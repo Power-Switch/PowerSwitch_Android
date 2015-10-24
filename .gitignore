@@ -1,4 +1,31 @@
 #################
+## Project Specific
+#################
+
+# Keystore
+keystore
+
+# Test Classes
+/Smartphone/src/test
+
+#################
+## Android Studio
+#################
+
+.idea
+build
+local.properties
+/Smartphone/*.apk
+
+# Gradle
+gradle
+.gradle
+gradlew
+gradlew.bat
+
+*.iml
+
+#################
 ## Eclipse
 #################
 
@@ -214,30 +241,3 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-
-
-# Android Studio
-.idea
-build
-local.properties
-/Smartphone/*.apk
-
-# Keystore
-keystore
-
-# Windows thumbnail db
-Thumbs.db
-
-# Gradle
-gradle
-.gradle
-gradlew
-gradlew.bat
-
-# OSX
-.DS_Store
-
-*.iml
-
-
-
