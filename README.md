@@ -12,7 +12,7 @@ Und wie schickt man die Signale zum Gateway? Eine Möglichkeit ist natürlich da
 
 Um die Entwicklung der App voran zu treiben und interessierten einen Blick hinter die Kulissen zu gewähren ist der Sourcecode der Android App hier verfügbar.
 
-# Lizens
+# Lizenz
     PowerSwitch by Max Rosin & Markus Ressel
     Copyright (C) 2015  Markus Ressel
 
