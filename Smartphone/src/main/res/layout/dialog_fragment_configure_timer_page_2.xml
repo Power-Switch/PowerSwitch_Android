@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ToggleButton
+            android:id="@+id/toggleButton_monday"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/monday"
+            android:textOn="@string/monday"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton_tuesday"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/tuesday"
+            android:textOn="@string/tuesday"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton_wednesday"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/wednesday"
+            android:textOn="@string/wednesday"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton_thursday"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/thursday"
+            android:textOn="@string/thursday"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton_friday"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/friday"
+            android:textOn="@string/friday"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton_saturday"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/saturday"
+            android:textOn="@string/saturday"/>
+
+        <ToggleButton
+            android:id="@+id/toggleButton_sunday"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:textOff="@string/sunday"
+            android:textOn="@string/sunday"/>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

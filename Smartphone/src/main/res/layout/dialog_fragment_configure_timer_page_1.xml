@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/timer_name_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dialog_horizontal_margin"
+            android:layout_marginRight="@dimen/dialog_horizontal_margin"
+            android:layout_marginTop="@dimen/title_margin_top">
+
+            <EditText
+                android:id="@+id/editText_timer_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editText_height"
+                android:ems="10"
+                android:hint="@string/name"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView_time_title"
+            style="@style/sub_header"
+            android:layout_marginLeft="@dimen/dialog_horizontal_margin"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/time"/>
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:timePickerMode="spinner"/>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="timers">Timer</string>
+
+    <!-- ConfigureTimerDialog -->
+    <string name="configure_timer">Timer einrichten</string>
+    <string name="time">Zeit</string>
+    <string name="days">Tage</string>
+    <string name="weekdays">Wochentage</string>
+    <string name="action">Aktion</string>
+    <string name="actions">Aktionen</string>
+
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
+
+    <string name="create_timer">Timer erstellen</string>
+
+    <string name="add_timer_action">Timer Aktion hinzufügen</string>
+
+    <string name="timer_will_be_gone_forever">Der Timer wird für immer verloren sein</string>
+
+</resources>

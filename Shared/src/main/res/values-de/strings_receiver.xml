@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- Configure Receiver Dialog -->
+    <string name="configure_receiver">Empfänger einrichten</string>
+    <string name="name">Name</string>
+    <string name="type">Typ</string>
+    <string name="setup">Setup</string>
+    <string name="summary">Übersicht</string>
+    <string name="receiver_saved">Empfänger gespeichert</string>
+
+    <string name="no_room_selected">Es ist kein Raum ausgewählt</string>
+    <string name="receiver_already_exists">Dieser Empfängername wird bereits verwendet</string>
+
+
+    <string name="create_receiver">Empfänger erstellen</string>
+
+    <string name="add_room">Raum erstellen</string>
+    <string name="room">Raum</string>
+    <string name="brand">Hersteller</string>
+    <string name="model">Modell</string>
+    <string name="channelMaster">Master</string>
+    <string name="channelSlave">Slave</string>
+    <string name="dips">Dips</string>
+    <string name="new_room_name">Neuer Raum Name</string>
+    <string name="add_universal_button">Universellen Button erstellen</string>
+    <string name="remove_universal_button">Universellen Button entfernen</string>
+    <string name="universal_buttons">Universelle Buttons</string>
+    <string name="enter_network_signal">Netzwerksignal</string>
+    <string name="receiver_will_be_gone_forever">Der Empfänger wird für immer verloren sein!</string>
+    <string name="receiver_deleted">Empfänger gelöscht</string>
+
+    <string name="pair_manual">Genauere Informationen zum Pairing Prozess findest du in der Anleitung zu deinem Empfänger</string>
+
+    <!-- Buttons -->
+    <string name="on">An</string>
+    <string name="off">Aus</string>
+    <string name="up">Hoch</string>
+    <string name="stop">Stopp</string>
+    <string name="down">Runter</string>
+
+    <string name="button">Button</string>
+
+    <string name="action_not_supported_by_receiver">Der Empfänger unterstützt diese Aktion nicht!</string>
+    <string name="no_receiver_supports_this_action">Kein Empfänger in diesem Raum unterstützt diese Aktion!</string>
+
+</resources>

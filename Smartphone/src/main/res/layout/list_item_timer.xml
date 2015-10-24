@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/cardview_padding">
+
+    <android.support.v7.widget.CardView
+        style="@style/card_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/cardview_default_height"
+                android:orientation="horizontal"
+                android:padding="4dp">
+
+                <TextView
+                    android:id="@+id/txt_timer_name"
+                    style="@style/text_list_item_header"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"/>
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_timer_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="4dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_timerDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
+
+                <TextView
+                    style="@style/sub_header"
+                    android:text="@string/time"/>
+
+                <TextView
+                    android:id="@+id/txt_timer_execution_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ui_element_margin_double"/>
+
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/weekdays"/>
+
+                <TextView
+                    android:id="@+id/txt_timer_execution_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ui_element_margin_double"/>
+
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/actions"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_timerActions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <include layout="@layout/list_footer"/>
+
+</LinearLayout>

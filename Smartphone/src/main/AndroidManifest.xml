@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="eu.power_switch"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="54"
+    android:versionName="@string/app_version">
+
+    <!-- Smartphone ONLY Permissions -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
+
+    <!-- Shared Permissions -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!-- Wear ONLY Permissions -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+
+    <application
+        android:name="eu.power_switch.application.PowerSwitch"
+        android:allowBackup="true"
+        android:fullBackupContent="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name">
+
+        <!-- Activities -->
+        <activity
+            android:name=".gui.activity.MainActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".widget.activity.ConfigureReceiverWidgetActivity"
+            android:label="@string/title_activity_configure_widget"
+            android:theme="@style/Theme.AppCompat.Dialog">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".widget.activity.ConfigureRoomWidgetActivity"
+            android:label="@string/title_activity_configure_widget"
+            android:theme="@style/Theme.AppCompat.Dialog">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".widget.activity.ConfigureSceneWidgetActivity"
+            android:label="@string/title_activity_configure_widget"
+            android:theme="@style/Theme.AppCompat.Dialog">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Receiver -->
+        <receiver
+            android:name=".widget.provider.ReceiverWidgetProvider"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/receiver">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/receiver_widget_info"/>
+        </receiver>
+        <receiver
+            android:name=".widget.provider.RoomWidgetProvider"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/room">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/room_widget_info"/>
+        </receiver>
+        <receiver
+            android:name=".widget.provider.SceneWidgetProvider"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/scene">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/scene_widget_info"/>
+        </receiver>
+        <receiver android:name=".api.IntentReceiver">
+            <!-- Tasker/LLama interface -->
+            <intent-filter>
+                <action android:name="eu.power_switch.action"/>
+
+                <!-- deprecated -->
+                <action android:name="de.ressel.powerswitch.action.Switch.ON"/>
+                <action android:name="de.ressel.powerswitch.action.Switch.OFF"/>
+                <action android:name="de.ressel.powerswitch.action.Room.ON"/>
+                <action android:name="de.ressel.powerswitch.action.Room.OFF"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".timer.alarm.AlarmIntentReceiver">
+            <!-- Timer alarms -->
+            <intent-filter>
+                <action android:name="eu.power_switch.alarm"/>
+                <data android:scheme="timer"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".sleep_as_android.IntentReceiver">
+            <!-- Sleep As Android -->
+            <intent-filter>
+                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_START"/>
+                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION"/>
+                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Sevices -->
+        <service
+            android:name=".wear.service.ListenerService">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".wear.service.UtilityService">
+            <!--<intent-filter>-->
+            <!--<action android:name="eu.power_switch.wear.UPDATE_DATA"/>-->
+            <!--</intent-filter>-->
+        </service>
+    </application>
+
+</manifest>

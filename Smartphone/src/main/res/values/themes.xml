@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base Dark Theme -->
+    <style name="PowerSwitchThemeBase.Dark" parent="Theme.AppCompat.NoActionBar">
+        <!-- material design -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorAccent">#FF999999</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+
+        <!-- custom views -->
+        <item name="dialog_bottomBar_next_color">@color/textColorPrimary</item>
+        <item name="button_backgroundDrawable">@drawable/button_shape_selector_dark</item>
+        <item name="cardview_backgroundColor">@color/cardview_background</item>
+
+        <!-- text color -->
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+    </style>
+
+    <!-- Base Light Theme -->
+    <style name="PowerSwitchThemeBase.Light" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- material design -->
+        <item name="colorPrimary">@color/primaryInverse</item>
+        <item name="colorAccent">#FF333333</item>
+        <item name="android:windowBackground">@color/windowBackgroundInverse</item>
+
+        <!-- custom views -->
+        <item name="dialog_bottomBar_next_color">@color/textColorPrimaryInverse</item>
+        <item name="button_backgroundDrawable">@drawable/button_shape_selector_light</item>
+        <item name="cardview_backgroundColor">@color/cardview_backgroundInverse</item>
+
+        <!-- text color -->
+        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+    </style>
+
+    <!-- Base Dark Blue -->
+    <style name="PowerSwitchThemeBase.Dark.Blue" parent="PowerSwitchThemeBase.Dark">
+        <item name="colorAccent">@color/accent_blue_a700</item>
+        <item name="android:textColorLink">@color/accent_blue_a700</item>
+
+        <!-- dialog -->
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleDarkBlue</item>
+    </style>
+
+    <!-- Base Dark Red -->
+    <style name="PowerSwitchThemeBase.Dark.Red" parent="PowerSwitchThemeBase.Dark">
+        <item name="colorAccent">@color/accent_red_a700</item>
+        <item name="android:textColorLink">@color/accent_red_a700</item>
+    </style>
+
+    <!-- Base Light Blue -->
+    <style name="PowerSwitchThemeBase.Light.Blue" parent="PowerSwitchThemeBase.Light">
+        <item name="colorAccent">@color/accent_blue_a700</item>
+        <item name="android:textColorLink">@color/accent_blue_a700</item>
+
+        <!-- dialog -->
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleLightBlue</item>
+    </style>
+
+    <!-- Base Light Red -->
+    <style name="PowerSwitchThemeBase.Light.Red" parent="PowerSwitchThemeBase.Light">
+        <item name="colorAccent">@color/accent_red_a700</item>
+        <item name="android:textColorLink">@color/accent_red_a700</item>
+    </style>
+
+    <!-- Themes -->
+    <style name="PowerSwitchTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dark.Blue"/>
+
+    <style name="PowerSwitchTheme.Dark.Red" parent="PowerSwitchThemeBase.Dark.Red"/>
+
+    <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue"/>
+
+    <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red"/>
+
+</resources>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- Package name -->
+    <string name="PACKAGE_NAME">eu.power_switch</string>
+
+    <!-- Wear DataApi -->
+    <string name="RECEIVER_ACTION_TRIGGER_CAPABILITY_NAME">receiver_action_trigger</string>
+    <string name="REQUEST_DATA_UPDATE_CAPABILITY_NAME">request_data_update</string>
+    <string name="DATA_EXCHANGE_CAPABILITY_NAME">data_exchange</string>
+
+
+    <string name="app_name">PowerSwitch</string>
+    <string name="app_version">0.9.28</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="close">Close</string>
+    <string name="unknown_error">Unknown Error</string>
+
+    <string name="open_settings">Open Settings</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- main menu -->
+    <string name="menu_home">Home</string>
+    <string name="menu_backup_restore">Backup/Restore</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_about">About</string>
+
+    <!-- intent receiver -->
+    <string name="error_parsing_intent">Error parsing Intent!</string>
+
+    <!-- network -->
+    <string name="sending">Sending&#8230;</string>
+    <string name="sent">Sent</string>
+    <string name="unknown_host">Unknown Host</string>
+    <string name="searching_gateways">Searching Gateways&#8230;</string>
+
+    <!-- misc -->
+    <string name="add">Add</string>
+    <string name="save">Save</string>
+    <string name="create">Create</string>
+    <string name="delete">Delete</string>
+    <string name="missing_external_storage_permission">Missing Permission for External Storage</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="no_active_gateway">No active Gateway!</string>
+    <string name="missing_wifi_connection">No WLAN connection!</string>
+    <string name="missing_network_connection">No Network connection!</string>
+
+    <!-- application information -->
+    <string name="version">Version</string>
+    <string name="app_about">
+<![CDATA[
+        <br /><br />This app is developed by<br />
+        <br />
+        Max Rosin &amp; Markus Ressel<br />
+        More information at: <a href="http://power-switch.eu">power-switch.eu</a><br />
+        <br />
+        Join the <a href="https://plus.google.com/communities/101925642491277812164">PowerSwitch G+ Community</a>!<br />
+        <br />]]>
+    </string>
+    <string name="app_changelog">
+<![CDATA[
+Changelog:<br />
+<br />
+<a href="http://power-switch.eu/download/">power-switch.eu/download</a><br />
+]]>
+    </string>
+
+    <!-- supported gateways, brands and models -->
+    <string-array name="gateway_array">
+        <item>ConnAir</item>
+        <item>ITGW-433</item>
+        <item>Brematic GWY433</item>
+    </string-array>
+    <string-array name="brand_array">
+        <item>BAT</item>
+        <item>Brennenstuhl</item>
+        <item>Elro</item>
+        <item>Intertechno</item>
+        <item>Mumbi</item>
+        <item>Pollin Electronic</item>
+        <item>REV</item>
+        <item>Rohrmotor 24</item>
+        <item>Universal</item>
+        <item>Vivanco</item>
+    </string-array>
+    <string-array name="model_bat_array">
+        <item>RC 3500-A IP44 DE</item>
+        <item>RC AAA1000-A IP44 Outdoor</item>
+        <!--<item>RC AAA3680-A IP20</item>-->
+    </string-array>
+    <string-array name="model_brennenstuhl_array">
+        <item>RCS 1000 N Comfort</item>
+        <item>RCS 1044 N Comfort</item>
+        <!--<item>RC 3600</item> -->
+    </string-array>
+    <string-array name="model_elro_array">
+        <item>AB440D 200W</item>
+        <item>AB440D 300W</item>
+        <item>AB440ID</item>
+        <item>AB440IS</item>
+        <item>AB440L</item>
+        <item>AB440S</item>
+        <item>AB440SC</item>
+        <item>AB440WD</item>
+        <!-- <item>AB600D</item> -->
+    </string-array>
+    <string-array name="model_intertechno_array">
+        <item>CMR 300</item>
+        <item>CMR 500</item>
+        <item>CMR 1000</item>
+        <item>CMR 1224</item>
+        <item>GRR 300</item>
+        <item>GRR 3500</item>
+        <item>IT 1500</item>
+        <item>IT 2300</item>
+        <item>ITDL 1000</item>
+        <item>ITDM 250</item>
+        <item>ITL 150</item>
+        <item>ITL 210</item>
+        <item>ITL 230</item>
+        <item>ITL 250</item>
+        <item>ITL 300</item>
+        <item>ITL 500</item>
+        <item>ITL 1000</item>
+        <item>ITL 3500</item>
+        <item>ITLR 300</item>
+        <item>ITLR 3500</item>
+        <item>ITLR 3500T</item>
+        <item>ITR 300</item>
+        <item>ITR 1500</item>
+        <item>ITR 3500</item>
+        <item>ITR 7000</item>
+        <item>ITWR 3500</item>
+        <item>LBUR 100</item>
+        <item>PA3 1000</item>
+        <item>YCR 1000</item>
+    </string-array>
+    <string-array name="model_mumbi_array">
+        <item>m-FS300</item>
+    </string-array>
+    <string-array name="model_rev_array">
+        <item>Ritter</item>
+        <item>Telecontrol</item>
+    </string-array>
+    <string-array name="model_rohrmotor24_array">
+        <item>RMF Motor</item>
+        <item>RMF-R1</item>
+        <item>RMF-R1 UP</item>
+    </string-array>
+    <string-array name="model_pollin_electronic_array">
+        <item>Set 2605</item>
+    </string-array>
+    <string-array name="model_vivanco_array">
+        <item>FSS 31000W</item>
+        <item>FSS 33600W</item>
+    </string-array>
+
+</resources>

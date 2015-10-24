@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:layout_marginTop="@dimen/padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TextView_generalSettings"
+                style="@style/header_settings"
+                android:text="@string/general_settings"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_autoDiscover"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/autodiscover"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_expandRoomsOnStart"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/auto_collapse_rooms"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_showRoomAllOnOffButtons"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/show_room_all_on_off_buttons"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_hideAddFAB"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/hide_FABs"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_highlightLastActivatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/highlight_last_activated_button"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_vibrateOnButtonPress"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:checked="false"
+                android:text="@string/vibrate_on_button_press"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_vibrationDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginLeft="32dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:gravity="center"
+                    android:text="@string/duration_title"/>
+
+                <EditText
+                    android:id="@+id/editText_vibrationDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:hint="@string/haptic_feedback_duration_hint"
+                    android:inputType="number"
+                    android:maxLength="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="ms"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/TextView_theme"
+                style="@style/header_settings"
+                android:text="@string/theme"/>
+
+            <RadioButton
+                android:id="@+id/radioButton_darkBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/theme_dark_blue"/>
+
+            <RadioButton
+                android:id="@+id/radioButton_lightBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/theme_light_blue"/>
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</android.support.v4.widget.NestedScrollView>

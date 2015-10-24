@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dialog_horizontal_margin"
+        android:paddingRight="@dimen/dialog_horizontal_margin">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/receiver_name_text_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_margin_top">
+
+            <EditText
+                android:id="@+id/editText_receiver_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/editText_height"
+                android:ems="10"
+                android:hint="@string/name"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textView_room"
+            style="@style/sub_header"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/room"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/listView_rooms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_room_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add_white_48dp"
+            app:backgroundTint="?attr/colorAccent"
+            app:borderWidth="0dp"
+            app:elevation="8dp"
+            app:fabSize="normal"
+            app:layout_anchor="@id/listView_rooms"
+            app:layout_anchorGravity="bottom|right|end"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/textView_brand"
+                style="@style/sub_header"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dialog_horizontal_margin"
+                android:text="@string/brand"
+                />
+
+            <TextView
+                android:id="@+id/textView_model"
+                style="@style/sub_header"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/dialog_horizontal_margin"
+                android:text="@string/model"/>
+
+        </TableRow>
+
+        <TableRow>
+
+            <ListView
+                android:id="@+id/listView_brands"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:choiceMode="singleChoice"
+                />
+
+            <ListView
+                android:id="@+id/listView_models"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:choiceMode="singleChoice"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="cardview">
+        <attr name="cardview_backgroundColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="button">
+        <attr name="button_backgroundDrawable" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="dialog_bottom_bar">
+        <attr name="dialog_bottomBar_next_color" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="dialog">
+        <attr name="dialog_background_color" format="color"/>
+    </declare-styleable>
+
+</resources>

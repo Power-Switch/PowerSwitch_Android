@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="android_wear_capabilities">
+        <item>@string/RECEIVER_ACTION_TRIGGER_CAPABILITY_NAME</item>
+        <item>@string/REQUEST_DATA_UPDATE_CAPABILITY_NAME</item>
+        <item>@string/DATA_EXCHANGE_CAPABILITY_NAME</item>
+    </string-array>
+</resources>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_margin_bottom"
+    android:paddingLeft="@dimen/dialog_horizontal_margin"
+    android:paddingRight="@dimen/dialog_horizontal_margin"
+    android:paddingTop="@dimen/dialog_margin_top">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/title_margin_top"
+        android:text="@string/type"
+        android:textColor="@color/accent_blue_a700"
+        android:id="@+id/textView"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButton_receiver_action"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/receiver"/>
+
+        <RadioButton
+            android:id="@+id/radioButton_room_action"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/room"/>
+
+        <RadioButton
+            android:id="@+id/radioButton_scene_action"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/scene"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_receiver_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/room"
+            android:textColor="@color/accent_blue_a700"/>
+
+        <Spinner
+            android:id="@+id/spinner_receiver_action_room"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/timer_action_spinner_height"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/receiver"
+            android:textColor="@color/accent_blue_a700"/>
+
+        <Spinner
+            android:id="@+id/spinner_receiver_action_receiver"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/timer_action_spinner_height"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/button"
+            android:textColor="@color/accent_blue_a700"/>
+
+        <Spinner
+            android:id="@+id/spinner_receiver_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/timer_action_spinner_height"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_room_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/room"
+            android:textColor="@color/accent_blue_a700"/>
+
+        <Spinner
+            android:id="@+id/spinner_room_action_room"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/timer_action_spinner_height"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/button"
+            android:textColor="@color/accent_blue_a700"/>
+
+        <Spinner
+            android:id="@+id/spinner_room_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/timer_action_spinner_height"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_scene_action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/scene"
+            android:textColor="@color/accent_blue_a700"/>
+
+        <Spinner
+            android:id="@+id/spinner_scene_action_scene"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/timer_action_spinner_height"/>
+
+    </LinearLayout>
+
+</LinearLayout>

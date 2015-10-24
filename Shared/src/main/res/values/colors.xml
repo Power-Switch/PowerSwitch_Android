@@ -1,0 +1,63 @@
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <color name="transparent">#00000000</color>
+    <color name="half_transparent">#7F000000</color>
+
+
+    <!-- Grey 900 #212121 -->
+    <color name="primary">#212121</color>
+    <!-- Grey 100 #F5F5F5 -->
+    <color name="primaryInverse">#F5F5F5</color>
+
+    <!--&lt;!&ndash; Black #000000 &ndash;&gt;-->
+    <!--<color name="primary_dark">#000000</color>-->
+    <!--&lt;!&ndash; White #FFFFFF &ndash;&gt;-->
+    <!--<color name="primary_darkInverse">#FFFFFF</color>-->
+
+    <!-- Grey 800 #424242 -->
+    <color name="primary_light">#424242</color>
+    <!-- Grey 200 #EEEEEE -->
+    <color name="primary_lightInverse">#EEEEEE</color>
+
+    <!-- Light Blue A700 #0091EA -->
+    <color name="accent_blue_a700">#FF0091EA</color>
+    <!-- Red A700 #D50000 -->
+    <color name="accent_red_a700">#D50000</color>
+
+    <color name="textColorPrimary">#FFFFFFFF</color>
+    <color name="textColorSecondary">#B2FFFFFF</color>
+    <!-- inverse text color: 87% black -->
+    <color name="textColorPrimaryInverse">#DE000000</color>
+    <color name="textColorSecondaryInverse">#8A000000</color>
+
+
+    <!-- Red 900 #B71C1C -->
+    <color name="delete_color">#FFB71C1C</color>
+
+    <color name="inactive_gray">#FF555555</color>
+    <color name="active_green">#FF009900</color>
+
+    <color name="windowBackground">#FF313031</color>
+    <color name="windowBackgroundInverse">#CECFCE</color>
+
+    <color name="cardview_background">@color/primary_light</color>
+    <color name="cardview_backgroundInverse">@color/primary_lightInverse</color>
+
+</resources>

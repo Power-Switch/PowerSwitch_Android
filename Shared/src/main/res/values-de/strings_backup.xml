@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- backup activity -->
+    <string name="backup">Sicherung</string>
+    <string name="backups">Sicherungen</string>
+    <string name="restore">Wiederherstellen</string>
+    <string name="restore_and_restart">Wiederherstellen und Neustarten</string>
+    <string name="backup_removed">Backup entfernt</string>
+    <string name="create_backup">Sicherung erstellen</string>
+    <string name="remove">Entfernen</string>
+    <string name="path">Pfad</string>
+    <string name="backup_successful">Sichern erfolgreich</string>
+    <string name="restore_successful">Wiederherstellen erfolgreich</string>
+    <string name="are_you_sure">Bist du sicher?</string>
+    <string name="backup_not_found">Sicherung nicht gefunden</string>
+    <string name="no_backups_found">Keine Sicherungen gefunden</string>
+    <string name="restore_backup_message">Achtung: Alle momentan eingerichteten Empfänger, Szenen und Einstellungen
+        werden ersetzt und sind unwiderruflich gelöscht!\n\nDie App schließt sich und startet kurz darauf von
+        selbst neu. Das dauert bis zu 10 Sekunden, also Geduld :)</string>
+    <string name="remove_backup_message">Die Sicherung wird unwiderruflich gelöscht!</string>
+    <string name="edit_backup">Sicherung bearbeiten</string>
+    <string name="backup_already_exists">Sicherung existiert bereits</string>
+    <string name="do_you_want_to_overwrite">Willst du sie überschreiben?</string>
+    <string name="backup_saved">Sicherung gespeichert</string>
+
+</resources>

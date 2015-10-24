@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="?attr/colorPrimary"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/imageButton_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="#000000"
+        android:src="@drawable/ic_delete_white_48dp"/>
+
+    <ImageButton
+        android:id="@+id/imageButton_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="#000000"
+        android:src="@drawable/ic_cancel_white_48dp"/>
+
+    <ImageButton
+        android:id="@+id/imageButton_next"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="#000000"
+        android:src="@drawable/ic_arrow_forward_white_48dp"/>
+
+    <ImageButton
+        android:id="@+id/imageButton_save"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="#000000"
+        android:src="@drawable/ic_check_circle_white_48dp"
+        android:visibility="gone"/>
+
+</LinearLayout>

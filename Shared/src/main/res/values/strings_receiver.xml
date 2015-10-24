@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- Configure Receiver Dialog -->
+    <string name="configure_receiver">Configure Receiver</string>
+    <string name="name">Name</string>
+    <string name="type">Type</string>
+    <string name="setup">Setup</string>
+    <string name="summary">Summary</string>
+    <string name="receiver_saved">Receiver saved</string>
+
+    <string name="no_room_selected">No Room selected</string>
+    <string name="receiver_already_exists">This Receiver name already exists</string>
+
+    <string name="create_receiver">Create Receiver</string>
+
+    <string name="add_room">Create Room</string>
+    <string name="room">Room</string>
+    <string name="brand">Brand</string>
+    <string name="model">Model</string>
+    <string name="channelMaster">Master</string>
+    <string name="channelSlave">Slave</string>
+    <string name="dips">Dips</string>
+    <string name="seed">Seed</string>
+    <string name="new_room_name">New Room name</string>
+    <string name="add_universal_button">Create universal Button</string>
+    <string name="remove_universal_button">Remove universal Button</string>
+    <string name="universal_buttons">Universal Buttons</string>
+    <string name="enter_network_signal">Enter Network Signal</string>
+    <string name="receiver_will_be_gone_forever">Receiver will be gone forever!</string>
+    <string name="receiver_deleted">Receiver deleted</string>
+
+    <string name="pair_manual">More infos about the pairing process can be found in the manual of your Receiver</string>
+
+    <string name="pair">Pair</string>
+    <string name="unpair">Unpair</string>
+    <string name="unpair_all">Unpair All</string>
+
+    <!-- Buttons -->
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="up">Up</string>
+    <string name="stop">Stop</string>
+    <string name="down">Down</string>
+
+    <string name="button">Button</string>
+
+    <string name="action_not_supported_by_receiver">Action not supported by Receiver!</string>
+    <string name="no_receiver_supports_this_action">No Receiver in this Room supports this Action!</string>
+
+</resources>

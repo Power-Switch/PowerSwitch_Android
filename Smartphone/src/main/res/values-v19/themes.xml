@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PowerSwitchTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dark.Blue">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="PowerSwitchTheme..Dark.Red" parent="PowerSwitchThemeBase.Dark.Red">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>

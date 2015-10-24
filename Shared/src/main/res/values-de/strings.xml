@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="action_settings">Einstellungen</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="close">Schließen</string>
+    <string name="unknown_error">Unbekannter Fehler</string>
+
+    <string name="open_settings">Einstellungen öffnen</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- main menu -->
+    <string name="menu_home">Home</string>
+    <string name="menu_backup_restore">Sichern/Wiederherstellen</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_help">Hilfe</string>
+    <string name="menu_about">Über uns</string>
+
+    <!-- intent receiver -->
+    <string name="error_parsing_intent">Fehler beim Parsen des Intents!</string>
+
+    <!-- network -->
+    <string name="sending">Sende&#8230;</string>
+    <string name="sent">Gesendet</string>
+    <string name="unknown_host">Unknown Host</string>
+    <string name="searching_gateways">Suche Gateways&#8230;</string>
+
+    <!-- misc -->
+    <string name="add">Hinzufügen</string>
+    <string name="save">Speichern</string>
+    <string name="create">Erstellen</string>
+    <string name="delete">Löschen</string>
+    <string name="missing_external_storage_permission">Keine Berechtigung für den Speicherzugriff</string>
+    <string name="permission_denied">Keine Berechtigung</string>
+    <string name="no_active_gateway">Kein aktives Gateway</string>
+    <string name="missing_wifi_connection">Keine WLAN Verbindung!</string>
+    <string name="missing_network_connection">Keine Netzwerkverbindung!</string>
+
+    <!-- application information -->
+    <string name="version">Version</string>
+    <string name="app_about">
+<![CDATA[
+        <br /><br />Diese App wird entwickelt von<br />
+        <br />
+        Max Rosin &amp; Markus Ressel<br />
+        Weitere Informationen unter: <a href="http://power-switch.eu">power-switch.eu</a><br />
+        <br />
+        Tritt der <a href="https://plus.google.com/communities/101925642491277812164">PowerSwitch G+ Community</a> bei!<br />
+        <br />]]>
+    </string>
+    <string name="app_changelog">
+<![CDATA[
+Changelog:<br />
+<br />
+<a href="http://power-switch.eu/download/">power-switch.eu/download</a><br />
+]]>
+    </string>
+
+
+</resources>

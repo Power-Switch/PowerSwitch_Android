@@ -1,0 +1,9 @@
+<resources>
+
+    <integer name="room_grid_span_count">2</integer>
+    <integer name="scene_grid_span_count">2</integer>
+    <integer name="timer_grid_span_count">2</integer>
+    <integer name="backup_grid_span_count">2</integer>
+    <integer name="gateway_grid_span_count">2</integer>
+
+</resources>
