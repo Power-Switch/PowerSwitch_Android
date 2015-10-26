@@ -36,7 +36,6 @@ public class Constants {
     public static final int THEME_LIGHT_BLUE = 2;
     public static final int THEME_LIGHT_RED = 3;
 
-
     // LocalBroadcasts
     public static final String INTENT_GATEWAY_CHANGED = "eu.power_switch.gateway_changed";
     public static final String INTENT_RECEIVER_CHANGED = "eu.power_switch.receiver_changed";
