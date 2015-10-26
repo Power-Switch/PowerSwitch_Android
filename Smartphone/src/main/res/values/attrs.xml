@@ -17,4 +17,8 @@
         <attr name="dialog_background_color" format="color"/>
     </declare-styleable>
 
+    <declare-styleable name="reorder_handle">
+        <attr name="reorder_handle_color" format="reference"/>
+    </declare-styleable>
+
 </resources>

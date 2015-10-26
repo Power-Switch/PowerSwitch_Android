@@ -53,9 +53,9 @@ public abstract class ReceiverReflectionMagic {
         String className = cursor.getString(4);
         long roomId = cursor.getLong(5);
 
-        long positionInRoom = -1;
+        int positionInRoom = -1;
         if (!cursor.isNull(6)) {
-            positionInRoom = cursor.getLong(6);
+            positionInRoom = cursor.getInt(6);
         }
 
         Receiver receiver = null;

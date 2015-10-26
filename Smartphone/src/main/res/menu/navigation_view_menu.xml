@@ -6,31 +6,31 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/home"
-            android:icon="@drawable/ic_home_white_48dp"
+            android:icon="@drawable/ic_home_white_24dp"
             android:title="@string/menu_home"/>
 
         <item
             android:id="@+id/backup_restore"
-            android:icon="@drawable/ic_restore_white_48dp"
+            android:icon="@drawable/ic_restore_white_24dp"
             android:title="@string/menu_backup_restore"/>
         <item
             android:id="@+id/settings"
-            android:icon="@drawable/ic_settings_white_48dp"
+            android:icon="@drawable/ic_settings_white_24dp"
             android:title="@string/menu_settings"/>
 
     </group>
 
     <item
         android:id="@+id/help"
-        android:icon="@drawable/ic_help_white_48dp"
+        android:icon="@drawable/ic_help_white_24dp"
         android:title="@string/menu_help"/>
     <item
         android:id="@+id/donate"
-        android:icon="@drawable/ic_attach_money_white_48dp"
+        android:icon="@drawable/ic_attach_money_white_24dp"
         android:title="@string/donate"/>
     <item
         android:id="@+id/about"
-        android:icon="@drawable/ic_info_white_48dp"
+        android:icon="@drawable/ic_info_white_24dp"
         android:title="@string/menu_about"/>
 
 </menu>

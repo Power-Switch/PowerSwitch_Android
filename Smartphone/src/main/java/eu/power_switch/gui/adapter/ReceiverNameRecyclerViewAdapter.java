@@ -19,10 +19,13 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,10 +44,12 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
         implements ItemTouchHelperAdapter {
     private ArrayList<Receiver> receivers;
     private Context context;
+    private OnStartDragListener onStartDragListener;
 
-    public ReceiverNameRecyclerViewAdapter(Context context, ArrayList<Receiver> receivers) {
+    public ReceiverNameRecyclerViewAdapter(Context context, ArrayList<Receiver> receivers, OnStartDragListener onStartDragListener) {
         this.receivers = receivers;
         this.context = context;
+        this.onStartDragListener = onStartDragListener;
     }
 
     @Override
@@ -57,6 +62,17 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
     public void onBindViewHolder(final ReceiverNameRecyclerViewAdapter.ViewHolder holder, int position) {
         final Receiver receiver = receivers.get(position);
         holder.receiverName.setText(receiver.getName());
+
+        holder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEventCompat.getActionMasked(event) ==
+                        MotionEvent.ACTION_DOWN) {
+                    onStartDragListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
     }
 
     // Return the total count of items
@@ -90,10 +106,12 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView receiverName;
+        public ImageView dragHandle;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.receiverName = (TextView) itemView.findViewById(R.id.txt_receiver_name);
+            this.dragHandle = (ImageView) itemView.findViewById(R.id.drag_handle);
         }
     }
 }

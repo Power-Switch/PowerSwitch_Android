@@ -37,7 +37,7 @@
 
             <TextView
                 android:id="@+id/TextView_type"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/title_height"
                 android:layout_marginLeft="@dimen/ui_element_margin_double"
                 android:layout_marginTop="@dimen/title_margin_top"
@@ -64,7 +64,7 @@
 
                 <EditText
                     android:id="@+id/txt_edit_gateway_address"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/editText_height"
                     android:hint="@string/hint_url"
                     android:inputType="textUri"

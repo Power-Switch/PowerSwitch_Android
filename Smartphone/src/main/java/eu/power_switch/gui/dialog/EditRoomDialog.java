@@ -46,6 +46,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
 import eu.power_switch.gui.fragment.RoomsFragment;
@@ -60,7 +61,8 @@ import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
 /**
  * Dialog to edit a Room
  */
-public class EditRoomDialog extends DialogFragment {
+public class EditRoomDialog extends DialogFragment implements
+        OnStartDragListener {
 
     private View rootView;
     private String originalName;
@@ -70,7 +72,9 @@ public class EditRoomDialog extends DialogFragment {
     private ImageButton imageButtonCancel;
     private ImageButton imageButtonDelete;
 
+    private Room currentRoom;
     private LinkedList<String> roomNames;
+    private ItemTouchHelper itemTouchHelper;
 
     @Nullable
     @Override
@@ -109,17 +113,19 @@ public class EditRoomDialog extends DialogFragment {
             }
         });
 
-        ArrayList<Receiver> receiverList = DatabaseHandler.getReceiverByRoomId(roomId);
+        currentRoom = DatabaseHandler.getRoom(roomId);
+
+        final ArrayList<Receiver> receiverList = new ArrayList<>(currentRoom.getReceivers());
         RecyclerView listOfReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
-        ReceiverNameRecyclerViewAdapter adapter = new ReceiverNameRecyclerViewAdapter(getContext(), receiverList);
+        ReceiverNameRecyclerViewAdapter adapter = new ReceiverNameRecyclerViewAdapter(getContext(), receiverList, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         listOfReceivers.setLayoutManager(linearLayoutManager);
         listOfReceivers.setAdapter(adapter);
 
+        // TODO: interface evtl. in ArrayAdapter verschieben?
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(listOfReceivers);
-
+        itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(listOfReceivers);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +176,13 @@ public class EditRoomDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 DatabaseHandler.updateRoom((int) roomId, getRoomName());
+
+                // save receiver order
+                for (int position = 0; position < receiverList.size(); position++) {
+                    Receiver receiver = receiverList.get(position);
+                    DatabaseHandler.setPositionInRoom(receiver.getId(), position);
+                }
+
                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());
                 Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)
                         .show();
@@ -184,7 +197,7 @@ public class EditRoomDialog extends DialogFragment {
 
     private void checkValidity() {
         if (getRoomName().equals(originalName)) {
-            setSaveButtonState(false);
+            setSaveButtonState(true);
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);
         } else if (getRoomName().length() <= 0) {
@@ -223,6 +236,11 @@ public class EditRoomDialog extends DialogFragment {
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.show();
         return dialog;
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
     }
 
     private String getRoomName() {

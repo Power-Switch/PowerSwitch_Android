@@ -25,7 +25,7 @@
 
             <EditText
                 android:id="@+id/txt_backup_name"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/editText_height"
                 android:hint="@string/name"
                 android:inputType="text"/>

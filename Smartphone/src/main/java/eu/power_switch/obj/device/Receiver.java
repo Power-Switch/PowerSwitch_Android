@@ -142,7 +142,7 @@ public abstract class Receiver {
     protected LinkedList<Button> buttons;
     protected long roomId;
     protected String type;
-    protected long positionInRoom;
+    protected int positionInRoom;
 
     public Receiver(Context context, long id, String name, String brand, String model, String type, long roomId) {
         this.context = context;
@@ -203,11 +203,11 @@ public abstract class Receiver {
         return type;
     }
 
-    public long getPositionInRoom() {
+    public int getPositionInRoom() {
         return positionInRoom;
     }
 
-    public void setPositionInRoom(long positionInRoom) {
+    public void setPositionInRoom(int positionInRoom) {
         this.positionInRoom = positionInRoom;
     }
 

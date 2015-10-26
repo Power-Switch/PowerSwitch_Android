@@ -22,6 +22,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import eu.power_switch.database.table.receiver.ReceiverTable;
@@ -49,6 +51,7 @@ public abstract class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_MODEL, receiver.getModel());
         values.put(ReceiverTable.COLUMN_CLASSNAME, receiver.getClass().getName());
         values.put(ReceiverTable.COLUMN_TYPE, receiver.getType());
+        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, RoomHandler.get(receiver.getRoomId()).getReceivers().size());
 
         long dbInsertReturnValue = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
 
@@ -165,6 +168,14 @@ public abstract class ReceiverHandler {
             cursor.moveToNext();
         }
         cursor.close();
+
+        Collections.sort(receivers, new Comparator<Receiver>() {
+            @Override
+            public int compare(Receiver t0, Receiver t1) {
+                return t0.getPositionInRoom() - t1.getPositionInRoom();
+            }
+        });
+
         return receivers;
     }
 
@@ -308,7 +319,6 @@ public abstract class ReceiverHandler {
         DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
                 ReceiverTable.COLUMN_ID + "=" + receiverId, null);
     }
-
 
     /**
      * Creates a Receiver Object out of Database information

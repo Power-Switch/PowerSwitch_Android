@@ -126,7 +126,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
             roomName.setText(room.getName());
             roomLayout.addView(roomName);
 
-            for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(room.getId())) {
+            for (Receiver receiver : room.getReceivers()) {
                 LinearLayout receiverLayout = new LinearLayout(getActivity());
                 receiverLayout.setOrientation(LinearLayout.HORIZONTAL);
                 roomLayout.addView(receiverLayout);

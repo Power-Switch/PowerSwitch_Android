@@ -191,7 +191,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
         if (!currentReceiverName.equals(originalName)) {
             try {
                 Room selectedRoom = DatabaseHandler.getRoom(currentRoomName);
-                for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(selectedRoom.getId())) {
+                for (Receiver receiver : selectedRoom.getReceivers()) {
                     if (receiver.getName().equals(currentReceiverName)) {
                         throw new ReceiverAlreadyExistsException();
                     }

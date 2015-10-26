@@ -139,7 +139,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                     // Perform your App Widget configuration:
                     Room selectedRoom = roomsList.get(spinnerRoom.getSelectedItemPosition());
                     Receiver selectedReceiver = null;
-                    for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(selectedRoom.getId())) {
+                    for (Receiver receiver : selectedRoom.getReceivers()) {
                         if (receiver.getName().equals(spinnerReceiver.getSelectedItem().toString())) {
                             selectedReceiver = receiver;
                             break;

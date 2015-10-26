@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/create_timer"
-        android:icon="@drawable/ic_add_white_48dp"
+        android:icon="@drawable/ic_add_white_24dp"
         android:title="@string/create_timer"
         app:showAsAction="ifRoom"/>
 

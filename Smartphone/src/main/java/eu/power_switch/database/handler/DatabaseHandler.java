@@ -1019,4 +1019,21 @@ public final class DatabaseHandler {
             close();
         }
     }
+
+    /**
+     * Sets the position of a Receiver
+     *
+     * @param receiverId ID of Receiver
+     * @param position   position in room
+     */
+    public static void setPositionInRoom(long receiverId, long position) {
+        openWritable();
+        try {
+            ReceiverHandler.setPositionInRoom(receiverId, position);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+    }
 }

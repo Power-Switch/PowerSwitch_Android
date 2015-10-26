@@ -24,14 +24,14 @@
 
             <CheckBox
                 android:id="@+id/checkBox_autoDiscover"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/autodiscover"/>
 
             <CheckBox
                 android:id="@+id/checkBox_expandRoomsOnStart"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/auto_collapse_rooms"/>
@@ -45,7 +45,7 @@
 
             <CheckBox
                 android:id="@+id/checkBox_hideAddFAB"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/hide_FABs"/>
