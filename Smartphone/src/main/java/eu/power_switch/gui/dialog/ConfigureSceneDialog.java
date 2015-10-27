@@ -43,10 +43,10 @@ import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.fragment.ScenesFragment;
-import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage2SetupFragment;
+import eu.power_switch.gui.fragment.main.ScenesFragment;
+import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.log.Log;
 import eu.power_switch.shared.Constants;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;

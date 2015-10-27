@@ -16,9 +16,10 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment;
+package eu.power_switch.gui.fragment.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -26,25 +27,28 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.activity.MainActivity;
 
 /**
- * Fragment holding the room, scene and timer Fragments in a TabLayout
+ * Fragment holding all settings related Fragments in a TabLayout
  * <p/>
- * Created by Markus on 25.06.2015.
+ * Created by Markus on 30.08.2015.
  */
-public class RoomsScenesTimersTabFragment extends Fragment {
-
+public class SettingsTabFragment extends Fragment {
     private CustomTabAdapter customTabAdapter;
     private TabLayout tabLayout;
     private ViewPager tabViewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.tabs_room_scene_timer, container, false);
+        setHasOptionsMenu(true);
 
         // Create the adapter that will return a fragment
         // for each of the two primary sections of the app.
@@ -55,7 +59,6 @@ public class RoomsScenesTimersTabFragment extends Fragment {
         tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
 
-        tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
@@ -70,6 +73,18 @@ public class RoomsScenesTimersTabFragment extends Fragment {
         super.onResume();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent homeIntent = new Intent(getActivity(), MainActivity.class);
+                homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(homeIntent);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private static class CustomTabAdapter extends FragmentPagerAdapter {
         private Context context;
 
@@ -82,13 +97,13 @@ public class RoomsScenesTimersTabFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new RoomsFragment();
+                    return new GeneralSettingsFragment();
                 case 1:
-                    return new ScenesFragment();
+                    return new GatewaySettingsFragment();
                 case 2:
-                    return new TimersFragment();
+                    return new WearableSettingsFragment();
                 default:
-                    return null;
+                    return new GeneralSettingsFragment();
             }
         }
 
@@ -97,20 +112,20 @@ public class RoomsScenesTimersTabFragment extends Fragment {
          */
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return context.getString(R.string.rooms);
+                    return context.getString(R.string.general);
                 case 1:
-                    return context.getString(R.string.scenes);
+                    return context.getString(R.string.gateways);
                 case 2:
-                    return context.getString(R.string.timers);
+                    return context.getString(R.string.wearable);
                 default:
-                    return "";
+                    return context.getString(R.string.general);
             }
         }
     }

@@ -45,7 +45,7 @@ import java.util.HashMap;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.activity.MainActivity;
-import eu.power_switch.gui.fragment.ScenesFragment;
+import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;

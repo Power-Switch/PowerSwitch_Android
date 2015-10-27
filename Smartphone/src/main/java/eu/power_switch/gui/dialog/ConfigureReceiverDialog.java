@@ -43,13 +43,13 @@ import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.fragment.RoomsFragment;
-import eu.power_switch.gui.fragment.ScenesFragment;
-import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4SummaryFragment;
+import eu.power_switch.gui.fragment.main.RoomsFragment;
+import eu.power_switch.gui.fragment.main.ScenesFragment;
+import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.log.Log;
 import eu.power_switch.shared.Constants;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;

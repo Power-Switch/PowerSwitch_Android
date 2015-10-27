@@ -36,7 +36,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.fragment.TimersFragment;
+import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.shared.Constants;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;

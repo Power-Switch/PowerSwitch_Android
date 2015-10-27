@@ -16,14 +16,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment;
+package eu.power_switch.gui.fragment.main;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -41,34 +40,38 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
-import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.ConfigureSceneDialog;
+import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
+import eu.power_switch.gui.animation.AnimationHandler;
+import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.log.Log;
-import eu.power_switch.obj.Scene;
+import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.Constants;
 import eu.power_switch.wear.service.UtilityService;
 
 /**
- * Fragment containing a List of all Scenes
+ * Fragment containing a List of all Rooms and Receivers
  */
-public class ScenesFragment extends Fragment {
+public class RoomsFragment extends Fragment {
 
-    private ArrayList<Scene> scenes;
-    private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
-    private RecyclerView recyclerViewScenes;
+    private NetworkHandler networkHandler;
+    private ArrayList<Room> rooms;
+
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
-    private FloatingActionButton fab;
+    private FloatingActionButton addReceiverFAB;
+    private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
+    private RecyclerView recyclerViewRooms;
 
     /**
-     * Used to notify Scene Fragment (this) that Scenes have changed
+     * Used to notify Room Fragment (this) that Rooms have changed
      *
      * @param context
      */
-    public static void sendScenesChangedBroadcast(Context context) {
-        Log.d("ScenesFragment", "sendScenesChangedBroadcast");
-        Intent intent = new Intent(Constants.INTENT_SCENE_CHANGED);
+    public static void sendReceiverChangedBroadcast(Context context) {
+        Log.d("RoomsFragment", "sendReceiverChangedBroadcast");
+        Intent intent = new Intent(Constants.INTENT_RECEIVER_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         UtilityService.forceWearDataUpdate(context);
@@ -77,75 +80,77 @@ public class ScenesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
+        rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
         setHasOptionsMenu(true);
 
-        scenes = new ArrayList<>();
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(), rootView, scenes);
-
-        recyclerViewScenes = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_scenes);
-        recyclerViewScenes.setAdapter(sceneRecyclerViewAdapter);
+        rooms = new ArrayList<>();
+        recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_rooms);
+        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getActivity(), rooms);
+        recyclerViewRooms.setAdapter(roomsRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.scene_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewScenes.setLayoutManager(layoutManager);
+                getResources().getInteger(R.integer.room_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+        recyclerViewRooms.setLayoutManager(layoutManager);
+        updateUI();
 
+        addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_receiver_fab);
         final Fragment fragment = this;
-        sceneRecyclerViewAdapter.setOnItemLongClickListener(new SceneRecyclerViewAdapter.OnItemLongClickListener() {
-            @Override
-            public void onItemLongClick(View itemView, int position) {
-                final Scene scene = scenes.get(position);
-
-                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                Bundle sceneData = new Bundle();
-                sceneData.putLong("SceneId", scene.getId());
-                configureSceneDialog.setArguments(sceneData);
-                configureSceneDialog.setTargetFragment(fragment, 0);
-                configureSceneDialog.show(getFragmentManager(), null);
-            }
-        });
-
-        refreshScenes();
-
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_scene_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        addReceiverFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                configureSceneDialog.setTargetFragment(fragment, 0);
-                configureSceneDialog.show(getFragmentManager(), null);
+//                AddReceiverDialog addReceiverDialog = new AddReceiverDialog();
+//                addReceiverDialog.show(getFragmentManager(), null);
+
+                if (AnimationHandler.checkTargetApi()) {
+//                    Intent intent = new Intent();
+//
+//                    ActivityOptionsCompat options =
+//                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+//                                    addReceiverFAB,   // The view which starts the transition
+//                                    "configureReceiverTransition"    // The transitionName of the view we’re transitioning to
+//                            );
+//                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+                } else {
+
+                }
+
+                ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
+                configureReceiverDialog.setTargetFragment(fragment, 0);
+                configureReceiverDialog.show(getFragmentManager(), null);
             }
         });
+
+        networkHandler = new NetworkHandler(getActivity());
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("ScenesFragment", "received intent: " + intent.getAction());
-                refreshScenes();
+                Log.d("RoomsFragment", "received intent: " + intent.getAction());
+                updateUI();
             }
         };
+
 
         return rootView;
     }
 
-    @UiThread
-    private void refreshScenes() {
-        Log.d("ScenesFragment", "refreshScenes");
-        scenes.clear();
+    private void updateUI() {
+        rooms.clear();
 
         SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
         if (sharedPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            scenes.addAll(playStoreModeDataModel.getScenes());
+            rooms.addAll(playStoreModeDataModel.getRooms());
         } else {
-            fillListWithScenes();
+            fillListWithRooms();
         }
 
-        sceneRecyclerViewAdapter.notifyDataSetChanged();
+        roomsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
-    private void fillListWithScenes() {
-        scenes.addAll(DatabaseHandler.getAllScenes());
+    private void fillListWithRooms() {
+        // Get Rooms and Receivers
+        rooms.addAll(DatabaseHandler.getAllRooms());
     }
 
     @Override
@@ -155,10 +160,10 @@ public class ScenesFragment extends Fragment {
         }
 
         switch (menuItem.getItemId()) {
-            case R.id.create_scene:
-                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                configureSceneDialog.setTargetFragment(this, 0);
-                configureSceneDialog.show(getFragmentManager(), null);
+            case R.id.create_receiver:
+                ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
+                configureReceiverDialog.setTargetFragment(this, 0);
+                configureReceiverDialog.show(getFragmentManager(), null);
             default:
                 break;
 
@@ -169,7 +174,7 @@ public class ScenesFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.scene_fragment_menu, menu);
+        inflater.inflate(R.menu.room_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -178,9 +183,9 @@ public class ScenesFragment extends Fragment {
         super.onResume();
         SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
         if (sharedPreferencesHandler.getHideAddFAB()) {
-            fab.setVisibility(View.GONE);
+            addReceiverFAB.setVisibility(View.GONE);
         } else {
-            fab.setVisibility(View.VISIBLE);
+            addReceiverFAB.setVisibility(View.VISIBLE);
         }
     }
 
@@ -188,7 +193,6 @@ public class ScenesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_SCENE_CHANGED);
         intentFilter.addAction(Constants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -198,4 +202,5 @@ public class ScenesFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
+
 }

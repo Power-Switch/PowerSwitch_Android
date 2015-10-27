@@ -43,11 +43,11 @@ import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1TimeFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2DaysFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4SummaryFragment;
+import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.log.Log;
 import eu.power_switch.shared.Constants;
 

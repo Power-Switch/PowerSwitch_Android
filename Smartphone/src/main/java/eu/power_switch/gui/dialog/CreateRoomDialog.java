@@ -41,7 +41,7 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.fragment.RoomsFragment;
+import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 
 /**

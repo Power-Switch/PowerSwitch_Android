@@ -42,7 +42,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
-import eu.power_switch.gui.fragment.SettingsTabFragment;
+import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
