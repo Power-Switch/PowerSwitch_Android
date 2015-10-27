@@ -106,6 +106,15 @@ public abstract class Gateway {
     }
 
     /**
+     * Sets active status of this Gateway
+     *
+     * @param active true if active
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
      * Get Host address of this Gateway
      *
      * @return

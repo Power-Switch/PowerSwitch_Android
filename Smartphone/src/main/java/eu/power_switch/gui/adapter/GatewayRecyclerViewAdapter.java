@@ -83,6 +83,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                 } else {
                     DatabaseHandler.disableGateway(gateway.getId());
                 }
+                gateway.setActive(isChecked);
             }
         });
 
