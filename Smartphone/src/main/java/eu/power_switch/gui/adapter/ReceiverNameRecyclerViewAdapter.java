@@ -19,6 +19,7 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,12 +27,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.device.Receiver;
 
@@ -40,8 +43,7 @@ import eu.power_switch.obj.device.Receiver;
  * <p/>
  * Created by Markus on 13.10.2015.
  */
-public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<ReceiverNameRecyclerViewAdapter.ViewHolder>
-        implements ItemTouchHelperAdapter {
+public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<ReceiverNameRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperAdapter {
     private ArrayList<Receiver> receivers;
     private Context context;
     private OnStartDragListener onStartDragListener;
@@ -104,14 +106,32 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
         receivers.remove(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+        public LinearLayout mainLayout;
         public TextView receiverName;
         public ImageView dragHandle;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.mainLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_main);
             this.receiverName = (TextView) itemView.findViewById(R.id.txt_receiver_name);
             this.dragHandle = (ImageView) itemView.findViewById(R.id.drag_handle);
+        }
+
+        @Override
+        public void onItemSelected() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                float toElevation = context.getResources().getDimension(R.dimen.list_element_elevation_while_moving);
+                AnimationHandler.animateElevation(mainLayout, 0, toElevation, 200);
+            }
+        }
+
+        @Override
+        public void onItemClear() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                float fromElevation = context.getResources().getDimension(R.dimen.list_element_elevation_while_moving);
+                AnimationHandler.animateElevation(mainLayout, fromElevation, 0, 200);
+            }
         }
     }
 }

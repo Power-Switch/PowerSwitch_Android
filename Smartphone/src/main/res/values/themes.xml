@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
     <!-- Base Dark Theme -->
     <style name="PowerSwitchThemeBase.Dark" parent="Theme.AppCompat.NoActionBar">
         <!-- material design -->
         <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryLight">@color/primary_light</item>
         <item name="colorAccent">#FF999999</item>
         <item name="android:windowBackground">@color/windowBackground</item>
 
@@ -25,6 +44,7 @@
     <style name="PowerSwitchThemeBase.Light" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- material design -->
         <item name="colorPrimary">@color/primaryInverse</item>
+        <item name="colorPrimaryLight">@color/primary_lightInverse</item>
         <item name="colorAccent">#FF333333</item>
         <item name="android:windowBackground">@color/windowBackgroundInverse</item>
 

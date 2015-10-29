@@ -18,8 +18,10 @@
 
 package eu.power_switch.gui.animation;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Build;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -36,6 +38,18 @@ public class AnimationHandler {
     public static Animation getRotationClockwiseAnimation(Context context) {
         Animation anim = AnimationUtils.loadAnimation(context, R.anim.rotate);
         return anim;
+    }
+
+    public static void animateElevation(View view, float fromElevation, float toElevation, long animationDuration) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+            ObjectAnimator animator = ObjectAnimator.ofFloat(view, "translationZ", fromElevation, toElevation);
+            animator.setDuration(animationDuration);
+            animator.start();
+        }
+    }
+
+    public static void animateElevation(View view, float fromElevation, float toElevation) {
+        animateElevation(view, fromElevation, toElevation, 300);
     }
 
 //    public static void enterCircularRevealAnimation(final View view) {

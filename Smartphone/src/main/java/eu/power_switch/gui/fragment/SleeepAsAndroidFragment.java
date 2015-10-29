@@ -27,7 +27,8 @@ import android.view.ViewGroup;
 import eu.power_switch.R;
 
 /**
- * Fragment containing all settings related to clock alarm handling from supported alarm clock applications
+ * Fragment containing all settings related to clock alarm handling from supported alarm clock applications like:
+ * Sleep As Android
  * <p/>
  * Created by Markus on 08.10.2015.
  */

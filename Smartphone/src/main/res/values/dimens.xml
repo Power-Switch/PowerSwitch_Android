@@ -1,3 +1,21 @@
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
     <!-- TODO: Check again -->
@@ -17,14 +35,19 @@
     <dimen name="ui_element_margin_double">8dp</dimen>
     <dimen name="editText_height">40dp</dimen>
     <dimen name="ui_element_height">48dp</dimen>
+
     <dimen name="font_title_size">24sp</dimen>
+    <dimen name="font_element_size">18sp</dimen>
 
     <dimen name="timer_action_spinner_height">48dp</dimen>
 
     <dimen name="cardview_corner_radius">8dp</dimen>
     <dimen name="cardview_padding">0dp</dimen>
     <dimen name="cardview_elevation">4dp</dimen>
+    <dimen name="cardview_elevation_while_moving">8dp</dimen>
     <dimen name="cardview_default_height">64dp</dimen>
+
+    <dimen name="list_element_elevation_while_moving">8dp</dimen>
 
     <integer name="room_grid_span_count">1</integer>
     <integer name="scene_grid_span_count">1</integer>
