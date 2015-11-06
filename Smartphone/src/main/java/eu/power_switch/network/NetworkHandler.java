@@ -44,11 +44,21 @@ import eu.power_switch.obj.gateway.ITGW433;
  */
 public class NetworkHandler {
 
-    protected final Object lockObject = new Object();
+    protected static final List<NetworkPackage> networkPackagesQueue = new LinkedList<>();
+    protected static final Object lockObject = new Object();
+    protected static NetworkPackageQueueHandler networkPackageQueueHandler;
     protected Context context;
 
     public NetworkHandler(Context context) {
         this.context = context;
+
+        if (networkPackageQueueHandler == null) {
+            networkPackageQueueHandler = new NetworkPackageQueueHandler(context);
+        }
+
+        if (networkPackageQueueHandler.getStatus() != AsyncTask.Status.RUNNING) {
+            networkPackageQueueHandler.execute();
+        }
     }
 
     /**
@@ -77,9 +87,9 @@ public class NetworkHandler {
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-
-        boolean isGprsAvailable = (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_MOBILE && networkInfo
-                .isConnected());
+        boolean isGprsAvailable = (networkInfo != null &&
+                networkInfo.getType() == ConnectivityManager.TYPE_MOBILE &&
+                networkInfo.isConnected());
         Log.d("isGprsAvailable: " + isGprsAvailable);
         return isGprsAvailable;
     }
@@ -97,8 +107,8 @@ public class NetworkHandler {
             try {
                 LinkedList<String> messages;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    messages = new AutoGatewayDiscover(context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-                            (Void[]) null).get();
+                    messages = new AutoGatewayDiscover(context).
+                            executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null).get();
                 } else {
                     messages = new AutoGatewayDiscover(context).execute().get();
                 }
@@ -212,7 +222,8 @@ public class NetworkHandler {
      *
      * @param networkPackages
      */
-    public void send(NetworkPackage... networkPackages) {
+    @Deprecated
+    private void send(NetworkPackage... networkPackages) {
         if (networkPackages.length == 0) {
             return;
         }
@@ -241,16 +252,19 @@ public class NetworkHandler {
      *
      * @param networkPackages
      */
-    public void send(List<NetworkPackage> networkPackages) {
-        if (networkPackages.size() == 0) {
+    public synchronized void send(List<NetworkPackage> networkPackages) {
+        if (networkPackages == null) {
             return;
         }
 
-        NetworkPackage[] array = new NetworkPackage[networkPackages.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = networkPackages.get(i);
+        // add NetworkPackages to queue
+        synchronized (networkPackagesQueue) {
+            networkPackagesQueue.addAll(networkPackages);
         }
-        send(array);
+        synchronized (NetworkPackageQueueHandler.lock) {
+            // notify worker thread to handle new packages
+            NetworkPackageQueueHandler.lock.notify();
+        }
     }
 
 }
