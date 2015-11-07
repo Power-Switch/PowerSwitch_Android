@@ -25,11 +25,11 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
 import eu.power_switch.widget.RoomWidget;
+import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
 
 /**
@@ -63,11 +63,12 @@ public class RoomWidgetProvider extends AppWidgetProvider {
 
                     // set button action
                     remoteViews.setOnClickPendingIntent(R.id.button_on,
-                            IntentReceiver.buildRoomButtonPendingIntent(context, room.getName(), context.getString(R
-                                    .string.on), ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
+                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R.string.on),
+                                    ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
                     remoteViews.setOnClickPendingIntent(R.id.button_off,
-                            IntentReceiver.buildRoomButtonPendingIntent(context, room.getName(), context.getString(R
-                                    .string.off), ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
+                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R
+                                            .string.off),
+                                    ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
                 } else {
                     remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_deleted));

@@ -36,11 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
 import eu.power_switch.widget.RoomWidget;
+import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 
 /**
@@ -122,11 +122,11 @@ public class ConfigureRoomWidgetActivity extends Activity {
                     views.setTextViewText(R.id.textView_room_widget_name, room.getName());
                     // set button action
                     views.setOnClickPendingIntent(R.id.button_on,
-                            IntentReceiver.buildRoomButtonPendingIntent(ConfigureRoomWidgetActivity.this, room.getName(),
-                                    getString(R.string.on), ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
+                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(), room,
+                                    getString(R.string.on), ROOM_INTENT_ID_OFFSET + appWidgetId));
                     views.setOnClickPendingIntent(R.id.button_off,
-                            IntentReceiver.buildRoomButtonPendingIntent(ConfigureRoomWidgetActivity.this, room.getName(),
-                                    getString(R.string.off), ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
+                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(),
+                                    room, getString(R.string.off), ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                     views.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
 
 

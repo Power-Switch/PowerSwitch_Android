@@ -155,7 +155,7 @@ public class IntentReceiver extends BroadcastReceiver {
                 }
             }
             log += " }";
-            Log.d("IntentReceiver", log);
+            Log.d(this, log);
         } catch (Exception e) {
             Log.e(e);
         }

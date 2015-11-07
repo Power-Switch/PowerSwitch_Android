@@ -85,6 +85,9 @@ public class Constants {
     // Api
     public static final String UNIVERSAL_ACTION_INTENT = "eu.power_switch.action";
 
+    // Widgets
+    public static final String WIDGET_ACTION_INTENT = "eu.power_switch.widget_action";
+
     // Timer
     public static final String TIMER_ACTIVATION_INTENT = "eu.power_switch.alarm";
     public static final String TIMER_URI_SCHEME = "timer";

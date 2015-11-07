@@ -38,6 +38,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.widget.ReceiverWidget;
+import eu.power_switch.widget.WidgetIntentReceiver;
 
 /**
  * This class is responsible for updating existing Receiver widgets
@@ -75,7 +76,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                     remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
 
                     // add buttons from database
-                    int j = 0;
+                    int buttonOffset = 0;
                     for (Button button : buttons) {
                         // set button action
                         RemoteViews buttonView = new RemoteViews(context.getResources()
@@ -84,12 +85,12 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                        PendingIntent intent = IntentReceiver.buildReceiverButtonPendingIntent(context, room.getName(),
-                                receiver.getName(), button.getName(), appWidgetId * 15 + j);
+                        PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, room,
+                                receiver, button, appWidgetId * 15 + buttonOffset);
                         buttonView.setOnClickPendingIntent(R.id.button_widget_universal, intent);
 
                         remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
-                        j++;
+                        buttonOffset++;
                     }
                     remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.VISIBLE);
                 } else {

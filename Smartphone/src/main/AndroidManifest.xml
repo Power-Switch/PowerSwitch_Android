@@ -121,6 +121,13 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/scene_widget_info"/>
         </receiver>
+        <receiver android:name=".widget.WidgetIntentReceiver">
+            <!-- Widgets -->
+            <intent-filter>
+                <action android:name="eu.power_switch.widget_action"/>
+            </intent-filter>
+        </receiver>
+
         <receiver android:name=".api.IntentReceiver">
             <!-- Tasker/LLama interface -->
             <intent-filter>

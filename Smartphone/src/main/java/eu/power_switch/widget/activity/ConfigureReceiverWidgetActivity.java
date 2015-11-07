@@ -43,12 +43,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.widget.ReceiverWidget;
+import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
@@ -163,7 +163,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
 
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, selectedRoom.getName() + ": " +
                             selectedReceiver.getName());
-                    int i = 0;
+                    int buttonOffset = 0;
                     for (eu.power_switch.obj.Button button : buttons) {
                         // set button action
                         RemoteViews buttonView = new RemoteViews(getApplicationContext().getResources()
@@ -172,13 +172,13 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                        PendingIntent pendingIntent = IntentReceiver.buildReceiverButtonPendingIntent
-                                (getApplicationContext(), selectedRoom.getName(), selectedReceiver.getName(), button
-                                        .getName(), (appWidgetId * 15) + i);
+                        PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(), selectedRoom,
+                                selectedReceiver, button, appWidgetId * 15 + buttonOffset);
+
                         buttonView.setOnClickPendingIntent(R.id.button_widget_universal, pendingIntent);
 
                         remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
-                        i++;
+                        buttonOffset++;
                     }
 
                     appWidgetManager.updateAppWidget(appWidgetId, remoteViews);

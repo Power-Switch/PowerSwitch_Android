@@ -36,11 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.widget.SceneWidget;
+import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
@@ -120,10 +120,8 @@ public class ConfigureSceneWidgetActivity extends Activity {
                     RemoteViews views = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
                     views.setTextViewText(R.id.buttonActivate_scene_widget, getString(R.string.activate));
                     views.setTextViewText(R.id.textView_scene_widget_name, scene.getName());
-                    views.setOnClickPendingIntent(R.id.buttonActivate_scene_widget, IntentReceiver
-                            .buildSceneButtonPendingIntent(ConfigureSceneWidgetActivity.this, scene.getName(),
-                                    SCENE_INTENT_ID_OFFSET + appWidgetId));
-
+                    views.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
+                            WidgetIntentReceiver.buildSceneWidgetPendingIntent(getApplicationContext(), scene, SCENE_INTENT_ID_OFFSET + appWidgetId));
                     appWidgetManager.updateAppWidget(appWidgetId, views);
 
                     // Finally, create the return Intent, set it with the
