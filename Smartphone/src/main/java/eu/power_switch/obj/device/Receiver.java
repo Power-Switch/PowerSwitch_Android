@@ -91,6 +91,7 @@ public abstract class Receiver {
             put("ITWR 3500", "eu.power_switch.obj.device.intertechno.ITWR3500");
             put("LBUR 100", "eu.power_switch.obj.device.intertechno.LBUR100");
             put("PA3 1000", "eu.power_switch.obj.device.intertechno.PA3_1000");
+            put("PAR 1500", "eu.power_switch.obj.device.intertechno.PAR_1500");
             put("YCR 1000", "eu.power_switch.obj.device.intertechno.YCR1000");
             // Mumbi
             put("m-FS300", "eu.power_switch.obj.device.mumbi.m_FS300");
