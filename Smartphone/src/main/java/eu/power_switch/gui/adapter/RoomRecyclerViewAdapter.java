@@ -141,6 +141,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                             .addToBackStack(null).commit();
                                 }
                             }).show();
+                    return;
                 }
 
                 ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
@@ -273,6 +274,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                                     .addToBackStack(null).commit();
                                         }
                                     }).show();
+                            return;
                         }
                         ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
                         for (Gateway gateway : activeGateways) {
