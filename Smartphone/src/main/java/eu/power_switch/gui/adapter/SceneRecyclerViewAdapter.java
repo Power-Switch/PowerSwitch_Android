@@ -18,9 +18,11 @@
 
 package eu.power_switch.gui.adapter;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,11 +38,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.log.Log;
-import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
@@ -116,8 +117,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 if (sharedPreferencesHandler.getVibrateOnButtonPress()) {
                     VibrationHandler.vibrate(fragmentActivity, sharedPreferencesHandler.getVibrationDuration());
                 }
-                NetworkHandler networkHandler = new NetworkHandler(fragmentActivity);
-                List<NetworkPackage> packages = new ArrayList<>();
+
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                 if (activeGateways.isEmpty()) {
                     Snackbar.make(rootView, R.string.no_active_gateway, Snackbar.LENGTH_LONG).setAction
@@ -134,19 +134,13 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     return;
                 }
 
-                for (SceneItem sceneItem : scene.getSceneItems()) {
-                    for (Gateway gateway : activeGateways) {
-                        try {
-                            packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
-                                    sceneItem.getActiveButton().getName()));
-                        } catch (Exception e) {
-                            Log.e(e);
-                        }
-                    }
-                    DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
-                            .getId(), sceneItem.getActiveButton().getId());
+                try {
+                    IntentReceiver.buildSceneButtonPendingIntent(fragmentActivity,
+                            scene.getName(), 0).send();
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                    Log.e(e);
                 }
-                networkHandler.send(packages);
             }
         });
 
@@ -193,7 +187,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);
 
-                final int accentColor = fragmentActivity.getResources().getColor(R.color.accent_blue_a700);
+                final int accentColor = ContextCompat.getColor(fragmentActivity, R.color.accent_blue_a700);
                 if (sceneItem.getActiveButton().equals(button)) {
                     buttonView.setTextColor(accentColor);
                 }

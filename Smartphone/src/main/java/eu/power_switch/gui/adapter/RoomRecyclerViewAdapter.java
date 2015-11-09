@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.adapter;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -38,14 +39,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.log.Log;
-import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
@@ -123,9 +123,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 if (sharedPreferencesHandler.getVibrateOnButtonPress()) {
                     VibrationHandler.vibrate(fragmentActivity, sharedPreferencesHandler.getVibrationDuration());
                 }
-                android.widget.Button buttonView = (android.widget.Button) v;
-                List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
+                List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                 if (activeGateways.isEmpty()) {
                     Snackbar.make(v, R.string.no_active_gateway, Snackbar.LENGTH_LONG).setAction
                             (R.string.open_settings, new View.OnClickListener() {
@@ -144,35 +143,17 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     return;
                 }
 
-                ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
-                for (Receiver receiver : room.getReceivers()) {
-                    for (eu.power_switch.obj.Button button : receiver.getButtons()) {
-                        if (buttonView.getText().equals(button.getName())) {
-                            for (Gateway gateway : activeGateways) {
-                                try {
-                                    networkPackages.add(receiver.getNetworkPackage(gateway, button.getName()));
-                                } catch (Exception e) {
-                                    Log.e(e);
-                                }
-                            }
-                        }
-                    }
+                android.widget.Button buttonView = (android.widget.Button) v;
+
+                try {
+                    IntentReceiver.buildRoomButtonPendingIntent(fragmentActivity,
+                            room.getName(), buttonView.getText().toString(), 0).send();
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                    Log.e(e);
                 }
 
-                NetworkHandler networkHandler = new NetworkHandler(fragmentActivity);
-                networkHandler.send(networkPackages);
-
-                if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
-                    // update last activated button for all receivers
-                    for (Receiver receiver : room.getReceivers()) {
-                        for (Button button : receiver.getButtons()) {
-                            if (buttonView.getText().equals(button.getName())) {
-                                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-                            }
-                        }
-                    }
-                    updateReceiverViews(holder, room);
-                }
+                updateReceiverViews(holder, room);
             }
         };
 
@@ -201,7 +182,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         }
     }
 
-    private void updateReceiverViews(final RoomRecyclerViewAdapter.ViewHolder holder, Room room) {
+    private void updateReceiverViews(final RoomRecyclerViewAdapter.ViewHolder holder, final Room room) {
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) fragmentActivity.getSystemService(inflaterString);
 
@@ -241,7 +222,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             long lastActivatedButtonId = DatabaseHandler.getLastActivatedButtonId(receiver.getId());
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
-                android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button,
+                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button,
                         null, false);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);
@@ -276,18 +257,15 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                     }).show();
                             return;
                         }
-                        ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
-                        for (Gateway gateway : activeGateways) {
-                            try {
-                                networkPackages.add(receiver.getNetworkPackage(gateway, button.getName()));
-                            } catch (Exception e) {
-                                Log.e(e);
-                            }
-                        }
-                        NetworkHandler networkHandler = new NetworkHandler(fragmentActivity);
-                        networkHandler.send(networkPackages);
 
-                        DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+                        try {
+                            IntentReceiver.buildReceiverButtonPendingIntent(fragmentActivity,
+                                    room.getName(), receiver.getName(), button.getName(), 0).send();
+                        } catch (PendingIntent.CanceledException e) {
+                            e.printStackTrace();
+                            Log.e(e);
+                        }
+
                         if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
                             for (android.widget.Button button : buttonViews) {
                                 if (button != v) {

@@ -23,6 +23,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -31,12 +32,12 @@ import android.widget.RemoteViews;
 import java.util.LinkedList;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 
@@ -67,6 +68,8 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                 Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
 
                 if (room != null && receiver != null) {
+                    SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+
                     // update UI
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, room.getName() + ": " + receiver.getName());
 
@@ -84,6 +87,11 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
+                        if (sharedPreferencesHandler.getHighlightLastActivatedButton() &&
+                                DatabaseHandler.getLastActivatedButtonId(receiver.getId()) == button.getId()) {
+                            buttonView.setTextColor(R.id.button_widget_universal,
+                                    ContextCompat.getColor(context, R.color.accent_blue_a700));
+                        }
 
                         PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, room,
                                 receiver, button, appWidgetId * 15 + buttonOffset);

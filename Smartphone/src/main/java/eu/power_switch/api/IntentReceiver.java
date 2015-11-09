@@ -40,7 +40,9 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.Constants;
+import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 public class IntentReceiver extends BroadcastReceiver {
 
@@ -189,6 +191,24 @@ public class IntentReceiver extends BroadcastReceiver {
             Bundle extras = intent.getExtras();
             if (extras != null) {
 
+//                if (DatabaseHandler.getAllGateways(true).isEmpty()) {
+//                    Snackbar.make(v, R.string.no_active_gateway, Snackbar.LENGTH_LONG).setAction
+//                            (R.string.open_settings, new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    MainActivity.addToBackstack(SettingsTabFragment.class, "Settings");
+//                                    fragmentActivity.getSupportFragmentManager()
+//                                            .beginTransaction()
+//                                            .setCustomAnimations(R.anim
+//                                                    .slide_in_right, R.anim.slide_out_left, android.R.anim
+//                                                    .slide_in_left, android.R.anim.slide_out_right)
+//                                            .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+//                                            .addToBackStack(null).commit();
+//                                }
+//                            }).show();
+//                    return;
+//                }
+
                 NetworkHandler nwm = new NetworkHandler(context);
 
                 if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {
@@ -262,6 +282,9 @@ public class IntentReceiver extends BroadcastReceiver {
                         for (SceneItem sceneItem : scene.getSceneItems()) {
                             packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
                                     sceneItem.getActiveButton().getName()));
+
+                            DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
+                                    .getId(), sceneItem.getActiveButton().getId());
                         }
                     }
                     nwm.send(packages);
@@ -269,6 +292,12 @@ public class IntentReceiver extends BroadcastReceiver {
                 }
             } else {
                 throw new NullPointerException();
+            }
+
+            SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+            // force receiver widget update to highlight last button
+            if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
+                ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);
             }
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);
