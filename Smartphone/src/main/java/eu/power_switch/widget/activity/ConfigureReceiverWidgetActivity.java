@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -47,6 +48,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
@@ -163,6 +165,9 @@ public class ConfigureReceiverWidgetActivity extends Activity {
 
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, selectedRoom.getName() + ": " +
                             selectedReceiver.getName());
+
+                    SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
+
                     int buttonOffset = 0;
                     for (eu.power_switch.obj.Button button : buttons) {
                         // set button action
@@ -171,6 +176,11 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
+                        if (sharedPreferencesHandler.getHighlightLastActivatedButton() &&
+                                DatabaseHandler.getLastActivatedButtonId(selectedReceiver.getId()) == button.getId()) {
+                            buttonView.setTextColor(R.id.button_widget_universal,
+                                    ContextCompat.getColor(getApplicationContext(), R.color.accent_blue_a700));
+                        }
 
                         PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(), selectedRoom,
                                 selectedReceiver, button, appWidgetId * 15 + buttonOffset);
