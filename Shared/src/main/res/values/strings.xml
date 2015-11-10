@@ -82,10 +82,12 @@
     <string name="app_changelog">
 <![CDATA[
 Changelog:<br />
+<a href="http://power-switch.eu/download/">http://power-switch.eu/download</a><br />
 <br />
-<a href="http://power-switch.eu/download/">power-switch.eu/download</a><br />
+Source Code on GitHub:<br />
+<a href="https://github.com/Power-Switch/PowerSwitch_Android">https://github.com/Power-Switch/PowerSwitch_Android</a><br />
 ]]>
-    </string>
+</string>
 
     <!-- supported gateways, brands and models -->
     <string-array name="gateway_array">
