@@ -27,6 +27,7 @@
     <string name="general_settings">General Settings</string>
     <string name="autodiscover">Automatically search for Gateway</string>
     <string name="auto_collapse_rooms">Automatically collapse Rooms</string>
+    <string name="auto_collapse_timers">Automatically collapse Timers</string>
     <string name="show_room_all_on_off_buttons">Show On/Off buttons for Room</string>
 
     <!-- Themes -->

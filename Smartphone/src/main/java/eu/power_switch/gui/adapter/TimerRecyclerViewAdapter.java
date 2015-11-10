@@ -32,6 +32,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.action.TimerAction;
@@ -151,6 +152,13 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
             TextView textViewAction = (TextView) linearLayout.findViewById(R.id.txt_timer_action);
             textViewAction.setText(timerAction.toString());
             holder.linearLayoutTimerActions.addView(linearLayout);
+        }
+
+
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+        // collapse timer
+        if (sharedPreferencesHandler.getAutoCollapseTimers()) {
+            linearLayoutDescription.setVisibility(View.GONE);
         }
 
         if (position == getItemCount() - 1) {

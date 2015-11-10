@@ -35,6 +35,7 @@ public class SharedPreferencesHandler {
     private static final String HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY = "highlightLastActivatedButton";
     private static final String HIDE_ADD_FAB_KEY = "hideAddFAB";
     private static final String AUTO_COLLAPSE_ROOMS_KEY = "autoCollapseRooms";
+    private static final String AUTO_COLLAPSE_TIMERS_KEY = "autoCollapseTimers";
     private static final String THEME_KEY = "theme";
     private static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
     private static final String VIBRATION_DURATION_KEY = "vibrationDuration";
@@ -150,6 +151,29 @@ public class SharedPreferencesHandler {
         Log.d(this, "setAutoCollapseRooms: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(AUTO_COLLAPSE_ROOMS_KEY, bool);
+        editor.apply();
+    }
+
+    /**
+     * Retrieves setting for automatic collapsing of Timers
+     *
+     * @return true if enabled
+     */
+    public boolean getAutoCollapseTimers() {
+        boolean value = sharedPreferences.getBoolean(AUTO_COLLAPSE_TIMERS_KEY, false);
+        Log.d(this, "getAutoCollapseTimers: " + value);
+        return value;
+    }
+
+    /**
+     * Sets setting for automatic collapsing of Timers
+     *
+     * @param bool true if enabled
+     */
+    public void setAutoCollapseTimers(boolean bool) {
+        Log.d(this, "setAutoCollapseTimers: " + bool);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(AUTO_COLLAPSE_TIMERS_KEY, bool);
         editor.apply();
     }
 

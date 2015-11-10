@@ -26,6 +26,7 @@
     <string name="general_settings">Allgemeine Einstellungen</string>
     <string name="autodiscover">Automatisch nach Gateways suchen</string>
     <string name="auto_collapse_rooms">Automatisch alle Räume zusammenklappen</string>
+    <string name="auto_collapse_timers">Automatisch alle Timer zusammenklappen</string>
     <string name="show_room_all_on_off_buttons">An/Aus Buttons für Räume anzeigen</string>
 
     <string name="theme">Theme</string>

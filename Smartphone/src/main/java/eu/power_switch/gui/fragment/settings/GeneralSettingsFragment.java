@@ -54,7 +54,8 @@ public class GeneralSettingsFragment extends Fragment {
     private SharedPreferencesHandler sharedPreferencesHandler;
 
     private CheckBox autoDiscover;
-    private CheckBox expandRoomsOnStart;
+    private CheckBox autoCollapseRooms;
+    private CheckBox autoCollapseTimers;
     private CheckBox showRoomAllOnOffButtons;
     private CheckBox hideAddFAB;
     private CheckBox highlightLastActivatedButton;
@@ -83,8 +84,11 @@ public class GeneralSettingsFragment extends Fragment {
                     case R.id.checkBox_autoDiscover:
                         sharedPreferencesHandler.setAutoDiscover(isChecked);
                         break;
-                    case R.id.checkBox_expandRoomsOnStart:
+                    case R.id.checkBox_autoCollapseRooms:
                         sharedPreferencesHandler.setAutoCollapseRooms(isChecked);
+                        break;
+                    case R.id.checkBox_autoCollapseTimers:
+                        sharedPreferencesHandler.setAutoCollapseTimers(isChecked);
                         break;
                     case R.id.checkBox_showRoomAllOnOffButtons:
                         sharedPreferencesHandler.setShowRoomAllOnOff(isChecked);
@@ -142,8 +146,11 @@ public class GeneralSettingsFragment extends Fragment {
         autoDiscover = (CheckBox) rootView.findViewById(R.id.checkBox_autoDiscover);
         autoDiscover.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        expandRoomsOnStart = (CheckBox) rootView.findViewById(R.id.checkBox_expandRoomsOnStart);
-        expandRoomsOnStart.setOnCheckedChangeListener(onCheckedChangeListener);
+        autoCollapseRooms = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
+        autoCollapseRooms.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        autoCollapseTimers = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseTimers);
+        autoCollapseTimers.setOnCheckedChangeListener(onCheckedChangeListener);
 
         showRoomAllOnOffButtons = (CheckBox) rootView.findViewById(R.id.checkBox_showRoomAllOnOffButtons);
         showRoomAllOnOffButtons.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -214,7 +221,8 @@ public class GeneralSettingsFragment extends Fragment {
 
     private void updateUI() {
         autoDiscover.setChecked(sharedPreferencesHandler.getAutoDiscover());
-        expandRoomsOnStart.setChecked(sharedPreferencesHandler.getAutoCollapseRooms());
+        autoCollapseRooms.setChecked(sharedPreferencesHandler.getAutoCollapseRooms());
+        autoCollapseTimers.setChecked(sharedPreferencesHandler.getAutoCollapseTimers());
         showRoomAllOnOffButtons.setChecked(sharedPreferencesHandler.getShowRoomAllOnOff());
         hideAddFAB.setChecked(sharedPreferencesHandler.getHideAddFAB());
         highlightLastActivatedButton.setChecked(sharedPreferencesHandler.getHighlightLastActivatedButton());
