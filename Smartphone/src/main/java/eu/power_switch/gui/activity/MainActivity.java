@@ -38,6 +38,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -313,15 +314,21 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.help:
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://power-switch.eu/faq/"));
                     startActivity(browserIntent);
-                    break;
+
+                    drawerLayout.closeDrawers();
+                    return;
                 case R.id.donate:
                     DonationDialog donationDialog = new DonationDialog();
                     donationDialog.show(getSupportFragmentManager(), null);
-                    break;
+
+                    drawerLayout.closeDrawers();
+                    return;
                 case R.id.about:
                     AboutDialog aboutDialog = new AboutDialog();
                     aboutDialog.show(getSupportFragmentManager(), null);
-                    break;
+
+                    drawerLayout.closeDrawers();
+                    return;
                 default:
 
             }
@@ -371,8 +378,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(android.R.id.home).setChecked(true);
+        return true;
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         lastFragmentClasses.pop();
         lastFragmentTitles.pop();
         if (!lastFragmentTitles.isEmpty()) {
