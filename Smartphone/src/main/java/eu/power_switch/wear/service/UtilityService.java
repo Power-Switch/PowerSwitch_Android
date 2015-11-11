@@ -164,6 +164,9 @@ public class UtilityService extends IntentService {
         receiverDataMap.putLong(Constants.RECEIVER_ID_DATAMAP_KEY, receiver.getId());
         receiverDataMap.putString(Constants.RECEIVER_NAME_DATAMAP_KEY, receiver.getName());
         receiverDataMap.putLong(Constants.RECEIVER_ROOM_ID_DATAMAP_KEY, receiver.getRoomId());
+        receiverDataMap.putInt(Constants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY, receiver.getPositionInRoom());
+        receiverDataMap.putLong(Constants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY, DatabaseHandler
+                .getLastActivatedButtonId(receiver.getId()));
 
         return receiverDataMap;
     }

@@ -64,21 +64,28 @@ public class Constants {
 
     // GoogleApi
     public static final int GOOGLE_API_CLIENT_TIMEOUT = 10;
+
     // Wear DataApi
     public static final String START_ACTIVITY_PATH = "/start_activity";
     public static final String RECEIVER_ACTION_TRIGGER_PATH = "/receiver_action_trigger";
     public static final String REQUEST_DATA_UPDATE_PATH = "/request_data_update";
     public static final String DATA_PATH = "/data";
     public static final String EXTRA_DATA = "extra_data";
+
     // DataMap Keys
     public static final String ROOM_ID_DATAMAP_KEY = "ROOM_ID_DATAMAP_KEY";
     public static final String ROOM_NAME_DATAMAP_KEY = "ROOM_NAME_DATAMAP_KEY";
+
     public static final String RECEIVER_ID_DATAMAP_KEY = "RECEIVER_ID_DATAMAP_KEY";
     public static final String RECEIVER_NAME_DATAMAP_KEY = "RECEIVER_NAME_DATAMAP_KEY";
     public static final String RECEIVER_ROOM_ID_DATAMAP_KEY = "RECEIVER_ROOM_ID_DATAMAP_KEY";
+    public static final String RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY = "RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY";
+    public static final String RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY = "RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY";
+
     public static final String BUTTON_ID_DATAMAP_KEY = "BUTTON_ID_DATAMAP_KEY";
     public static final String BUTTON_NAME_DATAMAP_KEY = "BUTTON_NAME_DATAMAP_KEY";
     public static final String BUTTON_RECEIVER_ID_DATAMAP_KEY = "BUTTON_RECEIVER_ID_DATAMAP_KEY";
+
     public static final String SCENE_ID_DATAMAP_KEY = "SCENE_ID_DATAMAP_KEY";
     public static final String SCENE_NAME_DATAMAP_KEY = "SCENE_NAME_DATAMAP_KEY";
 

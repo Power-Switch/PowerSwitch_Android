@@ -31,6 +31,8 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import eu.power_switch.obj.Button;
@@ -71,8 +73,11 @@ public class ListenerService extends WearableListenerService {
                 long receiverId = dataMapItem.getLong(Constants.RECEIVER_ID_DATAMAP_KEY);
                 String receiverName = dataMapItem.getString(Constants.RECEIVER_NAME_DATAMAP_KEY);
                 long receiverRoomId = dataMapItem.getLong(Constants.RECEIVER_ROOM_ID_DATAMAP_KEY);
+                int positionInRoom = dataMapItem.getInt(Constants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY);
+                long lastActivatedButtonId = dataMapItem.getLong(Constants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY);
 
-                Receiver receiver = new Receiver(receiverId, receiverName, receiverRoomId);
+                Receiver receiver = new Receiver(receiverId, receiverName, receiverRoomId,
+                        lastActivatedButtonId, positionInRoom);
 
                 for (Room room : rooms) {
                     if (room.getId() == receiver.getRoomId()) {
@@ -96,6 +101,16 @@ public class ListenerService extends WearableListenerService {
                     }
                 }
             }
+        }
+
+        // sort receivers
+        for (Room room : rooms) {
+            Collections.sort(room.getReceivers(), new Comparator<Receiver>() {
+                @Override
+                public int compare(Receiver t0, Receiver t1) {
+                    return t0.getPositionInRoom() - t1.getPositionInRoom();
+                }
+            });
         }
 
         return rooms;

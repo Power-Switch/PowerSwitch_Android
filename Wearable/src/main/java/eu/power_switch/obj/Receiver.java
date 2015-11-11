@@ -50,17 +50,29 @@ public class Receiver implements Serializable {
     private List<Button> buttons;
 
     /**
+     * Position in Room
+     */
+    private int positionInRoom;
+
+    /**
+     * ID of last activated Button
+     */
+    private long lastActivatedButtonId;
+
+    /**
      * Default constructor
      *
      * @param id
      * @param name
      * @param roomId ID of the Room this Receiver is contained in
      */
-    public Receiver(long id, String name, long roomId) {
+    public Receiver(long id, String name, long roomId, long lastActivatedButtonId, int positionInRoom) {
         this.id = id;
         this.name = name;
         this.roomId = roomId;
         this.buttons = new LinkedList<>();
+        this.lastActivatedButtonId = lastActivatedButtonId;
+        this.positionInRoom = positionInRoom;
     }
 
     public long getId() {
@@ -89,5 +101,13 @@ public class Receiver implements Serializable {
 
     public long getRoomId() {
         return roomId;
+    }
+
+    public long getLastActivatedButtonId() {
+        return lastActivatedButtonId;
+    }
+
+    public int getPositionInRoom() {
+        return positionInRoom;
     }
 }
