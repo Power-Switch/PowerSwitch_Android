@@ -33,7 +33,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -64,7 +64,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
     private static Intent createReceiverButtonIntent(String roomName, String receiverName, String buttonName) {
         Intent intent = new Intent();
-        intent.setAction(Constants.WIDGET_ACTION_INTENT);
+        intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
         intent.putExtra(KEY_ROOM, roomName);
         intent.putExtra(KEY_RECEIVER, receiverName);
         intent.putExtra(KEY_BUTTON, buttonName);
@@ -89,7 +89,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
     private static Intent createRoomButtonIntent(String roomName, String buttonName) {
         Intent intent = new Intent();
-        intent.setAction(Constants.WIDGET_ACTION_INTENT);
+        intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
         intent.putExtra(KEY_ROOM, roomName);
         intent.putExtra(KEY_BUTTON, buttonName);
 
@@ -104,7 +104,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
     private static Intent createSceneIntent(String sceneName) {
         Intent intent = new Intent();
-        intent.setAction(Constants.WIDGET_ACTION_INTENT);
+        intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
         intent.putExtra(KEY_SCENE, sceneName);
 
         return intent;
@@ -129,7 +129,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
         }
 
         try {
-            if (intent.getAction().equals(Constants.WIDGET_ACTION_INTENT)) {
+            if (intent.getAction().equals(WidgetConstants.WIDGET_ACTION_INTENT)) {
                 SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
                 // vibrate
                 if (sharedPreferencesHandler.getVibrateOnButtonPress()) {

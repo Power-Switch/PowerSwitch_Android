@@ -52,7 +52,7 @@ import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Fragment containing all settings related to Gateways
@@ -74,7 +74,7 @@ public class GatewaySettingsFragment extends Fragment {
 
     public static void sendGatewaysChangedBroadcast(Context context) {
         Log.d("CreateGatewayDialog", "sendGatewaysChangedBroadcast");
-        Intent intent = new Intent(Constants.INTENT_GATEWAY_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -294,7 +294,7 @@ public class GatewaySettingsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_GATEWAY_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

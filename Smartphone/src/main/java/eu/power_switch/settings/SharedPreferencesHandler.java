@@ -22,48 +22,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.SettingsConstants;
 
 /**
  * Preference handler used to store general app settings
  */
 public class SharedPreferencesHandler {
 
-    // app settings
-    private static final String AUTO_DISCOVER_KEY = "autoDiscover";
-    private static final String SHOW_ROOM_ALL_ON_OFF_KEY = "showRoomAllOnOff";
-    private static final String HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY = "highlightLastActivatedButton";
-    private static final String HIDE_ADD_FAB_KEY = "hideAddFAB";
-    private static final String AUTO_COLLAPSE_ROOMS_KEY = "autoCollapseRooms";
-    private static final String AUTO_COLLAPSE_TIMERS_KEY = "autoCollapseTimers";
-    private static final String THEME_KEY = "theme";
-    private static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
-    private static final String VIBRATION_DURATION_KEY = "vibrationDuration";
-
-    // Google API
-    private static final String VOK_ZWEQ =
-            "jVMU2RnWW1oelVoMVF4ZXJkV1B1cDcwWFRYc3g0c0hScmN2WjhmR21NN3R0V3E5YlF4cWtVSUFiYjFUQ0EzcW9ScU00bUxNY0E0T29ZVjVsTE1hSGxXanVyVHdJREFRQUI=";
-
-    private static final String KDH_SDSA =
-            "TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF3UDlkSk9QYVZQNnBHZ1kxeUYzRVBVVHRRbkJMaHVwN2xYVnNyTzAyMFdXZlp4YmFSRnQ5c1I";
-
-    private static final String DJA_IOVJ =
-            "VvWE9iYnB2NTNJMmJVeEFkSkZyUm9pWVNaa3BQV1hXb201dVN4UHdSQ2x5cVdDZXlmeFZTYlN6NGdSNFAwOVlyODlIMXFzNFBQdHRIZ2k1cDNsd2FVT2pwNzlGSVFZb1pmZ";
-
-    private static final String JKD_COAP =
-            "0K0RzZDlHS3EvbjYyLzMySFFydkJXcVVQK1FrOE1FNDUvYWM2UTh2YmNtdmlCV0h1T3hUSVB2d1RucU5mdzNpMjJXd1VTZVV0WHRReURLVVpZODJYVjJwY0ZoSGkydnpmWW";
-
-    // developer settings
-    private final String PLAY_STORE_MODE_KEY = "playStoreMode";
-
     SharedPreferences sharedPreferences;
 
     public SharedPreferencesHandler(Context context) {
-        sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     public static String getPublicKeyString() {
-        String string = KDH_SDSA + JKD_COAP + DJA_IOVJ + VOK_ZWEQ;
+        String string = SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
         return string;
     }
 
@@ -73,7 +46,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public boolean getAutoDiscover() {
-        boolean value = sharedPreferences.getBoolean(AUTO_DISCOVER_KEY, true);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.AUTO_DISCOVER_KEY, true);
         Log.d(this, "getAutoDiscover: " + value);
         return value;
     }
@@ -86,12 +59,12 @@ public class SharedPreferencesHandler {
     public void setAutoDiscover(boolean bool) {
         Log.d(this, "setAutoDiscover: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(AUTO_DISCOVER_KEY, bool);
+        editor.putBoolean(SettingsConstants.AUTO_DISCOVER_KEY, bool);
         editor.apply();
     }
 
     public boolean getShowRoomAllOnOff() {
-        boolean value = sharedPreferences.getBoolean(SHOW_ROOM_ALL_ON_OFF_KEY, true);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
         Log.d(this, "getShowRoomAllOnOff: " + value);
         return value;
     }
@@ -104,7 +77,7 @@ public class SharedPreferencesHandler {
     public void setShowRoomAllOnOff(boolean bool) {
         Log.d(this, "setShowRoomAllOnOff: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SHOW_ROOM_ALL_ON_OFF_KEY, bool);
+        editor.putBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, bool);
         editor.apply();
     }
 
@@ -114,7 +87,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public boolean getPlayStoreMode() {
-        boolean value = sharedPreferences.getBoolean(PLAY_STORE_MODE_KEY, false);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.PLAY_STORE_MODE_KEY, false);
         Log.d(this, "getPlayStoreMode: " + value);
         return value;
     }
@@ -127,7 +100,7 @@ public class SharedPreferencesHandler {
     public void setPlayStoreMode(boolean bool) {
         Log.d(this, "setPlayStoreMode: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(PLAY_STORE_MODE_KEY, bool);
+        editor.putBoolean(SettingsConstants.PLAY_STORE_MODE_KEY, bool);
         editor.apply();
     }
 
@@ -137,7 +110,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public boolean getAutoCollapseRooms() {
-        boolean value = sharedPreferences.getBoolean(AUTO_COLLAPSE_ROOMS_KEY, false);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
         Log.d(this, "getAutoCollapseRooms: " + value);
         return value;
     }
@@ -150,7 +123,7 @@ public class SharedPreferencesHandler {
     public void setAutoCollapseRooms(boolean bool) {
         Log.d(this, "setAutoCollapseRooms: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(AUTO_COLLAPSE_ROOMS_KEY, bool);
+        editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
         editor.apply();
     }
 
@@ -160,7 +133,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public boolean getAutoCollapseTimers() {
-        boolean value = sharedPreferences.getBoolean(AUTO_COLLAPSE_TIMERS_KEY, false);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, false);
         Log.d(this, "getAutoCollapseTimers: " + value);
         return value;
     }
@@ -173,7 +146,7 @@ public class SharedPreferencesHandler {
     public void setAutoCollapseTimers(boolean bool) {
         Log.d(this, "setAutoCollapseTimers: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(AUTO_COLLAPSE_TIMERS_KEY, bool);
+        editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, bool);
         editor.apply();
     }
 
@@ -183,7 +156,7 @@ public class SharedPreferencesHandler {
      * @return ID (internal) of Theme
      */
     public int getTheme() {
-        int value = sharedPreferences.getInt(THEME_KEY, Constants.THEME_DARK_BLUE);
+        int value = sharedPreferences.getInt(SettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
         Log.d(this, "getTheme: " + value);
         return value;
     }
@@ -196,7 +169,7 @@ public class SharedPreferencesHandler {
     public void setTheme(int theme) {
         Log.d(this, "setTheme: " + theme);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(THEME_KEY, theme);
+        editor.putInt(SettingsConstants.THEME_KEY, theme);
         editor.apply();
     }
 
@@ -206,7 +179,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public boolean getVibrateOnButtonPress() {
-        boolean value = sharedPreferences.getBoolean(VIBRATE_ON_BUTTON_PRESS_KEY, true);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
         Log.d(this, "getVibrateOnButtonPress: " + value);
         return value;
     }
@@ -219,7 +192,7 @@ public class SharedPreferencesHandler {
     public void setVibrateOnButtonPress(boolean bool) {
         Log.d(this, "setVibrateOnButtonPress: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(VIBRATE_ON_BUTTON_PRESS_KEY, bool);
+        editor.putBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, bool);
         editor.apply();
     }
 
@@ -229,7 +202,7 @@ public class SharedPreferencesHandler {
      * @return time in ms
      */
     public int getVibrationDuration() {
-        int value = sharedPreferences.getInt(VIBRATION_DURATION_KEY, Constants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+        int value = sharedPreferences.getInt(SettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
         Log.d(this, "getVibrationDuration: " + value);
         return value;
     }
@@ -242,7 +215,7 @@ public class SharedPreferencesHandler {
     public void setVibrationDuration(int milliseconds) {
         Log.d(this, "setVibrationDuration: " + milliseconds);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(VIBRATION_DURATION_KEY, milliseconds);
+        editor.putInt(SettingsConstants.VIBRATION_DURATION_KEY, milliseconds);
         editor.apply();
     }
 
@@ -252,7 +225,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public boolean getHighlightLastActivatedButton() {
-        boolean value = sharedPreferences.getBoolean(HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
         Log.d(this, "getHighlightLastActivatedButton: " + value);
         return value;
     }
@@ -265,7 +238,7 @@ public class SharedPreferencesHandler {
     public void setHighlightLastActivatedButton(boolean bool) {
         Log.d(this, "setHighlightLastActivatedButton: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
+        editor.putBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
         editor.apply();
     }
 
@@ -275,7 +248,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public boolean getHideAddFAB() {
-        boolean value = sharedPreferences.getBoolean(HIDE_ADD_FAB_KEY, false);
+        boolean value = sharedPreferences.getBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, false);
         Log.d(this, "getHideAddFAB: " + value);
         return value;
     }
@@ -288,7 +261,7 @@ public class SharedPreferencesHandler {
     public void setHideAddFAB(boolean bool) {
         Log.d(this, "setHideAddFAB: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(HIDE_ADD_FAB_KEY, bool);
+        editor.putBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, bool);
         editor.apply();
     }
 }

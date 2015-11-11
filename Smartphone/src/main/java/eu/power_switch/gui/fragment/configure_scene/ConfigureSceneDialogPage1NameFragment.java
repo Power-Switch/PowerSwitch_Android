@@ -44,7 +44,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * "Name" Fragment used in Configure Scene Dialog
@@ -72,7 +72,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
      * @param selectedReceivers Currently selected Receivers to include in Scene
      */
     public static void sendNameSceneChangedBroadcast(Context context, String name, ArrayList<Room> selectedReceivers) {
-        Intent intent = new Intent(Constants.INTENT_NAME_SCENE_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_SCENE_CHANGED);
         intent.putExtra("name", name);
         intent.putExtra("selectedReceivers", selectedReceivers);
 

@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 
@@ -63,7 +63,7 @@ public class ConfigureTimerDialogPage2DaysFragment extends Fragment {
     public static void sendTimerEexecutionIntervalChangedBroadcast(Context context, long executionInterval,
                                                                    ArrayList<WeekdayTimer.Day> executionDays, String
                                                                            executionType) {
-        Intent intent = new Intent(Constants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
         intent.putExtra("executionInterval", executionInterval);
         intent.putExtra("executionDays", executionDays);
         intent.putExtra("executionType", executionType);

@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -74,7 +74,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                VibrationHandler.vibrate(context, Constants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+                VibrationHandler.vibrate(context, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
                 
                 String actionString = DataApiHandler.buildSceneActionString(scene.getName());
                 dataApiHandler.sendSceneActionTrigger(actionString);

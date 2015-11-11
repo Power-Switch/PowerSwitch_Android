@@ -44,7 +44,7 @@ import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.log.Log;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.Timer;
 
 /**
@@ -67,7 +67,7 @@ public class TimersFragment extends Fragment {
      */
     public static void sendTimersChangedBroadcast(Context context) {
         Log.d("TimersFragment", "sendTimersChangedBroadcast");
-        Intent intent = new Intent(Constants.INTENT_TIMER_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -175,9 +175,9 @@ public class TimersFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_TIMER_CHANGED);
-        intentFilter.addAction(Constants.INTENT_SCENE_CHANGED);
-        intentFilter.addAction(Constants.INTENT_RECEIVER_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

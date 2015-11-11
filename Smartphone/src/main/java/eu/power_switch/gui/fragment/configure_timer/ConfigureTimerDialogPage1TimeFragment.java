@@ -39,7 +39,7 @@ import java.util.Calendar;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.Timer;
 
 /**
@@ -59,7 +59,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
      * @param calendar The calendar when this timer activates
      */
     public static void sendTimerNameExecutionTimeChangedBroadcast(Context context, String name, Calendar calendar) {
-        Intent intent = new Intent(Constants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
         intent.putExtra("name", name);
         intent.putExtra("executionTime", calendar);
 

@@ -39,7 +39,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.WearableConstants;
 
 /**
  * Created by Markus on 05.06.2015.
@@ -63,18 +63,18 @@ public class ListenerService extends WearableListenerService {
         ArrayList<Room> rooms = new ArrayList<>();
 
         for (DataMap dataMapItem : dataMapArrayList) {
-            if (dataMapItem.containsKey(Constants.ROOM_NAME_DATAMAP_KEY)) {
-                long roomId = dataMapItem.getLong(Constants.ROOM_ID_DATAMAP_KEY);
-                String roomName = dataMapItem.getString(Constants.ROOM_NAME_DATAMAP_KEY);
+            if (dataMapItem.containsKey(WearableConstants.ROOM_NAME_DATAMAP_KEY)) {
+                long roomId = dataMapItem.getLong(WearableConstants.ROOM_ID_DATAMAP_KEY);
+                String roomName = dataMapItem.getString(WearableConstants.ROOM_NAME_DATAMAP_KEY);
 
                 rooms.add(new Room(roomId, roomName));
 
-            } else if (dataMapItem.containsKey(Constants.RECEIVER_NAME_DATAMAP_KEY)) {
-                long receiverId = dataMapItem.getLong(Constants.RECEIVER_ID_DATAMAP_KEY);
-                String receiverName = dataMapItem.getString(Constants.RECEIVER_NAME_DATAMAP_KEY);
-                long receiverRoomId = dataMapItem.getLong(Constants.RECEIVER_ROOM_ID_DATAMAP_KEY);
-                int positionInRoom = dataMapItem.getInt(Constants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY);
-                long lastActivatedButtonId = dataMapItem.getLong(Constants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY);
+            } else if (dataMapItem.containsKey(WearableConstants.RECEIVER_NAME_DATAMAP_KEY)) {
+                long receiverId = dataMapItem.getLong(WearableConstants.RECEIVER_ID_DATAMAP_KEY);
+                String receiverName = dataMapItem.getString(WearableConstants.RECEIVER_NAME_DATAMAP_KEY);
+                long receiverRoomId = dataMapItem.getLong(WearableConstants.RECEIVER_ROOM_ID_DATAMAP_KEY);
+                int positionInRoom = dataMapItem.getInt(WearableConstants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY);
+                long lastActivatedButtonId = dataMapItem.getLong(WearableConstants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY);
 
                 Receiver receiver = new Receiver(receiverId, receiverName, receiverRoomId,
                         lastActivatedButtonId, positionInRoom);
@@ -85,10 +85,10 @@ public class ListenerService extends WearableListenerService {
                         break;
                     }
                 }
-            } else if (dataMapItem.containsKey(Constants.BUTTON_NAME_DATAMAP_KEY)) {
-                long buttonId = dataMapItem.getLong(Constants.BUTTON_ID_DATAMAP_KEY);
-                String buttonName = dataMapItem.getString(Constants.BUTTON_NAME_DATAMAP_KEY);
-                long buttonReceiverId = dataMapItem.getLong(Constants.BUTTON_RECEIVER_ID_DATAMAP_KEY);
+            } else if (dataMapItem.containsKey(WearableConstants.BUTTON_NAME_DATAMAP_KEY)) {
+                long buttonId = dataMapItem.getLong(WearableConstants.BUTTON_ID_DATAMAP_KEY);
+                String buttonName = dataMapItem.getString(WearableConstants.BUTTON_NAME_DATAMAP_KEY);
+                long buttonReceiverId = dataMapItem.getLong(WearableConstants.BUTTON_RECEIVER_ID_DATAMAP_KEY);
 
                 Button button = new Button(buttonId, buttonName, buttonReceiverId);
 
@@ -126,9 +126,9 @@ public class ListenerService extends WearableListenerService {
         ArrayList<Scene> scenes = new ArrayList<>();
 
         for (DataMap dataMapItem : dataMapArrayList) {
-            if (dataMapItem.containsKey(Constants.SCENE_NAME_DATAMAP_KEY)) {
-                long sceneId = dataMapItem.getLong(Constants.SCENE_ID_DATAMAP_KEY);
-                String sceneName = dataMapItem.getString(Constants.SCENE_NAME_DATAMAP_KEY);
+            if (dataMapItem.containsKey(WearableConstants.SCENE_NAME_DATAMAP_KEY)) {
+                long sceneId = dataMapItem.getLong(WearableConstants.SCENE_ID_DATAMAP_KEY);
+                String sceneName = dataMapItem.getString(WearableConstants.SCENE_NAME_DATAMAP_KEY);
                 Scene scene = new Scene(sceneId, sceneName);
                 scenes.add(scene);
             }
@@ -149,10 +149,10 @@ public class ListenerService extends WearableListenerService {
         for (DataEvent event : events) {
             if (event.getDataItem() != null
                     && event.getType() == DataEvent.TYPE_CHANGED
-                    && Constants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
+                    && WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
 
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                ArrayList<DataMap> data = dataMapItem.getDataMap().getDataMapArrayList(Constants.EXTRA_DATA);
+                ArrayList<DataMap> data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
 
                 // convert received data to room/receiver/button objects
                 ArrayList<Room> rooms = extractRoomDataMapItems(data);
@@ -175,7 +175,7 @@ public class ListenerService extends WearableListenerService {
         Toast.makeText(getApplicationContext(), "Message received: " + convertEventDataToString(messageEvent.getData()), Toast.LENGTH_LONG)
                 .show();
 
-        if (messageEvent.getPath().equals(Constants.START_ACTIVITY_PATH)) {
+        if (messageEvent.getPath().equals(WearableConstants.START_ACTIVITY_PATH)) {
             // TODO: Launch Wearable App
             // is this even possible?
         }

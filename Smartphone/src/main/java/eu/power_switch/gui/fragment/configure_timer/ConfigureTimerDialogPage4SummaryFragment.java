@@ -37,7 +37,7 @@ import java.util.Calendar;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.fragment.main.TimersFragment;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -70,7 +70,7 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
      * @param context
      */
     public static void sendSummaryChangedBroadcast(Context context) {
-        Intent intent = new Intent(Constants.INTENT_TIMER_SUMMARY_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_SUMMARY_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -84,16 +84,16 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (Constants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED.equals(intent.getAction())) {
+                if (LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED.equals(intent.getAction())) {
                     currentExecutionTime = (Calendar) intent.getSerializableExtra("executionTime");
                     currentName = intent.getStringExtra("name");
 
-                } else if (Constants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED.equals(intent.getAction())) {
+                } else if (LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED.equals(intent.getAction())) {
                     currentExecutionInterval = intent.getLongExtra("executionInterval", -1);
                     currentExecutionDays = (ArrayList<WeekdayTimer.Day>) intent.getSerializableExtra("executionDays");
                     currentExecutionType = intent.getStringExtra("executionType");
 
-                } else if (Constants.INTENT_TIMER_ACTIONS_CHANGED.equals(intent.getAction())) {
+                } else if (LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED.equals(intent.getAction())) {
                     currentActions = (ArrayList<TimerAction>) intent.getSerializableExtra("actions");
                 }
 
@@ -253,9 +253,9 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
-        intentFilter.addAction(Constants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
-        intentFilter.addAction(Constants.INTENT_TIMER_ACTIONS_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

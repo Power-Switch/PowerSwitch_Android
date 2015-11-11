@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * "Type" Fragment used in Configure Receiver Dialog
@@ -64,7 +64,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
      * @param model   Current selected Model name
      */
     public static void sendBrandModelChangedBroadcast(Context context, String brand, String model) {
-        Intent intent = new Intent(Constants.INTENT_BRAND_MODEL_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED);
         intent.putExtra("brand", brand);
         if (brand.equals(Receiver.BRAND_UNIVERSAL)) {
             model = Receiver.BRAND_UNIVERSAL;

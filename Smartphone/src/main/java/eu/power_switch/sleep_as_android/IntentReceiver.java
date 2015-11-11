@@ -25,7 +25,7 @@ import android.os.Bundle;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.ExternalAppConstants;
 
 /**
  * IntentReceiver to handle any Sleep As Android related Intents
@@ -62,11 +62,11 @@ public class IntentReceiver extends BroadcastReceiver {
         try {
             DatabaseHandler.init(context);
 
-            if (intent.getAction().equals(Constants.ALARM_TRIGGERED_INTENT)) {
+            if (intent.getAction().equals(ExternalAppConstants.ALARM_TRIGGERED_INTENT)) {
                 Log.d("IntentReceiver", "Alarm triggered!");
-            } else if (intent.getAction().equals(Constants.ALARM_SNOOZED_INTENT)) {
+            } else if (intent.getAction().equals(ExternalAppConstants.ALARM_SNOOZED_INTENT)) {
                 Log.d("IntentReceiver", "Alarm snoozed...");
-            } else if (intent.getAction().equals(Constants.ALARM_DISMISSED_INTENT)) {
+            } else if (intent.getAction().equals(ExternalAppConstants.ALARM_DISMISSED_INTENT)) {
                 Log.d("IntentReceiver", "Alarm dismissed...");
             } else {
                 Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());

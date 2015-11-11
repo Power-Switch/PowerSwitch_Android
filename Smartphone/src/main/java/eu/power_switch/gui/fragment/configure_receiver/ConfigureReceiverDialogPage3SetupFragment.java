@@ -64,7 +64,7 @@ import eu.power_switch.obj.device.MasterSlaveReceiver;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.device.UniversalReceiver;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * "Setup" Fragment used in Configure Receiver Dialog
@@ -106,7 +106,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
     public static void sendChannelDetailsChangedBroadcast(Context context, Character channelMaster, Integer channelSlave,
                                                           ArrayList<DipSwitch> dips, long seed,
                                                           ArrayList<UniversalButton> universalButtons) {
-        Intent intent = new Intent(Constants.INTENT_CHANNEL_DETAILS_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED);
         intent.putExtra("channelMaster", channelMaster);
         intent.putExtra("channelSlave", channelSlave);
         intent.putExtra("dips", dips);
@@ -126,7 +126,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Constants.INTENT_BRAND_MODEL_CHANGED)) {
+                if (intent.getAction().equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
                     String model = intent.getStringExtra("model");
 
                     Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));
@@ -571,7 +571,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
     public void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
-                new IntentFilter(Constants.INTENT_BRAND_MODEL_CHANGED)
+                new IntentFilter(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)
         );
     }
 

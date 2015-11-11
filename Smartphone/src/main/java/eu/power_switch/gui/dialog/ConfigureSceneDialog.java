@@ -48,7 +48,7 @@ import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage2Set
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
 
 /**
@@ -270,7 +270,7 @@ public class ConfigureSceneDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_SETUP_SCENE_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_SETUP_SCENE_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

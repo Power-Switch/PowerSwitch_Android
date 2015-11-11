@@ -47,7 +47,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.action.TimerAction;
 import eu.power_switch.timer.action.TimerReceiverAction;
 import eu.power_switch.timer.action.TimerRoomAction;
@@ -89,7 +89,7 @@ public class AddTimerActionDialog extends DialogFragment {
      * @param context
      */
     public static void sendTimerActionAddedBroadcast(Context context) {
-        Intent intent = new Intent(Constants.INTENT_TIMER_ACTION_ADDED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTION_ADDED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

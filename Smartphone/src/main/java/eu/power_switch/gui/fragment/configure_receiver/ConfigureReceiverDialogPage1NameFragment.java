@@ -48,7 +48,7 @@ import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * "Name" Fragment used in Configure Receiver Dialog
@@ -78,7 +78,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
      * @param roomName Current name of Room
      */
     public static void sendNameRoomChangedBroadcast(Context context, String name, String roomName) {
-        Intent intent = new Intent(Constants.INTENT_NAME_ROOM_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
         intent.putExtra("name", name);
         intent.putExtra("roomName", roomName);
 
@@ -234,7 +234,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     public void onStart() {
         super.onStart();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
-                new IntentFilter(Constants.INTENT_RECEIVER_CHANGED)
+                new IntentFilter(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED)
         );
     }
 

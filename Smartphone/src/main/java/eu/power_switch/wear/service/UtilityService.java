@@ -42,7 +42,8 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.constants.WearableConstants;
 
 /**
  * Created by Markus on 06.06.2015.
@@ -65,7 +66,7 @@ public class UtilityService extends IntentService {
      */
     public static void forceWearDataUpdate(Context context) {
         Intent intent = new Intent(context, UtilityService.class);
-        intent.setAction(Constants.REQUEST_DATA_UPDATE_PATH);
+        intent.setAction(WearableConstants.REQUEST_DATA_UPDATE_PATH);
         context.startService(intent);
     }
 
@@ -84,7 +85,8 @@ public class UtilityService extends IntentService {
 
         // It's OK to use blockingConnect() here as we are running in an
         // IntentService that executes work on a separate (background) thread.
-        ConnectionResult connectionResult = googleApiClient.blockingConnect(Constants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
+        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit
+                .SECONDS);
 
         ArrayList<DataMap> data = new ArrayList<>();
 
@@ -116,8 +118,8 @@ public class UtilityService extends IntentService {
         if (connectionResult.isSuccess() && googleApiClient.isConnected()
                 && data.size() > 0) {
 
-            PutDataMapRequest dataMap = PutDataMapRequest.create(Constants.DATA_PATH);
-            dataMap.getDataMap().putDataMapArrayList(Constants.EXTRA_DATA, data);
+            PutDataMapRequest dataMap = PutDataMapRequest.create(WearableConstants.DATA_PATH);
+            dataMap.getDataMap().putDataMapArrayList(WearableConstants.EXTRA_DATA, data);
             PutDataRequest request = dataMap.asPutDataRequest();
 
             // Send the data over
@@ -146,8 +148,8 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Room room) {
         DataMap roomDataMap = new DataMap();
 
-        roomDataMap.putLong(Constants.ROOM_ID_DATAMAP_KEY, room.getId());
-        roomDataMap.putString(Constants.ROOM_NAME_DATAMAP_KEY, room.getName());
+        roomDataMap.putLong(WearableConstants.ROOM_ID_DATAMAP_KEY, room.getId());
+        roomDataMap.putString(WearableConstants.ROOM_NAME_DATAMAP_KEY, room.getName());
 
         return roomDataMap;
     }
@@ -161,11 +163,11 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Receiver receiver) {
         DataMap receiverDataMap = new DataMap();
 
-        receiverDataMap.putLong(Constants.RECEIVER_ID_DATAMAP_KEY, receiver.getId());
-        receiverDataMap.putString(Constants.RECEIVER_NAME_DATAMAP_KEY, receiver.getName());
-        receiverDataMap.putLong(Constants.RECEIVER_ROOM_ID_DATAMAP_KEY, receiver.getRoomId());
-        receiverDataMap.putInt(Constants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY, receiver.getPositionInRoom());
-        receiverDataMap.putLong(Constants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY, DatabaseHandler
+        receiverDataMap.putLong(WearableConstants.RECEIVER_ID_DATAMAP_KEY, receiver.getId());
+        receiverDataMap.putString(WearableConstants.RECEIVER_NAME_DATAMAP_KEY, receiver.getName());
+        receiverDataMap.putLong(WearableConstants.RECEIVER_ROOM_ID_DATAMAP_KEY, receiver.getRoomId());
+        receiverDataMap.putInt(WearableConstants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY, receiver.getPositionInRoom());
+        receiverDataMap.putLong(WearableConstants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY, DatabaseHandler
                 .getLastActivatedButtonId(receiver.getId()));
 
         return receiverDataMap;
@@ -180,9 +182,9 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Button button) {
         DataMap buttonDataMap = new DataMap();
 
-        buttonDataMap.putLong(Constants.BUTTON_ID_DATAMAP_KEY, button.getId());
-        buttonDataMap.putString(Constants.BUTTON_NAME_DATAMAP_KEY, button.getName());
-        buttonDataMap.putLong(Constants.BUTTON_RECEIVER_ID_DATAMAP_KEY, button.getReceiverId());
+        buttonDataMap.putLong(WearableConstants.BUTTON_ID_DATAMAP_KEY, button.getId());
+        buttonDataMap.putString(WearableConstants.BUTTON_NAME_DATAMAP_KEY, button.getName());
+        buttonDataMap.putLong(WearableConstants.BUTTON_RECEIVER_ID_DATAMAP_KEY, button.getReceiverId());
 
         return buttonDataMap;
     }
@@ -196,8 +198,8 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Scene scene) {
         DataMap roomDataMap = new DataMap();
 
-        roomDataMap.putLong(Constants.SCENE_ID_DATAMAP_KEY, scene.getId());
-        roomDataMap.putString(Constants.SCENE_NAME_DATAMAP_KEY, scene.getName());
+        roomDataMap.putLong(WearableConstants.SCENE_ID_DATAMAP_KEY, scene.getId());
+        roomDataMap.putString(WearableConstants.SCENE_NAME_DATAMAP_KEY, scene.getName());
 
         return roomDataMap;
     }
@@ -212,7 +214,7 @@ public class UtilityService extends IntentService {
         DatabaseHandler.init(getApplicationContext());
 
         // Get Room/Receiver/Scene Data from Database and send to wearable
-        if (intent.getAction().equals(Constants.REQUEST_DATA_UPDATE_PATH)) {
+        if (intent.getAction().equals(WearableConstants.REQUEST_DATA_UPDATE_PATH)) {
             SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
 
             Log.d("Getting Data from Database to send to Wearable...");

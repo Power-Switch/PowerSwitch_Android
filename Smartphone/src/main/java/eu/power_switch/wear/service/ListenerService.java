@@ -27,7 +27,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.WearableConstants;
 
 /**
  * A Wear listener service, used to receive inbound messages from
@@ -44,7 +44,7 @@ public class ListenerService extends WearableListenerService {
      */
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if (messageEvent.getPath().equals(Constants.RECEIVER_ACTION_TRIGGER_PATH)) {
+        if (messageEvent.getPath().equals(WearableConstants.RECEIVER_ACTION_TRIGGER_PATH)) {
 
             String messageData = new String(messageEvent.getData());
             Log.d("Wear_ListenerService", "Message received: " + messageData);
@@ -63,10 +63,10 @@ public class ListenerService extends WearableListenerService {
             } catch (PendingIntent.CanceledException e) {
                 Log.e("Pending intent canceled", e);
             }
-        } else if (messageEvent.getPath().equals(Constants.REQUEST_DATA_UPDATE_PATH)) {
+        } else if (messageEvent.getPath().equals(WearableConstants.REQUEST_DATA_UPDATE_PATH)) {
             Log.d("Updating Data for Wearable");
             Intent intent = new Intent(this, UtilityService.class);
-            intent.setAction(Constants.REQUEST_DATA_UPDATE_PATH);
+            intent.setAction(WearableConstants.REQUEST_DATA_UPDATE_PATH);
             startService(intent);
         }
     }

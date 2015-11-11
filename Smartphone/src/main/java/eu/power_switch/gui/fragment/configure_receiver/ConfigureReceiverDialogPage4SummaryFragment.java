@@ -54,7 +54,7 @@ import eu.power_switch.obj.device.DipSwitch;
 import eu.power_switch.obj.device.MasterSlaveReceiver;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.device.UniversalReceiver;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
 
@@ -100,7 +100,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
      * @param context
      */
     public static void sendSummaryChangedBroadcast(Context context) {
-        Intent intent = new Intent(Constants.INTENT_RECEIVER_SUMMARY_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_SUMMARY_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -114,7 +114,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(Constants.INTENT_BRAND_MODEL_CHANGED)) {
+                if (intent.getAction().equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
                     String brand = intent.getStringExtra("brand");
                     String model = intent.getStringExtra("model");
 
@@ -123,13 +123,13 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
 
                     Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(currentModel));
                     currentType = receiver.getType();
-                } else if (intent.getAction().equals(Constants.INTENT_NAME_ROOM_CHANGED)) {
+                } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED)) {
                     String name = intent.getStringExtra("name");
                     String roomName = intent.getStringExtra("roomName");
 
                     currentName = name;
                     currentRoomName = roomName;
-                } else if (intent.getAction().equals(Constants.INTENT_CHANNEL_DETAILS_CHANGED)) {
+                } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED)) {
                     char channelMaster = intent.getCharExtra("channelMaster", 'A');
                     int channelSlave = intent.getIntExtra("channelSlave", 0);
                     ArrayList<DipSwitch> dips = (ArrayList<DipSwitch>) intent.getSerializableExtra("dips");
@@ -407,9 +407,9 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_NAME_ROOM_CHANGED);
-        intentFilter.addAction(Constants.INTENT_BRAND_MODEL_CHANGED);
-        intentFilter.addAction(Constants.INTENT_CHANNEL_DETAILS_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

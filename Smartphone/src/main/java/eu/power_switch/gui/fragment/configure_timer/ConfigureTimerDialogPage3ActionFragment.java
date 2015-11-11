@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.action.TimerAction;
 
 /**
@@ -59,7 +59,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
      * @param context
      */
     public static void sendTimerActionChangedBroadcast(Context context, ArrayList<TimerAction> actions) {
-        Intent intent = new Intent(Constants.INTENT_TIMER_ACTIONS_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
         intent.putExtra("actions", actions);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -136,7 +136,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_TIMER_ACTION_ADDED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_ACTION_ADDED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

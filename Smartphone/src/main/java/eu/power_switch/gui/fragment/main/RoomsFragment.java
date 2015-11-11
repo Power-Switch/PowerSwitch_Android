@@ -47,7 +47,7 @@ import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.wear.service.UtilityService;
 
 /**
@@ -71,7 +71,7 @@ public class RoomsFragment extends Fragment {
      */
     public static void sendReceiverChangedBroadcast(Context context) {
         Log.d("RoomsFragment", "sendReceiverChangedBroadcast");
-        Intent intent = new Intent(Constants.INTENT_RECEIVER_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         UtilityService.forceWearDataUpdate(context);
@@ -193,7 +193,7 @@ public class RoomsFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_RECEIVER_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

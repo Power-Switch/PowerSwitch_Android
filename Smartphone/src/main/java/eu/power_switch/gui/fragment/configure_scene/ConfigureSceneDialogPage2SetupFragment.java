@@ -51,7 +51,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
 
@@ -77,7 +77,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
      * @param context
      */
     public static void sendSetupSceneChangedBroadcast(Context context) {
-        Intent intent = new Intent(Constants.INTENT_SETUP_SCENE_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_SCENE_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -199,7 +199,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_NAME_SCENE_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_SCENE_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

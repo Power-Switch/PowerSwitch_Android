@@ -19,6 +19,8 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -37,7 +39,8 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -105,7 +108,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                VibrationHandler.vibrate(context, Constants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+                VibrationHandler.vibrate(context, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
 
                 android.widget.Button button = (android.widget.Button) v;
                 String actionString = DataApiHandler.buildRoomActionString(room.getName(), button.getText().toString());
@@ -115,6 +118,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
         holder.buttonAllOff.setOnClickListener(onClickListener);
         holder.buttonAllOn.setOnClickListener(onClickListener);
+
 
         // clear previous items
         holder.linearLayoutOfReceivers.removeAllViews();
@@ -140,21 +144,42 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
             int buttonsPerRow = 2;
             int i = 0;
+            final ArrayList<android.widget.Button> buttonViews = new ArrayList<>();
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
                 android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button_wear,
                         null, false);
+                buttonViews.add(buttonView);
+                final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonView.setText(button.getName());
+
+                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+                if (sharedPreferencesHandler.getHighlightLastActivatedButton() && button.getId() == receiver
+                        .getLastActivatedButtonId()) {
+                    buttonView.setTextColor(ContextCompat.getColor(context, R.color.accent_blue_a700));
+                }
+
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // Vibration Feedback
-                        VibrationHandler.vibrate(context, Constants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+                        VibrationHandler.vibrate(context, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
 
                         // Send Action to Smartphone app
                         String actionString = DataApiHandler.buildReceiverActionString(room.getName(),
                                 receiver.getName(), button.getName());
                         dataApiHandler.sendReceiverActionTrigger(actionString);
+
+//                        if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
+                        for (android.widget.Button button : buttonViews) {
+                            if (button != v) {
+                                button.setTextColor(defaultTextColor);
+                            } else {
+                                button.setTextColor(ContextCompat.getColor(context, R.color
+                                        .accent_blue_a700));
+                            }
+//                        }
+                        }
                     }
                 });
 

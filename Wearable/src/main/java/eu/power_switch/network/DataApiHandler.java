@@ -37,7 +37,8 @@ import eu.power_switch.gui.animation.ActionResponse;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.constants.WearableConstants;
 
 /**
  * Created by Markus on 03.06.2015.
@@ -102,7 +103,8 @@ public class DataApiHandler {
     }
 
     public boolean blockingConnect() {
-        ConnectionResult connectionResult = googleApiClient.blockingConnect(Constants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
+        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit
+                .SECONDS);
 
         if (!connectionResult.isSuccess() || !googleApiClient.isConnected()) {
             Log.e("FetchDataAsyncTask", String.format("Failed to connect to GoogleApiClient (error code = %d)",
@@ -195,7 +197,7 @@ public class DataApiHandler {
         if (dataItemBuffer.getStatus().isSuccess()) {
             for (DataItem dataItem : dataItemBuffer) {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                roomData = dataMapItem.getDataMap().getDataMapArrayList(Constants.EXTRA_DATA);
+                roomData = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
                 if (roomData != null) {
                     rooms = ListenerService.extractRoomDataMapItems(roomData);
                     break;
@@ -227,7 +229,7 @@ public class DataApiHandler {
         if (dataItemBuffer.getStatus().isSuccess()) {
             for (DataItem dataItem : dataItemBuffer) {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap().getDataMapArrayList(Constants.EXTRA_DATA);
+                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
                 if (data != null) {
                     scenes = ListenerService.extractSceneDataMapItems(data);
                     break;

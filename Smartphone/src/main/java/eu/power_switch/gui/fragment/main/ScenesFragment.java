@@ -46,7 +46,7 @@ import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.wear.service.UtilityService;
 
 /**
@@ -68,7 +68,7 @@ public class ScenesFragment extends Fragment {
      */
     public static void sendScenesChangedBroadcast(Context context) {
         Log.d("ScenesFragment", "sendScenesChangedBroadcast");
-        Intent intent = new Intent(Constants.INTENT_SCENE_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         UtilityService.forceWearDataUpdate(context);
@@ -188,8 +188,8 @@ public class ScenesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_SCENE_CHANGED);
-        intentFilter.addAction(Constants.INTENT_RECEIVER_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

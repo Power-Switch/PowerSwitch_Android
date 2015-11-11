@@ -60,7 +60,7 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.log.Log;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Fragment holding a list of all Backups
@@ -83,7 +83,7 @@ public class BackupFragment extends Fragment {
      */
     public static void sendBackupsChangedBroadcast(Context context) {
         Log.d("AddReceiverDialog", "sendReceiverChangedBroadcast");
-        Intent intent = new Intent(Constants.INTENT_BACKUP_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -282,7 +282,7 @@ public class BackupFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_BACKUP_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

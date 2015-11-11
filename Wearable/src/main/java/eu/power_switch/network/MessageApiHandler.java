@@ -34,7 +34,7 @@ import java.util.Set;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.animation.ActionResponse;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.WearableConstants;
 
 /**
  * Created by Markus on 03.06.2015.
@@ -59,7 +59,7 @@ public class MessageApiHandler {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String path = Constants.RECEIVER_ACTION_TRIGGER_PATH;
+                String path = WearableConstants.RECEIVER_ACTION_TRIGGER_PATH;
 
                 setupReachableReceiverActionTrigger();
 
@@ -93,7 +93,7 @@ public class MessageApiHandler {
 
     public void sendUpdateRequest() {
         String updateRequest = "Update";
-        String path = Constants.REQUEST_DATA_UPDATE_PATH;
+        String path = WearableConstants.REQUEST_DATA_UPDATE_PATH;
 
         String nodeId = pickBestNode(connectedNodes);
         if (nodeId != null) {

@@ -28,7 +28,7 @@ import android.os.Build;
 import java.util.Calendar;
 
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.TimerConstants;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -48,8 +48,8 @@ public abstract class AlarmHandler {
      */
     public static Intent createAlarmIntent(Timer timer) {
         Intent intent = new Intent();
-        intent.setAction(Constants.TIMER_ACTIVATION_INTENT);
-        intent.setData(Uri.parse(Constants.TIMER_URI_SCHEME + "://" + timer.getId()));
+        intent.setAction(TimerConstants.TIMER_ACTIVATION_INTENT);
+        intent.setData(Uri.parse(TimerConstants.TIMER_URI_SCHEME + "://" + timer.getId()));
 
         return intent;
     }

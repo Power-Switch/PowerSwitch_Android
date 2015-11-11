@@ -57,7 +57,8 @@ import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public static void sendStatusSnackbarBroadcast(Context context, String message, int duration) {
         Log.d("Status Snackbar: " + message);
-        Intent intent = new Intent(Constants.INTENT_STATUS_UPDATE_SNACKBAR);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
         intent.putExtra("message", message);
         intent.putExtra("duration", duration);
 
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public static void sendStatusToastBroadcast(Context context, String message, int duration) {
         Log.d("Status Toast: " + message);
-        Intent intent = new Intent(Constants.INTENT_STATUS_UPDATE_TOAST);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST);
         intent.putExtra("message", message);
         intent.putExtra("duration", duration);
 
@@ -124,16 +125,16 @@ public class MainActivity extends AppCompatActivity {
         // set Theme before anything else in onCreate
         SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         switch (sharedPreferencesHandler.getTheme()) {
-            case Constants.THEME_DARK_BLUE:
+            case SettingsConstants.THEME_DARK_BLUE:
                 setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 break;
-            case Constants.THEME_DARK_RED:
+            case SettingsConstants.THEME_DARK_RED:
                 setTheme(R.style.PowerSwitchTheme_Dark_Red);
                 break;
-            case Constants.THEME_LIGHT_BLUE:
+            case SettingsConstants.THEME_LIGHT_BLUE:
                 setTheme(R.style.PowerSwitchTheme_Light_Blue);
                 break;
-            case Constants.THEME_LIGHT_RED:
+            case SettingsConstants.THEME_LIGHT_RED:
                 setTheme(R.style.PowerSwitchTheme_Light_Red);
                 break;
             default:
@@ -153,11 +154,11 @@ public class MainActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 Log.d(this, "received intent: " + intent.getAction());
 
-                if (Constants.INTENT_STATUS_UPDATE_SNACKBAR.equals(intent.getAction())) {
+                if (LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR.equals(intent.getAction())) {
                     //noinspection ResourceType
                     Snackbar.make(navigationView, intent.getStringExtra("message"), intent.getIntExtra(
                             "duration", Snackbar.LENGTH_LONG)).show();
-                } else if (Constants.INTENT_STATUS_UPDATE_TOAST.equals(intent.getAction())) {
+                } else if (LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST.equals(intent.getAction())) {
                     //noinspection ResourceType
                     Toast.makeText(context, intent.getStringExtra("message"), intent.getIntExtra(
                             "duration", Toast.LENGTH_LONG)).show();
@@ -392,8 +393,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_STATUS_UPDATE_SNACKBAR);
-        intentFilter.addAction(Constants.INTENT_STATUS_UPDATE_TOAST);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 

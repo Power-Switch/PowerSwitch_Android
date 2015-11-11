@@ -41,7 +41,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 public class IntentReceiver extends BroadcastReceiver {
@@ -92,7 +92,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
     public static Intent createReceiverButtonIntent(String roomName, String receiverName, String buttonName) {
         Intent intent = new Intent();
-        intent.setAction(Constants.UNIVERSAL_ACTION_INTENT);
+        intent.setAction(ApiConstants.UNIVERSAL_ACTION_INTENT);
         intent.putExtra(IntentReceiver.KEY_ROOM, roomName);
         intent.putExtra(IntentReceiver.KEY_RECEIVER, receiverName);
         intent.putExtra(IntentReceiver.KEY_BUTTON, buttonName);
@@ -116,7 +116,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
     public static Intent createRoomButtonIntent(String roomName, String buttonName) {
         Intent intent = new Intent();
-        intent.setAction(Constants.UNIVERSAL_ACTION_INTENT);
+        intent.setAction(ApiConstants.UNIVERSAL_ACTION_INTENT);
         intent.putExtra(IntentReceiver.KEY_ROOM, roomName);
         intent.putExtra(IntentReceiver.KEY_BUTTON, buttonName);
 
@@ -138,7 +138,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
     public static Intent createSceneIntent(String sceneName) {
         Intent intent = new Intent();
-        intent.setAction(Constants.UNIVERSAL_ACTION_INTENT);
+        intent.setAction(ApiConstants.UNIVERSAL_ACTION_INTENT);
         intent.putExtra(IntentReceiver.KEY_SCENE, sceneName);
 
         return intent;
@@ -167,7 +167,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
             if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
                 Log.d("IntentReceiver", "appwidget update");
-            } else if (intent.getAction().equals(Constants.UNIVERSAL_ACTION_INTENT)) {
+            } else if (intent.getAction().equals(ApiConstants.UNIVERSAL_ACTION_INTENT)) {
                 parseActionIntent(context, intent);
             } else if (intent.getAction().equals(intent_switch_on)
                     || intent.getAction().equals(intent_switch_off)

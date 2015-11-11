@@ -51,7 +51,7 @@ import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 /**
@@ -280,7 +280,7 @@ public class ConfigureReceiverDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_RECEIVER_SUMMARY_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_SUMMARY_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

@@ -49,7 +49,7 @@ import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3Act
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4SummaryFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Dialog to create or modify a Timer
@@ -270,7 +270,7 @@ public class ConfigureTimerDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Constants.INTENT_TIMER_SUMMARY_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_SUMMARY_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

@@ -39,7 +39,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 /**
@@ -191,10 +191,10 @@ public class GeneralSettingsFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.radioButton_darkBlue:
-                        sharedPreferencesHandler.setTheme(Constants.THEME_DARK_BLUE);
+                        sharedPreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
                         break;
                     case R.id.radioButton_lightBlue:
-                        sharedPreferencesHandler.setTheme(Constants.THEME_LIGHT_BLUE);
+                        sharedPreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
                         break;
                     default:
                         break;
@@ -235,15 +235,15 @@ public class GeneralSettingsFragment extends Fragment {
         }
 
         switch (sharedPreferencesHandler.getTheme()) {
-            case Constants.THEME_DARK_BLUE:
+            case SettingsConstants.THEME_DARK_BLUE:
                 radioButtonDarkBlue.setChecked(true);
                 break;
-            case Constants.THEME_DARK_RED:
+            case SettingsConstants.THEME_DARK_RED:
                 break;
-            case Constants.THEME_LIGHT_BLUE:
+            case SettingsConstants.THEME_LIGHT_BLUE:
                 radioButtonLightBlue.setChecked(true);
                 break;
-            case Constants.THEME_LIGHT_RED:
+            case SettingsConstants.THEME_LIGHT_RED:
                 break;
             default:
                 break;

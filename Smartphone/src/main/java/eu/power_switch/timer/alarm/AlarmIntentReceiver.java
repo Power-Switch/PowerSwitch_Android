@@ -28,7 +28,7 @@ import java.util.Calendar;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.log.Log;
-import eu.power_switch.shared.Constants;
+import eu.power_switch.shared.constants.TimerConstants;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.action.TimerAction;
@@ -70,7 +70,7 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
         try {
             DatabaseHandler.init(context);
 
-            if (intent.getAction().equals(Constants.TIMER_ACTIVATION_INTENT)) {
+            if (intent.getAction().equals(TimerConstants.TIMER_ACTIVATION_INTENT)) {
                 Log.d("AlarmIntentReceiver", "parsing timer activation intent...");
                 parseActionIntent(context, intent);
             } else if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
