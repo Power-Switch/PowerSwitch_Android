@@ -50,15 +50,14 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         while (true) {
             // start working
-            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
-                    .sending), Snackbar.LENGTH_INDEFINITE);
+
             Log.d(this, "start working");
 
-            processQueue();
+            if (NetworkHandler.networkPackagesQueue.size() > 0) {
+                processQueue();
+            }
 
             // queue is empty
-            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
-
             Log.d(this, "queue is empty, wait for notify...");
 
             // Put Thread asleep and wait for wakeup from NetworkHandler
@@ -76,8 +75,13 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
 
     private void processQueue() {
         if (NetworkHandler.isWifiAvailable(context) || NetworkHandler.isGprsAvailable(context)) {
+
+            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+                    .sending), Snackbar.LENGTH_INDEFINITE);
+
             NetworkPackage networkPackage;
             while (NetworkHandler.networkPackagesQueue.size() > 0) {
+
                 synchronized (NetworkHandler.networkPackagesQueue) {
                     networkPackage = NetworkHandler.networkPackagesQueue.get(0);
                 }
@@ -130,6 +134,9 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                     }
                 }
             }
+
+            // queue worked off
+            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
         } else {
             synchronized (NetworkHandler.networkPackagesQueue) {
                 // remove all NetworkPackage from queue and abort
