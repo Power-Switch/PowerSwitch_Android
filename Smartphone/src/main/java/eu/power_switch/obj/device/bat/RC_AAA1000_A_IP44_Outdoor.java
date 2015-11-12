@@ -50,7 +50,7 @@ public class RC_AAA1000_A_IP44_Outdoor extends Receiver implements DipReceiver {
     private String headITGW = "0,0,10,11200,350,26,0,";
     private String tailITGW = tx433version + sSpeedITGW + "0";
 
-    public RC_AAA1000_A_IP44_Outdoor(Context context, long id, String name, LinkedList<Boolean> dips, long roomId) {
+    public RC_AAA1000_A_IP44_Outdoor(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_DIPS, roomId);
         dipList = new LinkedList<>();
 

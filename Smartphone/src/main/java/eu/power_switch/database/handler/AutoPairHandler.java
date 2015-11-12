@@ -36,7 +36,7 @@ public abstract class AutoPairHandler {
      * @param receiverID The ID of the receiver.
      * @param seed       The seed of the receiver.
      */
-    protected static void add(long receiverID, long seed) {
+    protected static void add(Long receiverID, long seed) {
         ContentValues values = new ContentValues();
         values.put(AutoPairTable.COLUMN_SEED, seed);
         values.put(AutoPairTable.COLUMN_RECEIVER_ID, receiverID);
@@ -48,7 +48,7 @@ public abstract class AutoPairHandler {
      *
      * @param receiverID ID of the deleted receiver
      */
-    protected static void delete(long receiverID) {
+    protected static void delete(Long receiverID) {
         DatabaseHandler.database.delete(AutoPairTable.TABLE_NAME, AutoPairTable.COLUMN_RECEIVER_ID + "=" + receiverID, null);
     }
 
@@ -58,7 +58,7 @@ public abstract class AutoPairHandler {
      * @param receiverID The ID of the receiver.
      * @return The seed of the receiver.
      */
-    protected static long getSeed(long receiverID) {
+    protected static long getSeed(Long receiverID) {
         String[] columns = {AutoPairTable.COLUMN_SEED};
         Cursor cursor = DatabaseHandler.database.query(AutoPairTable.TABLE_NAME, columns,
                 AutoPairTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);

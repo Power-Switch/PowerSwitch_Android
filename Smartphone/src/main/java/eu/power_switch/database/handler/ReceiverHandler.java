@@ -53,7 +53,7 @@ public abstract class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_TYPE, receiver.getType());
         values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, RoomHandler.get(receiver.getRoomId()).getReceivers().size());
 
-        long dbInsertReturnValue = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
+        Long dbInsertReturnValue = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
 
         if (dbInsertReturnValue > -1) {
             insertDetails(receiver, dbInsertReturnValue);
@@ -68,7 +68,7 @@ public abstract class ReceiverHandler {
      * @param receiver   the new Receiver
      * @param receiverId ID of the new Receiver in database
      */
-    private static void insertDetails(Receiver receiver, long receiverId) {
+    private static void insertDetails(Receiver receiver, Long receiverId) {
         String type = receiver.getType();
         if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
             MasterSlaveReceiver receiverAsMasterSlave = (MasterSlaveReceiver) receiver;
@@ -125,7 +125,7 @@ public abstract class ReceiverHandler {
      * @param id ID of Receiver
      * @return Receiver
      */
-    protected static Receiver get(long id) {
+    protected static Receiver get(Long id) {
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, null, ReceiverTable.COLUMN_ID + "="
                 + id, null, null, null, null);
         cursor.moveToFirst();
@@ -141,7 +141,7 @@ public abstract class ReceiverHandler {
      * @param receiverName Name of Receiver
      * @return Receiver
      */
-    protected static Receiver getByRoom(long roomId, String receiverName) {
+    protected static Receiver getByRoom(Long roomId, String receiverName) {
         for (Receiver receiver : getByRoom(roomId)) {
             if (receiverName.equals(receiver.getName())) {
                 return receiver;
@@ -157,7 +157,7 @@ public abstract class ReceiverHandler {
      * @param roomId ID of Room
      * @return List of Receivers
      */
-    protected static ArrayList<Receiver> getByRoom(long roomId) {
+    protected static ArrayList<Receiver> getByRoom(Long roomId) {
         ArrayList<Receiver> receivers = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, null, ReceiverTable.COLUMN_ROOM_ID +
                 "=" + roomId, null, null, null, null);
@@ -202,7 +202,7 @@ public abstract class ReceiverHandler {
      *
      * @param id ID of Receiver
      */
-    protected static void delete(long id) {
+    protected static void delete(Long id) {
         Log.d("Delete Receiver: " + id);
         // CAREFUL ABOUT DELETE ORDER, SOME THINGS DEPEND ON EXISTING DATA
         // delete depending things first!
@@ -221,7 +221,7 @@ public abstract class ReceiverHandler {
      *
      * @param id ID of Receiver
      */
-    private static void deleteDetails(long id) {
+    private static void deleteDetails(Long id) {
         String type = getType(id);
         if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
             MasterSlaveReceiverHandler.delete(id);
@@ -240,7 +240,7 @@ public abstract class ReceiverHandler {
      * @param id ID of Receiver
      * @return Type of Receiver
      */
-    protected static String getType(long id) {
+    protected static String getType(Long id) {
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_TYPE};
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID +
                 "=" + id, null, null, null, null);
@@ -256,7 +256,7 @@ public abstract class ReceiverHandler {
      * @param id ID of Receiver
      * @return ID of last activated Button, -1 if not set
      */
-    protected static long getLastActivatedButtonId(long id) {
+    protected static long getLastActivatedButtonId(Long id) {
         String[] columns = {ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
                 + id, null, null, null, null);
@@ -277,7 +277,7 @@ public abstract class ReceiverHandler {
      * @param receiverId ID of Receiver
      * @param buttonId   ID of Button
      */
-    protected static void setLastActivatedButtonId(long receiverId, long buttonId) {
+    protected static void setLastActivatedButtonId(Long receiverId, Long buttonId) {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID, buttonId);
 
@@ -291,7 +291,7 @@ public abstract class ReceiverHandler {
      * @param id ID of Receiver
      * @return Position in Room
      */
-    protected static long getPositionInRoom(long id) {
+    protected static Long getPositionInRoom(Long id) {
         String[] columns = {ReceiverTable.COLUMN_POSITION_IN_ROOM};
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
                 + id, null, null, null, null);
@@ -312,7 +312,7 @@ public abstract class ReceiverHandler {
      * @param receiverId     ID of Receiver
      * @param positionInRoom Position in Room
      */
-    protected static void setPositionInRoom(long receiverId, long positionInRoom) {
+    protected static void setPositionInRoom(Long receiverId, Long positionInRoom) {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, positionInRoom);
 

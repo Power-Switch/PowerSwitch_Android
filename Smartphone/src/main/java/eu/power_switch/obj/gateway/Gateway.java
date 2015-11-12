@@ -26,7 +26,7 @@ public abstract class Gateway {
     /**
      * ID of this Gateway
      */
-    private long id;
+    private Long id;
 
     /**
      * Boolean whether this Gateway is active

@@ -76,7 +76,7 @@ public abstract class GatewayHandler {
      *
      * @param id ID of Gateway
      */
-    protected static void enable(long id) {
+    protected static void enable(Long id) {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_ACTIVE, 1);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
@@ -87,7 +87,7 @@ public abstract class GatewayHandler {
      *
      * @param id ID of Gateway
      */
-    protected static void disable(long id) {
+    protected static void disable(Long id) {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_ACTIVE, 0);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
@@ -102,7 +102,7 @@ public abstract class GatewayHandler {
      * @param address new Address (Host)
      * @param port    new Port
      */
-    protected static void update(long id, String name, String model, String address, Integer port) {
+    protected static void update(Long id, String name, String model, String address, Integer port) {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_NAME, name);
         values.put(GatewayTable.COLUMN_MODEL, model);
@@ -116,7 +116,7 @@ public abstract class GatewayHandler {
      *
      * @param id ID of Gateway
      */
-    protected static void delete(long id) {
+    protected static void delete(Long id) {
         DatabaseHandler.database.delete(GatewayTable.TABLE_NAME, GatewayTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -126,7 +126,7 @@ public abstract class GatewayHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    protected static Gateway get(long id) {
+    protected static Gateway get(Long id) {
         Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, GatewayTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
         cursor.moveToFirst();
@@ -184,7 +184,7 @@ public abstract class GatewayHandler {
     private static Gateway dbToGateway(Cursor c) {
         try {
             Gateway gateway;
-            int id = c.getInt(0);
+            Long id = c.getLong(0);
             int rawActive = c.getInt(1);
             boolean active;
             String name = c.getString(2);

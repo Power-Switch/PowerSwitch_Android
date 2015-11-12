@@ -51,7 +51,7 @@ public class CMR500 extends Receiver implements MasterSlaveReceiver {
     private Character channelMaster;
     private int channelSlave;
 
-    public CMR500(Context context, long id, String name, char channelMaster, int channelSlave, long roomId) {
+    public CMR500(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_MASTER_SLAVE, roomId);
         buttons.add(new Button(Button.BUTTON_ON_ID, context.getString(R.string.on), id));
         buttons.add(new Button(Button.BUTTON_OFF_ID, context.getString(R.string.off), id));

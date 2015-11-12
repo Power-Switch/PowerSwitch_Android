@@ -44,7 +44,7 @@ public abstract class SceneItemHandler {
      * @param sceneId ID of Scene the SceneItems will be associated with
      * @param items   list of SceneItems
      */
-    protected static void add(long sceneId, ArrayList<SceneItem> items) {
+    protected static void add(Long sceneId, ArrayList<SceneItem> items) {
         for (SceneItem item : items) {
             add(sceneId, item);
         }
@@ -56,7 +56,7 @@ public abstract class SceneItemHandler {
      * @param sceneId ID of Scene the SceneItems will be associated with
      * @param item    SceneItem
      */
-    private static void add(long sceneId, SceneItem item) {
+    private static void add(Long sceneId, SceneItem item) {
         ContentValues values = new ContentValues();
         values.put(SceneItemTable.COLUMN_SCENE_ID, sceneId);
         values.put(SceneItemTable.COLUMN_RECEIVER_ID, item.getReceiver().getId());
@@ -79,7 +79,7 @@ public abstract class SceneItemHandler {
      * @param sceneId ID of Scene
      * @return list of SceneItems
      */
-    protected static List<SceneItem> getSceneItems(long sceneId) {
+    protected static List<SceneItem> getSceneItems(Long sceneId) {
         LinkedList<SceneItem> sceneItems = new LinkedList<>();
 
         Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, null,
@@ -99,7 +99,7 @@ public abstract class SceneItemHandler {
      *
      * @param receiverId ID of Receiver
      */
-    protected static void deleteByReceiverId(long receiverId) {
+    protected static void deleteByReceiverId(Long receiverId) {
         Log.d("Delete SceneItem by ReceiverId: " + receiverId);
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
@@ -135,7 +135,7 @@ public abstract class SceneItemHandler {
      * @param buttonId ID of Button
      * @return Name of active Button
      */
-    private static String getActiveButtonName(long buttonId) {
+    private static String getActiveButtonName(Long buttonId) {
         if (buttonId == Button.BUTTON_ON_ID) {
             return DatabaseHandler.context.getString(R.string.on);
         } else if (buttonId == Button.BUTTON_OFF_ID) {

@@ -28,7 +28,7 @@ public class ITGW433 extends Gateway {
      */
     public static final String MODEL = "ITGW-433";
 
-    public ITGW433(int id, boolean active, String name, String firmware, String address, int port) {
+    public ITGW433(Long id, boolean active, String name, String firmware, String address, int port) {
         super(id, active, name, MODEL, firmware, address, port);
     }
 

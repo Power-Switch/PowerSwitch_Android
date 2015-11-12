@@ -44,7 +44,7 @@ public abstract class TimerHandler {
      *
      * @param timer Timer
      */
-    protected static long add(Timer timer) {
+    protected static Long add(Timer timer) {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, timer.isActive());
         values.put(TimerTable.COLUMN_NAME, timer.getName());
@@ -70,7 +70,7 @@ public abstract class TimerHandler {
         return timerId;
     }
 
-    private static void insertWeekdayDetails(WeekdayTimer weekdayTimer, long timerId) {
+    private static void insertWeekdayDetails(WeekdayTimer weekdayTimer, Long timerId) {
         for (WeekdayTimer.Day day : weekdayTimer.getExecutionDays()) {
             ContentValues values = new ContentValues();
             values.put(TimerWeekdayTable.COLUMN_EXECUTION_DAY, day.positionInWeek);
@@ -85,7 +85,7 @@ public abstract class TimerHandler {
      *
      * @param timerId ID of Timer
      */
-    protected static void delete(long timerId) {
+    protected static void delete(Long timerId) {
         AlarmHandler.cancelAlarm(DatabaseHandler.context, get(timerId));
 
         TimerActionHandler.delete(timerId);
@@ -96,7 +96,7 @@ public abstract class TimerHandler {
                 "=" + timerId, null);
     }
 
-    private static void deleteWeekdayDetails(long timerId) {
+    private static void deleteWeekdayDetails(Long timerId) {
         DatabaseHandler.database.delete(TimerWeekdayTable.TABLE_NAME, TimerWeekdayTable.COLUMN_TIMER_ID +
                 "=" + timerId, null);
     }
@@ -139,7 +139,7 @@ public abstract class TimerHandler {
      * @param timerId
      * @return Timer
      */
-    protected static Timer get(long timerId) {
+    protected static Timer get(Long timerId) {
         String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
                 TimerTable.COLUMN_EXECUTION_TIME, TimerTable.COLUMN_EXECUTION_INTERVAL,
                 TimerTable.COLUMN_EXECUTION_TYPE};
@@ -201,7 +201,7 @@ public abstract class TimerHandler {
      *
      * @param id ID of Timer
      */
-    protected static void enable(long id) {
+    protected static void enable(Long id) {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, 1);
         DatabaseHandler.database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
@@ -212,7 +212,7 @@ public abstract class TimerHandler {
      *
      * @param id ID of Timer
      */
-    protected static void disable(long id) {
+    protected static void disable(Long id) {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, 0);
         DatabaseHandler.database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
@@ -225,7 +225,7 @@ public abstract class TimerHandler {
      * @return Timer
      */
     private static Timer dbToTimer(Cursor c) {
-        int timerId = c.getInt(0);
+        Long timerId = c.getLong(0);
         int rawActive = c.getInt(1);
         boolean active;
         if (rawActive > 0) {
@@ -254,11 +254,11 @@ public abstract class TimerHandler {
         return null;
     }
 
-    private static ArrayList<WeekdayTimer.Day> getWeekdayDetails(int timerId) {
+    private static ArrayList<WeekdayTimer.Day> getWeekdayDetails(Long timerId) {
         return getExecutionDays(timerId);
     }
 
-    private static ArrayList<WeekdayTimer.Day> getExecutionDays(long timerId) {
+    private static ArrayList<WeekdayTimer.Day> getExecutionDays(Long timerId) {
         ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
 
         String[] columns = {TimerWeekdayTable.COLUMN_EXECUTION_DAY};

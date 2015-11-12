@@ -167,7 +167,7 @@ public final class DatabaseHandler {
      * @param id      the ID of the Room
      * @param newName the new Name
      */
-    public static void updateRoom(long id, String newName) {
+    public static void updateRoom(Long id, String newName) {
         openWritable();
         try {
             RoomHandler.update(id, newName);
@@ -183,7 +183,7 @@ public final class DatabaseHandler {
      *
      * @param id the ID of the room
      */
-    public static void deleteRoom(long id) {
+    public static void deleteRoom(Long id) {
         openWritable();
         try {
             RoomHandler.delete(id);
@@ -219,7 +219,7 @@ public final class DatabaseHandler {
      * @param id the ID of the room
      * @return a room object
      */
-    public static Room getRoom(long id) {
+    public static Room getRoom(Long id) {
         openReadable();
         Room room = null;
         try {
@@ -296,7 +296,7 @@ public final class DatabaseHandler {
      * @param id ID of the Receiver
      * @return Receiver, can be null
      */
-    public static Receiver getReceiver(long id) {
+    public static Receiver getReceiver(Long id) {
         openReadable();
         Receiver receiver = null;
         try {
@@ -315,7 +315,7 @@ public final class DatabaseHandler {
      * @param id ID of room
      * @return List of Receivers
      */
-    public static ArrayList<Receiver> getReceiverByRoomId(long id) {
+    public static ArrayList<Receiver> getReceiverByRoomId(Long id) {
         openReadable();
         ArrayList<Receiver> receivers = null;
         try {
@@ -335,7 +335,7 @@ public final class DatabaseHandler {
      * @param receiverName Name of Receiver
      * @return List of Receivers
      */
-    public static Receiver getReceiverByRoomId(long roomId, String receiverName) {
+    public static Receiver getReceiverByRoomId(Long roomId, String receiverName) {
         openReadable();
         Receiver receiver = null;
         try {
@@ -371,7 +371,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Receiver
      */
-    public static void deleteReceiver(long id) {
+    public static void deleteReceiver(Long id) {
         openWritable();
         try {
             ReceiverHandler.delete(id);
@@ -388,7 +388,7 @@ public final class DatabaseHandler {
      * @param id ID of Button
      * @return Button
      */
-    public static UniversalButton getButton(long id) {
+    public static UniversalButton getButton(Long id) {
         openReadable();
         UniversalButton button = null;
         try {
@@ -407,7 +407,7 @@ public final class DatabaseHandler {
      * @param receiverId ID of Receiver
      * @return List of Buttons
      */
-    public static List<UniversalButton> getButtons(long receiverId) {
+    public static List<UniversalButton> getButtons(Long receiverId) {
         openReadable();
         List<UniversalButton> buttons = null;
         try {
@@ -426,7 +426,7 @@ public final class DatabaseHandler {
      * @param id ID of Receiver
      * @return ID of last activated Button, -1 if not set
      */
-    public static long getLastActivatedButtonId(long id) {
+    public static long getLastActivatedButtonId(Long id) {
         openReadable();
         long buttonId = -1;
         try {
@@ -446,7 +446,7 @@ public final class DatabaseHandler {
      * @param buttonId   ID of Button
      * @return ID of last activated Button, -1 if not set
      */
-    public static void setLastActivatedButtonId(long receiverId, long buttonId) {
+    public static void setLastActivatedButtonId(Long receiverId, Long buttonId) {
         openWritable();
         try {
             ReceiverHandler.setLastActivatedButtonId(receiverId, buttonId);
@@ -502,7 +502,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Scene
      */
-    public static void deleteScene(long id) {
+    public static void deleteScene(Long id) {
         openWritable();
         try {
             SceneHandler.delete(id);
@@ -538,7 +538,7 @@ public final class DatabaseHandler {
      * @param id ID of Scene
      * @return Scene
      */
-    public static Scene getScene(long id) {
+    public static Scene getScene(Long id) {
         openReadable();
         Scene scene = null;
         try {
@@ -603,7 +603,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
-    public static void enableGateway(long id) {
+    public static void enableGateway(Long id) {
         openWritable();
         try {
             GatewayHandler.enable(id);
@@ -619,7 +619,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
-    public static void disableGateway(long id) {
+    public static void disableGateway(Long id) {
         openWritable();
         try {
             GatewayHandler.disable(id);
@@ -639,7 +639,7 @@ public final class DatabaseHandler {
      * @param address new Address (Host) of Gateway
      * @param port    new Port of Gateway
      */
-    public static void updateGateway(long id, String name, String model, String address, Integer port) {
+    public static void updateGateway(Long id, String name, String model, String address, Integer port) {
         openWritable();
         try {
             GatewayHandler.update(id, name, model, address, port);
@@ -655,7 +655,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
-    public static void deleteGateway(long id) {
+    public static void deleteGateway(Long id) {
         openWritable();
         try {
             GatewayHandler.delete(id);
@@ -672,7 +672,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    public static Gateway getGateway(long id) {
+    public static Gateway getGateway(Long id) {
         openReadable();
         Gateway gateway = null;
         try {
@@ -887,7 +887,7 @@ public final class DatabaseHandler {
      * @param id ID of Timer
      * @return Timer
      */
-    public static Timer getTimer(long id) {
+    public static Timer getTimer(Long id) {
         openReadable();
         Timer timer = null;
         try {
@@ -961,7 +961,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
-    public static void enableTimer(long id) {
+    public static void enableTimer(Long id) {
         openWritable();
         try {
             TimerHandler.enable(id);
@@ -977,7 +977,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
-    public static void disableTimer(long id) {
+    public static void disableTimer(Long id) {
         openWritable();
         try {
             TimerHandler.disable(id);
@@ -993,7 +993,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
-    public static void deleteTimer(long id) {
+    public static void deleteTimer(Long id) {
         openWritable();
         try {
             TimerHandler.delete(id);
@@ -1026,7 +1026,7 @@ public final class DatabaseHandler {
      * @param receiverId ID of Receiver
      * @param position   position in room
      */
-    public static void setPositionInRoom(long receiverId, long position) {
+    public static void setPositionInRoom(Long receiverId, Long position) {
         openWritable();
         try {
             ReceiverHandler.setPositionInRoom(receiverId, position);

@@ -67,7 +67,7 @@ public abstract class SceneHandler {
      * @param id      ID of Scene
      * @param newName new Scene name
      */
-    private static void updateName(long id, String newName) {
+    private static void updateName(Long id, String newName) {
         ContentValues values = new ContentValues();
         values.put(SceneTable.COLUMN_NAME, newName);
         DatabaseHandler.database.update(SceneTable.TABLE_NAME, values, SceneTable.COLUMN_ID + "==" + id, null);
@@ -78,7 +78,7 @@ public abstract class SceneHandler {
      *
      * @param id ID of Scene
      */
-    protected static void delete(long id) {
+    protected static void delete(Long id) {
         TimerActionHandler.deleteBySceneId(id);
 
         deleteSceneItems(id);
@@ -90,7 +90,7 @@ public abstract class SceneHandler {
      *
      * @param sceneId ID of Scene
      */
-    private static void deleteSceneItems(long sceneId) {
+    private static void deleteSceneItems(Long sceneId) {
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null);
     }
 
@@ -115,7 +115,7 @@ public abstract class SceneHandler {
      * @param id ID of Scene
      * @return Scene
      */
-    protected static Scene get(long id) {
+    protected static Scene get(Long id) {
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_ID + "==" + id, null, null, null,
                 null);
         cursor.moveToFirst();
@@ -149,7 +149,7 @@ public abstract class SceneHandler {
      * @return Scene
      */
     private static Scene dbToScene(Cursor c) {
-        Scene scene = new Scene(c.getInt(0), c.getString(1));
+        Scene scene = new Scene(c.getLong(0), c.getString(1));
         for (SceneItem item : SceneItemHandler.getSceneItems(scene.getId())) {
             scene.addSceneItem(item);
         }

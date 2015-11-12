@@ -46,7 +46,7 @@ public class ITL1000 extends Receiver implements AutoPairReceiver {
 
     private long seed = -1;
 
-    public ITL1000(Context context, long id, String name, long seed, long roomId) {
+    public ITL1000(Context context, Long id, String name, long seed, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_AUTOPAIR, roomId);
         buttons.add(new Button(Button.BUTTON_UP_ID, context.getString(R.string.up), id));
         buttons.add(new Button(Button.BUTTON_DOWN_ID, context.getString(R.string.down), id));

@@ -136,16 +136,17 @@ public abstract class Receiver {
 
     protected Context context;
 
-    protected long id;
+    protected Long id;
     protected String name;
     protected String brand;
     protected String model;
     protected LinkedList<Button> buttons;
-    protected long roomId;
+    protected Long roomId;
     protected String type;
-    protected int positionInRoom;
+    protected Integer positionInRoom;
+    protected Long lastActivatedButtonId;
 
-    public Receiver(Context context, long id, String name, String brand, String model, String type, long roomId) {
+    public Receiver(Context context, Long id, String name, String brand, String model, String type, Long roomId) {
         this.context = context;
         this.id = id;
         this.name = name;
@@ -154,7 +155,6 @@ public abstract class Receiver {
         this.buttons = new LinkedList<>();
         this.type = type;
         this.roomId = roomId;
-        this.positionInRoom = -1;
     }
 
     public static String getJavaPath(String model) {
@@ -176,7 +176,7 @@ public abstract class Receiver {
         return null;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -196,7 +196,7 @@ public abstract class Receiver {
         return buttons;
     }
 
-    public long getRoomId() {
+    public Long getRoomId() {
         return roomId;
     }
 
@@ -204,12 +204,20 @@ public abstract class Receiver {
         return type;
     }
 
-    public int getPositionInRoom() {
+    public Integer getPositionInRoom() {
         return positionInRoom;
     }
 
     public void setPositionInRoom(int positionInRoom) {
         this.positionInRoom = positionInRoom;
+    }
+
+    public Long getLastActivatedButtonId() {
+        return lastActivatedButtonId;
+    }
+
+    public void setLastActivatedButtonId(Long lastActivatedButtonId) {
+        this.lastActivatedButtonId = lastActivatedButtonId;
     }
 
     public NetworkPackage getNetworkPackage(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {

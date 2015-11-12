@@ -49,15 +49,15 @@ public class PlayStoreModeDataModel {
     private ArrayList<Scene> scenes = new ArrayList<>();
 
     // Scenes
-    private Scene scene_kinoabend = new Scene(0, "Kinoabend");
-    private Scene scene_abendessen = new Scene(1, "Abendessen");
-    private Scene scene_feier = new Scene(2, "Feier");
+    private Scene scene_kinoabend = new Scene((long) 0, "Kinoabend");
+    private Scene scene_abendessen = new Scene((long) 1, "Abendessen");
+    private Scene scene_feier = new Scene((long) 2, "Feier");
     // Rooms
-    private Room wohnzimmer = new Room(0, "Wohnzimmer");
-    private Room schlafzimmer = new Room(1, "Schlafzimmer");
-    private Room kueche = new Room(2, "Küche");
-    private Room kinderzimmer = new Room(3, "Kinderzimmer");
-    private Room garten = new Room(4, "Garten");
+    private Room wohnzimmer = new Room((long) 0, "Wohnzimmer");
+    private Room schlafzimmer = new Room((long) 1, "Schlafzimmer");
+    private Room kueche = new Room((long) 2, "Küche");
+    private Room kinderzimmer = new Room((long) 3, "Kinderzimmer");
+    private Room garten = new Room((long) 4, "Garten");
     // Receiver
     private Receiver sofa_wohnzimmer;
     private Receiver ecklampe_wohnzimmer;
@@ -94,30 +94,30 @@ public class PlayStoreModeDataModel {
     public static ArrayList<Gateway> getGateways() {
         ArrayList<Gateway> gateways = new ArrayList<>();
 
-        gateways.add(new ConnAir(0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880));
-        gateways.add(new ITGW433(0, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880));
-        gateways.add(new BrematicGWY433(0, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880));
+        gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880));
+        gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880));
+        gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880));
 
         return gateways;
     }
 
     private void initReceiver() {
-        sofa_wohnzimmer = new CMR1000(context, 0, "Sofa", 'E', 1, wohnzimmer.getId());
-        ecklampe_wohnzimmer = new CMR1000(context, 1, "Ecklampe", 'E', 1, wohnzimmer.getId());
-        verstaerker_wohnzimmer = new CMR1000(context, 2, "Verstärker", 'E', 1, wohnzimmer.getId());
-        decke_schlafzimmer = new CMR1000(context, 3, "Decke", 'E', 1, schlafzimmer.getId());
-        fenster_schlafzimmer = new CMR1000(context, 4, "Fenster", 'E', 1, schlafzimmer.getId());
-        nachttische_schlafzimmer = new CMR1000(context, 5, "Nachttische", 'E', 1, schlafzimmer.getId());
-        abzugshaube_kueche = new CMR1000(context, 6, "Abzugshaube", 'E', 1, kueche.getId());
-        esstisch_kueche = new CMR1000(context, 7, "Esstisch", 'E', 1, kueche.getId());
-        arbeitsflaeche_kueche = new CMR1000(context, 8, "Arbeitsfläche", 'E', 1, kueche.getId());
-        kaffeemaschine_kueche = new CMR1000(context, 9, "Kaffeemaschine", 'E', 1, kueche.getId());
-        decke_kinderzimmer = new CMR1000(context, 10, "Decke", 'E', 1, kinderzimmer.getId());
-        nachtlicht_kinderzimmer = new CMR1000(context, 11, "Nachtlicht", 'E', 1, kinderzimmer.getId());
-        terrasse_garten = new CMR1000(context, 12, "Terrasse", 'E', 1, garten.getId());
-        wegbeleuchtung_garten = new CMR1000(context, 13, "Wegbeleuchtung", 'E', 1, garten.getId());
-        hinterhaus_garten = new CMR1000(context, 14, "Hinterhaus", 'E', 1, garten.getId());
-        weihnachtsdeko_garten = new CMR1000(context, 15, "Weihnachtsdeko", 'E', 1, garten.getId());
+        sofa_wohnzimmer = new CMR1000(context, (long) 0, "Sofa", 'E', 1, wohnzimmer.getId());
+        ecklampe_wohnzimmer = new CMR1000(context, (long) 1, "Ecklampe", 'E', 1, wohnzimmer.getId());
+        verstaerker_wohnzimmer = new CMR1000(context, (long) 2, "Verstärker", 'E', 1, wohnzimmer.getId());
+        decke_schlafzimmer = new CMR1000(context, (long) 3, "Decke", 'E', 1, schlafzimmer.getId());
+        fenster_schlafzimmer = new CMR1000(context, (long) 4, "Fenster", 'E', 1, schlafzimmer.getId());
+        nachttische_schlafzimmer = new CMR1000(context, (long) 5, "Nachttische", 'E', 1, schlafzimmer.getId());
+        abzugshaube_kueche = new CMR1000(context, (long) 6, "Abzugshaube", 'E', 1, kueche.getId());
+        esstisch_kueche = new CMR1000(context, (long) 7, "Esstisch", 'E', 1, kueche.getId());
+        arbeitsflaeche_kueche = new CMR1000(context, (long) 8, "Arbeitsfläche", 'E', 1, kueche.getId());
+        kaffeemaschine_kueche = new CMR1000(context, (long) 9, "Kaffeemaschine", 'E', 1, kueche.getId());
+        decke_kinderzimmer = new CMR1000(context, (long) 10, "Decke", 'E', 1, kinderzimmer.getId());
+        nachtlicht_kinderzimmer = new CMR1000(context, (long) 11, "Nachtlicht", 'E', 1, kinderzimmer.getId());
+        terrasse_garten = new CMR1000(context, (long) 12, "Terrasse", 'E', 1, garten.getId());
+        wegbeleuchtung_garten = new CMR1000(context, (long) 13, "Wegbeleuchtung", 'E', 1, garten.getId());
+        hinterhaus_garten = new CMR1000(context, (long) 14, "Hinterhaus", 'E', 1, garten.getId());
+        weihnachtsdeko_garten = new CMR1000(context, (long) 15, "Weihnachtsdeko", 'E', 1, garten.getId());
     }
 
     private void initScenes() {

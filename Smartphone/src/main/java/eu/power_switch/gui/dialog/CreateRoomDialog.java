@@ -99,7 +99,7 @@ public class CreateRoomDialog extends DialogFragment {
         builder.setPositiveButton(R.string.create, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DatabaseHandler.addRoom(new Room(0, getRoomName()));
+                DatabaseHandler.addRoom(new Room(null, getRoomName()));
 
                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());
                 Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)

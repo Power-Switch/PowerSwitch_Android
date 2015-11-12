@@ -52,7 +52,7 @@ public class Ritter extends Receiver implements DipReceiver {
 
     private LinkedList<DipSwitch> dipList;
 
-    public Ritter(Context context, long id, String name, LinkedList<Boolean> dips, long roomId) {
+    public Ritter(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_DIPS, roomId);
         dipList = new LinkedList<>();
 

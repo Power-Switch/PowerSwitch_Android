@@ -32,7 +32,7 @@ public class UniversalReceiver extends Receiver {
 
     private List<UniversalButton> universalButtons = new ArrayList<>();
 
-    public UniversalReceiver(Context context, long id, String name, List<UniversalButton> buttons, long
+    public UniversalReceiver(Context context, Long id, String name, List<UniversalButton> buttons, Long
             roomId) {
         super(context, id, name, BRAND_UNIVERSAL, BRAND_UNIVERSAL, Receiver.TYPE_UNIVERSAL, roomId);
         universalButtons.addAll(buttons);

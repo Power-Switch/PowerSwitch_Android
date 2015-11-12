@@ -35,7 +35,7 @@ public abstract class MasterSlaveReceiverHandler {
      * @param master     Master channel of the receiver.
      * @param slave      Slave channel of the receiver.
      */
-    protected static void add(long receiverID, Character master, int slave) {
+    protected static void add(Long receiverID, Character master, int slave) {
         ContentValues values = new ContentValues();
         values.put(MasterSlaveTable.COLUMN_MASTER, master.toString());
         values.put(MasterSlaveTable.COLUMN_SLAVE, slave);
@@ -48,7 +48,7 @@ public abstract class MasterSlaveReceiverHandler {
      *
      * @param receiverID ID of the deleted receiver
      */
-    protected static void delete(long receiverID) {
+    protected static void delete(Long receiverID) {
         DatabaseHandler.database.delete(MasterSlaveTable.TABLE_NAME, MasterSlaveTable.COLUMN_RECEIVER_ID + "=" + receiverID, null);
     }
 
@@ -58,7 +58,7 @@ public abstract class MasterSlaveReceiverHandler {
      * @param receiverID The ID of the receiver.
      * @return The master channel of the receiver.
      */
-    protected static Character getMaster(long receiverID) {
+    protected static Character getMaster(Long receiverID) {
         String[] columns = {MasterSlaveTable.COLUMN_MASTER};
         Cursor cursor = DatabaseHandler.database.query(MasterSlaveTable.TABLE_NAME, columns,
                 MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);
@@ -74,7 +74,7 @@ public abstract class MasterSlaveReceiverHandler {
      * @param receiverID The ID of the receiver.
      * @return The slave channel of the receiver.
      */
-    protected static int getSlave(long receiverID) {
+    protected static int getSlave(Long receiverID) {
         String[] columns = {MasterSlaveTable.COLUMN_SLAVE};
         Cursor cursor = DatabaseHandler.database.query(MasterSlaveTable.TABLE_NAME, columns,
                 MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);

@@ -38,7 +38,7 @@ public abstract class DipHandler {
      * @param receiverID The ID of the receiver in database (can differ from the one in the newly created object)
      * @param receiver   The DipReceiver containing the dip information.
      */
-    protected static void add(long receiverID, DipReceiver receiver) {
+    protected static void add(Long receiverID, DipReceiver receiver) {
         int position = 0;
         for (DipSwitch dip : receiver.getDips()) {
             ContentValues values = new ContentValues();
@@ -55,7 +55,7 @@ public abstract class DipHandler {
      *
      * @param receiverId The ID of the receiver
      */
-    protected static void delete(long receiverId) {
+    protected static void delete(Long receiverId) {
         DatabaseHandler.database.delete(DipTable.TABLE_NAME, DipTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
 
@@ -65,7 +65,7 @@ public abstract class DipHandler {
      * @param receiverId The ID of the receiver
      * @return List of Dip positions
      */
-    protected static LinkedList<Boolean> getDips(long receiverId) {
+    protected static LinkedList<Boolean> getDips(Long receiverId) {
         LinkedList<Boolean> dips = new LinkedList<>();
 
         String[] dipColumns = {DipTable.COLUMN_STATE};

@@ -43,7 +43,7 @@ import eu.power_switch.timer.action.TimerSceneAction;
  */
 public abstract class TimerActionHandler {
 
-    protected static void add(ArrayList<TimerAction> actions, long timerId) {
+    protected static void add(ArrayList<TimerAction> actions, Long timerId) {
         for (TimerAction action : actions) {
             ContentValues values = new ContentValues();
             values.put(TimerActionTable.COLUMN_TIMER_ID, timerId);
@@ -60,7 +60,7 @@ public abstract class TimerActionHandler {
         }
     }
 
-    private static void insertActionDetails(TimerReceiverAction timerReceiverAction, long actionId) {
+    private static void insertActionDetails(TimerReceiverAction timerReceiverAction, Long actionId) {
         ContentValues values = new ContentValues();
         values.put(TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID, actionId);
         values.put(TimerReceiverActionTable.COLUMN_ROOM_ID, timerReceiverAction.getRoom().getId());
@@ -69,7 +69,7 @@ public abstract class TimerActionHandler {
         DatabaseHandler.database.insert(TimerReceiverActionTable.TABLE_NAME, null, values);
     }
 
-    private static void insertActionDetails(TimerRoomAction timerRoomAction, long actionId) {
+    private static void insertActionDetails(TimerRoomAction timerRoomAction, Long actionId) {
         ContentValues values = new ContentValues();
         values.put(TimerRoomActionTable.COLUMN_TIMER_ACTION_ID, actionId);
         values.put(TimerRoomActionTable.COLUMN_ROOM_ID, timerRoomAction.getRoom().getId());
@@ -77,7 +77,7 @@ public abstract class TimerActionHandler {
         DatabaseHandler.database.insert(TimerRoomActionTable.TABLE_NAME, null, values);
     }
 
-    private static void insertActionDetails(TimerSceneAction timerSceneAction, long actionId) {
+    private static void insertActionDetails(TimerSceneAction timerSceneAction, Long actionId) {
         ContentValues values = new ContentValues();
         values.put(TimerSceneActionTable.COLUMN_TIMER_ACTION_ID, actionId);
         values.put(TimerSceneActionTable.COLUMN_SCENE_ID, timerSceneAction.getScene().getId());
@@ -89,7 +89,7 @@ public abstract class TimerActionHandler {
      *
      * @param timerId ID of Timer
      */
-    protected static void delete(long timerId) {
+    protected static void delete(Long timerId) {
         ArrayList<TimerAction> timerActions = getByTimerId(timerId);
 
         for (TimerAction timerAction : timerActions) {
@@ -112,7 +112,7 @@ public abstract class TimerActionHandler {
      *
      * @param receiverId ID of Receiver
      */
-    protected static void deleteByReceiverId(long receiverId) {
+    protected static void deleteByReceiverId(Long receiverId) {
         Log.d("Delete TimerActions by ReceiverId: " + receiverId);
         String[] columns = {TimerReceiverActionTable.COLUMN_ID, TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(TimerReceiverActionTable.TABLE_NAME, columns,
@@ -139,7 +139,7 @@ public abstract class TimerActionHandler {
      *
      * @param roomId ID of Room
      */
-    protected static void deleteByRoomId(long roomId) {
+    protected static void deleteByRoomId(Long roomId) {
         String[] columns = {TimerRoomActionTable.COLUMN_ID, TimerRoomActionTable.COLUMN_TIMER_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(TimerRoomActionTable.TABLE_NAME, columns,
                 TimerRoomActionTable.COLUMN_ROOM_ID + "=" + roomId, null, null, null, null);
@@ -165,7 +165,7 @@ public abstract class TimerActionHandler {
      *
      * @param sceneId ID of Scene
      */
-    protected static void deleteBySceneId(long sceneId) {
+    protected static void deleteBySceneId(Long sceneId) {
         String[] columns = {TimerSceneActionTable.COLUMN_ID, TimerSceneActionTable.COLUMN_TIMER_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(TimerSceneActionTable.TABLE_NAME, columns,
                 TimerSceneActionTable.COLUMN_SCENE_ID + "=" + sceneId, null, null, null, null);

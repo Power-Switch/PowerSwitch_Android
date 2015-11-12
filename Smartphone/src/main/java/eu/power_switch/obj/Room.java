@@ -31,7 +31,7 @@ public class Room {
     /**
      * ID of this Room
      */
-    private long id;
+    private Long id;
 
     /**
      * Name of this Room
@@ -49,7 +49,7 @@ public class Room {
      * @param id
      * @param name
      */
-    public Room(long id, String name) {
+    public Room(Long id, String name) {
         this.id = id;
         this.name = name;
         receivers = new LinkedList<>();
@@ -87,7 +87,7 @@ public class Room {
      *
      * @return ID
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

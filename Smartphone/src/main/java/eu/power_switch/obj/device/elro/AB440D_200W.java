@@ -53,7 +53,7 @@ public class AB440D_200W extends Receiver implements DipReceiver {
 
     private LinkedList<DipSwitch> dipList;
 
-    public AB440D_200W(Context context, long id, String name, LinkedList<Boolean> dips, long roomId) {
+    public AB440D_200W(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_DIPS, roomId);
         dipList = new LinkedList<>();
 

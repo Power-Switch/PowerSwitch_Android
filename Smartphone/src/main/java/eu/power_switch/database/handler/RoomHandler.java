@@ -51,7 +51,7 @@ public abstract class RoomHandler {
      * @param id      ID of Room
      * @param newName new Room name
      */
-    protected static void update(long id, String newName) {
+    protected static void update(Long id, String newName) {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, newName);
         DatabaseHandler.database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
@@ -62,7 +62,7 @@ public abstract class RoomHandler {
      *
      * @param id ID of Room
      */
-    protected static void delete(long id) {
+    protected static void delete(Long id) {
         TimerActionHandler.deleteByRoomId(id);
 
         deleteReceiversOfRoom(id);
@@ -74,7 +74,7 @@ public abstract class RoomHandler {
      *
      * @param roomId ID of Room
      */
-    private static void deleteReceiversOfRoom(long roomId) {
+    private static void deleteReceiversOfRoom(Long roomId) {
         ArrayList<Receiver> receivers = ReceiverHandler.getByRoom(roomId);
         for (Receiver receiver : receivers) {
             ReceiverHandler.delete(receiver.getId());
@@ -103,7 +103,7 @@ public abstract class RoomHandler {
      * @param id ID of Room
      * @return Room
      */
-    protected static Room get(long id) {
+    protected static Room get(Long id) {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_ID + "==" + id,
                 null, null, null, null);
         cursor.moveToFirst();
@@ -138,7 +138,7 @@ public abstract class RoomHandler {
      */
     private static Room dbToRoom(Cursor c) {
         try {
-            Room room = new Room(c.getInt(0), c.getString(1));
+            Room room = new Room(c.getLong(0), c.getString(1));
             room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
             return room;
         } catch (Exception e) {

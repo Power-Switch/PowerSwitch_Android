@@ -28,7 +28,7 @@ public class BrematicGWY433 extends Gateway {
      */
     public static final String MODEL = "Brematic GWY433";
 
-    public BrematicGWY433(int id, boolean active, String name, String firmware, String address, int port) {
+    public BrematicGWY433(Long id, boolean active, String name, String firmware, String address, int port) {
         super(id, active, name, MODEL, firmware, address, port);
     }
 

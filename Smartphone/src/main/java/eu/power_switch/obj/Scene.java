@@ -35,7 +35,7 @@ public class Scene {
     /**
      * ID of this Scene
      */
-    private long id;
+    private Long id;
     /**
      * Name of this Scene
      */
@@ -47,7 +47,7 @@ public class Scene {
      * @param id
      * @param name
      */
-    public Scene(long id, String name) {
+    public Scene(Long id, String name) {
         this.id = id;
         this.name = name;
         items = new ArrayList<>();
@@ -58,7 +58,7 @@ public class Scene {
      *
      * @return ID
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

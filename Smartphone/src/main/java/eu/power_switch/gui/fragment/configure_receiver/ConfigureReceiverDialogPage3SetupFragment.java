@@ -560,7 +560,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
             EditText nameEditText = (EditText) nameLayout.getChildAt(0);
             EditText signalEditText = (EditText) universalButtonLayout.getChildAt(1);
 
-            buttons.add(new UniversalButton(0, nameEditText.getText().toString(), 0, signalEditText.getText()
+            buttons.add(new UniversalButton(null, nameEditText.getText().toString(), null, signalEditText.getText()
                     .toString()));
         }
 

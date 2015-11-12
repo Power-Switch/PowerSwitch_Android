@@ -41,7 +41,7 @@ public class Button {
     /**
      * ID of this Button
      */
-    private long id;
+    private Long id;
 
     /**
      * Name of this Button
@@ -51,7 +51,7 @@ public class Button {
     /**
      * ID of the receiver this Button is associated with
      */
-    private long receiverId;
+    private Long receiverId;
 
     /**
      * Constructor
@@ -60,13 +60,13 @@ public class Button {
      * @param name
      * @param receiverId ID of Receiver that this Button is associated with
      */
-    public Button(long id, String name, long receiverId) {
+    public Button(Long id, String name, Long receiverId) {
         this.id = id;
         this.name = name;
         this.receiverId = receiverId;
     }
 
-    public static String getButtonName(Context context, long buttonId) {
+    public static String getButtonName(Context context, Long buttonId) {
         if (buttonId == BUTTON_ON_ID) {
             return context.getString(R.string.on);
         } else if (buttonId == BUTTON_OFF_ID) {
@@ -87,7 +87,7 @@ public class Button {
      *
      * @return ID
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -105,7 +105,7 @@ public class Button {
      *
      * @return ID
      */
-    public long getReceiverId() {
+    public Long getReceiverId() {
         return receiverId;
     }
 }

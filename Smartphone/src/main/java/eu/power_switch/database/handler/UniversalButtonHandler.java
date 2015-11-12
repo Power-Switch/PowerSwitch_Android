@@ -39,7 +39,7 @@ public abstract class UniversalButtonHandler {
      * @param button     Button
      * @return ID of Database Button entry
      */
-    protected static long addUniversalButton(long receiverId, UniversalButton button) {
+    protected static long addUniversalButton(Long receiverId, UniversalButton button) {
         ContentValues values = new ContentValues();
         values.put(UniversalButtonTable.COLUMN_RECEIVER_ID, receiverId);
         values.put(UniversalButtonTable.COLUMN_NAME, button.getName());
@@ -55,7 +55,7 @@ public abstract class UniversalButtonHandler {
      * @param receiverId ID of Receiver*
      * @param buttons    List of Buttons
      */
-    protected static void addUniversalButtons(long receiverId, List<UniversalButton> buttons) {
+    protected static void addUniversalButtons(Long receiverId, List<UniversalButton> buttons) {
         for (UniversalButton button : buttons) {
             addUniversalButton(receiverId, button);
         }
@@ -66,7 +66,7 @@ public abstract class UniversalButtonHandler {
      *
      * @param id ID of Button
      */
-    protected static void deleteUniversalButton(long id) {
+    protected static void deleteUniversalButton(Long id) {
         DatabaseHandler.database.delete(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -75,7 +75,7 @@ public abstract class UniversalButtonHandler {
      *
      * @param receiverId ID of Receiver
      */
-    protected static void deleteUniversalButtons(long receiverId) {
+    protected static void deleteUniversalButtons(Long receiverId) {
         DatabaseHandler.database.delete(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
 
@@ -85,7 +85,7 @@ public abstract class UniversalButtonHandler {
      * @param id ID of Button
      * @return Button
      */
-    protected static UniversalButton getUniversalButton(long id) {
+    protected static UniversalButton getUniversalButton(Long id) {
         Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, null, UniversalButtonTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
         cursor.moveToFirst();
@@ -100,7 +100,7 @@ public abstract class UniversalButtonHandler {
      * @param receiverId ID of Receiver
      * @return List of Buttons
      */
-    protected static List<UniversalButton> getUniversalButtons(long receiverId) {
+    protected static List<UniversalButton> getUniversalButtons(Long receiverId) {
         List<UniversalButton> buttons = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, null, UniversalButtonTable.COLUMN_RECEIVER_ID +
                 "=" + receiverId, null, null, null, null);
@@ -121,8 +121,8 @@ public abstract class UniversalButtonHandler {
      * @return Gateway, can be null
      */
     private static UniversalButton dbToUniversalButton(Cursor c) {
-        int id = c.getInt(0);
-        int receiverId = c.getInt(1);
+        Long id = c.getLong(0);
+        Long receiverId = c.getLong(1);
         String name = c.getString(2);
         String signal = c.getString(3);
 

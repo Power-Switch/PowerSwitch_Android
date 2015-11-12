@@ -26,11 +26,11 @@ public class UniversalButton {
     /**
      * ID of this UniversalButton
      */
-    private int id;
+    private Long id;
     /**
      * ID of Receiver this UniversalButton is associated with
      */
-    private int receiverId;
+    private Long receiverId;
     /**
      * Name
      */
@@ -48,7 +48,7 @@ public class UniversalButton {
      * @param receiverId ID of Receiver this UniversalButton is associated with
      * @param signal     Network signal that will be sent on button press
      */
-    public UniversalButton(int id, String name, int receiverId, String signal) {
+    public UniversalButton(Long id, String name, Long receiverId, String signal) {
         this.id = id;
         this.name = name;
         this.receiverId = receiverId;
@@ -60,7 +60,7 @@ public class UniversalButton {
      *
      * @return ID
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
@@ -78,7 +78,7 @@ public class UniversalButton {
      *
      * @return
      */
-    public int getReceiverId() {
+    public Long getReceiverId() {
         return receiverId;
     }
 

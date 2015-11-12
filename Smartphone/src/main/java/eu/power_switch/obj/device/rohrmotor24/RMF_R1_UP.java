@@ -49,7 +49,7 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
 
     private long seed = -1;
 
-    public RMF_R1_UP(Context context, long id, String name, long seed, long roomId) {
+    public RMF_R1_UP(Context context, Long id, String name, long seed, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_AUTOPAIR, roomId);
         buttons.add(new Button(Button.BUTTON_UP_ID, context.getString(R.string.up), id));
         if (seed == -1) {

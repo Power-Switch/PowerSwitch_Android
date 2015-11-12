@@ -136,7 +136,7 @@ public class EditRoomDialog extends DialogFragment implements
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DatabaseHandler.deleteRoom((int) roomId);
+                                DatabaseHandler.deleteRoom(roomId);
 
                                 // notify rooms fragment
                                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());
@@ -175,12 +175,12 @@ public class EditRoomDialog extends DialogFragment implements
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHandler.updateRoom((int) roomId, getRoomName());
+                DatabaseHandler.updateRoom(roomId, getRoomName());
 
                 // save receiver order
                 for (int position = 0; position < receiverList.size(); position++) {
                     Receiver receiver = receiverList.get(position);
-                    DatabaseHandler.setPositionInRoom(receiver.getId(), position);
+                    DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
                 }
 
                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());

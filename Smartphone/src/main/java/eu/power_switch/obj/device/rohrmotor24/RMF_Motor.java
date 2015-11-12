@@ -49,7 +49,7 @@ public class RMF_Motor extends Receiver implements AutoPairReceiver {
 
     private long seed = -1;
 
-    public RMF_Motor(Context context, long id, String name, long seed, long roomId) {
+    public RMF_Motor(Context context, Long id, String name, long seed, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_AUTOPAIR, roomId);
         buttons.add(new Button(Button.BUTTON_UP_ID, context.getString(R.string.up), id));
         buttons.add(new Button(Button.BUTTON_STOP_ID, context.getString(R.string.stop), id));

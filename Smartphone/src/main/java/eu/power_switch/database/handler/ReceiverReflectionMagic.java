@@ -105,14 +105,14 @@ public abstract class ReceiverReflectionMagic {
         Class<?> myClass = Class.forName(className);
 
         if (type.equals(Receiver.TYPE_DIPS)) {
-            constructor = myClass.getConstructor(Context.class, long.class, String.class, LinkedList.class, long.class);
+            constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
         } else if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
-            constructor = myClass.getConstructor(Context.class, long.class, String.class, char.class, int.class,
-                    long.class);
+            constructor = myClass.getConstructor(Context.class, Long.class, String.class, char.class, int.class,
+                    Long.class);
         } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
-            constructor = myClass.getConstructor(Context.class, long.class, String.class, long.class, long.class);
+            constructor = myClass.getConstructor(Context.class, Long.class, String.class, long.class, Long.class);
         } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
-            constructor = myClass.getConstructor(Context.class, long.class, String.class, List.class, long.class);
+            constructor = myClass.getConstructor(Context.class, Long.class, String.class, List.class, Long.class);
         }
         return constructor;
     }
@@ -168,22 +168,25 @@ public abstract class ReceiverReflectionMagic {
 
             for (Class<?> someClass : implementedInterfaces) {
                 if (someClass.equals(MasterSlaveReceiver.class)) {
-                    Constructor<?> constructor = myClass.getConstructor(Context.class, long.class, String.class, char
-                            .class, int.class, long.class);
-                    return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, 'A', 0, 0);
+                    Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, char
+                            .class, int.class, Long.class);
+                    return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, 'A', 0,
+                            null);
                 } else if (someClass.equals(DipReceiver.class)) {
                     Constructor<?> constructor;
-                    constructor = myClass.getConstructor(Context.class, long.class, String.class, LinkedList.class, long.class);
+                    constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
                     return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, new
-                            LinkedList<Boolean>(), 0);
+                            LinkedList<Boolean>(), null);
                 } else if (someClass.equals(AutoPairReceiver.class)) {
-                    Constructor<?> constructor = myClass.getConstructor(Context.class, long.class, String.class, long.class, long.class);
-                    return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, -1, 0);
+                    Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, long
+                            .class, Long.class);
+                    return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, -1, null);
                 }
             }
 
             if (myClass.equals(UniversalReceiver.class)) {
-                return new UniversalReceiver(context, dummyReceiverId, dummyReceiverName, new LinkedList<UniversalButton>(), 0);
+                return new UniversalReceiver(context, dummyReceiverId, dummyReceiverName, new
+                        LinkedList<UniversalButton>(), null);
             }
         } catch (Exception e) {
             Log.e(e);
