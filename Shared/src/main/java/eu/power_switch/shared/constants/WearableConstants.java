@@ -29,8 +29,12 @@ public class WearableConstants {
     public static final String START_ACTIVITY_PATH = "/start_activity";
     public static final String RECEIVER_ACTION_TRIGGER_PATH = "/receiver_action_trigger";
     public static final String REQUEST_DATA_UPDATE_PATH = "/request_data_update";
+    public static final String REQUEST_SETTINGS_UPDATE_PATH = "/request_settings_update";
     public static final String DATA_PATH = "/data";
     public static final String EXTRA_DATA = "extra_data";
+    public static final String SETTINGS_PATH = "/settings";
+    public static final String EXTRA_SETTINGS = "extra_settings";
+
 
     // DataMap Keys
     public static final String ROOM_ID_DATAMAP_KEY = "ROOM_ID_DATAMAP_KEY";
@@ -48,6 +52,16 @@ public class WearableConstants {
 
     public static final String SCENE_ID_DATAMAP_KEY = "SCENE_ID_DATAMAP_KEY";
     public static final String SCENE_NAME_DATAMAP_KEY = "SCENE_NAME_DATAMAP_KEY";
+
+    public static final String SETTINGS_AUTO_COLLAPSE_ROOMS = "SETTINGS_AUTO_COLLAPSE_ROOMS";
+    public static final String SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON = "SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON";
+    public static final String SETTINGS_SHOW_ROOM_ALL_ON_OFF = "SETTINGS_SHOW_ROOM_ALL_ON_OFF";
+    public static final String SETTINGS_THEME = "SETTINGS_THEME";
+    public static final String SETTINGS_VIBRATE_ON_BUTTON_PRESS = "SETTINGS_VIBRATE_ON_BUTTON_PRESS";
+    public static final String SETTINGS_VIBRATION_DURATION = "SETTINGS_VIBRATION_DURATION";
+
+    // SharedPreferences
+    public static final String WEARABLE_SHARED_PREFS_NAME = "eu.power_switch.wearable.prefs";
 
     /**
      * Private Constructor

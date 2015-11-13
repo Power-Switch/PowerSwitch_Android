@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_marginLeft="@dimen/padding"
+            android:layout_marginRight="@dimen/padding"
+            android:layout_marginTop="@dimen/padding"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TextView_wearableSettings"
+                style="@style/header_settings"
+                android:text="@string/wearable_settings"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_highlightLastActivatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/highlight_last_activated_button"/>
+
+            <CheckBox
+                android:id="@+id/checkBox_vibrateOnButtonPress"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:checked="false"
+                android:text="@string/vibrate_on_button_press"/>
+
+            <TextView
+                android:id="@+id/TextView_theme"
+                style="@style/header_settings"
+                android:text="@string/theme"/>
+
+            <RadioButton
+                android:id="@+id/radioButton_darkBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/theme_dark_blue"/>
+
+            <RadioButton
+                android:id="@+id/radioButton_lightBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/theme_light_blue"/>
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</android.support.v4.widget.NestedScrollView>

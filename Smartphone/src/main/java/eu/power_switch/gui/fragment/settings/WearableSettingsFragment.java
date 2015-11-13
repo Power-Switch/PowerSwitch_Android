@@ -18,12 +18,98 @@
 
 package eu.power_switch.gui.fragment.settings;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+
+import eu.power_switch.R;
+import eu.power_switch.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.wear.service.UtilityService;
+import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 /**
  * Fragment containing all settings related to Wearable companion app
- *
+ * <p/>
  * Created by Markus on 30.08.2015.
  */
 public class WearableSettingsFragment extends Fragment {
+
+    private View rootView;
+    private WearablePreferencesHandler wearablePreferencesHandler;
+    private RadioButton radioButtonDarkBlue;
+    private RadioButton radioButtonLightBlue;
+    private CheckBox vibrateOnButtonPress;
+    private CheckBox highlightLastActivatedButton;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+        rootView = inflater.inflate(R.layout.fragment_wear_settings, container, false);
+
+
+        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                switch (buttonView.getId()) {
+                    case R.id.checkBox_autoCollapseRooms:
+                        wearablePreferencesHandler.setAutoCollapseRooms(isChecked);
+                        break;
+                    case R.id.checkBox_vibrateOnButtonPress:
+                        wearablePreferencesHandler.setVibrateOnButtonPress(isChecked);
+                        break;
+                    case R.id.checkBox_highlightLastActivatedButton:
+                        wearablePreferencesHandler.setHighlightLastActivatedButton(isChecked);
+                        // force receiver widget update
+                        ConfigureReceiverWidgetActivity.forceWidgetUpdate(getContext());
+                        break;
+                    default:
+                        break;
+                }
+
+                UtilityService.forceWearSettingsUpdate(getContext());
+            }
+        };
+
+        highlightLastActivatedButton = (CheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
+        highlightLastActivatedButton.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        vibrateOnButtonPress = (CheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
+        vibrateOnButtonPress.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.radioButton_darkBlue:
+                        wearablePreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
+                        break;
+                    case R.id.radioButton_lightBlue:
+                        wearablePreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
+                        break;
+                    default:
+                        break;
+                }
+
+                // TODO: restart wear app
+            }
+        };
+
+        radioButtonDarkBlue = (RadioButton) rootView.findViewById(R.id.radioButton_darkBlue);
+        radioButtonDarkBlue.setOnClickListener(onClickListener);
+
+        radioButtonLightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_lightBlue);
+        radioButtonLightBlue.setOnClickListener(onClickListener);
+
+        wearablePreferencesHandler = new WearablePreferencesHandler(getActivity());
+
+        return rootView;
+    }
+
 }

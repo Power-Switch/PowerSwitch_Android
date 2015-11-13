@@ -23,44 +23,17 @@ import android.content.SharedPreferences;
 
 import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.constants.WearableConstants;
 
 /**
- * Preference handler used to store general app settings
+ * Created by Markus on 13.11.2015.
  */
-public class SharedPreferencesHandler {
+public class WearablePreferencesHandler {
 
     SharedPreferences sharedPreferences;
 
-    public SharedPreferencesHandler(Context context) {
-        sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
-    }
-
-    public static String getPublicKeyString() {
-        String string = SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
-        return string;
-    }
-
-    /**
-     * Retrieves setting for AutoDiscovery of Gateways
-     *
-     * @return true if enabled
-     */
-    public boolean getAutoDiscover() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.AUTO_DISCOVER_KEY, true);
-        Log.d(this, "getAutoDiscover: " + value);
-        return value;
-    }
-
-    /**
-     * Sets setting for AutoDiscovery of Gateways
-     *
-     * @param bool true if enabled
-     */
-    public void setAutoDiscover(boolean bool) {
-        Log.d(this, "setAutoDiscover: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.AUTO_DISCOVER_KEY, bool);
-        editor.apply();
+    public WearablePreferencesHandler(Context context) {
+        sharedPreferences = context.getSharedPreferences(WearableConstants.WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
     }
 
     /**
@@ -87,29 +60,6 @@ public class SharedPreferencesHandler {
     }
 
     /**
-     * Retrieves setting for hidden Play Store Mode (used to take Screenshots)
-     *
-     * @return true if enabled
-     */
-    public boolean getPlayStoreMode() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.PLAY_STORE_MODE_KEY, false);
-        Log.d(this, "getPlayStoreMode: " + value);
-        return value;
-    }
-
-    /**
-     * Sets setting for hidden Play Store Mode (used to take Screenshots)
-     *
-     * @param bool true if enabled
-     */
-    public void setPlayStoreMode(boolean bool) {
-        Log.d(this, "setPlayStoreMode: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.PLAY_STORE_MODE_KEY, bool);
-        editor.apply();
-    }
-
-    /**
      * Retrieves setting for automatic collapsing of Rooms
      *
      * @return true if enabled
@@ -129,29 +79,6 @@ public class SharedPreferencesHandler {
         Log.d(this, "setAutoCollapseRooms: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
-        editor.apply();
-    }
-
-    /**
-     * Retrieves setting for automatic collapsing of Timers
-     *
-     * @return true if enabled
-     */
-    public boolean getAutoCollapseTimers() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, false);
-        Log.d(this, "getAutoCollapseTimers: " + value);
-        return value;
-    }
-
-    /**
-     * Sets setting for automatic collapsing of Timers
-     *
-     * @param bool true if enabled
-     */
-    public void setAutoCollapseTimers(boolean bool) {
-        Log.d(this, "setAutoCollapseTimers: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, bool);
         editor.apply();
     }
 
@@ -247,26 +174,4 @@ public class SharedPreferencesHandler {
         editor.apply();
     }
 
-    /**
-     * Retrieves setting for hiding FAB buttons
-     *
-     * @return true if enabled
-     */
-    public boolean getHideAddFAB() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, false);
-        Log.d(this, "getHideAddFAB: " + value);
-        return value;
-    }
-
-    /**
-     * Retrieves setting for hiding FAB buttons
-     *
-     * @param bool true if enabled
-     */
-    public void setHideAddFAB(boolean bool) {
-        Log.d(this, "setHideAddFAB: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, bool);
-        editor.apply();
-    }
 }

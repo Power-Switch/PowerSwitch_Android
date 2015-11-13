@@ -147,22 +147,35 @@ public class ListenerService extends WearableListenerService {
         final List<DataEvent> events = FreezableUtils.freezeIterable(dataEvents);
 
         for (DataEvent event : events) {
-            if (event.getDataItem() != null
-                    && event.getType() == DataEvent.TYPE_CHANGED
-                    && WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
+            if (event.getDataItem() != null) {
+                if (event.getType() == DataEvent.TYPE_CHANGED
+                        && WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
 
-                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                ArrayList<DataMap> data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+                    ArrayList<DataMap> data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
 
-                // convert received data to room/receiver/button objects
-                ArrayList<Room> rooms = extractRoomDataMapItems(data);
-                ArrayList<Scene> scenes = extractSceneDataMapItems(data);
+                    // convert received data to room/receiver/button objects
+                    ArrayList<Room> rooms = extractRoomDataMapItems(data);
+                    ArrayList<Scene> scenes = extractSceneDataMapItems(data);
 
-                // send data to Activity
-                sendDataUpdatedBroadcast(rooms, scenes);
+                    // send data to Activity
+                    sendDataUpdatedBroadcast(rooms, scenes);
+                } else if (event.getType() == DataEvent.TYPE_CHANGED
+                        && WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
+
+                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+                    ArrayList<DataMap> settings = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
+
+                    extractSettings(settings);
+
+                    // TODO: notify app about changes
+                }
             }
         }
+    }
 
+    private void extractSettings(ArrayList<DataMap> settings) {
+        // TODO: get changed values and save to local preferenceHandler
     }
 
     /**
