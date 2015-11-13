@@ -420,24 +420,24 @@ public final class DatabaseHandler {
         return buttons;
     }
 
-    /**
-     * Gets ID of last activated Button of a Receiver
-     *
-     * @param id ID of Receiver
-     * @return ID of last activated Button, -1 if not set
-     */
-    public static long getLastActivatedButtonId(Long id) {
-        openReadable();
-        long buttonId = -1;
-        try {
-            buttonId = ReceiverHandler.getLastActivatedButtonId(id);
-        } catch (Exception e) {
-            Log.e(e);
-        } finally {
-            close();
-        }
-        return buttonId;
-    }
+//    /**
+//     * Gets ID of last activated Button of a Receiver
+//     *
+//     * @param id ID of Receiver
+//     * @return ID of last activated Button, -1 if not set
+//     */
+//    public static long getLastActivatedButtonId(Long id) {
+//        openReadable();
+//        long buttonId = -1;
+//        try {
+//            buttonId = ReceiverHandler.getLastActivatedButtonId(id);
+//        } catch (Exception e) {
+//            Log.e(e);
+//        } finally {
+//            close();
+//        }
+//        return buttonId;
+//    }
 
     /**
      * Sets ID of last activated Button of a Receiver

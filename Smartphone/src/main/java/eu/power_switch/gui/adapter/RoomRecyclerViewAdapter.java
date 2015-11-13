@@ -219,7 +219,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
             int i = 0;
             final ArrayList<android.widget.Button> buttonViews = new ArrayList<>();
-            long lastActivatedButtonId = DatabaseHandler.getLastActivatedButtonId(receiver.getId());
+            long lastActivatedButtonId = receiver.getLastActivatedButtonId();
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
                 final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button,

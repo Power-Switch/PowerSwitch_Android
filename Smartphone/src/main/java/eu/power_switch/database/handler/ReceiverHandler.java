@@ -126,7 +126,10 @@ public abstract class ReceiverHandler {
      * @return Receiver
      */
     protected static Receiver get(Long id) {
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, null, ReceiverTable.COLUMN_ID + "="
+        String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
+                ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
+                ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
+        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
                 + id, null, null, null, null);
         cursor.moveToFirst();
         Receiver receiver = dbToReceiver(cursor);
@@ -159,7 +162,10 @@ public abstract class ReceiverHandler {
      */
     protected static ArrayList<Receiver> getByRoom(Long roomId) {
         ArrayList<Receiver> receivers = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, null, ReceiverTable.COLUMN_ROOM_ID +
+        String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
+                ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
+                ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
+        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ROOM_ID +
                 "=" + roomId, null, null, null, null);
         cursor.moveToFirst();
 
@@ -186,7 +192,10 @@ public abstract class ReceiverHandler {
      */
     protected static List<Receiver> getAll() {
         List<Receiver> receivers = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, null, null, null, null, null, null);
+        String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
+                ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
+                ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
+        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -250,26 +259,26 @@ public abstract class ReceiverHandler {
         return type;
     }
 
-    /**
-     * Gets ID of last activated Button of a Receiver
-     *
-     * @param id ID of Receiver
-     * @return ID of last activated Button, -1 if not set
-     */
-    protected static long getLastActivatedButtonId(Long id) {
-        String[] columns = {ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
-                + id, null, null, null, null);
-        cursor.moveToFirst();
-
-        long buttonId = -1;
-        if (!cursor.isNull(0)) {
-            buttonId = cursor.getLong(0);
-        }
-
-        cursor.close();
-        return buttonId;
-    }
+//    /**
+//     * Gets ID of last activated Button of a Receiver
+//     *
+//     * @param id ID of Receiver
+//     * @return ID of last activated Button, -1 if not set
+//     */
+//    protected static long getLastActivatedButtonId(Long id) {
+//        String[] columns = {ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
+//        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
+//                + id, null, null, null, null);
+//        cursor.moveToFirst();
+//
+//        long buttonId = -1;
+//        if (!cursor.isNull(0)) {
+//            buttonId = cursor.getLong(0);
+//        }
+//
+//        cursor.close();
+//        return buttonId;
+//    }
 
     /**
      * Sets ID of last activated Button of a Receiver
@@ -285,26 +294,26 @@ public abstract class ReceiverHandler {
                 ReceiverTable.COLUMN_ID + "=" + receiverId, null);
     }
 
-    /**
-     * Gets position in a Room of a Receiver
-     *
-     * @param id ID of Receiver
-     * @return Position in Room
-     */
-    protected static Long getPositionInRoom(Long id) {
-        String[] columns = {ReceiverTable.COLUMN_POSITION_IN_ROOM};
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
-                + id, null, null, null, null);
-        cursor.moveToFirst();
-
-        long positionInRoom = -1;
-        if (!cursor.isNull(0)) {
-            positionInRoom = cursor.getLong(0);
-        }
-
-        cursor.close();
-        return positionInRoom;
-    }
+//    /**
+//     * Gets position in a Room of a Receiver
+//     *
+//     * @param id ID of Receiver
+//     * @return Position in Room
+//     */
+//    protected static Long getPositionInRoom(Long id) {
+//        String[] columns = {ReceiverTable.COLUMN_POSITION_IN_ROOM};
+//        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
+//                + id, null, null, null, null);
+//        cursor.moveToFirst();
+//
+//        long positionInRoom = -1;
+//        if (!cursor.isNull(0)) {
+//            positionInRoom = cursor.getLong(0);
+//        }
+//
+//        cursor.close();
+//        return positionInRoom;
+//    }
 
     /**
      * Sets position in a Room of a Receiver

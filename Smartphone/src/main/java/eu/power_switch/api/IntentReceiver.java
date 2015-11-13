@@ -42,6 +42,7 @@ import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
+import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 public class IntentReceiver extends BroadcastReceiver {
@@ -232,6 +233,8 @@ public class IntentReceiver extends BroadcastReceiver {
 
                         nwm.send(networkPackages);
 
+                        UtilityService.forceWearDataUpdate(context);
+
                     } catch (ActionNotSupportedException e) {
                         Log.e("Action not supported by Receiver!", e);
                         Toast.makeText(context, context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG)
@@ -273,6 +276,8 @@ public class IntentReceiver extends BroadcastReceiver {
                         nwm.send(networkPackages);
                     }
 
+                    UtilityService.forceWearDataUpdate(context);
+
                 } else if (extras.containsKey(KEY_SCENE)) {
                     // Expects the following Extras:
                     // Scene:<SceneName>
@@ -289,6 +294,7 @@ public class IntentReceiver extends BroadcastReceiver {
                     }
                     nwm.send(packages);
 
+                    UtilityService.forceWearDataUpdate(context);
                 }
             } else {
                 throw new NullPointerException();

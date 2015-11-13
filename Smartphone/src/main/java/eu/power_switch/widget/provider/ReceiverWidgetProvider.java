@@ -88,7 +88,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
                         if (sharedPreferencesHandler.getHighlightLastActivatedButton() &&
-                                DatabaseHandler.getLastActivatedButtonId(receiver.getId()) == button.getId()) {
+                                receiver.getLastActivatedButtonId().equals(button.getId())) {
                             buttonView.setTextColor(R.id.button_widget_universal,
                                     ContextCompat.getColor(context, R.color.accent_blue_a700));
                         }

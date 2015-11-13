@@ -167,8 +167,7 @@ public class UtilityService extends IntentService {
         receiverDataMap.putString(WearableConstants.RECEIVER_NAME_DATAMAP_KEY, receiver.getName());
         receiverDataMap.putLong(WearableConstants.RECEIVER_ROOM_ID_DATAMAP_KEY, receiver.getRoomId());
         receiverDataMap.putInt(WearableConstants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY, receiver.getPositionInRoom());
-        receiverDataMap.putLong(WearableConstants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY, DatabaseHandler
-                .getLastActivatedButtonId(receiver.getId()));
+        receiverDataMap.putLong(WearableConstants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY, receiver.getLastActivatedButtonId());
 
         return receiverDataMap;
     }

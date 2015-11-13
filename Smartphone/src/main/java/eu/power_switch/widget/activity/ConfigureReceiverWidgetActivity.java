@@ -176,8 +176,8 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
-                        if (sharedPreferencesHandler.getHighlightLastActivatedButton() &&
-                                DatabaseHandler.getLastActivatedButtonId(selectedReceiver.getId()) == button.getId()) {
+                        if (sharedPreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
+                                .getLastActivatedButtonId().equals(button.getId())) {
                             buttonView.setTextColor(R.id.button_widget_universal,
                                     ContextCompat.getColor(getApplicationContext(), R.color.accent_blue_a700));
                         }

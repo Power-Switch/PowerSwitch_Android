@@ -46,17 +46,19 @@ public abstract class ReceiverReflectionMagic {
      * @return The complete Receiver object.
      */
     public static Receiver fromDatabase(Context context, Cursor cursor) {
-        long id = cursor.getLong(0);
+        Long id = cursor.getLong(0);
         String name = cursor.getString(1);
         String model = cursor.getString(2);
         String type = cursor.getString(3);
         String className = cursor.getString(4);
-        long roomId = cursor.getLong(5);
+        Long roomId = cursor.getLong(5);
 
         int positionInRoom = -1;
         if (!cursor.isNull(6)) {
             positionInRoom = cursor.getInt(6);
         }
+
+        Long lastActivatedButtonId = cursor.getLong(7);
 
         Receiver receiver = null;
 
@@ -85,6 +87,7 @@ public abstract class ReceiverReflectionMagic {
 
         if (receiver != null) {
             receiver.setPositionInRoom(positionInRoom);
+            receiver.setLastActivatedButtonId(lastActivatedButtonId);
         }
 
         return receiver;
