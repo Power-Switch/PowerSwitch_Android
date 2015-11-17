@@ -39,6 +39,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.List;
@@ -156,12 +157,20 @@ public class MainActivity extends AppCompatActivity {
 
                 if (LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR.equals(intent.getAction())) {
                     //noinspection ResourceType
-                    Snackbar.make(navigationView, intent.getStringExtra("message"), intent.getIntExtra(
-                            "duration", Snackbar.LENGTH_LONG)).show();
+                    final Snackbar snackbar = Snackbar.make(navigationView, intent.getStringExtra("message"), intent
+                            .getIntExtra("duration", Snackbar.LENGTH_LONG));
+                    snackbar.setAction(getString(R.string.dismiss), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            snackbar.dismiss();
+                        }
+                    });
+                    snackbar.show();
                 } else if (LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST.equals(intent.getAction())) {
                     //noinspection ResourceType
-                    Toast.makeText(context, intent.getStringExtra("message"), intent.getIntExtra(
-                            "duration", Toast.LENGTH_LONG)).show();
+                    Toast toast = Toast.makeText(context, intent.getStringExtra("message"), intent.getIntExtra(
+                            "duration", Toast.LENGTH_LONG));
+                    toast.show();
                 }
             }
         };
@@ -396,6 +405,13 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
     }
 
     @Override

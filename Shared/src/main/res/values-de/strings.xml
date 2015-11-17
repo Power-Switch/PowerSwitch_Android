@@ -22,6 +22,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="close">Schließen</string>
+    <string name="dismiss">Ausblenden</string>
     <string name="unknown_error">Unbekannter Fehler</string>
 
     <string name="open_settings">Einstellungen öffnen</string>
