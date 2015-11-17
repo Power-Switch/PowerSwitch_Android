@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import eu.power_switch.R;
@@ -42,16 +44,19 @@ public class WearableSettingsFragment extends Fragment {
 
     private View rootView;
     private WearablePreferencesHandler wearablePreferencesHandler;
+
+    private LinearLayout vibrationDurationLayout;
+    private CheckBox vibrateOnButtonPress;
+    private EditText vibrationDuration;
+    private CheckBox highlightLastActivatedButton;
+
     private RadioButton radioButtonDarkBlue;
     private RadioButton radioButtonLightBlue;
-    private CheckBox vibrateOnButtonPress;
-    private CheckBox highlightLastActivatedButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_wear_settings, container, false);
-
 
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -63,6 +68,11 @@ public class WearableSettingsFragment extends Fragment {
                         break;
                     case R.id.checkBox_vibrateOnButtonPress:
                         wearablePreferencesHandler.setVibrateOnButtonPress(isChecked);
+                        if (isChecked) {
+                            vibrationDurationLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            vibrationDurationLayout.setVisibility(View.GONE);
+                        }
                         break;
                     case R.id.checkBox_highlightLastActivatedButton:
                         wearablePreferencesHandler.setHighlightLastActivatedButton(isChecked);
