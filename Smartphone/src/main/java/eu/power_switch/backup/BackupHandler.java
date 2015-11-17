@@ -19,7 +19,6 @@
 package eu.power_switch.backup;
 
 import android.content.Context;
-import android.os.Environment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +35,7 @@ import eu.power_switch.exception.backup.CreateBackupException;
 import eu.power_switch.exception.backup.RemoveBackupException;
 import eu.power_switch.exception.backup.RestoreBackupException;
 import eu.power_switch.log.Log;
+import eu.power_switch.settings.SharedPreferencesHandler;
 
 /**
  * Database Handler to access/modify Backups stored on device or external storage
@@ -63,8 +63,8 @@ public class BackupHandler {
      */
     public ArrayList<Backup> getBackups() {
         ArrayList<Backup> backups = new ArrayList<>();
-        File backupDir = new File(Environment.getExternalStorageDirectory()
-                .getPath() + File.separator + MAIN_BACKUP_FOLDERNAME);
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+        File backupDir = new File(sharedPreferencesHandler.getBackupPath());
         if (backupDir.exists()) {
 
             for (File file : backupDir.listFiles()) {
@@ -88,14 +88,15 @@ public class BackupHandler {
      */
     public void createBackup(boolean useExternalStorage, String name, boolean force) throws
             CreateBackupException, BackupAlreadyExistsException {
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+
         if (useExternalStorage) {
             // TODO: kp wie man internen und externen speicher unterscheidet
         } else {
             File src;
             File dst;
 
-            dst = new File(Environment.getExternalStorageDirectory()
-                    .getPath() + File.separator + MAIN_BACKUP_FOLDERNAME + File.separator
+            dst = new File(sharedPreferencesHandler.getBackupPath() + File.separator
                     + name);
             if (!dst.exists()) {
                 dst.mkdirs();
@@ -117,8 +118,7 @@ public class BackupHandler {
             try {
                 // copy database
                 src = new File(context.getFilesDir().getParent() + File.separator + "databases");
-                dst = new File(Environment.getExternalStorageDirectory()
-                        .getPath() + File.separator + MAIN_BACKUP_FOLDERNAME + File.separator
+                dst = new File(sharedPreferencesHandler.getBackupPath() + File.separator
                         + name + File.separator + "databases");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -126,8 +126,7 @@ public class BackupHandler {
 
                 // copy preferences
                 src = new File(context.getFilesDir().getParent() + File.separator + "shared_prefs");
-                dst = new File(Environment.getExternalStorageDirectory()
-                        .getPath() + File.separator + MAIN_BACKUP_FOLDERNAME + File.separator
+                dst = new File(sharedPreferencesHandler.getBackupPath() + File.separator
                         + name + File.separator + "shared_prefs");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -148,8 +147,8 @@ public class BackupHandler {
      */
     public void removeBackup(String name) throws BackupNotFoundException, RemoveBackupException {
         try {
-            File backupFolder = new File(Environment.getExternalStorageDirectory()
-                    .getPath() + File.separator + MAIN_BACKUP_FOLDERNAME
+            SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+            File backupFolder = new File(sharedPreferencesHandler.getBackupPath()
                     + File.separator + name);
             if (!backupFolder.exists()) {
                 throw new BackupNotFoundException();
@@ -170,11 +169,11 @@ public class BackupHandler {
      * @throws BackupAlreadyExistsException
      */
     public void renameBackup(String oldName, String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
-        File oldFolder = new File(Environment.getExternalStorageDirectory()
-                .getPath() + File.separator + MAIN_BACKUP_FOLDERNAME
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+
+        File oldFolder = new File(sharedPreferencesHandler.getBackupPath()
                 + File.separator + oldName);
-        File newFolder = new File(Environment.getExternalStorageDirectory()
-                .getPath() + File.separator + MAIN_BACKUP_FOLDERNAME
+        File newFolder = new File(sharedPreferencesHandler.getBackupPath()
                 + File.separator + newName);
 
         if (!oldFolder.exists()) {
@@ -194,9 +193,10 @@ public class BackupHandler {
      * @throws RestoreBackupException
      */
     public void restoreBackup(String name) throws BackupNotFoundException, RestoreBackupException {
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+
         // create source path object
-        File src = new File(Environment.getExternalStorageDirectory().getPath() + File.separator +
-                "PowerSwitch_Backup" + File.separator + name);
+        File src = new File(sharedPreferencesHandler.getBackupPath() + File.separator + name);
         if (src.exists()) {
             try {
                 // create destination path object
@@ -212,7 +212,6 @@ public class BackupHandler {
                     }
                 }
                 // copy directory to system folder
-
                 copyDirectory(src, dst);
             } catch (Exception e) {
                 Log.e(e);

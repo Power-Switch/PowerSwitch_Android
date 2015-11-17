@@ -20,7 +20,11 @@ package eu.power_switch.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 
+import java.io.File;
+
+import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.SettingsConstants;
 
@@ -62,6 +66,32 @@ public class SharedPreferencesHandler {
         editor.putBoolean(SettingsConstants.AUTO_DISCOVER_KEY, bool);
         editor.apply();
     }
+
+
+    /**
+     * Retrieves setting for Backup Path
+     *
+     * @return Backup Path
+     */
+    public String getBackupPath() {
+        String value = sharedPreferences.getString(SettingsConstants.BACKUP_PATH_KEY,
+                Environment.getExternalStorageDirectory().getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
+        Log.d(this, "getBackupPath: " + value);
+        return value;
+    }
+
+    /**
+     * Sets setting for Backup Path
+     *
+     * @param path Backup Path
+     */
+    public void setBackupPath(String path) {
+        Log.d(this, "setBackupPath: " + path);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(SettingsConstants.BACKUP_PATH_KEY, path);
+        editor.apply();
+    }
+
 
     /**
      * Retrieves setting for Room On/Off Buttons

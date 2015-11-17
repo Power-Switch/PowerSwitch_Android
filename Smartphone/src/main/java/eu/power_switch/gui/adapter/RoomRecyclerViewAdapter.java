@@ -144,13 +144,24 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 }
 
                 android.widget.Button buttonView = (android.widget.Button) v;
+                String buttonName = buttonView.getText().toString();
 
                 try {
+                    // send signal
                     IntentReceiver.buildRoomButtonPendingIntent(fragmentActivity,
-                            room.getName(), buttonView.getText().toString(), 0).send();
+                            room.getName(), buttonName, 0).send();
+
                 } catch (PendingIntent.CanceledException e) {
                     e.printStackTrace();
                     Log.e(e);
+                }
+
+                // update list item
+                for (Receiver receiver : room.getReceivers()) {
+                    Button button = receiver.getButton(buttonName);
+                    if (button != null) {
+                        receiver.setLastActivatedButtonId(button.getId());
+                    }
                 }
 
                 updateReceiverViews(holder, room);
@@ -190,8 +201,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.linearLayoutOfReceivers.removeAllViews();
         // add items
         for (final Receiver receiver : room.getReceivers()) {
-            // create a new receiverRow for our current receiver and add it
-            // to
+            // create a new receiverRow for our current receiver and add it to
             // our table of all devices of our current room
             // the row will contain the device name and all buttons
             LinearLayout receiverRow = new LinearLayout(fragmentActivity);

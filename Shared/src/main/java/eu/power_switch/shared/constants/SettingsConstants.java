@@ -30,6 +30,7 @@ public class SettingsConstants {
 
     // app settings
     public static final String AUTO_DISCOVER_KEY = "autoDiscover";
+    public static final String BACKUP_PATH_KEY = "backupPath";
     public static final String SHOW_ROOM_ALL_ON_OFF_KEY = "showRoomAllOnOff";
     public static final String HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY = "highlightLastActivatedButton";
     public static final String HIDE_ADD_FAB_KEY = "hideAddFAB";
