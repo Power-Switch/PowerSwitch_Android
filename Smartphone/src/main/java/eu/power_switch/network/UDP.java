@@ -34,6 +34,7 @@ import eu.power_switch.log.Log;
 /**
  * Background thread used to send receiver actions to gateway
  */
+@Deprecated
 public class UDP extends AsyncTask<NetworkPackage, Void, Void> {
 
     private Context context;

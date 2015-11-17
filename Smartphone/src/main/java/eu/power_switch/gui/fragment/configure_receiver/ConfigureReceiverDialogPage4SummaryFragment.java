@@ -352,14 +352,14 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         }
 
         Receiver receiver = null;
-        if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
+        if (Receiver.TYPE_MASTER_SLAVE.equals(type)) {
             try {
                 receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentMaster, currentSlave, room
                         .getId());
             } catch (Exception e) {
                 Log.e("AddReceiverDialog", e);
             }
-        } else if (type.equals(Receiver.TYPE_DIPS)) {
+        } else if (Receiver.TYPE_DIPS.equals(type)) {
             LinkedList<Boolean> dipValues = new LinkedList<>();
             for (DipSwitch dipSwitch : currentDips) {
                 dipValues.add(dipSwitch.isChecked());
@@ -370,13 +370,13 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("AddReceiverDialog", e);
             }
-        } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
+        } else if (Receiver.TYPE_AUTOPAIR.equals(type)) {
             try {
                 receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentSeed, room.getId());
             } catch (Exception e) {
                 Log.e("AddReceiverDialog", e);
             }
-        } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
+        } else if (Receiver.TYPE_UNIVERSAL.equals(type)) {
             receiver = new UniversalReceiver(getActivity(), currentId, currentName, currentUniversalButtons,
                     room.getId());
         }

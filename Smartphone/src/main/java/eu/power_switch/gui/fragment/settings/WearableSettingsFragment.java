@@ -20,6 +20,8 @@ package eu.power_switch.gui.fragment.settings;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,19 +95,44 @@ public class WearableSettingsFragment extends Fragment {
         vibrateOnButtonPress = (CheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
         vibrateOnButtonPress.setOnCheckedChangeListener(onCheckedChangeListener);
 
+        vibrationDurationLayout = (LinearLayout) rootView.findViewById(R.id.linearLayout_vibrationDuration);
+        vibrationDuration = (EditText) rootView.findViewById(R.id.editText_vibrationDuration);
+        vibrationDuration.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s != null && s.length() > 0) {
+                    wearablePreferencesHandler.setVibrationDuration(Integer.valueOf(s.toString()));
+                    UtilityService.forceWearSettingsUpdate(getContext());
+                }
+            }
+        });
+
+
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.radioButton_darkBlue:
                         wearablePreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
+                        radioButtonLightBlue.setChecked(false);
                         break;
                     case R.id.radioButton_lightBlue:
                         wearablePreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
+                        radioButtonDarkBlue.setChecked(false);
                         break;
                     default:
                         break;
                 }
+
+                UtilityService.forceWearSettingsUpdate(getContext());
 
                 // TODO: restart wear app
             }
@@ -122,4 +149,35 @@ public class WearableSettingsFragment extends Fragment {
         return rootView;
     }
 
+    private void updateUI() {
+        highlightLastActivatedButton.setChecked(wearablePreferencesHandler.getHighlightLastActivatedButton());
+        vibrateOnButtonPress.setChecked(wearablePreferencesHandler.getVibrateOnButtonPress());
+        vibrationDuration.setText("" + wearablePreferencesHandler.getVibrationDuration());
+        if (!wearablePreferencesHandler.getVibrateOnButtonPress()) {
+            vibrationDurationLayout.setVisibility(View.GONE);
+        } else {
+            vibrationDurationLayout.setVisibility(View.VISIBLE);
+        }
+
+        switch (wearablePreferencesHandler.getTheme()) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                radioButtonDarkBlue.setChecked(true);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                radioButtonLightBlue.setChecked(true);
+                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
 }

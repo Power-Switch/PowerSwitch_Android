@@ -55,6 +55,37 @@
                 android:checked="false"
                 android:text="@string/vibrate_on_button_press"/>
 
+            <LinearLayout
+                android:id="@+id/linearLayout_vibrationDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginLeft="32dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:gravity="center"
+                    android:text="@string/duration_title"/>
+
+                <EditText
+                    android:id="@+id/editText_vibrationDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:hint="@string/haptic_feedback_duration_hint"
+                    android:inputType="number"
+                    android:maxLength="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="ms"/>
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/TextView_theme"
                 style="@style/header_settings"

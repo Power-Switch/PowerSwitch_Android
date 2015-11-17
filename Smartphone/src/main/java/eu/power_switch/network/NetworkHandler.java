@@ -194,20 +194,20 @@ public class NetworkHandler {
                 // "HCGW:VC:Simple Solutions;MC:ConnAir433V1.1;FW:1.00;IP:192.168.2.125;;"
                 // "HCGW:VC:Simple Solutions;MC:ConnAir433;FW:V014;IP:192.168.2.125;;"
                 if (brand.contains("Simple Solutions") || model.contains("ConnAir")) {
-                    return new ConnAir(null, true, "AutoDiscovered", firmware, host, 49880);
+                    return new ConnAir((long) -1, true, "AutoDiscovered", firmware, host, 49880);
                 }
 
                 // Brennenstuhl Gateway
                 // "HCGW:VC:Brennenstuhl;MC:0290217;FW:V016;IP:192.168.178.24;;"
                 if (brand.contains("Brennenstuhl") || model.contains("0290217")) {
-                    return new BrematicGWY433(null, true, "AutoDiscovered", firmware, host, 49880);
+                    return new BrematicGWY433((long) -1, true, "AutoDiscovered", firmware, host, 49880);
                 }
 
                 // Intertechno Gateway
                 // "HCGW:VC:ITECHNO;MC:HCGW22;FW:11;IP:192.168.2.186;;"
                 // "HCGW:VC:ITECHNO;MC:ITGW-433;FW:300;IP:192.168.2.100;;"
                 if (brand.contains("ITECHNO") && (model.contains("HCGW22") || model.contains("ITGW-433"))) {
-                    return new ITGW433(null, true, "AutoDiscovered", firmware, host, 49880);
+                    return new ITGW433((long) -1, true, "AutoDiscovered", firmware, host, 49880);
                 }
             }
             return null;
