@@ -44,6 +44,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,6 +94,11 @@ public class BackupFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);
+
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
+
+        TextView textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
+        textViewBackupPath.setText(sharedPreferencesHandler.getBackupPath());
 
         backups = new ArrayList<>();
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_backups);

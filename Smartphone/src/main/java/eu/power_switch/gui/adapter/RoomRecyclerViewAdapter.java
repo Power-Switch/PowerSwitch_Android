@@ -276,6 +276,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                             Log.e(e);
                         }
 
+                        // update list item
+                        receiver.setLastActivatedButtonId(button.getId());
+
                         if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
                             for (android.widget.Button button : buttonViews) {
                                 if (button != v) {
