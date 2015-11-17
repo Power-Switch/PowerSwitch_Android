@@ -28,7 +28,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.log.Log;
 
 /**
@@ -76,7 +76,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
     private void processQueue() {
         if (NetworkHandler.isWifiAvailable(context) || NetworkHandler.isGprsAvailable(context)) {
 
-            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                     .sending), Snackbar.LENGTH_INDEFINITE);
 
             NetworkPackage networkPackage;
@@ -108,7 +108,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
 //                        }
 //                    }
                 } catch (UnknownHostException e) {
-                    MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+                    StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                             .unknown_host), Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender", e);
                     try {
@@ -118,7 +118,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                         Log.e("UDP Sender", e1);
                     }
                 } catch (Exception e) {
-                    MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+                    StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                             .unknown_error), Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender: Unknown error while sending message in background:", e);
                     try {
@@ -136,14 +136,14 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
             }
 
             // queue worked off
-            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
+            StatusMessageHandler.showStatusMessage(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
         } else {
             synchronized (NetworkHandler.networkPackagesQueue) {
                 // remove all NetworkPackage from queue and abort
                 NetworkHandler.networkPackagesQueue.clear();
             }
 
-            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                     .missing_network_connection), Snackbar.LENGTH_LONG);
         }
     }

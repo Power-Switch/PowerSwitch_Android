@@ -28,7 +28,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.log.Log;
 
 /**
@@ -44,7 +44,7 @@ public class UDP extends AsyncTask<NetworkPackage, Void, Void> {
 
     @Override
     protected Void doInBackground(NetworkPackage... networkPackages) {
-        MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+        StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                 .sending), Snackbar.LENGTH_LONG);
         DatagramSocket socket = null;
 
@@ -83,9 +83,9 @@ public class UDP extends AsyncTask<NetworkPackage, Void, Void> {
                     }
                 }
 
-                MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
+                StatusMessageHandler.showStatusMessage(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
             } catch (UnknownHostException e) {
-                MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+                StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                         .unknown_host), Snackbar.LENGTH_LONG);
                 Log.e("UDP Sender", e);
                 try {
@@ -95,7 +95,7 @@ public class UDP extends AsyncTask<NetworkPackage, Void, Void> {
                     Log.e("UDP Sender", e1);
                 }
             } catch (Exception e) {
-                MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+                StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                         .unknown_error), Snackbar.LENGTH_LONG);
                 Log.e("UDP Sender: Unknown error while sending message in background:", e);
                 try {

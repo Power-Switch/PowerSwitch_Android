@@ -40,7 +40,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.Stack;
@@ -49,6 +48,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AboutDialog;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.BackupFragment;
@@ -70,45 +70,13 @@ import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
  */
 public class MainActivity extends AppCompatActivity {
 
+    public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
     private static Stack<String> lastFragmentTitles = new Stack<>();
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private BroadcastReceiver broadcastReceiver;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private Toolbar toolbar;
-
-    /**
-     * Show Snackbar on MainActivity context
-     *
-     * @param context  any suitable context
-     * @param message  snackbar message
-     * @param duration duration of snackbar
-     */
-    public static void sendStatusSnackbarBroadcast(Context context, String message, int duration) {
-        Log.d("Status Snackbar: " + message);
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
-        intent.putExtra("message", message);
-        intent.putExtra("duration", duration);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
-
-    /**
-     * Show Toast above all other views
-     *
-     * @param context  any suitable context
-     * @param message  toast message
-     * @param duration duration of toast
-     */
-    public static void sendStatusToastBroadcast(Context context, String message, int duration) {
-        Log.d("Status Toast: " + message);
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST);
-        intent.putExtra("message", message);
-        intent.putExtra("duration", duration);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
 
     /**
      * Add class to Backstack
@@ -119,6 +87,15 @@ public class MainActivity extends AppCompatActivity {
     public static void addToBackstack(Class newFragmentClass, String title) {
         lastFragmentClasses.push(newFragmentClass);
         lastFragmentTitles.push(title);
+    }
+
+    /**
+     * Indicates whether the App is running in Foreground or in Background
+     *
+     * @return true if the App is in Foreground
+     */
+    public static boolean isInForeground() {
+        return appIsInForeground;
     }
 
     @Override
@@ -166,17 +143,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     snackbar.show();
-                } else if (LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST.equals(intent.getAction())) {
-                    //noinspection ResourceType
-                    Toast toast = Toast.makeText(context, intent.getStringExtra("message"), intent.getIntExtra(
-                            "duration", Toast.LENGTH_LONG));
-                    toast.show();
                 }
             }
         };
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Find our drawer view
@@ -378,7 +350,8 @@ public class MainActivity extends AppCompatActivity {
                     BackupFragment.sendBackupsChangedBroadcast(this);
                 } else {
                     // Permission Denied
-                    sendStatusSnackbarBroadcast(this, getString(R.string.permission_denied), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showStatusMessage(this, getString(R.string.permission_denied), Snackbar
+                            .LENGTH_LONG);
                 }
                 break;
             default:
@@ -403,15 +376,19 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_STATUS_UPDATE_TOAST);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        appIsInForeground = true;
+    }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        appIsInForeground = false;
     }
 
     @Override

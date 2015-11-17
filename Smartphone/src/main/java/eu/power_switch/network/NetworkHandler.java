@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.log.Log;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -242,7 +242,7 @@ public class NetworkHandler {
                 }
             }
         } else {
-            MainActivity.sendStatusSnackbarBroadcast(context, context.getString(R.string
+            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
                     .missing_network_connection), Snackbar.LENGTH_LONG);
         }
     }

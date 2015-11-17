@@ -33,7 +33,6 @@ public class LocalBroadcastConstants {
     public static final String INTENT_TIMER_CHANGED = "eu.power_switch.timer_changed";
     public static final String INTENT_BACKUP_CHANGED = "eu.power_switch.backup_changed";
     public static final String INTENT_STATUS_UPDATE_SNACKBAR = "eu.power_switch.status_update.snackbar";
-    public static final String INTENT_STATUS_UPDATE_TOAST = "eu.power_switch.status_update.toast";
 
     public static final String INTENT_BRAND_MODEL_CHANGED = "eu.power_switch.brand_model_changed";
     public static final String INTENT_NAME_ROOM_CHANGED = "eu.power_switch.name_room_changed";

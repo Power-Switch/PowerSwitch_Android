@@ -42,7 +42,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
-import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.log.Log;
@@ -399,8 +399,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         // update scene widgets
         ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
 
-        MainActivity.sendStatusSnackbarBroadcast(getActivity(), getString(R.string.receiver_saved),
-                Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.receiver_saved), Snackbar.LENGTH_LONG);
     }
 
     @Override
