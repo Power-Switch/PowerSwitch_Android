@@ -42,6 +42,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.WearablePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 
@@ -71,6 +72,17 @@ public class UtilityService extends IntentService {
     }
 
     /**
+     * Create Intent to update Wear Settings via background service
+     *
+     * @param context
+     */
+    public static void forceWearSettingsUpdate(Context context) {
+        Intent intent = new Intent(context, UtilityService.class);
+        intent.setAction(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH);
+        context.startService(intent);
+    }
+
+    /**
      * Transfer the required data over to the wearable
      *
      * @param rooms     List containing Rooms from Database
@@ -80,13 +92,12 @@ public class UtilityService extends IntentService {
             scenes) {
         Log.d("Sending new Data to Wearable...");
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API)
-                .build();
+                .addApi(Wearable.API).build();
 
         // It's OK to use blockingConnect() here as we are running in an
         // IntentService that executes work on a separate (background) thread.
-        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit
-                .SECONDS);
+        ConnectionResult connectionResult = googleApiClient.blockingConnect(
+                SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
         ArrayList<DataMap> data = new ArrayList<>();
 
@@ -115,8 +126,7 @@ public class UtilityService extends IntentService {
             data.add(convertToDataMap(scene));
         }
 
-        if (connectionResult.isSuccess() && googleApiClient.isConnected()
-                && data.size() > 0) {
+        if (connectionResult.isSuccess() && googleApiClient.isConnected() && data.size() > 0) {
 
             PutDataMapRequest dataMap = PutDataMapRequest.create(WearableConstants.DATA_PATH);
             dataMap.getDataMap().putDataMapArrayList(WearableConstants.EXTRA_DATA, data);
@@ -213,7 +223,7 @@ public class UtilityService extends IntentService {
         DatabaseHandler.init(getApplicationContext());
 
         // Get Room/Receiver/Scene Data from Database and send to wearable
-        if (intent.getAction().equals(WearableConstants.REQUEST_DATA_UPDATE_PATH)) {
+        if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
             SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
 
             Log.d("Getting Data from Database to send to Wearable...");
@@ -245,6 +255,62 @@ public class UtilityService extends IntentService {
             List<Scene> scenes = DatabaseHandler.getAllScenes();
 
             sendDataToWearable(rooms, receivers, buttons, scenes);
+        } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
+
+
+            sendSettingsToWearable();
         }
+    }
+
+    private void sendSettingsToWearable() {
+        Log.d("Sending Settings to Wearable...");
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Wearable.API).build();
+
+        // It's OK to use blockingConnect() here as we are running in an
+        // IntentService that executes work on a separate (background) thread.
+        ConnectionResult connectionResult = googleApiClient.blockingConnect(
+                SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
+
+        ArrayList<DataMap> settings = new ArrayList<>();
+        DataMap settingsDataMap = getSettingsDataMap();
+        settings.add(settingsDataMap);
+
+        if (connectionResult.isSuccess() && googleApiClient.isConnected() && settings.size() > 0) {
+
+            PutDataMapRequest dataMap = PutDataMapRequest.create(WearableConstants.SETTINGS_PATH);
+            dataMap.getDataMap().putDataMapArrayList(WearableConstants.EXTRA_SETTINGS, settings);
+            PutDataRequest request = dataMap.asPutDataRequest();
+
+            // Send the data over
+            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request).await();
+
+            if (!result.getStatus().isSuccess()) {
+                Log.e("", String.format("Error sending settings using DataApi (error code = %d)",
+                        result.getStatus().getStatusCode()));
+            } else {
+                Log.d("Updated settings sent");
+            }
+
+        } else {
+            // GoogleApiClient connection error
+            Log.e("Error connecting GoogleApiClient");
+        }
+
+
+    }
+
+    private DataMap getSettingsDataMap() {
+        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
+
+        DataMap settingsDataMap = new DataMap();
+        settingsDataMap.putBoolean(WearableConstants.SETTINGS_AUTO_COLLAPSE_ROOMS, wearablePreferencesHandler.getAutoCollapseRooms());
+        settingsDataMap.putBoolean(WearableConstants.SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON, wearablePreferencesHandler.getHighlightLastActivatedButton());
+        settingsDataMap.putBoolean(WearableConstants.SETTINGS_SHOW_ROOM_ALL_ON_OFF, wearablePreferencesHandler.getShowRoomAllOnOff());
+        settingsDataMap.putInt(WearableConstants.SETTINGS_THEME, wearablePreferencesHandler.getTheme());
+        settingsDataMap.putBoolean(WearableConstants.SETTINGS_VIBRATE_ON_BUTTON_PRESS, wearablePreferencesHandler.getVibrateOnButtonPress());
+        settingsDataMap.putInt(WearableConstants.SETTINGS_VIBRATION_DURATION, wearablePreferencesHandler.getVibrationDuration());
+
+        return settingsDataMap;
     }
 }

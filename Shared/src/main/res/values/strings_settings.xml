@@ -25,6 +25,7 @@
 
     <!-- settings -->
     <string name="general_settings">General Settings</string>
+    <string name="wearable_settings">Wearable Settings</string>
     <string name="autodiscover">Automatically search for Gateway</string>
     <string name="auto_collapse_rooms">Automatically collapse Rooms</string>
     <string name="auto_collapse_timers">Automatically collapse Timers</string>
