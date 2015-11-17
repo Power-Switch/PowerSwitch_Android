@@ -137,11 +137,11 @@ public class CreateGatewayDialog extends DialogFragment {
                 Gateway newGateway;
 
                 if (gatewayModel.equals(BrematicGWY433.MODEL)) {
-                    newGateway = new BrematicGWY433(null, true, gatewayName, "", gatewayAddress, gatewayPort);
+                    newGateway = new BrematicGWY433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
                 } else if (gatewayModel.equals(ConnAir.MODEL)) {
-                    newGateway = new ConnAir(null, true, gatewayName, "", gatewayAddress, gatewayPort);
+                    newGateway = new ConnAir((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
                 } else if (gatewayModel.equals(ITGW433.MODEL)) {
-                    newGateway = new ITGW433(null, true, gatewayName, "", gatewayAddress, gatewayPort);
+                    newGateway = new ITGW433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
                 } else {
                     throw new UnknownGatewayException();
                 }

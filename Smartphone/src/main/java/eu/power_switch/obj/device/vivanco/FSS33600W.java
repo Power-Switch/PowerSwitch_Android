@@ -36,7 +36,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 
 public class FSS33600W extends Receiver implements DipReceiver {
-    // // dips are 12345 ABCDE
+    // dips are 12345 ABCDE
 
     static String BRAND = Receiver.BRAND_VIVANCO;
     static String MODEL = Receiver.getModelName(FSS33600W.class.getCanonicalName());
@@ -47,8 +47,8 @@ public class FSS33600W extends Receiver implements DipReceiver {
     private String headConnAir = "TXP:0,0,10,5600,350,25,";
     private String tailConnAir = tx433version + sSpeedConnAir + ";";
 
-    private String sSpeedITGW = "125,";
-    private String headITGW = "0,0,10,11200,350,26,0,";
+    private String sSpeedITGW = "32,";
+    private String headITGW = "0,0,6,11200,350,26,0,";
     private String tailITGW = tx433version + sSpeedITGW + "0";
 
     private LinkedList<DipSwitch> dipList;
