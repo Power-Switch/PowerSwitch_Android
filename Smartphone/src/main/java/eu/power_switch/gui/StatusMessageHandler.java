@@ -36,6 +36,8 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class StatusMessageHandler {
 
+    private static Toast lastToast;
+
     /**
      * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
      * it is running in the foreground
@@ -82,9 +84,17 @@ public class StatusMessageHandler {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                //noinspection ResourceType
+                // cancel last toast
+                if (lastToast != null) {
+                    lastToast.cancel();
+                }
+
+                // create and show new toast
                 Toast toast = Toast.makeText(context.getApplicationContext(), message, duration);
                 toast.show();
+
+                // save toast reference
+                lastToast = toast;
             }
         });
     }
