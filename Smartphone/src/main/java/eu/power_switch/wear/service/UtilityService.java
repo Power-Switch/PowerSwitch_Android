@@ -43,6 +43,7 @@ import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
@@ -310,12 +311,15 @@ public class UtilityService extends IntentService {
         WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
 
         DataMap settingsDataMap = new DataMap();
-        settingsDataMap.putBoolean(WearableConstants.SETTINGS_AUTO_COLLAPSE_ROOMS, wearablePreferencesHandler.getAutoCollapseRooms());
-        settingsDataMap.putBoolean(WearableConstants.SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON, wearablePreferencesHandler.getHighlightLastActivatedButton());
-        settingsDataMap.putBoolean(WearableConstants.SETTINGS_SHOW_ROOM_ALL_ON_OFF, wearablePreferencesHandler.getShowRoomAllOnOff());
-        settingsDataMap.putInt(WearableConstants.SETTINGS_THEME, wearablePreferencesHandler.getTheme());
-        settingsDataMap.putBoolean(WearableConstants.SETTINGS_VIBRATE_ON_BUTTON_PRESS, wearablePreferencesHandler.getVibrateOnButtonPress());
-        settingsDataMap.putInt(WearableConstants.SETTINGS_VIBRATION_DURATION, wearablePreferencesHandler.getVibrationDuration());
+        settingsDataMap.putBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, wearablePreferencesHandler
+                .getAutoCollapseRooms());
+        settingsDataMap.putBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, wearablePreferencesHandler
+                .getHighlightLastActivatedButton());
+        settingsDataMap.putBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, wearablePreferencesHandler.getShowRoomAllOnOff());
+        settingsDataMap.putInt(WearableSettingsConstants.THEME_KEY, wearablePreferencesHandler.getTheme());
+        settingsDataMap.putBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, wearablePreferencesHandler
+                .getVibrateOnButtonPress());
+        settingsDataMap.putInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, wearablePreferencesHandler.getVibrationDuration());
 
         return settingsDataMap;
     }

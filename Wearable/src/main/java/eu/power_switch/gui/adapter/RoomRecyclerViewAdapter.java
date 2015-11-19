@@ -110,11 +110,27 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
+                if (wearablePreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
+                }
 
                 android.widget.Button button = (android.widget.Button) v;
                 String actionString = DataApiHandler.buildRoomActionString(room.getName(), button.getText().toString());
                 dataApiHandler.sendRoomActionTrigger(actionString);
+
+
+                for (Receiver receiver : room.getReceivers()) {
+                    for (Button currentButton : receiver.getButtons()) {
+                        if (button.getText().equals(currentButton.getName())) {
+                            receiver.setLastActivatedButtonId(currentButton.getId());
+                            break;
+                        }
+                    }
+                }
+
+                if (wearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                    // TODO: rerender buttons
+                }
             }
         };
 
@@ -164,22 +180,25 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     @Override
                     public void onClick(View v) {
                         // Vibration Feedback
-                        VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
+                        if (wearablePreferencesHandler.getVibrateOnButtonPress()) {
+                            VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
+                        }
 
                         // Send Action to Smartphone app
                         String actionString = DataApiHandler.buildReceiverActionString(room.getName(),
                                 receiver.getName(), button.getName());
                         dataApiHandler.sendReceiverActionTrigger(actionString);
 
-//                        if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
-                        for (android.widget.Button button : buttonViews) {
-                            if (button != v) {
-                                button.setTextColor(defaultTextColor);
-                            } else {
-                                button.setTextColor(ContextCompat.getColor(context, R.color
-                                        .accent_blue_a700));
+                        receiver.setLastActivatedButtonId(button.getId());
+                        if (wearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                            for (android.widget.Button button : buttonViews) {
+                                if (button != v) {
+                                    button.setTextColor(defaultTextColor);
+                                } else {
+                                    button.setTextColor(ContextCompat.getColor(context, R.color
+                                            .accent_blue_a700));
+                                }
                             }
-//                        }
                         }
                     }
                 });

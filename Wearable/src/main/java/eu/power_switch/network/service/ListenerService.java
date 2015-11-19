@@ -40,6 +40,7 @@ import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -153,7 +154,8 @@ public class ListenerService extends WearableListenerService {
                         && WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
 
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    ArrayList<DataMap> data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                    ArrayList<DataMap> data = dataMapItem.getDataMap()
+                            .getDataMapArrayList(WearableConstants.EXTRA_DATA);
 
                     // convert received data to room/receiver/button objects
                     ArrayList<Room> rooms = extractRoomDataMapItems(data);
@@ -165,11 +167,13 @@ public class ListenerService extends WearableListenerService {
                         && WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
 
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    ArrayList<DataMap> settings = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
+                    ArrayList<DataMap> settings = dataMapItem.getDataMap()
+                            .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
 
                     extractSettings(settings);
 
                     // TODO: notify app about changes
+
                 }
             }
         }
@@ -180,23 +184,28 @@ public class ListenerService extends WearableListenerService {
 
         // save map values to local preferenceHandler
         for (DataMap dataMapItem : settings) {
-            if (dataMapItem.containsKey(WearableConstants.SETTINGS_AUTO_COLLAPSE_ROOMS)) {
-                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_AUTO_COLLAPSE_ROOMS);
+            if (dataMapItem.containsKey(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY);
                 wearablePreferencesHandler.setAutoCollapseRooms(bool);
-            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
-                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY);
                 wearablePreferencesHandler.setHighlightLastActivatedButton(bool);
-            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_SHOW_ROOM_ALL_ON_OFF)) {
-                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_SHOW_ROOM_ALL_ON_OFF);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY);
                 wearablePreferencesHandler.setShowRoomAllOnOff(bool);
-            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_THEME)) {
-                int value = dataMapItem.getInt(WearableConstants.SETTINGS_THEME);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.THEME_KEY)) {
+                int value = dataMapItem.getInt(WearableSettingsConstants.THEME_KEY);
                 wearablePreferencesHandler.setTheme(value);
-            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_VIBRATE_ON_BUTTON_PRESS)) {
-                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_VIBRATE_ON_BUTTON_PRESS);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY);
                 wearablePreferencesHandler.setVibrateOnButtonPress(bool);
-            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_VIBRATION_DURATION)) {
-                int value = dataMapItem.getInt(WearableConstants.SETTINGS_VIBRATION_DURATION);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.VIBRATION_DURATION_KEY)) {
+                int value = dataMapItem.getInt(WearableSettingsConstants.VIBRATION_DURATION_KEY);
                 wearablePreferencesHandler.setVibrationDuration(value);
             }
         }

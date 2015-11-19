@@ -42,9 +42,6 @@ public class SettingsConstants {
 
     public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 75;
 
-    // wearable settings
-    public static final String WEAR_THEME_KEY = "WEAR_THEME_KEY";
-
     // GoogleApi
     public static final int GOOGLE_API_CLIENT_TIMEOUT = 10;
 

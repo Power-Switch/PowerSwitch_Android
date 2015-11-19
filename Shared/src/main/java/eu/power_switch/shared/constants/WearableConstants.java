@@ -53,16 +53,6 @@ public class WearableConstants {
     public static final String SCENE_ID_DATAMAP_KEY = "SCENE_ID_DATAMAP_KEY";
     public static final String SCENE_NAME_DATAMAP_KEY = "SCENE_NAME_DATAMAP_KEY";
 
-    public static final String SETTINGS_AUTO_COLLAPSE_ROOMS = "SETTINGS_AUTO_COLLAPSE_ROOMS";
-    public static final String SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON = "SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON";
-    public static final String SETTINGS_SHOW_ROOM_ALL_ON_OFF = "SETTINGS_SHOW_ROOM_ALL_ON_OFF";
-    public static final String SETTINGS_THEME = "SETTINGS_THEME";
-    public static final String SETTINGS_VIBRATE_ON_BUTTON_PRESS = "SETTINGS_VIBRATE_ON_BUTTON_PRESS";
-    public static final String SETTINGS_VIBRATION_DURATION = "SETTINGS_VIBRATION_DURATION";
-
-    // SharedPreferences
-    public static final String WEARABLE_SHARED_PREFS_NAME = "eu.power_switch.wearable.prefs";
-
     /**
      * Private Constructor
      */

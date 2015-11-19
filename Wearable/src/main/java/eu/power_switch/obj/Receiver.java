@@ -107,6 +107,10 @@ public class Receiver implements Serializable {
         return lastActivatedButtonId;
     }
 
+    public void setLastActivatedButtonId(long lastActivatedButtonId) {
+        this.lastActivatedButtonId = lastActivatedButtonId;
+    }
+
     public int getPositionInRoom() {
         return positionInRoom;
     }

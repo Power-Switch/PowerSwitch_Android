@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -38,7 +38,8 @@ public class WearablePreferencesHandler {
     SharedPreferences sharedPreferences;
 
     public WearablePreferencesHandler(Context context) {
-        sharedPreferences = context.getSharedPreferences(WearableConstants.WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(WearableSettingsConstants.WEARABLE_SHARED_PREFS_NAME,
+                Context.MODE_PRIVATE);
     }
 
     /**
@@ -47,7 +48,7 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getShowRoomAllOnOff() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
+        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
         Log.d(this, "getShowRoomAllOnOff: " + value);
         return value;
     }
@@ -60,7 +61,7 @@ public class WearablePreferencesHandler {
     public void setShowRoomAllOnOff(boolean bool) {
         Log.d(this, "setShowRoomAllOnOff: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, bool);
         editor.apply();
     }
 
@@ -70,7 +71,7 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getAutoCollapseRooms() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
+        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
         Log.d(this, "getAutoCollapseRooms: " + value);
         return value;
     }
@@ -83,7 +84,7 @@ public class WearablePreferencesHandler {
     public void setAutoCollapseRooms(boolean bool) {
         Log.d(this, "setAutoCollapseRooms: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
         editor.apply();
     }
 
@@ -93,7 +94,7 @@ public class WearablePreferencesHandler {
      * @return ID (internal) of Theme
      */
     public int getTheme() {
-        int value = sharedPreferences.getInt(SettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
+        int value = sharedPreferences.getInt(WearableSettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
         Log.d(this, "getTheme: " + value);
         return value;
     }
@@ -106,7 +107,7 @@ public class WearablePreferencesHandler {
     public void setTheme(int theme) {
         Log.d(this, "setTheme: " + theme);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SettingsConstants.THEME_KEY, theme);
+        editor.putInt(WearableSettingsConstants.THEME_KEY, theme);
         editor.apply();
     }
 
@@ -116,7 +117,7 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getVibrateOnButtonPress() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
+        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
         Log.d(this, "getVibrateOnButtonPress: " + value);
         return value;
     }
@@ -129,7 +130,7 @@ public class WearablePreferencesHandler {
     public void setVibrateOnButtonPress(boolean bool) {
         Log.d(this, "setVibrateOnButtonPress: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, bool);
         editor.apply();
     }
 
@@ -139,7 +140,8 @@ public class WearablePreferencesHandler {
      * @return time in ms
      */
     public int getVibrationDuration() {
-        int value = sharedPreferences.getInt(SettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+        int value = sharedPreferences.getInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants
+                .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
         Log.d(this, "getVibrationDuration: " + value);
         return value;
     }
@@ -152,7 +154,7 @@ public class WearablePreferencesHandler {
     public void setVibrationDuration(int milliseconds) {
         Log.d(this, "setVibrationDuration: " + milliseconds);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SettingsConstants.VIBRATION_DURATION_KEY, milliseconds);
+        editor.putInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, milliseconds);
         editor.apply();
     }
 
@@ -162,7 +164,7 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getHighlightLastActivatedButton() {
-        boolean value = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
+        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
         Log.d(this, "getHighlightLastActivatedButton: " + value);
         return value;
     }
@@ -175,7 +177,7 @@ public class WearablePreferencesHandler {
     public void setHighlightLastActivatedButton(boolean bool) {
         Log.d(this, "setHighlightLastActivatedButton: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
         editor.apply();
     }
 

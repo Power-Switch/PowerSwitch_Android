@@ -76,7 +76,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
+                if (wearablePreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
+                }
 
                 String actionString = DataApiHandler.buildSceneActionString(scene.getName());
                 dataApiHandler.sendSceneActionTrigger(actionString);
