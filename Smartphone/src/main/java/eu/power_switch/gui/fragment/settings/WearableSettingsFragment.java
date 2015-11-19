@@ -32,8 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import eu.power_switch.R;
-import eu.power_switch.settings.WearablePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 

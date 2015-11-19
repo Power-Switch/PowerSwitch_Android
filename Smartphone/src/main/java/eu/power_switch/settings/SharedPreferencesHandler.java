@@ -25,8 +25,8 @@ import android.os.Environment;
 import java.io.File;
 
 import eu.power_switch.backup.BackupHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Preference handler used to store general app settings

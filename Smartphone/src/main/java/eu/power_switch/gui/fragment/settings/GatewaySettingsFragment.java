@@ -48,11 +48,11 @@ import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.CreateGatewayDialog;
 import eu.power_switch.gui.dialog.EditGatewayDialog;
-import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Fragment containing all settings related to Gateways

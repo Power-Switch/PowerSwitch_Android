@@ -22,8 +22,8 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
-import eu.power_switch.log.Log;
-import eu.power_switch.log.Log4JConfiguration;
+import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.Log4JConfiguration;
 
 /**
  * Entry Point for the Application

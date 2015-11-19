@@ -38,8 +38,8 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 
 /**

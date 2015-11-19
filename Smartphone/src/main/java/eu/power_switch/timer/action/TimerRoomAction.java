@@ -22,8 +22,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 
 import eu.power_switch.api.IntentReceiver;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
+import eu.power_switch.shared.log.Log;
 
 /**
  * TimerRoomAction that holds a specific room/button combination to activate on execution

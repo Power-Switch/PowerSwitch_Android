@@ -16,16 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.settings;
+package eu.power_switch.shared.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
+ * This class is responsible for accessing and modifying Wear App Settings
+ * <p/>
+ * Note: Most (if not all) Settings can not be changed on the Wearable itself but only using the Smartphone
+ * <p/>
+ * <p/>
  * Created by Markus on 13.11.2015.
  */
 public class WearablePreferencesHandler {

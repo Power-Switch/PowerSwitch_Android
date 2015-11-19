@@ -45,13 +45,13 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Room items (containing Receivers) in RecyclerView

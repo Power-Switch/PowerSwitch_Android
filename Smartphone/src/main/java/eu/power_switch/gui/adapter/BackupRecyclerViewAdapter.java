@@ -36,7 +36,7 @@ import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
-import eu.power_switch.log.Log;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Adapter to visualize Backup items in RecyclerView

@@ -22,10 +22,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 
 import eu.power_switch.api.IntentReceiver;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.shared.log.Log;
 
 /**
  * TimerReceiverAction that holds a specific room/receiver/button combination to activate on execution

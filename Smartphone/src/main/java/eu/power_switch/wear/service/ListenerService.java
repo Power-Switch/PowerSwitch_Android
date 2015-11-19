@@ -19,15 +19,14 @@
 package eu.power_switch.wear.service;
 
 import android.app.PendingIntent;
-import android.content.Intent;
 import android.widget.Toast;
 
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import eu.power_switch.api.IntentReceiver;
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * A Wear listener service, used to receive inbound messages from
@@ -64,10 +63,9 @@ public class ListenerService extends WearableListenerService {
                 Log.e("Pending intent canceled", e);
             }
         } else if (messageEvent.getPath().equals(WearableConstants.REQUEST_DATA_UPDATE_PATH)) {
-            Log.d("Updating Data for Wearable");
-            Intent intent = new Intent(this, UtilityService.class);
-            intent.setAction(WearableConstants.REQUEST_DATA_UPDATE_PATH);
-            startService(intent);
+            UtilityService.forceWearDataUpdate(this);
+        } else if (messageEvent.getPath().equals(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH)) {
+            UtilityService.forceWearSettingsUpdate(this);
         }
     }
 

@@ -40,6 +40,7 @@ import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 05.06.2015.
@@ -175,11 +176,34 @@ public class ListenerService extends WearableListenerService {
     }
 
     private void extractSettings(ArrayList<DataMap> settings) {
-        // TODO: get changed values and save to local preferenceHandler
+        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
+
+        // save map values to local preferenceHandler
+        for (DataMap dataMapItem : settings) {
+            if (dataMapItem.containsKey(WearableConstants.SETTINGS_AUTO_COLLAPSE_ROOMS)) {
+                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_AUTO_COLLAPSE_ROOMS);
+                wearablePreferencesHandler.setAutoCollapseRooms(bool);
+            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                wearablePreferencesHandler.setHighlightLastActivatedButton(bool);
+            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_SHOW_ROOM_ALL_ON_OFF)) {
+                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_SHOW_ROOM_ALL_ON_OFF);
+                wearablePreferencesHandler.setShowRoomAllOnOff(bool);
+            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_THEME)) {
+                int value = dataMapItem.getInt(WearableConstants.SETTINGS_THEME);
+                wearablePreferencesHandler.setTheme(value);
+            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_VIBRATE_ON_BUTTON_PRESS)) {
+                boolean bool = dataMapItem.getBoolean(WearableConstants.SETTINGS_VIBRATE_ON_BUTTON_PRESS);
+                wearablePreferencesHandler.setVibrateOnButtonPress(bool);
+            } else if (dataMapItem.containsKey(WearableConstants.SETTINGS_VIBRATION_DURATION)) {
+                int value = dataMapItem.getInt(WearableConstants.SETTINGS_VIBRATION_DURATION);
+                wearablePreferencesHandler.setVibrationDuration(value);
+            }
+        }
     }
 
     /**
-     * Reacts on Messegaes from MessageApi
+     * Reacts on Messages from MessageApi
      *
      * @param messageEvent
      */

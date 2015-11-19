@@ -59,9 +59,9 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
-import eu.power_switch.log.Log;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Fragment holding a list of all Backups

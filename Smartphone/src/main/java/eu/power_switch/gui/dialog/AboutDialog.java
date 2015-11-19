@@ -30,7 +30,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import eu.power_switch.R;
-import eu.power_switch.log.Log;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Fragment displaying the "About" screen containing all info about the app and version history

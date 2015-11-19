@@ -45,7 +45,6 @@ import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.device.AutoPairReceiver;
@@ -55,6 +54,7 @@ import eu.power_switch.obj.device.MasterSlaveReceiver;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.device.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
 

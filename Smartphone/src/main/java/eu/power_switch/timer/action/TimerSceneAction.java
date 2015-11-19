@@ -22,8 +22,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 
 import eu.power_switch.api.IntentReceiver;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.log.Log;
 
 /**
  * TimerSceneAction that holds a specific scene to activate on execution

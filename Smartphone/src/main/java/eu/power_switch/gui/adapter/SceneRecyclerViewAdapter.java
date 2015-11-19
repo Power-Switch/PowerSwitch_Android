@@ -41,13 +41,13 @@ import eu.power_switch.R;
 import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Scene items in RecyclerView

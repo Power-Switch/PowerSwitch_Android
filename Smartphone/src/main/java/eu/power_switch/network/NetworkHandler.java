@@ -33,11 +33,11 @@ import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Class to handle all network related actions such as sending button actions and searching for gateways

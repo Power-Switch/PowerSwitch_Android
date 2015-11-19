@@ -42,9 +42,9 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
-import eu.power_switch.log.Log;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 
 /**

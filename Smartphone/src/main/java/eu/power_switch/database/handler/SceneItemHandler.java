@@ -27,11 +27,11 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.table.scene.SceneItemTable;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing SceneItems

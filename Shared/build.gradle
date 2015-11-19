@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
+    compile fileTree(include: ['*.jar'], dir: 'libraries')
     compile 'com.android.support:appcompat-v7:+'
 }

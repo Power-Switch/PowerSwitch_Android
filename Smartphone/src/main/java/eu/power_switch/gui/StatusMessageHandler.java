@@ -26,8 +26,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
 import eu.power_switch.gui.activity.MainActivity;
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * This is a helper Class to create and show status messages depending on the app state

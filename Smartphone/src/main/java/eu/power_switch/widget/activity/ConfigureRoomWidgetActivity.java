@@ -37,8 +37,8 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.provider.RoomWidgetProvider;

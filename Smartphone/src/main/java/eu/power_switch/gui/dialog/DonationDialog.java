@@ -37,7 +37,6 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.playstore.Base64;
 import eu.power_switch.playstore.IabHelper;
 import eu.power_switch.playstore.IabResult;
@@ -45,6 +44,7 @@ import eu.power_switch.playstore.Inventory;
 import eu.power_switch.playstore.Purchase;
 import eu.power_switch.playstore.SkuDetails;
 import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to select a Play Store Donation

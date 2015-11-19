@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.log.Log;
+import eu.power_switch.shared.log.Log;
 
 /**
  * This Class is responsible for sending NetworkPackages that are queued up to be sent

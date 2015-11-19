@@ -40,7 +40,7 @@ import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.log.Log;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to rename a Backup

@@ -50,8 +50,8 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 /**

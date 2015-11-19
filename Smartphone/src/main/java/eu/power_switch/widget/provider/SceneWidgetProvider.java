@@ -26,8 +26,8 @@ import android.widget.RemoteViews;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.SceneWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;

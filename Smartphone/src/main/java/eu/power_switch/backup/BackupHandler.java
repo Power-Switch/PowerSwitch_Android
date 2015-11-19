@@ -34,8 +34,8 @@ import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.exception.backup.CreateBackupException;
 import eu.power_switch.exception.backup.RemoveBackupException;
 import eu.power_switch.exception.backup.RestoreBackupException;
-import eu.power_switch.log.Log;
 import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Database Handler to access/modify Backups stored on device or external storage

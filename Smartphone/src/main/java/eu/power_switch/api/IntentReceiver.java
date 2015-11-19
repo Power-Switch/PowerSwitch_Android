@@ -31,7 +31,6 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
-import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.Button;
@@ -42,6 +41,7 @@ import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 

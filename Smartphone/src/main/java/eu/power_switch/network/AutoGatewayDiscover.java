@@ -28,7 +28,7 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.LinkedList;
 
-import eu.power_switch.log.Log;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Background thread to search through local network for Gateways

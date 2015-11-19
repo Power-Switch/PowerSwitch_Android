@@ -48,8 +48,8 @@ import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2Day
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4SummaryFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to create or modify a Timer

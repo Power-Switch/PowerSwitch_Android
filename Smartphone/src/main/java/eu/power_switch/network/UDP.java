@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.log.Log;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Background thread used to send receiver actions to gateway

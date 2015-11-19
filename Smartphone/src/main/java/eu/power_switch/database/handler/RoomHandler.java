@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.database.table.room.RoomTable;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Rooms

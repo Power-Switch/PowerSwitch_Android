@@ -54,12 +54,12 @@ import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.main.RoomsScenesTimersTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // update wear data
                 UtilityService.forceWearDataUpdate(context);
+                UtilityService.forceWearSettingsUpdate(context);
 
                 // update receiver widgets
                 ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);

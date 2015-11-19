@@ -53,7 +53,6 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.UniversalButton;
@@ -65,6 +64,7 @@ import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.device.UniversalReceiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * "Setup" Fragment used in Configure Receiver Dialog

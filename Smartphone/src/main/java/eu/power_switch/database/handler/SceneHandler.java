@@ -26,9 +26,9 @@ import java.util.List;
 
 import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.database.table.scene.SceneTable;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Scenes

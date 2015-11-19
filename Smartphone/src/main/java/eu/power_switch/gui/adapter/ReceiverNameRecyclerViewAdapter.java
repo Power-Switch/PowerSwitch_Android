@@ -35,8 +35,8 @@ import java.util.Collections;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.animation.AnimationHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Receiver items in RecyclerView

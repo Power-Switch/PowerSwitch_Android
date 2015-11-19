@@ -27,8 +27,8 @@ import android.os.Build;
 
 import java.util.Calendar;
 
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.TimerConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;

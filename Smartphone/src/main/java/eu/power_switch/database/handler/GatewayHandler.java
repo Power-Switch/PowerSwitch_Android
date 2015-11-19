@@ -28,11 +28,11 @@ import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
 import eu.power_switch.exception.gateway.UnknownGatewayException;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Gateways

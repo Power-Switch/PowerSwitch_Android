@@ -26,7 +26,6 @@ import java.util.Random;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.device.AutoPairReceiver;
 import eu.power_switch.obj.device.MasterSlaveReceiver;
@@ -35,6 +34,7 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.shared.log.Log;
 
 public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveReceiver {
 

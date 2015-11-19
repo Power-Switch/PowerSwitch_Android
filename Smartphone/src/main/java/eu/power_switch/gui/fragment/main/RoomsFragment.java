@@ -43,11 +43,11 @@ import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
-import eu.power_switch.log.Log;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 
 /**

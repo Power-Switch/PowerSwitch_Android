@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.log;
+package eu.power_switch.shared.log;
 
 
 import org.apache.log4j.Logger;

@@ -33,11 +33,11 @@ import java.util.LinkedList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 

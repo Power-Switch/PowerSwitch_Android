@@ -36,15 +36,15 @@ import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.settings.WearablePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 06.06.2015.
@@ -63,9 +63,10 @@ public class UtilityService extends IntentService {
     /**
      * Create Intent to update Wear Data via background service
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void forceWearDataUpdate(Context context) {
+        Log.d("Updating Data for Wearable");
         Intent intent = new Intent(context, UtilityService.class);
         intent.setAction(WearableConstants.REQUEST_DATA_UPDATE_PATH);
         context.startService(intent);
@@ -74,9 +75,10 @@ public class UtilityService extends IntentService {
     /**
      * Create Intent to update Wear Settings via background service
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void forceWearSettingsUpdate(Context context) {
+        Log.d("Updating Settings for Wearable");
         Intent intent = new Intent(context, UtilityService.class);
         intent.setAction(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH);
         context.startService(intent);
@@ -256,12 +258,13 @@ public class UtilityService extends IntentService {
 
             sendDataToWearable(rooms, receivers, buttons, scenes);
         } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
-
-
             sendSettingsToWearable();
         }
     }
 
+    /**
+     * Sends current Wearable Settings made in Smartphone app over to the Wearable companion app
+     */
     private void sendSettingsToWearable() {
         Log.d("Sending Settings to Wearable...");
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
@@ -296,10 +299,13 @@ public class UtilityService extends IntentService {
             // GoogleApiClient connection error
             Log.e("Error connecting GoogleApiClient");
         }
-
-
     }
 
+    /**
+     * Get Wearable settings and put them into a DataMap
+     *
+     * @return DataMap containing all Wearable settings
+     */
     private DataMap getSettingsDataMap() {
         WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
 

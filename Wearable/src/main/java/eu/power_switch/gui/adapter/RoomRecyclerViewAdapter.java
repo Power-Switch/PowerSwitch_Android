@@ -39,15 +39,15 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
-import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 15.08.2015.
  */
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
 
+    private final WearablePreferencesHandler wearablePreferencesHandler;
     // Store a member variable for the users
     private ArrayList<Room> rooms;
     private Context context;
@@ -61,6 +61,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         this.context = context;
         this.parentRecyclerView = parentRecyclerView;
         this.dataApiHandler = dataApiHandler;
+        this.wearablePreferencesHandler = new WearablePreferencesHandler(context);
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -104,11 +105,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             }
         });
 
+
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                VibrationHandler.vibrate(context, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+                VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
 
                 android.widget.Button button = (android.widget.Button) v;
                 String actionString = DataApiHandler.buildRoomActionString(room.getName(), button.getText().toString());
@@ -153,8 +155,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonView.setText(button.getName());
 
-                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
-                if (sharedPreferencesHandler.getHighlightLastActivatedButton() && button.getId() == receiver
+                if (wearablePreferencesHandler.getHighlightLastActivatedButton() && button.getId() == receiver
                         .getLastActivatedButtonId()) {
                     buttonView.setTextColor(ContextCompat.getColor(context, R.color.accent_blue_a700));
                 }
@@ -163,7 +164,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     @Override
                     public void onClick(View v) {
                         // Vibration Feedback
-                        VibrationHandler.vibrate(context, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+                        VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
 
                         // Send Action to Smartphone app
                         String actionString = DataApiHandler.buildReceiverActionString(room.getName(),

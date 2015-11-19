@@ -24,8 +24,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.log.Log;
 import eu.power_switch.shared.constants.ExternalAppConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * IntentReceiver to handle any Sleep As Android related Intents

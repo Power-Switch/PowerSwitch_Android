@@ -61,7 +61,6 @@ android {
 }
 
 dependencies {
-    compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
     compile fileTree(dir: 'libraries', include: ['*.jar'])
 
     compile 'com.android.support:cardview-v7:23.1.1'

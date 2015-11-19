@@ -43,8 +43,8 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
-import eu.power_switch.log.Log;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to edit a Gateway
