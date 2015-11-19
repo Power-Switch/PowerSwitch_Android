@@ -35,7 +35,6 @@ import eu.power_switch.R;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 /**
  * Fragment containing all settings related to Wearable companion app
@@ -63,7 +62,6 @@ public class WearableSettingsFragment extends Fragment {
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
                 switch (buttonView.getId()) {
                     case R.id.checkBox_autoCollapseRooms:
                         wearablePreferencesHandler.setAutoCollapseRooms(isChecked);
@@ -78,13 +76,12 @@ public class WearableSettingsFragment extends Fragment {
                         break;
                     case R.id.checkBox_highlightLastActivatedButton:
                         wearablePreferencesHandler.setHighlightLastActivatedButton(isChecked);
-                        // force receiver widget update
-                        ConfigureReceiverWidgetActivity.forceWidgetUpdate(getContext());
                         break;
                     default:
                         break;
                 }
 
+                // sync settings with wearable app
                 UtilityService.forceWearSettingsUpdate(getContext());
             }
         };
