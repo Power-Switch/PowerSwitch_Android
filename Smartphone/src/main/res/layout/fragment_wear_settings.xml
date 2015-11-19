@@ -41,6 +41,13 @@
                 android:text="@string/wearable_settings"/>
 
             <CheckBox
+                android:id="@+id/checkBox_autoCollapseRooms"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:text="@string/auto_collapse_rooms"/>
+
+            <CheckBox
                 android:id="@+id/checkBox_highlightLastActivatedButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"

@@ -46,6 +46,7 @@ public class WearableSettingsFragment extends Fragment {
     private View rootView;
     private WearablePreferencesHandler wearablePreferencesHandler;
 
+    private CheckBox autoCollapseRooms;
     private LinearLayout vibrationDurationLayout;
     private CheckBox vibrateOnButtonPress;
     private EditText vibrationDuration;
@@ -85,6 +86,9 @@ public class WearableSettingsFragment extends Fragment {
                 UtilityService.forceWearSettingsUpdate(getContext());
             }
         };
+
+        autoCollapseRooms = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
+        autoCollapseRooms.setOnCheckedChangeListener(onCheckedChangeListener);
 
         highlightLastActivatedButton = (CheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
         highlightLastActivatedButton.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -147,6 +151,7 @@ public class WearableSettingsFragment extends Fragment {
     }
 
     private void updateUI() {
+        autoCollapseRooms.setChecked(wearablePreferencesHandler.getAutoCollapseRooms());
         highlightLastActivatedButton.setChecked(wearablePreferencesHandler.getHighlightLastActivatedButton());
         vibrateOnButtonPress.setChecked(wearablePreferencesHandler.getVibrateOnButtonPress());
         vibrationDuration.setText("" + wearablePreferencesHandler.getVibrationDuration());
