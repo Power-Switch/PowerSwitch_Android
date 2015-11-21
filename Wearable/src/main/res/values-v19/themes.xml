@@ -17,14 +17,22 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
+<resources>
 
-    <corners
-        android:radius="2dp"/>
+    <style name="PowerSwitchWearTheme.Dark.Blue" parent="PowerSwitchWearThemeBase.Dark.Blue">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
 
-    <solid
-        android:color="@color/accent_blue_a700"/>
+    <style name="PowerSwitchWearTheme.Dark.Red" parent="PowerSwitchWearThemeBase.Dark.Red">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
 
-</shape>
+    <style name="PowerSwitchWearTheme.Light.Blue" parent="PowerSwitchWearThemeBase.Light.Blue">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="PowerSwitchWearTheme.Light.Red" parent="PowerSwitchWearThemeBase.Light.Red">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>

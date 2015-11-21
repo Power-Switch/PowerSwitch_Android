@@ -35,7 +35,6 @@
         android:textColor="@color/accent_blue_a700"
         android:textSize="@dimen/font_title_size"/>
 
-
     <Button
         android:id="@+id/button_Activate"
         android:layout_width="wrap_content"
@@ -43,7 +42,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="4dp"
         android:height="54dp"
-        android:background="@drawable/button_shape_selector"
+        android:background="?attr/button_backgroundDrawable"
         android:text="@string/activate"/>
 
 </LinearLayout>

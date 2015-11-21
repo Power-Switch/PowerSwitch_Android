@@ -182,7 +182,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
             for (final Button button : sceneItem.getReceiver().getButtons()) {
                 final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout
-                        .standard_button, null, false);
+                        .standard_button, buttonRow, false);
                 buttonList.add(buttonView);
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);

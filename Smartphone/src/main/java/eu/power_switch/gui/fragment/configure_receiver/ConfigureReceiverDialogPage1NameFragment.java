@@ -233,9 +233,9 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
-                new IntentFilter(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED)
-        );
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override

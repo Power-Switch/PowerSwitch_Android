@@ -68,7 +68,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     @Override
     public RoomRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_room__round, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_room__round, parent, false);
         // Return a new holder instance
         return new RoomRecyclerViewAdapter.ViewHolder(itemView);
     }
@@ -80,7 +80,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         final Room room = rooms.get(position);
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(inflaterString);
+        LayoutInflater inflater = (LayoutInflater) parentRecyclerView.getContext().getSystemService(inflaterString);
 
         // Set item views based on the data model
         holder.roomName.setText(room.getName());
@@ -166,13 +166,13 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
                 android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button_wear,
-                        null, false);
+                        buttonRow, false);
                 buttonViews.add(buttonView);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonView.setText(button.getName());
 
-                if (wearablePreferencesHandler.getHighlightLastActivatedButton() && button.getId() == receiver
-                        .getLastActivatedButtonId()) {
+                if (button.getId() == receiver.getLastActivatedButtonId()
+                        && wearablePreferencesHandler.getHighlightLastActivatedButton()) {
                     buttonView.setTextColor(ContextCompat.getColor(context, R.color.accent_blue_a700));
                 }
 

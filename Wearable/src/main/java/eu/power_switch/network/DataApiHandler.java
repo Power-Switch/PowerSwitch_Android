@@ -191,15 +191,15 @@ public class DataApiHandler {
             }
         }
 
-        ArrayList<DataMap> roomData;
+        ArrayList<DataMap> data;
         DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient).await();
 
         if (dataItemBuffer.getStatus().isSuccess()) {
             for (DataItem dataItem : dataItemBuffer) {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                roomData = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
-                if (roomData != null) {
-                    rooms = ListenerService.extractRoomDataMapItems(roomData);
+                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                if (data != null) {
+                    rooms = ListenerService.extractRoomDataMapItems(data);
                     break;
                 }
             }
@@ -239,5 +239,31 @@ public class DataApiHandler {
         dataItemBuffer.release();
 
         return scenes;
+    }
+
+    /**
+     * Retrieve wear settings from Wear cloud storage
+     */
+    public void updateSettings(Context context) {
+        if (!googleApiClient.isConnected()) {
+            if (!blockingConnect()) {
+                return;
+            }
+        }
+
+        ArrayList<DataMap> data;
+        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient).await();
+
+        if (dataItemBuffer.getStatus().isSuccess()) {
+            for (DataItem dataItem : dataItemBuffer) {
+                DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
+                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
+                if (data != null) {
+                    ListenerService.extractSettings(context, data);
+                    break;
+                }
+            }
+        }
+        dataItemBuffer.release();
     }
 }

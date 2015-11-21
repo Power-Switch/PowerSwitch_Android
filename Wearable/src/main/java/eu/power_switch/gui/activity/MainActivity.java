@@ -41,6 +41,8 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Main Activity holding all app related views
@@ -61,6 +63,31 @@ public class MainActivity extends WearableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // set Theme before anything else in onCreate
+        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
+        switch (wearablePreferencesHandler.getTheme()) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
+                setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
+                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Light_Red);
+                setTheme(R.style.PowerSwitchWearTheme_Light_Red);
+                break;
+            default:
+                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                break;
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -75,11 +102,13 @@ public class MainActivity extends WearableActivity {
             public void onReceive(Context context, Intent intent) {
                 Log.d("MainActivity", "received intent: " + intent.getAction());
 
-                ArrayList<Room> rooms = (ArrayList<Room>) intent.getSerializableExtra(ListenerService.ROOM_DATA);
-                replaceRoomList(rooms);
+                if (ListenerService.DATA_UPDATED.equals(intent.getAction())) {
+                    ArrayList<Room> rooms = (ArrayList<Room>) intent.getSerializableExtra(ListenerService.ROOM_DATA);
+                    replaceRoomList(rooms);
 
-                ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.SCENE_DATA);
-                replaceSceneList(scenes);
+                    ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.SCENE_DATA);
+                    replaceSceneList(scenes);
+                }
 
                 refreshUI();
             }
@@ -148,9 +177,9 @@ public class MainActivity extends WearableActivity {
             dataApiHandler.connect();
         }
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-                new IntentFilter(ListenerService.DATA_UPDATED)
-        );
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ListenerService.DATA_UPDATED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -213,8 +242,12 @@ public class MainActivity extends WearableActivity {
 
         @Override
         protected ArrayList<Object> doInBackground(Uri... params) {
+            // Get Room Data from Smartphone App
             ArrayList<Room> rooms = dataApiHandler.getRoomData();
+            // Get Scene Data from Smartphone App
             ArrayList<Scene> scenes = dataApiHandler.getSceneData();
+            // Get Wearable Settings from Smartphone App
+            dataApiHandler.updateSettings(getApplicationContext());
 
             ArrayList<Object> result = new ArrayList<>();
             result.add(rooms);

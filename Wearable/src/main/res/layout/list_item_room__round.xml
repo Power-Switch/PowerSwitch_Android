@@ -45,22 +45,14 @@
 
         <Button
             android:id="@+id/button_AllOn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="4dp"
-            android:height="54dp"
-            android:background="@drawable/button_shape_selector"
+            style="@style/room_on_off_buttons"
+            android:layout_height="54dp"
             android:text="@string/on"/>
 
         <Button
             android:id="@+id/button_AllOff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="4dp"
+            style="@style/room_on_off_buttons"
             android:height="54dp"
-            android:background="@drawable/button_shape_selector"
             android:text="@string/off"/>
 
     </LinearLayout>

@@ -19,20 +19,24 @@
 
 <resources>
 
-    <style name="PowerSwitchTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dark.Blue">
-        <item name="android:windowTranslucentStatus">true</item>
+    <style name="standard_button">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <style name="PowerSwitchTheme.Dark.Red" parent="PowerSwitchThemeBase.Dark.Red">
-        <item name="android:windowTranslucentStatus">true</item>
+    <style name="room_on_off_buttons">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">?attr/button_backgroundDrawable</item>
     </style>
 
-    <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
-    <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red">
-        <item name="android:windowTranslucentStatus">true</item>
+    <style name="scene_activate_button">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:background">?attr/button_backgroundDrawable</item>
     </style>
 
 </resources>

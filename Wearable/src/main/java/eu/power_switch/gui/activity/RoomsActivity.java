@@ -39,6 +39,8 @@ import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 26.08.2015.
@@ -55,6 +57,26 @@ public class RoomsActivity extends WearableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // set Theme before anything else in onCreate
+        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
+        switch (wearablePreferencesHandler.getTheme()) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
+                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+                setTheme(R.style.PowerSwitchWearTheme_Light_Red);
+                break;
+            default:
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                break;
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rooms);
 

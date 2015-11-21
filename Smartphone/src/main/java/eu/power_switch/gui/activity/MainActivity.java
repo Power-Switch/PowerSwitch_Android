@@ -104,18 +104,23 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
         switch (sharedPreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 break;
             case SettingsConstants.THEME_DARK_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
                 setTheme(R.style.PowerSwitchTheme_Dark_Red);
                 break;
             case SettingsConstants.THEME_LIGHT_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Blue);
                 setTheme(R.style.PowerSwitchTheme_Light_Blue);
                 break;
             case SettingsConstants.THEME_LIGHT_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
                 setTheme(R.style.PowerSwitchTheme_Light_Red);
                 break;
             default:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 break;
         }

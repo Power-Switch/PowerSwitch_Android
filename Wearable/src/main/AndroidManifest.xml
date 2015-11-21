@@ -31,8 +31,7 @@
         android:name="eu.power_switch.application.PowerSwitchWear"
         android:allowBackup="true"
         android:icon="@drawable/wearable_ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/PowerSwitchWearTheme">
+        android:label="@string/app_name">
 
         <uses-library
             android:name="com.google.android.wearable"

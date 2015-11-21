@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <!-- Base Dark Theme -->
+    <style name="PowerSwitchWearThemeBase.Dark" parent="android:Theme.DeviceDefault">
+        <!-- material design -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryLight">@color/primary_light</item>
+        <item name="colorAccent">#FF999999</item>
+        <item name="android:windowBackground">@color/black</item>
+
+        <!-- custom views -->
+        <item name="dialog_bottomBar_next_color">@color/textColorPrimary</item>
+        <item name="button_backgroundDrawable">@drawable/button_shape_selector_dark</item>
+        <item name="cardview_backgroundColor">@color/cardview_background</item>
+
+        <!-- text color -->
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+    </style>
+
+    <!-- Base Light Theme -->
+    <style name="PowerSwitchWearThemeBase.Light" parent="android:Theme.DeviceDefault.Light">
+        <!-- material design -->
+        <item name="colorPrimary">@color/primaryInverse</item>
+        <item name="colorPrimaryLight">@color/primary_lightInverse</item>
+        <item name="colorAccent">#FF333333</item>
+        <item name="android:windowBackground">@color/windowBackgroundInverse</item>
+
+        <!-- custom views -->
+        <item name="dialog_bottomBar_next_color">@color/textColorPrimaryInverse</item>
+        <item name="button_backgroundDrawable">@drawable/button_shape_selector_light</item>
+        <item name="cardview_backgroundColor">@color/cardview_backgroundInverse</item>
+
+        <!-- text color -->
+        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+    </style>
+
+    <!-- Base Dark Blue -->
+    <style name="PowerSwitchWearThemeBase.Dark.Blue" parent="PowerSwitchWearThemeBase.Dark">
+        <item name="colorAccent">@color/accent_blue_a700</item>
+        <item name="android:textColorLink">@color/accent_blue_a700</item>
+    </style>
+
+    <!-- Base Dark Red -->
+    <style name="PowerSwitchWearThemeBase.Dark.Red" parent="PowerSwitchWearThemeBase.Dark">
+        <item name="colorAccent">@color/accent_red_a700</item>
+        <item name="android:textColorLink">@color/accent_red_a700</item>
+    </style>
+
+    <!-- Base Light Blue -->
+    <style name="PowerSwitchWearThemeBase.Light.Blue" parent="PowerSwitchWearThemeBase.Light">
+        <item name="colorAccent">@color/accent_blue_a700</item>
+        <item name="android:textColorLink">@color/accent_blue_a700</item>
+    </style>
+
+    <!-- Base Light Red -->
+    <style name="PowerSwitchWearThemeBase.Light.Red" parent="PowerSwitchWearThemeBase.Light">
+        <item name="colorAccent">@color/accent_red_a700</item>
+        <item name="android:textColorLink">@color/accent_red_a700</item>
+    </style>
+
+    <!-- Themes -->
+    <style name="PowerSwitchWearTheme.Dark.Blue" parent="PowerSwitchWearThemeBase.Dark.Blue"/>
+
+    <style name="PowerSwitchWearTheme.Dark.Red" parent="PowerSwitchWearThemeBase.Dark.Red"/>
+
+    <style name="PowerSwitchWearTheme.Light.Blue" parent="PowerSwitchWearThemeBase.Light.Blue"/>
+
+    <style name="PowerSwitchWearTheme.Light.Red" parent="PowerSwitchWearThemeBase.Light.Red"/>
+
+</resources>

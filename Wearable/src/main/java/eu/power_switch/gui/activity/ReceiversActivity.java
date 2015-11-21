@@ -23,6 +23,8 @@ import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
 
 import eu.power_switch.R;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 26.08.2015.
@@ -31,6 +33,26 @@ public class ReceiversActivity extends WearableActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // set Theme before anything else in onCreate
+        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
+        switch (wearablePreferencesHandler.getTheme()) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
+                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+                setTheme(R.style.PowerSwitchWearTheme_Light_Red);
+                break;
+            default:
+                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
+                break;
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receivers);
 

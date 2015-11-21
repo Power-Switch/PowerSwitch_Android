@@ -148,7 +148,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
         holder.linearLayoutTimerActions.removeAllViews();
         for (TimerAction timerAction : timer.getActions()) {
-            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.list_item_timer_action, null, false);
+            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.list_item_timer_action, holder.linearLayoutTimerActions, false);
             TextView textViewAction = (TextView) linearLayout.findViewById(R.id.txt_timer_action);
             textViewAction.setText(timerAction.toString());
             holder.linearLayoutTimerActions.addView(linearLayout);
