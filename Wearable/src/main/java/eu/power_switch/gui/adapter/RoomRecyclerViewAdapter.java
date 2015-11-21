@@ -144,23 +144,17 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.linearLayoutOfReceivers.removeAllViews();
         // add items
         for (final Receiver receiver : room.getReceivers()) {
-            LinearLayout receiverLayout = new LinearLayout(context);
-            receiverLayout.setOrientation(LinearLayout.VERTICAL);
-            receiverLayout.setGravity(Gravity.CENTER);
+            LinearLayout receiverLayout = (LinearLayout) inflater.inflate(R.layout.list_item_receiver, holder
+                    .linearLayoutOfReceivers, false);
             holder.linearLayoutOfReceivers.addView(receiverLayout);
 
             // setup TextView to display device name
-            TextView receiverName = new TextView(context);
+            TextView receiverName = (TextView) receiverLayout.findViewById(R.id.textView_receiver_name);
             receiverName.setText(receiver.getName());
             receiverName.setTextSize(18);
-            receiverLayout.addView(receiverName, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
             // Setup Buttons
-            TableLayout buttonLayout = new TableLayout(context);
-            buttonLayout.setGravity(Gravity.CENTER);
-            receiverLayout.addView(buttonLayout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+            TableLayout buttonLayout = (TableLayout) receiverLayout.findViewById(R.id.buttonLayout);
 
             int buttonsPerRow = 2;
             int i = 0;

@@ -26,7 +26,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -204,22 +203,18 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             // create a new receiverRow for our current receiver and add it to
             // our table of all devices of our current room
             // the row will contain the device name and all buttons
-            LinearLayout receiverRow = new LinearLayout(fragmentActivity);
-            receiverRow.setOrientation(LinearLayout.HORIZONTAL);
-            holder.linearLayoutOfReceivers.addView(receiverRow);
+
+            LinearLayout receiverLayout = (LinearLayout) inflater.inflate(R.layout.list_item_receiver,
+                    holder.linearLayoutOfReceivers, false);
+            receiverLayout.setOrientation(LinearLayout.HORIZONTAL);
+            holder.linearLayoutOfReceivers.addView(receiverLayout);
 
             // setup TextView to display device name
-            TextView receiverName = new TextView(fragmentActivity);
+            TextView receiverName = (TextView) receiverLayout.findViewById(R.id.txt_receiver_name);
             receiverName.setText(receiver.getName());
             receiverName.setTextSize(18);
-            receiverName.setGravity(Gravity.CENTER_VERTICAL);
-            receiverRow.addView(receiverName, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
 
-            TableLayout buttonLayout = new TableLayout(fragmentActivity);
-            receiverRow.addView(buttonLayout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-
+            TableLayout buttonLayout = (TableLayout) receiverLayout.findViewById(R.id.buttonLayout);
             int buttonsPerRow;
             if (receiver.getButtons().size() % 3 == 0) {
                 buttonsPerRow = 3;
@@ -305,7 +300,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 i++;
             }
 
-            receiverRow.setOnLongClickListener(new View.OnLongClickListener() {
+            receiverLayout.setOnLongClickListener(new View.OnLongClickListener() {
 
                 @Override
                 public boolean onLongClick(View v) {
