@@ -183,8 +183,8 @@ public class EditRoomDialog extends DialogFragment implements
                 }
 
                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-                Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)
-                        .show();
+
+                StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.room_saved), Snackbar.LENGTH_LONG);
                 getDialog().dismiss();
             }
         });

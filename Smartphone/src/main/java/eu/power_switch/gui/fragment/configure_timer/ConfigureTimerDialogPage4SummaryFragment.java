@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.IntervalTimer;
@@ -247,6 +249,8 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
         }
 
         TimersFragment.sendTimersChangedBroadcast(getContext());
+        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.timer_saved)
+                , Snackbar.LENGTH_LONG);
     }
 
     @Override

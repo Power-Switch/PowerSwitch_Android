@@ -42,6 +42,7 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.log.Log;
@@ -139,8 +140,7 @@ public class EditGatewayDialog extends DialogFragment {
                                     public void onClick(DialogInterface dialog, int which) {
                                         DatabaseHandler.deleteGateway(gatewayId);
                                         GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-                                        Snackbar.make(getTargetFragment().getView(), R.string.gateway_removed, Snackbar.LENGTH_LONG)
-                                                .show();
+                                        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.gateway_removed), Snackbar.LENGTH_LONG);
 
                                         // close dialog
                                         getDialog().dismiss();
@@ -169,8 +169,7 @@ public class EditGatewayDialog extends DialogFragment {
                                 .toString(),
                         address.getText().toString().trim(), portInt);
                 GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-                Snackbar.make(getTargetFragment().getView(), R.string.gateway_saved, Snackbar.LENGTH_LONG)
-                        .show();
+                StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.gateway_saved), Snackbar.LENGTH_LONG);
                 getDialog().dismiss();
             }
         });

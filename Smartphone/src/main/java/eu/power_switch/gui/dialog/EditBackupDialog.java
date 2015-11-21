@@ -39,6 +39,7 @@ import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.exception.backup.BackupNotFoundException;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.shared.log.Log;
 
@@ -96,8 +97,7 @@ public class EditBackupDialog extends DialogFragment {
                 try {
                     backupHandler.renameBackup(backupName, name.getText().toString());
                     BackupFragment.sendBackupsChangedBroadcast(getActivity());
-                    Snackbar.make(getTargetFragment().getView(), R.string.backup_saved, Snackbar.LENGTH_LONG)
-                            .show();
+                    StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.backup_saved), Snackbar.LENGTH_LONG);
                 } catch (BackupAlreadyExistsException e) {
                     Log.e(e);
                     new AlertDialog.Builder(getActivity())
@@ -114,8 +114,7 @@ public class EditBackupDialog extends DialogFragment {
                 } catch (BackupNotFoundException e) {
                     Log.e(e);
                     e.printStackTrace();
-                    Snackbar.make(getTargetFragment().getView(), R.string.backup_not_found, Snackbar.LENGTH_LONG)
-                            .show();
+                    StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.backup_not_found), Snackbar.LENGTH_LONG);
                 }
             }
         });

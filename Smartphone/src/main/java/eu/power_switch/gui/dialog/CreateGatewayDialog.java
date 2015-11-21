@@ -41,6 +41,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.UnknownGatewayException;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -156,8 +157,7 @@ public class CreateGatewayDialog extends DialogFragment {
 
                 GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
 
-                Snackbar.make(getTargetFragment().getView(), R.string.gateway_created, Snackbar.LENGTH_LONG)
-                        .show();
+                StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.gateway_created), Snackbar.LENGTH_LONG);
                 getDialog().dismiss();
             }
         });

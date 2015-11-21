@@ -27,6 +27,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,7 @@ import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
@@ -146,6 +148,9 @@ public class ConfigureReceiverDialog extends DialogFragment {
 
                                         // update receiver widgets
                                         ConfigureReceiverWidgetActivity.forceWidgetUpdate(getActivity());
+
+                                        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string
+                                                .receiver_deleted), Snackbar.LENGTH_LONG);
 
                                         // close dialog
                                         getDialog().dismiss();

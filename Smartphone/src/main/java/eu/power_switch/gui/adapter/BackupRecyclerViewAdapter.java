@@ -36,11 +36,12 @@ import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Adapter to visualize Backup items in RecyclerView
- *
+ * <p/>
  * Created by Markus on 27.07.2015.
  */
 public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecyclerViewAdapter.ViewHolder> {
@@ -91,13 +92,16 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                             backups.remove(position);
                             notifyItemRemoved(position);
 //                            refreshBackups();
-                            Snackbar.make(rootView, R.string.backup_removed, Snackbar.LENGTH_LONG).show();
+                            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
+                                    .backup_removed), Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
                             Log.e(e);
-                            Snackbar.make(rootView, R.string.backup_not_found, Snackbar.LENGTH_LONG).show();
+                            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
+                                    .backup_not_found), Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             Log.e(e);
-                            Snackbar.make(rootView, R.string.unknown_error, Snackbar.LENGTH_LONG).show();
+                            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
+                                    .unknown_error), Snackbar.LENGTH_LONG);
                         }
                     }
                 }).setNeutralButton(android.R.string.cancel, null).setTitle(context.getString(R.string
