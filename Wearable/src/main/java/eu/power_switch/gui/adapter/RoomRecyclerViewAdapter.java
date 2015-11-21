@@ -85,26 +85,28 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         // Set item views based on the data model
         holder.roomName.setText(room.getName());
 
-        final LinearLayout linearLayoutOfReceivers = holder.linearLayoutOfReceivers;
-        final LinearLayout linearLayout1AllOnOffButtons = holder.linearLayout_AllOnOffButtons;
-        if (rooms.size() > 1) {
-            linearLayoutOfReceivers.setVisibility(View.GONE);
+        if (wearablePreferencesHandler.getAutoCollapseRooms()) {
+            holder.linearLayoutOfReceivers.setVisibility(View.GONE);
+            holder.linearLayout_AllOnOffButtons.setVisibility(View.VISIBLE);
+        } else {
+            holder.linearLayoutOfReceivers.setVisibility(View.VISIBLE);
+            holder.linearLayout_AllOnOffButtons.setVisibility(View.GONE);
         }
+
         holder.roomName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (linearLayoutOfReceivers.getVisibility() == View.VISIBLE) {
-                    linearLayoutOfReceivers.setVisibility(View.GONE);
-                    linearLayout1AllOnOffButtons.setVisibility(View.VISIBLE);
+                if (holder.linearLayoutOfReceivers.getVisibility() == View.VISIBLE) {
+                    holder.linearLayoutOfReceivers.setVisibility(View.GONE);
+                    holder.linearLayout_AllOnOffButtons.setVisibility(View.VISIBLE);
                 } else {
-                    linearLayoutOfReceivers.setVisibility(View.VISIBLE);
-                    linearLayout1AllOnOffButtons.setVisibility(View.GONE);
+                    holder.linearLayoutOfReceivers.setVisibility(View.VISIBLE);
+                    holder.linearLayout_AllOnOffButtons.setVisibility(View.GONE);
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) parentRecyclerView.getLayoutManager();
                     linearLayoutManager.smoothScrollToPosition(parentRecyclerView, new RecyclerView.State(), position);
                 }
             }
         });
-
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -118,7 +120,6 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 String actionString = DataApiHandler.buildRoomActionString(room.getName(), button.getText().toString());
                 dataApiHandler.sendRoomActionTrigger(actionString);
 
-
                 for (Receiver receiver : room.getReceivers()) {
                     for (Button currentButton : receiver.getButtons()) {
                         if (button.getText().equals(currentButton.getName())) {
@@ -130,6 +131,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 if (wearablePreferencesHandler.getHighlightLastActivatedButton()) {
                     // TODO: rerender buttons
+                    notifyDataSetChanged();
                 }
             }
         };
@@ -217,6 +219,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 i++;
             }
         }
+
+        if (position == getItemCount() - 1) {
+            holder.footer.setVisibility(View.VISIBLE);
+        } else {
+            holder.footer.setVisibility(View.GONE);
+        }
     }
 
     // Return the total count of items
@@ -235,6 +243,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         public android.widget.Button buttonAllOn;
         public android.widget.Button buttonAllOff;
         public LinearLayout linearLayoutOfReceivers;
+        public LinearLayout footer;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -245,6 +254,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             this.buttonAllOn = (android.widget.Button) itemView.findViewById(R.id.button_AllOn);
             this.buttonAllOff = (android.widget.Button) itemView.findViewById(R.id.button_AllOff);
             this.linearLayoutOfReceivers = (LinearLayout) itemView.findViewById(R.id.layout_of_receivers);
+            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
         }
     }
 }

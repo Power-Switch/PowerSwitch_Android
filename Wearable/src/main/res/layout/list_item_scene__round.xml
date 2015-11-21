@@ -45,4 +45,6 @@
         android:background="?attr/button_backgroundDrawable"
         android:text="@string/activate"/>
 
+    <include layout="@layout/list_footer"/>
+    
 </LinearLayout>

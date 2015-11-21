@@ -52,7 +52,7 @@
         <Button
             android:id="@+id/button_AllOff"
             style="@style/room_on_off_buttons"
-            android:height="54dp"
+            android:layout_height="54dp"
             android:text="@string/off"/>
 
     </LinearLayout>
@@ -62,5 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
+
+    <include layout="@layout/list_footer"/>
 
 </LinearLayout>

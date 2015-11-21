@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -85,6 +86,12 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 dataApiHandler.sendSceneActionTrigger(actionString);
             }
         });
+
+        if (position == getItemCount() - 1) {
+            holder.footer.setVisibility(View.VISIBLE);
+        } else {
+            holder.footer.setVisibility(View.GONE);
+        }
     }
 
     // Return the total count of items
@@ -100,6 +107,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         // for any view that will be set as you render a row
         public TextView sceneName;
         public android.widget.Button buttonActivate;
+        public LinearLayout footer;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -107,6 +115,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             super(itemView);
             this.sceneName = (TextView) itemView.findViewById(R.id.textView_scene_name);
             this.buttonActivate = (android.widget.Button) itemView.findViewById(R.id.button_Activate);
+            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
         }
     }
 }
