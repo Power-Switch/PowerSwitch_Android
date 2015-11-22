@@ -112,9 +112,11 @@ public class StatusMessageHandler {
     /**
      * Show Snackbar on MainActivity context
      *
-     * @param context  any suitable context
-     * @param message  snackbar message
-     * @param duration duration of snackbar
+     * @param context       any suitable context
+     * @param message       snackbar message
+     * @param actionMessage optional action button message
+     * @param runnable      optional action for action button
+     * @param duration      duration of snackbar
      */
     private static void sendStatusSnackbarBroadcast(Context context, String message, String actionMessage,
                                                     SerializableRunnable runnable, int duration) {

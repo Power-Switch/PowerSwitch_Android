@@ -30,6 +30,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,7 @@ public class ScenesActivity extends WearableActivity {
     private DataApiHandler dataApiHandler;
 
     private BroadcastReceiver broadcastReceiver;
+    private RelativeLayout relativeLayoutAmbientMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +78,7 @@ public class ScenesActivity extends WearableActivity {
                 setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
                 break;
         }
-        
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scenes);
 
@@ -102,6 +104,8 @@ public class ScenesActivity extends WearableActivity {
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
+
+                relativeLayoutAmbientMode = (RelativeLayout) findViewById(R.id.relativeLayout_ambientMode);
 
                 scenesRecyclerView = (RecyclerView) findViewById(R.id.scenes_recyclerView);
                 sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getApplicationContext(), scenesRecyclerView,
@@ -149,11 +153,13 @@ public class ScenesActivity extends WearableActivity {
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
         scenesRecyclerView.setVisibility(View.INVISIBLE);
+        relativeLayoutAmbientMode.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onExitAmbient() {
         scenesRecyclerView.setVisibility(View.VISIBLE);
+        relativeLayoutAmbientMode.setVisibility(View.GONE);
         super.onExitAmbient();
     }
 

@@ -30,6 +30,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,7 @@ public class RoomsActivity extends WearableActivity {
     private DataApiHandler dataApiHandler;
 
     private BroadcastReceiver broadcastReceiver;
+    private RelativeLayout relativeLayoutAmbientMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +105,8 @@ public class RoomsActivity extends WearableActivity {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
 
+                relativeLayoutAmbientMode = (RelativeLayout) findViewById(R.id.relativeLayout_ambientMode);
+
                 roomsRecyclerView = (RecyclerView) findViewById(R.id.rooms_recyclerView);
                 roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getApplicationContext(), roomsRecyclerView,
                         roomList, dataApiHandler);
@@ -148,11 +152,13 @@ public class RoomsActivity extends WearableActivity {
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
         roomsRecyclerView.setVisibility(View.INVISIBLE);
+        relativeLayoutAmbientMode.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onExitAmbient() {
         roomsRecyclerView.setVisibility(View.VISIBLE);
+        relativeLayoutAmbientMode.setVisibility(View.GONE);
         super.onExitAmbient();
     }
 
