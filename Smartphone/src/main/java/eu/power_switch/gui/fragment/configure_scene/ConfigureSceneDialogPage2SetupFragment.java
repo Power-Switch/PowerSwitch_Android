@@ -287,7 +287,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
                 }
                 final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
                 for (Button button : receiver.getButtons()) {
-                    android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button, null, false);
+                    android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, null, false);
                     buttonList.add(buttonView);
 
                     if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId() == button.getId()) {

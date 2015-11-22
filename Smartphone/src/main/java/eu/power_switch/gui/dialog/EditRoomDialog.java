@@ -61,8 +61,7 @@ import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
 /**
  * Dialog to edit a Room
  */
-public class EditRoomDialog extends DialogFragment implements
-        OnStartDragListener {
+public class EditRoomDialog extends DialogFragment implements OnStartDragListener {
 
     private View rootView;
     private String originalName;

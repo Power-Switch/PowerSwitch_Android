@@ -230,7 +230,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             long lastActivatedButtonId = receiver.getLastActivatedButtonId();
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
-                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button,
+                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button,
                         buttonRow, false);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);

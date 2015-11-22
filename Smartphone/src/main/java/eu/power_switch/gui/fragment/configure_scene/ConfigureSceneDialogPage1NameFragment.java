@@ -117,6 +117,9 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
     }
 
     private void addReceiversToLayout() {
+        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+
         for (Room room : DatabaseHandler.getAllRooms()) {
             LinearLayout roomLayout = new LinearLayout(getActivity());
             roomLayout.setOrientation(LinearLayout.VERTICAL);
@@ -131,7 +134,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
                 receiverLayout.setOrientation(LinearLayout.HORIZONTAL);
                 roomLayout.addView(receiverLayout);
 
-                final CheckBox checkBox = new CheckBox(getActivity());
+                final CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.simple_checkbox, receiverLayout, false);
                 checkBox.setTag(R.string.room, room);
                 checkBox.setTag(R.string.receiver, receiver);
                 receiverLayout.addView(checkBox);
@@ -173,7 +176,8 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
             for (CheckBox checkBox : receiverCheckboxList) {
                 Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
                 Room associatedRoom = (Room) checkBox.getTag(R.string.room);
-                if (associatedReceiver.getId() == receiver.getId() && associatedRoom.getId() == receiver.getRoomId()) {
+                if (associatedReceiver.getId().equals(receiver.getId()) && associatedRoom.getId().equals(receiver
+                        .getRoomId())) {
                     checkBox.setChecked(true);
                 }
             }
