@@ -40,6 +40,8 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.SerializableRunnable;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
@@ -125,20 +127,21 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                 if (activeGateways.isEmpty()) {
-                    Snackbar.make(v, R.string.no_active_gateway, Snackbar.LENGTH_LONG).setAction
-                            (R.string.open_settings, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    MainActivity.addToBackstack(SettingsTabFragment.class, "Settings");
-                                    fragmentActivity.getSupportFragmentManager()
-                                            .beginTransaction()
-                                            .setCustomAnimations(R.anim
-                                                    .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                                    .slide_in_left, android.R.anim.slide_out_right)
-                                            .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
-                                            .addToBackStack(null).commit();
-                                }
-                            }).show();
+                    StatusMessageHandler.showStatusMessage(fragmentActivity, R
+                            .string.no_active_gateway, R.string.open_settings, new SerializableRunnable() {
+                        @Override
+                        public void run() {
+                            MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
+                                    .getString(R.string.menu_settings));
+                            fragmentActivity.getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setCustomAnimations(R.anim
+                                            .slide_in_right, R.anim.slide_out_left, android.R.anim
+                                            .slide_in_left, android.R.anim.slide_out_right)
+                                    .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                    .addToBackStack(null).commit();
+                        }
+                    }, Snackbar.LENGTH_LONG);
                     return;
                 }
 
@@ -246,20 +249,21 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         }
                         List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                         if (activeGateways.isEmpty()) {
-                            Snackbar.make(v, R.string.no_active_gateway, Snackbar.LENGTH_LONG).setAction
-                                    (R.string.open_settings, new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            MainActivity.addToBackstack(SettingsTabFragment.class, "Settings");
-                                            fragmentActivity.getSupportFragmentManager()
-                                                    .beginTransaction()
-                                                    .setCustomAnimations(R.anim
-                                                            .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                                            .slide_in_left, android.R.anim.slide_out_right)
-                                                    .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
-                                                    .addToBackStack(null).commit();
-                                        }
-                                    }).show();
+                            StatusMessageHandler.showStatusMessage(fragmentActivity, R
+                                    .string.no_active_gateway, R.string.open_settings, new SerializableRunnable() {
+                                @Override
+                                public void run() {
+                                    MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
+                                            .getString(R.string.menu_settings));
+                                    fragmentActivity.getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .setCustomAnimations(R.anim
+                                                    .slide_in_right, R.anim.slide_out_left, android.R.anim
+                                                    .slide_in_left, android.R.anim.slide_out_right)
+                                            .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                            .addToBackStack(null).commit();
+                                }
+                            }, Snackbar.LENGTH_LONG);
                             return;
                         }
 

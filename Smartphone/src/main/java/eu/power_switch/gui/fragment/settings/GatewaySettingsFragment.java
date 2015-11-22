@@ -44,6 +44,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.CreateGatewayDialog;
@@ -152,8 +153,7 @@ public class GatewaySettingsFragment extends Fragment {
 
     private void startAutoDiscovery() {
         if (!NetworkHandler.isWifiAvailable(getActivity())) {
-            Snackbar.make(rootView, getString(R.string.missing_wifi_connection), Snackbar.LENGTH_LONG)
-                    .show();
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -174,15 +174,13 @@ public class GatewaySettingsFragment extends Fragment {
                     });
 
                     if (foundGateways == null || foundGateways.isEmpty()) {
-                        Snackbar.make(rootView, getString(R.string.no_gateway_found), Snackbar.LENGTH_LONG)
-                                .show();
+                        StatusMessageHandler.showStatusMessage(getContext(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                         return;
                     }
 
                     for (Gateway newGateway : foundGateways) {
                         if (newGateway == null) {
-                            Snackbar.make(rootView, getString(R.string.cant_understand_gateway), Snackbar.LENGTH_LONG)
-                                    .show();
+                            StatusMessageHandler.showStatusMessage(getContext(), R.string.cant_understand_gateway, Snackbar.LENGTH_LONG);
                             continue;
                         }
                         // save new Gateway if it doesn't exist already
@@ -190,8 +188,7 @@ public class GatewaySettingsFragment extends Fragment {
                         alreadyInDatabase = isGatewayAlreadyInDatabase(newGateway);
 
                         if (alreadyInDatabase) {
-                            Snackbar.make(rootView, getString(R.string.gateway_already_exists_it_has_been_enabled), Snackbar.LENGTH_LONG)
-                                    .show();
+                            StatusMessageHandler.showStatusMessage(getContext(), R.string.gateway_already_exists_it_has_been_enabled, Snackbar.LENGTH_LONG);
                         } else {
                             // TODO: Exceptions richtig abfangen und verwenden
                             try {
@@ -234,7 +231,7 @@ public class GatewaySettingsFragment extends Fragment {
         DatabaseHandler.addGateway(newGateway);
         gateways.add(newGateway);
         gatewayRecyclerViewAdapter.notifyDataSetChanged();
-        Snackbar.make(rootView, getString(R.string.gateway_found), Snackbar.LENGTH_LONG).show();
+        StatusMessageHandler.showStatusMessage(getContext(), R.string.gateway_found, Snackbar.LENGTH_LONG);
     }
 
     private void refreshGateways() {

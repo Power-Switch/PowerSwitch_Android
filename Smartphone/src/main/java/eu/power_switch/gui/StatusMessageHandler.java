@@ -42,15 +42,70 @@ public class StatusMessageHandler {
      * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
      * it is running in the foreground
      *
+     * @param context       any suitable context
+     * @param message       status message
+     * @param actionMessage message of action button
+     * @param runnable      code that should be executed when activating the action button
+     * @param duration      duration
+     */
+    public static void showStatusMessage(Context context, String message, String actionMessage, SerializableRunnable
+            runnable, int duration) {
+        if (MainActivity.isInForeground()) {
+            sendStatusSnackbarBroadcast(context, message, actionMessage, runnable, duration);
+        } else {
+            showStatusToast(context, message, duration);
+        }
+    }
+
+    /**
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground
+     *
+     * @param context                 any suitable context
+     * @param messageResourceId       status message resource id
+     * @param actionMessageResourceId message resource id of action button
+     * @param runnable                code that should be executed when activating the action button
+     * @param duration                duration
+     */
+    public static void showStatusMessage(Context context, int messageResourceId, int actionMessageResourceId,
+                                         SerializableRunnable runnable, int duration) {
+        if (MainActivity.isInForeground()) {
+            sendStatusSnackbarBroadcast(context, context.getString(messageResourceId), context.getString(actionMessageResourceId), runnable,
+                    duration);
+        } else {
+            showStatusToast(context, context.getString(messageResourceId), duration);
+        }
+    }
+
+    /**
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground
+     *
      * @param context  any suitable context
      * @param message  status message
      * @param duration duration
      */
     public static void showStatusMessage(Context context, String message, int duration) {
         if (MainActivity.isInForeground()) {
-            sendStatusSnackbarBroadcast(context, message, duration);
+            sendStatusSnackbarBroadcast(context, message, null, null, duration);
         } else {
             showStatusToast(context, message, duration);
+        }
+    }
+
+    /**
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground
+     *
+     * @param context           any suitable context
+     * @param messageResourceId status message resource id
+     * @param duration          duration
+     */
+    public static void showStatusMessage(Context context, int messageResourceId, int duration) {
+        if (MainActivity.isInForeground()) {
+            sendStatusSnackbarBroadcast(context, context.getString(messageResourceId), null, null, duration);
+        } else {
+            showStatusToast(context, context.getString(messageResourceId), duration);
         }
     }
 
@@ -61,11 +116,16 @@ public class StatusMessageHandler {
      * @param message  snackbar message
      * @param duration duration of snackbar
      */
-    private static void sendStatusSnackbarBroadcast(Context context, String message, int duration) {
+    private static void sendStatusSnackbarBroadcast(Context context, String message, String actionMessage,
+                                                    SerializableRunnable runnable, int duration) {
         Log.d("Status Snackbar: " + message);
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
         intent.putExtra("message", message);
         intent.putExtra("duration", duration);
+        if (actionMessage != null && runnable != null) {
+            intent.putExtra("actionMessage", actionMessage);
+            intent.putExtra("runnable", runnable);
+        }
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

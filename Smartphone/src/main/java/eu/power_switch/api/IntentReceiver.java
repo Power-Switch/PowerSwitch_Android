@@ -191,25 +191,6 @@ public class IntentReceiver extends BroadcastReceiver {
         try {
             Bundle extras = intent.getExtras();
             if (extras != null) {
-
-//                if (DatabaseHandler.getAllGateways(true).isEmpty()) {
-//                    Snackbar.make(v, R.string.no_active_gateway, Snackbar.LENGTH_LONG).setAction
-//                            (R.string.open_settings, new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    MainActivity.addToBackstack(SettingsTabFragment.class, "Settings");
-//                                    fragmentActivity.getSupportFragmentManager()
-//                                            .beginTransaction()
-//                                            .setCustomAnimations(R.anim
-//                                                    .slide_in_right, R.anim.slide_out_left, android.R.anim
-//                                                    .slide_in_left, android.R.anim.slide_out_right)
-//                                            .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
-//                                            .addToBackStack(null).commit();
-//                                }
-//                            }).show();
-//                    return;
-//                }
-
                 NetworkHandler nwm = new NetworkHandler(context);
 
                 if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {

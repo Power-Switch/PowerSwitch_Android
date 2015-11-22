@@ -48,6 +48,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
+import eu.power_switch.gui.SerializableRunnable;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AboutDialog;
 import eu.power_switch.gui.dialog.DonationDialog;
@@ -139,14 +140,28 @@ public class MainActivity extends AppCompatActivity {
 
                 if (LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR.equals(intent.getAction())) {
                     //noinspection ResourceType
-                    final Snackbar snackbar = Snackbar.make(navigationView, intent.getStringExtra("message"), intent
-                            .getIntExtra("duration", Snackbar.LENGTH_LONG));
-                    snackbar.setAction(getString(R.string.dismiss), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            snackbar.dismiss();
-                        }
-                    });
+                    final Snackbar snackbar = Snackbar.make(navigationView,
+                            intent.getStringExtra("message"),
+                            intent.getIntExtra("duration", Snackbar.LENGTH_LONG));
+
+                    if (intent.hasExtra("actionMessage") && intent.hasExtra("runnable")) {
+                        final SerializableRunnable runnable = (SerializableRunnable) intent.getSerializableExtra("runnable");
+                        snackbar.setAction(intent.getStringExtra("actionMessage"), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        runnable.run();
+                                    }
+                                }
+                        );
+                    } else {
+                        snackbar.setAction(getString(R.string.dismiss), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                snackbar.dismiss();
+                            }
+                        });
+                    }
+
                     snackbar.show();
                 }
             }
@@ -204,9 +219,8 @@ public class MainActivity extends AppCompatActivity {
                     List<Gateway> foundGateways = nwm.searchGateways();
 
                     if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways().isEmpty()) {
-                        Snackbar.make(navigationView, getResources().getString(R.string.no_gateway_found), Snackbar
-                                .LENGTH_LONG)
-                                .show();
+                        StatusMessageHandler.showStatusMessage(context, getString(R.string.no_gateway_found), Snackbar
+                                .LENGTH_LONG);
                     } else {
                         for (Gateway gateway : foundGateways) {
                             if (gateway == null) {
@@ -214,20 +228,18 @@ public class MainActivity extends AppCompatActivity {
                             }
                             try {
                                 DatabaseHandler.addGateway(gateway);
-                                Snackbar.make(navigationView, getResources().getString(R.string.gateway_found), Snackbar
-                                        .LENGTH_LONG)
-                                        .show();
+                                StatusMessageHandler.showStatusMessage(context, getString(R.string.gateway_found), Snackbar
+                                        .LENGTH_LONG);
                             } catch (GatewayAlreadyExistsException e) {
                                 Log.e(e);
                             } catch (GatewayHasBeenEnabledException e) {
                                 Log.e(e);
-                                Snackbar.make(navigationView, getResources().getString(R.string.gateway_already_exists_it_has_been_enabled), Snackbar.LENGTH_LONG)
-                                        .show();
+                                StatusMessageHandler.showStatusMessage(context, getString(R.string.gateway_already_exists_it_has_been_enabled), Snackbar
+                                        .LENGTH_LONG);
                             } catch (Exception e) {
                                 Log.e(e);
-                                Snackbar.make(navigationView, getResources().getString(R.string.unknown_error), Snackbar
-                                        .LENGTH_LONG)
-                                        .show();
+                                StatusMessageHandler.showStatusMessage(context, getString(R.string.unknown_error), Snackbar
+                                        .LENGTH_LONG);
                             }
                         }
                     }

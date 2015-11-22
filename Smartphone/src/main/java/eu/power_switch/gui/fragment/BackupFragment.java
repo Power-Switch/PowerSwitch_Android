@@ -55,6 +55,8 @@ import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.exception.backup.RestoreBackupException;
+import eu.power_switch.gui.SerializableRunnable;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
@@ -128,13 +130,13 @@ public class BackupFragment extends Fragment {
                             android.os.Process.killProcess(android.os.Process.myPid());
                         } catch (BackupNotFoundException e) {
                             Log.e(e);
-                            Snackbar.make(rootView, R.string.backup_not_found, Snackbar.LENGTH_LONG).show();
+                            StatusMessageHandler.showStatusMessage(getContext(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
                         } catch (RestoreBackupException e) {
                             Log.e(e);
-                            Snackbar.make(rootView, R.string.unknown_error, Snackbar.LENGTH_LONG).show();
+                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             Log.e(e);
-                            Snackbar.make(rootView, R.string.unknown_error, Snackbar.LENGTH_LONG).show();
+                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, Snackbar.LENGTH_LONG);
                         }
                     }
                 }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
@@ -230,16 +232,15 @@ public class BackupFragment extends Fragment {
             // and the user would benefit from additional context for the use of the permission.
             // For example if the user has previously denied the permission.
             Log.d("Displaying storage permission rationale to provide additional context.");
-            Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar
-                    .LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
+
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.missing_external_storage_permission,
+                    android.R.string.ok, new SerializableRunnable() {
                         @Override
-                        public void onClick(View view) {
+                        public void run() {
                             ActivityCompat.requestPermissions(getActivity(), new String[]{
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSIONS);
                         }
-                    })
-                    .show();
+                    }, Snackbar.LENGTH_INDEFINITE);
         } else {
             Log.d("Displaying default storage permission dialog to request permission");
             ActivityCompat.requestPermissions(getActivity(), new String[]{
