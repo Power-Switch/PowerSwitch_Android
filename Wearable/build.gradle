@@ -20,13 +20,6 @@ apply plugin: 'com.android.application'
 
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'PowerSwitch'
-            storeFile file('/keystore')
-        }
-    }
-
     buildToolsVersion "23.0.2"
     compileSdkVersion 23
 
@@ -49,7 +42,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
     }
 }
