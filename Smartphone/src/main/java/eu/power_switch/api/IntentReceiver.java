@@ -145,49 +145,11 @@ public class IntentReceiver extends BroadcastReceiver {
         return intent;
     }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        try {
-            String log = "onReceive: Action: ";
-            log += intent.getAction();
-            Bundle extras = intent.getExtras();
-            log += "{ ";
-            if (extras != null) {
-                for (String extra : extras.keySet()) {
-                    log += extra + "[" + extras.get(extra) + "], ";
-                }
-            }
-            log += " }";
-            Log.d(this, log);
-        } catch (Exception e) {
-            Log.e(e);
-        }
-
-        try {
-            DatabaseHandler.init(context);
-
-            if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
-                Log.d("IntentReceiver", "appwidget update");
-            } else if (intent.getAction().equals(ApiConstants.UNIVERSAL_ACTION_INTENT)) {
-                parseActionIntent(context, intent);
-            } else if (intent.getAction().equals(intent_switch_on)
-                    || intent.getAction().equals(intent_switch_off)
-                    || intent.getAction().equals(intent_room_on)
-                    || intent.getAction().equals(intent_room_off)) {
-                parseActionIntentOld(context, intent);
-            } else {
-                Log.d("Received unknown intent: " + intent.getAction());
-            }
-        } catch (Exception e) {
-            Log.e(e);
-        }
-    }
-
     /**
      * @param context
      * @param intent
      */
-    private void parseActionIntent(Context context, Intent intent) {
+    public static void parseActionIntent(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
             if (extras != null) {
@@ -250,7 +212,7 @@ public class IntentReceiver extends BroadcastReceiver {
                     }
 
                     if (networkPackages.size() <= 0) {
-                        Log.d("No Receiver in this Room supports this action!");
+                        Log.d(context.getString(R.string.no_receiver_supports_this_action));
                         Toast.makeText(context, context.getString(R.string.no_receiver_supports_this_action), Toast
                                 .LENGTH_LONG).show();
                     } else {
@@ -289,6 +251,44 @@ public class IntentReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);
             Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        try {
+            String log = "onReceive: Action: ";
+            log += intent.getAction();
+            Bundle extras = intent.getExtras();
+            log += "{ ";
+            if (extras != null) {
+                for (String extra : extras.keySet()) {
+                    log += extra + "[" + extras.get(extra) + "], ";
+                }
+            }
+            log += " }";
+            Log.d(this, log);
+        } catch (Exception e) {
+            Log.e(e);
+        }
+
+        try {
+            DatabaseHandler.init(context);
+
+            if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
+                Log.d("IntentReceiver", "appwidget update");
+            } else if (intent.getAction().equals(ApiConstants.UNIVERSAL_ACTION_INTENT)) {
+                parseActionIntent(context, intent);
+            } else if (intent.getAction().equals(intent_switch_on)
+                    || intent.getAction().equals(intent_switch_off)
+                    || intent.getAction().equals(intent_room_on)
+                    || intent.getAction().equals(intent_room_off)) {
+                parseActionIntentOld(context, intent);
+            } else {
+                Log.d("Received unknown intent: " + intent.getAction());
+            }
+        } catch (Exception e) {
+            Log.e(e);
         }
     }
 

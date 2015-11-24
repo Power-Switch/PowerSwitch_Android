@@ -73,7 +73,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Generates a unique PendingIntent for actions on receiver widgets
+     * Generates a unique PendingIntent for actions on room widgets
      *
      * @param context           any suitable context
      * @param room              Room
@@ -96,6 +96,14 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
         return intent;
     }
 
+    /**
+     * Generates a unique PendingIntent for actions on scene widgets
+     *
+     * @param context           any suitable context
+     * @param scene             Scene
+     * @param uniqueRequestCode unique identifier for different combinations of rooms, receivers and buttons
+     * @return PendingIntent
+     */
     public static PendingIntent buildSceneWidgetPendingIntent(Context context, Scene scene, int
             uniqueRequestCode) {
         return PendingIntent.getBroadcast(context, uniqueRequestCode, createSceneIntent(scene.getName()), PendingIntent
@@ -148,26 +156,24 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
     private void parseWidgetActionIntent(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
-            if (extras != null) {
-                if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {
-                    String roomName = extras.getString(KEY_ROOM);
-                    String receiverName = extras.getString(KEY_RECEIVER);
-                    String buttonName = extras.getString(KEY_BUTTON);
+            if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {
+                String roomName = extras.getString(KEY_ROOM);
+                String receiverName = extras.getString(KEY_RECEIVER);
+                String buttonName = extras.getString(KEY_BUTTON);
 
-                    IntentReceiver.buildReceiverButtonPendingIntent(context, roomName, receiverName,
-                            buttonName, 0).send();
-                } else if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_BUTTON)) {
-                    String roomName = extras.getString(KEY_ROOM);
-                    String buttonName = extras.getString(KEY_BUTTON);
+                IntentReceiver.parseActionIntent(context,
+                        IntentReceiver.createReceiverButtonIntent(roomName, receiverName, buttonName));
+            } else if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_BUTTON)) {
+                String roomName = extras.getString(KEY_ROOM);
+                String buttonName = extras.getString(KEY_BUTTON);
 
-                    IntentReceiver.buildRoomButtonPendingIntent(context, roomName, buttonName, 0).send();
-                } else if (extras.containsKey(KEY_SCENE)) {
-                    String sceneName = extras.getString(KEY_SCENE);
+                IntentReceiver.parseActionIntent(context,
+                        IntentReceiver.createRoomButtonIntent(roomName, buttonName));
+            } else if (extras.containsKey(KEY_SCENE)) {
+                String sceneName = extras.getString(KEY_SCENE);
 
-                    IntentReceiver.buildSceneButtonPendingIntent(context, sceneName, 0).send();
-                }
-            } else {
-                throw new NullPointerException();
+                IntentReceiver.parseActionIntent(context,
+                        IntentReceiver.createSceneIntent(sceneName));
             }
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);

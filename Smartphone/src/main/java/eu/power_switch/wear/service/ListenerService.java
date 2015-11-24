@@ -18,13 +18,14 @@
 
 package eu.power_switch.wear.service;
 
-import android.app.PendingIntent;
-import android.widget.Toast;
+import android.support.design.widget.Snackbar;
 
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+import eu.power_switch.R;
 import eu.power_switch.api.IntentReceiver;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -49,19 +50,7 @@ public class ListenerService extends WearableListenerService {
             Log.d("Wear_ListenerService", "Message received: " + messageData);
 
             // trigger api intent
-            try {
-                PendingIntent pendingIntent = createApiPendingIntent(messageData);
-                if (pendingIntent != null) {
-                    pendingIntent.send();
-                    Log.d("Pending intent send");
-                } else {
-                    Log.e("Error parsing wearable message\n\n" + messageData);
-                    Toast.makeText(getApplicationContext(), "Error parsing wearable message\n\n" + messageData, Toast.LENGTH_LONG)
-                            .show();
-                }
-            } catch (PendingIntent.CanceledException e) {
-                Log.e("Pending intent canceled", e);
-            }
+            parseMessage(messageData);
         } else if (messageEvent.getPath().equals(WearableConstants.REQUEST_DATA_UPDATE_PATH)) {
             UtilityService.forceWearDataUpdate(this);
         } else if (messageEvent.getPath().equals(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH)) {
@@ -70,12 +59,12 @@ public class ListenerService extends WearableListenerService {
     }
 
     /**
-     * Create PendingIntent to trigger Api IntentReceiver
+     * Parse message string
      *
      * @param messageData
      * @return
      */
-    private PendingIntent createApiPendingIntent(String messageData) {
+    private void parseMessage(String messageData) {
         try {
             String roomName;
             String receiverName;
@@ -92,8 +81,8 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonName = messageData.substring(start, stop);
 
-                PendingIntent pendingIntent = IntentReceiver.buildReceiverButtonPendingIntent(getApplicationContext(), roomName, receiverName, buttonName, 0);
-                return pendingIntent;
+                IntentReceiver.parseActionIntent(getApplicationContext(),
+                        IntentReceiver.createReceiverButtonIntent(roomName, receiverName, buttonName));
             } else if (messageData.contains("RoomName") && messageData.contains("ButtonName")) {
                 int start = messageData.indexOf("RoomName:") + 9;
                 int stop = messageData.indexOf("ButtonName:");
@@ -102,20 +91,20 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonName = messageData.substring(start, stop);
 
-                PendingIntent pendingIntent = IntentReceiver.buildRoomButtonPendingIntent(getApplicationContext(), roomName, buttonName, 0);
-                return pendingIntent;
+                IntentReceiver.parseActionIntent(getApplicationContext(),
+                        IntentReceiver.createRoomButtonIntent(roomName, buttonName));
             } else if (messageData.contains("SceneName")) {
                 int start = messageData.indexOf("SceneName:") + 10;
                 int stop = messageData.indexOf(";;");
                 String sceneName = messageData.substring(start, stop);
 
-                PendingIntent pendingIntent = IntentReceiver.buildSceneButtonPendingIntent(getApplicationContext(), sceneName, 0);
-                return pendingIntent;
+                IntentReceiver.parseActionIntent(getApplicationContext(),
+                        IntentReceiver.createSceneIntent(sceneName));
             }
         } catch (Exception e) {
-            Log.e("createApiPendingIntent", e);
+            Log.e("parseMessage", e);
+            StatusMessageHandler.showStatusMessage(getApplicationContext(), R.string.error_executing_wear_action,
+                    Snackbar.LENGTH_LONG);
         }
-
-        return null;
     }
 }

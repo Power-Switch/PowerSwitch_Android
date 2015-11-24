@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.adapter;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -50,7 +49,6 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
-import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Scene items in RecyclerView
@@ -141,13 +139,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     return;
                 }
 
-                try {
-                    IntentReceiver.buildSceneButtonPendingIntent(fragmentActivity,
-                            scene.getName(), 0).send();
-                } catch (PendingIntent.CanceledException e) {
-                    e.printStackTrace();
-                    Log.e(e);
-                }
+                IntentReceiver.parseActionIntent(fragmentActivity, IntentReceiver
+                        .createSceneIntent(scene.getName()));
             }
         });
 

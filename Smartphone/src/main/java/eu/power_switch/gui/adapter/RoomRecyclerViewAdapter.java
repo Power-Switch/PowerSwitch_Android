@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.adapter;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -52,7 +51,6 @@ import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
-import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Room items (containing Receivers) in RecyclerView
@@ -148,15 +146,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 android.widget.Button buttonView = (android.widget.Button) v;
                 String buttonName = buttonView.getText().toString();
 
-                try {
-                    // send signal
-                    IntentReceiver.buildRoomButtonPendingIntent(fragmentActivity,
-                            room.getName(), buttonName, 0).send();
-
-                } catch (PendingIntent.CanceledException e) {
-                    e.printStackTrace();
-                    Log.e(e);
-                }
+                // send signal
+                IntentReceiver.parseActionIntent(fragmentActivity,
+                        IntentReceiver.createRoomButtonIntent(room.getName(), buttonName));
 
                 // update list item
                 for (Receiver receiver : room.getReceivers()) {
@@ -267,13 +259,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                             return;
                         }
 
-                        try {
-                            IntentReceiver.buildReceiverButtonPendingIntent(fragmentActivity,
-                                    room.getName(), receiver.getName(), button.getName(), 0).send();
-                        } catch (PendingIntent.CanceledException e) {
-                            e.printStackTrace();
-                            Log.e(e);
-                        }
+                        // send signal
+                        IntentReceiver.parseActionIntent(fragmentActivity, IntentReceiver
+                                .createReceiverButtonIntent(room.getName(), receiver.getName(), button.getName()));
 
                         // update list item
                         receiver.setLastActivatedButtonId(button.getId());

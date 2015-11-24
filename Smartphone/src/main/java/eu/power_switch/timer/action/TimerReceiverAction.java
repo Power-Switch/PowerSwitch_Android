@@ -18,14 +18,12 @@
 
 package eu.power_switch.timer.action;
 
-import android.app.PendingIntent;
 import android.content.Context;
 
 import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.shared.log.Log;
 
 /**
  * TimerReceiverAction that holds a specific room/receiver/button combination to activate on execution
@@ -69,16 +67,7 @@ public class TimerReceiverAction extends TimerAction {
 
     @Override
     public void execute(Context context) {
-        try {
-            PendingIntent pendingIntent = IntentReceiver.buildReceiverButtonPendingIntent
-                    (context, room.getName(), receiver.getName(), button.getName(), 0);
-
-            if (pendingIntent != null) {
-                pendingIntent.send();
-                Log.d("Pending intent send");
-            }
-        } catch (PendingIntent.CanceledException e) {
-            Log.e("Pending intent canceled", e);
-        }
+        IntentReceiver.parseActionIntent(context,
+                IntentReceiver.createReceiverButtonIntent(room.getName(), receiver.getName(), button.getName()));
     }
 }

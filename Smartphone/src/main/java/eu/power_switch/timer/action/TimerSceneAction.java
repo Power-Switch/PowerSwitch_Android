@@ -18,12 +18,10 @@
 
 package eu.power_switch.timer.action;
 
-import android.app.PendingIntent;
 import android.content.Context;
 
 import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.log.Log;
 
 /**
  * TimerSceneAction that holds a specific scene to activate on execution
@@ -55,16 +53,8 @@ public class TimerSceneAction extends TimerAction {
 
     @Override
     public void execute(Context context) {
-        try {
-            PendingIntent pendingIntent = IntentReceiver.buildSceneButtonPendingIntent(context, scene.getName(), 0);
-
-            if (pendingIntent != null) {
-                pendingIntent.send();
-                Log.d("Pending intent send");
-            }
-        } catch (PendingIntent.CanceledException e) {
-            Log.e("Pending intent canceled", e);
-        }
+        IntentReceiver.parseActionIntent(context,
+                IntentReceiver.createSceneIntent(scene.getName()));
     }
 
 

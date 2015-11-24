@@ -57,7 +57,11 @@ public class NetworkHandler {
         }
 
         if (networkPackageQueueHandler.getStatus() != AsyncTask.Status.RUNNING) {
-            networkPackageQueueHandler.execute();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                networkPackageQueueHandler.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else {
+                networkPackageQueueHandler.execute();
+            }
         }
     }
 
@@ -67,12 +71,11 @@ public class NetworkHandler {
      * @return false if WLAN is not available
      */
     public static boolean isWifiAvailable(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isWifiAvailable = (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo
-                .isConnected());
+        boolean isWifiAvailable = (networkInfo != null &&
+                ConnectivityManager.TYPE_WIFI == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
         Log.d("isWifiAvailable: " + isWifiAvailable);
         return isWifiAvailable;
     }
@@ -83,13 +86,11 @@ public class NetworkHandler {
      * @return false if GPRS is not available
      */
     public static boolean isGprsAvailable(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         boolean isGprsAvailable = (networkInfo != null &&
-                networkInfo.getType() == ConnectivityManager.TYPE_MOBILE &&
-                networkInfo.isConnected());
+                ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
         Log.d("isGprsAvailable: " + isGprsAvailable);
         return isGprsAvailable;
     }
@@ -261,8 +262,8 @@ public class NetworkHandler {
         synchronized (networkPackagesQueue) {
             networkPackagesQueue.addAll(networkPackages);
         }
+        // notify worker thread to handle new packages
         synchronized (NetworkPackageQueueHandler.lock) {
-            // notify worker thread to handle new packages
             NetworkPackageQueueHandler.lock.notify();
         }
     }
