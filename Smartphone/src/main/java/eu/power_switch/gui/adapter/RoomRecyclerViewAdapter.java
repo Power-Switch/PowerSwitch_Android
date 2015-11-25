@@ -44,6 +44,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
@@ -61,12 +62,15 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
     // Store a member variable for the users
+    private RecyclerViewFragment recyclerViewFragment;
     private ArrayList<Room> rooms;
     private FragmentActivity fragmentActivity;
     private SharedPreferencesHandler sharedPreferencesHandler;
 
     // Pass in the context and users array into the constructor
-    public RoomRecyclerViewAdapter(FragmentActivity fragmentActivity, ArrayList<Room> rooms) {
+    public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity,
+                                   ArrayList<Room> rooms) {
+        this.recyclerViewFragment = recyclerViewFragment;
         this.rooms = rooms;
         this.fragmentActivity = fragmentActivity;
         this.sharedPreferencesHandler = new SharedPreferencesHandler(fragmentActivity);
@@ -109,7 +113,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 roomData.putLong("id", room.getId());
                 roomData.putString("name", room.getName());
                 editRoomDialog.setArguments(roomData);
-                editRoomDialog.setTargetFragment(fragmentActivity.getSupportFragmentManager().getFragments().get(0), 0);
+                editRoomDialog.setTargetFragment(recyclerViewFragment, 0);
                 editRoomDialog.show(fragmentActivity.getSupportFragmentManager(), null);
                 return false;
             }
@@ -125,7 +129,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                 if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showStatusMessage(fragmentActivity, R
+                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R
                             .string.no_active_gateway, R.string.open_settings, new SerializableRunnable() {
                         @Override
                         public void run() {
@@ -241,7 +245,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         }
                         List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                         if (activeGateways.isEmpty()) {
-                            StatusMessageHandler.showStatusMessage(fragmentActivity, R
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R
                                     .string.no_active_gateway, R.string.open_settings, new SerializableRunnable() {
                                 @Override
                                 public void run() {
@@ -300,6 +304,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     Bundle bundle = new Bundle();
                     bundle.putLong("ReceiverId", receiver.getId());
                     configureReceiverDialog.setArguments(bundle);
+                    configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureReceiverDialog.show(fragmentActivity.getSupportFragmentManager(), null);
                     return false;
                 }

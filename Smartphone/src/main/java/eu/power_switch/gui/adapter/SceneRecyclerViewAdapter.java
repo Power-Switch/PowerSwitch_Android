@@ -42,6 +42,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.SerializableRunnable;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Scene;
@@ -56,6 +57,7 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
  * Created by Markus on 27.07.2015.
  */
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
+    private RecyclerViewFragment recyclerViewFragment;
     private ArrayList<Scene> scenes;
     private FragmentActivity fragmentActivity;
     private View rootView;
@@ -63,7 +65,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public SceneRecyclerViewAdapter(FragmentActivity fragmentActivity, View rootView, ArrayList<Scene> scenes) {
+    public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, View
+            rootView, ArrayList<Scene> scenes) {
+        this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
         this.rootView = rootView;
@@ -121,7 +125,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                 if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showStatusMessage(fragmentActivity, R.string.no_active_gateway,
+                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.no_active_gateway,
                             R.string.open_settings, new SerializableRunnable() {
                                 @Override
                                 public void run() {

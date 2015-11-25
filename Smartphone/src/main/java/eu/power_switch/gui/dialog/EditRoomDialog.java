@@ -49,6 +49,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
@@ -151,8 +152,8 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
                                 // update scene widgets
                                 ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
 
-                                StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string
-                                        .room_deleted), Snackbar.LENGTH_LONG);
+                                StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                        R.string.room_deleted, Snackbar.LENGTH_LONG);
 
                                 // close dialog
                                 getDialog().dismiss();
@@ -183,7 +184,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
 
                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());
 
-                StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.room_saved), Snackbar.LENGTH_LONG);
+                StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
                 getDialog().dismiss();
             }
         });

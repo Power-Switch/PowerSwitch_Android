@@ -76,8 +76,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
     private void processQueue() {
         if (NetworkHandler.isWifiAvailable(context) || NetworkHandler.isGprsAvailable(context)) {
 
-            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                    .sending), Snackbar.LENGTH_INDEFINITE);
+            StatusMessageHandler.showStatusMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
             NetworkPackage networkPackage;
             while (NetworkHandler.networkPackagesQueue.size() > 0) {
@@ -108,8 +107,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
 //                        }
 //                    }
                 } catch (UnknownHostException e) {
-                    StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                            .unknown_host), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showStatusMessage(context, R.string.unknown_host, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender", e);
                     try {
                         Thread.sleep(2000);
@@ -118,8 +116,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                         Log.e("UDP Sender", e1);
                     }
                 } catch (Exception e) {
-                    StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                            .unknown_error), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender: Unknown error while sending message in background:", e);
                     try {
                         Thread.sleep(2000);
@@ -136,15 +133,14 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
             }
 
             // queue worked off
-            StatusMessageHandler.showStatusMessage(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
+            StatusMessageHandler.showStatusMessage(context, R.string.sent, Snackbar.LENGTH_SHORT);
         } else {
             synchronized (NetworkHandler.networkPackagesQueue) {
                 // remove all NetworkPackage from queue and abort
                 NetworkHandler.networkPackagesQueue.clear();
             }
 
-            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                    .missing_network_connection), Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showStatusMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
         }
     }
 

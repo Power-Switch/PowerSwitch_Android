@@ -45,6 +45,7 @@ import android.widget.ImageButton;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1TimeFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2DaysFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
@@ -84,11 +85,14 @@ public class ConfigureTimerDialog extends DialogFragment {
         if (args != null && args.containsKey("TimerId")) {
             // init dialog using existing scene
             timerId = args.getLong("TimerId");
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), timerId);
+            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
+                    getTargetFragment(),
+                    timerId);
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager());
+            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
+                    getTargetFragment());
         }
 
         // Set up the tabViewPager, attaching the adapter and setting up a listener
@@ -138,8 +142,8 @@ public class ConfigureTimerDialog extends DialogFragment {
                                         // notify scenes fragment
                                         TimersFragment.sendTimersChangedBroadcast(getActivity());
 
-                                        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.timer_deleted)
-                                                , Snackbar.LENGTH_LONG);
+                                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                                R.string.timer_deleted, Snackbar.LENGTH_LONG);
                                         // close dialog
                                         getDialog().dismiss();
                                     }
@@ -289,17 +293,21 @@ public class ConfigureTimerDialog extends DialogFragment {
         private Context context;
         private long timerId;
         private ConfigureTimerDialogPage4SummaryFragment summaryFragment;
+        private RecyclerViewFragment recyclerViewFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm) {
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
             super(fm);
             this.context = context;
-            timerId = -1;
+            this.timerId = -1;
+            this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long
+                id) {
             super(fm);
             this.context = context;
             this.timerId = id;
+            this.recyclerViewFragment = recyclerViewFragment;
         }
 
         public ConfigureTimerDialogPage4SummaryFragment getSummaryFragment() {
@@ -351,6 +359,7 @@ public class ConfigureTimerDialog extends DialogFragment {
                     ConfigureTimerDialogPage4SummaryFragment configureTimerDialogPage4SummaryFragment = new
                             ConfigureTimerDialogPage4SummaryFragment();
                     configureTimerDialogPage4SummaryFragment.setArguments(bundle);
+                    configureTimerDialogPage4SummaryFragment.setTargetFragment(recyclerViewFragment, 0);
                     summaryFragment = configureTimerDialogPage4SummaryFragment;
 
                     return configureTimerDialogPage4SummaryFragment;

@@ -45,6 +45,7 @@ import android.widget.ImageButton;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
@@ -87,11 +88,13 @@ public class ConfigureReceiverDialog extends DialogFragment {
         if (args != null && args.containsKey("ReceiverId")) {
             // init dialog using existing receiver
             receiverId = args.getLong("ReceiverId");
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), receiverId);
+            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
+                    getTargetFragment(), receiverId);
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager());
+            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
+                    getTargetFragment());
         }
 
         // Set up the tabViewPager, attaching the adapter and setting up a listener
@@ -149,8 +152,8 @@ public class ConfigureReceiverDialog extends DialogFragment {
                                         // update receiver widgets
                                         ConfigureReceiverWidgetActivity.forceWidgetUpdate(getActivity());
 
-                                        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string
-                                                .receiver_deleted), Snackbar.LENGTH_LONG);
+                                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                                R.string.receiver_deleted, Snackbar.LENGTH_LONG);
 
                                         // close dialog
                                         getDialog().dismiss();
@@ -300,17 +303,20 @@ public class ConfigureReceiverDialog extends DialogFragment {
         private Context context;
         private long receiverId;
         private ConfigureReceiverDialogPage4SummaryFragment summaryFragment;
+        private RecyclerViewFragment recyclerViewFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm) {
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
             super(fm);
             this.context = context;
-            receiverId = -1;
+            this.receiverId = -1;
+            this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
             super(fm);
             this.context = context;
             this.receiverId = id;
+            this.recyclerViewFragment = recyclerViewFragment;
         }
 
         public ConfigureReceiverDialogPage4SummaryFragment getSummaryFragment() {
@@ -362,6 +368,7 @@ public class ConfigureReceiverDialog extends DialogFragment {
                     ConfigureReceiverDialogPage4SummaryFragment configureReceiverDialogPage4SummaryFragment = new
                             ConfigureReceiverDialogPage4SummaryFragment();
                     configureReceiverDialogPage4SummaryFragment.setArguments(bundle);
+                    configureReceiverDialogPage4SummaryFragment.setTargetFragment(recyclerViewFragment, 0);
 
                     summaryFragment = configureReceiverDialogPage4SummaryFragment;
                     return configureReceiverDialogPage4SummaryFragment;

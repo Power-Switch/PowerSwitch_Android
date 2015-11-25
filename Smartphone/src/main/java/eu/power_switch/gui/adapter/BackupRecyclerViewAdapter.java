@@ -37,6 +37,7 @@ import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -45,6 +46,7 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 27.07.2015.
  */
 public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecyclerViewAdapter.ViewHolder> {
+    private RecyclerViewFragment recyclerViewFragment;
     private ArrayList<Backup> backups;
     private Context context;
     private View rootView;
@@ -52,7 +54,9 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public BackupRecyclerViewAdapter(Context context, View rootView, ArrayList<Backup> backups) {
+    public BackupRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, Context context, View rootView,
+                                     ArrayList<Backup> backups) {
+        this.recyclerViewFragment = recyclerViewFragment;
         this.backups = backups;
         this.context = context;
         this.rootView = rootView;
@@ -92,16 +96,13 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                             backups.remove(position);
                             notifyItemRemoved(position);
 //                            refreshBackups();
-                            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                                    .backup_removed), Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_removed, Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
                             Log.e(e);
-                            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                                    .backup_not_found), Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_not_found, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             Log.e(e);
-                            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                                    .unknown_error), Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, Snackbar.LENGTH_LONG);
                         }
                     }
                 }).setNeutralButton(android.R.string.cancel, null).setTitle(context.getString(R.string

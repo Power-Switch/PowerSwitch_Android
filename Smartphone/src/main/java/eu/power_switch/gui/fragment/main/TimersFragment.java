@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -42,6 +41,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -52,7 +52,7 @@ import eu.power_switch.timer.Timer;
  * <p/>
  * Created by Markus on 12.09.2015.
  */
-public class TimersFragment extends Fragment {
+public class TimersFragment extends RecyclerViewFragment {
 
     private ArrayList<Timer> timers;
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
@@ -78,7 +78,7 @@ public class TimersFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_timers, container, false);
         setHasOptionsMenu(true);
 
-        final Fragment fragment = this;
+        final RecyclerViewFragment recyclerViewFragment = this;
 
         timers = new ArrayList<>();
         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), rootView, timers);
@@ -97,7 +97,7 @@ public class TimersFragment extends Fragment {
                 Bundle sceneData = new Bundle();
                 sceneData.putLong("TimerId", timer.getId());
                 configureTimerDialog.setArguments(sceneData);
-                configureTimerDialog.setTargetFragment(fragment, 0);
+                configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureTimerDialog.show(getFragmentManager(), null);
             }
         });
@@ -109,7 +109,7 @@ public class TimersFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
-                configureTimerDialog.setTargetFragment(fragment, 0);
+                configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureTimerDialog.show(getFragmentManager(), null);
             }
         });
@@ -185,5 +185,10 @@ public class TimersFragment extends Fragment {
     public void onStop() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return recyclerViewTimers;
     }
 }

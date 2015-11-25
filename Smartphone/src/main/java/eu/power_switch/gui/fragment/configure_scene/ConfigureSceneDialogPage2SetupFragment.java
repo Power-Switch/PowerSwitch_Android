@@ -45,6 +45,7 @@ import java.util.HashMap;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
@@ -191,7 +192,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         // update scene widgets
         ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
 
-        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.scene_saved), Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

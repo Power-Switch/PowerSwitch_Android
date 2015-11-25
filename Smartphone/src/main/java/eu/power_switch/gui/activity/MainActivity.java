@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
     public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
     private static Stack<String> lastFragmentTitles = new Stack<>();
+    private static NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private BroadcastReceiver broadcastReceiver;
     private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
 
     /**
      * Add class to Backstack
@@ -97,6 +97,15 @@ public class MainActivity extends AppCompatActivity {
      */
     public static boolean isInForeground() {
         return appIsInForeground;
+    }
+
+    /**
+     * Get Main App View
+     *
+     * @return navigationView
+     */
+    public static View getNavigationView() {
+        return navigationView;
     }
 
     @Override
@@ -219,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     List<Gateway> foundGateways = nwm.searchGateways();
 
                     if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways().isEmpty()) {
-                        StatusMessageHandler.showStatusMessage(context, getString(R.string.no_gateway_found), Snackbar
+                        StatusMessageHandler.showStatusMessage(context, R.string.no_gateway_found, Snackbar
                                 .LENGTH_LONG);
                     } else {
                         for (Gateway gateway : foundGateways) {
@@ -228,17 +237,17 @@ public class MainActivity extends AppCompatActivity {
                             }
                             try {
                                 DatabaseHandler.addGateway(gateway);
-                                StatusMessageHandler.showStatusMessage(context, getString(R.string.gateway_found), Snackbar
+                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
                                         .LENGTH_LONG);
                             } catch (GatewayAlreadyExistsException e) {
                                 Log.e(e);
                             } catch (GatewayHasBeenEnabledException e) {
                                 Log.e(e);
-                                StatusMessageHandler.showStatusMessage(context, getString(R.string.gateway_already_exists_it_has_been_enabled), Snackbar
-                                        .LENGTH_LONG);
+                                StatusMessageHandler.showStatusMessage(context,
+                                        R.string.gateway_already_exists_it_has_been_enabled, Snackbar.LENGTH_LONG);
                             } catch (Exception e) {
                                 Log.e(e);
-                                StatusMessageHandler.showStatusMessage(context, getString(R.string.unknown_error), Snackbar
+                                StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar
                                         .LENGTH_LONG);
                             }
                         }
@@ -368,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                     BackupFragment.sendBackupsChangedBroadcast(this);
                 } else {
                     // Permission Denied
-                    StatusMessageHandler.showStatusMessage(this, getString(R.string.permission_denied), Snackbar
+                    StatusMessageHandler.showStatusMessage(this, R.string.permission_denied, Snackbar
                             .LENGTH_LONG);
                 }
                 break;

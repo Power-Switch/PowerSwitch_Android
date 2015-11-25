@@ -43,6 +43,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
@@ -399,7 +400,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         // update scene widgets
         ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
 
-        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.receiver_saved), Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

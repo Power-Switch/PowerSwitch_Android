@@ -19,14 +19,15 @@
 package eu.power_switch.gui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Toast;
 
+import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -37,40 +38,53 @@ import eu.power_switch.shared.log.Log;
 public class StatusMessageHandler {
 
     private static Toast lastToast;
+    private static Snackbar lastSnackbar;
 
     /**
-     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a Snackbar if
      * it is running in the foreground
+     * You can pass an actionMessage and a Runnable that will be represented as a button on the Snackbar. The Toast
+     * however will not have a button, be mindful about that.
      *
-     * @param context       any suitable context
-     * @param message       status message
-     * @param actionMessage message of action button
-     * @param runnable      code that should be executed when activating the action button
-     * @param duration      duration
+     * @param recyclerViewFragment          recyclerViewFragment this snackbar is shown on (used for
+     *                                      the Snackbar and as a context)
+     * @param messageResourceId             status message resource id
+     * @param actionButtonMessageResourceId message resource id of action button
+     * @param runnable                      code that should be executed when activating the action button
+     * @param duration                      duration
      */
-    public static void showStatusMessage(Context context, String message, String actionMessage, SerializableRunnable
-            runnable, int duration) {
+    public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, int messageResourceId,
+                                         int actionButtonMessageResourceId, Runnable runnable, int duration) {
+        Context context = recyclerViewFragment.getContext();
+
         if (MainActivity.isInForeground()) {
-            sendStatusSnackbarBroadcast(context, message, actionMessage, runnable, duration);
+            showSnackbar(recyclerViewFragment.getRecyclerView(),
+                    context.getString(messageResourceId),
+                    context.getString(actionButtonMessageResourceId), runnable,
+                    duration);
         } else {
-            showStatusToast(context, message, duration);
+            showStatusToast(context, context.getString(messageResourceId), duration);
         }
     }
 
     /**
-     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a Snackbar if
      * it is running in the foreground
+     * You can pass an actionMessage and a Runnable that will be represented as a button on the Snackbar. The Toast
+     * however will not have a button, be mindful about that.
      *
-     * @param context                 any suitable context
-     * @param messageResourceId       status message resource id
-     * @param actionMessageResourceId message resource id of action button
-     * @param runnable                code that should be executed when activating the action button
-     * @param duration                duration
+     * @param context                       any suitable context
+     * @param messageResourceId             status message resource id
+     * @param actionButtonMessageResourceId message resource id of action button
+     * @param runnable                      code that should be executed when activating the action button
+     * @param duration                      duration
      */
-    public static void showStatusMessage(Context context, int messageResourceId, int actionMessageResourceId,
-                                         SerializableRunnable runnable, int duration) {
+    public static void showStatusMessage(Context context, int messageResourceId,
+                                         int actionButtonMessageResourceId, Runnable runnable, int duration) {
         if (MainActivity.isInForeground()) {
-            sendStatusSnackbarBroadcast(context, context.getString(messageResourceId), context.getString(actionMessageResourceId), runnable,
+            showSnackbar(MainActivity.getNavigationView(),
+                    context.getString(messageResourceId),
+                    context.getString(actionButtonMessageResourceId), runnable,
                     duration);
         } else {
             showStatusToast(context, context.getString(messageResourceId), duration);
@@ -79,23 +93,28 @@ public class StatusMessageHandler {
 
     /**
      * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
-     * it is running in the foreground
+     * it is running in the foreground.
+     * The Snackbar will have a "Dismiss" Button by default.
      *
-     * @param context  any suitable context
-     * @param message  status message
-     * @param duration duration
+     * @param recyclerViewFragment recyclerViewFragment this snackbar is shown on (used for
+     *                             the Snackbar and as a context)
+     * @param messageResourceId    status message resource id
+     * @param duration             duration
      */
-    public static void showStatusMessage(Context context, String message, int duration) {
+    public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, int messageResourceId, int duration) {
+        Context context = recyclerViewFragment.getContext();
+
         if (MainActivity.isInForeground()) {
-            sendStatusSnackbarBroadcast(context, message, null, null, duration);
+            showStatusSnackbar(recyclerViewFragment.getRecyclerView(), context.getString(messageResourceId), duration);
         } else {
-            showStatusToast(context, message, duration);
+            showStatusToast(context, context.getString(messageResourceId), duration);
         }
     }
 
     /**
      * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
-     * it is running in the foreground
+     * it is running in the foreground.
+     * The Snackbar will have a "Dismiss" Button by default.
      *
      * @param context           any suitable context
      * @param messageResourceId status message resource id
@@ -103,33 +122,78 @@ public class StatusMessageHandler {
      */
     public static void showStatusMessage(Context context, int messageResourceId, int duration) {
         if (MainActivity.isInForeground()) {
-            sendStatusSnackbarBroadcast(context, context.getString(messageResourceId), null, null, duration);
+            showStatusSnackbar(MainActivity.getNavigationView(), context.getString(messageResourceId), duration);
         } else {
             showStatusToast(context, context.getString(messageResourceId), duration);
         }
     }
 
     /**
-     * Show Snackbar on MainActivity context
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground.
+     * The Snackbar will have a "Dismiss" Button by default.
      *
-     * @param context       any suitable context
-     * @param message       snackbar message
-     * @param actionMessage optional action button message
-     * @param runnable      optional action for action button
-     * @param duration      duration of snackbar
+     * @param context  any suitable context
+     * @param message  status message
+     * @param duration duration
      */
-    private static void sendStatusSnackbarBroadcast(Context context, String message, String actionMessage,
-                                                    SerializableRunnable runnable, int duration) {
-        Log.d("Status Snackbar: " + message);
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
-        intent.putExtra("message", message);
-        intent.putExtra("duration", duration);
-        if (actionMessage != null && runnable != null) {
-            intent.putExtra("actionMessage", actionMessage);
-            intent.putExtra("runnable", runnable);
+    public static void showStatusMessage(Context context, String message, int duration) {
+        if (MainActivity.isInForeground()) {
+            showStatusSnackbar(MainActivity.getNavigationView(), message, duration);
+        } else {
+            showStatusToast(context, message, duration);
         }
+    }
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    /**
+     * Show Snackbar with default "Dismiss" action button
+     *
+     * @param parent   parent view
+     * @param message  message
+     * @param duration duration
+     */
+    private static void showStatusSnackbar(View parent, String message, int duration) {
+        Log.d("Status Snackbar: " + message);
+        final Snackbar snackbar = Snackbar.make(parent, message, duration);
+
+        snackbar.setAction(parent.getContext().getString(R.string.dismiss), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+
+        snackbar.show();
+        lastSnackbar = snackbar;
+    }
+
+    /**
+     * Show Snackbar with custom action button
+     *
+     * @param parent              parent view
+     * @param message             message
+     * @param actionButtonMessage action button message
+     * @param runnable            action code
+     * @param duration            duration
+     */
+    private static void showSnackbar(View parent, String message, String actionButtonMessage,
+                                     final Runnable runnable, int duration) {
+        Log.d("Status Snackbar: [" + message + "] with action: [" + actionButtonMessage + "]");
+
+        if (parent == null) {
+            parent = MainActivity.getNavigationView();
+        }
+        Snackbar snackbar = Snackbar.make(parent, message, duration);
+
+        snackbar.setAction(actionButtonMessage, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runnable.run();
+            }
+        });
+
+        snackbar.show();
+        lastSnackbar = snackbar;
     }
 
     /**

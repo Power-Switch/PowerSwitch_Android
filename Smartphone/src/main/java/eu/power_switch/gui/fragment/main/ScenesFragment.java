@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -43,6 +42,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -52,7 +52,7 @@ import eu.power_switch.wear.service.UtilityService;
 /**
  * Fragment containing a List of all Scenes
  */
-public class ScenesFragment extends Fragment {
+public class ScenesFragment extends RecyclerViewFragment {
 
     private ArrayList<Scene> scenes;
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
@@ -81,15 +81,15 @@ public class ScenesFragment extends Fragment {
         setHasOptionsMenu(true);
 
         scenes = new ArrayList<>();
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(), rootView, scenes);
 
         recyclerViewScenes = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_scenes);
+        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), rootView, scenes);
         recyclerViewScenes.setAdapter(sceneRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getResources().getInteger(R.integer.scene_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewScenes.setLayoutManager(layoutManager);
 
-        final Fragment fragment = this;
+        final RecyclerViewFragment recyclerViewFragment = this;
         sceneRecyclerViewAdapter.setOnItemLongClickListener(new SceneRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
@@ -99,7 +99,7 @@ public class ScenesFragment extends Fragment {
                 Bundle sceneData = new Bundle();
                 sceneData.putLong("SceneId", scene.getId());
                 configureSceneDialog.setArguments(sceneData);
-                configureSceneDialog.setTargetFragment(fragment, 0);
+                configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureSceneDialog.show(getFragmentManager(), null);
             }
         });
@@ -111,7 +111,7 @@ public class ScenesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                configureSceneDialog.setTargetFragment(fragment, 0);
+                configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureSceneDialog.show(getFragmentManager(), null);
             }
         });
@@ -197,5 +197,10 @@ public class ScenesFragment extends Fragment {
     public void onStop() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return recyclerViewScenes;
     }
 }

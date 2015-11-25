@@ -243,8 +243,7 @@ public class NetworkHandler {
                 }
             }
         } else {
-            StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                    .missing_network_connection), Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showStatusMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
         }
     }
 

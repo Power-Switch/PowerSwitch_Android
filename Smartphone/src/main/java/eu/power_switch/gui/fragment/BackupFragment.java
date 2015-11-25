@@ -32,7 +32,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -68,7 +67,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Fragment holding a list of all Backups
  */
-public class BackupFragment extends Fragment {
+public class BackupFragment extends RecyclerViewFragment {
 
     public static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -104,7 +103,8 @@ public class BackupFragment extends Fragment {
 
         backups = new ArrayList<>();
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_backups);
-        backupArrayAdapter = new BackupRecyclerViewAdapter(getActivity(), rootView, backups);
+        backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), rootView, backups);
+        final RecyclerViewFragment recyclerViewFragment = this;
         backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -130,13 +130,14 @@ public class BackupFragment extends Fragment {
                             android.os.Process.killProcess(android.os.Process.myPid());
                         } catch (BackupNotFoundException e) {
                             Log.e(e);
-                            StatusMessageHandler.showStatusMessage(getContext(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_not_found, Snackbar
+                                    .LENGTH_LONG);
                         } catch (RestoreBackupException e) {
                             Log.e(e);
-                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             Log.e(e);
-                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, Snackbar.LENGTH_LONG);
                         }
                     }
                 }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
@@ -146,7 +147,6 @@ public class BackupFragment extends Fragment {
                 dialog.show();
             }
         });
-        final Fragment fragment = this;
         backupArrayAdapter.setOnItemLongClickListener(new BackupRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
@@ -156,7 +156,7 @@ public class BackupFragment extends Fragment {
                 Bundle backupData = new Bundle();
                 backupData.putString("name", backup.getName());
                 editBackupDialog.setArguments(backupData);
-                editBackupDialog.setTargetFragment(fragment, 0);
+                editBackupDialog.setTargetFragment(recyclerViewFragment, 0);
                 editBackupDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
@@ -170,7 +170,7 @@ public class BackupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 CreateBackupDialog createBackupDialog = new CreateBackupDialog();
-                createBackupDialog.setTargetFragment(fragment, 0);
+                createBackupDialog.setTargetFragment(recyclerViewFragment, 0);
                 createBackupDialog.show(getFragmentManager(), null);
             }
         });
@@ -233,7 +233,7 @@ public class BackupFragment extends Fragment {
             // For example if the user has previously denied the permission.
             Log.d("Displaying storage permission rationale to provide additional context.");
 
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.missing_external_storage_permission,
+            StatusMessageHandler.showStatusMessage(this, R.string.missing_external_storage_permission,
                     android.R.string.ok, new SerializableRunnable() {
                         @Override
                         public void run() {
@@ -297,5 +297,10 @@ public class BackupFragment extends Fragment {
     public void onStop() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
+    }
+
+    @Override
+    public RecyclerView getRecyclerView() {
+        return recyclerViewBackups;
     }
 }

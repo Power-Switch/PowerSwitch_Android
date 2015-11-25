@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -49,6 +48,7 @@ import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.CreateGatewayDialog;
 import eu.power_switch.gui.dialog.EditGatewayDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
@@ -60,7 +60,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 30.08.2015.
  */
-public class GatewaySettingsFragment extends Fragment {
+public class GatewaySettingsFragment extends RecyclerViewFragment {
 
     private View rootView;
 
@@ -86,7 +86,7 @@ public class GatewaySettingsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_gateway_settings, container, false);
         setHasOptionsMenu(true);
 
-        final Fragment fragment = this;
+        final RecyclerViewFragment recyclerViewFragment = this;
         final View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +94,7 @@ public class GatewaySettingsFragment extends Fragment {
                 switch (view.getId()) {
                     case R.id.add_gateway_fab:
                         CreateGatewayDialog createGatewayDialog = new CreateGatewayDialog();
-                        createGatewayDialog.setTargetFragment(fragment, 0);
+                        createGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
                         createGatewayDialog.show(getFragmentManager(), null);
                         break;
                     case R.id.search_gateway_fab:
@@ -116,7 +116,6 @@ public class GatewaySettingsFragment extends Fragment {
 
         recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_gateways);
         gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), rootView, gateways);
-        final Fragment targetFragment = this;
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
@@ -130,7 +129,7 @@ public class GatewaySettingsFragment extends Fragment {
                 gatewayData.putInt("port", gateway.getPort());
 
                 EditGatewayDialog dia = new EditGatewayDialog();
-                dia.setTargetFragment(targetFragment, 0);
+                dia.setTargetFragment(recyclerViewFragment, 0);
                 dia.setArguments(gatewayData);
                 dia.show(getFragmentManager(), null);
             }
@@ -153,11 +152,12 @@ public class GatewaySettingsFragment extends Fragment {
 
     private void startAutoDiscovery() {
         if (!NetworkHandler.isWifiAvailable(getActivity())) {
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showStatusMessage(this, R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
             return;
         }
 
         searchGatewayFAB.startAnimation(AnimationHandler.getRotationClockwiseAnimation(getContext()));
+        final RecyclerViewFragment recyclerViewFragment = this;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -174,13 +174,15 @@ public class GatewaySettingsFragment extends Fragment {
                     });
 
                     if (foundGateways == null || foundGateways.isEmpty()) {
-                        StatusMessageHandler.showStatusMessage(getContext(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.no_gateway_found, Snackbar
+                                .LENGTH_LONG);
                         return;
                     }
 
                     for (Gateway newGateway : foundGateways) {
                         if (newGateway == null) {
-                            StatusMessageHandler.showStatusMessage(getContext(), R.string.cant_understand_gateway, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.cant_understand_gateway, Snackbar
+                                    .LENGTH_LONG);
                             continue;
                         }
                         // save new Gateway if it doesn't exist already
@@ -188,7 +190,8 @@ public class GatewaySettingsFragment extends Fragment {
                         alreadyInDatabase = isGatewayAlreadyInDatabase(newGateway);
 
                         if (alreadyInDatabase) {
-                            StatusMessageHandler.showStatusMessage(getContext(), R.string.gateway_already_exists_it_has_been_enabled, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.gateway_already_exists_it_has_been_enabled,
+                                    Snackbar.LENGTH_LONG);
                         } else {
                             // TODO: Exceptions richtig abfangen und verwenden
                             try {
@@ -205,7 +208,6 @@ public class GatewaySettingsFragment extends Fragment {
             }
         }).start();
     }
-
 
     private boolean isGatewayAlreadyInDatabase(Gateway newGateway) {
         for (Gateway gateway : DatabaseHandler.getAllGateways()) {
@@ -231,7 +233,7 @@ public class GatewaySettingsFragment extends Fragment {
         DatabaseHandler.addGateway(newGateway);
         gateways.add(newGateway);
         gatewayRecyclerViewAdapter.notifyDataSetChanged();
-        StatusMessageHandler.showStatusMessage(getContext(), R.string.gateway_found, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showStatusMessage(this, R.string.gateway_found, Snackbar.LENGTH_LONG);
     }
 
     private void refreshGateways() {
@@ -307,4 +309,8 @@ public class GatewaySettingsFragment extends Fragment {
         super.onResume();
     }
 
+    @Override
+    public RecyclerView getRecyclerView() {
+        return recyclerViewGateways;
+    }
 }

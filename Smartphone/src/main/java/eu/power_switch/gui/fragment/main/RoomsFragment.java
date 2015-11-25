@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -43,6 +42,7 @@ import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SharedPreferencesHandler;
@@ -53,7 +53,7 @@ import eu.power_switch.wear.service.UtilityService;
 /**
  * Fragment containing a List of all Rooms and Receivers
  */
-public class RoomsFragment extends Fragment {
+public class RoomsFragment extends RecyclerViewFragment {
 
     private NetworkHandler networkHandler;
     private ArrayList<Room> rooms;
@@ -85,7 +85,7 @@ public class RoomsFragment extends Fragment {
 
         rooms = new ArrayList<>();
         recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_rooms);
-        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getActivity(), rooms);
+        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms);
         recyclerViewRooms.setAdapter(roomsRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getResources().getInteger(R.integer.room_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
@@ -93,7 +93,7 @@ public class RoomsFragment extends Fragment {
         updateUI();
 
         addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_receiver_fab);
-        final Fragment fragment = this;
+        final RecyclerViewFragment recyclerViewFragment = this;
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +114,7 @@ public class RoomsFragment extends Fragment {
                 }
 
                 ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
-                configureReceiverDialog.setTargetFragment(fragment, 0);
+                configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureReceiverDialog.show(getFragmentManager(), null);
             }
         });
@@ -203,4 +203,8 @@ public class RoomsFragment extends Fragment {
         super.onStop();
     }
 
+    @Override
+    public RecyclerView getRecyclerView() {
+        return recyclerViewRooms;
+    }
 }

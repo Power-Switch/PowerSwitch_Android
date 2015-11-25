@@ -45,8 +45,7 @@ public class UDP extends AsyncTask<NetworkPackage, Void, Void> {
 
     @Override
     protected Void doInBackground(NetworkPackage... networkPackages) {
-        StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                .sending), Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showStatusMessage(context, R.string.sending, Snackbar.LENGTH_LONG);
         DatagramSocket socket = null;
 
         for (int i = 0; i < networkPackages.length; i++) {
@@ -84,10 +83,9 @@ public class UDP extends AsyncTask<NetworkPackage, Void, Void> {
                     }
                 }
 
-                StatusMessageHandler.showStatusMessage(context, context.getString(R.string.sent), Snackbar.LENGTH_SHORT);
+                StatusMessageHandler.showStatusMessage(context, R.string.sent, Snackbar.LENGTH_SHORT);
             } catch (UnknownHostException e) {
-                StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                        .unknown_host), Snackbar.LENGTH_LONG);
+                StatusMessageHandler.showStatusMessage(context, R.string.unknown_host, Snackbar.LENGTH_LONG);
                 Log.e("UDP Sender", e);
                 try {
                     Thread.sleep(2000);
@@ -96,8 +94,7 @@ public class UDP extends AsyncTask<NetworkPackage, Void, Void> {
                     Log.e("UDP Sender", e1);
                 }
             } catch (Exception e) {
-                StatusMessageHandler.showStatusMessage(context, context.getString(R.string
-                        .unknown_error), Snackbar.LENGTH_LONG);
+                StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
                 Log.e("UDP Sender: Unknown error while sending message in background:", e);
                 try {
                     Thread.sleep(2000);

@@ -217,7 +217,7 @@ public class DonationDialog extends DialogFragment {
 
                 consumePurchase(purchase);
 
-                StatusMessageHandler.showStatusMessage(getContext(), getString(R.string.thank_you), Snackbar
+                StatusMessageHandler.showStatusMessage(getContext(), R.string.thank_you, Snackbar
                         .LENGTH_LONG);
                 getDialog().cancel();
             }

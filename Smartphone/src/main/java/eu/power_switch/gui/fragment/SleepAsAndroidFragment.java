@@ -32,7 +32,7 @@ import eu.power_switch.R;
  * <p/>
  * Created by Markus on 08.10.2015.
  */
-public class SleeepAsAndroidFragment extends Fragment {
+public class SleepAsAndroidFragment extends Fragment {
 
     private View rootView;
 

@@ -45,6 +45,7 @@ import android.widget.ImageButton;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage2SetupFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
@@ -85,9 +86,12 @@ public class ConfigureSceneDialog extends DialogFragment {
         if (args != null && args.containsKey("SceneId")) {
             // init dialog using existing scene
             sceneId = args.getLong("SceneId");
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), sceneId);
+            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
+                    getTargetFragment(),
+                    sceneId);
         } else {
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager());
+            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
+                    getTargetFragment());
         }
 
         // Set up the tabViewPager, attaching the adapter and setting up a listener
@@ -142,9 +146,8 @@ public class ConfigureSceneDialog extends DialogFragment {
                                         // update scene widgets
                                         ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
 
-                                        StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string
-                                                .scene_deleted)
-                                                , Snackbar.LENGTH_LONG);
+                                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                                R.string.scene_deleted, Snackbar.LENGTH_LONG);
 
                                         // close dialog
                                         getDialog().dismiss();
@@ -240,7 +243,6 @@ public class ConfigureSceneDialog extends DialogFragment {
         }
     }
 
-
     @Override
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -291,17 +293,20 @@ public class ConfigureSceneDialog extends DialogFragment {
         private Context context;
         private long sceneId;
         private ConfigureSceneDialogPage2SetupFragment setupFragment;
+        private RecyclerViewFragment recyclerViewFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm) {
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
             super(fm);
             this.context = context;
-            sceneId = -1;
+            this.sceneId = -1;
+            this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
             super(fm);
             this.context = context;
             this.sceneId = id;
+            this.recyclerViewFragment = recyclerViewFragment;
         }
 
         public ConfigureSceneDialogPage2SetupFragment getSetupFragment() {
@@ -339,6 +344,7 @@ public class ConfigureSceneDialog extends DialogFragment {
                     ConfigureSceneDialogPage2SetupFragment configureSceneDialogPage2SetupFragment = new
                             ConfigureSceneDialogPage2SetupFragment();
                     configureSceneDialogPage2SetupFragment.setArguments(bundle);
+                    configureSceneDialogPage2SetupFragment.setTargetFragment(recyclerViewFragment, 0);
 
                     setupFragment = configureSceneDialogPage2SetupFragment;
                     return configureSceneDialogPage2SetupFragment;

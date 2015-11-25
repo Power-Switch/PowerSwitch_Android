@@ -37,7 +37,7 @@
     <string name="remove_backup_message">It will be lost forever!</string>
     <string name="edit_backup">Edit Backup</string>
     <string name="backup_already_exists">Backup already exists</string>
-    <string name="do_you_want_to_overwrite">Do you want to overvwrite it?</string>
+    <string name="do_you_want_to_overwrite">Do you want to overwrite it?</string>
     <string name="backup_saved">Backup saved</string>
 
 </resources>

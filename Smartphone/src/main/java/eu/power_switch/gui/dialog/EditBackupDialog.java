@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -41,6 +40,7 @@ import eu.power_switch.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.BackupFragment;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -51,11 +51,6 @@ public class EditBackupDialog extends DialogFragment {
     private Dialog dialog;
     private int defaultTextColor;
     private View rootView;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
 
     @NonNull
     @Override
@@ -97,24 +92,15 @@ public class EditBackupDialog extends DialogFragment {
                 try {
                     backupHandler.renameBackup(backupName, name.getText().toString());
                     BackupFragment.sendBackupsChangedBroadcast(getActivity());
-                    StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.backup_saved), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
                 } catch (BackupAlreadyExistsException e) {
                     Log.e(e);
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.backup_already_exists)
-                            .setMessage(R.string.do_you_want_to_overwrite)
-                            .setPositiveButton(android.R.string.yes, new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null);
                     e.printStackTrace();
+                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
                 } catch (BackupNotFoundException e) {
                     Log.e(e);
                     e.printStackTrace();
-                    StatusMessageHandler.showStatusMessage(getActivity(), getString(R.string.backup_not_found), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
                 }
             }
         });
