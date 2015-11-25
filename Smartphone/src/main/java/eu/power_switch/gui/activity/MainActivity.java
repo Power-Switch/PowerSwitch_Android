@@ -18,10 +18,8 @@
 
 package eu.power_switch.gui.activity;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -31,7 +29,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -48,7 +45,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
-import eu.power_switch.gui.SerializableRunnable;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AboutDialog;
 import eu.power_switch.gui.dialog.DonationDialog;
@@ -58,7 +54,6 @@ import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
@@ -76,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     private static Stack<String> lastFragmentTitles = new Stack<>();
     private static NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private BroadcastReceiver broadcastReceiver;
     private DrawerLayout drawerLayout;
 
     /**
@@ -140,41 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
         // One time Database Handler initialization for all later access
         DatabaseHandler.init(getApplicationContext());
-
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
-
-                if (LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR.equals(intent.getAction())) {
-                    //noinspection ResourceType
-                    final Snackbar snackbar = Snackbar.make(navigationView,
-                            intent.getStringExtra("message"),
-                            intent.getIntExtra("duration", Snackbar.LENGTH_LONG));
-
-                    if (intent.hasExtra("actionMessage") && intent.hasExtra("runnable")) {
-                        final SerializableRunnable runnable = (SerializableRunnable) intent.getSerializableExtra("runnable");
-                        snackbar.setAction(intent.getStringExtra("actionMessage"), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        runnable.run();
-                                    }
-                                }
-                        );
-                    } else {
-                        snackbar.setAction(getString(R.string.dismiss), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                            }
-                        });
-                    }
-
-                    snackbar.show();
-                }
-            }
-        };
 
         // Set a Toolbar to replace the ActionBar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -398,15 +357,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_STATUS_UPDATE_SNACKBAR);
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         appIsInForeground = true;
@@ -416,12 +366,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         appIsInForeground = false;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
     @Override
