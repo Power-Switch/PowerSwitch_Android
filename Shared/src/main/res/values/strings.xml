@@ -29,7 +29,7 @@
 
 
     <string name="app_name">PowerSwitch</string>
-    <string name="app_version">1.2.1</string>
+    <string name="app_version">1.2.2</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
     <string name="close">Close</string>
