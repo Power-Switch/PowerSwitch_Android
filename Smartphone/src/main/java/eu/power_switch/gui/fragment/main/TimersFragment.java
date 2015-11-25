@@ -81,7 +81,7 @@ public class TimersFragment extends RecyclerViewFragment {
         final RecyclerViewFragment recyclerViewFragment = this;
 
         timers = new ArrayList<>();
-        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), rootView, timers);
+        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), timers);
 
         recyclerViewTimers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_timers);
         recyclerViewTimers.setAdapter(timerRecyclerViewAdapter);

@@ -41,15 +41,13 @@ import eu.power_switch.obj.gateway.Gateway;
 public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Gateway> gateways;
     private Context context;
-    private View rootView;
 
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public GatewayRecyclerViewAdapter(Context context, View rootView, ArrayList<Gateway> gateways) {
+    public GatewayRecyclerViewAdapter(Context context, ArrayList<Gateway> gateways) {
         this.gateways = gateways;
         this.context = context;
-        this.rootView = rootView;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

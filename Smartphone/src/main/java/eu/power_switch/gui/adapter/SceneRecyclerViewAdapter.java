@@ -59,17 +59,15 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     private RecyclerViewFragment recyclerViewFragment;
     private ArrayList<Scene> scenes;
     private FragmentActivity fragmentActivity;
-    private View rootView;
 
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, View
-            rootView, ArrayList<Scene> scenes) {
+    public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity,
+                                    ArrayList<Scene> scenes) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
-        this.rootView = rootView;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

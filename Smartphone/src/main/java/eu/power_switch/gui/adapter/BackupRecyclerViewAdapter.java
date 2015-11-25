@@ -49,17 +49,14 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     private RecyclerViewFragment recyclerViewFragment;
     private ArrayList<Backup> backups;
     private Context context;
-    private View rootView;
 
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public BackupRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, Context context, View rootView,
-                                     ArrayList<Backup> backups) {
+    public BackupRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, Context context, ArrayList<Backup> backups) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.backups = backups;
         this.context = context;
-        this.rootView = rootView;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -95,7 +92,6 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
                             backups.remove(position);
                             notifyItemRemoved(position);
-//                            refreshBackups();
                             StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_removed, Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
                             Log.e(e);

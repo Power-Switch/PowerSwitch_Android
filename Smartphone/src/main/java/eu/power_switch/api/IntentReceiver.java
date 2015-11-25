@@ -153,6 +153,8 @@ public class IntentReceiver extends BroadcastReceiver {
         try {
             Bundle extras = intent.getExtras();
             if (extras != null) {
+                DatabaseHandler.init(context);
+
                 NetworkHandler nwm = new NetworkHandler(context);
 
                 if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {
@@ -254,44 +256,6 @@ public class IntentReceiver extends BroadcastReceiver {
         }
     }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        try {
-            String log = "onReceive: Action: ";
-            log += intent.getAction();
-            Bundle extras = intent.getExtras();
-            log += "{ ";
-            if (extras != null) {
-                for (String extra : extras.keySet()) {
-                    log += extra + "[" + extras.get(extra) + "], ";
-                }
-            }
-            log += " }";
-            Log.d(this, log);
-        } catch (Exception e) {
-            Log.e(e);
-        }
-
-        try {
-            DatabaseHandler.init(context);
-
-            if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
-                Log.d("IntentReceiver", "appwidget update");
-            } else if (intent.getAction().equals(ApiConstants.UNIVERSAL_ACTION_INTENT)) {
-                parseActionIntent(context, intent);
-            } else if (intent.getAction().equals(intent_switch_on)
-                    || intent.getAction().equals(intent_switch_off)
-                    || intent.getAction().equals(intent_room_on)
-                    || intent.getAction().equals(intent_room_off)) {
-                parseActionIntentOld(context, intent);
-            } else {
-                Log.d("Received unknown intent: " + intent.getAction());
-            }
-        } catch (Exception e) {
-            Log.e(e);
-        }
-    }
-
     /**
      * Old method of parsing Intent Extras
      * Please use the new method parseActionIntent()
@@ -300,10 +264,12 @@ public class IntentReceiver extends BroadcastReceiver {
      * @param intent
      */
     @Deprecated
-    private void parseActionIntentOld(Context context, Intent intent) {
+    private static void parseActionIntentOld(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
             if (extras != null) {
+                DatabaseHandler.init(context);
+
                 NetworkHandler nwm = new NetworkHandler(context);
 
                 int start;
@@ -371,7 +337,6 @@ public class IntentReceiver extends BroadcastReceiver {
 
                             Room room = DatabaseHandler.getRoom(roomName);
 
-
                             List<NetworkPackage> networkPackages = new ArrayList<>();
                             for (Receiver receiver : room.getReceivers()) {
                                 Button button = receiver.getButton(buttonName);
@@ -399,6 +364,43 @@ public class IntentReceiver extends BroadcastReceiver {
         } catch (Exception e) {
             Log.e(e);
             Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        try {
+            String log = "onReceive: Action: ";
+            log += intent.getAction();
+            Bundle extras = intent.getExtras();
+            log += "{ ";
+            if (extras != null) {
+                for (String extra : extras.keySet()) {
+                    log += extra + "[" + extras.get(extra) + "], ";
+                }
+            }
+            log += " }";
+            Log.d(this, log);
+        } catch (Exception e) {
+            Log.e(e);
+        }
+
+        try {
+
+            if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
+                Log.d("IntentReceiver", "appwidget update");
+            } else if (intent.getAction().equals(ApiConstants.UNIVERSAL_ACTION_INTENT)) {
+                parseActionIntent(context, intent);
+            } else if (intent.getAction().equals(intent_switch_on)
+                    || intent.getAction().equals(intent_switch_off)
+                    || intent.getAction().equals(intent_room_on)
+                    || intent.getAction().equals(intent_room_off)) {
+                parseActionIntentOld(context, intent);
+            } else {
+                Log.d("Received unknown intent: " + intent.getAction());
+            }
+        } catch (Exception e) {
+            Log.e(e);
         }
     }
 }

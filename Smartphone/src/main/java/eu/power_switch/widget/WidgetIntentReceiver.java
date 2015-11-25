@@ -37,6 +37,9 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * Intent Receiver for Widgets
+ * This Class handles all actions done on any widget type
+ * <p/>
  * Created by Markus on 07.11.2015.
  */
 public class WidgetIntentReceiver extends BroadcastReceiver {

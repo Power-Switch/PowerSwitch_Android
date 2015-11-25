@@ -46,15 +46,13 @@ import eu.power_switch.timer.alarm.AlarmHandler;
 public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Timer> timers;
     private Context context;
-    private View rootView;
 
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public TimerRecyclerViewAdapter(Context context, View rootView, ArrayList<Timer> timers) {
+    public TimerRecyclerViewAdapter(Context context, ArrayList<Timer> timers) {
         this.timers = timers;
         this.context = context;
-        this.rootView = rootView;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

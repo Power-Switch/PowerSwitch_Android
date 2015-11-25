@@ -115,7 +115,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
 
         recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_gateways);
-        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), rootView, gateways);
+        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
