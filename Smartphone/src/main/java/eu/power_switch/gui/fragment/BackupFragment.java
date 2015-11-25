@@ -54,7 +54,6 @@ import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.exception.backup.RestoreBackupException;
-import eu.power_switch.gui.SerializableRunnable;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
@@ -234,7 +233,7 @@ public class BackupFragment extends RecyclerViewFragment {
             Log.d("Displaying storage permission rationale to provide additional context.");
 
             StatusMessageHandler.showStatusMessage(this, R.string.missing_external_storage_permission,
-                    android.R.string.ok, new SerializableRunnable() {
+                    android.R.string.ok, new Runnable() {
                         @Override
                         public void run() {
                             ActivityCompat.requestPermissions(getActivity(), new String[]{

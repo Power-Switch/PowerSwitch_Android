@@ -51,7 +51,6 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
-import eu.power_switch.gui.SerializableRunnable;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
@@ -219,7 +218,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
 
                 if (activeGateways.isEmpty()) {
                     StatusMessageHandler.showStatusMessage(getContext(), R
-                            .string.no_active_gateway, R.string.open_settings, new SerializableRunnable() {
+                            .string.no_active_gateway, R.string.open_settings, new Runnable() {
                         @Override
                         public void run() {
                             MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
@@ -258,7 +257,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
 
                 if (activeGateways.isEmpty()) {
                     StatusMessageHandler.showStatusMessage(getContext(), R
-                            .string.no_active_gateway, R.string.open_settings, new SerializableRunnable() {
+                            .string.no_active_gateway, R.string.open_settings, new Runnable() {
                         @Override
                         public void run() {
                             MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
@@ -297,7 +296,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
 
                 if (activeGateways.isEmpty()) {
                     StatusMessageHandler.showStatusMessage(getContext(), R
-                            .string.no_active_gateway, R.string.open_settings, new SerializableRunnable() {
+                            .string.no_active_gateway, R.string.open_settings, new Runnable() {
                         @Override
                         public void run() {
                             MainActivity.addToBackstack(SettingsTabFragment.class, getContext()

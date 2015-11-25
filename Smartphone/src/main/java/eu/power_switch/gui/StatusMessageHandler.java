@@ -183,8 +183,8 @@ public class StatusMessageHandler {
         if (parent == null) {
             parent = MainActivity.getNavigationView();
         }
-        Snackbar snackbar = Snackbar.make(parent, message, duration);
 
+        Snackbar snackbar = Snackbar.make(parent, message, duration);
         snackbar.setAction(actionButtonMessage, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

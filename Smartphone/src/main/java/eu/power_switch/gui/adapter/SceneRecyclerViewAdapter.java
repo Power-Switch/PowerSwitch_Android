@@ -39,7 +39,6 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.SerializableRunnable;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -126,7 +125,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                 if (activeGateways.isEmpty()) {
                     StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.no_active_gateway,
-                            R.string.open_settings, new SerializableRunnable() {
+                            R.string.open_settings, new Runnable() {
                                 @Override
                                 public void run() {
                                     MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
