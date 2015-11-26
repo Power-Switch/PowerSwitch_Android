@@ -45,6 +45,7 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -223,6 +224,7 @@ public class UtilityService extends IntentService {
      */
     @Override
     synchronized protected void onHandleIntent(Intent intent) {
+        LogHandler.configureLogger();
         DatabaseHandler.init(getApplicationContext());
 
         // Get Room/Receiver/Scene Data from Database and send to wearable

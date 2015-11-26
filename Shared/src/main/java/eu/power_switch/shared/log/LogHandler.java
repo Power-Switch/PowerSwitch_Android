@@ -40,6 +40,10 @@ public class LogHandler {
     private LogHandler() {
     }
 
+    public static void configureLogger() {
+        Log4JConfiguration.configure();
+    }
+
     /**
      * Delete Logs older than 14 days
      */

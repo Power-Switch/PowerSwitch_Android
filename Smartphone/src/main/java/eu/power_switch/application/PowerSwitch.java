@@ -23,7 +23,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.Log4JConfiguration;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Entry Point for the Application
@@ -37,7 +37,7 @@ public class PowerSwitch extends MultiDexApplication {
 
     public PowerSwitch() {
         // Configure Log4J Logger
-        Log4JConfiguration.configure();
+        LogHandler.configureLogger();
 
         // save original uncaught exception handler
         originalUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();

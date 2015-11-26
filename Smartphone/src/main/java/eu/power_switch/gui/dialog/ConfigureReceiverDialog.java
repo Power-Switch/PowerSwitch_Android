@@ -73,6 +73,8 @@ public class ConfigureReceiverDialog extends DialogFragment {
 
     private long receiverId = -1;
 
+    private boolean modified;
+
     private ImageButton imageButtonCancel;
     private ImageButton imageButtonSave;
     private ImageButton imageButtonDelete;
@@ -166,16 +168,21 @@ public class ConfigureReceiverDialog extends DialogFragment {
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // ask to really close
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getDialog().cancel();
-                            }
-                        })
-                        .setNeutralButton(android.R.string.no, null)
-                        .show();
+                if (modified) {
+                    // ask to really close
+                    new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getDialog().cancel();
+                                }
+                            })
+                            .setNeutralButton(android.R.string.no, null)
+                            .setMessage(R.string.all_changes_will_be_lost)
+                            .show();
+                } else {
+                    getDialog().dismiss();
+                }
             }
         });
 
@@ -210,6 +217,7 @@ public class ConfigureReceiverDialog extends DialogFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 try {
+                    modified = true;
                     updateUI();
                 } catch (Exception e) {
                     setSaveButtonState(false);

@@ -62,6 +62,7 @@
     <string name="save">Save</string>
     <string name="create">Create</string>
     <string name="delete">Delete</string>
+    <string name="all_changes_will_be_lost">All changes will be lost!</string>
     <string name="missing_external_storage_permission">Missing Permission for External Storage</string>
     <string name="permission_denied">Permission denied</string>
     <string name="no_active_gateway">No active Gateway!</string>

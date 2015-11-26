@@ -75,7 +75,8 @@ public class SharedPreferencesHandler {
      */
     public String getBackupPath() {
         String value = sharedPreferences.getString(SettingsConstants.BACKUP_PATH_KEY,
-                Environment.getExternalStorageDirectory().getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
+                Environment.getExternalStorageDirectory()
+                        .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
         Log.d(this, "getBackupPath: " + value);
         return value;
     }
@@ -289,7 +290,7 @@ public class SharedPreferencesHandler {
     }
 
     /**
-     * Retrieves setting for hiding FAB buttons
+     * Sets setting for hiding FAB buttons
      *
      * @param bool true if enabled
      */
@@ -297,6 +298,29 @@ public class SharedPreferencesHandler {
         Log.d(this, "setHideAddFAB: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, bool);
+        editor.apply();
+    }
+
+    /**
+     * Retrieves setting for startup default tab
+     *
+     * @return tab index
+     */
+    public int getStartupDefaultTab() {
+        int value = sharedPreferences.getInt(SettingsConstants.STARTUP_DEFAULT_TAB_KEY, SettingsConstants.ROOMS_TAB_INDEX);
+        Log.d(this, "getStartupDefaultTab: " + value);
+        return value;
+    }
+
+    /**
+     * Sets setting for startup default tab
+     *
+     * @param tabIndex index of tab
+     */
+    public void setStartupDefaultTab(int tabIndex) {
+        Log.d(this, "setStartupDefaultTab: " + tabIndex);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SettingsConstants.STARTUP_DEFAULT_TAB_KEY, tabIndex);
         editor.apply();
     }
 }

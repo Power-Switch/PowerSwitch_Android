@@ -30,6 +30,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
+import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.shared.constants.SettingsConstants;
 
 /**
  * Fragment holding the room, scene and timer Fragments in a TabLayout
@@ -62,6 +64,9 @@ public class RoomsScenesTimersTabFragment extends Fragment {
         tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
 
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
+        tabViewPager.setCurrentItem(sharedPreferencesHandler.getStartupDefaultTab(), false);
+
         return rootView;
     }
 
@@ -81,11 +86,11 @@ public class RoomsScenesTimersTabFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
+                case SettingsConstants.ROOMS_TAB_INDEX:
                     return new RoomsFragment();
-                case 1:
+                case SettingsConstants.SCENES_TAB_INDEX:
                     return new ScenesFragment();
-                case 2:
+                case SettingsConstants.TIMERS_TAB_INDEX:
                     return new TimersFragment();
                 default:
                     return null;

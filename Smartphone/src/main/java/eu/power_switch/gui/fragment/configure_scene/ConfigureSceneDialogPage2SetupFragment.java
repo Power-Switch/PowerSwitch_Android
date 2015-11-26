@@ -299,6 +299,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
 
                         @Override
                         public void onClick(View v) {
+                            sendSetupSceneChangedBroadcast(context);
                             for (android.widget.Button button : buttonList) {
                                 if (button == v) {
                                     button.setTextColor(getResources().getColor(R.color.accent_blue_a700));

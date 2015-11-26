@@ -32,11 +32,17 @@ import de.mindpipe.android.logging.log4j.LogConfigurator;
  */
 public class Log4JConfiguration {
 
+    private static LogConfigurator logConfigurator;
+
     private Log4JConfiguration() {
     }
 
     public static void configure() {
-        final LogConfigurator logConfigurator = new LogConfigurator();
+        if (logConfigurator != null) {
+            return;
+        }
+
+        logConfigurator = new LogConfigurator();
 
         if (LogHandler.createLogDirectory() && LogHandler.isExternalStorageReadable() && LogHandler
                 .isExternalStorageWritable()) {

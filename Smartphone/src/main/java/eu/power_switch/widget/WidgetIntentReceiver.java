@@ -35,6 +35,7 @@ import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Intent Receiver for Widgets
@@ -123,6 +124,8 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        LogHandler.configureLogger();
+
         try {
             String log = "onReceive: Action: ";
             log += intent.getAction();

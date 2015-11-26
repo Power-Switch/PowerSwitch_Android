@@ -53,6 +53,8 @@ import eu.power_switch.shared.log.Log;
  */
 public class EditGatewayDialog extends DialogFragment {
 
+    private boolean modified;
+
     private View rootView;
     private TextInputLayout floatingName;
     private EditText name;
@@ -100,6 +102,7 @@ public class EditGatewayDialog extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                modified = true;
                 checkValidity();
             }
         };
@@ -128,6 +131,7 @@ public class EditGatewayDialog extends DialogFragment {
 
         floatingPort = (TextInputLayout) rootView.findViewById(R.id.gateway_port_text_input_layout);
         port = (EditText) rootView.findViewById(R.id.txt_edit_gateway_port);
+        port.addTextChangedListener(textWatcher);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +159,21 @@ public class EditGatewayDialog extends DialogFragment {
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getDialog().cancel();
+                if (modified) {
+                    // ask to really close
+                    new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getDialog().cancel();
+                                }
+                            })
+                            .setNeutralButton(android.R.string.no, null)
+                            .setMessage(R.string.all_changes_will_be_lost)
+                            .show();
+                } else {
+                    getDialog().dismiss();
+                }
             }
         });
 

@@ -28,6 +28,7 @@ import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * A Wear listener service, used to receive inbound messages from
@@ -44,6 +45,8 @@ public class ListenerService extends WearableListenerService {
      */
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
+        LogHandler.configureLogger();
+        
         if (messageEvent.getPath().equals(WearableConstants.RECEIVER_ACTION_TRIGGER_PATH)) {
 
             String messageData = new String(messageEvent.getData());

@@ -29,6 +29,7 @@ import java.util.Calendar;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.TimerConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.action.TimerAction;
@@ -44,6 +45,8 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        LogHandler.configureLogger();
+
         try {
             String log = "onReceive: Action: ";
             log += intent.getAction();

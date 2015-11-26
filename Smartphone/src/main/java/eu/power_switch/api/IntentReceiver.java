@@ -42,6 +42,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
@@ -369,6 +370,8 @@ public class IntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        LogHandler.configureLogger();
+
         try {
             String log = "onReceive: Action: ";
             log += intent.getAction();

@@ -68,6 +68,8 @@ public class ConfigureTimerDialog extends DialogFragment {
     private CustomTabAdapter customTabAdapter;
     private ViewPager tabViewPager;
 
+    private boolean modified;
+
     private long timerId = -1;
 
     private ImageButton imageButtonDelete;
@@ -156,15 +158,20 @@ public class ConfigureTimerDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 // ask to really close
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getDialog().cancel();
-                            }
-                        })
-                        .setNeutralButton(android.R.string.no, null)
-                        .show();
+                if (modified) {
+                    new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getDialog().cancel();
+                                }
+                            })
+                            .setNeutralButton(android.R.string.no, null)
+                            .setMessage(R.string.all_changes_will_be_lost)
+                            .show();
+                } else {
+                    getDialog().dismiss();
+                }
             }
         });
 
@@ -200,6 +207,7 @@ public class ConfigureTimerDialog extends DialogFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 try {
+                    modified = true;
                     updateUI();
                 } catch (Exception e) {
                     setSaveButtonState(false);

@@ -225,7 +225,7 @@ public class GeneralSettingsFragment extends Fragment {
         hideAddFAB.setChecked(sharedPreferencesHandler.getHideAddFAB());
         highlightLastActivatedButton.setChecked(sharedPreferencesHandler.getHighlightLastActivatedButton());
         vibrateOnButtonPress.setChecked(sharedPreferencesHandler.getVibrateOnButtonPress());
-        vibrationDuration.setText("" + sharedPreferencesHandler.getVibrationDuration());
+        vibrationDuration.setText(String.format("%d", sharedPreferencesHandler.getVibrationDuration()));
         if (!sharedPreferencesHandler.getVibrateOnButtonPress()) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {
