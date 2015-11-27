@@ -91,6 +91,12 @@ Source Code on GitHub:<br />
 ]]>
 </string>
 
+    <string-array name="main_tab_names">
+        <item>@string/rooms</item>
+        <item>@string/scenes</item>
+        <item>@string/timers</item>
+    </string-array>
+
     <!-- supported gateways, brands and models -->
     <string-array name="gateway_array">
         <item>ConnAir</item>

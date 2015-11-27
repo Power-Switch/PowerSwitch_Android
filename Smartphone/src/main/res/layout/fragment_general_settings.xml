@@ -40,6 +40,11 @@
                 style="@style/header_settings"
                 android:text="@string/general_settings"/>
 
+            <Spinner
+                android:id="@+id/spinner_startupDefaultTab"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"/>
+
             <CheckBox
                 android:id="@+id/checkBox_autoDiscover"
                 android:layout_width="match_parent"

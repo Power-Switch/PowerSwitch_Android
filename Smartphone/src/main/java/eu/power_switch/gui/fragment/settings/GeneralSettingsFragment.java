@@ -26,11 +26,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -69,6 +72,7 @@ public class GeneralSettingsFragment extends Fragment {
 
     private int devMenuClickCounter = 0;
     private Calendar devMenuFirstClickTime;
+    private Spinner startupDefaultTab;
 
 
     @Override
@@ -140,6 +144,24 @@ public class GeneralSettingsFragment extends Fragment {
                     DeveloperOptionsDialog developerOptionsDialog = new DeveloperOptionsDialog();
                     developerOptionsDialog.show(getActivity().getSupportFragmentManager(), null);
                 }
+            }
+        });
+
+
+        startupDefaultTab = (Spinner) rootView.findViewById(R.id.spinner_startupDefaultTab);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.main_tab_names, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        startupDefaultTab.setAdapter(adapter);
+        startupDefaultTab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
+                sharedPreferencesHandler.setStartupDefaultTab(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
