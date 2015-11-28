@@ -27,7 +27,7 @@ import java.util.List;
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.shared.log.Log;
+import eu.power_switch.settings.SharedPreferencesHandler;
 
 /**
  * Provides database methods for managing Rooms
@@ -107,7 +107,12 @@ public abstract class RoomHandler {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_ID + "==" + id,
                 null, null, null, null);
         cursor.moveToFirst();
+
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(DatabaseHandler.context);
+        boolean autoCollapseRooms = sharedPreferencesHandler.getAutoCollapseRooms();
+
         Room room = dbToRoom(cursor);
+        room.setCollapsed(autoCollapseRooms);
         cursor.close();
         return room;
     }
@@ -122,8 +127,13 @@ public abstract class RoomHandler {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
 
+        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(DatabaseHandler.context);
+        boolean autoCollapseRooms = sharedPreferencesHandler.getAutoCollapseRooms();
+
         while (!cursor.isAfterLast()) {
-            rooms.add(dbToRoom(cursor));
+            Room room = dbToRoom(cursor);
+            room.setCollapsed(autoCollapseRooms);
+            rooms.add(room);
             cursor.moveToNext();
         }
         cursor.close();
@@ -137,13 +147,8 @@ public abstract class RoomHandler {
      * @return Room
      */
     private static Room dbToRoom(Cursor c) {
-        try {
-            Room room = new Room(c.getLong(0), c.getString(1));
-            room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
-            return room;
-        } catch (Exception e) {
-            Log.e(e);
-            return null;
-        }
+        Room room = new Room(c.getLong(0), c.getString(1));
+        room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
+        return room;
     }
 }

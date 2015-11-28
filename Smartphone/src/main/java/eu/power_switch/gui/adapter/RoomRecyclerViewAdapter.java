@@ -99,8 +99,10 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             @Override
             public void onClick(View v) {
                 if (linearLayout.getVisibility() == View.VISIBLE) {
+                    room.setCollapsed(true);
                     linearLayout.setVisibility(View.GONE);
                 } else {
+                    room.setCollapsed(false);
                     linearLayout.setVisibility(View.VISIBLE);
                 }
             }
@@ -183,8 +185,10 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         updateReceiverViews(holder, room);
 
         // collapse room
-        if (sharedPreferencesHandler.getAutoCollapseRooms()) {
+        if (room.isCollapsed()) {
             linearLayout.setVisibility(View.GONE);
+        } else {
+            linearLayout.setVisibility(View.VISIBLE);
         }
 
         if (position == getItemCount() - 1) {

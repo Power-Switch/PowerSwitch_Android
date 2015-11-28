@@ -44,6 +44,11 @@ public class Room {
     private LinkedList<Receiver> receivers;
 
     /**
+     * Specifies if this room should be rendered collapsed
+     */
+    private boolean collapsed;
+
+    /**
      * Constructor
      *
      * @param id
@@ -98,6 +103,24 @@ public class Room {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Get collapsed state of this Room
+     *
+     * @return true if collapsed
+     */
+    public boolean isCollapsed() {
+        return collapsed;
+    }
+
+    /**
+     * Set collapsed state of this Room
+     *
+     * @param collapsed
+     */
+    public void setCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
     }
 
     /**
