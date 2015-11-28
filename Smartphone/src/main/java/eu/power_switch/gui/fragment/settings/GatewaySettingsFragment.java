@@ -65,7 +65,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     private View rootView;
 
     private BroadcastReceiver broadcastReceiver;
-    private SharedPreferencesHandler sharedPreferencesHandler;
 
     private GatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
     private RecyclerView recyclerViewGateways;
@@ -111,8 +110,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
         addGatewayFAB = (FloatingActionButton) rootView.findViewById(R.id.add_gateway_fab);
         addGatewayFAB.setOnClickListener(onClickListener);
-
-        sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
 
         recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_gateways);
         gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), gateways);
@@ -241,7 +238,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
         gateways.clear();
 
-        if (sharedPreferencesHandler.getPlayStoreMode()) {
+        if (SharedPreferencesHandler.getPlayStoreMode()) {
             gateways.addAll(PlayStoreModeDataModel.getGateways());
         } else {
             gateways.addAll(DatabaseHandler.getAllGateways());
@@ -250,7 +247,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        if (sharedPreferencesHandler.getHideAddFAB()) {
+        if (SharedPreferencesHandler.getHideAddFAB()) {
             searchGatewayFAB.setVisibility(View.GONE);
             addGatewayFAB.setVisibility(View.GONE);
         } else {

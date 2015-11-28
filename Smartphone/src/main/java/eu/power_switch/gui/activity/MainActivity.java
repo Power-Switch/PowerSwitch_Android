@@ -56,6 +56,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
@@ -104,9 +105,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
-        switch (sharedPreferencesHandler.getTheme()) {
+        SharedPreferencesHandler.init(getApplicationContext());
+        WearablePreferencesHandler.init(getApplicationContext());
+        // set Theme before anything else in onCreate);
+        switch (SharedPreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
                 getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 setTheme(R.style.PowerSwitchTheme_Dark_Blue);
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Fragment tabLayoutFragment = RoomsScenesTimersTabFragment.class.newInstance();
             Bundle arguments = new Bundle();
-            arguments.putInt("tabIndex", sharedPreferencesHandler.getStartupDefaultTab());
+            arguments.putInt("tabIndex", SharedPreferencesHandler.getStartupDefaultTab());
             tabLayoutFragment.setArguments(arguments);
             lastFragmentClasses.push(tabLayoutFragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
@@ -178,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        boolean autoDiscoverStatus = sharedPreferencesHandler.getAutoDiscover();
+        boolean autoDiscoverStatus = SharedPreferencesHandler.getAutoDiscover();
 
         if (autoDiscoverStatus) {
             new AsyncTask<Context, Void, Void>() {
@@ -203,10 +205,12 @@ public class MainActivity extends AppCompatActivity {
                                         .LENGTH_LONG);
                             } catch (GatewayAlreadyExistsException e) {
                                 Log.e(e);
+                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
+                                        .LENGTH_LONG);
                             } catch (GatewayHasBeenEnabledException e) {
                                 Log.e(e);
-                                StatusMessageHandler.showStatusMessage(context,
-                                        R.string.gateway_already_exists_it_has_been_enabled, Snackbar.LENGTH_LONG);
+                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
+                                        .LENGTH_LONG);
                             } catch (Exception e) {
                                 Log.e(e);
                                 StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar

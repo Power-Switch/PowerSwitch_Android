@@ -68,8 +68,6 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                 Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
 
                 if (room != null && receiver != null) {
-                    SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
-
                     // update UI
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, room.getName() + ": " + receiver.getName());
 
@@ -87,7 +85,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
-                        if (sharedPreferencesHandler.getHighlightLastActivatedButton() &&
+                        if (SharedPreferencesHandler.getHighlightLastActivatedButton() &&
                                 receiver.getLastActivatedButtonId().equals(button.getId())) {
                             buttonView.setTextColor(R.id.button_widget_universal,
                                     ContextCompat.getColor(context, R.color.accent_blue_a700));

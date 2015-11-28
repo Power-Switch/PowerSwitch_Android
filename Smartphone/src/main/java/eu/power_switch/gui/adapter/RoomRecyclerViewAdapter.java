@@ -65,7 +65,6 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     private RecyclerViewFragment recyclerViewFragment;
     private ArrayList<Room> rooms;
     private FragmentActivity fragmentActivity;
-    private SharedPreferencesHandler sharedPreferencesHandler;
 
     // Pass in the context and users array into the constructor
     public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity,
@@ -73,7 +72,6 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         this.recyclerViewFragment = recyclerViewFragment;
         this.rooms = rooms;
         this.fragmentActivity = fragmentActivity;
-        this.sharedPreferencesHandler = new SharedPreferencesHandler(fragmentActivity);
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -124,9 +122,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(fragmentActivity);
-                if (sharedPreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(fragmentActivity, sharedPreferencesHandler.getVibrationDuration());
+                if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(fragmentActivity, SharedPreferencesHandler.getVibrationDuration());
                 }
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
@@ -175,7 +172,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.buttonAllOn.setOnClickListener(onClickListener);
         holder.buttonAllOff.setOnClickListener(onClickListener);
 
-        if (!sharedPreferencesHandler.getShowRoomAllOnOff()) {
+        if (!SharedPreferencesHandler.getShowRoomAllOnOff()) {
             holder.buttonAllOn.setVisibility(View.GONE);
             holder.buttonAllOff.setVisibility(View.GONE);
         } else {
@@ -239,7 +236,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
-                if (sharedPreferencesHandler.getHighlightLastActivatedButton() && lastActivatedButtonId != -1 && button.getId
+                if (SharedPreferencesHandler.getHighlightLastActivatedButton() && lastActivatedButtonId != -1 && button.getId
                         () == lastActivatedButtonId) {
                     buttonView.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.accent_blue_a700));
                 }
@@ -247,9 +244,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                     @Override
                     public void onClick(View v) {
-                        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(fragmentActivity);
-                        if (sharedPreferencesHandler.getVibrateOnButtonPress()) {
-                            VibrationHandler.vibrate(fragmentActivity, sharedPreferencesHandler.getVibrationDuration());
+                        if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
+                            VibrationHandler.vibrate(fragmentActivity, SharedPreferencesHandler.getVibrationDuration());
                         }
                         List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                         if (activeGateways.isEmpty()) {
@@ -282,7 +278,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         // update list item
                         receiver.setLastActivatedButtonId(button.getId());
 
-                        if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
+                        if (SharedPreferencesHandler.getHighlightLastActivatedButton()) {
                             for (android.widget.Button button : buttonViews) {
                                 if (button != v) {
                                     button.setTextColor(defaultTextColor);

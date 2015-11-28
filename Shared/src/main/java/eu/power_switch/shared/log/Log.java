@@ -48,8 +48,10 @@ public class Log {
      */
     public static void d(Object source, String message) {
         String logMessage = "";
-        if (source.getClass().equals(String.class)) {
+        if (String.class.equals(source.getClass())) {
             logMessage += source + " : ";
+        } else if (source instanceof Class) {
+            logMessage += source.toString() + " : ";
         } else {
             try {
                 logMessage += source.getClass() + " : ";
@@ -94,6 +96,8 @@ public class Log {
 
         if (source.getClass().equals(String.class)) {
             logMessage += source + " : ";
+        } else if (source instanceof Class) {
+            logMessage += source.toString() + " : ";
         } else {
             try {
                 logMessage += source.getClass() + " : ";

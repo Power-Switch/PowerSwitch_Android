@@ -259,7 +259,7 @@ public class DataApiHandler {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
                 data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
                 if (data != null) {
-                    ListenerService.extractSettings(context, data);
+                    ListenerService.extractSettings(data);
                     break;
                 }
             }

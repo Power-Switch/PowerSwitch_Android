@@ -114,8 +114,7 @@ public class TimersFragment extends RecyclerViewFragment {
             }
         });
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
-        if (sharedPreferencesHandler.getHideAddFAB()) {
+        if (SharedPreferencesHandler.getHideAddFAB()) {
             fab.setVisibility(View.GONE);
         }
 
@@ -135,8 +134,7 @@ public class TimersFragment extends RecyclerViewFragment {
         Log.d("TimersFragment", "refreshTimers");
         timers.clear();
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
-        if (sharedPreferencesHandler.getPlayStoreMode()) {
+        if (SharedPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             timers.addAll(playStoreModeDataModel.getTimers());
         } else {

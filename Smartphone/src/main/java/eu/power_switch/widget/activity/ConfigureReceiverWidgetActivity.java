@@ -166,8 +166,6 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, selectedRoom.getName() + ": " +
                             selectedReceiver.getName());
 
-                    SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
-
                     int buttonOffset = 0;
                     for (eu.power_switch.obj.Button button : buttons) {
                         // set button action
@@ -176,7 +174,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
-                        if (sharedPreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
+                        if (SharedPreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
                                 .getLastActivatedButtonId().equals(button.getId())) {
                             buttonView.setTextColor(R.id.button_widget_universal,
                                     ContextCompat.getColor(getApplicationContext(), R.color.accent_blue_a700));

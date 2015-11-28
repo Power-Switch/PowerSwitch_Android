@@ -64,8 +64,8 @@ public class MainActivity extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
-        switch (wearablePreferencesHandler.getTheme()) {
+        WearablePreferencesHandler.init(getApplicationContext());
+        switch (WearablePreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
                 getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
                 setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
@@ -244,9 +244,7 @@ public class MainActivity extends WearableActivity {
         protected ArrayList<Object> doInBackground(Uri... params) {
             // Get Room Data from Smartphone App
             ArrayList<Room> rooms = dataApiHandler.getRoomData();
-            WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler
-                    (getApplicationContext());
-            boolean autoCollapseRooms = wearablePreferencesHandler.getAutoCollapseRooms();
+            boolean autoCollapseRooms = WearablePreferencesHandler.getAutoCollapseRooms();
             for (Room room : rooms) {
                 room.setCollapsed(autoCollapseRooms);
             }

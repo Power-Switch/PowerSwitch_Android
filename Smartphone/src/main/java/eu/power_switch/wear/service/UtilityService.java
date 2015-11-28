@@ -229,11 +229,9 @@ public class UtilityService extends IntentService {
 
         // Get Room/Receiver/Scene Data from Database and send to wearable
         if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
-            SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getApplicationContext());
-
             Log.d("Getting Data from Database to send to Wearable...");
 
-            if (sharedPreferencesHandler.getPlayStoreMode()) {
+            if (SharedPreferencesHandler.getPlayStoreMode()) {
                 PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
 
                 List<Room> rooms = playStoreModeDataModel.getRooms();
@@ -310,18 +308,16 @@ public class UtilityService extends IntentService {
      * @return DataMap containing all Wearable settings
      */
     private DataMap getSettingsDataMap() {
-        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
-
         DataMap settingsDataMap = new DataMap();
-        settingsDataMap.putBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, wearablePreferencesHandler
+        settingsDataMap.putBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, WearablePreferencesHandler
                 .getAutoCollapseRooms());
-        settingsDataMap.putBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, wearablePreferencesHandler
+        settingsDataMap.putBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, WearablePreferencesHandler
                 .getHighlightLastActivatedButton());
-        settingsDataMap.putBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, wearablePreferencesHandler.getShowRoomAllOnOff());
-        settingsDataMap.putInt(WearableSettingsConstants.THEME_KEY, wearablePreferencesHandler.getTheme());
-        settingsDataMap.putBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, wearablePreferencesHandler
+        settingsDataMap.putBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, WearablePreferencesHandler.getShowRoomAllOnOff());
+        settingsDataMap.putInt(WearableSettingsConstants.THEME_KEY, WearablePreferencesHandler.getTheme());
+        settingsDataMap.putBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, WearablePreferencesHandler
                 .getVibrateOnButtonPress());
-        settingsDataMap.putInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, wearablePreferencesHandler.getVibrationDuration());
+        settingsDataMap.putInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, WearablePreferencesHandler.getVibrationDuration());
 
         return settingsDataMap;
     }

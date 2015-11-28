@@ -95,10 +95,8 @@ public class BackupFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
-
         TextView textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
-        textViewBackupPath.setText(sharedPreferencesHandler.getBackupPath());
+        textViewBackupPath.setText(SharedPreferencesHandler.getBackupPath());
 
         backups = new ArrayList<>();
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_backups);
@@ -276,8 +274,7 @@ public class BackupFragment extends RecyclerViewFragment {
     public void onResume() {
         super.onResume();
         checkWriteExternalStoragePermission();
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
-        if (sharedPreferencesHandler.getHideAddFAB()) {
+        if (SharedPreferencesHandler.getHideAddFAB()) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

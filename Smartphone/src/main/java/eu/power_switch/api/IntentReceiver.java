@@ -246,9 +246,9 @@ public class IntentReceiver extends BroadcastReceiver {
                 throw new NullPointerException("extras are null!");
             }
 
-            SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
+            SharedPreferencesHandler.init(context);
             // force receiver widget update to highlight last button
-            if (sharedPreferencesHandler.getHighlightLastActivatedButton()) {
+            if (SharedPreferencesHandler.getHighlightLastActivatedButton()) {
                 ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);
             }
         } catch (Exception e) {

@@ -144,10 +144,9 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
         try {
             if (intent.getAction().equals(WidgetConstants.WIDGET_ACTION_INTENT)) {
-                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
                 // vibrate
-                if (sharedPreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(context, sharedPreferencesHandler.getVibrationDuration());
+                if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(context, SharedPreferencesHandler.getVibrationDuration());
                 }
 
                 parseWidgetActionIntent(context, intent);

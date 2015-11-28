@@ -39,7 +39,6 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
 
-    private final WearablePreferencesHandler wearablePreferencesHandler;
     // Store a member variable for the users
     private ArrayList<Scene> scenes;
     private Context context;
@@ -53,7 +52,6 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         this.context = context;
         this.parentRecyclerView = parentRecyclerView;
         this.dataApiHandler = dataApiHandler;
-        this.wearablePreferencesHandler = new WearablePreferencesHandler(context);
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -78,8 +76,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                if (wearablePreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(context, wearablePreferencesHandler.getVibrationDuration());
+                if (WearablePreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(context, WearablePreferencesHandler.getVibrationDuration());
                 }
 
                 String actionString = DataApiHandler.buildSceneActionString(scene.getName());

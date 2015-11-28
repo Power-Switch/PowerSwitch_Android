@@ -63,8 +63,7 @@ public class BackupHandler {
      */
     public ArrayList<Backup> getBackups() {
         ArrayList<Backup> backups = new ArrayList<>();
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
-        File backupDir = new File(sharedPreferencesHandler.getBackupPath());
+        File backupDir = new File(SharedPreferencesHandler.getBackupPath());
         if (backupDir.exists()) {
 
             for (File file : backupDir.listFiles()) {
@@ -88,15 +87,13 @@ public class BackupHandler {
      */
     public void createBackup(boolean useExternalStorage, String name, boolean force) throws
             CreateBackupException, BackupAlreadyExistsException {
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
-
         if (useExternalStorage) {
             // TODO: kp wie man internen und externen speicher unterscheidet
         } else {
             File src;
             File dst;
 
-            dst = new File(sharedPreferencesHandler.getBackupPath() + File.separator
+            dst = new File(SharedPreferencesHandler.getBackupPath() + File.separator
                     + name);
             if (!dst.exists()) {
                 dst.mkdirs();
@@ -118,7 +115,7 @@ public class BackupHandler {
             try {
                 // copy database
                 src = new File(context.getFilesDir().getParent() + File.separator + "databases");
-                dst = new File(sharedPreferencesHandler.getBackupPath() + File.separator
+                dst = new File(SharedPreferencesHandler.getBackupPath() + File.separator
                         + name + File.separator + "databases");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -126,7 +123,7 @@ public class BackupHandler {
 
                 // copy preferences
                 src = new File(context.getFilesDir().getParent() + File.separator + "shared_prefs");
-                dst = new File(sharedPreferencesHandler.getBackupPath() + File.separator
+                dst = new File(SharedPreferencesHandler.getBackupPath() + File.separator
                         + name + File.separator + "shared_prefs");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -147,8 +144,7 @@ public class BackupHandler {
      */
     public void removeBackup(String name) throws BackupNotFoundException, RemoveBackupException {
         try {
-            SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
-            File backupFolder = new File(sharedPreferencesHandler.getBackupPath()
+            File backupFolder = new File(SharedPreferencesHandler.getBackupPath()
                     + File.separator + name);
             if (!backupFolder.exists()) {
                 throw new BackupNotFoundException();
@@ -169,11 +165,9 @@ public class BackupHandler {
      * @throws BackupAlreadyExistsException
      */
     public void renameBackup(String oldName, String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
-
-        File oldFolder = new File(sharedPreferencesHandler.getBackupPath()
+        File oldFolder = new File(SharedPreferencesHandler.getBackupPath()
                 + File.separator + oldName);
-        File newFolder = new File(sharedPreferencesHandler.getBackupPath()
+        File newFolder = new File(SharedPreferencesHandler.getBackupPath()
                 + File.separator + newName);
 
         if (!oldFolder.exists()) {
@@ -193,10 +187,8 @@ public class BackupHandler {
      * @throws RestoreBackupException
      */
     public void restoreBackup(String name) throws BackupNotFoundException, RestoreBackupException {
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
-
         // create source path object
-        File src = new File(sharedPreferencesHandler.getBackupPath() + File.separator + name);
+        File src = new File(SharedPreferencesHandler.getBackupPath() + File.separator + name);
         if (src.exists()) {
             try {
                 // create destination path object

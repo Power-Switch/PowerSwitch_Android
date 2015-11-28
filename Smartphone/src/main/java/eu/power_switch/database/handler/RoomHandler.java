@@ -108,8 +108,7 @@ public abstract class RoomHandler {
                 null, null, null, null);
         cursor.moveToFirst();
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(DatabaseHandler.context);
-        boolean autoCollapseRooms = sharedPreferencesHandler.getAutoCollapseRooms();
+        boolean autoCollapseRooms = SharedPreferencesHandler.getAutoCollapseRooms();
 
         Room room = dbToRoom(cursor);
         room.setCollapsed(autoCollapseRooms);
@@ -127,8 +126,7 @@ public abstract class RoomHandler {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(DatabaseHandler.context);
-        boolean autoCollapseRooms = sharedPreferencesHandler.getAutoCollapseRooms();
+        boolean autoCollapseRooms = SharedPreferencesHandler.getAutoCollapseRooms();
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(cursor);

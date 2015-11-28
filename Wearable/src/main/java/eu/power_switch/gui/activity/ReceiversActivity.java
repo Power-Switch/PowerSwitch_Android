@@ -34,8 +34,7 @@ public class ReceiversActivity extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler(getApplicationContext());
-        switch (wearablePreferencesHandler.getTheme()) {
+        switch (WearablePreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
                 setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
                 break;

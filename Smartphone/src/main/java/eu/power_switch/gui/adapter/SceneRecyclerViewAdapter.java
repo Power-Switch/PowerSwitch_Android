@@ -117,9 +117,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         holder.buttonActivateScene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(fragmentActivity);
-                if (sharedPreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(fragmentActivity, sharedPreferencesHandler.getVibrationDuration());
+                if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(fragmentActivity, SharedPreferencesHandler.getVibrationDuration());
                 }
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);

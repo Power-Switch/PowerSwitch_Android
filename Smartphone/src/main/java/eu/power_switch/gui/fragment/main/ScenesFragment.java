@@ -133,8 +133,7 @@ public class ScenesFragment extends RecyclerViewFragment {
         Log.d("ScenesFragment", "refreshScenes");
         scenes.clear();
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
-        if (sharedPreferencesHandler.getPlayStoreMode()) {
+        if (SharedPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             scenes.addAll(playStoreModeDataModel.getScenes());
         } else {
@@ -176,8 +175,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
-        if (sharedPreferencesHandler.getHideAddFAB()) {
+        if (SharedPreferencesHandler.getHideAddFAB()) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

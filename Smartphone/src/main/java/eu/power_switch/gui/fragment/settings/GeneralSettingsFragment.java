@@ -54,8 +54,6 @@ public class GeneralSettingsFragment extends Fragment {
 
     private View rootView;
 
-    private SharedPreferencesHandler sharedPreferencesHandler;
-
     private CheckBox autoDiscover;
     private CheckBox autoCollapseRooms;
     private CheckBox autoCollapseTimers;
@@ -86,22 +84,22 @@ public class GeneralSettingsFragment extends Fragment {
 
                 switch (buttonView.getId()) {
                     case R.id.checkBox_autoDiscover:
-                        sharedPreferencesHandler.setAutoDiscover(isChecked);
+                        SharedPreferencesHandler.setAutoDiscover(isChecked);
                         break;
                     case R.id.checkBox_autoCollapseRooms:
-                        sharedPreferencesHandler.setAutoCollapseRooms(isChecked);
+                        SharedPreferencesHandler.setAutoCollapseRooms(isChecked);
                         break;
                     case R.id.checkBox_autoCollapseTimers:
-                        sharedPreferencesHandler.setAutoCollapseTimers(isChecked);
+                        SharedPreferencesHandler.setAutoCollapseTimers(isChecked);
                         break;
                     case R.id.checkBox_showRoomAllOnOffButtons:
-                        sharedPreferencesHandler.setShowRoomAllOnOff(isChecked);
+                        SharedPreferencesHandler.setShowRoomAllOnOff(isChecked);
                         break;
                     case R.id.checkBox_hideAddFAB:
-                        sharedPreferencesHandler.setHideAddFAB(isChecked);
+                        SharedPreferencesHandler.setHideAddFAB(isChecked);
                         break;
                     case R.id.checkBox_vibrateOnButtonPress:
-                        sharedPreferencesHandler.setVibrateOnButtonPress(isChecked);
+                        SharedPreferencesHandler.setVibrateOnButtonPress(isChecked);
                         if (isChecked) {
                             vibrationDurationLayout.setVisibility(View.VISIBLE);
                         } else {
@@ -109,7 +107,7 @@ public class GeneralSettingsFragment extends Fragment {
                         }
                         break;
                     case R.id.checkBox_highlightLastActivatedButton:
-                        sharedPreferencesHandler.setHighlightLastActivatedButton(isChecked);
+                        SharedPreferencesHandler.setHighlightLastActivatedButton(isChecked);
                         // force receiver widget update
                         ConfigureReceiverWidgetActivity.forceWidgetUpdate(getContext());
                         break;
@@ -156,8 +154,7 @@ public class GeneralSettingsFragment extends Fragment {
         startupDefaultTab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
-                sharedPreferencesHandler.setStartupDefaultTab(position);
+                SharedPreferencesHandler.setStartupDefaultTab(position);
             }
 
             @Override
@@ -200,7 +197,7 @@ public class GeneralSettingsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s != null && s.length() > 0) {
-                    sharedPreferencesHandler.setVibrationDuration(Integer.valueOf(s.toString()));
+                    SharedPreferencesHandler.setVibrationDuration(Integer.valueOf(s.toString()));
                 }
             }
         });
@@ -211,10 +208,10 @@ public class GeneralSettingsFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.radioButton_darkBlue:
-                        sharedPreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
+                        SharedPreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
                         break;
                     case R.id.radioButton_lightBlue:
-                        sharedPreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
+                        SharedPreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
                         break;
                     default:
                         break;
@@ -234,27 +231,25 @@ public class GeneralSettingsFragment extends Fragment {
         radioButtonLightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_lightBlue);
         radioButtonLightBlue.setOnClickListener(onClickListener);
 
-        sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
-
         return rootView;
     }
 
     private void updateUI() {
-        autoDiscover.setChecked(sharedPreferencesHandler.getAutoDiscover());
-        autoCollapseRooms.setChecked(sharedPreferencesHandler.getAutoCollapseRooms());
-        autoCollapseTimers.setChecked(sharedPreferencesHandler.getAutoCollapseTimers());
-        showRoomAllOnOffButtons.setChecked(sharedPreferencesHandler.getShowRoomAllOnOff());
-        hideAddFAB.setChecked(sharedPreferencesHandler.getHideAddFAB());
-        highlightLastActivatedButton.setChecked(sharedPreferencesHandler.getHighlightLastActivatedButton());
-        vibrateOnButtonPress.setChecked(sharedPreferencesHandler.getVibrateOnButtonPress());
-        vibrationDuration.setText(String.format("%d", sharedPreferencesHandler.getVibrationDuration()));
-        if (!sharedPreferencesHandler.getVibrateOnButtonPress()) {
+        autoDiscover.setChecked(SharedPreferencesHandler.getAutoDiscover());
+        autoCollapseRooms.setChecked(SharedPreferencesHandler.getAutoCollapseRooms());
+        autoCollapseTimers.setChecked(SharedPreferencesHandler.getAutoCollapseTimers());
+        showRoomAllOnOffButtons.setChecked(SharedPreferencesHandler.getShowRoomAllOnOff());
+        hideAddFAB.setChecked(SharedPreferencesHandler.getHideAddFAB());
+        highlightLastActivatedButton.setChecked(SharedPreferencesHandler.getHighlightLastActivatedButton());
+        vibrateOnButtonPress.setChecked(SharedPreferencesHandler.getVibrateOnButtonPress());
+        vibrationDuration.setText(String.format("%d", SharedPreferencesHandler.getVibrationDuration()));
+        if (!SharedPreferencesHandler.getVibrateOnButtonPress()) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {
             vibrationDurationLayout.setVisibility(View.VISIBLE);
         }
 
-        switch (sharedPreferencesHandler.getTheme()) {
+        switch (SharedPreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
                 radioButtonDarkBlue.setChecked(true);
                 break;

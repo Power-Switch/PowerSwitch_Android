@@ -44,15 +44,12 @@ public class DeveloperOptionsDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         rootView = inflater.inflate(R.layout.dialog_developer_options, null);
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
-
         CheckBox checkBox_playStoreMode = (CheckBox) rootView.findViewById(R.id.checkBox_playStoreMode);
-        checkBox_playStoreMode.setChecked(sharedPreferencesHandler.getPlayStoreMode());
+        checkBox_playStoreMode.setChecked(SharedPreferencesHandler.getPlayStoreMode());
         checkBox_playStoreMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
-                sharedPreferencesHandler.setPlayStoreMode(isChecked);
+                SharedPreferencesHandler.setPlayStoreMode(isChecked);
             }
         });
 

@@ -153,9 +153,8 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         }
 
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
         // collapse timer
-        if (sharedPreferencesHandler.getAutoCollapseTimers()) {
+        if (SharedPreferencesHandler.getAutoCollapseTimers()) {
             linearLayoutDescription.setVisibility(View.GONE);
         }
 

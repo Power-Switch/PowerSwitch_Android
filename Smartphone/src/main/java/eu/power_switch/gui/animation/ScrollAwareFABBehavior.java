@@ -56,8 +56,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      * @param floatingActionButton FAB
      */
     private void animateOut(final FloatingActionButton floatingActionButton) {
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(floatingActionButton.getContext());
-        if (sharedPreferencesHandler.getHideAddFAB()) {
+        if (SharedPreferencesHandler.getHideAddFAB()) {
             return;
         }
 
@@ -108,8 +107,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      */
     //
     private void animateIn(FloatingActionButton floatingActionButton) {
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(floatingActionButton.getContext());
-        if (sharedPreferencesHandler.getHideAddFAB()) {
+        if (SharedPreferencesHandler.getHideAddFAB()) {
             return;
         }
         floatingActionButton.setVisibility(View.VISIBLE);

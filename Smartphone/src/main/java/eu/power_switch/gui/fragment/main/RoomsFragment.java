@@ -137,8 +137,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     private void updateUI() {
         rooms.clear();
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getActivity());
-        if (sharedPreferencesHandler.getPlayStoreMode()) {
+        if (SharedPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             rooms.addAll(playStoreModeDataModel.getRooms());
         } else {
@@ -181,8 +180,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
-        if (sharedPreferencesHandler.getHideAddFAB()) {
+        if (SharedPreferencesHandler.getHideAddFAB()) {
             addReceiverFAB.setVisibility(View.GONE);
         } else {
             addReceiverFAB.setVisibility(View.VISIBLE);
