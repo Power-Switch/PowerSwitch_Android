@@ -133,6 +133,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                                     SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
                                     Bundle arguments = new Bundle();
                                     arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
+                                    settingsTabFragment.setArguments(arguments);
                                     fragmentActivity.getSupportFragmentManager()
                                             .beginTransaction()
                                             .setCustomAnimations(R.anim
