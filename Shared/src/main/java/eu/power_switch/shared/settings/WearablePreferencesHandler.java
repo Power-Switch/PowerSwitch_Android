@@ -37,9 +37,28 @@ public class WearablePreferencesHandler {
 
     SharedPreferences sharedPreferences;
 
+    private boolean showRoomAllOnOffCache;
+    private boolean autoCollapseRoomsCache;
+    private int themeCache;
+    private boolean vibrateOnButtonPressCache;
+    private int vibrationDurationCache;
+    private boolean highlightLastActivatedButtonCache;
+
     public WearablePreferencesHandler(Context context) {
         sharedPreferences = context.getSharedPreferences(WearableSettingsConstants.WEARABLE_SHARED_PREFS_NAME,
                 Context.MODE_PRIVATE);
+
+        initCache();
+    }
+
+    private void initCache() {
+        showRoomAllOnOffCache = sharedPreferences.getBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
+        autoCollapseRoomsCache = sharedPreferences.getBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
+        themeCache = sharedPreferences.getInt(WearableSettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
+        vibrateOnButtonPressCache = sharedPreferences.getBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
+        vibrationDurationCache = sharedPreferences.getInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants
+                .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+        highlightLastActivatedButtonCache = sharedPreferences.getBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
     }
 
     /**
@@ -48,9 +67,8 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getShowRoomAllOnOff() {
-        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
-        Log.d(this, "getShowRoomAllOnOff: " + value);
-        return value;
+        Log.d(this, "getShowRoomAllOnOff: " + showRoomAllOnOffCache);
+        return showRoomAllOnOffCache;
     }
 
     /**
@@ -63,6 +81,8 @@ public class WearablePreferencesHandler {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, bool);
         editor.apply();
+
+        showRoomAllOnOffCache = bool;
     }
 
     /**
@@ -71,9 +91,8 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getAutoCollapseRooms() {
-        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
-        Log.d(this, "getAutoCollapseRooms: " + value);
-        return value;
+        Log.d(this, "getAutoCollapseRooms: " + autoCollapseRoomsCache);
+        return autoCollapseRoomsCache;
     }
 
     /**
@@ -86,6 +105,8 @@ public class WearablePreferencesHandler {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
         editor.apply();
+
+        autoCollapseRoomsCache = bool;
     }
 
     /**
@@ -94,9 +115,8 @@ public class WearablePreferencesHandler {
      * @return ID (internal) of Theme
      */
     public int getTheme() {
-        int value = sharedPreferences.getInt(WearableSettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
-        Log.d(this, "getTheme: " + value);
-        return value;
+        Log.d(this, "getTheme: " + themeCache);
+        return themeCache;
     }
 
     /**
@@ -109,6 +129,8 @@ public class WearablePreferencesHandler {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(WearableSettingsConstants.THEME_KEY, theme);
         editor.apply();
+
+        themeCache = theme;
     }
 
     /**
@@ -117,9 +139,8 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getVibrateOnButtonPress() {
-        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
-        Log.d(this, "getVibrateOnButtonPress: " + value);
-        return value;
+        Log.d(this, "getVibrateOnButtonPress: " + vibrateOnButtonPressCache);
+        return vibrateOnButtonPressCache;
     }
 
     /**
@@ -132,6 +153,8 @@ public class WearablePreferencesHandler {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, bool);
         editor.apply();
+
+        vibrateOnButtonPressCache = bool;
     }
 
     /**
@@ -140,10 +163,8 @@ public class WearablePreferencesHandler {
      * @return time in ms
      */
     public int getVibrationDuration() {
-        int value = sharedPreferences.getInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants
-                .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
-        Log.d(this, "getVibrationDuration: " + value);
-        return value;
+        Log.d(this, "getVibrationDuration: " + vibrationDurationCache);
+        return vibrationDurationCache;
     }
 
     /**
@@ -156,6 +177,8 @@ public class WearablePreferencesHandler {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, milliseconds);
         editor.apply();
+
+        vibrationDurationCache = milliseconds;
     }
 
     /**
@@ -164,9 +187,8 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public boolean getHighlightLastActivatedButton() {
-        boolean value = sharedPreferences.getBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
-        Log.d(this, "getHighlightLastActivatedButton: " + value);
-        return value;
+        Log.d(this, "getHighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
+        return highlightLastActivatedButtonCache;
     }
 
     /**
@@ -179,6 +201,8 @@ public class WearablePreferencesHandler {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
         editor.apply();
+
+        highlightLastActivatedButtonCache = bool;
     }
 
 }
