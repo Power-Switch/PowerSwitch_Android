@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
         boolean autoDiscoverStatus = SharedPreferencesHandler.getAutoDiscover();
 
-        if (autoDiscoverStatus) {
+        if (autoDiscoverStatus && NetworkHandler.isWifiAvailable(this)) {
             new AsyncTask<Context, Void, Void>() {
 
                 @Override
