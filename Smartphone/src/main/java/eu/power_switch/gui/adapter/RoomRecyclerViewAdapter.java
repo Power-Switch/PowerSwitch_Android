@@ -50,6 +50,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -134,12 +135,15 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         public void run() {
                             MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
                                     .getString(R.string.menu_settings));
+                            SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                            Bundle arguments = new Bundle();
+                            arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
                             fragmentActivity.getSupportFragmentManager()
                                     .beginTransaction()
                                     .setCustomAnimations(R.anim
                                             .slide_in_right, R.anim.slide_out_left, android.R.anim
                                             .slide_in_left, android.R.anim.slide_out_right)
-                                    .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                    .replace(R.id.mainContentFrameLayout, settingsTabFragment)
                                     .addToBackStack(null).commit();
                         }
                     }, Snackbar.LENGTH_LONG);
@@ -250,12 +254,16 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                 public void run() {
                                     MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
                                             .getString(R.string.menu_settings));
+                                    SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                                    Bundle arguments = new Bundle();
+                                    arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
+                                    settingsTabFragment.setArguments(arguments);
                                     fragmentActivity.getSupportFragmentManager()
                                             .beginTransaction()
                                             .setCustomAnimations(R.anim
                                                     .slide_in_right, R.anim.slide_out_left, android.R.anim
                                                     .slide_in_left, android.R.anim.slide_out_right)
-                                            .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                            .replace(R.id.mainContentFrameLayout, settingsTabFragment)
                                             .addToBackStack(null).commit();
                                 }
                             }, Snackbar.LENGTH_LONG);

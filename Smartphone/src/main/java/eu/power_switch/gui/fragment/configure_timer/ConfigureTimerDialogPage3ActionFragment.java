@@ -110,8 +110,8 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
         recyclerViewTimerActions.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
-        long timerId = args.getLong("TimerId");
-        if (timerId != -1) {
+        if (args != null && args.containsKey("TimerId")) {
+            long timerId = args.getLong("TimerId");
             initializeTimerData(timerId);
         }
 

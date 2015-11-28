@@ -338,28 +338,26 @@ public class ConfigureSceneDialog extends DialogFragment {
 
         @Override
         public Fragment getItem(int i) {
-            Bundle bundle = new Bundle();
-            bundle.putLong("SceneId", sceneId);
+            Fragment fragment = null;
 
             switch (i) {
                 case 0:
-                    ConfigureSceneDialogPage1NameFragment configureSceneDialogPage1NameFragment = new
-                            ConfigureSceneDialogPage1NameFragment();
-                    configureSceneDialogPage1NameFragment.setArguments(bundle);
-
-                    return configureSceneDialogPage1NameFragment;
+                    fragment = new ConfigureSceneDialogPage1NameFragment();
+                    break;
                 case 1:
-                    ConfigureSceneDialogPage2SetupFragment configureSceneDialogPage2SetupFragment = new
-                            ConfigureSceneDialogPage2SetupFragment();
-                    configureSceneDialogPage2SetupFragment.setArguments(bundle);
-                    configureSceneDialogPage2SetupFragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment = new ConfigureSceneDialogPage2SetupFragment();
+                    fragment.setTargetFragment(recyclerViewFragment, 0);
 
-                    setupFragment = configureSceneDialogPage2SetupFragment;
-                    return configureSceneDialogPage2SetupFragment;
-                case 2:
-                    return null;
+                    setupFragment = (ConfigureSceneDialogPage2SetupFragment) fragment;
             }
-            return null;
+
+            if (fragment != null && sceneId != -1) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("SceneId", sceneId);
+                fragment.setArguments(bundle);
+            }
+
+            return fragment;
         }
 
         /**

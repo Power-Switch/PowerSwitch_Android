@@ -30,7 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
-import eu.power_switch.settings.SharedPreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 
 /**
@@ -64,8 +63,11 @@ public class RoomsScenesTimersTabFragment extends Fragment {
         tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
 
-        SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(getContext());
-        tabViewPager.setCurrentItem(sharedPreferencesHandler.getStartupDefaultTab(), false);
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("tabIndex")) {
+            int tabIndex = args.getInt("tabIndex");
+            tabViewPager.setCurrentItem(tabIndex);
+        }
 
         return rootView;
     }
@@ -108,11 +110,11 @@ public class RoomsScenesTimersTabFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
+                case SettingsConstants.ROOMS_TAB_INDEX:
                     return context.getString(R.string.rooms);
-                case 1:
+                case SettingsConstants.SCENES_TAB_INDEX:
                     return context.getString(R.string.scenes);
-                case 2:
+                case SettingsConstants.TIMERS_TAB_INDEX:
                     return context.getString(R.string.timers);
                 default:
                     return "";

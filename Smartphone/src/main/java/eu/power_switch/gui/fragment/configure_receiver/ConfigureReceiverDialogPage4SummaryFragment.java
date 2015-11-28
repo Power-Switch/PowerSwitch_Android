@@ -67,7 +67,7 @@ import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
 public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
 
     private View rootView;
-    private long currentId;
+    private long currentId = -1;
     private String currentName;
     private String currentRoomName;
     private String currentBrand;
@@ -173,10 +173,9 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         updateUi();
 
         Bundle args = getArguments();
-        long receiverId = args.getLong("ReceiverId");
-        currentId = receiverId;
-
-        if (currentId != -1) {
+        if (args != null && args.containsKey("ReceiverId")) {
+            long receiverId = args.getLong("ReceiverId");
+            currentId = receiverId;
             initializeReceiverData(receiverId);
         }
 

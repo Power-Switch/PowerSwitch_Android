@@ -101,8 +101,8 @@ public class ConfigureTimerDialogPage2DaysFragment extends Fragment {
         toggleButtonSunday.setOnCheckedChangeListener(onCheckedChangeListener);
 
         Bundle args = getArguments();
-        long timerId = args.getLong("TimerId");
-        if (timerId != -1) {
+        if (args != null && args.containsKey("TimerId")) {
+            long timerId = args.getLong("TimerId");
             initializeTimerData(timerId);
         }
 

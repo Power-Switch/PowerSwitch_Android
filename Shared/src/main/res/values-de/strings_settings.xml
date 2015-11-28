@@ -24,6 +24,7 @@
 
     <!-- settings -->
     <string name="general_settings">Allgemeine Einstellungen</string>
+    <string name="startup_default_tab">Standard Tab beim Start</string>
     <string name="wearable_settings">Wearable Einstellungen</string>
     <string name="autodiscover">Automatisch nach Gateways suchen</string>
     <string name="auto_collapse_rooms">Automatisch alle Räume zusammenklappen</string>

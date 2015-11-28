@@ -110,6 +110,8 @@
                 android:layout_height="48dp"
                 android:text="@string/theme_light_blue"/>
 
+            <include layout="@layout/list_footer"/>
+
         </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>

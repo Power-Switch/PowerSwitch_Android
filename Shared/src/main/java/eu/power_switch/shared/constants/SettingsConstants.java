@@ -47,6 +47,12 @@ public class SettingsConstants {
     public static final int SCENES_TAB_INDEX = 1;
     public static final int TIMERS_TAB_INDEX = 2;
 
+    // Settings Tabs
+    public static final int GENERAL_SETTINGS_TAB_INDEX = 0;
+    public static final int GATEWAYS_TAB_INDEX = 1;
+    public static final int WEARABLE_TAB_INDEX = 2;
+
+
     // Theme
     public static final int THEME_DARK_BLUE = 0;
     public static final int THEME_DARK_RED = 1;

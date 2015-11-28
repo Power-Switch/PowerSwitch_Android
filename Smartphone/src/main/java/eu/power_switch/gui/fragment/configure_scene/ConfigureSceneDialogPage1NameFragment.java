@@ -107,10 +107,11 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         addReceiversToLayout();
 
         Bundle args = getArguments();
-        long sceneId = args.getLong("SceneId");
-        if (sceneId != -1) {
+        if (args != null && args.containsKey("SceneId")) {
+            long sceneId = args.getLong("SceneId");
             initializeSceneData(sceneId);
         }
+
         checkValidity();
 
         return rootView;

@@ -350,38 +350,35 @@ public class ConfigureReceiverDialog extends DialogFragment {
 
         @Override
         public Fragment getItem(int i) {
-            Bundle bundle = new Bundle();
-            bundle.putLong("ReceiverId", receiverId);
+            Fragment fragment = null;
 
             switch (i) {
                 case 0:
-                    ConfigureReceiverDialogPage1NameFragment configureReceiverDialogPage1NameFragment = new
-                            ConfigureReceiverDialogPage1NameFragment();
-                    configureReceiverDialogPage1NameFragment.setArguments(bundle);
-
-                    return configureReceiverDialogPage1NameFragment;
+                    fragment = new ConfigureReceiverDialogPage1NameFragment();
+                    break;
                 case 1:
-                    ConfigureReceiverDialogPage2TypeFragment configureReceiverDialogPage2TypeFragment = new
-                            ConfigureReceiverDialogPage2TypeFragment();
-                    configureReceiverDialogPage2TypeFragment.setArguments(bundle);
-
-                    return configureReceiverDialogPage2TypeFragment;
+                    fragment = new ConfigureReceiverDialogPage2TypeFragment();
+                    break;
                 case 2:
-                    ConfigureReceiverDialogPage3SetupFragment configureReceiverDialogPage3SetupFragment = new
-                            ConfigureReceiverDialogPage3SetupFragment();
-                    configureReceiverDialogPage3SetupFragment.setArguments(bundle);
-
-                    return configureReceiverDialogPage3SetupFragment;
+                    fragment = new ConfigureReceiverDialogPage3SetupFragment();
+                    break;
                 case 3:
-                    ConfigureReceiverDialogPage4SummaryFragment configureReceiverDialogPage4SummaryFragment = new
-                            ConfigureReceiverDialogPage4SummaryFragment();
-                    configureReceiverDialogPage4SummaryFragment.setArguments(bundle);
-                    configureReceiverDialogPage4SummaryFragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment = new ConfigureReceiverDialogPage4SummaryFragment();
+                    fragment.setTargetFragment(recyclerViewFragment, 0);
 
-                    summaryFragment = configureReceiverDialogPage4SummaryFragment;
-                    return configureReceiverDialogPage4SummaryFragment;
+                    summaryFragment = (ConfigureReceiverDialogPage4SummaryFragment) fragment;
+                    break;
+                default:
+                    break;
             }
-            return null;
+
+            if (fragment != null && receiverId != -1) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("ReceiverId", receiverId);
+                fragment.setArguments(bundle);
+            }
+
+            return fragment;
         }
 
         /**

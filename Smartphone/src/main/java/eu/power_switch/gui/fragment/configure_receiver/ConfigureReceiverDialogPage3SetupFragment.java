@@ -65,6 +65,7 @@ import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.device.UniversalReceiver;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -223,12 +224,15 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                         public void run() {
                             MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
                                     .getString(R.string.menu_settings));
+                            SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                            Bundle arguments = new Bundle();
+                            arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
                                     .setCustomAnimations(R.anim
                                             .slide_in_right, R.anim.slide_out_left, android.R.anim
                                             .slide_in_left, android.R.anim.slide_out_right)
-                                    .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                    .replace(R.id.mainContentFrameLayout, settingsTabFragment)
                                     .addToBackStack(null).commit();
                         }
                     }, Snackbar.LENGTH_LONG);
@@ -262,12 +266,15 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                         public void run() {
                             MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
                                     .getString(R.string.menu_settings));
+                            SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                            Bundle arguments = new Bundle();
+                            arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
                                     .setCustomAnimations(R.anim
                                             .slide_in_right, R.anim.slide_out_left, android.R.anim
                                             .slide_in_left, android.R.anim.slide_out_right)
-                                    .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                    .replace(R.id.mainContentFrameLayout, settingsTabFragment)
                                     .addToBackStack(null).commit();
                         }
                     }, Snackbar.LENGTH_LONG);
@@ -301,12 +308,15 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                         public void run() {
                             MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
                                     .getString(R.string.menu_settings));
+                            SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                            Bundle arguments = new Bundle();
+                            arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
                                     .setCustomAnimations(R.anim
                                             .slide_in_right, R.anim.slide_out_left, android.R.anim
                                             .slide_in_left, android.R.anim.slide_out_right)
-                                    .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                    .replace(R.id.mainContentFrameLayout, settingsTabFragment)
                                     .addToBackStack(null).commit();
                         }
                     }, Snackbar.LENGTH_LONG);
@@ -346,8 +356,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
         updateUi(null);
 
         Bundle args = getArguments();
-        long receiverId = args.getLong("ReceiverId");
-        if (receiverId != -1) {
+        if (args != null && args.containsKey("ReceiverId")) {
+            long receiverId = args.getLong("ReceiverId");
             initializeReceiverData(receiverId);
         }
 

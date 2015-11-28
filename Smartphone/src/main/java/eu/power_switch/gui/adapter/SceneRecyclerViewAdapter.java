@@ -19,6 +19,7 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -48,6 +49,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -128,12 +130,15 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                                 public void run() {
                                     MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
                                             .getString(R.string.menu_settings));
+                                    SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                                    Bundle arguments = new Bundle();
+                                    arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
                                     fragmentActivity.getSupportFragmentManager()
                                             .beginTransaction()
                                             .setCustomAnimations(R.anim
                                                     .slide_in_right, R.anim.slide_out_left, android.R.anim
                                                     .slide_in_left, android.R.anim.slide_out_right)
-                                            .replace(R.id.mainContentFrameLayout, new SettingsTabFragment())
+                                            .replace(R.id.mainContentFrameLayout, settingsTabFragment)
                                             .addToBackStack(null).commit();
                                 }
                             }, Snackbar.LENGTH_LONG);

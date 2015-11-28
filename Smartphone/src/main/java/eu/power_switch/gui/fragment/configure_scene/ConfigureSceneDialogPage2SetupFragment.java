@@ -110,9 +110,9 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         recyclerViewSelectedReceivers.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
-        currentId = args.getLong("SceneId");
-        if (currentId != -1) {
-            initializeSceneData(currentId);
+        if (args != null && args.containsKey("SceneId")) {
+            long sceneId = args.getLong("SceneId");
+            initializeSceneData(sceneId);
         }
         checkValidity();
 

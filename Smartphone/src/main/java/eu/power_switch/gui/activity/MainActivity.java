@@ -165,6 +165,9 @@ public class MainActivity extends AppCompatActivity {
         // Load first Fragment
         try {
             Fragment tabLayoutFragment = RoomsScenesTimersTabFragment.class.newInstance();
+            Bundle arguments = new Bundle();
+            arguments.putInt("tabIndex", sharedPreferencesHandler.getStartupDefaultTab());
+            tabLayoutFragment.setArguments(arguments);
             lastFragmentClasses.push(tabLayoutFragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
             getSupportFragmentManager().beginTransaction()

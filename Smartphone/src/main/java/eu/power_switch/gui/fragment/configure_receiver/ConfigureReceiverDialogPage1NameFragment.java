@@ -141,8 +141,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
         });
 
         Bundle args = getArguments();
-        long receiverId = args.getLong("ReceiverId");
-        if (receiverId != -1) {
+        if (args != null && args.containsKey("ReceiverId")) {
+            long receiverId = args.getLong("ReceiverId");
             initializeReceiverData(receiverId);
         }
         checkValidity();

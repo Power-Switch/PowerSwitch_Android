@@ -341,38 +341,31 @@ public class ConfigureTimerDialog extends DialogFragment {
 
         @Override
         public Fragment getItem(int i) {
-            Bundle bundle = new Bundle();
-            bundle.putLong("TimerId", timerId);
+            Fragment fragment = null;
 
             switch (i) {
                 case 0:
-                    ConfigureTimerDialogPage1TimeFragment configureTimerDialogPage1TimeFragment = new
-                            ConfigureTimerDialogPage1TimeFragment();
-                    configureTimerDialogPage1TimeFragment.setArguments(bundle);
-
-                    return configureTimerDialogPage1TimeFragment;
+                    fragment = new ConfigureTimerDialogPage1TimeFragment();
+                    break;
                 case 1:
-                    ConfigureTimerDialogPage2DaysFragment configureTimerDialogPage2DaysFragment = new
-                            ConfigureTimerDialogPage2DaysFragment();
-                    configureTimerDialogPage2DaysFragment.setArguments(bundle);
-
-                    return configureTimerDialogPage2DaysFragment;
+                    fragment = new ConfigureTimerDialogPage2DaysFragment();
+                    break;
                 case 2:
-                    ConfigureTimerDialogPage3ActionFragment configureTimerDialogPage3ActionFragment = new
-                            ConfigureTimerDialogPage3ActionFragment();
-                    configureTimerDialogPage3ActionFragment.setArguments(bundle);
-
-                    return configureTimerDialogPage3ActionFragment;
+                    fragment = new ConfigureTimerDialogPage3ActionFragment();
+                    break;
                 case 3:
-                    ConfigureTimerDialogPage4SummaryFragment configureTimerDialogPage4SummaryFragment = new
-                            ConfigureTimerDialogPage4SummaryFragment();
-                    configureTimerDialogPage4SummaryFragment.setArguments(bundle);
-                    configureTimerDialogPage4SummaryFragment.setTargetFragment(recyclerViewFragment, 0);
-                    summaryFragment = configureTimerDialogPage4SummaryFragment;
-
-                    return configureTimerDialogPage4SummaryFragment;
+                    fragment = new ConfigureTimerDialogPage4SummaryFragment();
+                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    summaryFragment = (ConfigureTimerDialogPage4SummaryFragment) fragment;
             }
-            return null;
+
+            if (fragment != null && timerId != -1) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("TimerId", timerId);
+                fragment.setArguments(bundle);
+            }
+
+            return fragment;
         }
 
         /**

@@ -165,9 +165,9 @@ public class IntentReceiver extends BroadcastReceiver {
                     // Button:<ButtonName>
 
                     try {
-                        Room room = DatabaseHandler.getRoom(extras.getString(KEY_ROOM));
-                        Receiver receiver = room.getReceiver(extras.getString(KEY_RECEIVER));
-                        Button button = receiver.getButton(extras.getString(KEY_BUTTON));
+                        Room room = DatabaseHandler.getRoom(extras.getString(KEY_ROOM).trim());
+                        Receiver receiver = room.getReceiver(extras.getString(KEY_RECEIVER).trim());
+                        Button button = receiver.getButton(extras.getString(KEY_BUTTON).trim());
 
                         List<NetworkPackage> networkPackages = new ArrayList<>();
                         for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
@@ -195,11 +195,11 @@ public class IntentReceiver extends BroadcastReceiver {
                     // Where ButtonName is the name of the Button that is
                     // pressed for each Receiver in the specified Room
 
-                    Room room = DatabaseHandler.getRoom(extras.getString(KEY_ROOM));
+                    Room room = DatabaseHandler.getRoom(extras.getString(KEY_ROOM).trim());
 
                     List<NetworkPackage> networkPackages = new ArrayList<>();
                     for (Receiver receiver : room.getReceivers()) {
-                        Button button = receiver.getButton(extras.getString(KEY_BUTTON));
+                        Button button = receiver.getButton(extras.getString(KEY_BUTTON).trim());
                         for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
                             try {
                                 NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
@@ -227,7 +227,7 @@ public class IntentReceiver extends BroadcastReceiver {
                 } else if (extras.containsKey(KEY_SCENE)) {
                     // Expects the following Extras:
                     // Scene:<SceneName>
-                    Scene scene = DatabaseHandler.getScene(extras.getString(KEY_SCENE));
+                    Scene scene = DatabaseHandler.getScene(extras.getString(KEY_SCENE).trim());
                     List<NetworkPackage> packages = new ArrayList<>();
                     for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
                         for (SceneItem sceneItem : scene.getSceneItems()) {
@@ -243,7 +243,7 @@ public class IntentReceiver extends BroadcastReceiver {
                     UtilityService.forceWearDataUpdate(context);
                 }
             } else {
-                throw new NullPointerException();
+                throw new NullPointerException("extras are null!");
             }
 
             SharedPreferencesHandler sharedPreferencesHandler = new SharedPreferencesHandler(context);
@@ -359,7 +359,7 @@ public class IntentReceiver extends BroadcastReceiver {
                         }
                     }
                 } else {
-                    throw new NullPointerException();
+                    throw new NullPointerException("extras are null!");
                 }
             }
         } catch (Exception e) {

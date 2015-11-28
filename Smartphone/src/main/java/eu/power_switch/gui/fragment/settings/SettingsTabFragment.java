@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.shared.constants.SettingsConstants;
 
 /**
  * Fragment holding all settings related Fragments in a TabLayout
@@ -65,6 +66,12 @@ public class SettingsTabFragment extends Fragment {
         tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
 
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("tabIndex")) {
+            int tabIndex = args.getInt("tabIndex");
+            tabViewPager.setCurrentItem(tabIndex);
+        }
+
         return rootView;
     }
 
@@ -96,11 +103,11 @@ public class SettingsTabFragment extends Fragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
+                case SettingsConstants.GENERAL_SETTINGS_TAB_INDEX:
                     return new GeneralSettingsFragment();
-                case 1:
+                case SettingsConstants.GATEWAYS_TAB_INDEX:
                     return new GatewaySettingsFragment();
-                case 2:
+                case SettingsConstants.WEARABLE_TAB_INDEX:
                     return new WearableSettingsFragment();
                 default:
                     return new GeneralSettingsFragment();
@@ -118,11 +125,11 @@ public class SettingsTabFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
+                case SettingsConstants.GENERAL_SETTINGS_TAB_INDEX:
                     return context.getString(R.string.general);
-                case 1:
+                case SettingsConstants.GATEWAYS_TAB_INDEX:
                     return context.getString(R.string.gateways);
-                case 2:
+                case SettingsConstants.WEARABLE_TAB_INDEX:
                     return context.getString(R.string.wearable);
                 default:
                     return context.getString(R.string.general);

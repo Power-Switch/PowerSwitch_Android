@@ -51,7 +51,7 @@ import eu.power_switch.timer.action.TimerAction;
  */
 public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
 
-    private long currentId;
+    private long currentId = -1;
     private boolean currentIsActive;
     private String currentName = "";
     private Calendar currentExecutionTime = Calendar.getInstance();
@@ -112,10 +112,11 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
         textViewAction = (TextView) rootView.findViewById(R.id.textView_action);
 
         Bundle args = getArguments();
-        currentId = args.getLong("TimerId");
-        if (currentId != -1) {
+        if (args != null && args.containsKey("TimerId")) {
+            currentId = args.getLong("TimerId");
             initializeTimerData(currentId);
         }
+
         checkValidity();
         updateUi();
 
