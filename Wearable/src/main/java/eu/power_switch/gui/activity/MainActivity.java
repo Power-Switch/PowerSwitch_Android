@@ -244,8 +244,16 @@ public class MainActivity extends WearableActivity {
         protected ArrayList<Object> doInBackground(Uri... params) {
             // Get Room Data from Smartphone App
             ArrayList<Room> rooms = dataApiHandler.getRoomData();
+            WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler
+                    (getApplicationContext());
+            boolean autoCollapseRooms = wearablePreferencesHandler.getAutoCollapseRooms();
+            for (Room room : rooms) {
+                room.setCollapsed(autoCollapseRooms);
+            }
+
             // Get Scene Data from Smartphone App
             ArrayList<Scene> scenes = dataApiHandler.getSceneData();
+
             // Get Wearable Settings from Smartphone App
             dataApiHandler.updateSettings(getApplicationContext());
 

@@ -30,6 +30,10 @@ public class Room implements Serializable {
     private long id;
     private String name;
     private List<Receiver> receivers;
+    /**
+     * Specifies if this room should be rendered collapsed
+     */
+    private boolean collapsed;
 
     public Room(long id, String name) {
         this.id = id;
@@ -63,5 +67,23 @@ public class Room implements Serializable {
 
     public void addReceiver(Receiver receiver) {
         receivers.add(receiver);
+    }
+
+    /**
+     * Get collapsed state of this Room
+     *
+     * @return true if collapsed
+     */
+    public boolean isCollapsed() {
+        return collapsed;
+    }
+
+    /**
+     * Set collapsed state of this Room
+     *
+     * @param collapsed
+     */
+    public void setCollapsed(boolean collapsed) {
+        this.collapsed = collapsed;
     }
 }

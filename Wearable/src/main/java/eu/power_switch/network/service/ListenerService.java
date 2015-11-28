@@ -195,8 +195,15 @@ public class ListenerService extends WearableListenerService {
                     ArrayList<DataMap> data = dataMapItem.getDataMap()
                             .getDataMapArrayList(WearableConstants.EXTRA_DATA);
 
+                    WearablePreferencesHandler wearablePreferencesHandler = new WearablePreferencesHandler
+                            (getApplicationContext());
+                    boolean autoCollapseRooms = wearablePreferencesHandler.getAutoCollapseRooms();
+
                     // convert received data to room/receiver/button objects
                     ArrayList<Room> rooms = extractRoomDataMapItems(data);
+                    for (Room room : rooms) {
+                        room.setCollapsed(autoCollapseRooms);
+                    }
                     ArrayList<Scene> scenes = extractSceneDataMapItems(data);
 
                     // send data to Activity

@@ -85,7 +85,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         // Set item views based on the data model
         holder.roomName.setText(room.getName());
 
-        if (wearablePreferencesHandler.getAutoCollapseRooms()) {
+        if (room.isCollapsed()) {
             holder.linearLayoutOfReceivers.setVisibility(View.GONE);
             holder.linearLayout_AllOnOffButtons.setVisibility(View.VISIBLE);
         } else {
@@ -97,9 +97,11 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             @Override
             public void onClick(View v) {
                 if (holder.linearLayoutOfReceivers.getVisibility() == View.VISIBLE) {
+                    room.setCollapsed(true);
                     holder.linearLayoutOfReceivers.setVisibility(View.GONE);
                     holder.linearLayout_AllOnOffButtons.setVisibility(View.VISIBLE);
                 } else {
+                    room.setCollapsed(false);
                     holder.linearLayoutOfReceivers.setVisibility(View.VISIBLE);
                     holder.linearLayout_AllOnOffButtons.setVisibility(View.GONE);
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) parentRecyclerView.getLayoutManager();
