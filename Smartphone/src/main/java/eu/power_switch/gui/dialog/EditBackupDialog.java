@@ -48,9 +48,12 @@ import eu.power_switch.shared.log.Log;
  */
 public class EditBackupDialog extends DialogFragment {
 
+    private boolean modified = false;
+
     private Dialog dialog;
     private int defaultTextColor;
     private View rootView;
+    private EditText name;
 
     @NonNull
     @Override
@@ -66,7 +69,7 @@ public class EditBackupDialog extends DialogFragment {
         builder.setView(rootView);
 
         // restore name
-        final EditText name = (EditText) rootView.findViewById(R.id.editText_backup_name);
+        name = (EditText) rootView.findViewById(R.id.editText_backup_name);
         name.setText(backupName);
         name.addTextChangedListener(new TextWatcher() {
 
@@ -80,7 +83,7 @@ public class EditBackupDialog extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                modified = true;
             }
         });
 
@@ -88,19 +91,19 @@ public class EditBackupDialog extends DialogFragment {
         builder.setPositiveButton(R.string.save, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                BackupHandler backupHandler = new BackupHandler(getActivity());
-                try {
-                    backupHandler.renameBackup(backupName, name.getText().toString());
-                    BackupFragment.sendBackupsChangedBroadcast(getActivity());
-                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
-                } catch (BackupAlreadyExistsException e) {
-                    Log.e(e);
-                    e.printStackTrace();
-                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
-                } catch (BackupNotFoundException e) {
-                    Log.e(e);
-                    e.printStackTrace();
-                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                if (modified) {
+                    try {
+                        BackupHandler backupHandler = new BackupHandler(getActivity());
+                        backupHandler.renameBackup(backupName, name.getText().toString().trim());
+                        BackupFragment.sendBackupsChangedBroadcast(getActivity());
+                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
+                    } catch (BackupAlreadyExistsException e) {
+                        Log.e(e);
+                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
+                    } catch (BackupNotFoundException e) {
+                        Log.e(e);
+                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                    }
                 }
             }
         });

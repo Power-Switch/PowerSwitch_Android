@@ -18,14 +18,14 @@
 
 package eu.power_switch.exception.gateway;
 
-public class UnknownGatewayException extends RuntimeException {
+public class GatewayUnknownException extends RuntimeException {
     private static final long serialVersionUID = 5040868827100944073L;
 
-    public UnknownGatewayException() {
+    public GatewayUnknownException() {
         super();
     }
 
-    public UnknownGatewayException(String s) {
+    public GatewayUnknownException(String s) {
         super(s);
     }
 }

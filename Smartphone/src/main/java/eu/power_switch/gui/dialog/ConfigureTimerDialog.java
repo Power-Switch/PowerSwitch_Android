@@ -188,14 +188,18 @@ public class ConfigureTimerDialog extends DialogFragment {
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Saving timer");
-                CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
-                ConfigureTimerDialogPage4SummaryFragment summaryFragment =
-                        customTabAdapter.getSummaryFragment();
-
-                if (summaryFragment.checkValidity()) {
-                    summaryFragment.saveCurrentConfigurationToDatabase();
+                if (!modified) {
                     getDialog().dismiss();
+                } else {
+                    Log.d("Saving timer");
+                    CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
+                    ConfigureTimerDialogPage4SummaryFragment summaryFragment =
+                            customTabAdapter.getSummaryFragment();
+
+                    if (summaryFragment.checkValidity()) {
+                        summaryFragment.saveCurrentConfigurationToDatabase();
+                        getDialog().dismiss();
+                    }
                 }
             }
         });

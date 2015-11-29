@@ -64,6 +64,8 @@ import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
  */
 public class EditRoomDialog extends DialogFragment implements OnStartDragListener {
 
+    private boolean modified = false;
+
     private View rootView;
     private String originalName;
     private EditText name;
@@ -109,6 +111,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
 
             @Override
             public void afterTextChanged(Editable s) {
+                modified = true;
                 checkValidity();
             }
         });
@@ -174,18 +177,22 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHandler.updateRoom(roomId, getRoomName());
+                if (!modified) {
+                    getDialog().dismiss();
+                } else {
+                    DatabaseHandler.updateRoom(roomId, getRoomName());
 
-                // save receiver order
-                for (int position = 0; position < receiverList.size(); position++) {
-                    Receiver receiver = receiverList.get(position);
-                    DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
+                    // save receiver order
+                    for (int position = 0; position < receiverList.size(); position++) {
+                        Receiver receiver = receiverList.get(position);
+                        DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
+                    }
+
+                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+
+                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
+                    getDialog().dismiss();
                 }
-
-                RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-
-                StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
-                getDialog().dismiss();
             }
         });
 
@@ -239,6 +246,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        modified = true;
         itemTouchHelper.startDrag(viewHolder);
     }
 

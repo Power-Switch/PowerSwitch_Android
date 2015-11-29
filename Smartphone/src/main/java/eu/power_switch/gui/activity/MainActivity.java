@@ -200,16 +200,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                             try {
                                 DatabaseHandler.addGateway(gateway);
-                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
-                                        .LENGTH_LONG);
+                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
                             } catch (GatewayAlreadyExistsException e) {
-                                Log.e(e);
-                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
-                                        .LENGTH_LONG);
+                                DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
+                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
                             } catch (Exception e) {
                                 Log.e(e);
-                                StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar
-                                        .LENGTH_LONG);
+                                StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
                             }
                         }
                     }

@@ -199,13 +199,17 @@ public class ConfigureReceiverDialog extends DialogFragment {
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Saving receiver");
-                CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
-                ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
-                        customTabAdapter.getSummaryFragment();
-                if (summaryFragment.checkSetupValidity()) {
-                    summaryFragment.saveCurrentConfigurationToDatabase();
+                if (!modified) {
                     getDialog().dismiss();
+                } else {
+                    Log.d("Saving receiver");
+                    CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
+                    ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
+                            customTabAdapter.getSummaryFragment();
+                    if (summaryFragment.checkSetupValidity()) {
+                        summaryFragment.saveCurrentConfigurationToDatabase();
+                        getDialog().dismiss();
+                    }
                 }
             }
         });

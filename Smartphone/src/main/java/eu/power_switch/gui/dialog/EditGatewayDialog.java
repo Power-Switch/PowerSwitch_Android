@@ -181,16 +181,19 @@ public class EditGatewayDialog extends DialogFragment {
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int portInt = 49880;
-                if (port.getText().toString().trim().length() > 0) {
-                    portInt = Integer.valueOf(port.getText().toString());
+                if (!modified) {
+                    getDialog().dismiss();
+                } else {
+                    int portInt = 49880;
+                    if (port.getText().toString().trim().length() > 0) {
+                        portInt = Integer.valueOf(port.getText().toString());
+                    }
+                    DatabaseHandler.updateGateway(gatewayId, name.getText().toString().trim(), model.getSelectedItem()
+                            .toString(), address.getText().toString().trim(), portInt);
+                    GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
+                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
+                    getDialog().dismiss();
                 }
-                DatabaseHandler.updateGateway(gatewayId, name.getText().toString().trim(), model.getSelectedItem()
-                                .toString(),
-                        address.getText().toString().trim(), portInt);
-                GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-                StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
-                getDialog().dismiss();
             }
         });
 

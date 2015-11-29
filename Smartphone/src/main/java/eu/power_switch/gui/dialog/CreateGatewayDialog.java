@@ -40,7 +40,8 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.exception.gateway.UnknownGatewayException;
+import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.exception.gateway.GatewayUnknownException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
@@ -145,21 +146,23 @@ public class CreateGatewayDialog extends DialogFragment {
                 } else if (gatewayModel.equals(ITGW433.MODEL)) {
                     newGateway = new ITGW433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
                 } else {
-                    throw new UnknownGatewayException();
+                    throw new GatewayUnknownException();
                 }
 
                 try {
                     DatabaseHandler.addGateway(newGateway);
+
+                    GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
+
+                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                            R.string.gateway_created, Snackbar.LENGTH_LONG);
+                    getDialog().dismiss();
+                } catch (GatewayAlreadyExistsException e) {
+                    StatusMessageHandler.showStatusMessage(rootView.getContext(),
+                            R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
                     Log.e(e);
-                    e.printStackTrace();
-                    return;
                 }
-
-                GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-
-                StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.gateway_created, Snackbar.LENGTH_LONG);
-                getDialog().dismiss();
             }
         });
 

@@ -26,12 +26,11 @@ import java.util.List;
 
 import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.exception.gateway.UnknownGatewayException;
+import eu.power_switch.exception.gateway.GatewayUnknownException;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Gateways
@@ -175,38 +174,32 @@ public abstract class GatewayHandler {
      * @return Gateway, can be null
      */
     private static Gateway dbToGateway(Cursor c) {
-        try {
-            Gateway gateway;
-            Long id = c.getLong(0);
-            int rawActive = c.getInt(1);
-            boolean active;
-            String name = c.getString(2);
-            String rawModel = c.getString(3);
-            String firmware = c.getString(4);
-            String address = c.getString(5);
-            int port = c.getInt(6);
+        Gateway gateway;
+        Long id = c.getLong(0);
+        int rawActive = c.getInt(1);
+        boolean active;
+        String name = c.getString(2);
+        String rawModel = c.getString(3);
+        String firmware = c.getString(4);
+        String address = c.getString(5);
+        int port = c.getInt(6);
 
-            if (rawActive > 0) {
-                active = true;
-            } else {
-                active = false;
-            }
-
-            if (rawModel.equals(BrematicGWY433.MODEL)) {
-                gateway = new BrematicGWY433(id, active, name, firmware, address, port);
-            } else if (rawModel.equals(ConnAir.MODEL)) {
-                gateway = new ConnAir(id, active, name, firmware, address, port);
-            } else if (rawModel.equals(ITGW433.MODEL)) {
-                gateway = new ITGW433(id, active, name, firmware, address, port);
-            } else {
-                throw new UnknownGatewayException();
-            }
-
-            return gateway;
-        } catch (Exception e) {
-            Log.e(e);
-            return null;
+        if (rawActive > 0) {
+            active = true;
+        } else {
+            active = false;
         }
-    }
 
+        if (rawModel.equals(BrematicGWY433.MODEL)) {
+            gateway = new BrematicGWY433(id, active, name, firmware, address, port);
+        } else if (rawModel.equals(ConnAir.MODEL)) {
+            gateway = new ConnAir(id, active, name, firmware, address, port);
+        } else if (rawModel.equals(ITGW433.MODEL)) {
+            gateway = new ITGW433(id, active, name, firmware, address, port);
+        } else {
+            throw new GatewayUnknownException();
+        }
+
+        return gateway;
+    }
 }

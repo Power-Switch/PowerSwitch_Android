@@ -193,12 +193,16 @@ public class ConfigureSceneDialog extends DialogFragment {
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Saving scene");
-                CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
-                ConfigureSceneDialogPage2SetupFragment setupFragment =
-                        customTabAdapter.getSetupFragment();
-                setupFragment.saveCurrentConfigurationToDatabase();
-                getDialog().dismiss();
+                if (!modified) {
+                    getDialog().dismiss();
+                } else {
+                    Log.d("Saving scene");
+                    CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
+                    ConfigureSceneDialogPage2SetupFragment setupFragment =
+                            customTabAdapter.getSetupFragment();
+                    setupFragment.saveCurrentConfigurationToDatabase();
+                    getDialog().dismiss();
+                }
             }
         });
         if (sceneId == -1) {
