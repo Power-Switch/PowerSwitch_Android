@@ -143,8 +143,8 @@ public abstract class Receiver {
     protected LinkedList<Button> buttons;
     protected Long roomId;
     protected String type;
-    protected Integer positionInRoom;
-    protected Long lastActivatedButtonId;
+    protected Integer positionInRoom = -1;
+    protected Long lastActivatedButtonId = (long) -1;
 
     public Receiver(Context context, Long id, String name, String brand, String model, String type, Long roomId) {
         this.context = context;
