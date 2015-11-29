@@ -39,7 +39,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -154,8 +154,6 @@ public class IntentReceiver extends BroadcastReceiver {
         try {
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                DatabaseHandler.init(context);
-
                 NetworkHandler nwm = new NetworkHandler(context);
 
                 if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {
@@ -246,9 +244,8 @@ public class IntentReceiver extends BroadcastReceiver {
                 throw new NullPointerException("extras are null!");
             }
 
-            SharedPreferencesHandler.init(context);
             // force receiver widget update to highlight last button
-            if (SharedPreferencesHandler.getHighlightLastActivatedButton()) {
+            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
                 ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);
             }
         } catch (Exception e) {
@@ -269,8 +266,6 @@ public class IntentReceiver extends BroadcastReceiver {
         try {
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                DatabaseHandler.init(context);
-
                 NetworkHandler nwm = new NetworkHandler(context);
 
                 int start;

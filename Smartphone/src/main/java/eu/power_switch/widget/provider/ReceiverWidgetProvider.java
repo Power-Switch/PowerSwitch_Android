@@ -36,7 +36,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
@@ -59,8 +59,6 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
             int appWidgetId = appWidgetIds[i];
             RemoteViews remoteViews = new RemoteViews(context.getResources()
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
-
-            DatabaseHandler.init(context);
 
             ReceiverWidget receiverWidget = DatabaseHandler.getReceiverWidget(appWidgetId);
             if (receiverWidget != null) {
@@ -85,7 +83,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
-                        if (SharedPreferencesHandler.getHighlightLastActivatedButton() &&
+                        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() &&
                                 receiver.getLastActivatedButtonId().equals(button.getId())) {
                             buttonView.setTextColor(R.id.button_widget_universal,
                                     ContextCompat.getColor(context, R.color.accent_blue_a700));

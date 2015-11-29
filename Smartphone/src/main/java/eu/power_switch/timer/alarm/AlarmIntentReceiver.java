@@ -71,8 +71,6 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
         }
 
         try {
-            DatabaseHandler.init(context);
-
             if (intent.getAction().equals(TimerConstants.TIMER_ACTIVATION_INTENT)) {
                 Log.d("AlarmIntentReceiver", "parsing timer activation intent...");
                 parseActionIntent(context, intent);

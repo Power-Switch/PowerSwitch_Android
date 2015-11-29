@@ -30,7 +30,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * FAB Behaviour
@@ -56,7 +56,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      * @param floatingActionButton FAB
      */
     private void animateOut(final FloatingActionButton floatingActionButton) {
-        if (SharedPreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
             return;
         }
 
@@ -107,7 +107,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      */
     //
     private void animateIn(FloatingActionButton floatingActionButton) {
-        if (SharedPreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
             return;
         }
         floatingActionButton.setVisibility(View.VISIBLE);

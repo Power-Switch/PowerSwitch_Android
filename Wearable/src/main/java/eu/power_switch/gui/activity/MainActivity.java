@@ -64,7 +64,6 @@ public class MainActivity extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        WearablePreferencesHandler.init(getApplicationContext());
         switch (WearablePreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
                 getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);

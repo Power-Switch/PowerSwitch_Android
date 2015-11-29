@@ -20,9 +20,11 @@ package eu.power_switch.application;
 
 import android.app.Application;
 
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
+
 /**
  * Entry point for the Wearable application
- *
+ * <p/>
  * Created by Markus on 12.08.2015.
  */
 public class PowerSwitchWear extends Application {
@@ -31,4 +33,11 @@ public class PowerSwitchWear extends Application {
 
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        // One time initialization of handlers for static access
+        WearablePreferencesHandler.init(this);
+    }
 }

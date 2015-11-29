@@ -59,7 +59,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -96,7 +96,7 @@ public class BackupFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         TextView textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
-        textViewBackupPath.setText(SharedPreferencesHandler.getBackupPath());
+        textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
 
         backups = new ArrayList<>();
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_backups);
@@ -274,7 +274,7 @@ public class BackupFragment extends RecyclerViewFragment {
     public void onResume() {
         super.onResume();
         checkWriteExternalStoragePermission();
-        if (SharedPreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

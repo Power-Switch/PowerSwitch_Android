@@ -42,7 +42,7 @@ import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
@@ -114,7 +114,7 @@ public class TimersFragment extends RecyclerViewFragment {
             }
         });
 
-        if (SharedPreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
             fab.setVisibility(View.GONE);
         }
 
@@ -134,7 +134,7 @@ public class TimersFragment extends RecyclerViewFragment {
         Log.d("TimersFragment", "refreshTimers");
         timers.clear();
 
-        if (SharedPreferencesHandler.getPlayStoreMode()) {
+        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             timers.addAll(playStoreModeDataModel.getTimers());
         } else {

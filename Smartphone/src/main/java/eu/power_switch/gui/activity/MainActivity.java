@@ -52,10 +52,9 @@ import eu.power_switch.gui.fragment.main.RoomsScenesTimersTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
@@ -104,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferencesHandler.init(getApplicationContext());
-        WearablePreferencesHandler.init(getApplicationContext());
         // set Theme before anything else in onCreate);
-        switch (SharedPreferencesHandler.getTheme()) {
+        switch (SmartphonePreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
                 getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 setTheme(R.style.PowerSwitchTheme_Dark_Blue);
@@ -132,9 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // One time Database Handler initialization for all later access
-        DatabaseHandler.init(getApplicationContext());
 
         // Set a Toolbar to replace the ActionBar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -167,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Fragment tabLayoutFragment = RoomsScenesTimersTabFragment.class.newInstance();
             Bundle arguments = new Bundle();
-            arguments.putInt("tabIndex", SharedPreferencesHandler.getStartupDefaultTab());
+            arguments.putInt("tabIndex", SmartphonePreferencesHandler.getStartupDefaultTab());
             tabLayoutFragment.setArguments(arguments);
             lastFragmentClasses.push(tabLayoutFragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
@@ -179,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        boolean autoDiscoverStatus = SharedPreferencesHandler.getAutoDiscover();
+        boolean autoDiscoverStatus = SmartphonePreferencesHandler.getAutoDiscover();
 
         if (autoDiscoverStatus && NetworkHandler.isWifiAvailable(this)) {
             new AsyncTask<Context, Void, Void>() {

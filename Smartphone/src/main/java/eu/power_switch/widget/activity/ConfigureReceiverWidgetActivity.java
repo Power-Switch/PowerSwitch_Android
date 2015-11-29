@@ -47,7 +47,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
@@ -83,7 +83,6 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("ConfigureReceiverWidgetActivity");
         super.onCreate(savedInstanceState);
-        DatabaseHandler.init(this);
 
         setContentView(R.layout.widget_dialog_configure_receiver);
 
@@ -174,7 +173,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
-                        if (SharedPreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
+                        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
                                 .getLastActivatedButtonId().equals(button.getId())) {
                             buttonView.setTextColor(R.id.button_widget_universal,
                                     ContextCompat.getColor(getApplicationContext(), R.color.accent_blue_a700));

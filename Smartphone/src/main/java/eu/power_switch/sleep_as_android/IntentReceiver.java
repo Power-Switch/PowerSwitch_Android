@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -63,8 +62,6 @@ public class IntentReceiver extends BroadcastReceiver {
         }
 
         try {
-            DatabaseHandler.init(context);
-
             if (intent.getAction().equals(ExternalAppConstants.ALARM_TRIGGERED_INTENT)) {
                 Log.d("IntentReceiver", "Alarm triggered!");
             } else if (intent.getAction().equals(ExternalAppConstants.ALARM_SNOOZED_INTENT)) {

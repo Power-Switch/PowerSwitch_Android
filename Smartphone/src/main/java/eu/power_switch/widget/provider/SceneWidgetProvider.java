@@ -52,8 +52,6 @@ public class SceneWidgetProvider extends AppWidgetProvider {
             RemoteViews remoteViews = new RemoteViews(context.getResources()
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
 
-            DatabaseHandler.init(context);
-
             SceneWidget sceneWidget = DatabaseHandler.getSceneWidget(appWidgetId);
             if (sceneWidget != null) {
                 // update UI

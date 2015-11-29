@@ -29,7 +29,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import eu.power_switch.R;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Hidden Dialog Menu to access developer options
@@ -45,11 +45,11 @@ public class DeveloperOptionsDialog extends DialogFragment {
         rootView = inflater.inflate(R.layout.dialog_developer_options, null);
 
         CheckBox checkBox_playStoreMode = (CheckBox) rootView.findViewById(R.id.checkBox_playStoreMode);
-        checkBox_playStoreMode.setChecked(SharedPreferencesHandler.getPlayStoreMode());
+        checkBox_playStoreMode.setChecked(SmartphonePreferencesHandler.getPlayStoreMode());
         checkBox_playStoreMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferencesHandler.setPlayStoreMode(isChecked);
+                SmartphonePreferencesHandler.setPlayStoreMode(isChecked);
             }
         });
 

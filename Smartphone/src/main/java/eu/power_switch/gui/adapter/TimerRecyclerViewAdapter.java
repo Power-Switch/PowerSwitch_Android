@@ -32,7 +32,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.action.TimerAction;
@@ -154,7 +154,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
 
         // collapse timer
-        if (SharedPreferencesHandler.getAutoCollapseTimers()) {
+        if (SmartphonePreferencesHandler.getAutoCollapseTimers()) {
             linearLayoutDescription.setVisibility(View.GONE);
         }
 

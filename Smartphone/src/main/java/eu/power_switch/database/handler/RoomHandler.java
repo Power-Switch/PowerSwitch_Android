@@ -27,7 +27,7 @@ import java.util.List;
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Provides database methods for managing Rooms
@@ -108,7 +108,7 @@ public abstract class RoomHandler {
                 null, null, null, null);
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = SharedPreferencesHandler.getAutoCollapseRooms();
+        boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
 
         Room room = dbToRoom(cursor);
         room.setCollapsed(autoCollapseRooms);
@@ -126,7 +126,7 @@ public abstract class RoomHandler {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = SharedPreferencesHandler.getAutoCollapseRooms();
+        boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(cursor);

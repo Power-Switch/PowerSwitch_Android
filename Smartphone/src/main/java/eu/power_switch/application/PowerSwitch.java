@@ -22,8 +22,11 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Entry Point for the Application
@@ -36,9 +39,6 @@ public class PowerSwitch extends MultiDexApplication {
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
 
     public PowerSwitch() {
-        // Configure Log4J Logger
-        LogHandler.configureLogger();
-
         // save original uncaught exception handler
         originalUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 
@@ -58,4 +58,20 @@ public class PowerSwitch extends MultiDexApplication {
         super.attachBaseContext(base);
         MultiDex.install(base);
     }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        // Configure Log4J Logger
+        LogHandler.configureLogger();
+
+        Log.d("Application init...");
+
+        // One time initialization of handlers for static access
+        DatabaseHandler.init(this);
+        SmartphonePreferencesHandler.init(this);
+        WearablePreferencesHandler.init(this);
+    }
+
 }

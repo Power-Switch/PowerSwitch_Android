@@ -50,7 +50,7 @@ import eu.power_switch.gui.dialog.EditGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -215,7 +215,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
         gateways.clear();
 
-        if (SharedPreferencesHandler.getPlayStoreMode()) {
+        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
             gateways.addAll(PlayStoreModeDataModel.getGateways());
         } else {
             gateways.addAll(DatabaseHandler.getAllGateways());
@@ -223,7 +223,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        if (SharedPreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
             searchGatewayFAB.setVisibility(View.GONE);
             addGatewayFAB.setVisibility(View.GONE);
         } else {

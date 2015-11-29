@@ -44,7 +44,7 @@ import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
@@ -133,7 +133,7 @@ public class ScenesFragment extends RecyclerViewFragment {
         Log.d("ScenesFragment", "refreshScenes");
         scenes.clear();
 
-        if (SharedPreferencesHandler.getPlayStoreMode()) {
+        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             scenes.addAll(playStoreModeDataModel.getScenes());
         } else {
@@ -175,7 +175,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SharedPreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

@@ -45,7 +45,7 @@ import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Room;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
@@ -137,7 +137,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     private void updateUI() {
         rooms.clear();
 
-        if (SharedPreferencesHandler.getPlayStoreMode()) {
+        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             rooms.addAll(playStoreModeDataModel.getRooms());
         } else {
@@ -180,7 +180,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SharedPreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
             addReceiverFAB.setVisibility(View.GONE);
         } else {
             addReceiverFAB.setVisibility(View.VISIBLE);

@@ -74,8 +74,6 @@ public class ConfigureRoomWidgetActivity extends Activity {
         Log.d("ConfigureRoomWidgetActivity");
         super.onCreate(savedInstanceState);
 
-        DatabaseHandler.init(this);
-
         setContentView(R.layout.widget_dialog_configure_room);
 
         roomsList = DatabaseHandler.getAllRooms();

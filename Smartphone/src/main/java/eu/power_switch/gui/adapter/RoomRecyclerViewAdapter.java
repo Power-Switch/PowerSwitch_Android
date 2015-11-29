@@ -49,7 +49,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
@@ -122,8 +122,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(fragmentActivity, SharedPreferencesHandler.getVibrationDuration());
+                if (SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                 }
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
@@ -172,7 +172,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.buttonAllOn.setOnClickListener(onClickListener);
         holder.buttonAllOff.setOnClickListener(onClickListener);
 
-        if (!SharedPreferencesHandler.getShowRoomAllOnOff()) {
+        if (!SmartphonePreferencesHandler.getShowRoomAllOnOff()) {
             holder.buttonAllOn.setVisibility(View.GONE);
             holder.buttonAllOff.setVisibility(View.GONE);
         } else {
@@ -236,7 +236,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
-                if (SharedPreferencesHandler.getHighlightLastActivatedButton() && lastActivatedButtonId != -1 && button.getId
+                if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() && lastActivatedButtonId != -1 && button
+                        .getId
                         () == lastActivatedButtonId) {
                     buttonView.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.accent_blue_a700));
                 }
@@ -244,8 +245,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                     @Override
                     public void onClick(View v) {
-                        if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
-                            VibrationHandler.vibrate(fragmentActivity, SharedPreferencesHandler.getVibrationDuration());
+                        if (SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
+                            VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                         }
                         List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                         if (activeGateways.isEmpty()) {
@@ -278,7 +279,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         // update list item
                         receiver.setLastActivatedButtonId(button.getId());
 
-                        if (SharedPreferencesHandler.getHighlightLastActivatedButton()) {
+                        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
                             for (android.widget.Button button : buttonViews) {
                                 if (button != v) {
                                     button.setTextColor(defaultTextColor);

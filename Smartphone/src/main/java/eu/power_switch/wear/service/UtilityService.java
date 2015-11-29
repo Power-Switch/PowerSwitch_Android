@@ -40,12 +40,11 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -224,14 +223,11 @@ public class UtilityService extends IntentService {
      */
     @Override
     synchronized protected void onHandleIntent(Intent intent) {
-        LogHandler.configureLogger();
-        DatabaseHandler.init(getApplicationContext());
-
         // Get Room/Receiver/Scene Data from Database and send to wearable
         if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
             Log.d("Getting Data from Database to send to Wearable...");
 
-            if (SharedPreferencesHandler.getPlayStoreMode()) {
+            if (SmartphonePreferencesHandler.getPlayStoreMode()) {
                 PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
 
                 List<Room> rooms = playStoreModeDataModel.getRooms();

@@ -74,8 +74,6 @@ public class ConfigureSceneWidgetActivity extends Activity {
         Log.d("ConfigureSceneWidgetActivity");
         super.onCreate(savedInstanceState);
 
-        DatabaseHandler.init(this);
-
         setContentView(R.layout.widget_dialog_configure_scene);
 
         scenesList = DatabaseHandler.getAllScenes();

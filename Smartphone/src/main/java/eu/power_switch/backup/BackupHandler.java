@@ -34,7 +34,7 @@ import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.exception.backup.CreateBackupException;
 import eu.power_switch.exception.backup.RemoveBackupException;
 import eu.power_switch.exception.backup.RestoreBackupException;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -63,7 +63,7 @@ public class BackupHandler {
      */
     public ArrayList<Backup> getBackups() {
         ArrayList<Backup> backups = new ArrayList<>();
-        File backupDir = new File(SharedPreferencesHandler.getBackupPath());
+        File backupDir = new File(SmartphonePreferencesHandler.getBackupPath());
         if (backupDir.exists()) {
 
             for (File file : backupDir.listFiles()) {
@@ -93,7 +93,7 @@ public class BackupHandler {
             File src;
             File dst;
 
-            dst = new File(SharedPreferencesHandler.getBackupPath() + File.separator
+            dst = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator
                     + name);
             if (!dst.exists()) {
                 dst.mkdirs();
@@ -115,7 +115,7 @@ public class BackupHandler {
             try {
                 // copy database
                 src = new File(context.getFilesDir().getParent() + File.separator + "databases");
-                dst = new File(SharedPreferencesHandler.getBackupPath() + File.separator
+                dst = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator
                         + name + File.separator + "databases");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -123,7 +123,7 @@ public class BackupHandler {
 
                 // copy preferences
                 src = new File(context.getFilesDir().getParent() + File.separator + "shared_prefs");
-                dst = new File(SharedPreferencesHandler.getBackupPath() + File.separator
+                dst = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator
                         + name + File.separator + "shared_prefs");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -144,7 +144,7 @@ public class BackupHandler {
      */
     public void removeBackup(String name) throws BackupNotFoundException, RemoveBackupException {
         try {
-            File backupFolder = new File(SharedPreferencesHandler.getBackupPath()
+            File backupFolder = new File(SmartphonePreferencesHandler.getBackupPath()
                     + File.separator + name);
             if (!backupFolder.exists()) {
                 throw new BackupNotFoundException();
@@ -165,9 +165,9 @@ public class BackupHandler {
      * @throws BackupAlreadyExistsException
      */
     public void renameBackup(String oldName, String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
-        File oldFolder = new File(SharedPreferencesHandler.getBackupPath()
+        File oldFolder = new File(SmartphonePreferencesHandler.getBackupPath()
                 + File.separator + oldName);
-        File newFolder = new File(SharedPreferencesHandler.getBackupPath()
+        File newFolder = new File(SmartphonePreferencesHandler.getBackupPath()
                 + File.separator + newName);
 
         if (!oldFolder.exists()) {
@@ -188,7 +188,7 @@ public class BackupHandler {
      */
     public void restoreBackup(String name) throws BackupNotFoundException, RestoreBackupException {
         // create source path object
-        File src = new File(SharedPreferencesHandler.getBackupPath() + File.separator + name);
+        File src = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator + name);
         if (src.exists()) {
             try {
                 // create destination path object

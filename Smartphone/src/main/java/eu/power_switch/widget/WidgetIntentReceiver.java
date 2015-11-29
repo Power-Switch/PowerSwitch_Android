@@ -31,7 +31,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.log.Log;
@@ -145,8 +145,8 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
         try {
             if (intent.getAction().equals(WidgetConstants.WIDGET_ACTION_INTENT)) {
                 // vibrate
-                if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(context, SharedPreferencesHandler.getVibrationDuration());
+                if (SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(context, SmartphonePreferencesHandler.getVibrationDuration());
                 }
 
                 parseWidgetActionIntent(context, intent);

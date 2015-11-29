@@ -41,7 +41,7 @@ import java.util.Calendar;
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
@@ -84,22 +84,22 @@ public class GeneralSettingsFragment extends Fragment {
 
                 switch (buttonView.getId()) {
                     case R.id.checkBox_autoDiscover:
-                        SharedPreferencesHandler.setAutoDiscover(isChecked);
+                        SmartphonePreferencesHandler.setAutoDiscover(isChecked);
                         break;
                     case R.id.checkBox_autoCollapseRooms:
-                        SharedPreferencesHandler.setAutoCollapseRooms(isChecked);
+                        SmartphonePreferencesHandler.setAutoCollapseRooms(isChecked);
                         break;
                     case R.id.checkBox_autoCollapseTimers:
-                        SharedPreferencesHandler.setAutoCollapseTimers(isChecked);
+                        SmartphonePreferencesHandler.setAutoCollapseTimers(isChecked);
                         break;
                     case R.id.checkBox_showRoomAllOnOffButtons:
-                        SharedPreferencesHandler.setShowRoomAllOnOff(isChecked);
+                        SmartphonePreferencesHandler.setShowRoomAllOnOff(isChecked);
                         break;
                     case R.id.checkBox_hideAddFAB:
-                        SharedPreferencesHandler.setHideAddFAB(isChecked);
+                        SmartphonePreferencesHandler.setHideAddFAB(isChecked);
                         break;
                     case R.id.checkBox_vibrateOnButtonPress:
-                        SharedPreferencesHandler.setVibrateOnButtonPress(isChecked);
+                        SmartphonePreferencesHandler.setVibrateOnButtonPress(isChecked);
                         if (isChecked) {
                             vibrationDurationLayout.setVisibility(View.VISIBLE);
                         } else {
@@ -107,7 +107,7 @@ public class GeneralSettingsFragment extends Fragment {
                         }
                         break;
                     case R.id.checkBox_highlightLastActivatedButton:
-                        SharedPreferencesHandler.setHighlightLastActivatedButton(isChecked);
+                        SmartphonePreferencesHandler.setHighlightLastActivatedButton(isChecked);
                         // force receiver widget update
                         ConfigureReceiverWidgetActivity.forceWidgetUpdate(getContext());
                         break;
@@ -154,7 +154,7 @@ public class GeneralSettingsFragment extends Fragment {
         startupDefaultTab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferencesHandler.setStartupDefaultTab(position);
+                SmartphonePreferencesHandler.setStartupDefaultTab(position);
             }
 
             @Override
@@ -197,7 +197,7 @@ public class GeneralSettingsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s != null && s.length() > 0) {
-                    SharedPreferencesHandler.setVibrationDuration(Integer.valueOf(s.toString()));
+                    SmartphonePreferencesHandler.setVibrationDuration(Integer.valueOf(s.toString()));
                 }
             }
         });
@@ -208,10 +208,10 @@ public class GeneralSettingsFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.radioButton_darkBlue:
-                        SharedPreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
+                        SmartphonePreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
                         break;
                     case R.id.radioButton_lightBlue:
-                        SharedPreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
+                        SmartphonePreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
                         break;
                     default:
                         break;
@@ -235,21 +235,21 @@ public class GeneralSettingsFragment extends Fragment {
     }
 
     private void updateUI() {
-        autoDiscover.setChecked(SharedPreferencesHandler.getAutoDiscover());
-        autoCollapseRooms.setChecked(SharedPreferencesHandler.getAutoCollapseRooms());
-        autoCollapseTimers.setChecked(SharedPreferencesHandler.getAutoCollapseTimers());
-        showRoomAllOnOffButtons.setChecked(SharedPreferencesHandler.getShowRoomAllOnOff());
-        hideAddFAB.setChecked(SharedPreferencesHandler.getHideAddFAB());
-        highlightLastActivatedButton.setChecked(SharedPreferencesHandler.getHighlightLastActivatedButton());
-        vibrateOnButtonPress.setChecked(SharedPreferencesHandler.getVibrateOnButtonPress());
-        vibrationDuration.setText(String.format("%d", SharedPreferencesHandler.getVibrationDuration()));
-        if (!SharedPreferencesHandler.getVibrateOnButtonPress()) {
+        autoDiscover.setChecked(SmartphonePreferencesHandler.getAutoDiscover());
+        autoCollapseRooms.setChecked(SmartphonePreferencesHandler.getAutoCollapseRooms());
+        autoCollapseTimers.setChecked(SmartphonePreferencesHandler.getAutoCollapseTimers());
+        showRoomAllOnOffButtons.setChecked(SmartphonePreferencesHandler.getShowRoomAllOnOff());
+        hideAddFAB.setChecked(SmartphonePreferencesHandler.getHideAddFAB());
+        highlightLastActivatedButton.setChecked(SmartphonePreferencesHandler.getHighlightLastActivatedButton());
+        vibrateOnButtonPress.setChecked(SmartphonePreferencesHandler.getVibrateOnButtonPress());
+        vibrationDuration.setText(String.format("%d", SmartphonePreferencesHandler.getVibrationDuration()));
+        if (!SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {
             vibrationDurationLayout.setVisibility(View.VISIBLE);
         }
 
-        switch (SharedPreferencesHandler.getTheme()) {
+        switch (SmartphonePreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
                 radioButtonDarkBlue.setChecked(true);
                 break;

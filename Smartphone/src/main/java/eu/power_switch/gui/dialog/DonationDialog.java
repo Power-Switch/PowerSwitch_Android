@@ -43,7 +43,7 @@ import eu.power_switch.playstore.IabResult;
 import eu.power_switch.playstore.Inventory;
 import eu.power_switch.playstore.Purchase;
 import eu.power_switch.playstore.SkuDetails;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -139,7 +139,7 @@ public class DonationDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         try {
-            String key = SharedPreferencesHandler.getPublicKeyString();
+            String key = SmartphonePreferencesHandler.getPublicKeyString();
             String base64EncodedPublicKey = new String(Base64.decode(key));
             iapHelper = new IabHelper(getActivity(), base64EncodedPublicKey);
 

@@ -48,7 +48,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SharedPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
@@ -117,8 +117,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         holder.buttonActivateScene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SharedPreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(fragmentActivity, SharedPreferencesHandler.getVibrationDuration());
+                if (SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
+                    VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                 }
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);

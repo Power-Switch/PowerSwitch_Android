@@ -51,8 +51,6 @@ public class RoomWidgetProvider extends AppWidgetProvider {
             RemoteViews remoteViews = new RemoteViews(context.getResources()
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_room);
 
-            DatabaseHandler.init(context);
-
             RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
             if (roomWidget != null) {
                 Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());

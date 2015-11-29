@@ -31,7 +31,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Preference handler used to store general app settings
  */
-public class SharedPreferencesHandler {
+public class SmartphonePreferencesHandler {
 
     private static SharedPreferences sharedPreferences;
 
@@ -49,7 +49,7 @@ public class SharedPreferencesHandler {
     private static int vibrationDurationCache;
     private static boolean highlightLastActivatedButtonCache;
 
-    private SharedPreferencesHandler() {
+    private SmartphonePreferencesHandler() {
     }
 
     public static void init(Context context) {
@@ -99,7 +99,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getAutoDiscover() {
-        Log.d(SharedPreferencesHandler.class, "getAutoDiscover: " + autoDiscoverCache);
+        Log.d(SmartphonePreferencesHandler.class, "getAutoDiscover: " + autoDiscoverCache);
         return autoDiscoverCache;
     }
 
@@ -109,7 +109,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setAutoDiscover(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setAutoDiscover: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setAutoDiscover: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.AUTO_DISCOVER_KEY, bool);
         editor.apply();
@@ -123,7 +123,7 @@ public class SharedPreferencesHandler {
      * @return Backup Path
      */
     public static String getBackupPath() {
-        Log.d(SharedPreferencesHandler.class, "getBackupPath: " + backupPathCache);
+        Log.d(SmartphonePreferencesHandler.class, "getBackupPath: " + backupPathCache);
         return backupPathCache;
     }
 
@@ -133,7 +133,7 @@ public class SharedPreferencesHandler {
      * @param path Backup Path
      */
     public static void setBackupPath(String path) {
-        Log.d(SharedPreferencesHandler.class, "setBackupPath: " + path);
+        Log.d(SmartphonePreferencesHandler.class, "setBackupPath: " + path);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(SettingsConstants.BACKUP_PATH_KEY, path);
         editor.apply();
@@ -148,7 +148,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getShowRoomAllOnOff() {
-        Log.d(SharedPreferencesHandler.class, "getShowRoomAllOnOff: " + showRoomAllOnOffCache);
+        Log.d(SmartphonePreferencesHandler.class, "getShowRoomAllOnOff: " + showRoomAllOnOffCache);
         return showRoomAllOnOffCache;
     }
 
@@ -158,7 +158,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setShowRoomAllOnOff(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setShowRoomAllOnOff: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setShowRoomAllOnOff: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, bool);
         editor.apply();
@@ -172,7 +172,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getPlayStoreMode() {
-        Log.d(SharedPreferencesHandler.class, "getPlayStoreMode: " + playStoreModeCache);
+        Log.d(SmartphonePreferencesHandler.class, "getPlayStoreMode: " + playStoreModeCache);
         return playStoreModeCache;
     }
 
@@ -182,7 +182,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setPlayStoreMode(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setPlayStoreMode: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setPlayStoreMode: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.PLAY_STORE_MODE_KEY, bool);
         editor.apply();
@@ -196,7 +196,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getAutoCollapseRooms() {
-        Log.d(SharedPreferencesHandler.class, "getAutoCollapseRooms: " + autoCollapseRoomsCache);
+        Log.d(SmartphonePreferencesHandler.class, "getAutoCollapseRooms: " + autoCollapseRoomsCache);
         return autoCollapseRoomsCache;
     }
 
@@ -206,7 +206,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setAutoCollapseRooms(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setAutoCollapseRooms: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setAutoCollapseRooms: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
         editor.apply();
@@ -220,7 +220,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getAutoCollapseTimers() {
-        Log.d(SharedPreferencesHandler.class, "getAutoCollapseTimers: " + autoCollapseTimersCache);
+        Log.d(SmartphonePreferencesHandler.class, "getAutoCollapseTimers: " + autoCollapseTimersCache);
         return autoCollapseTimersCache;
     }
 
@@ -230,7 +230,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setAutoCollapseTimers(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setAutoCollapseTimers: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setAutoCollapseTimers: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, bool);
         editor.apply();
@@ -244,7 +244,7 @@ public class SharedPreferencesHandler {
      * @return ID (internal) of Theme
      */
     public static int getTheme() {
-        Log.d(SharedPreferencesHandler.class, "getTheme: " + themeCache);
+        Log.d(SmartphonePreferencesHandler.class, "getTheme: " + themeCache);
         return themeCache;
     }
 
@@ -254,12 +254,12 @@ public class SharedPreferencesHandler {
      * @param theme ID (internal) of Theme
      */
     public static void setTheme(int theme) {
-        Log.d(SharedPreferencesHandler.class, "setTheme: " + theme);
+        Log.d(SmartphonePreferencesHandler.class, "setTheme: " + theme);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SettingsConstants.THEME_KEY, theme);
         editor.apply();
 
-        SharedPreferencesHandler.themeCache = theme;
+        SmartphonePreferencesHandler.themeCache = theme;
     }
 
     /**
@@ -268,7 +268,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getVibrateOnButtonPress() {
-        Log.d(SharedPreferencesHandler.class, "getVibrateOnButtonPress: " + vibrateOnButtonPressCache);
+        Log.d(SmartphonePreferencesHandler.class, "getVibrateOnButtonPress: " + vibrateOnButtonPressCache);
         return vibrateOnButtonPressCache;
     }
 
@@ -278,7 +278,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setVibrateOnButtonPress(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setVibrateOnButtonPress: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setVibrateOnButtonPress: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, bool);
         editor.apply();
@@ -292,7 +292,7 @@ public class SharedPreferencesHandler {
      * @return time in ms
      */
     public static int getVibrationDuration() {
-        Log.d(SharedPreferencesHandler.class, "getVibrationDuration: " + vibrationDurationCache);
+        Log.d(SmartphonePreferencesHandler.class, "getVibrationDuration: " + vibrationDurationCache);
         return vibrationDurationCache;
     }
 
@@ -302,7 +302,7 @@ public class SharedPreferencesHandler {
      * @param milliseconds time in ms
      */
     public static void setVibrationDuration(int milliseconds) {
-        Log.d(SharedPreferencesHandler.class, "setVibrationDuration: " + milliseconds);
+        Log.d(SmartphonePreferencesHandler.class, "setVibrationDuration: " + milliseconds);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SettingsConstants.VIBRATION_DURATION_KEY, milliseconds);
         editor.apply();
@@ -316,7 +316,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getHighlightLastActivatedButton() {
-        Log.d(SharedPreferencesHandler.class, "getHighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
+        Log.d(SmartphonePreferencesHandler.class, "getHighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
         return highlightLastActivatedButtonCache;
     }
 
@@ -326,7 +326,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setHighlightLastActivatedButton(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setHighlightLastActivatedButton: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setHighlightLastActivatedButton: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
         editor.apply();
@@ -340,7 +340,7 @@ public class SharedPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getHideAddFAB() {
-        Log.d(SharedPreferencesHandler.class, "getHideAddFAB: " + hideAddFABCache);
+        Log.d(SmartphonePreferencesHandler.class, "getHideAddFAB: " + hideAddFABCache);
         return hideAddFABCache;
     }
 
@@ -350,7 +350,7 @@ public class SharedPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setHideAddFAB(boolean bool) {
-        Log.d(SharedPreferencesHandler.class, "setHideAddFAB: " + bool);
+        Log.d(SmartphonePreferencesHandler.class, "setHideAddFAB: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, bool);
         editor.apply();
@@ -364,7 +364,7 @@ public class SharedPreferencesHandler {
      * @return tab index
      */
     public static int getStartupDefaultTab() {
-        Log.d(SharedPreferencesHandler.class, "getStartupDefaultTab: " + startupDefaultTabCache);
+        Log.d(SmartphonePreferencesHandler.class, "getStartupDefaultTab: " + startupDefaultTabCache);
         return startupDefaultTabCache;
     }
 
@@ -374,7 +374,7 @@ public class SharedPreferencesHandler {
      * @param tabIndex index of tab
      */
     public static void setStartupDefaultTab(int tabIndex) {
-        Log.d(SharedPreferencesHandler.class, "setStartupDefaultTab: " + tabIndex);
+        Log.d(SmartphonePreferencesHandler.class, "setStartupDefaultTab: " + tabIndex);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SettingsConstants.STARTUP_DEFAULT_TAB_KEY, tabIndex);
         editor.apply();
