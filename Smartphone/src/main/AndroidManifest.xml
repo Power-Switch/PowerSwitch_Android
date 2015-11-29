@@ -20,7 +20,7 @@
 <manifest
     package="eu.power_switch"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="59"
+    android:versionCode="60"
     android:versionName="@string/app_version">
 
     <!-- Smartphone ONLY Permissions -->
