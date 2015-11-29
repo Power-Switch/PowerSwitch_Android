@@ -55,6 +55,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.special.HolidaySpecialHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
@@ -353,6 +354,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         appIsInForeground = true;
+
+        HolidaySpecialHandler.showHolidaySpecial(this);
     }
 
     @Override
