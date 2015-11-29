@@ -26,7 +26,6 @@ import java.util.List;
 
 import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
 import eu.power_switch.exception.gateway.UnknownGatewayException;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -45,17 +44,11 @@ public abstract class GatewayHandler {
      * @param gateway the new Gateway
      * @return ID of new Database entry
      * @throws GatewayAlreadyExistsException
-     * @throws GatewayHasBeenEnabledException
      */
-    protected static long add(Gateway gateway) throws GatewayAlreadyExistsException, GatewayHasBeenEnabledException {
+    protected static long add(Gateway gateway) throws GatewayAlreadyExistsException {
         for (Gateway existingGateway : getAll()) {
             if (existingGateway.hasSameAddress(gateway)) {
-                if (existingGateway.isActive()) {
-                    throw new GatewayAlreadyExistsException();
-                } else {
-                    enable(existingGateway.getId());
-                    throw new GatewayHasBeenEnabledException();
-                }
+                throw new GatewayAlreadyExistsException();
             }
         }
 

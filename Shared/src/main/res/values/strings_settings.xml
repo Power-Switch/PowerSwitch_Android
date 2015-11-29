@@ -71,6 +71,8 @@
     <string name="malformed_url">Malformed URL</string>
     <string name="gateway_will_be_gone_forever">It will be lost forever!</string>
 
+    <string name="autodiscover_response_message">New: %1$d, Existing: %2$d, Unknown: %3$d</string>
+
     <string name="gateway_created">Gateway created</string>
     <string name="gateway_removed">Gateway removed</string>
 

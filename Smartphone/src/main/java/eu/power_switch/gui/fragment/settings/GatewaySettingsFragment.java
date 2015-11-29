@@ -42,7 +42,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
@@ -73,7 +72,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     private FloatingActionButton addGatewayFAB;
 
     public static void sendGatewaysChangedBroadcast(Context context) {
-        Log.d("CreateGatewayDialog", "sendGatewaysChangedBroadcast");
+        Log.d(GatewaySettingsFragment.class, "sendGatewaysChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -171,66 +170,43 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                     });
 
                     if (foundGateways == null || foundGateways.isEmpty()) {
-                        StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.no_gateway_found, Snackbar
-                                .LENGTH_LONG);
+                        StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.no_gateway_found,
+                                Snackbar.LENGTH_LONG);
                         return;
                     }
 
+                    int unknownGatewaysCount = 0;
+                    int existingGatewaysCount = 0;
+                    int newGatewaysCount = 0;
                     for (Gateway newGateway : foundGateways) {
                         if (newGateway == null) {
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.cant_understand_gateway, Snackbar
-                                    .LENGTH_LONG);
+                            unknownGatewaysCount++;
                             continue;
                         }
-                        // save new Gateway if it doesn't exist already
-                        boolean alreadyInDatabase;
-                        alreadyInDatabase = isGatewayAlreadyInDatabase(newGateway);
 
-                        if (alreadyInDatabase) {
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.gateway_already_exists_it_has_been_enabled,
+                        // save new Gateway if it doesn't exist already
+                        try {
+                            DatabaseHandler.addGateway(newGateway);
+                            newGatewaysCount++;
+                        } catch (GatewayAlreadyExistsException e) {
+                            existingGatewaysCount++;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error,
                                     Snackbar.LENGTH_LONG);
-                        } else {
-                            // TODO: Exceptions richtig abfangen und verwenden
-                            try {
-                                addGateway(newGateway);
-                            } catch (Exception e) {
-                                Log.e(e);
-                                e.printStackTrace();
-                            }
                         }
                     }
+
+                    StatusMessageHandler.showStatusMessage(recyclerViewFragment,
+                            getString(R.string.autodiscover_response_message, newGatewaysCount, existingGatewaysCount,
+                                    unknownGatewaysCount), Snackbar.LENGTH_LONG);
+
+                    sendGatewaysChangedBroadcast(recyclerViewFragment.getContext());
                 } catch (Exception e) {
                     Log.e(e);
                 }
             }
         }).start();
-    }
-
-    private boolean isGatewayAlreadyInDatabase(Gateway newGateway) {
-        for (Gateway gateway : DatabaseHandler.getAllGateways()) {
-            if (gateway.hasSameAddress(newGateway)) {
-                // enable existing gateway to avoid user confusion
-                if (!gateway.isActive()) {
-                    DatabaseHandler.enableGateway(gateway.getId());
-                    refreshGateways();
-                    for (int i = 0; i < gateways.size(); i++) {
-                        Gateway currentGateway = gateways.get(i);
-                        if (currentGateway.hasSameAddress(newGateway)) {
-                            gatewayRecyclerViewAdapter.notifyDataSetChanged();
-                        }
-                    }
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void addGateway(Gateway newGateway) throws GatewayHasBeenEnabledException, GatewayAlreadyExistsException {
-        DatabaseHandler.addGateway(newGateway);
-        gateways.add(newGateway);
-        gatewayRecyclerViewAdapter.notifyDataSetChanged();
-        StatusMessageHandler.showStatusMessage(this, R.string.gateway_found, Snackbar.LENGTH_LONG);
     }
 
     private void refreshGateways() {
@@ -243,7 +219,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         } else {
             gateways.addAll(DatabaseHandler.getAllGateways());
         }
-
     }
 
     private void updateUI() {
@@ -302,8 +277,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
     @Override
     public void onResume() {
-        updateUI();
         super.onResume();
+        updateUI();
     }
 
     @Override

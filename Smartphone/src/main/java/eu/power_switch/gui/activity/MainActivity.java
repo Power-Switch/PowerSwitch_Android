@@ -44,7 +44,6 @@ import java.util.Stack;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AboutDialog;
 import eu.power_switch.gui.dialog.DonationDialog;
@@ -204,10 +203,6 @@ public class MainActivity extends AppCompatActivity {
                                 StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
                                         .LENGTH_LONG);
                             } catch (GatewayAlreadyExistsException e) {
-                                Log.e(e);
-                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
-                                        .LENGTH_LONG);
-                            } catch (GatewayHasBeenEnabledException e) {
                                 Log.e(e);
                                 StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar
                                         .LENGTH_LONG);

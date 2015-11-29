@@ -28,7 +28,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import eu.power_switch.database.Database;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.exception.gateway.GatewayHasBeenEnabledException;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.UniversalButton;
@@ -582,10 +581,9 @@ public final class DatabaseHandler {
      *
      * @param gateway new Gateway
      * @return ID of saved Database entry
-     * @throws GatewayHasBeenEnabledException
      * @throws GatewayAlreadyExistsException
      */
-    public static long addGateway(Gateway gateway) throws GatewayHasBeenEnabledException, GatewayAlreadyExistsException {
+    public static long addGateway(Gateway gateway) throws GatewayAlreadyExistsException {
         openWritable();
         long id;
         try {

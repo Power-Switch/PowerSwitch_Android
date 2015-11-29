@@ -98,6 +98,26 @@ public class StatusMessageHandler {
      *
      * @param recyclerViewFragment recyclerViewFragment this snackbar is shown on (used for
      *                             the Snackbar and as a context)
+     * @param message              status message
+     * @param duration             duration
+     */
+    public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, String message, int duration) {
+        Context context = recyclerViewFragment.getContext();
+
+        if (MainActivity.isInForeground()) {
+            showStatusSnackbar(recyclerViewFragment.getRecyclerView(), message, duration);
+        } else {
+            showStatusToast(context, message, duration);
+        }
+    }
+
+    /**
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground.
+     * The Snackbar will have a "Dismiss" Button by default.
+     *
+     * @param recyclerViewFragment recyclerViewFragment this snackbar is shown on (used for
+     *                             the Snackbar and as a context)
      * @param messageResourceId    status message resource id
      * @param duration             duration
      */

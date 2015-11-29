@@ -65,6 +65,8 @@
     <string name="malformed_url">Ungültige URL</string>
     <string name="gateway_will_be_gone_forever">Das Gateway wird für immer verloren sein!</string>
 
+    <string name="autodiscover_response_message">Neu: %1$d, Bekannt: %2$d, Unbekannt: %3$d</string>
+
     <string name="gateway_created">Gateway erstellt</string>
     <string name="gateway_removed">Gateway entfernt</string>
 
