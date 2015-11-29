@@ -123,12 +123,7 @@ public class StatusMessageHandler {
      */
     public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, int messageResourceId, int duration) {
         Context context = recyclerViewFragment.getContext();
-
-        if (MainActivity.isInForeground()) {
-            showStatusSnackbar(recyclerViewFragment.getRecyclerView(), context.getString(messageResourceId), duration);
-        } else {
-            showStatusToast(context, context.getString(messageResourceId), duration);
-        }
+        showStatusMessage(recyclerViewFragment, context.getString(messageResourceId), duration);
     }
 
     /**
@@ -141,11 +136,7 @@ public class StatusMessageHandler {
      * @param duration          duration
      */
     public static void showStatusMessage(Context context, int messageResourceId, int duration) {
-        if (MainActivity.isInForeground()) {
-            showStatusSnackbar(MainActivity.getNavigationView(), context.getString(messageResourceId), duration);
-        } else {
-            showStatusToast(context, context.getString(messageResourceId), duration);
-        }
+        showStatusMessage(context, context.getString(messageResourceId), duration);
     }
 
     /**

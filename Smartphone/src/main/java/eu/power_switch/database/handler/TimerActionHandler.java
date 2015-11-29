@@ -113,7 +113,7 @@ public abstract class TimerActionHandler {
      * @param receiverId ID of Receiver
      */
     protected static void deleteByReceiverId(Long receiverId) {
-        Log.d("Delete TimerActions by ReceiverId: " + receiverId);
+        Log.d(TimerActionHandler.class, "Delete TimerActions by ReceiverId: " + receiverId);
         String[] columns = {TimerReceiverActionTable.COLUMN_ID, TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(TimerReceiverActionTable.TABLE_NAME, columns,
                 TimerReceiverActionTable.COLUMN_RECEIVER_ID + "=" + receiverId, null, null, null, null);

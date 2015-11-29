@@ -39,17 +39,17 @@ public class HolidaySpecialHandler {
      * @param context any suitable context
      */
     public static void showHolidaySpecial(Context context) {
-        Calendar calendar = Calendar.getInstance();
-        Calendar easterDate = getEasterDate(calendar.get(Calendar.YEAR));
+        Calendar currentDate = Calendar.getInstance();
+        Calendar easterDate = getEasterDate(currentDate.get(Calendar.YEAR));
 
-        if (Calendar.DECEMBER == calendar.get(Calendar.MONTH) && calendar.get(Calendar.DAY_OF_MONTH) == 24) {
+        if (Calendar.DECEMBER == currentDate.get(Calendar.MONTH) && currentDate.get(Calendar.DAY_OF_MONTH) == 24) {
             showChristmasMessage(context);
-        } else if (Calendar.JANUARY == calendar.get(Calendar.MONTH) && calendar.get(Calendar.DAY_OF_MONTH) == 1) {
+        } else if (Calendar.JANUARY == currentDate.get(Calendar.MONTH) && currentDate.get(Calendar.DAY_OF_MONTH) == 1) {
             showNewYearMessage(context);
-        } else if (Calendar.OCTOBER == calendar.get(Calendar.MONTH) && calendar.get(Calendar.DAY_OF_MONTH) == 31) {
+        } else if (Calendar.OCTOBER == currentDate.get(Calendar.MONTH) && currentDate.get(Calendar.DAY_OF_MONTH) == 31) {
             showHalloweenMessage(context);
-        } else if (easterDate.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && easterDate.get(Calendar
-                .DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)) {
+        } else if (easterDate.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH) && easterDate.get(Calendar
+                .DAY_OF_MONTH) == currentDate.get(Calendar.DAY_OF_MONTH)) {
             showEasterMessage(context);
         }
     }

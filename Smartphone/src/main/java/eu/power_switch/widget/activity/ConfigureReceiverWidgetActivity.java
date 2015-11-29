@@ -66,7 +66,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     /**
      * Forces an Update of all Receiver Widgets
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void forceWidgetUpdate(Context context) {
         // update receiver widgets
@@ -81,7 +81,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("ConfigureReceiverWidgetActivity");
+        Log.d(this);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.widget_dialog_configure_receiver);

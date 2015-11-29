@@ -89,7 +89,7 @@ public final class DatabaseHandler {
             // dont init again
             return;
         }
-        Log.d("Init Database Handler");
+        Log.d(DatabaseHandler.class, "Init Database Handler...");
 
         lock = new ReentrantLock();
 

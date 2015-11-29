@@ -85,8 +85,6 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        Log.d("Moved from " + fromPosition + " to " + toPosition);
-
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
                 Collections.swap(receivers, i, i + 1);

@@ -24,6 +24,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.util.Arrays;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Scene;
@@ -79,7 +81,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        Log.d("Deleting Scene Widgets: " + appWidgetIds.toString());
+        Log.d("Deleting Scene Widgets: " + Arrays.toString(appWidgetIds));
 
         for (int appWidgetId : appWidgetIds) {
             DatabaseHandler.deleteSceneWidget(appWidgetId);

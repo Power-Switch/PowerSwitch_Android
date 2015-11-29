@@ -43,6 +43,23 @@ public class Log {
     /**
      * Log Debug
      *
+     * @param source any object
+     */
+    public static void d(Object source) {
+        String logMessage = "";
+        if (String.class.equals(source.getClass())) {
+            logMessage += source + " : ";
+        } else if (source instanceof Class) {
+            logMessage += source.toString();
+        } else {
+            logMessage += source.getClass();
+        }
+        log.debug(logMessage);
+    }
+
+    /**
+     * Log Debug
+     *
      * @param source  a source object
      * @param message any text message
      */

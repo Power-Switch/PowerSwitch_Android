@@ -29,6 +29,7 @@ import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import eu.power_switch.R;
@@ -115,7 +116,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        Log.d("Deleting Receiver Widgets: " + appWidgetIds.toString());
+        Log.d("Deleting Receiver Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
             DatabaseHandler.deleteReceiverWidget(appWidgetId);
         }

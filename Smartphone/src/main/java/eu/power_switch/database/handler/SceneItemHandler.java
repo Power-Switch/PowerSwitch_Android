@@ -100,7 +100,7 @@ public abstract class SceneItemHandler {
      * @param receiverId ID of Receiver
      */
     protected static void deleteByReceiverId(Long receiverId) {
-        Log.d("Delete SceneItem by ReceiverId: " + receiverId);
+        Log.d(SceneItemHandler.class, "Delete SceneItem by ReceiverId: " + receiverId);
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
 

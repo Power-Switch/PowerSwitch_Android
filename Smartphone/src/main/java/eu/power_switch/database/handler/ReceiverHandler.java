@@ -212,7 +212,7 @@ public abstract class ReceiverHandler {
      * @param id ID of Receiver
      */
     protected static void delete(Long id) {
-        Log.d("Delete Receiver: " + id);
+        Log.d(ReceiverHandler.class, "Delete Receiver: " + id);
         // CAREFUL ABOUT DELETE ORDER, SOME THINGS DEPEND ON EXISTING DATA
         // delete depending things first!
 

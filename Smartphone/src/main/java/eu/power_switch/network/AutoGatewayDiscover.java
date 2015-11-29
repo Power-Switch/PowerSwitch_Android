@@ -105,7 +105,7 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
             }
 
         } catch (SocketTimeoutException e) {
-            Log.d("AutoDetect Timeout Reached");
+            Log.d(this, "AutoDetect Timeout Reached");
         } catch (InterruptedIOException e) {
             Log.e("AutoGatewayDiscover", e);
         } catch (Exception e) {

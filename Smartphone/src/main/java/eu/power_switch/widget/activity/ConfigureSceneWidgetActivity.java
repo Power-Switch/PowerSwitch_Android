@@ -56,7 +56,7 @@ public class ConfigureSceneWidgetActivity extends Activity {
     /**
      * Forces an Update of all Scene Widgets
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void forceWidgetUpdate(Context context) {
         // update scene widgets
@@ -71,7 +71,7 @@ public class ConfigureSceneWidgetActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("ConfigureSceneWidgetActivity");
+        Log.d(this);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.widget_dialog_configure_scene);

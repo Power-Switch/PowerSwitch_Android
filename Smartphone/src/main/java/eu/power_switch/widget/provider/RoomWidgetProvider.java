@@ -24,6 +24,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.util.Arrays;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Room;
@@ -83,7 +85,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        Log.d("Deleting Room Widgets: " + appWidgetIds.toString());
+        Log.d("Deleting Room Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
             DatabaseHandler.deleteRoomWidget(appWidgetId);
         }
