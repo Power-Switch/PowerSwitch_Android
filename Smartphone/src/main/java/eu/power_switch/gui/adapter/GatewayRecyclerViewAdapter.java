@@ -76,10 +76,12 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         holder.gatewaySwitchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    DatabaseHandler.enableGateway(gateway.getId());
-                } else {
-                    DatabaseHandler.disableGateway(gateway.getId());
+                if (buttonView.isPressed()) {
+                    if (isChecked) {
+                        DatabaseHandler.enableGateway(gateway.getId());
+                    } else {
+                        DatabaseHandler.disableGateway(gateway.getId());
+                    }
                 }
                 gateway.setActive(isChecked);
             }
