@@ -190,6 +190,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                             newGatewaysCount++;
                         } catch (GatewayAlreadyExistsException e) {
                             existingGatewaysCount++;
+                            DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
                         } catch (Exception e) {
                             Log.e(e);
                             StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error,

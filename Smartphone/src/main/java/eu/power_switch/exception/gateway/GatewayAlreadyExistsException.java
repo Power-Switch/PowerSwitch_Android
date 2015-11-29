@@ -23,7 +23,14 @@ package eu.power_switch.exception.gateway;
  */
 public class GatewayAlreadyExistsException extends Exception {
 
-    public GatewayAlreadyExistsException() {
+    public long idOfExistingGateway;
+
+    public GatewayAlreadyExistsException(long idOfExistingGateway) {
         super("Gateway already exists!");
+        this.idOfExistingGateway = idOfExistingGateway;
+    }
+
+    public long getIdOfExistingGateway() {
+        return idOfExistingGateway;
     }
 }

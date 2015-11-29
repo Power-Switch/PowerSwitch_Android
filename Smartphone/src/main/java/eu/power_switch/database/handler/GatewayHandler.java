@@ -48,7 +48,7 @@ public abstract class GatewayHandler {
     protected static long add(Gateway gateway) throws GatewayAlreadyExistsException {
         for (Gateway existingGateway : getAll()) {
             if (existingGateway.hasSameAddress(gateway)) {
-                throw new GatewayAlreadyExistsException();
+                throw new GatewayAlreadyExistsException(existingGateway.getId());
             }
         }
 
