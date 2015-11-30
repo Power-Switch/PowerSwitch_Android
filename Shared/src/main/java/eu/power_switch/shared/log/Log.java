@@ -46,13 +46,13 @@ public class Log {
      * @param source any object
      */
     public static void d(Object source) {
-        String logMessage = "";
+        StringBuilder logMessage = new StringBuilder();
         if (String.class.equals(source.getClass())) {
-            logMessage += source + " : ";
+            logMessage.append(source).append(" : ");
         } else if (source instanceof Class) {
-            logMessage += source.toString();
+            logMessage.append("{").append(((Class) source).getCanonicalName()).append("}");
         } else {
-            logMessage += source.getClass();
+            logMessage.append(source.getClass());
         }
         log.debug(logMessage);
     }
@@ -64,20 +64,25 @@ public class Log {
      * @param message any text message
      */
     public static void d(Object source, String message) {
-        String logMessage = "";
-        if (String.class.equals(source.getClass())) {
-            logMessage += source + " : ";
-        } else if (source instanceof Class) {
-            logMessage += source.toString() + " : ";
-        } else {
-            try {
-                logMessage += source.getClass() + " : ";
-            } catch (Exception e) {
-                // do nothing
+        StringBuilder logMessage = new StringBuilder();
+        if (source != null) {
+            logMessage.append("{");
+            if (String.class.equals(source.getClass())) {
+                logMessage.append(source);
+            } else if (source instanceof Class) {
+                logMessage.append(((Class) source).getCanonicalName());
+            } else {
+                try {
+                    logMessage.append(source.getClass());
+                } catch (Exception e) {
+                    // do nothing
+                }
             }
+
+            logMessage.append("} ");
         }
 
-        logMessage += message;
+        logMessage.append(message);
         log.debug(logMessage);
     }
 
@@ -109,21 +114,25 @@ public class Log {
      * @param message any text message
      */
     public static void e(Object source, String message) {
-        String logMessage = "";
+        StringBuilder logMessage = new StringBuilder();
 
-        if (source.getClass().equals(String.class)) {
-            logMessage += source + " : ";
-        } else if (source instanceof Class) {
-            logMessage += source.toString() + " : ";
-        } else {
-            try {
-                logMessage += source.getClass() + " : ";
-            } catch (Exception e) {
-                // do nothing
+        if (source != null) {
+            logMessage.append("{");
+            if (source.getClass().equals(String.class)) {
+                logMessage.append(source);
+            } else if (source instanceof Class) {
+                logMessage.append(((Class) source).getCanonicalName());
+            } else {
+                try {
+                    logMessage.append(source.getClass());
+                } catch (Exception e) {
+                    // do nothing
+                }
             }
+            logMessage.append("} ");
         }
 
-        logMessage += message;
+        logMessage.append(message);
         log.error(logMessage);
     }
 

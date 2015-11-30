@@ -48,6 +48,10 @@ public class Log4JConfiguration {
                 .isExternalStorageWritable()) {
             logConfigurator.setFileName(Environment.getExternalStorageDirectory() + File.separator +
                     LogHandler.LOG_FOLDER + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
+            String filePattern = "%d{dd-MM-yyyy HH:mm:ss,SSS} [%-5p] %m%n";
+            logConfigurator.setFilePattern(filePattern);
+            String logCatPattern = "[%-5p] %m%n";
+            logConfigurator.setLogCatPattern(logCatPattern);
             logConfigurator.setRootLevel(Level.ALL);
             logConfigurator.setImmediateFlush(true);
             logConfigurator.setUseLogCatAppender(true);
