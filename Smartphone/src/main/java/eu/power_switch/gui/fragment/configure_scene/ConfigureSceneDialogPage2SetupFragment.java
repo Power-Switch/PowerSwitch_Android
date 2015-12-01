@@ -111,8 +111,8 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null && args.containsKey("SceneId")) {
-            long sceneId = args.getLong("SceneId");
-            initializeSceneData(sceneId);
+            currentId = args.getLong("SceneId");
+            initializeSceneData(currentId);
         }
         checkValidity();
 
