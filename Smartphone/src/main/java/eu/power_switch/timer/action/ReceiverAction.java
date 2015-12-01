@@ -26,17 +26,17 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.device.Receiver;
 
 /**
- * TimerReceiverAction that holds a specific room/receiver/button combination to activate on execution
+ * ReceiverAction that holds a specific room/receiver/button combination to activate on execution
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public class TimerReceiverAction extends TimerAction {
+public class ReceiverAction extends Action {
 
     private Room room;
     private Receiver receiver;
     private Button button;
 
-    public TimerReceiverAction(long id, Room room, Receiver receiver, Button button) {
+    public ReceiverAction(long id, Room room, Receiver receiver, Button button) {
         this.id = id;
         this.room = room;
         this.receiver = receiver;

@@ -25,14 +25,19 @@ package eu.power_switch.shared.constants;
  */
 public class ExternalAppConstants {
 
-    // Sleep As Android
     public static final String ALARM_TRIGGERED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_START";
     public static final String ALARM_SNOOZED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION";
     public static final String ALARM_DISMISSED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS";
-
     /**
      * Private Constructor
      */
     private ExternalAppConstants() {
+    }
+
+    // Sleep As Android
+    public enum ALARM_EVENT {
+        ALARM_TRIGGERED,
+        ALARM_SNOOZED,
+        ALARM_DISMISSED
     }
 }

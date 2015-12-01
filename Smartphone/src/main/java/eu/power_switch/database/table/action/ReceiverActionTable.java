@@ -16,32 +16,32 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.timer;
+package eu.power_switch.database.table.action;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import eu.power_switch.database.table.action.ActionTable;
-
 /**
- * TimerAction table description
- * <p/>
- * Created by Markus on 24.09.2015.
+ * ReceiverAction table description
  */
-public class TimerActionTable {
+public class ReceiverActionTable {
 
-    public static final String TABLE_NAME = "timer_actions";
-    public static final String COLUMN_TIMER_ID = "timer_id";
+    public static final String TABLE_NAME = "receiver_actions";
+    public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ACTION_ID = "action_id";
+    public static final String COLUMN_ROOM_ID = "room_id";
+    public static final String COLUMN_RECEIVER_ID = "receiver_id";
+    public static final String COLUMN_BUTTON_ID = "button_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_TIMER_ID + " integer not null," +
+            COLUMN_ID + " integer primary key autoincrement," +
             COLUMN_ACTION_ID + " integer not null," +
-            "FOREIGN KEY(" + COLUMN_TIMER_ID + ") REFERENCES " +
-                TimerTable.TABLE_NAME + "(" + TimerTable.COLUMN_ID + "), " +
-            "FOREIGN KEY(" + COLUMN_ACTION_ID+ ") REFERENCES " +
-                ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + "), " +
-            "PRIMARY KEY (" + COLUMN_TIMER_ID + ", " + COLUMN_ACTION_ID + ")" +
+            COLUMN_ROOM_ID + " integer not null," +
+            COLUMN_RECEIVER_ID + " integer not null," +
+            COLUMN_BUTTON_ID + " integer not null," +
+            "FOREIGN KEY(" + COLUMN_ACTION_ID + ") REFERENCES " +
+                ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID +
+            ")" +
         ");";
     //formatter:on
 
@@ -61,7 +61,9 @@ public class TimerActionTable {
                 onCreate(db);
             case 7:
             case 8:
-                onCreate(db);
+                db.execSQL("ALTER TABLE " + "timer_receiver_action" + " RENAME TO " + TABLE_NAME + ";");
+                break;
+
         }
     }
 }

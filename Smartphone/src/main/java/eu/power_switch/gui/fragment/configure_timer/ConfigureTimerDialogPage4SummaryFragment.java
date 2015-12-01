@@ -44,7 +44,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.TimerAction;
+import eu.power_switch.timer.action.Action;
 
 /**
  * Created by Markus on 12.09.2015.
@@ -58,7 +58,7 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
     private long currentExecutionInterval = -1;
     private ArrayList<WeekdayTimer.Day> currentExecutionDays;
     private String currentExecutionType;
-    private ArrayList<TimerAction> currentActions;
+    private ArrayList<Action> currentActions;
 
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
@@ -97,7 +97,7 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
                     currentExecutionType = intent.getStringExtra("executionType");
 
                 } else if (LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentActions = (ArrayList<TimerAction>) intent.getSerializableExtra("actions");
+                    currentActions = (ArrayList<Action>) intent.getSerializableExtra("actions");
                 }
 
                 updateUi();
@@ -188,8 +188,8 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
 
         String actionText = "";
         if (currentActions != null) {
-            for (TimerAction timerAction : currentActions) {
-                actionText += timerAction.toString() + "\n";
+            for (Action action : currentActions) {
+                actionText += action.toString() + "\n";
             }
         }
         textViewAction.setText(actionText);

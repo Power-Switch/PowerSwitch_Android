@@ -16,32 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.timer;
+package eu.power_switch.database.table.sleep_as_android;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import eu.power_switch.database.table.action.ActionTable;
-
 /**
- * TimerAction table description
- * <p/>
- * Created by Markus on 24.09.2015.
+ * SceneAction table description
  */
-public class TimerActionTable {
+public class SceneActionTable {
 
-    public static final String TABLE_NAME = "timer_actions";
-    public static final String COLUMN_TIMER_ID = "timer_id";
-    public static final String COLUMN_ACTION_ID = "action_id";
+    public static final String TABLE_NAME = "sleep_as_android_scene_action";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ALARM_TYPE_ID = "alarm_type_id";
+    public static final String COLUMN_SCENE_ID = "scene_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_TIMER_ID + " integer not null," +
-            COLUMN_ACTION_ID + " integer not null," +
-            "FOREIGN KEY(" + COLUMN_TIMER_ID + ") REFERENCES " +
-                TimerTable.TABLE_NAME + "(" + TimerTable.COLUMN_ID + "), " +
-            "FOREIGN KEY(" + COLUMN_ACTION_ID+ ") REFERENCES " +
-                ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + "), " +
-            "PRIMARY KEY (" + COLUMN_TIMER_ID + ", " + COLUMN_ACTION_ID + ")" +
+            COLUMN_ID + " integer primary key autoincrement," +
+            COLUMN_ALARM_TYPE_ID + " integer not null," +
+            COLUMN_SCENE_ID + " integer not null," +
+            "FOREIGN KEY(" + COLUMN_ALARM_TYPE_ID + ") REFERENCES " +
+                SleepAsAndroidActionTable.TABLE_NAME + "(" + SleepAsAndroidActionTable.COLUMN_ID +
+            ")" +
         ");";
     //formatter:on
 
@@ -59,9 +55,8 @@ public class TimerActionTable {
             case 6:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
-            case 7:
-            case 8:
-                onCreate(db);
+                break;
+
         }
     }
 }

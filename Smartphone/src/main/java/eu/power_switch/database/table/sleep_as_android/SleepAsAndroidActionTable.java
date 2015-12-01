@@ -16,29 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.timer;
+package eu.power_switch.database.table.sleep_as_android;
 
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * TimerRoomAction table description
+ * SleepAsAndroidAction table description
+ * <p/>
+ * Created by Markus on 24.09.2015.
  */
-public class TimerRoomActionTable {
+public class SleepAsAndroidActionTable {
 
-    public static final String TABLE_NAME = "timer_room_action";
+    public static final String TABLE_NAME = "sleep_as_android_action";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_TIMER_ACTION_ID = "timer_action_id";
-    public static final String COLUMN_ROOM_ID = "room_id";
-    public static final String COLUMN_BUTTON_NAME = "button_name";
+    public static final String COLUMN_ACTION_TYPE = "action_type";
+    public static final String COLUMN_ALARM_TYPE_ID = "alarm_type_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_TIMER_ACTION_ID + " integer not null," +
-            COLUMN_ROOM_ID + " integer not null," +
-            COLUMN_BUTTON_NAME + " text not null," +
-            "FOREIGN KEY(" + COLUMN_TIMER_ACTION_ID + ") REFERENCES " +
-                TimerActionTable.TABLE_NAME + "(" + TimerActionTable.COLUMN_ID +
+            COLUMN_ALARM_TYPE_ID + " integer not null," +
+            COLUMN_ACTION_TYPE + " integer not null," +
+            "FOREIGN KEY(" + COLUMN_ALARM_TYPE_ID + ") REFERENCES " +
+                SleepAsAndroidActionTable.TABLE_NAME + "(" + SleepAsAndroidActionTable.COLUMN_ID +
             ")" +
         ");";
     //formatter:on

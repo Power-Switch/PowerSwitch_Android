@@ -16,31 +16,27 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.timer;
+package eu.power_switch.database.table.action;
 
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * TimerReceiverAction table description
+ * TimerSceneAction table description
  */
-public class TimerReceiverActionTable {
+public class SceneActionTable {
 
-    public static final String TABLE_NAME = "timer_receiver_action";
+    public static final String TABLE_NAME = "scene_actions";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_TIMER_ACTION_ID = "timer_action_id";
-    public static final String COLUMN_ROOM_ID = "room_id";
-    public static final String COLUMN_RECEIVER_ID = "receiver_id";
-    public static final String COLUMN_BUTTON_ID = "button_id";
+    public static final String COLUMN_ACTION_ID = "action_id";
+    public static final String COLUMN_SCENE_ID = "scene_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_TIMER_ACTION_ID + " integer not null," +
-            COLUMN_ROOM_ID + " integer not null," +
-            COLUMN_RECEIVER_ID + " integer not null," +
-            COLUMN_BUTTON_ID + " integer not null," +
-            "FOREIGN KEY(" + COLUMN_TIMER_ACTION_ID + ") REFERENCES " +
-                TimerActionTable.TABLE_NAME + "(" + TimerActionTable.COLUMN_ID +
+            COLUMN_ACTION_ID + " integer not null," +
+            COLUMN_SCENE_ID + " integer not null," +
+            "FOREIGN KEY(" + COLUMN_ACTION_ID + ") REFERENCES " +
+                ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID +
             ")" +
         ");";
     //formatter:on
@@ -59,6 +55,9 @@ public class TimerReceiverActionTable {
             case 6:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+            case 7:
+            case 8:
+                db.execSQL("ALTER TABLE " + "timer_scene_action" + " RENAME TO " + TABLE_NAME);
                 break;
 
         }

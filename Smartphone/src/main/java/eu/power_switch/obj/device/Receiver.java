@@ -162,7 +162,7 @@ public abstract class Receiver {
     }
 
     public static String getModelName(String javaPath) {
-        Set entrySet = receiverMap.entrySet();
+        Set<Map.Entry<String, String>> entrySet = receiverMap.entrySet();
 
         Iterator<Map.Entry<String, String>> itr = entrySet.iterator();
         while (itr.hasNext()) {

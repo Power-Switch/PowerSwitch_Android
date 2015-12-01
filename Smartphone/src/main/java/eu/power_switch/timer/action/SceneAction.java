@@ -20,47 +20,42 @@ package eu.power_switch.timer.action;
 
 import android.content.Context;
 
+import eu.power_switch.api.IntentReceiver;
+import eu.power_switch.obj.Scene;
+
 /**
- * TimerAction Base Class
- * A Timer can contains a list of TimerActions
+ * SceneAction that holds a specific scene to activate on execution
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public abstract class TimerAction {
+public class SceneAction extends Action {
 
-    public static final String ACTION_TYPE_RECEIVER = "action_type_receiver";
-    public static final String ACTION_TYPE_ROOM = "action_type_room";
-    public static final String ACTION_TYPE_SCENE = "action_type_scene";
+    private Scene scene;
 
-    protected long id;
-
-    /**
-     * Get ID of this TimerAction
-     *
-     * @return ID
-     */
-    public long getId() {
-        return id;
+    public SceneAction(long id, Scene scene) {
+        this.id = id;
+        this.scene = scene;
     }
 
-    /**
-     * Get ActionType of this TimerAction
-     *
-     * @return ActionType
-     */
-    public abstract String getActionType();
+    public Scene getScene() {
+        return scene;
+    }
 
-    /**
-     * Returns a human readable representation of a TimerAction
-     *
-     * @return Text
-     */
-    public abstract String toString();
+    @Override
+    public String getActionType() {
+        return ACTION_TYPE_SCENE;
+    }
 
-    /**
-     * Exceutes this TimerAction
-     *
-     * @param context
-     */
-    public abstract void execute(Context context);
+    @Override
+    public String toString() {
+        return scene.getName();
+    }
+
+    @Override
+    public void execute(Context context) {
+        IntentReceiver.parseActionIntent(context,
+                IntentReceiver.createSceneIntent(scene.getName()));
+    }
+
+
 }

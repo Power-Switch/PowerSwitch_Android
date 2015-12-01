@@ -20,42 +20,47 @@ package eu.power_switch.timer.action;
 
 import android.content.Context;
 
-import eu.power_switch.api.IntentReceiver;
-import eu.power_switch.obj.Scene;
-
 /**
- * TimerSceneAction that holds a specific scene to activate on execution
+ * Action Base Class
+ * A Timer can contains a list of Actions
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public class TimerSceneAction extends TimerAction {
+public abstract class Action {
 
-    private Scene scene;
+    public static final String ACTION_TYPE_RECEIVER = "action_type_receiver";
+    public static final String ACTION_TYPE_ROOM = "action_type_room";
+    public static final String ACTION_TYPE_SCENE = "action_type_scene";
 
-    public TimerSceneAction(long id, Scene scene) {
-        this.id = id;
-        this.scene = scene;
+    protected long id;
+
+    /**
+     * Get ID of this Action
+     *
+     * @return ID
+     */
+    public long getId() {
+        return id;
     }
 
-    public Scene getScene() {
-        return scene;
-    }
+    /**
+     * Get ActionType of this Action
+     *
+     * @return ActionType
+     */
+    public abstract String getActionType();
 
-    @Override
-    public String getActionType() {
-        return ACTION_TYPE_SCENE;
-    }
+    /**
+     * Returns a human readable representation of a Action
+     *
+     * @return Text
+     */
+    public abstract String toString();
 
-    @Override
-    public String toString() {
-        return scene.getName();
-    }
-
-    @Override
-    public void execute(Context context) {
-        IntentReceiver.parseActionIntent(context,
-                IntentReceiver.createSceneIntent(scene.getName()));
-    }
-
-
+    /**
+     * Executes this Action
+     *
+     * @param context
+     */
+    public abstract void execute(Context context);
 }

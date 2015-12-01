@@ -22,6 +22,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import eu.power_switch.database.table.action.ActionTable;
+import eu.power_switch.database.table.action.ReceiverActionTable;
+import eu.power_switch.database.table.action.RoomActionTable;
+import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.database.table.receiver.AutoPairTable;
 import eu.power_switch.database.table.receiver.DipTable;
@@ -32,9 +36,6 @@ import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.database.table.scene.SceneTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
-import eu.power_switch.database.table.timer.TimerReceiverActionTable;
-import eu.power_switch.database.table.timer.TimerRoomActionTable;
-import eu.power_switch.database.table.timer.TimerSceneActionTable;
 import eu.power_switch.database.table.timer.TimerTable;
 import eu.power_switch.database.table.timer.TimerWeekdayTable;
 import eu.power_switch.database.table.widget.ReceiverWidgetTable;
@@ -47,7 +48,7 @@ import eu.power_switch.database.table.widget.SceneWidgetTable;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -76,9 +77,10 @@ public class Database extends SQLiteOpenHelper {
         TimerWeekdayTable.onCreate(db);
         TimerActionTable.onCreate(db);
 
-        TimerReceiverActionTable.onCreate(db);
-        TimerRoomActionTable.onCreate(db);
-        TimerSceneActionTable.onCreate(db);
+        ActionTable.onCreate(db);
+        ReceiverActionTable.onCreate(db);
+        RoomActionTable.onCreate(db);
+        SceneActionTable.onCreate(db);
     }
 
     @Override
@@ -116,9 +118,38 @@ public class Database extends SQLiteOpenHelper {
         TimerWeekdayTable.onUpgrade(db, oldVersion, newVersion);
         TimerActionTable.onUpgrade(db, oldVersion, newVersion);
 
-        TimerReceiverActionTable.onUpgrade(db, oldVersion, newVersion);
-        TimerRoomActionTable.onUpgrade(db, oldVersion, newVersion);
-        TimerSceneActionTable.onUpgrade(db, oldVersion, newVersion);
-    }
+        ActionTable.onUpgrade(db, oldVersion, newVersion);
+        ReceiverActionTable.onUpgrade(db, oldVersion, newVersion);
+        RoomActionTable.onUpgrade(db, oldVersion, newVersion);
+        SceneActionTable.onUpgrade(db, oldVersion, newVersion);
 
+
+        switch (oldVersion) {
+            case 1:
+                db.execSQL("DROP TABLE IF EXISTS " + "widgets");
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+                // update timerActions
+                // insert data from old timer_action table into TimerActionTable
+                db.execSQL("INSERT INTO " + TimerActionTable.TABLE_NAME + "(" + TimerActionTable.COLUMN_ACTION_ID + ", " +
+                        TimerActionTable.COLUMN_TIMER_ID + ") " +
+                        "SELECT " + "" + "_id, " + TimerActionTable.COLUMN_TIMER_ID + " FROM timer_action;");
+
+                // insert data from old timer_action table into ActionTable
+                // TODO
+
+                // drop old table
+                db.execSQL("DROP TABLE timer_action");
+
+                //
+
+
+                break;
+        }
+    }
 }

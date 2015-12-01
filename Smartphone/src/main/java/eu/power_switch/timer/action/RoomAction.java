@@ -24,16 +24,16 @@ import eu.power_switch.api.IntentReceiver;
 import eu.power_switch.obj.Room;
 
 /**
- * TimerRoomAction that holds a specific room/button combination to activate on execution
+ * RoomAction that holds a specific room/button combination to activate on execution
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public class TimerRoomAction extends TimerAction {
+public class RoomAction extends Action {
 
     private Room room;
     private String buttonName;
 
-    public TimerRoomAction(long id, Room room, String buttonName) {
+    public RoomAction(long id, Room room, String buttonName) {
         this.id = id;
         this.room = room;
         this.buttonName = buttonName;

@@ -32,7 +32,7 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.TimerAction;
+import eu.power_switch.timer.action.Action;
 
 /**
  * IntentReceiver to handle any Alarm/Timer related Intents
@@ -139,8 +139,8 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
 
     private void executeActions(Context context, Timer timer) {
         Log.d("AlarmIntentReceiver", "executing Actions...");
-        for (TimerAction timerAction : timer.getActions()) {
-            timerAction.execute(context);
+        for (Action action : timer.getActions()) {
+            action.execute(context);
         }
     }
 

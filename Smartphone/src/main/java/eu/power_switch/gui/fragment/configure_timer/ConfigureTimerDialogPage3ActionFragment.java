@@ -40,14 +40,14 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.timer.action.TimerAction;
+import eu.power_switch.timer.action.Action;
 
 /**
  * Created by Markus on 12.09.2015.
  */
 public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
 
-    private static ArrayList<TimerAction> currentActions;
+    private static ArrayList<Action> currentActions;
     private static TimerActionRecyclerViewAdapter timerActionRecyclerViewAdapter;
 
     private BroadcastReceiver broadcastReceiver;
@@ -58,7 +58,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
      *
      * @param context
      */
-    public static void sendTimerActionChangedBroadcast(Context context, ArrayList<TimerAction> actions) {
+    public static void sendTimerActionChangedBroadcast(Context context, ArrayList<Action> actions) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
         intent.putExtra("actions", actions);
 
@@ -68,10 +68,10 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
     /**
      * Used to add TimerActions from "Add TimerAction" Dialog
      *
-     * @param timerAction TimerAction
+     * @param action TimerAction
      */
-    public static void addTimerAction(TimerAction timerAction) {
-        currentActions.add(timerAction);
+    public static void addTimerAction(Action action) {
+        currentActions.add(action);
         timerActionRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -125,8 +125,8 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
         currentActions.addAll(DatabaseHandler.getTimer(timerId).getActions());
     }
 
-    private ArrayList<TimerAction> getCurrentTimerActions() {
-        ArrayList<TimerAction> actions = new ArrayList<>();
+    private ArrayList<Action> getCurrentTimerActions() {
+        ArrayList<Action> actions = new ArrayList<>();
 
 
         return actions;
@@ -147,11 +147,11 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
     }
 
     public class TimerActionRecyclerViewAdapter extends RecyclerView.Adapter<TimerActionRecyclerViewAdapter.ViewHolder> {
-        private ArrayList<TimerAction> timerActions;
+        private ArrayList<Action> actions;
         private Context context;
 
-        public TimerActionRecyclerViewAdapter(Context context, ArrayList<TimerAction> timerActions) {
-            this.timerActions = timerActions;
+        public TimerActionRecyclerViewAdapter(Context context, ArrayList<Action> actions) {
+            this.actions = actions;
             this.context = context;
         }
 
@@ -163,22 +163,22 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(TimerActionRecyclerViewAdapter.ViewHolder holder, final int position) {
-            final TimerAction timerAction = timerActions.get(position);
-            holder.action.setText(timerAction.toString());
+            final Action action = actions.get(position);
+            holder.action.setText(action.toString());
 
             holder.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    timerActions.remove(position);
+                    actions.remove(position);
                     notifyDataSetChanged();
-                    sendTimerActionChangedBroadcast(getContext(), timerActions);
+                    sendTimerActionChangedBroadcast(getContext(), actions);
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return timerActions.size();
+            return actions.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

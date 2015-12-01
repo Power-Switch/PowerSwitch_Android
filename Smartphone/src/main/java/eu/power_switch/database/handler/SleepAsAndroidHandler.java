@@ -16,38 +16,27 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.timer;
+package eu.power_switch.database.handler;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 import eu.power_switch.timer.action.Action;
 
 /**
- * Timer based on just a start time and an interval
+ * Provides database methods for managing Sleep As Android related Actions
  * <p/>
- * Created by Markus on 21.09.2015.
+ * Created by Markus on 30.11.2015.
  */
-public class IntervalTimer extends Timer {
+public class SleepAsAndroidHandler {
 
-    private Calendar executionTime;
-    private long executionInterval;
-
-    public IntervalTimer(long id, boolean isActive, String name, Calendar executionTime, long executionInterval,
-                         ArrayList<Action> actions) {
-        super(id, isActive, name, EXECUTION_TYPE_INTERVAL, new ArrayList<Action>());
-        this.executionTime = executionTime;
-        this.executionInterval = executionInterval;
-        this.actions = actions;
+    protected List<Action> getAlarmTriggeredActions() {
+        return new LinkedList<>();
     }
 
-    @Override
-    public Calendar getExecutionTime() {
-        return executionTime;
+    protected void setAlarmTriggeredActions(ArrayList<Action> actions) {
+
     }
 
-    @Override
-    public long getExecutionInterval() {
-        return executionInterval;
-    }
 }

@@ -24,7 +24,6 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.database.table.scene.SceneTable;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
@@ -57,8 +56,7 @@ public abstract class SceneHandler {
      */
     protected static void update(Scene scene) {
         updateName(scene.getId(), scene.getName());
-        deleteSceneItems(scene.getId());
-        SceneItemHandler.add(scene.getId(), scene.getSceneItems());
+        SceneItemHandler.update(scene);
     }
 
     /**
@@ -81,17 +79,8 @@ public abstract class SceneHandler {
     protected static void delete(Long id) {
         TimerActionHandler.deleteBySceneId(id);
 
-        deleteSceneItems(id);
+        SceneItemHandler.deleteSceneItems(id);
         DatabaseHandler.database.delete(SceneTable.TABLE_NAME, SceneTable.COLUMN_ID + "=" + id, null);
-    }
-
-    /**
-     * Deletes all SceneItems from Database
-     *
-     * @param sceneId ID of Scene
-     */
-    private static void deleteSceneItems(Long sceneId) {
-        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null);
     }
 
     /**

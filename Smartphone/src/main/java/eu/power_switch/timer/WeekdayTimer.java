@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import eu.power_switch.R;
-import eu.power_switch.timer.action.TimerAction;
+import eu.power_switch.timer.action.Action;
 
 /**
  * Timer based on an execution time and weekdays
@@ -39,7 +39,7 @@ public class WeekdayTimer extends Timer {
     private Calendar executionTime;
 
     public WeekdayTimer(long id, boolean isActive, String name, Calendar executionTime, ArrayList<Day> executionDays,
-                        ArrayList<TimerAction> actions) {
+                        ArrayList<Action> actions) {
         super(id, isActive, name, EXECUTION_TYPE_WEEKDAY, actions);
         this.executionTime = executionTime;
         this.executionDays = executionDays;

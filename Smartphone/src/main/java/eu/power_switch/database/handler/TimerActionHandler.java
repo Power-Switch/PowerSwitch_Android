@@ -23,83 +23,57 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 
+import eu.power_switch.database.table.action.ActionTable;
+import eu.power_switch.database.table.action.ReceiverActionTable;
+import eu.power_switch.database.table.action.RoomActionTable;
+import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
-import eu.power_switch.database.table.timer.TimerReceiverActionTable;
-import eu.power_switch.database.table.timer.TimerRoomActionTable;
-import eu.power_switch.database.table.timer.TimerSceneActionTable;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
-import eu.power_switch.timer.action.TimerAction;
-import eu.power_switch.timer.action.TimerReceiverAction;
-import eu.power_switch.timer.action.TimerRoomAction;
-import eu.power_switch.timer.action.TimerSceneAction;
+import eu.power_switch.timer.action.Action;
 
 /**
- * Provides database methods for managing TimerActions
+ * Provides database methods for managing Timer Actions
  */
 public abstract class TimerActionHandler {
 
-    protected static void add(ArrayList<TimerAction> actions, Long timerId) {
-        for (TimerAction action : actions) {
+    /**
+     * Adds Actions to a specific Timer
+     *
+     * @param actions Actions to be added to the Timer
+     * @param timerId ID of Timer
+     */
+    protected static void add(ArrayList<Action> actions, Long timerId) {
+        // add actions to database
+        ArrayList<Long> actionIds = ActionHandler.add(actions);
+
+        // add timer <-> action relation
+        for (Long actionId : actionIds) {
             ContentValues values = new ContentValues();
             values.put(TimerActionTable.COLUMN_TIMER_ID, timerId);
-            values.put(TimerActionTable.COLUMN_ACTION_TYPE, action.getActionType());
-            long actionId = DatabaseHandler.database.insert(TimerActionTable.TABLE_NAME, null, values);
-
-            if (TimerAction.ACTION_TYPE_RECEIVER.equals(action.getActionType())) {
-                insertActionDetails((TimerReceiverAction) action, actionId);
-            } else if (TimerAction.ACTION_TYPE_ROOM.equals(action.getActionType())) {
-                insertActionDetails((TimerRoomAction) action, actionId);
-            } else if (TimerAction.ACTION_TYPE_SCENE.equals(action.getActionType())) {
-                insertActionDetails((TimerSceneAction) action, actionId);
-            }
+            values.put(TimerActionTable.COLUMN_ACTION_ID, actionId);
+            DatabaseHandler.database.insert(TimerActionTable.TABLE_NAME, null, values);
         }
     }
 
-    private static void insertActionDetails(TimerReceiverAction timerReceiverAction, Long actionId) {
-        ContentValues values = new ContentValues();
-        values.put(TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID, actionId);
-        values.put(TimerReceiverActionTable.COLUMN_ROOM_ID, timerReceiverAction.getRoom().getId());
-        values.put(TimerReceiverActionTable.COLUMN_RECEIVER_ID, timerReceiverAction.getReceiver().getId());
-        values.put(TimerReceiverActionTable.COLUMN_BUTTON_ID, timerReceiverAction.getButton().getId());
-        DatabaseHandler.database.insert(TimerReceiverActionTable.TABLE_NAME, null, values);
-    }
-
-    private static void insertActionDetails(TimerRoomAction timerRoomAction, Long actionId) {
-        ContentValues values = new ContentValues();
-        values.put(TimerRoomActionTable.COLUMN_TIMER_ACTION_ID, actionId);
-        values.put(TimerRoomActionTable.COLUMN_ROOM_ID, timerRoomAction.getRoom().getId());
-        values.put(TimerRoomActionTable.COLUMN_BUTTON_NAME, timerRoomAction.getButtonName());
-        DatabaseHandler.database.insert(TimerRoomActionTable.TABLE_NAME, null, values);
-    }
-
-    private static void insertActionDetails(TimerSceneAction timerSceneAction, Long actionId) {
-        ContentValues values = new ContentValues();
-        values.put(TimerSceneActionTable.COLUMN_TIMER_ACTION_ID, actionId);
-        values.put(TimerSceneActionTable.COLUMN_SCENE_ID, timerSceneAction.getScene().getId());
-        DatabaseHandler.database.insert(TimerSceneActionTable.TABLE_NAME, null, values);
-    }
 
     /**
-     * Deletes all TimerActions using Timer ID
+     * Deletes all Actions using Timer ID
      *
      * @param timerId ID of Timer
      */
     protected static void delete(Long timerId) {
-        ArrayList<TimerAction> timerActions = getByTimerId(timerId);
+        ArrayList<Action> actions = getByTimerId(timerId);
 
-        for (TimerAction timerAction : timerActions) {
+        for (Action action : actions) {
+            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID + "=" + action.getId(), null);
             // delete timerXXXactions
-            DatabaseHandler.database.delete(TimerReceiverActionTable.TABLE_NAME, TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID +
-                    "=" + timerAction.getId(), null);
-            DatabaseHandler.database.delete(TimerRoomActionTable.TABLE_NAME, TimerRoomActionTable.COLUMN_TIMER_ACTION_ID +
-                    "=" + timerAction.getId(), null);
-            DatabaseHandler.database.delete(TimerSceneActionTable.TABLE_NAME, TimerSceneActionTable.COLUMN_TIMER_ACTION_ID +
-                    "=" + timerAction.getId(), null);
+            DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
+                    "=" + action.getId(), null);
+            DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
+                    "=" + action.getId(), null);
+            DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID +
+                    "=" + action.getId(), null);
 
             // then delete timerAction
             DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_TIMER_ID +
@@ -108,25 +82,27 @@ public abstract class TimerActionHandler {
     }
 
     /**
-     * Deletes all TimerActions using a specific Receiver
+     * Deletes all Actions using a specific Receiver
      *
      * @param receiverId ID of Receiver
      */
     protected static void deleteByReceiverId(Long receiverId) {
         Log.d(TimerActionHandler.class, "Delete TimerActions by ReceiverId: " + receiverId);
-        String[] columns = {TimerReceiverActionTable.COLUMN_ID, TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(TimerReceiverActionTable.TABLE_NAME, columns,
-                TimerReceiverActionTable.COLUMN_RECEIVER_ID + "=" + receiverId, null, null, null, null);
+        String[] columns = {ReceiverActionTable.COLUMN_ID, ReceiverActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(ReceiverActionTable.TABLE_NAME, columns,
+                ReceiverActionTable.COLUMN_RECEIVER_ID + "=" + receiverId, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            long timerReceiverActionId = cursor.getLong(0);
-            long timerActionId = cursor.getLong(1);
+            long receiverActionId = cursor.getLong(0);
+            long actionId = cursor.getLong(1);
 
-            DatabaseHandler.database.delete(TimerReceiverActionTable.TABLE_NAME, TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID +
-                    "=" + timerReceiverActionId, null);
-            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ID +
-                    "=" + timerActionId, null);
+            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
+                    "=" + actionId, null);
+            DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
+                    "=" + receiverActionId, null);
+            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
+                    "=" + actionId, null);
 
             cursor.moveToNext();
         }
@@ -135,24 +111,26 @@ public abstract class TimerActionHandler {
     }
 
     /**
-     * Deletes all TimerActions using a specific Room
+     * Deletes all Actions using a specific Room
      *
      * @param roomId ID of Room
      */
     protected static void deleteByRoomId(Long roomId) {
-        String[] columns = {TimerRoomActionTable.COLUMN_ID, TimerRoomActionTable.COLUMN_TIMER_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(TimerRoomActionTable.TABLE_NAME, columns,
-                TimerRoomActionTable.COLUMN_ROOM_ID + "=" + roomId, null, null, null, null);
+        String[] columns = {RoomActionTable.COLUMN_ID, RoomActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(RoomActionTable.TABLE_NAME, columns,
+                RoomActionTable.COLUMN_ROOM_ID + "=" + roomId, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            long timerRoomActionId = cursor.getLong(0);
-            long timerActionId = cursor.getLong(1);
+            long roomActionId = cursor.getLong(0);
+            long actionId = cursor.getLong(1);
 
-            DatabaseHandler.database.delete(TimerRoomActionTable.TABLE_NAME, TimerRoomActionTable
-                    .COLUMN_TIMER_ACTION_ID + "=" + timerRoomActionId, null);
-            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ID +
-                    "=" + timerActionId, null);
+            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
+                    "=" + actionId, null);
+            DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
+                    "=" + roomActionId, null);
+            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
+                    "=" + actionId, null);
 
             cursor.moveToNext();
         }
@@ -161,24 +139,26 @@ public abstract class TimerActionHandler {
     }
 
     /**
-     * Deletes all TimerActions using a specific Scene
+     * Deletes all Timer Actions using a specific Scene
      *
      * @param sceneId ID of Scene
      */
     protected static void deleteBySceneId(Long sceneId) {
-        String[] columns = {TimerSceneActionTable.COLUMN_ID, TimerSceneActionTable.COLUMN_TIMER_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(TimerSceneActionTable.TABLE_NAME, columns,
-                TimerSceneActionTable.COLUMN_SCENE_ID + "=" + sceneId, null, null, null, null);
+        String[] columns = {SceneActionTable.COLUMN_ID, SceneActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(SceneActionTable.TABLE_NAME, columns,
+                SceneActionTable.COLUMN_SCENE_ID + "=" + sceneId, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            long timerSceneActionId = cursor.getLong(0);
-            long timerActionId = cursor.getLong(1);
+            long sceneActionId = cursor.getLong(0);
+            long actionId = cursor.getLong(1);
 
-            DatabaseHandler.database.delete(TimerSceneActionTable.TABLE_NAME, TimerSceneActionTable.COLUMN_TIMER_ACTION_ID +
-                    "=" + timerSceneActionId, null);
-            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ID +
-                    "=" + timerActionId, null);
+            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
+                    "=" + actionId, null);
+            DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID +
+                    "=" + sceneActionId, null);
+            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
+                    "=" + actionId, null);
 
             cursor.moveToNext();
         }
@@ -186,105 +166,32 @@ public abstract class TimerActionHandler {
         cursor.close();
     }
 
-    protected static ArrayList<TimerAction> getByTimerId(long timerId) {
-        ArrayList<TimerAction> timerActions = new ArrayList<>();
+    /**
+     * Get all Actions associated with a specific Timer
+     *
+     * @param timerId ID of Timer
+     * @return List of Actions
+     */
+    protected static ArrayList<Action> getByTimerId(long timerId) {
+        ArrayList<Action> actions = new ArrayList<>();
 
-        String[] columns = {TimerActionTable.COLUMN_ID, TimerActionTable.COLUMN_ACTION_TYPE};
+        String[] columns = {TimerActionTable.COLUMN_TIMER_ID, TimerActionTable.COLUMN_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(TimerActionTable.TABLE_NAME, columns,
                 TimerActionTable.COLUMN_TIMER_ID + "=" + timerId, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            timerActions.add(dbToTimerAction(cursor));
+            Long actionId = cursor.getLong(1);
+            actions.add(ActionHandler.get(actionId));
             cursor.moveToNext();
         }
 
         cursor.close();
-        return timerActions;
+        return actions;
     }
 
     /**
-     * Gets a TimerAction
-     *
-     * @param id ID of TimerAction
-     * @return TimerAction
-     */
-    protected static TimerAction get(long id) {
-        String[] columns = {TimerActionTable.COLUMN_ID, TimerActionTable.COLUMN_ACTION_TYPE};
-        Cursor cursor = DatabaseHandler.database.query(TimerActionTable.TABLE_NAME, columns,
-                TimerActionTable.COLUMN_ID + "=" + id, null, null, null, null);
-        cursor.moveToFirst();
-
-        while (cursor.isAfterLast()) {
-            cursor.close();
-            return null;
-        }
-
-        TimerAction timerAction = dbToTimerAction(cursor);
-        cursor.close();
-        return timerAction;
-
-    }
-
-    private static TimerAction dbToTimerAction(Cursor cursor) {
-        long timerActionId = cursor.getLong(0);
-        String actionType = cursor.getString(1);
-
-        if (TimerAction.ACTION_TYPE_RECEIVER.equals(actionType)) {
-            String[] columns1 = {TimerReceiverActionTable.COLUMN_ROOM_ID,
-                    TimerReceiverActionTable.COLUMN_RECEIVER_ID, TimerReceiverActionTable.COLUMN_BUTTON_ID};
-            Cursor cursor1 = DatabaseHandler.database.query(TimerReceiverActionTable.TABLE_NAME, columns1,
-                    TimerReceiverActionTable.COLUMN_TIMER_ACTION_ID + "=" + timerActionId, null, null, null, null);
-            cursor1.moveToFirst();
-
-            long roomId = cursor1.getLong(0);
-            long receiverId = cursor1.getLong(1);
-            long buttonId = cursor1.getLong(2);
-
-            Room room = RoomHandler.get(roomId);
-            Receiver receiver = ReceiverHandler.get(receiverId);
-            Button button = null;
-
-            for (Button currentButton : receiver.getButtons()) {
-                if (currentButton.getId() == buttonId) {
-                    button = currentButton;
-                    break;
-                }
-            }
-
-            cursor1.close();
-
-            return new TimerReceiverAction(timerActionId, room, receiver, button);
-        } else if (TimerAction.ACTION_TYPE_ROOM.equals(actionType)) {
-            String[] columns1 = {TimerRoomActionTable.COLUMN_ROOM_ID, TimerRoomActionTable.COLUMN_BUTTON_NAME};
-            Cursor cursor1 = DatabaseHandler.database.query(TimerRoomActionTable.TABLE_NAME, columns1,
-                    TimerRoomActionTable.COLUMN_TIMER_ACTION_ID + "=" + timerActionId, null, null, null, null);
-            cursor1.moveToFirst();
-
-            long roomId = cursor1.getLong(0);
-            Room room = RoomHandler.get(roomId);
-            String buttonName = cursor1.getString(1);
-
-            cursor1.close();
-            return new TimerRoomAction(timerActionId, room, buttonName);
-        } else if (TimerAction.ACTION_TYPE_SCENE.equals(actionType)) {
-            String[] columns1 = {TimerSceneActionTable.COLUMN_SCENE_ID};
-            Cursor cursor1 = DatabaseHandler.database.query(TimerSceneActionTable.TABLE_NAME, columns1,
-                    TimerSceneActionTable.COLUMN_TIMER_ACTION_ID + "=" + timerActionId, null, null, null, null);
-            cursor1.moveToFirst();
-
-            long sceneId = cursor1.getLong(0);
-            Scene scene = SceneHandler.get(sceneId);
-
-            cursor1.close();
-            return new TimerSceneAction(timerActionId, scene);
-        }
-
-        return null;
-    }
-
-    /**
-     * Update TimerActions for an existing Timer
+     * Update Actions for an existing Timer
      *
      * @param timer new Timer
      */

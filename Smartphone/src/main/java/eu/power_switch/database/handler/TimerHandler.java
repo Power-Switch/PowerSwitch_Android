@@ -31,7 +31,7 @@ import eu.power_switch.database.table.timer.TimerWeekdayTable;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.TimerAction;
+import eu.power_switch.timer.action.Action;
 import eu.power_switch.timer.alarm.AlarmHandler;
 
 /**
@@ -241,7 +241,7 @@ public abstract class TimerHandler {
         long executionInterval = c.getLong(4);
         String executionType = c.getString(5);
 
-        ArrayList<TimerAction> actions = TimerActionHandler.getByTimerId(timerId);
+        ArrayList<Action> actions = TimerActionHandler.getByTimerId(timerId);
 
         if (executionType.equals(Timer.EXECUTION_TYPE_WEEKDAY)) {
             ArrayList<WeekdayTimer.Day> weekdays = getWeekdayDetails(timerId);

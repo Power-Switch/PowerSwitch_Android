@@ -35,7 +35,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.TimerAction;
+import eu.power_switch.timer.action.Action;
 import eu.power_switch.timer.alarm.AlarmHandler;
 
 /**
@@ -145,10 +145,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(inflaterString);
 
         holder.linearLayoutTimerActions.removeAllViews();
-        for (TimerAction timerAction : timer.getActions()) {
+        for (Action action : timer.getActions()) {
             LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.list_item_timer_action, holder.linearLayoutTimerActions, false);
             TextView textViewAction = (TextView) linearLayout.findViewById(R.id.txt_timer_action);
-            textViewAction.setText(timerAction.toString());
+            textViewAction.setText(action.toString());
             holder.linearLayoutTimerActions.addView(linearLayout);
         }
 

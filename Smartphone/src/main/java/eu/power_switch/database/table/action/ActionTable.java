@@ -16,32 +16,25 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.timer;
+package eu.power_switch.database.table.action;
 
 import android.database.sqlite.SQLiteDatabase;
-
-import eu.power_switch.database.table.action.ActionTable;
 
 /**
  * TimerAction table description
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public class TimerActionTable {
+public class ActionTable {
 
-    public static final String TABLE_NAME = "timer_actions";
-    public static final String COLUMN_TIMER_ID = "timer_id";
-    public static final String COLUMN_ACTION_ID = "action_id";
+    public static final String TABLE_NAME = "actions";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ACTION_TYPE = "action_type";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_TIMER_ID + " integer not null," +
-            COLUMN_ACTION_ID + " integer not null," +
-            "FOREIGN KEY(" + COLUMN_TIMER_ID + ") REFERENCES " +
-                TimerTable.TABLE_NAME + "(" + TimerTable.COLUMN_ID + "), " +
-            "FOREIGN KEY(" + COLUMN_ACTION_ID+ ") REFERENCES " +
-                ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + "), " +
-            "PRIMARY KEY (" + COLUMN_TIMER_ID + ", " + COLUMN_ACTION_ID + ")" +
+            COLUMN_ID + " integer primary key autoincrement," +
+            COLUMN_ACTION_TYPE + " text not null" +
         ");";
     //formatter:on
 
@@ -60,8 +53,13 @@ public class TimerActionTable {
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
             case 7:
-            case 8:
+                // create new table
                 onCreate(db);
+
+                // TODO:
+//                db.execSQL("INSERT INTO " + TABLE_NAME + "("+ COLUMN_TIMER_ID + ", " + COLUMN_ACTION_ID + ") SELECT " +
+//                    "_id, " + TimerActionTable.COLUMN_TIMER_ID + " FROM timer_action;");
+
         }
     }
 }

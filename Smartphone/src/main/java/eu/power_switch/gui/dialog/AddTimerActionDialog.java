@@ -48,10 +48,10 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.timer.action.TimerAction;
-import eu.power_switch.timer.action.TimerReceiverAction;
-import eu.power_switch.timer.action.TimerRoomAction;
-import eu.power_switch.timer.action.TimerSceneAction;
+import eu.power_switch.timer.action.Action;
+import eu.power_switch.timer.action.ReceiverAction;
+import eu.power_switch.timer.action.RoomAction;
+import eu.power_switch.timer.action.SceneAction;
 
 /**
  * Dialog to select a timer action configuration
@@ -64,7 +64,7 @@ public class AddTimerActionDialog extends DialogFragment {
     private View rootView;
 
     private int defaultTextColor;
-    private String currentTimerActionType = TimerAction.ACTION_TYPE_RECEIVER;
+    private String currentTimerActionType = Action.ACTION_TYPE_RECEIVER;
     private RadioButton radioButtonReceiverAction;
     private RadioButton radioButtonRoomAction;
     private RadioButton radioButtonSceneAction;
@@ -108,15 +108,15 @@ public class AddTimerActionDialog extends DialogFragment {
                 if (v.getId() == R.id.radioButton_receiver_action) {
                     radioButtonRoomAction.setChecked(false);
                     radioButtonSceneAction.setChecked(false);
-                    updateActionType(TimerAction.ACTION_TYPE_RECEIVER);
+                    updateActionType(Action.ACTION_TYPE_RECEIVER);
                 } else if (v.getId() == R.id.radioButton_room_action) {
                     radioButtonReceiverAction.setChecked(false);
                     radioButtonSceneAction.setChecked(false);
-                    updateActionType(TimerAction.ACTION_TYPE_ROOM);
+                    updateActionType(Action.ACTION_TYPE_ROOM);
                 } else if (v.getId() == R.id.radioButton_scene_action) {
                     radioButtonReceiverAction.setChecked(false);
                     radioButtonRoomAction.setChecked(false);
-                    updateActionType(TimerAction.ACTION_TYPE_SCENE);
+                    updateActionType(Action.ACTION_TYPE_SCENE);
                 }
                 setPositiveButtonVisibility(checkValidity());
             }
@@ -288,15 +288,15 @@ public class AddTimerActionDialog extends DialogFragment {
 
     private void updateActionType(String timerActionType) {
         currentTimerActionType = timerActionType;
-        if (TimerAction.ACTION_TYPE_RECEIVER.equals(timerActionType)) {
+        if (Action.ACTION_TYPE_RECEIVER.equals(timerActionType)) {
             linearLayoutReceiverAction.setVisibility(View.VISIBLE);
             linearLayoutRoomAction.setVisibility(View.GONE);
             linearLayoutSceneAction.setVisibility(View.GONE);
-        } else if (TimerAction.ACTION_TYPE_ROOM.equals(timerActionType)) {
+        } else if (Action.ACTION_TYPE_ROOM.equals(timerActionType)) {
             linearLayoutReceiverAction.setVisibility(View.GONE);
             linearLayoutRoomAction.setVisibility(View.VISIBLE);
             linearLayoutSceneAction.setVisibility(View.GONE);
-        } else if (TimerAction.ACTION_TYPE_SCENE.equals(timerActionType)) {
+        } else if (Action.ACTION_TYPE_SCENE.equals(timerActionType)) {
             linearLayoutReceiverAction.setVisibility(View.GONE);
             linearLayoutRoomAction.setVisibility(View.GONE);
             linearLayoutSceneAction.setVisibility(View.VISIBLE);
@@ -304,8 +304,8 @@ public class AddTimerActionDialog extends DialogFragment {
     }
 
     private void addCurrentSelection() {
-        TimerAction timerAction = null;
-        if (TimerAction.ACTION_TYPE_RECEIVER.equals(currentTimerActionType)) {
+        Action action = null;
+        if (Action.ACTION_TYPE_RECEIVER.equals(currentTimerActionType)) {
             Log.d(spinner_receiver_action_room.getSelectedItem().toString());
             Log.d(spinner_receiver_action_receiver.getSelectedItem().toString());
             Log.d(spinner_receiver_action_button.getSelectedItem().toString());
@@ -320,42 +320,42 @@ public class AddTimerActionDialog extends DialogFragment {
                 }
             }
 
-            timerAction = new TimerReceiverAction(-1, selectedRoom, selectedReceiver, selectedButton);
-        } else if (TimerAction.ACTION_TYPE_ROOM.equals(currentTimerActionType)) {
+            action = new ReceiverAction(-1, selectedRoom, selectedReceiver, selectedButton);
+        } else if (Action.ACTION_TYPE_ROOM.equals(currentTimerActionType)) {
             Log.d(spinner_room_action_room.getSelectedItem().toString());
             Log.d(spinner_room_action_button.getSelectedItem().toString());
 
             Room selectedRoom = DatabaseHandler.getRoom(spinner_room_action_room.getSelectedItem().toString());
 
-            timerAction = new TimerRoomAction(-1, selectedRoom, spinner_room_action_button.getSelectedItem()
+            action = new RoomAction(-1, selectedRoom, spinner_room_action_button.getSelectedItem()
                     .toString());
-        } else if (TimerAction.ACTION_TYPE_SCENE.equals(currentTimerActionType)) {
+        } else if (Action.ACTION_TYPE_SCENE.equals(currentTimerActionType)) {
             Log.d(spinner_scene_action_scene.getSelectedItem().toString());
 
             Scene selectedScene = DatabaseHandler.getScene(spinner_scene_action_scene.getSelectedItem().toString());
 
-            timerAction = new TimerSceneAction(0, selectedScene);
+            action = new SceneAction(0, selectedScene);
         }
 
-        ConfigureTimerDialogPage3ActionFragment.addTimerAction(timerAction);
+        ConfigureTimerDialogPage3ActionFragment.addTimerAction(action);
     }
 
     private boolean checkValidity() {
         if (currentTimerActionType == null) {
             return false;
         }
-        if (TimerAction.ACTION_TYPE_RECEIVER.equals(currentTimerActionType)) {
+        if (Action.ACTION_TYPE_RECEIVER.equals(currentTimerActionType)) {
             if (spinner_receiver_action_room.getSelectedItem() == null
                     || spinner_receiver_action_receiver.getSelectedItem() == null
                     || spinner_receiver_action_button.getSelectedItem() == null) {
                 return false;
             }
-        } else if (TimerAction.ACTION_TYPE_ROOM.equals(currentTimerActionType)) {
+        } else if (Action.ACTION_TYPE_ROOM.equals(currentTimerActionType)) {
             if (spinner_room_action_room.getSelectedItem() == null
                     || spinner_room_action_button.getSelectedItem() == null) {
                 return false;
             }
-        } else if (TimerAction.ACTION_TYPE_SCENE.equals(currentTimerActionType)) {
+        } else if (Action.ACTION_TYPE_SCENE.equals(currentTimerActionType)) {
             if (spinner_scene_action_scene.getSelectedItem() == null) {
                 return false;
             }

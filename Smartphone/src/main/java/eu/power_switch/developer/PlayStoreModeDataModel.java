@@ -33,8 +33,8 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.TimerAction;
-import eu.power_switch.timer.action.TimerReceiverAction;
+import eu.power_switch.timer.action.Action;
+import eu.power_switch.timer.action.ReceiverAction;
 
 /**
  * This Class represents a demo Room/Recever/Scene setup for use in Play Store images
@@ -221,7 +221,7 @@ public class PlayStoreModeDataModel {
     public ArrayList<Timer> getTimers() {
         ArrayList<Timer> timers = new ArrayList<>();
 
-        TimerReceiverAction timerReceiverAction = new TimerReceiverAction(0, wohnzimmer, ecklampe_wohnzimmer,
+        ReceiverAction timerReceiverAction = new ReceiverAction(0, wohnzimmer, ecklampe_wohnzimmer,
                 ecklampe_wohnzimmer.getButtons().getFirst());
         ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
         days.add(WeekdayTimer.Day.MONDAY);
@@ -232,7 +232,7 @@ public class PlayStoreModeDataModel {
         days.add(WeekdayTimer.Day.SATURDAY);
         days.add(WeekdayTimer.Day.SUNDAY);
 
-        ArrayList<TimerAction> actions = new ArrayList<>();
+        ArrayList<Action> actions = new ArrayList<>();
         actions.add(timerReceiverAction);
 
         Calendar c = Calendar.getInstance();
@@ -242,10 +242,10 @@ public class PlayStoreModeDataModel {
         timers.add(new WeekdayTimer(0, true, "Abendlicht", c, days, actions));
 
 
-        TimerReceiverAction timerReceiverAction2 = new TimerReceiverAction(0, kueche, kaffeemaschine_kueche,
+        ReceiverAction timerReceiverAction2 = new ReceiverAction(0, kueche, kaffeemaschine_kueche,
                 ecklampe_wohnzimmer.getButtons().getFirst());
 
-        ArrayList<TimerAction> actions2 = new ArrayList<>();
+        ArrayList<Action> actions2 = new ArrayList<>();
         actions2.add(timerReceiverAction2);
 
         ArrayList<WeekdayTimer.Day> days2 = new ArrayList<>();

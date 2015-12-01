@@ -21,7 +21,7 @@ package eu.power_switch.timer;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import eu.power_switch.timer.action.TimerAction;
+import eu.power_switch.timer.action.Action;
 
 /**
  * Timer base class
@@ -37,9 +37,9 @@ public abstract class Timer {
     protected boolean isActive;
     protected String name;
     protected String executionType;
-    protected ArrayList<TimerAction> actions;
+    protected ArrayList<Action> actions;
 
-    public Timer(long id, boolean isActive, String name, String executionType, ArrayList<TimerAction> actions) {
+    public Timer(long id, boolean isActive, String name, String executionType, ArrayList<Action> actions) {
         this.id = id;
         this.isActive = isActive;
         this.name = name;
@@ -88,7 +88,7 @@ public abstract class Timer {
      *
      * @return List of TimerActions
      */
-    public ArrayList<TimerAction> getActions() {
+    public ArrayList<Action> getActions() {
         return actions;
     }
 

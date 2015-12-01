@@ -28,6 +28,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.device.Receiver;
@@ -74,6 +75,16 @@ public abstract class SceneItemHandler {
     }
 
     /**
+     * Update all SceneItems related to a specific Scene
+     *
+     * @param scene Scene
+     */
+    protected static void update(Scene scene) {
+        deleteSceneItems(scene.getId());
+        add(scene.getId(), scene.getSceneItems());
+    }
+
+    /**
      * Get a list of all SceneItems associated with a Scene
      *
      * @param sceneId ID of Scene
@@ -102,6 +113,15 @@ public abstract class SceneItemHandler {
     protected static void deleteByReceiverId(Long receiverId) {
         Log.d(SceneItemHandler.class, "Delete SceneItem by ReceiverId: " + receiverId);
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
+    }
+
+    /**
+     * Deletes all SceneItems related to a specific Scene from Database
+     *
+     * @param sceneId ID of Scene
+     */
+    protected static void deleteSceneItems(Long sceneId) {
+        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null);
     }
 
     /**
