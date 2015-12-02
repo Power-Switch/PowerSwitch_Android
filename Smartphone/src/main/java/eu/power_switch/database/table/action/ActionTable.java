@@ -50,9 +50,8 @@ public class ActionTable {
             case 4:
             case 5:
             case 6:
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-                onCreate(db);
             case 7:
+            case 8:
                 // create new table
                 onCreate(db);
         }

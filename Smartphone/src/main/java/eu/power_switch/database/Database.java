@@ -136,7 +136,7 @@ public class Database extends SQLiteOpenHelper {
             case 8:
                 // insert data from old timer_action table into ActionTable
                 db.execSQL("INSERT INTO " + ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + ", " + ActionTable.COLUMN_ACTION_TYPE + ") SELECT " +
-                        TimerActionTable.COLUMN_ACTION_ID + ", " + "action_type" + " FROM timer_action;");
+                        "_id" + ", " + "action_type" + " FROM timer_action;");
 
                 // update timerActions
                 // insert data from old timer_action table into TimerActionTable

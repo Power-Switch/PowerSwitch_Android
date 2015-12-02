@@ -62,11 +62,15 @@ public class IntentReceiver extends BroadcastReceiver {
         }
 
         try {
-            if (intent.getAction().equals(ExternalAppConstants.ALARM_TRIGGERED_INTENT)) {
+            if (intent.getAction()
+                    .equals(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction())) {
                 Log.d("IntentReceiver", "Alarm triggered!");
-            } else if (intent.getAction().equals(ExternalAppConstants.ALARM_SNOOZED_INTENT)) {
+            } else if (intent.getAction()
+                    .equals(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED.getIntentAction())) {
                 Log.d("IntentReceiver", "Alarm snoozed...");
-            } else if (intent.getAction().equals(ExternalAppConstants.ALARM_DISMISSED_INTENT)) {
+            } else if (intent.getAction()
+                    .equals(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED.getIntentAction
+                            ())) {
                 Log.d("IntentReceiver", "Alarm dismissed...");
             } else {
                 Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());

@@ -57,7 +57,15 @@ public class SceneActionTable {
                 onCreate(db);
             case 7:
             case 8:
-                db.execSQL("ALTER TABLE " + "timer_scene_action" + " RENAME TO " + TABLE_NAME);
+                // TODO: create new table
+                db.execSQL(TABLE_CREATE);
+                // TODO: merge old information
+                db.execSQL("INSERT INTO " + TABLE_NAME + "(" + COLUMN_ACTION_ID + ", " +
+                        COLUMN_SCENE_ID + ") " +
+                        "SELECT " + COLUMN_ID + ", " + COLUMN_SCENE_ID + " FROM " +
+                        "timer_scene_action;");
+                // TODO: delete old table
+                db.execSQL("DROP TABLE IF EXISTS " + "timer_scene_action");
                 break;
 
         }

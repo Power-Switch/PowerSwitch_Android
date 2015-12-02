@@ -59,7 +59,15 @@ public class RoomActionTable {
                 onCreate(db);
             case 7:
             case 8:
-                db.execSQL("ALTER TABLE " + "timer_room_action" + " RENAME TO " + TABLE_NAME);
+                // TODO: create new table
+                db.execSQL(TABLE_CREATE);
+                // TODO: merge old information
+                db.execSQL("INSERT INTO " + TABLE_NAME + "(" + COLUMN_ACTION_ID + ", " +
+                        COLUMN_ROOM_ID + ", " + COLUMN_BUTTON_NAME + ") " +
+                        "SELECT " + COLUMN_ID + ", " + COLUMN_ROOM_ID + ", " + COLUMN_BUTTON_NAME +
+                        " FROM " + "timer_room_action;");
+                // TODO: delete old table
+                db.execSQL("DROP TABLE IF EXISTS " + "timer_room_action");
                 break;
 
         }
