@@ -29,17 +29,14 @@ public class SleepAsAndroidActionTable {
 
     public static final String TABLE_NAME = "sleep_as_android_action";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ACTION_TYPE = "action_type";
     public static final String COLUMN_ALARM_TYPE_ID = "alarm_type_id";
+    public static final String COLUMN_ACTION_ID = "action_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
             COLUMN_ALARM_TYPE_ID + " integer not null," +
-            COLUMN_ACTION_TYPE + " integer not null," +
-            "FOREIGN KEY(" + COLUMN_ALARM_TYPE_ID + ") REFERENCES " +
-                SleepAsAndroidActionTable.TABLE_NAME + "(" + SleepAsAndroidActionTable.COLUMN_ID +
-            ")" +
+            COLUMN_ACTION_ID + " integer not null" +
         ");";
     //formatter:on
 
@@ -55,6 +52,7 @@ public class SleepAsAndroidActionTable {
             case 4:
             case 5:
             case 6:
+            case 7:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
                 break;

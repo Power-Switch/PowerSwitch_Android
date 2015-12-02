@@ -18,10 +18,18 @@
 
 package eu.power_switch.database.handler;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+import eu.power_switch.database.table.action.ActionTable;
+import eu.power_switch.database.table.action.ReceiverActionTable;
+import eu.power_switch.database.table.action.RoomActionTable;
+import eu.power_switch.database.table.action.SceneActionTable;
+import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
+import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.timer.action.Action;
 
 /**
@@ -32,11 +40,57 @@ import eu.power_switch.timer.action.Action;
 public class SleepAsAndroidHandler {
 
     protected List<Action> getAlarmTriggeredActions() {
-        return new LinkedList<>();
+        ArrayList<Action> actions = new ArrayList<>();
+
+        String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(SleepAsAndroidActionTable.TABLE_NAME, columns,
+                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getId(),
+                null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long actionId = cursor.getLong(1);
+            actions.add(ActionHandler.get(actionId));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return actions;
     }
 
     protected void setAlarmTriggeredActions(ArrayList<Action> actions) {
+        deleteAlarmTriggeredActions();
+        addAlarmTriggeredActions(actions);
+    }
 
+    private void addAlarmTriggeredActions(ArrayList<Action> actions) {
+        // add actions to database
+        ArrayList<Long> actionIds = ActionHandler.add(actions);
+
+        // add AlarmTriggered <-> action relation
+        for (Long actionId : actionIds) {
+            ContentValues values = new ContentValues();
+            values.put(SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getId());
+            values.put(SleepAsAndroidActionTable.COLUMN_ACTION_ID, actionId);
+            DatabaseHandler.database.insert(SleepAsAndroidActionTable.TABLE_NAME, null, values);
+        }
+    }
+
+    private void deleteAlarmTriggeredActions() {
+        for (Action action : getAlarmTriggeredActions()) {
+            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID + "=" + action.getId(), null);
+            // delete timerXXXactions
+            DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
+                    "=" + action.getId(), null);
+            DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
+                    "=" + action.getId(), null);
+            DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID +
+                    "=" + action.getId(), null);
+
+            // then delete AlarmTriggered relation
+            DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID +
+                    "=" + ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getId(), null);
+        }
     }
 
 }

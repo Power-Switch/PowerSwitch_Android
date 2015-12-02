@@ -55,11 +55,6 @@ public class ActionTable {
             case 7:
                 // create new table
                 onCreate(db);
-
-                // TODO:
-//                db.execSQL("INSERT INTO " + TABLE_NAME + "("+ COLUMN_TIMER_ID + ", " + COLUMN_ACTION_ID + ") SELECT " +
-//                    "_id, " + TimerActionTable.COLUMN_TIMER_ID + " FROM timer_action;");
-
         }
     }
 }

@@ -25,9 +25,10 @@ package eu.power_switch.shared.constants;
  */
 public class ExternalAppConstants {
 
-    public static final String ALARM_TRIGGERED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_START";
-    public static final String ALARM_SNOOZED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION";
-    public static final String ALARM_DISMISSED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS";
+    private static final String ALARM_TRIGGERED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_START";
+    private static final String ALARM_SNOOZED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION";
+    private static final String ALARM_DISMISSED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS";
+
     /**
      * Private Constructor
      */
@@ -35,9 +36,26 @@ public class ExternalAppConstants {
     }
 
     // Sleep As Android
-    public enum ALARM_EVENT {
-        ALARM_TRIGGERED,
-        ALARM_SNOOZED,
-        ALARM_DISMISSED
+    public enum SLEEP_AS_ANDROID_ALARM_EVENT {
+        ALARM_TRIGGERED(0, ALARM_TRIGGERED_INTENT),
+        ALARM_SNOOZED(1, ALARM_SNOOZED_INTENT),
+        ALARM_DISMISSED(2, ALARM_DISMISSED_INTENT);
+
+        private final int id;
+        private final String intentAction;
+
+        SLEEP_AS_ANDROID_ALARM_EVENT(int id, String intentAction) {
+            this.id = id;
+            this.intentAction = intentAction;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getIntentAction() {
+            return intentAction;
+        }
     }
+
 }

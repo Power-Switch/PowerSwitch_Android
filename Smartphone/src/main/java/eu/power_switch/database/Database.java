@@ -134,21 +134,17 @@ public class Database extends SQLiteOpenHelper {
             case 6:
             case 7:
             case 8:
+                // insert data from old timer_action table into ActionTable
+                db.execSQL("INSERT INTO " + ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + ", " + ActionTable.COLUMN_ACTION_TYPE + ") SELECT " +
+                        TimerActionTable.COLUMN_ACTION_ID + ", " + "action_type" + " FROM timer_action;");
+
                 // update timerActions
                 // insert data from old timer_action table into TimerActionTable
                 db.execSQL("INSERT INTO " + TimerActionTable.TABLE_NAME + "(" + TimerActionTable.COLUMN_ACTION_ID + ", " +
                         TimerActionTable.COLUMN_TIMER_ID + ") " +
                         "SELECT " + "" + "_id, " + TimerActionTable.COLUMN_TIMER_ID + " FROM timer_action;");
-
-                // insert data from old timer_action table into ActionTable
-                // TODO
-
                 // drop old table
                 db.execSQL("DROP TABLE timer_action");
-
-                //
-
-
                 break;
         }
     }

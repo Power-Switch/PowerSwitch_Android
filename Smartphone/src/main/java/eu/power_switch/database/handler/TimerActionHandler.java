@@ -75,7 +75,7 @@ public abstract class TimerActionHandler {
             DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID +
                     "=" + action.getId(), null);
 
-            // then delete timerAction
+            // then delete Timer relation
             DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_TIMER_ID +
                     "=" + timerId, null);
         }
@@ -197,8 +197,8 @@ public abstract class TimerActionHandler {
      */
     protected static void update(Timer timer) {
         // delete current actions
-        TimerActionHandler.delete(timer.getId());
+        delete(timer.getId());
         // add new actions
-        TimerActionHandler.add(timer.getActions(), timer.getId());
+        add(timer.getActions(), timer.getId());
     }
 }
