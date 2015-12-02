@@ -33,8 +33,10 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
+import eu.power_switch.timer.action.Action;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.SceneWidget;
@@ -1034,4 +1036,49 @@ public final class DatabaseHandler {
             close();
         }
     }
+
+    /**
+     *
+     * ////////////////////////////////
+     * // Sleep As Android functions //
+     * ////////////////////////////////
+     *
+     */
+
+    /**
+     * Get Actions for a specific alarm event
+     *
+     * @param event alarm event
+     * @return List of Actions
+     */
+    public static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+        openReadable();
+        List<Action> actions = new ArrayList<>();
+        try {
+            actions = SleepAsAndroidHandler.getAlarmActions(event);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return actions;
+    }
+
+    /**
+     * Set Actions for a specific alarm event
+     *
+     * @param event   alarm event
+     * @param actions List of Actions
+     */
+    public static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) {
+        openWritable();
+        try {
+            SleepAsAndroidHandler.setAlarmActions(event, actions);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+    }
+
 }

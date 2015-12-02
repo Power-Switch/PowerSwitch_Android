@@ -39,12 +39,12 @@ import eu.power_switch.timer.action.Action;
  */
 public class SleepAsAndroidHandler {
 
-    protected List<Action> getAlarmTriggeredActions() {
+    protected static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(SleepAsAndroidActionTable.TABLE_NAME, columns,
-                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getId(),
+                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(),
                 null, null, null, null);
         cursor.moveToFirst();
 
@@ -58,28 +58,28 @@ public class SleepAsAndroidHandler {
         return actions;
     }
 
-    protected void setAlarmTriggeredActions(ArrayList<Action> actions) {
-        deleteAlarmTriggeredActions();
-        addAlarmTriggeredActions(actions);
+    protected static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) {
+        deleteAlarmActions(event);
+        addAlarmActions(event, actions);
     }
 
-    private void addAlarmTriggeredActions(ArrayList<Action> actions) {
+    private static void addAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 
         // add AlarmTriggered <-> action relation
         for (Long actionId : actionIds) {
             ContentValues values = new ContentValues();
-            values.put(SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getId());
+            values.put(SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, event.getId());
             values.put(SleepAsAndroidActionTable.COLUMN_ACTION_ID, actionId);
             DatabaseHandler.database.insert(SleepAsAndroidActionTable.TABLE_NAME, null, values);
         }
     }
 
-    private void deleteAlarmTriggeredActions() {
-        for (Action action : getAlarmTriggeredActions()) {
+    private static void deleteAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+        for (Action action : getAlarmActions(event)) {
             DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID + "=" + action.getId(), null);
-            // delete timerXXXactions
+            // delete alarmXXXactions
             DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
                     "=" + action.getId(), null);
             DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
@@ -89,7 +89,7 @@ public class SleepAsAndroidHandler {
 
             // then delete AlarmTriggered relation
             DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID +
-                    "=" + ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getId(), null);
+                    "=" + event.getId(), null);
         }
     }
 

@@ -73,7 +73,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     /**
      * Used to notify the summary page that some info has changed
      *
-     * @param context
+     * @param context  any suitable context
      * @param name     Current name of the Receiver
      * @param roomName Current name of Room
      */
@@ -81,6 +81,19 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
         intent.putExtra("name", name);
         intent.putExtra("roomName", roomName);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * Used to notify this page that a room has been added to the list
+     *
+     * @param context     any suitable context
+     * @param newRoomName name of added room
+     */
+    public static void sendRoomAddedBroadcast(Context context, String newRoomName) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_ADDED);
+        intent.putExtra("newRoomName", newRoomName);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -96,6 +109,11 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 updateRoomNamesList();
+
+                if (intent.hasExtra("newRoomName")) {
+                    String newRoomName = intent.getStringExtra("newRoomName");
+                    roomsListView.setItemChecked(roomNamesAdapter.getPosition(newRoomName), true);
+                }
             }
         };
 
@@ -234,7 +252,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_ADDED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

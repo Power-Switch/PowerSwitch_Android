@@ -41,6 +41,7 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 
@@ -101,6 +102,7 @@ public class CreateRoomDialog extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 DatabaseHandler.addRoom(new Room(null, getRoomName()));
 
+                ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());
                 Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)
                         .show();
