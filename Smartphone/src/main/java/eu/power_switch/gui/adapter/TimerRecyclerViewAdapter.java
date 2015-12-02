@@ -131,12 +131,16 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         holder.timerStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    DatabaseHandler.enableTimer(timer.getId());
-                    AlarmHandler.createAlarm(context, timer);
-                } else {
-                    DatabaseHandler.disableTimer(timer.getId());
-                    AlarmHandler.cancelAlarm(context, timer);
+                // check if user pressed the button
+                if (buttonView.isPressed()) {
+                    if (isChecked) {
+                        DatabaseHandler.enableTimer(timer.getId());
+                        AlarmHandler.createAlarm(context, timer);
+                    } else {
+                        DatabaseHandler.disableTimer(timer.getId());
+                        AlarmHandler.cancelAlarm(context, timer);
+                    }
+                    timer.setActive(isChecked);
                 }
             }
         });

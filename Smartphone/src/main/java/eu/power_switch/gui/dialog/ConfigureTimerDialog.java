@@ -134,7 +134,7 @@ public class ConfigureTimerDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                        .scene_will_be_gone_forever)
+                        .timer_will_be_gone_forever)
                         .setPositiveButton
                                 (android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override

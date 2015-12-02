@@ -34,14 +34,14 @@ public abstract class Timer {
     public static final String EXECUTION_TYPE_INTERVAL = "interval_timer";
 
     protected long id;
-    protected boolean isActive;
+    protected boolean active;
     protected String name;
     protected String executionType;
     protected ArrayList<Action> actions;
 
-    public Timer(long id, boolean isActive, String name, String executionType, ArrayList<Action> actions) {
+    public Timer(long id, boolean active, String name, String executionType, ArrayList<Action> actions) {
         this.id = id;
-        this.isActive = isActive;
+        this.active = active;
         this.name = name;
         this.executionType = executionType;
         this.actions = actions;
@@ -62,7 +62,11 @@ public abstract class Timer {
      * @return true if active
      */
     public boolean isActive() {
-        return isActive;
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     /**
