@@ -61,17 +61,7 @@ public class ReceiverActionTable {
                 onCreate(db);
             case 7:
             case 8:
-                // TODO: create new table
                 db.execSQL(TABLE_CREATE);
-                // TODO: merge old information
-                db.execSQL("INSERT INTO " + TABLE_NAME + "(" + COLUMN_ACTION_ID + ", " +
-                        COLUMN_ROOM_ID + ", " + COLUMN_RECEIVER_ID + ", " + COLUMN_BUTTON_ID + ") " +
-                        "SELECT " + COLUMN_ID + ", " + COLUMN_ROOM_ID + ", " +
-                        COLUMN_RECEIVER_ID + ", " + COLUMN_BUTTON_ID +
-                        " FROM " + "timer_receiver_action;");
-                // TODO: delete old table
-                db.execSQL("DROP TABLE IF EXISTS " + "timer_receiver_action");
-//                db.execSQL("ALTER TABLE " + "timer_receiver_action" + " RENAME TO " + TABLE_NAME + ";");
                 break;
 
         }
