@@ -25,13 +25,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -49,7 +49,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
 
     private View rootView;
     private TextInputLayout floatingName;
-    private EditText name;
+    private AppCompatEditText name;
     private TimePicker timePicker;
 
     /**
@@ -73,7 +73,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_1, container, false);
 
         floatingName = (TextInputLayout) rootView.findViewById(R.id.timer_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.editText_timer_name);
+        name = (AppCompatEditText) rootView.findViewById(R.id.editText_timer_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override

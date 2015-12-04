@@ -32,14 +32,14 @@
         android:paddingLeft="@dimen/activity_margin_horizontal"
         android:paddingRight="@dimen/activity_margin_horizontal">
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="@dimen/activity_margin_horizontal"
             android:text="@string/path"
             android:textColor="@color/accent_blue_a700"/>
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textView_backupPath"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

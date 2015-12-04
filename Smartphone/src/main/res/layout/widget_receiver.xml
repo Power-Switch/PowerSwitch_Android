@@ -25,7 +25,7 @@
     android:background="@drawable/widget_shape"
     android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textView_receiver_widget_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

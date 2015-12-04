@@ -35,7 +35,7 @@
             android:layout_marginTop="@dimen/padding"
             android:orientation="vertical">
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/TextView_generalSettings"
                 style="@style/header_settings"
                 android:text="@string/general_settings"/>
@@ -45,63 +45,63 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="8dp"
                     android:text="@string/startup_default_tab"/>
 
-                <Spinner
+                <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/spinner_startupDefaultTab"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"/>
 
             </LinearLayout>
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkBox_autoDiscover"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/autodiscover"/>
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkBox_autoCollapseRooms"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/auto_collapse_rooms"/>
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkBox_autoCollapseTimers"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/auto_collapse_timers"/>
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkBox_showRoomAllOnOffButtons"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/show_room_all_on_off_buttons"/>
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkBox_hideAddFAB"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/hide_FABs"/>
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkBox_highlightLastActivatedButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:text="@string/highlight_last_activated_button"/>
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/checkBox_vibrateOnButtonPress"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -116,14 +116,14 @@
                 android:layout_marginLeft="32dp"
                 android:orientation="horizontal">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="4dp"
                     android:gravity="center"
                     android:text="@string/duration_title"/>
 
-                <EditText
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/editText_vibrationDuration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                     android:inputType="number"
                     android:maxLength="3"/>
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -140,7 +140,7 @@
 
             </LinearLayout>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/TextView_theme"
                 style="@style/header_settings"
                 android:text="@string/theme"/>

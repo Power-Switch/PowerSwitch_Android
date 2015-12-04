@@ -27,6 +27,8 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -34,9 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 
 import java.util.List;
 
@@ -57,15 +57,15 @@ public class EditGatewayDialog extends DialogFragment {
 
     private View rootView;
     private TextInputLayout floatingName;
-    private EditText name;
+    private AppCompatEditText name;
 
     private TextInputLayout floatingAddress;
-    private EditText address;
+    private AppCompatEditText address;
 
-    private Spinner model;
+    private AppCompatSpinner model;
 
     private TextInputLayout floatingPort;
-    private EditText port;
+    private AppCompatEditText port;
 
     private ImageButton imageButtonDelete;
     private ImageButton imageButtonCancel;
@@ -107,10 +107,10 @@ public class EditGatewayDialog extends DialogFragment {
             }
         };
         floatingName = (TextInputLayout) rootView.findViewById(R.id.gateway_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.txt_edit_gateway_name);
+        name = (AppCompatEditText) rootView.findViewById(R.id.txt_edit_gateway_name);
         name.addTextChangedListener(textWatcher);
 
-        model = (Spinner) rootView.findViewById(R.id.spinner_gateway_type);
+        model = (AppCompatSpinner) rootView.findViewById(R.id.spinner_gateway_type);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.gateway_array,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -126,11 +126,11 @@ public class EditGatewayDialog extends DialogFragment {
         }
 
         floatingAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_address_text_input_layout);
-        address = (EditText) rootView.findViewById(R.id.txt_edit_gateway_address);
+        address = (AppCompatEditText) rootView.findViewById(R.id.txt_edit_gateway_address);
         address.addTextChangedListener(textWatcher);
 
         floatingPort = (TextInputLayout) rootView.findViewById(R.id.gateway_port_text_input_layout);
-        port = (EditText) rootView.findViewById(R.id.txt_edit_gateway_port);
+        port = (AppCompatEditText) rootView.findViewById(R.id.txt_edit_gateway_port);
         port.addTextChangedListener(textWatcher);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);

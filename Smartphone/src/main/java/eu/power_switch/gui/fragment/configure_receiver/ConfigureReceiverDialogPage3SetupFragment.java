@@ -28,6 +28,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,9 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -211,7 +211,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
 
         // AutoPair
         layoutAutoPair = (LinearLayout) rootView.findViewById(R.id.linearLayout_autoPair);
-        Button buttonPair = (Button) rootView.findViewById(R.id.button_pair);
+        AppCompatButton buttonPair = (AppCompatButton) rootView.findViewById(R.id.button_pair);
         buttonPair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,7 +253,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 networkHandler.send(networkPackages);
             }
         });
-        Button buttonUnpair = (Button) rootView.findViewById(R.id.button_unpair);
+        AppCompatButton buttonUnpair = (AppCompatButton) rootView.findViewById(R.id.button_unpair);
         buttonUnpair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -295,7 +295,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 networkHandler.send(networkPackages);
             }
         });
-        Button buttonUnpairAll = (Button) rootView.findViewById(R.id.button_unpairAll);
+        AppCompatButton buttonUnpairAll = (AppCompatButton) rootView.findViewById(R.id.button_unpairAll);
         buttonUnpairAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -507,7 +507,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
         LinearLayout nameLayout = new LinearLayout(getActivity());
         nameLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        EditText universalButtonNameEditText = new EditText(getActivity());
+        AppCompatEditText universalButtonNameEditText = new AppCompatEditText(getActivity());
         universalButtonNameEditText.setHint(R.string.name);
         universalButtonNameEditText.setText(name);
         universalButtonNameEditText.addTextChangedListener(tw);
@@ -529,7 +529,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
         nameLayout.addView(deleteUniversalButton);
 
-        EditText universalButtonSignalEditText = new EditText(getActivity());
+        AppCompatEditText universalButtonSignalEditText = new AppCompatEditText(getActivity());
         universalButtonSignalEditText.setHint(R.string.enter_network_signal);
         universalButtonSignalEditText.setText(signal);
         universalButtonSignalEditText.addTextChangedListener(tw);
@@ -574,8 +574,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
             LinearLayout universalButtonLayout = (LinearLayout) buttonsList.getChildAt(i);
 
             LinearLayout nameLayout = (LinearLayout) universalButtonLayout.getChildAt(0);
-            EditText nameEditText = (EditText) nameLayout.getChildAt(0);
-            EditText signalEditText = (EditText) universalButtonLayout.getChildAt(1);
+            AppCompatEditText nameEditText = (AppCompatEditText) nameLayout.getChildAt(0);
+            AppCompatEditText signalEditText = (AppCompatEditText) universalButtonLayout.getChildAt(1);
 
             buttons.add(new UniversalButton(null, nameEditText.getText().toString(), null, signalEditText.getText()
                     .toString()));

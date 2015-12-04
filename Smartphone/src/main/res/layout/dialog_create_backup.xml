@@ -41,7 +41,7 @@
             android:layout_marginRight="@dimen/ui_element_margin"
             android:layout_marginTop="@dimen/ui_element_margin">
 
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/txt_backup_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/editText_height"

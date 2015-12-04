@@ -17,7 +17,7 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<Button
+<android.support.v7.widget.AppCompatButton
     android:id="@+id/button_widget_universal"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

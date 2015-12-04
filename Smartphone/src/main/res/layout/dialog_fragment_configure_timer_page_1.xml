@@ -36,7 +36,7 @@
             android:layout_marginRight="@dimen/dialog_horizontal_margin"
             android:layout_marginTop="@dimen/title_margin_top">
 
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/editText_timer_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/editText_height"
@@ -45,7 +45,7 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textView_time_title"
             style="@style/sub_header"
             android:layout_marginLeft="@dimen/dialog_horizontal_margin"

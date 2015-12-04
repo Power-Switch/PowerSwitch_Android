@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,7 +34,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,15 +158,14 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         // add current setup
         for (final SceneItem sceneItem : scene.getSceneItems()) {
             // create a new receiverRow for our current receiver and add it
-            // to
-            // our table of all devices of our current room
+            // to our table of all devices of our current room
             // the row will contain the device name and all buttons
             LinearLayout receiverRow = new LinearLayout(fragmentActivity);
             receiverRow.setOrientation(LinearLayout.HORIZONTAL);
             holder.linearLayoutSceneItems.addView(receiverRow);
 
             // setup TextView to display receiver name
-            TextView receiverName = new TextView(fragmentActivity);
+            AppCompatTextView receiverName = new AppCompatTextView(fragmentActivity);
             receiverName.setText(sceneItem.getReceiver().getName());
             receiverName.setTextSize(18);
             receiverName.setGravity(Gravity.CENTER_VERTICAL);
@@ -185,10 +185,10 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
             int i = 0;
             TableRow buttonRow = null;
-            final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
+            final ArrayList<AppCompatButton> buttonList = new ArrayList<>();
             for (final Button button : sceneItem.getReceiver().getButtons()) {
-                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout
-                        .simple_button, buttonRow, false);
+                final AppCompatButton buttonView = (AppCompatButton) inflater.inflate(R.layout.simple_button,
+                        buttonRow, false);
                 buttonList.add(buttonView);
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);
@@ -233,15 +233,15 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView sceneName;
-        public android.widget.Button buttonActivateScene;
+        public AppCompatTextView sceneName;
+        public AppCompatButton buttonActivateScene;
         public LinearLayout linearLayoutSceneItems;
         public LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.sceneName = (TextView) itemView.findViewById(R.id.txt_scene_name);
-            this.buttonActivateScene = (android.widget.Button) itemView.findViewById(R.id.btn_activate_scene);
+            this.sceneName = (AppCompatTextView) itemView.findViewById(R.id.txt_scene_name);
+            this.buttonActivateScene = (AppCompatButton) itemView.findViewById(R.id.btn_activate_scene);
             this.linearLayoutSceneItems = (LinearLayout) itemView.findViewById(R.id.layout_of_scene_items);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 

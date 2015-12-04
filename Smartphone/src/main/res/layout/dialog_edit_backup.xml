@@ -34,7 +34,7 @@
         android:layout_marginBottom="@dimen/ui_element_margin"
         android:layout_marginTop="@dimen/ui_element_margin">
 
-        <EditText
+        <android.support.v7.widget.AppCompatEditText
             android:id="@+id/editText_backup_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ui_element_height"
@@ -43,7 +43,7 @@
 
             <requestFocus/>
 
-        </EditText>
+        </android.support.v7.widget.AppCompatEditText>
 
     </android.support.design.widget.TextInputLayout>
 

@@ -44,7 +44,7 @@
                 android:layout_marginRight="@dimen/ui_element_margin_double"
                 android:layout_marginTop="@dimen/ui_element_margin">
 
-                <EditText
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/txt_edit_gateway_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/editText_height"
@@ -53,7 +53,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/TextView_type"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/title_height"
@@ -62,7 +62,7 @@
                 android:text="@string/gateway_type"
                 android:textColor="@color/accent_blue_a700"/>
 
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/spinner_gateway_type"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/ui_element_height"
@@ -80,7 +80,7 @@
                 android:layout_marginRight="@dimen/ui_element_margin_double"
                 android:layout_marginTop="@dimen/ui_element_margin">
 
-                <EditText
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/txt_edit_gateway_address"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/editText_height"
@@ -99,7 +99,7 @@
                 android:layout_marginRight="@dimen/ui_element_margin_double"
                 android:layout_marginTop="@dimen/ui_element_margin">
 
-                <EditText
+                <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/txt_edit_gateway_port"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/editText_height"

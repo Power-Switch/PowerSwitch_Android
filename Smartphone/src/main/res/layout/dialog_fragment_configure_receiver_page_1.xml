@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top">
 
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/editText_receiver_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/editText_height"
@@ -46,7 +46,7 @@
 
         </android.support.design.widget.TextInputLayout>
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textView_room"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"

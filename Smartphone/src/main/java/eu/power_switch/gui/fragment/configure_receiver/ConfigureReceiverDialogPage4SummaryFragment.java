@@ -27,12 +27,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -81,19 +81,19 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
 
     private BroadcastReceiver broadcastReceiver;
 
-    private TextView name;
-    private TextView roomName;
-    private TextView brand;
-    private TextView model;
-    private TextView channelMaster;
-    private TextView channelSlave;
+    private AppCompatTextView name;
+    private AppCompatTextView roomName;
+    private AppCompatTextView brand;
+    private AppCompatTextView model;
+    private AppCompatTextView channelMaster;
+    private AppCompatTextView channelSlave;
     private LinearLayout linearLayoutMasterSlaveReceiver;
     private LinearLayout linearLayoutDipReceiver;
     private LinearLayout linearLayoutUniversalReceiver;
     private LinearLayout linearLayoutDips;
     private LinearLayout linearLayoutUniversalButtons;
     private LinearLayout linearLayoutAutoPairReceiver;
-    private TextView seed;
+    private AppCompatTextView seed;
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -152,12 +152,12 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
             }
         };
 
-        name = (TextView) rootView.findViewById(R.id.textView_name);
-        roomName = (TextView) rootView.findViewById(R.id.textView_roomName);
-        brand = (TextView) rootView.findViewById(R.id.textView_brand);
-        model = (TextView) rootView.findViewById(R.id.textView_model);
-        channelMaster = (TextView) rootView.findViewById(R.id.textView_channelMaster);
-        channelSlave = (TextView) rootView.findViewById(R.id.textView_channelSlave);
+        name = (AppCompatTextView) rootView.findViewById(R.id.textView_name);
+        roomName = (AppCompatTextView) rootView.findViewById(R.id.textView_roomName);
+        brand = (AppCompatTextView) rootView.findViewById(R.id.textView_brand);
+        model = (AppCompatTextView) rootView.findViewById(R.id.textView_model);
+        channelMaster = (AppCompatTextView) rootView.findViewById(R.id.textView_channelMaster);
+        channelSlave = (AppCompatTextView) rootView.findViewById(R.id.textView_channelSlave);
 
         linearLayoutMasterSlaveReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_masterSlaveReceiver);
 
@@ -165,7 +165,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         linearLayoutDips = (LinearLayout) rootView.findViewById(R.id.linearLayout_dips);
 
         linearLayoutAutoPairReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_autoPair);
-        seed = (TextView) rootView.findViewById(R.id.textView_seed);
+        seed = (AppCompatTextView) rootView.findViewById(R.id.textView_seed);
 
         linearLayoutUniversalReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalReceiver);
         linearLayoutUniversalButtons = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalButtons);
@@ -242,7 +242,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
             for (UniversalButton universalButton : currentUniversalButtons) {
 
                 LinearLayout linearLayout = new LinearLayout(getActivity());
-                TextView textView = new TextView(getActivity());
+                AppCompatTextView textView = new AppCompatTextView(getActivity());
                 textView.setText("Name: " + universalButton.getName() + "\n"
                         + "Signal: " + universalButton.getSignal());
                 linearLayout.addView(textView);

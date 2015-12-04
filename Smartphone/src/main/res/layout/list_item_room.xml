@@ -46,7 +46,7 @@
                     android:orientation="horizontal"
                     android:padding="4dp">
 
-                    <TextView
+                    <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/txt_room_name"
                         style="@style/text_list_item_header"
                         android:layout_width="0dp"
@@ -54,13 +54,13 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"/>
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/button_AllOn"
                         style="@style/room_on_off_buttons"
                         android:elevation="2dp"
                         android:text="@string/on"/>
 
-                    <Button
+                    <android.support.v7.widget.AppCompatButton
                         android:id="@+id/button_AllOff"
                         style="@style/room_on_off_buttons"
                         android:elevation="2dp"

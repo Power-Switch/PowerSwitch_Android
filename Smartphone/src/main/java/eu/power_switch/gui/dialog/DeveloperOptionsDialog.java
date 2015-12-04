@@ -23,9 +23,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import eu.power_switch.R;
@@ -44,7 +44,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         rootView = inflater.inflate(R.layout.dialog_developer_options, null);
 
-        CheckBox checkBox_playStoreMode = (CheckBox) rootView.findViewById(R.id.checkBox_playStoreMode);
+        AppCompatCheckBox checkBox_playStoreMode = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_playStoreMode);
         checkBox_playStoreMode.setChecked(SmartphonePreferencesHandler.getPlayStoreMode());
         checkBox_playStoreMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

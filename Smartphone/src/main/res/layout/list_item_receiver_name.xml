@@ -27,7 +27,7 @@
     android:orientation="horizontal"
     android:paddingLeft="16dp">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/txt_receiver_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"

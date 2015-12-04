@@ -27,12 +27,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 
 import java.util.Calendar;
 
@@ -50,7 +50,7 @@ import eu.power_switch.shared.log.Log;
 public class CreateBackupDialog extends DialogFragment {
 
     private Dialog dialog;
-    private EditText name;
+    private AppCompatEditText name;
     private int defaultTextColor;
     private View rootView;
 
@@ -82,7 +82,7 @@ public class CreateBackupDialog extends DialogFragment {
                 }
             }
         };
-        name = (EditText) rootView.findViewById(R.id.txt_backup_name);
+        name = (AppCompatEditText) rootView.findViewById(R.id.txt_backup_name);
         name.requestFocus();
         name.addTextChangedListener(textWatcher);
 

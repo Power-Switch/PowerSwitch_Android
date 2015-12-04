@@ -19,13 +19,13 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -109,19 +109,19 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView gatewayName;
-        public TextView gatewayModel;
-        public TextView gatewayAddress;
-        public TextView gatewayPort;
+        public AppCompatTextView gatewayName;
+        public AppCompatTextView gatewayModel;
+        public AppCompatTextView gatewayAddress;
+        public AppCompatTextView gatewayPort;
         public android.support.v7.widget.SwitchCompat gatewaySwitchStatus;
         public LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.gatewayName = (TextView) itemView.findViewById(R.id.txt_gateway_name);
-            this.gatewayModel = (TextView) itemView.findViewById(R.id.txt_gateway_model);
-            this.gatewayAddress = (TextView) itemView.findViewById(R.id.txt_gateway_address);
-            this.gatewayPort = (TextView) itemView.findViewById(R.id.txt_gateway_port);
+            this.gatewayName = (AppCompatTextView) itemView.findViewById(R.id.txt_gateway_name);
+            this.gatewayModel = (AppCompatTextView) itemView.findViewById(R.id.txt_gateway_model);
+            this.gatewayAddress = (AppCompatTextView) itemView.findViewById(R.id.txt_gateway_address);
+            this.gatewayPort = (AppCompatTextView) itemView.findViewById(R.id.txt_gateway_port);
             this.gatewaySwitchStatus = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_gateway_status);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 

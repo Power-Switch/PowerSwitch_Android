@@ -24,13 +24,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -54,7 +54,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     private ListView modelListView;
     private ArrayAdapter modelNamesAdapter;
 
-    private TextView modelTextView;
+    private AppCompatTextView modelTextView;
 
     /**
      * Used to notify the summary page that some info has changed
@@ -92,7 +92,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
             }
         });
 
-        modelTextView = (TextView) rootView.findViewById(R.id.textView_model);
+        modelTextView = (AppCompatTextView) rootView.findViewById(R.id.textView_model);
 
         modelListView = (ListView) rootView.findViewById(R.id.listView_models);
         modelNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, new ArrayList<String>());

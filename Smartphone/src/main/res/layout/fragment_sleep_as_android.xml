@@ -23,11 +23,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <CheckBox
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/checkBox_sleep_as_android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sleep As Android"/>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/spinner_sleep_as_android_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,7 +41,7 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_list_of_alarm_clock_actions"
+            android:id="@+id/recyclerview_list_of_alarm_event_actions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
@@ -53,7 +58,7 @@
             app:borderWidth="0dp"
             app:elevation="8dp"
             app:fabSize="normal"
-            app:layout_anchor="@id/recyclerview_list_of_alarm_clock_actions"
+            app:layout_anchor="@id/recyclerview_list_of_alarm_event_actions"
             app:layout_anchorGravity="bottom|right|end"
             app:layout_behavior="eu.power_switch.gui.animation.ScrollAwareFABBehavior"/>
 

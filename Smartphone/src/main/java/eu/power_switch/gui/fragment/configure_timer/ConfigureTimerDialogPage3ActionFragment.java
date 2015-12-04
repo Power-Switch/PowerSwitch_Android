@@ -27,12 +27,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -182,13 +182,13 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView action;
+            public AppCompatTextView action;
             public FloatingActionButton deleteTimerActionFAB;
 
 
             public ViewHolder(final View itemView) {
                 super(itemView);
-                action = (TextView) itemView.findViewById(R.id.txt_timer_action);
+                action = (AppCompatTextView) itemView.findViewById(R.id.txt_timer_action);
                 deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_timer_action_fab);
             }
         }

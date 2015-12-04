@@ -28,6 +28,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
@@ -37,7 +39,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -261,7 +262,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
                 holder.linearLayoutOfReceivers.addView(receiverRow);
 
                 // setup TextView to display device name
-                TextView receiverName = new TextView(context);
+                AppCompatTextView receiverName = new AppCompatTextView(context);
                 receiverName.setText(receiver.getName());
                 receiverName.setTextSize(18);
                 receiverName.setGravity(Gravity.CENTER_VERTICAL);
@@ -286,21 +287,21 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
                     receiverSceneItemHashMap.put(receiver.getId(), new SceneItem(receiver, receiver.getButtons()
                             .getFirst()));
                 }
-                final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
+                final ArrayList<AppCompatButton> buttonList = new ArrayList<>();
                 for (Button button : receiver.getButtons()) {
-                    android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, null, false);
+                    AppCompatButton buttonView = (AppCompatButton) inflater.inflate(R.layout.simple_button, null, false);
                     buttonList.add(buttonView);
 
                     if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId() == button.getId()) {
                         buttonView.setTextColor(getResources().getColor(R.color.accent_blue_a700));
                     }
                     buttonView.setText(button.getName());
-                    buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
+                    buttonView.setOnClickListener(new AppCompatButton.OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
                             sendSetupSceneChangedBroadcast(context);
-                            for (android.widget.Button button : buttonList) {
+                            for (AppCompatButton button : buttonList) {
                                 if (button == v) {
                                     button.setTextColor(getResources().getColor(R.color.accent_blue_a700));
 
@@ -339,12 +340,12 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView roomName;
+            public AppCompatTextView roomName;
             public LinearLayout linearLayoutOfReceivers;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
-                this.roomName = (TextView) itemView.findViewById(R.id.txt_room_name);
+                this.roomName = (AppCompatTextView) itemView.findViewById(R.id.txt_room_name);
                 this.linearLayoutOfReceivers = (LinearLayout) itemView.findViewById(R.id.layout_of_receivers);
             }
         }

@@ -21,6 +21,10 @@ package eu.power_switch.gui.fragment.settings;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,13 +32,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -54,23 +54,23 @@ public class GeneralSettingsFragment extends Fragment {
 
     private View rootView;
 
-    private CheckBox autoDiscover;
-    private CheckBox autoCollapseRooms;
-    private CheckBox autoCollapseTimers;
-    private CheckBox showRoomAllOnOffButtons;
-    private CheckBox hideAddFAB;
-    private CheckBox highlightLastActivatedButton;
+    private AppCompatCheckBox autoDiscover;
+    private AppCompatCheckBox autoCollapseRooms;
+    private AppCompatCheckBox autoCollapseTimers;
+    private AppCompatCheckBox showRoomAllOnOffButtons;
+    private AppCompatCheckBox hideAddFAB;
+    private AppCompatCheckBox highlightLastActivatedButton;
 
     private LinearLayout vibrationDurationLayout;
-    private CheckBox vibrateOnButtonPress;
-    private EditText vibrationDuration;
+    private AppCompatCheckBox vibrateOnButtonPress;
+    private AppCompatEditText vibrationDuration;
 
     private RadioButton radioButtonDarkBlue;
     private RadioButton radioButtonLightBlue;
 
     private int devMenuClickCounter = 0;
     private Calendar devMenuFirstClickTime;
-    private Spinner startupDefaultTab;
+    private AppCompatSpinner startupDefaultTab;
 
 
     @Override
@@ -118,7 +118,7 @@ public class GeneralSettingsFragment extends Fragment {
         };
 
         // setup hidden developer menu
-        TextView generalSettingsTextView = (TextView) rootView.findViewById(R.id.TextView_generalSettings);
+        AppCompatTextView generalSettingsTextView = (AppCompatTextView) rootView.findViewById(R.id.TextView_generalSettings);
         generalSettingsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +146,7 @@ public class GeneralSettingsFragment extends Fragment {
         });
 
 
-        startupDefaultTab = (Spinner) rootView.findViewById(R.id.spinner_startupDefaultTab);
+        startupDefaultTab = (AppCompatSpinner) rootView.findViewById(R.id.spinner_startupDefaultTab);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.main_tab_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -162,29 +162,29 @@ public class GeneralSettingsFragment extends Fragment {
             }
         });
 
-        autoDiscover = (CheckBox) rootView.findViewById(R.id.checkBox_autoDiscover);
+        autoDiscover = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_autoDiscover);
         autoDiscover.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        autoCollapseRooms = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
+        autoCollapseRooms = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
         autoCollapseRooms.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        autoCollapseTimers = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseTimers);
+        autoCollapseTimers = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_autoCollapseTimers);
         autoCollapseTimers.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        showRoomAllOnOffButtons = (CheckBox) rootView.findViewById(R.id.checkBox_showRoomAllOnOffButtons);
+        showRoomAllOnOffButtons = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_showRoomAllOnOffButtons);
         showRoomAllOnOffButtons.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        hideAddFAB = (CheckBox) rootView.findViewById(R.id.checkBox_hideAddFAB);
+        hideAddFAB = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_hideAddFAB);
         hideAddFAB.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        highlightLastActivatedButton = (CheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
+        highlightLastActivatedButton = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
         highlightLastActivatedButton.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        vibrateOnButtonPress = (CheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
+        vibrateOnButtonPress = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
         vibrateOnButtonPress.setOnCheckedChangeListener(onCheckedChangeListener);
 
         vibrationDurationLayout = (LinearLayout) rootView.findViewById(R.id.linearLayout_vibrationDuration);
-        vibrationDuration = (EditText) rootView.findViewById(R.id.editText_vibrationDuration);
+        vibrationDuration = (AppCompatEditText) rootView.findViewById(R.id.editText_vibrationDuration);
         vibrationDuration.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

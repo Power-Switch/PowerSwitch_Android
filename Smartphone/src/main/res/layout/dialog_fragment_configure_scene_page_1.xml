@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top">
 
-            <EditText
+            <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/editText_scene_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/editText_height"

@@ -19,13 +19,13 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -151,7 +151,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         holder.linearLayoutTimerActions.removeAllViews();
         for (Action action : timer.getActions()) {
             LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.list_item_timer_action, holder.linearLayoutTimerActions, false);
-            TextView textViewAction = (TextView) linearLayout.findViewById(R.id.txt_timer_action);
+            AppCompatTextView textViewAction = (AppCompatTextView) linearLayout.findViewById(R.id.txt_timer_action);
             textViewAction.setText(action.toString());
             holder.linearLayoutTimerActions.addView(linearLayout);
         }
@@ -185,9 +185,9 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
     public class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout linearLayoutTimerDescription;
         public LinearLayout linearLayoutTimerActions;
-        public TextView name;
-        public TextView executionTime;
-        public TextView executionDays;
+        public AppCompatTextView name;
+        public AppCompatTextView executionTime;
+        public AppCompatTextView executionDays;
         public android.support.v7.widget.SwitchCompat timerStatus;
         public LinearLayout footer;
 
@@ -196,9 +196,9 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
             this.linearLayoutTimerDescription = (LinearLayout) itemView.findViewById(R.id
                     .linearLayout_timerDescription);
             this.linearLayoutTimerActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_timerActions);
-            this.name = (TextView) itemView.findViewById(R.id.txt_timer_name);
-            this.executionTime = (TextView) itemView.findViewById(R.id.txt_timer_execution_time);
-            this.executionDays = (TextView) itemView.findViewById(R.id.txt_timer_execution_days);
+            this.name = (AppCompatTextView) itemView.findViewById(R.id.txt_timer_name);
+            this.executionTime = (AppCompatTextView) itemView.findViewById(R.id.txt_timer_execution_time);
+            this.executionDays = (AppCompatTextView) itemView.findViewById(R.id.txt_timer_execution_days);
             this.timerStatus = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_timer_status);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 

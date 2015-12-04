@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/checkBox_playStoreMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

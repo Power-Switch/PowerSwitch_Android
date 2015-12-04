@@ -28,6 +28,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -35,7 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     private View rootView;
 
     private TextInputLayout floatingName;
-    private EditText name;
+    private AppCompatEditText name;
 
     private ListView roomsListView;
     private ArrayAdapter roomNamesAdapter;
@@ -118,7 +118,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
         };
 
         floatingName = (TextInputLayout) rootView.findViewById(R.id.receiver_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.editText_receiver_name);
+        name = (AppCompatEditText) rootView.findViewById(R.id.editText_receiver_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override

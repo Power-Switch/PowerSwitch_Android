@@ -25,7 +25,7 @@
     android:background="@drawable/widget_shape"
     android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textView_scene_widget_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp">
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/buttonActivate_scene_widget"
             android:layout_width="0dp"
             android:layout_height="match_parent"

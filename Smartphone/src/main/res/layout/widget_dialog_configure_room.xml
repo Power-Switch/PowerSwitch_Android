@@ -24,18 +24,18 @@
     android:layout_margin="8dp"
     android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/TextView_widgetRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/rooms"/>
 
-    <Spinner
+    <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/Spinner_widgetRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/button_widgetSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

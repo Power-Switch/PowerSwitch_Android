@@ -24,14 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.Room;
-import eu.power_switch.shared.constants.ExternalAppConstants;
-import eu.power_switch.timer.action.Action;
-import eu.power_switch.timer.action.ReceiverAction;
 
 /**
  * Fragment containing all settings related to clock alarm handling from supported alarm clock applications like:
@@ -48,16 +41,21 @@ public class SleepAsAndroidFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_sleep_as_android, container, false);
 
-        Room markus = DatabaseHandler.getRoom("Markus");
+        try {
 
-        ArrayList<Action> actions = new ArrayList<>();
-        ReceiverAction receiverAction = new ReceiverAction(0, markus, markus.getReceiver("Schrank"),
-                markus.getReceiver("Schrank").getButton("On"));
-        actions.add(receiverAction);
+        } catch (Exception e) {
 
-        DatabaseHandler.setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED, actions);
+//        Room markus = DatabaseHandler.getRoom("Markus");
 
-        DatabaseHandler.getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED);
+//        ArrayList<Action> actions = new ArrayList<>();
+//        ReceiverAction receiverAction = new ReceiverAction(0, markus, markus.getReceiver("Schrank"),
+//                markus.getReceiver("Schrank").getButton("On"));
+//        actions.add(receiverAction);
+
+//        DatabaseHandler.setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED, actions);
+//
+//        DatabaseHandler.getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED);
+        }
 
         return rootView;
     }

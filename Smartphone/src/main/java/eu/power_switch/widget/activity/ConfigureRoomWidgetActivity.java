@@ -24,12 +24,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.RemoteViews;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
     public static final int ROOM_INTENT_ID_OFFSET = 20000;
 
-    private Spinner spinnerRoom;
+    private AppCompatSpinner spinnerRoom;
     private List<Room> roomsList;
 
     /**
@@ -77,7 +77,7 @@ public class ConfigureRoomWidgetActivity extends Activity {
         setContentView(R.layout.widget_dialog_configure_room);
 
         roomsList = DatabaseHandler.getAllRooms();
-        spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
+        spinnerRoom = (AppCompatSpinner) findViewById(R.id.Spinner_widgetRoom);
 
         ArrayList<String> roomNamesList = new ArrayList<>();
         for (Room room : roomsList) {
@@ -93,7 +93,7 @@ public class ConfigureRoomWidgetActivity extends Activity {
         adapterRooms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapterRooms);
 
-        Button save = (Button) findViewById(R.id.button_widgetSave);
+        AppCompatButton save = (AppCompatButton) findViewById(R.id.button_widgetSave);
         save.setOnClickListener(new OnClickListener() {
 
             @Override

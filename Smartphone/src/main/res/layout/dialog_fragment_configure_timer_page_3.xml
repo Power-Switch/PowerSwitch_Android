@@ -24,7 +24,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textView_actions"
         style="@style/sub_header"
         android:layout_marginTop="@dimen/title_margin_top"

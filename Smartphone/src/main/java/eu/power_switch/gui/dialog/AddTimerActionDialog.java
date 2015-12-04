@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,7 +36,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -72,12 +72,12 @@ public class AddTimerActionDialog extends DialogFragment {
     private LinearLayout linearLayoutReceiverAction;
     private LinearLayout linearLayoutRoomAction;
     private LinearLayout linearLayoutSceneAction;
-    private Spinner spinner_receiver_action_room;
-    private Spinner spinner_receiver_action_receiver;
-    private Spinner spinner_receiver_action_button;
-    private Spinner spinner_room_action_room;
-    private Spinner spinner_room_action_button;
-    private Spinner spinner_scene_action_scene;
+    private AppCompatSpinner spinner_receiver_action_room;
+    private AppCompatSpinner spinner_receiver_action_receiver;
+    private AppCompatSpinner spinner_receiver_action_button;
+    private AppCompatSpinner spinner_room_action_room;
+    private AppCompatSpinner spinner_room_action_button;
+    private AppCompatSpinner spinner_scene_action_scene;
     private ArrayList<String> buttonNamesReceiver;
     private ArrayAdapter<String> receiverSpinnerArrayAdapter;
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
@@ -161,7 +161,7 @@ public class AddTimerActionDialog extends DialogFragment {
         // Receiver Action
         linearLayoutReceiverAction = (LinearLayout) rootView.findViewById(R.id.linearLayout_receiver_action);
 
-        spinner_receiver_action_room = (Spinner) rootView.findViewById(R.id.spinner_receiver_action_room);
+        spinner_receiver_action_room = (AppCompatSpinner) rootView.findViewById(R.id.spinner_receiver_action_room);
         ArrayAdapter<String> roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_room.setAdapter(roomSpinnerArrayAdapter);
@@ -178,7 +178,7 @@ public class AddTimerActionDialog extends DialogFragment {
             }
         });
 
-        spinner_receiver_action_receiver = (Spinner) rootView.findViewById(R.id.spinner_receiver_action_receiver);
+        spinner_receiver_action_receiver = (AppCompatSpinner) rootView.findViewById(R.id.spinner_receiver_action_receiver);
         receiverSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, receiverNames);
         receiverSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_receiver.setAdapter(receiverSpinnerArrayAdapter);
@@ -195,7 +195,7 @@ public class AddTimerActionDialog extends DialogFragment {
             }
         });
 
-        spinner_receiver_action_button = (Spinner) rootView.findViewById(R.id.spinner_receiver_action_button);
+        spinner_receiver_action_button = (AppCompatSpinner) rootView.findViewById(R.id.spinner_receiver_action_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNamesReceiver);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_button.setAdapter(buttonSpinnerArrayAdapter);
@@ -205,10 +205,10 @@ public class AddTimerActionDialog extends DialogFragment {
         // Room Action
         linearLayoutRoomAction = (LinearLayout) rootView.findViewById(R.id.linearLayout_room_action);
 
-        spinner_room_action_room = (Spinner) rootView.findViewById(R.id.spinner_room_action_room);
+        spinner_room_action_room = (AppCompatSpinner) rootView.findViewById(R.id.spinner_room_action_room);
         spinner_room_action_room.setAdapter(roomSpinnerArrayAdapter);
 
-        spinner_room_action_button = (Spinner) rootView.findViewById(R.id.spinner_room_action_button);
+        spinner_room_action_button = (AppCompatSpinner) rootView.findViewById(R.id.spinner_room_action_button);
         ArrayAdapter<String> buttonAllSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNamesAll);
         buttonAllSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room_action_button.setAdapter(buttonAllSpinnerArrayAdapter);
@@ -216,7 +216,7 @@ public class AddTimerActionDialog extends DialogFragment {
         // Scene Action
         linearLayoutSceneAction = (LinearLayout) rootView.findViewById(R.id.linearLayout_scene_action);
 
-        spinner_scene_action_scene = (Spinner) rootView.findViewById(R.id.spinner_scene_action_scene);
+        spinner_scene_action_scene = (AppCompatSpinner) rootView.findViewById(R.id.spinner_scene_action_scene);
         ArrayAdapter<String> sceneSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sceneNames);
         sceneSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_scene_action_scene.setAdapter(sceneSpinnerArrayAdapter);
