@@ -49,6 +49,15 @@ public class ExternalAppConstants {
             this.intentAction = intentAction;
         }
 
+        public static SLEEP_AS_ANDROID_ALARM_EVENT getById(int id) {
+            for (SLEEP_AS_ANDROID_ALARM_EVENT e : values()) {
+                if (e.getId() == id) {
+                    return e;
+                }
+            }
+            return null;
+        }
+
         public int getId() {
             return id;
         }
