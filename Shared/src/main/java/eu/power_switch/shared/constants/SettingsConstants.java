@@ -46,6 +46,7 @@ public class SettingsConstants {
     public static final int ROOMS_TAB_INDEX = 0;
     public static final int SCENES_TAB_INDEX = 1;
     public static final int TIMERS_TAB_INDEX = 2;
+    public static final int SAA_TAB_INDEX = 3;
 
     // Settings Tabs
     public static final int GENERAL_SETTINGS_TAB_INDEX = 0;
@@ -76,6 +77,7 @@ public class SettingsConstants {
 
     // developer settings
     public static final String PLAY_STORE_MODE_KEY = "playStoreMode";
+
 
     /**
      * Private Constructor

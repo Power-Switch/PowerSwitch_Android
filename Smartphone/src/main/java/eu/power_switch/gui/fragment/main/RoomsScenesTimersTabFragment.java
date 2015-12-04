@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.shared.constants.SettingsConstants;
 
 /**
@@ -94,6 +95,8 @@ public class RoomsScenesTimersTabFragment extends Fragment {
                     return new ScenesFragment();
                 case SettingsConstants.TIMERS_TAB_INDEX:
                     return new TimersFragment();
+                case SettingsConstants.SAA_TAB_INDEX:
+                    return new SleepAsAndroidFragment();
                 default:
                     return null;
             }
@@ -104,7 +107,7 @@ public class RoomsScenesTimersTabFragment extends Fragment {
          */
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -116,6 +119,8 @@ public class RoomsScenesTimersTabFragment extends Fragment {
                     return context.getString(R.string.scenes);
                 case SettingsConstants.TIMERS_TAB_INDEX:
                     return context.getString(R.string.timers);
+                case SettingsConstants.SAA_TAB_INDEX:
+                    return "SAA";
                 default:
                     return "";
             }

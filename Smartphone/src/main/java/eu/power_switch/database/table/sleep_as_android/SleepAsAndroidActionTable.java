@@ -34,7 +34,6 @@ public class SleepAsAndroidActionTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
             COLUMN_ALARM_TYPE_ID + " integer not null," +
             COLUMN_ACTION_ID + " integer not null" +
         ");";
@@ -53,6 +52,7 @@ public class SleepAsAndroidActionTable {
             case 5:
             case 6:
             case 7:
+            case 8:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
                 break;
