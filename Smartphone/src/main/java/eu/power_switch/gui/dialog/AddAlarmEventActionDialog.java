@@ -23,11 +23,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 
+import java.util.ArrayList;
+
+import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.timer.action.Action;
 
 /**
  * Dialog to select a timer action configuration
@@ -63,7 +70,10 @@ public class AddAlarmEventActionDialog extends AddActionDialog {
 
     @Override
     protected void addCurrentSelection() {
-        DatabaseHandler.addAlarmAction(currentEventType, getCurrentSelection());
+        ArrayList<Action> actions = new ArrayList<>(DatabaseHandler.getAlarmActions(currentEventType));
+        actions.add(getCurrentSelection());
+        DatabaseHandler.setAlarmActions(currentEventType, actions);
+        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.action_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

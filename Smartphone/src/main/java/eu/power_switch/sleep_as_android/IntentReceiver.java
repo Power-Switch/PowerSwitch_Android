@@ -23,9 +23,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.List;
+
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.timer.action.Action;
 
 /**
  * IntentReceiver to handle any Sleep As Android related Intents
@@ -56,28 +60,37 @@ public class IntentReceiver extends BroadcastReceiver {
                 }
             }
             log += " }";
-            Log.d("IntentReceiver", log);
+            Log.d(this, log);
         } catch (Exception e) {
             Log.e(e);
         }
 
         try {
-            if (intent.getAction()
-                    .equals(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction())) {
+            if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction()
+                    .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm triggered!");
-            } else if (intent.getAction()
-                    .equals(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED.getIntentAction())) {
+                executeActions(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED);
+            } else if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED.getIntentAction()
+                    .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm snoozed...");
-            } else if (intent.getAction()
-                    .equals(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED.getIntentAction
-                            ())) {
+                executeActions(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED);
+            } else if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED.getIntentAction()
+                    .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm dismissed...");
+                executeActions(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED);
             } else {
                 Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());
             }
 
         } catch (Exception e) {
             Log.e(e);
+        }
+    }
+
+    private void executeActions(Context context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+        List<Action> actions = DatabaseHandler.getAlarmActions(event);
+        for (Action action : actions) {
+            action.execute(context);
         }
     }
 }

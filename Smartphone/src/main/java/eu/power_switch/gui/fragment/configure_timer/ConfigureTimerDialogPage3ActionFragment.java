@@ -157,7 +157,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
 
         @Override
         public TimerActionRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_timer_action_dialog, parent, false);
+            View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_action, parent, false);
             return new TimerActionRecyclerViewAdapter.ViewHolder(itemView);
         }
 
@@ -185,10 +185,9 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
             public AppCompatTextView action;
             public FloatingActionButton deleteTimerActionFAB;
 
-
             public ViewHolder(final View itemView) {
                 super(itemView);
-                action = (AppCompatTextView) itemView.findViewById(R.id.txt_timer_action);
+                action = (AppCompatTextView) itemView.findViewById(R.id.txt_action_description);
                 deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_timer_action_fab);
             }
         }

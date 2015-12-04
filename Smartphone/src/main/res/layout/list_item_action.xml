@@ -51,7 +51,7 @@
                     android:orientation="vertical">
 
                     <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/txt_timer_action"
+                        android:id="@+id/txt_action_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 

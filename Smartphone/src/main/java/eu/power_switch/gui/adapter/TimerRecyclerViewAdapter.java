@@ -150,12 +150,11 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
         holder.linearLayoutTimerActions.removeAllViews();
         for (Action action : timer.getActions()) {
-            LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.list_item_timer_action, holder.linearLayoutTimerActions, false);
-            AppCompatTextView textViewAction = (AppCompatTextView) linearLayout.findViewById(R.id.txt_timer_action);
-            textViewAction.setText(action.toString());
-            holder.linearLayoutTimerActions.addView(linearLayout);
+            AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
+            textViewActionDescription.setText(action.toString());
+            textViewActionDescription.setPadding(0, 0, 0, 4);
+            holder.linearLayoutTimerActions.addView(textViewActionDescription);
         }
-
 
         // collapse timer
         if (SmartphonePreferencesHandler.getAutoCollapseTimers()) {
