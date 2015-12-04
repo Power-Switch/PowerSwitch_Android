@@ -235,6 +235,7 @@ public class GeneralSettingsFragment extends Fragment {
     }
 
     private void updateUI() {
+        startupDefaultTab.setSelection(SmartphonePreferencesHandler.getStartupDefaultTab());
         autoDiscover.setChecked(SmartphonePreferencesHandler.getAutoDiscover());
         autoCollapseRooms.setChecked(SmartphonePreferencesHandler.getAutoCollapseRooms());
         autoCollapseTimers.setChecked(SmartphonePreferencesHandler.getAutoCollapseTimers());
