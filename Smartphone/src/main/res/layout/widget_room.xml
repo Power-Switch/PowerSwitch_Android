@@ -25,7 +25,7 @@
     android:background="@drawable/widget_shape"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textView_room_widget_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,14 +47,14 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp">
 
-        <android.support.v7.widget.AppCompatButton
+        <Button
             android:id="@+id/button_on"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/on"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <Button
             android:id="@+id/button_off"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

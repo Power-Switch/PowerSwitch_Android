@@ -151,7 +151,7 @@ public class WearableSettingsFragment extends Fragment {
         autoCollapseRooms.setChecked(WearablePreferencesHandler.getAutoCollapseRooms());
         highlightLastActivatedButton.setChecked(WearablePreferencesHandler.getHighlightLastActivatedButton());
         vibrateOnButtonPress.setChecked(WearablePreferencesHandler.getVibrateOnButtonPress());
-        vibrationDuration.setText("" + WearablePreferencesHandler.getVibrationDuration());
+        vibrationDuration.setText(String.format("%d", WearablePreferencesHandler.getVibrationDuration()));
         if (!WearablePreferencesHandler.getVibrateOnButtonPress()) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {

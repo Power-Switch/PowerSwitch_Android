@@ -169,7 +169,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                     for (eu.power_switch.obj.Button button : buttons) {
                         // set button action
                         RemoteViews buttonView = new RemoteViews(getApplicationContext().getResources()
-                                .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.receiver_widget_button_layout);
+                                .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
                         SpannableString s = new SpannableString(button.getName());
                         s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                         buttonView.setTextViewText(R.id.button_widget_universal, s);
