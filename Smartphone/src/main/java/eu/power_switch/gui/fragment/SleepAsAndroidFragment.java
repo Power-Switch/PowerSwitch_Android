@@ -20,12 +20,14 @@ package eu.power_switch.gui.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -93,14 +95,21 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);
         recyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View itemView, int position) {
-                actions.remove(position);
-                DatabaseHandler.setAlarmActions(
-                        SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())
-                        , actions);
-                StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
+            public void onItemClick(View itemView, final int position) {
+                new AlertDialog.Builder(getContext()).setMessage(R.string.are_you_sure)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                actions.remove(position);
+                                DatabaseHandler.setAlarmActions(
+                                        SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())
+                                        , actions);
+                                StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
 
-                recyclerViewAdapter.notifyDataSetChanged();
+                                recyclerViewAdapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNeutralButton(android.R.string.cancel, null).show();
             }
         });
         recyclerViewActions.setAdapter(recyclerViewAdapter);

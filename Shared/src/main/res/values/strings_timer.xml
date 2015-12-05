@@ -44,6 +44,6 @@
 
     <string name="add_action">Add Action</string>
 
-    <string name="timer_will_be_gone_forever">The Timer will be lost forever!</string>
+    <string name="timer_will_be_gone_forever">The Timer will be gone forever!</string>
 
 </resources>

@@ -44,6 +44,6 @@
 
     <string name="add_action">Aktion hinzufügen</string>
 
-    <string name="timer_will_be_gone_forever">Der Timer wird für immer verloren sein</string>
+    <string name="timer_will_be_gone_forever">Der Timer wird für immer verloren sein!</string>
 
 </resources>

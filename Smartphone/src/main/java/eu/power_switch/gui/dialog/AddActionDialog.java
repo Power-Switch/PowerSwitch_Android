@@ -296,8 +296,8 @@ public abstract class AddActionDialog extends DialogFragment {
             Log.d(spinner_receiver_action_button.getSelectedItem().toString());
 
             Room selectedRoom = DatabaseHandler.getRoom(spinner_receiver_action_room.getSelectedItem().toString());
-            Receiver selectedReceiver = DatabaseHandler.getReceiverByRoomId(selectedRoom.getId(), spinner_receiver_action_receiver
-                    .getSelectedItem().toString());
+            Receiver selectedReceiver = selectedRoom.getReceiver(
+                    spinner_receiver_action_receiver.getSelectedItem().toString());
             Button selectedButton = null;
             for (Button button : selectedReceiver.getButtons()) {
                 if (button.getName().equals(spinner_receiver_action_button.getSelectedItem().toString())) {

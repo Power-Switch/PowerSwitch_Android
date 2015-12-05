@@ -26,7 +26,7 @@
 
     <!-- Configure Scene Dialog -->
     <string name="configure_scene">Configure Scene</string>
-    <string name="scene_will_be_gone_forever">The Scene will be lost forever!</string>
+    <string name="scene_will_be_gone_forever">The Scene will be gone forever!</string>
 
     <string name="scene_deleted">Scene deleted</string>
     <string name="scene_saved">Scene saved</string>

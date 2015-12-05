@@ -48,7 +48,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AboutDialog;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.gui.fragment.main.RoomsScenesTimersTabFragment;
+import eu.power_switch.gui.fragment.main.MainTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Load first Fragment
         try {
-            Fragment tabLayoutFragment = RoomsScenesTimersTabFragment.class.newInstance();
+            Fragment tabLayoutFragment = MainTabFragment.class.newInstance();
             Bundle arguments = new Bundle();
             arguments.putInt("tabIndex", SmartphonePreferencesHandler.getStartupDefaultTab());
             tabLayoutFragment.setArguments(arguments);

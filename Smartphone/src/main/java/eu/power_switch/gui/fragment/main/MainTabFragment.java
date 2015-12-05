@@ -38,7 +38,7 @@ import eu.power_switch.shared.constants.SettingsConstants;
  * <p/>
  * Created by Markus on 25.06.2015.
  */
-public class RoomsScenesTimersTabFragment extends Fragment {
+public class MainTabFragment extends Fragment {
 
     private CustomTabAdapter customTabAdapter;
     private TabLayout tabLayout;
