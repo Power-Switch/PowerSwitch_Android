@@ -26,7 +26,7 @@ import eu.power_switch.database.table.receiver.MasterSlaveTable;
 /**
  * Provides database methods for managing MasterSlaveReceivers
  */
-public abstract class MasterSlaveReceiverHandler {
+abstract class MasterSlaveReceiverHandler {
 
     /**
      * Adds the MasterSlaveReceiver details of a new receiver.

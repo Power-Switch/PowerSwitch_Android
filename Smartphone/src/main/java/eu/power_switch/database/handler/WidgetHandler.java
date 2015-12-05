@@ -31,7 +31,7 @@ import eu.power_switch.widget.SceneWidget;
 /**
  * Provides database methods for managing Widgets
  */
-public abstract class WidgetHandler {
+abstract class WidgetHandler {
 
     /**
      * Adds Receiver Widget to Database

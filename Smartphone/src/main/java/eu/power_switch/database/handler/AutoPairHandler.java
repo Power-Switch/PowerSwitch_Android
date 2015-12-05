@@ -28,7 +28,7 @@ import eu.power_switch.database.table.receiver.AutoPairTable;
  *
  * Created by Markus on 10.09.2015.
  */
-public abstract class AutoPairHandler {
+abstract class AutoPairHandler {
 
     /**
      * Adds the AutoPairReceiver details of a new receiver.

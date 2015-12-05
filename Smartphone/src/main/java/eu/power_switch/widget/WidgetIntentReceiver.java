@@ -26,11 +26,12 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.action.ActionHandler;
+import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
@@ -166,19 +167,24 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
                 String receiverName = extras.getString(KEY_RECEIVER);
                 String buttonName = extras.getString(KEY_BUTTON);
 
-                IntentReceiver.parseActionIntent(context,
-                        IntentReceiver.createReceiverButtonIntent(roomName, receiverName, buttonName));
+                Room room = DatabaseHandler.getRoom(roomName);
+                Receiver receiver = room.getReceiver(receiverName);
+                Button button = receiver.getButton(buttonName);
+
+                ActionHandler.executeAction(context, receiver, button);
             } else if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_BUTTON)) {
                 String roomName = extras.getString(KEY_ROOM);
                 String buttonName = extras.getString(KEY_BUTTON);
 
-                IntentReceiver.parseActionIntent(context,
-                        IntentReceiver.createRoomButtonIntent(roomName, buttonName));
+                Room room = DatabaseHandler.getRoom(roomName);
+
+                ActionHandler.executeAction(context, room, buttonName);
             } else if (extras.containsKey(KEY_SCENE)) {
                 String sceneName = extras.getString(KEY_SCENE);
 
-                IntentReceiver.parseActionIntent(context,
-                        IntentReceiver.createSceneIntent(sceneName));
+                Scene scene = DatabaseHandler.getScene(sceneName);
+
+                ActionHandler.executeAction(context, scene);
             }
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);

@@ -39,16 +39,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.SceneItem;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
@@ -146,8 +146,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     return;
                 }
 
-                IntentReceiver.parseActionIntent(fragmentActivity, IntentReceiver
-                        .createSceneIntent(scene.getName()));
+                ActionHandler.executeAction(fragmentActivity, scene);
             }
         });
 

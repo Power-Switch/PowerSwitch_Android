@@ -26,18 +26,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerTable;
 import eu.power_switch.database.table.timer.TimerWeekdayTable;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.Action;
 import eu.power_switch.timer.alarm.AlarmHandler;
 
 /**
  * Provides database methods for managing Timers
  */
-public abstract class TimerHandler {
+abstract class TimerHandler {
 
     /**
      * Adds Timer to Database

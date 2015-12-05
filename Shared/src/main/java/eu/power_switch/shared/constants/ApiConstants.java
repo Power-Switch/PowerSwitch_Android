@@ -25,8 +25,38 @@ package eu.power_switch.shared.constants;
  */
 public class ApiConstants {
 
-    // Api
+    // DEPRECATED: Old intents from Versions older than 1.0
+    /**
+     * Intent used to switch on a Receiver
+     */
+    @Deprecated
+    public static final String intent_switch_on = "de.ressel.powerswitch.action.Switch.ON";
+    /**
+     * Intent used to switch off a Receiver
+     */
+    @Deprecated
+    public static final String intent_switch_off = "de.ressel.powerswitch.action.Switch.OFF";
+    /**
+     * Intent used to switch on all Receivers in a Room
+     */
+    @Deprecated
+    public static final String intent_room_on = "de.ressel.powerswitch.action.Room.ON";
+    /**
+     * Intent used to switch off all Receivers in a Room
+     */
+    @Deprecated
+    public static final String intent_room_off = "de.ressel.powerswitch.action.Room.OFF";
+
+
+    // NEW:
+
     public static final String UNIVERSAL_ACTION_INTENT = "eu.power_switch.action";
+
+    public static final String KEY_BUTTON = "Button";
+    public static final String KEY_RECEIVER = "Receiver";
+    public static final String KEY_ROOM = "Room";
+    public static final String KEY_SCENE = "Scene";
+
 
     /**
      * Private Constructor

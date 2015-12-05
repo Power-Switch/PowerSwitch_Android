@@ -18,9 +18,12 @@
 
 package eu.power_switch.database.table.receiver;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import eu.power_switch.database.table.room.RoomTable;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Receiver table description
@@ -69,6 +72,30 @@ public class ReceiverTable {
             case 6:
             case 7:
                 db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_LAST_ACTIVATED_BUTTON_ID + " int;");
+            case 8:
+
+                // insert data from old timer_action table into ActionTable and TimerActionTable
+                String[] columns = {COLUMN_ID, COLUMN_CLASSNAME};
+                Cursor cursor = db.query(TABLE_NAME, columns,
+                        null, null, null, null, null);
+                cursor.moveToFirst();
+
+                while (!cursor.isAfterLast()) {
+                    long id = cursor.getLong(0);
+                    String className = cursor.getString(1);
+                    String newClassName = className.replace("eu.power_switch.obj.device.", "eu.power_switch.obj.receiver.device.");
+
+                    Log.d("old className: " + className);
+                    Log.d("new className: " + newClassName);
+
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_CLASSNAME, newClassName);
+                    db.update(TABLE_NAME, values, COLUMN_ID + "=" + id, null);
+
+                    cursor.moveToNext();
+                }
+
+                cursor.close();
                 break;
         }
     }

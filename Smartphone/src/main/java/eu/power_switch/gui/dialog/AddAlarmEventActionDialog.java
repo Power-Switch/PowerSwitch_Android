@@ -29,12 +29,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.timer.action.Action;
 
 /**
  * Dialog to select a timer action configuration

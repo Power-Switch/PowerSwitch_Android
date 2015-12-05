@@ -27,17 +27,17 @@ import java.util.Comparator;
 import java.util.List;
 
 import eu.power_switch.database.table.receiver.ReceiverTable;
-import eu.power_switch.obj.device.AutoPairReceiver;
-import eu.power_switch.obj.device.DipReceiver;
-import eu.power_switch.obj.device.MasterSlaveReceiver;
-import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.obj.device.UniversalReceiver;
+import eu.power_switch.obj.receiver.device.AutoPairReceiver;
+import eu.power_switch.obj.receiver.device.DipReceiver;
+import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.device.UniversalReceiver;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Receivers of any type
  */
-public abstract class ReceiverHandler {
+class ReceiverHandler {
 
     /**
      * Adds Receiver to Database

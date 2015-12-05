@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**

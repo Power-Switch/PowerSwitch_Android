@@ -23,6 +23,7 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 
+import eu.power_switch.action.Action;
 import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
@@ -30,12 +31,11 @@ import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
-import eu.power_switch.timer.action.Action;
 
 /**
  * Provides database methods for managing Timer Actions
  */
-public abstract class TimerActionHandler {
+abstract class TimerActionHandler {
 
     /**
      * Adds Actions to a specific Timer

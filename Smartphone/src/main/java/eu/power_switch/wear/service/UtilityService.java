@@ -36,10 +36,10 @@ import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;

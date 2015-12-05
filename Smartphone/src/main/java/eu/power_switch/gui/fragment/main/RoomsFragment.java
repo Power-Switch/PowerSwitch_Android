@@ -43,8 +43,7 @@ import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.obj.Room;
+import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -55,7 +54,6 @@ import eu.power_switch.wear.service.UtilityService;
  */
 public class RoomsFragment extends RecyclerViewFragment {
 
-    private NetworkHandler networkHandler;
     private ArrayList<Room> rooms;
 
     private BroadcastReceiver broadcastReceiver;
@@ -118,8 +116,6 @@ public class RoomsFragment extends RecyclerViewFragment {
                 configureReceiverDialog.show(getFragmentManager(), null);
             }
         });
-
-        networkHandler = new NetworkHandler(getActivity());
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {

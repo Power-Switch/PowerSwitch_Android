@@ -31,11 +31,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.Action;
 import eu.power_switch.timer.alarm.AlarmHandler;
 
 /**

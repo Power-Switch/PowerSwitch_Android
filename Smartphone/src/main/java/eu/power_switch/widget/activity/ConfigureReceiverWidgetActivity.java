@@ -45,8 +45,9 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.ReceiverWidget;
@@ -160,13 +161,13 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                     RemoteViews remoteViews = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME),
                             R.layout.widget_receiver);
 
-                    LinkedList<eu.power_switch.obj.Button> buttons = selectedReceiver.getButtons();
+                    LinkedList<Button> buttons = selectedReceiver.getButtons();
 
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, selectedRoom.getName() + ": " +
                             selectedReceiver.getName());
 
                     int buttonOffset = 0;
-                    for (eu.power_switch.obj.Button button : buttons) {
+                    for (Button button : buttons) {
                         // set button action
                         RemoteViews buttonView = new RemoteViews(getApplicationContext().getResources()
                                 .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);

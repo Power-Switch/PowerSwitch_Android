@@ -24,8 +24,13 @@ import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
+import eu.power_switch.action.ActionHandler;
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -46,7 +51,7 @@ public class ListenerService extends WearableListenerService {
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         LogHandler.configureLogger();
-        
+
         if (messageEvent.getPath().equals(WearableConstants.RECEIVER_ACTION_TRIGGER_PATH)) {
 
             String messageData = new String(messageEvent.getData());
@@ -84,8 +89,11 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonName = messageData.substring(start, stop);
 
-                IntentReceiver.parseActionIntent(getApplicationContext(),
-                        IntentReceiver.createReceiverButtonIntent(roomName, receiverName, buttonName));
+                Room room = DatabaseHandler.getRoom(roomName);
+                Receiver receiver = room.getReceiver(receiverName);
+                Button button = receiver.getButton(buttonName);
+
+                ActionHandler.executeAction(getApplicationContext(), receiver, button);
             } else if (messageData.contains("RoomName") && messageData.contains("ButtonName")) {
                 int start = messageData.indexOf("RoomName:") + 9;
                 int stop = messageData.indexOf("ButtonName:");
@@ -94,15 +102,17 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonName = messageData.substring(start, stop);
 
-                IntentReceiver.parseActionIntent(getApplicationContext(),
-                        IntentReceiver.createRoomButtonIntent(roomName, buttonName));
+                Room room = DatabaseHandler.getRoom(roomName);
+
+                ActionHandler.executeAction(getApplicationContext(), room, buttonName);
             } else if (messageData.contains("SceneName")) {
                 int start = messageData.indexOf("SceneName:") + 10;
                 int stop = messageData.indexOf(";;");
                 String sceneName = messageData.substring(start, stop);
 
-                IntentReceiver.parseActionIntent(getApplicationContext(),
-                        IntentReceiver.createSceneIntent(sceneName));
+                Scene scene = DatabaseHandler.getScene(sceneName);
+
+                ActionHandler.executeAction(getApplicationContext(), scene);
             }
         } catch (Exception e) {
             Log.e("parseMessage", e);

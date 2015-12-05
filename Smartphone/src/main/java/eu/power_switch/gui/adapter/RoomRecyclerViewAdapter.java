@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.api.IntentReceiver;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
@@ -46,10 +46,10 @@ import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
@@ -155,8 +155,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 String buttonName = buttonView.getText().toString();
 
                 // send signal
-                IntentReceiver.parseActionIntent(fragmentActivity,
-                        IntentReceiver.createRoomButtonIntent(room.getName(), buttonName));
+                ActionHandler.executeAction(fragmentActivity, room, buttonName);
 
                 // update list item
                 for (Receiver receiver : room.getReceivers()) {
@@ -275,8 +274,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         }
 
                         // send signal
-                        IntentReceiver.parseActionIntent(fragmentActivity, IntentReceiver
-                                .createReceiverButtonIntent(room.getName(), receiver.getName(), button.getName()));
+                        ActionHandler.executeAction(fragmentActivity, receiver, button);
 
                         // update list item
                         receiver.setLastActivatedButtonId(button.getId());

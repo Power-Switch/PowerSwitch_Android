@@ -21,7 +21,7 @@ package eu.power_switch.timer;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import eu.power_switch.timer.action.Action;
+import eu.power_switch.action.Action;
 
 /**
  * Timer based on just a start time and an interval

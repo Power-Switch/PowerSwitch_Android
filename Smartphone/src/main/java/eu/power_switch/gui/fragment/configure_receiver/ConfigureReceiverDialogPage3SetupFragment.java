@@ -56,14 +56,14 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
-import eu.power_switch.obj.UniversalButton;
-import eu.power_switch.obj.device.AutoPairReceiver;
-import eu.power_switch.obj.device.DipReceiver;
-import eu.power_switch.obj.device.DipSwitch;
-import eu.power_switch.obj.device.MasterSlaveReceiver;
-import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.obj.device.UniversalReceiver;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.receiver.UniversalButton;
+import eu.power_switch.obj.receiver.device.AutoPairReceiver;
+import eu.power_switch.obj.receiver.device.DipReceiver;
+import eu.power_switch.obj.receiver.device.DipSwitch;
+import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.device.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
@@ -249,8 +249,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                     }
                 }
 
-                NetworkHandler networkHandler = new NetworkHandler(getActivity());
-                networkHandler.send(networkPackages);
+                NetworkHandler.init(getContext());
+                NetworkHandler.send(networkPackages);
             }
         });
         AppCompatButton buttonUnpair = (AppCompatButton) rootView.findViewById(R.id.button_unpair);
@@ -291,8 +291,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                     }
                 }
 
-                NetworkHandler networkHandler = new NetworkHandler(getActivity());
-                networkHandler.send(networkPackages);
+                NetworkHandler.init(getContext());
+                NetworkHandler.send(networkPackages);
             }
         });
         AppCompatButton buttonUnpairAll = (AppCompatButton) rootView.findViewById(R.id.button_unpairAll);
@@ -333,8 +333,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                     }
                 }
 
-                NetworkHandler networkHandler = new NetworkHandler(getActivity());
-                networkHandler.send(networkPackages);
+                NetworkHandler.init(getContext());
+                NetworkHandler.send(networkPackages);
             }
         });
 

@@ -23,6 +23,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -70,6 +71,7 @@ public class PowerSwitch extends MultiDexApplication {
 
         // One time initialization of handlers for static access
         DatabaseHandler.init(this);
+        NetworkHandler.init(this);
         SmartphonePreferencesHandler.init(this);
         WearablePreferencesHandler.init(this);
     }

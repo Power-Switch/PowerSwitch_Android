@@ -25,12 +25,12 @@ import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
 
-import eu.power_switch.obj.UniversalButton;
-import eu.power_switch.obj.device.AutoPairReceiver;
-import eu.power_switch.obj.device.DipReceiver;
-import eu.power_switch.obj.device.MasterSlaveReceiver;
-import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.obj.device.UniversalReceiver;
+import eu.power_switch.obj.receiver.UniversalButton;
+import eu.power_switch.obj.receiver.device.AutoPairReceiver;
+import eu.power_switch.obj.receiver.device.DipReceiver;
+import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.device.UniversalReceiver;
 import eu.power_switch.shared.log.Log;
 
 /**

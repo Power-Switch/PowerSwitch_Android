@@ -38,16 +38,16 @@ import android.widget.RadioButton;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
+import eu.power_switch.action.ReceiverAction;
+import eu.power_switch.action.RoomAction;
+import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.timer.action.Action;
-import eu.power_switch.timer.action.ReceiverAction;
-import eu.power_switch.timer.action.RoomAction;
-import eu.power_switch.timer.action.SceneAction;
 
 /**
  * Dialog to select an action configuration

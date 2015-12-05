@@ -60,6 +60,7 @@
     <string name="button">Button</string>
 
     <string name="action_not_supported_by_receiver">Der Empfänger unterstützt diese Aktion nicht!</string>
+    <string name="gateway_not_supported_by_receiver">Der Empfänger unterstützt dieses Gateway nicht!</string>
     <string name="no_receiver_supports_this_action">Kein Empfänger in diesem Raum unterstützt diese Aktion!</string>
 
 </resources>

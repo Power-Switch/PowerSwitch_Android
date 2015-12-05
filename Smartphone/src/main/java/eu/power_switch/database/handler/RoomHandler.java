@@ -25,14 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.database.table.room.RoomTable;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Provides database methods for managing Rooms
  */
-public abstract class RoomHandler {
+abstract class RoomHandler {
 
     /**
      * Adds a Room to Database

@@ -35,7 +35,7 @@ import eu.power_switch.obj.gateway.ITGW433;
 /**
  * Provides database methods for managing Gateways
  */
-public abstract class GatewayHandler {
+abstract class GatewayHandler {
 
     /**
      * Adds Gateway information to Database

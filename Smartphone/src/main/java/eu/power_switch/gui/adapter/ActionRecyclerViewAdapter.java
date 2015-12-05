@@ -29,7 +29,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.timer.action.Action;
+import eu.power_switch.action.Action;
 
 /**
  * Adapter to visualize Action items in RecyclerView

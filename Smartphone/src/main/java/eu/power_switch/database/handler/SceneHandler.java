@@ -25,14 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.database.table.scene.SceneTable;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.SceneItem;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.SceneItem;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Scenes
  */
-public abstract class SceneHandler {
+abstract class SceneHandler {
 
     /**
      * Adds a Scene to Database

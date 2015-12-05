@@ -37,10 +37,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.timer.action.Action;
 
 /**
  * Created by Markus on 12.09.2015.

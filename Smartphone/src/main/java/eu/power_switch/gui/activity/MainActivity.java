@@ -182,26 +182,29 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 protected Void doInBackground(Context... contexts) {
                     Context context = contexts[0];
-                    NetworkHandler nwm = new NetworkHandler(context);
-                    List<Gateway> foundGateways = nwm.searchGateways();
+                    NetworkHandler.init(context);
+                    List<Gateway> foundGateways = NetworkHandler.searchGateways();
 
-                    if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways().isEmpty()) {
-                        StatusMessageHandler.showStatusMessage(context, R.string.no_gateway_found, Snackbar
-                                .LENGTH_LONG);
-                    } else {
-                        for (Gateway gateway : foundGateways) {
-                            if (gateway == null) {
-                                continue;
-                            }
-                            try {
-                                DatabaseHandler.addGateway(gateway);
-                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
-                            } catch (GatewayAlreadyExistsException e) {
-                                DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
-                                StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
-                            } catch (Exception e) {
-                                Log.e(e);
-                                StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                    if (foundGateways != null) {
+                        if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways()
+                                .isEmpty()) {
+                            StatusMessageHandler.showStatusMessage(context, R.string.no_gateway_found, Snackbar
+                                    .LENGTH_LONG);
+                        } else {
+                            for (Gateway gateway : foundGateways) {
+                                if (gateway == null) {
+                                    continue;
+                                }
+                                try {
+                                    DatabaseHandler.addGateway(gateway);
+                                    StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                } catch (GatewayAlreadyExistsException e) {
+                                    DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
+                                    StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                                }
                             }
                         }
                     }

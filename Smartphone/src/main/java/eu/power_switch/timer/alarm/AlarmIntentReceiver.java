@@ -26,13 +26,13 @@ import android.os.Bundle;
 
 import java.util.Calendar;
 
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.TimerConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.Action;
 
 /**
  * IntentReceiver to handle any Alarm/Timer related Intents

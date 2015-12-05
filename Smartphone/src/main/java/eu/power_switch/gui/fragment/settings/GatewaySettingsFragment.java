@@ -158,8 +158,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
             @Override
             public void run() {
                 try {
-                    NetworkHandler nwm = new NetworkHandler(getActivity());
-                    final List<Gateway> foundGateways = nwm.searchGateways();
+                    NetworkHandler.init(getContext());
+                    final List<Gateway> foundGateways = NetworkHandler.searchGateways();
 
                     // stop animation
                     getActivity().runOnUiThread(new Runnable() {

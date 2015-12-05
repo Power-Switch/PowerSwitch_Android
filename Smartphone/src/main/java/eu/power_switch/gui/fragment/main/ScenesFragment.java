@@ -43,7 +43,7 @@ import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.receiver.Scene;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;

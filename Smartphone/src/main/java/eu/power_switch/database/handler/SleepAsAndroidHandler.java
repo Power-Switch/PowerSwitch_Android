@@ -24,20 +24,20 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.power_switch.action.Action;
 import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.shared.constants.ExternalAppConstants;
-import eu.power_switch.timer.action.Action;
 
 /**
  * Provides database methods for managing Sleep As Android related Actions
  * <p/>
  * Created by Markus on 30.11.2015.
  */
-public class SleepAsAndroidHandler {
+abstract class SleepAsAndroidHandler {
 
     protected static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
         ArrayList<Action> actions = new ArrayList<>();

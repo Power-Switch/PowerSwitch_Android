@@ -23,26 +23,26 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 
+import eu.power_switch.action.Action;
+import eu.power_switch.action.ReceiverAction;
+import eu.power_switch.action.RoomAction;
+import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.timer.action.Action;
-import eu.power_switch.timer.action.ReceiverAction;
-import eu.power_switch.timer.action.RoomAction;
-import eu.power_switch.timer.action.SceneAction;
 
 /**
  * Provides database methods for managing Actions
  * <p/>
  * Created by Markus on 01.12.2015.
  */
-public abstract class ActionHandler {
+abstract class ActionHandler {
 
     /**
      * Inserts Actions into database

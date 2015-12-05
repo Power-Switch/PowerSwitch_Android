@@ -24,13 +24,13 @@ import android.database.Cursor;
 import java.util.LinkedList;
 
 import eu.power_switch.database.table.receiver.DipTable;
-import eu.power_switch.obj.device.DipReceiver;
-import eu.power_switch.obj.device.DipSwitch;
+import eu.power_switch.obj.receiver.device.DipReceiver;
+import eu.power_switch.obj.receiver.device.DipSwitch;
 
 /**
  * Provides database methods for managing DipReceivers
  */
-public abstract class DipHandler {
+abstract class DipHandler {
 
     /**
      * Adds Dips from a DipReceiver to Database

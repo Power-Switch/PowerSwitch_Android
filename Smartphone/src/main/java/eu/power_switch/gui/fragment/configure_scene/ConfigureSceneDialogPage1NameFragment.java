@@ -40,10 +40,10 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.SceneItem;
-import eu.power_switch.obj.device.Receiver;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.SceneItem;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**

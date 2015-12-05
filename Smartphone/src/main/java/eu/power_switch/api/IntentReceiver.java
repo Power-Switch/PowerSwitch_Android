@@ -18,7 +18,6 @@
 
 package eu.power_switch.api;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,339 +28,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
-import eu.power_switch.obj.Button;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.SceneItem;
-import eu.power_switch.obj.device.Receiver;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
-import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 public class IntentReceiver extends BroadcastReceiver {
-
-    // DEPRECATED: Old intents from Versions older than 1.0
-    /**
-     * Intent used to switch on a Receiver
-     */
-    @Deprecated
-    public static String intent_switch_on = "de.ressel.powerswitch.action.Switch.ON";
-    /**
-     * Intent used to switch off a Receiver
-     */
-    @Deprecated
-    public static String intent_switch_off = "de.ressel.powerswitch.action.Switch.OFF";
-    /**
-     * Intent used to switch on all Receivers in a Room
-     */
-    @Deprecated
-    public static String intent_room_on = "de.ressel.powerswitch.action.Room.ON";
-    /**
-     * Intent used to switch off all Receivers in a Room
-     */
-    @Deprecated
-    public static String intent_room_off = "de.ressel.powerswitch.action.Room.OFF";
-
-    // NEW:
-    private static String KEY_BUTTON = "Button";
-    private static String KEY_RECEIVER = "Receiver";
-    private static String KEY_ROOM = "Room";
-    private static String KEY_SCENE = "Scene";
-
-    /**
-     * Generates a unique PendingIntent for actions on receivers
-     *
-     * @param context           any suitable context
-     * @param roomName          name of Room
-     * @param receiverName      name of Receiver
-     * @param buttonName        name of Button
-     * @param uniqueRequestCode unique identifier for different combinations of rooms, receivers and buttons
-     * @return PendingIntent
-     */
-    public static PendingIntent buildReceiverButtonPendingIntent(Context context, String roomName,
-                                                                 String receiverName, String buttonName, int uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context, uniqueRequestCode, createReceiverButtonIntent(roomName, receiverName, buttonName),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    public static Intent createReceiverButtonIntent(String roomName, String receiverName, String buttonName) {
-        Intent intent = new Intent();
-        intent.setAction(ApiConstants.UNIVERSAL_ACTION_INTENT);
-        intent.putExtra(IntentReceiver.KEY_ROOM, roomName);
-        intent.putExtra(IntentReceiver.KEY_RECEIVER, receiverName);
-        intent.putExtra(IntentReceiver.KEY_BUTTON, buttonName);
-
-        return intent;
-    }
-
-    /**
-     * Generates a unique PendingIntent for actions on rooms
-     *
-     * @param context           any suitable context
-     * @param roomName          name of Room
-     * @param buttonName        name of Button
-     * @param uniqueRequestCode unique identifier for different combinations of rooms and buttons
-     * @return PendingIntent
-     */
-    public static PendingIntent buildRoomButtonPendingIntent(Context context, String roomName, String buttonName, int uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context, uniqueRequestCode, createRoomButtonIntent(roomName, buttonName),
-                PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-    public static Intent createRoomButtonIntent(String roomName, String buttonName) {
-        Intent intent = new Intent();
-        intent.setAction(ApiConstants.UNIVERSAL_ACTION_INTENT);
-        intent.putExtra(IntentReceiver.KEY_ROOM, roomName);
-        intent.putExtra(IntentReceiver.KEY_BUTTON, buttonName);
-
-        return intent;
-    }
-
-    /**
-     * Generates a unique PendingIntent for actions on scenes
-     *
-     * @param context           any suitable context
-     * @param sceneName         name of Scene
-     * @param uniqueRequestCode unique identifier for different combinations of scenes and buttons
-     * @return PendingIntent
-     */
-    public static PendingIntent buildSceneButtonPendingIntent(Context context, String sceneName, int uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context, uniqueRequestCode, createSceneIntent(sceneName), PendingIntent
-                .FLAG_UPDATE_CURRENT);
-    }
-
-    public static Intent createSceneIntent(String sceneName) {
-        Intent intent = new Intent();
-        intent.setAction(ApiConstants.UNIVERSAL_ACTION_INTENT);
-        intent.putExtra(IntentReceiver.KEY_SCENE, sceneName);
-
-        return intent;
-    }
-
-    /**
-     * @param context
-     * @param intent
-     */
-    public static void parseActionIntent(Context context, Intent intent) {
-        try {
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                NetworkHandler nwm = new NetworkHandler(context);
-
-                if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {
-                    // Expects the following Extras:
-                    // Room:<RoomName>
-                    // Receiver:<ReceiverName>
-                    // Button:<ButtonName>
-
-                    try {
-                        Room room = DatabaseHandler.getRoom(extras.getString(KEY_ROOM).trim());
-                        Receiver receiver = room.getReceiver(extras.getString(KEY_RECEIVER).trim());
-                        Button button = receiver.getButton(extras.getString(KEY_BUTTON).trim());
-
-                        List<NetworkPackage> networkPackages = new ArrayList<>();
-                        for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                            networkPackages.add(networkPackage);
-                        }
-
-                        DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-
-                        nwm.send(networkPackages);
-
-                        UtilityService.forceWearDataUpdate(context);
-
-                    } catch (ActionNotSupportedException e) {
-                        Log.e("Action not supported by Receiver!", e);
-                        Toast.makeText(context, context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG)
-                                .show();
-                    }
-
-                } else if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_BUTTON)) {
-                    // Expects the following Extras:
-                    // Room:<RoomName>
-                    // Button:<ButtonName>
-                    //
-                    // Where ButtonName is the name of the Button that is
-                    // pressed for each Receiver in the specified Room
-
-                    Room room = DatabaseHandler.getRoom(extras.getString(KEY_ROOM).trim());
-
-                    List<NetworkPackage> networkPackages = new ArrayList<>();
-                    for (Receiver receiver : room.getReceivers()) {
-                        Button button = receiver.getButton(extras.getString(KEY_BUTTON).trim());
-                        for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                            try {
-                                NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                                networkPackages.add(networkPackage);
-                            } catch (Exception e) {
-                                Log.e("Action not supported by Receiver!", e);
-                            }
-                        }
-
-                        if (button != null) {
-                            DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-                        }
-                    }
-
-                    if (networkPackages.size() <= 0) {
-                        Log.d(context.getString(R.string.no_receiver_supports_this_action));
-                        Toast.makeText(context, context.getString(R.string.no_receiver_supports_this_action), Toast
-                                .LENGTH_LONG).show();
-                    } else {
-                        nwm.send(networkPackages);
-                    }
-
-                    UtilityService.forceWearDataUpdate(context);
-
-                } else if (extras.containsKey(KEY_SCENE)) {
-                    // Expects the following Extras:
-                    // Scene:<SceneName>
-                    Scene scene = DatabaseHandler.getScene(extras.getString(KEY_SCENE).trim());
-                    List<NetworkPackage> packages = new ArrayList<>();
-                    for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                        for (SceneItem sceneItem : scene.getSceneItems()) {
-                            packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
-                                    sceneItem.getActiveButton().getName()));
-
-                            DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
-                                    .getId(), sceneItem.getActiveButton().getId());
-                        }
-                    }
-                    nwm.send(packages);
-
-                    UtilityService.forceWearDataUpdate(context);
-                }
-            } else {
-                throw new NullPointerException("extras are null!");
-            }
-
-            // force receiver widget update to highlight last button
-            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
-                ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);
-            }
-        } catch (Exception e) {
-            Log.e("Error parsing intent!", e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    /**
-     * Old method of parsing Intent Extras
-     * Please use the new method parseActionIntent()
-     *
-     * @param context
-     * @param intent
-     */
-    @Deprecated
-    private static void parseActionIntentOld(Context context, Intent intent) {
-        try {
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                NetworkHandler nwm = new NetworkHandler(context);
-
-                int start;
-                int end;
-
-                if (intent.getAction().equals(intent_switch_on) || intent.getAction().equals(intent_switch_off)) {
-                    if (extras.containsKey("Switch")) {
-                        String switchProperties = extras.getString("Switch");
-                        try {
-                            Log.d("IntentReceiver", "Switch: " + switchProperties);
-
-                            start = switchProperties.indexOf("room:") + 5;
-                            end = switchProperties.indexOf(";switch");
-                            String roomName = switchProperties.substring(start, end);
-
-                            start = switchProperties.indexOf("switch:") + 7;
-                            end = switchProperties.indexOf(";;");
-                            String switchName = switchProperties.substring(start, end);
-
-                            String buttonName;
-                            if (intent.getAction().equals(intent_switch_on)) {
-                                buttonName = context.getString(R.string.on);
-                            } else {
-                                buttonName = context.getString(R.string.off);
-                            }
-
-                            Room room = DatabaseHandler.getRoom(roomName);
-
-                            List<NetworkPackage> networkPackages = new ArrayList<>();
-
-                            Receiver receiver = room.getReceiver(switchName);
-                            Button button = receiver.getButton(buttonName);
-                            for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                                networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
-                            }
-                            if (button != null) {
-                                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-                            }
-
-                            nwm.send(networkPackages);
-
-                        } catch (Exception e) {
-                            Log.e("invalid intent string: " + switchProperties + "\n", e);
-                            Toast.makeText(context,
-                                    "PowerSwitch - Error: invalid intent string: " + switchProperties,
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                } else if (intent.getAction().equals(intent_room_on) || intent.getAction().equals(intent_room_off)) {
-                    if (extras.containsKey("Room")) {
-                        String roomProperties = extras.getString("Room");
-                        try {
-                            Log.d("IntentReceiver", "Room: " + roomProperties);
-
-                            start = 0;
-                            end = roomProperties.indexOf(";;");
-                            String roomName = roomProperties.substring(start, end);
-
-                            String buttonName;
-                            if (intent.getAction().equals(intent_room_on)) {
-                                buttonName = context.getString(R.string.on);
-                            } else {
-                                buttonName = context.getString(R.string.off);
-                            }
-
-                            Room room = DatabaseHandler.getRoom(roomName);
-
-                            List<NetworkPackage> networkPackages = new ArrayList<>();
-                            for (Receiver receiver : room.getReceivers()) {
-                                Button button = receiver.getButton(buttonName);
-                                for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                                    networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
-                                }
-
-                                if (button != null) {
-                                    DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-                                }
-                            }
-                            nwm.send(networkPackages);
-
-                        } catch (Exception e) {
-                            Log.e("invalid intent string" + "\n", e);
-                            Toast.makeText(context,
-                                    "PowerSwitch - Error: invalid intent string: " + roomProperties,
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                } else {
-                    throw new NullPointerException("extras are null!");
-                }
-            }
-        } catch (Exception e) {
-            Log.e(e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -387,18 +69,206 @@ public class IntentReceiver extends BroadcastReceiver {
 
             if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
                 Log.d("IntentReceiver", "appwidget update");
-            } else if (intent.getAction().equals(ApiConstants.UNIVERSAL_ACTION_INTENT)) {
+            } else if (ApiConstants.UNIVERSAL_ACTION_INTENT.equals(intent.getAction())) {
                 parseActionIntent(context, intent);
-            } else if (intent.getAction().equals(intent_switch_on)
-                    || intent.getAction().equals(intent_switch_off)
-                    || intent.getAction().equals(intent_room_on)
-                    || intent.getAction().equals(intent_room_off)) {
+            } else if (ApiConstants.intent_switch_on.equals(intent.getAction())
+                    || ApiConstants.intent_switch_off.equals(intent.getAction())
+                    || ApiConstants.intent_room_on.equals(intent.getAction())
+                    || ApiConstants.intent_room_off.equals(intent.getAction())) {
                 parseActionIntentOld(context, intent);
             } else {
                 Log.d("Received unknown intent: " + intent.getAction());
             }
         } catch (Exception e) {
             Log.e(e);
+        }
+    }
+
+    /**
+     * Method for extracting information from action intents received either internally (Button click, Timer, etc.) or
+     * externally (via API)
+     *
+     * @param context any suitable Context
+     * @param intent  action intent
+     */
+    private void parseActionIntent(Context context, Intent intent) {
+        try {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras
+                        .containsKey
+                                (ApiConstants.KEY_BUTTON)) {
+                    // Expects the following Extras:
+                    // Room:<RoomName>
+                    // Receiver:<ReceiverName>
+                    // Button:<ButtonName>
+
+                    try {
+                        Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
+                        Receiver receiver = room.getReceiver(extras.getString(ApiConstants.KEY_RECEIVER).trim());
+                        Button button = receiver.getButton(extras.getString(ApiConstants.KEY_BUTTON).trim());
+
+                        ActionHandler.executeAction(context, receiver, button);
+                    } catch (Exception e) {
+                        Log.e("Error!", e);
+                        Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
+                                .show();
+                    }
+
+                } else if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
+                    // Expects the following Extras:
+                    // Room:<RoomName>
+                    // Button:<ButtonName>
+                    //
+                    // Where ButtonName is the name of the Button that is
+                    // pressed for each Receiver in the specified Room
+
+                    try {
+                        Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
+                        String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
+
+                        ActionHandler.executeAction(context, room, buttonName);
+                    } catch (Exception e) {
+                        Log.e("Error!", e);
+                        Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                } else if (extras.containsKey(ApiConstants.KEY_SCENE)) {
+                    // Expects the following Extras:
+                    // Scene:<SceneName>
+
+                    try {
+                        Scene scene = DatabaseHandler.getScene(extras.getString(ApiConstants.KEY_SCENE).trim());
+
+                        ActionHandler.executeAction(context, scene);
+                    } catch (Exception e) {
+                        Log.e("Error!", e);
+                        Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
+                                .show();
+                    }
+                }
+            } else {
+                throw new NullPointerException("extras are null!");
+            }
+
+            // force receiver widget update to highlight last button
+            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+                ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);
+            }
+        } catch (Exception e) {
+            Log.e("Error parsing intent!", e);
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Old method of parsing Intent Extras
+     * Please use the new method parseActionIntent()
+     *
+     * @param context any suitable Context
+     * @param intent  action intent
+     */
+    @Deprecated
+    private void parseActionIntentOld(Context context, Intent intent) {
+        try {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                NetworkHandler.init(context);
+
+                int start;
+                int end;
+
+                if (intent.getAction().equals(ApiConstants.intent_switch_on) || intent.getAction()
+                        .equals(ApiConstants.intent_switch_off)) {
+                    if (extras.containsKey("Switch")) {
+                        String switchProperties = extras.getString("Switch");
+                        try {
+                            Log.d("IntentReceiver", "Switch: " + switchProperties);
+
+                            start = switchProperties.indexOf("room:") + 5;
+                            end = switchProperties.indexOf(";switch");
+                            String roomName = switchProperties.substring(start, end);
+
+                            start = switchProperties.indexOf("switch:") + 7;
+                            end = switchProperties.indexOf(";;");
+                            String switchName = switchProperties.substring(start, end);
+
+                            String buttonName;
+                            if (intent.getAction().equals(ApiConstants.intent_switch_on)) {
+                                buttonName = context.getString(R.string.on);
+                            } else {
+                                buttonName = context.getString(R.string.off);
+                            }
+
+                            Room room = DatabaseHandler.getRoom(roomName);
+
+                            List<NetworkPackage> networkPackages = new ArrayList<>();
+
+                            Receiver receiver = room.getReceiver(switchName);
+                            Button button = receiver.getButton(buttonName);
+                            for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
+                                networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
+                            }
+                            if (button != null) {
+                                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+                            }
+
+                            NetworkHandler.send(networkPackages);
+
+                        } catch (Exception e) {
+                            Log.e("invalid intent string: " + switchProperties + "\n", e);
+                            Toast.makeText(context,
+                                    "PowerSwitch - Error: invalid intent string: " + switchProperties,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } else if (intent.getAction().equals(ApiConstants.intent_room_on) || intent.getAction()
+                        .equals(ApiConstants.intent_room_off)) {
+                    if (extras.containsKey("Room")) {
+                        String roomProperties = extras.getString("Room");
+                        try {
+                            Log.d("IntentReceiver", "Room: " + roomProperties);
+
+                            start = 0;
+                            end = roomProperties.indexOf(";;");
+                            String roomName = roomProperties.substring(start, end);
+
+                            String buttonName;
+                            if (intent.getAction().equals(ApiConstants.intent_room_on)) {
+                                buttonName = context.getString(R.string.on);
+                            } else {
+                                buttonName = context.getString(R.string.off);
+                            }
+
+                            Room room = DatabaseHandler.getRoom(roomName);
+
+                            List<NetworkPackage> networkPackages = new ArrayList<>();
+                            for (Receiver receiver : room.getReceivers()) {
+                                Button button = receiver.getButton(buttonName);
+                                for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
+                                    networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
+                                }
+
+                                if (button != null) {
+                                    DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+                                }
+                            }
+                            NetworkHandler.send(networkPackages);
+
+                        } catch (Exception e) {
+                            Log.e("invalid intent string" + "\n", e);
+                            Toast.makeText(context,
+                                    "PowerSwitch - Error: invalid intent string: " + roomProperties,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                } else {
+                    throw new NullPointerException("extras are null!");
+                }
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -23,18 +23,18 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.device.Receiver;
-import eu.power_switch.obj.device.intertechno.CMR1000;
+import eu.power_switch.action.Action;
+import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.action.Action;
-import eu.power_switch.timer.action.ReceiverAction;
 
 /**
  * This Class represents a demo Room/Recever/Scene setup for use in Play Store images

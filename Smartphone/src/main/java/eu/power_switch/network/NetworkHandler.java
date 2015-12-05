@@ -42,15 +42,22 @@ import eu.power_switch.shared.log.Log;
 /**
  * Class to handle all network related actions such as sending button actions and searching for gateways
  */
-public class NetworkHandler {
+public abstract class NetworkHandler {
 
     protected static final List<NetworkPackage> networkPackagesQueue = new LinkedList<>();
     protected static final Object lockObject = new Object();
     protected static NetworkPackageQueueHandler networkPackageQueueHandler;
-    protected Context context;
+    protected static Context context;
 
-    public NetworkHandler(Context context) {
-        this.context = context;
+    private NetworkHandler() {
+    }
+
+    public static void init(Context context) {
+        if (NetworkHandler.context != null) {
+            return;
+        }
+
+        NetworkHandler.context = context;
 
         if (networkPackageQueueHandler == null) {
             networkPackageQueueHandler = new NetworkPackageQueueHandler(context);
@@ -96,11 +103,31 @@ public class NetworkHandler {
     }
 
     /**
+     * sends a list of NetworkPackages
+     *
+     * @param networkPackages
+     */
+    public static synchronized void send(List<NetworkPackage> networkPackages) {
+        if (networkPackages == null) {
+            return;
+        }
+
+        // add NetworkPackages to queue
+        synchronized (networkPackagesQueue) {
+            networkPackagesQueue.addAll(networkPackages);
+        }
+        // notify worker thread to handle new packages
+        synchronized (NetworkPackageQueueHandler.lock) {
+            NetworkPackageQueueHandler.lock.notify();
+        }
+    }
+
+    /**
      * Automatically search local network for available gateways
      *
      * @return List of found Gateways
      */
-    public List<Gateway> searchGateways() {
+    public static List<Gateway> searchGateways() {
         List<Gateway> foundGateways = new ArrayList<>();
         Log.d("NetworkManager", "searchGateways");
 
@@ -139,7 +166,7 @@ public class NetworkHandler {
      * @param message some text
      * @return Gateway null if message could not be parsed
      */
-    private Gateway parseMessageToGateway(String message) {
+    private static Gateway parseMessageToGateway(String message) {
         Log.d("parsing Gateway Message: " + message);
 
         int start;
@@ -244,26 +271,6 @@ public class NetworkHandler {
             }
         } else {
             StatusMessageHandler.showStatusMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
-        }
-    }
-
-    /**
-     * sends a list of NetworkPackages
-     *
-     * @param networkPackages
-     */
-    public synchronized void send(List<NetworkPackage> networkPackages) {
-        if (networkPackages == null) {
-            return;
-        }
-
-        // add NetworkPackages to queue
-        synchronized (networkPackagesQueue) {
-            networkPackagesQueue.addAll(networkPackages);
-        }
-        // notify worker thread to handle new packages
-        synchronized (NetworkPackageQueueHandler.lock) {
-            NetworkPackageQueueHandler.lock.notify();
         }
     }
 
