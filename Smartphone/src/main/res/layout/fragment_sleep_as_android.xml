@@ -23,16 +23,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatCheckBox
-        android:id="@+id/checkBox_sleep_as_android"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sleep As Android"/>
+        android:gravity="center_vertical"
+        android:padding="8dp">
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/spinner_sleep_as_android_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:paddingRight="8dp"
+            android:text="@string/event_type"/>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spinner_sleep_as_android_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

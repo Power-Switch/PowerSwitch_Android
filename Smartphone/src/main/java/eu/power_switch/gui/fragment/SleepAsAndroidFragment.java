@@ -43,7 +43,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddAlarmEventActionDialog;
-import eu.power_switch.shared.constants.ExternalAppConstants;
+import eu.power_switch.shared.constants.ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -61,6 +61,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     private RecyclerView recyclerViewActions;
     private ActionRecyclerViewAdapter recyclerViewAdapter;
     private AppCompatSpinner spinnerEventType;
+    private FloatingActionButton addActionFAB;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,18 +69,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_sleep_as_android, container, false);
 
         final RecyclerViewFragment recyclerViewFragment = this;
-        FloatingActionButton addFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action_fab);
-        addFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddAlarmEventActionDialog addAlarmEventActionDialog = new AddAlarmEventActionDialog();
-                Bundle args = new Bundle();
-                args.putInt("eventId", spinnerEventType.getSelectedItemPosition());
-                addAlarmEventActionDialog.setArguments(args);
-                addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
-                addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
-            }
-        });
 
         spinnerEventType = (AppCompatSpinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -98,7 +87,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         });
 
         actions = new ArrayList<>(DatabaseHandler.getAlarmActions(
-                ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED));
+                SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED));
 
         recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_alarm_event_actions);
         recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);
@@ -107,7 +96,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
             public void onItemClick(View itemView, int position) {
                 actions.remove(position);
                 DatabaseHandler.setAlarmActions(
-                        ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())
+                        SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())
                         , actions);
                 StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
 
@@ -118,6 +107,19 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getResources().getInteger(R.integer.timer_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);
+
+        addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action_fab);
+        addActionFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddAlarmEventActionDialog addAlarmEventActionDialog = new AddAlarmEventActionDialog();
+                Bundle args = new Bundle();
+                args.putInt("eventId", spinnerEventType.getSelectedItemPosition());
+                addAlarmEventActionDialog.setArguments(args);
+                addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
+                addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
+            }
+        });
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -137,8 +139,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     private void updateUI() {
         actions.clear();
         actions.addAll(DatabaseHandler.getAlarmActions(
-                ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.getById(
-                        spinnerEventType.getSelectedItemPosition())));
+                SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())));
 
         recyclerViewAdapter.notifyDataSetChanged();
     }

@@ -19,16 +19,10 @@
 
 <resources>
 
-    <string name="alarm_triggered">Alarm Triggered</string>
-    <string name="alarm_snoozed">Alarm Snoozed</string>
-    <string name="alarm_dismissed">Alarm Dismissed</string>
+    <string name="alarm_triggered">Alarm aktiviert</string>
+    <string name="alarm_snoozed">Schlummertaste</string>
+    <string name="alarm_dismissed">Alarm ausgeschaltet</string>
 
-    <string name="event_type">Event Type:</string>
-
-    <string-array name="sleep_as_android_event_names">
-        <item>@string/alarm_triggered</item>
-        <item>@string/alarm_snoozed</item>
-        <item>@string/alarm_dismissed</item>
-    </string-array>
+    <string name="event_type">Event Typ:</string>
 
 </resources>
