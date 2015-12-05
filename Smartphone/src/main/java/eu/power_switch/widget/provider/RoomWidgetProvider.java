@@ -20,7 +20,9 @@ package eu.power_switch.widget.provider;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -38,6 +40,22 @@ import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
  * This class is responsible for updating existing Room widgets
  */
 public class RoomWidgetProvider extends AppWidgetProvider {
+
+    /**
+     * Forces an Update of all Room Widgets
+     *
+     * @param context any suitable context
+     */
+    public static void forceWidgetUpdate(Context context) {
+        // update room widgets
+        Intent intent = new Intent(context, RoomWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
+                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
+                        RoomWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(intent);
+    }
 
     @Override
     public void onEnabled(Context context) {

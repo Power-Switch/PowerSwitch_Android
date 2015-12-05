@@ -20,8 +20,6 @@ package eu.power_switch.widget.activity;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
@@ -41,7 +39,6 @@ import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
-import eu.power_switch.widget.provider.RoomWidgetProvider;
 
 /**
  * Configuration Activity for Room widgets
@@ -52,22 +49,6 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
     private AppCompatSpinner spinnerRoom;
     private List<Room> roomsList;
-
-    /**
-     * Forces an Update of all Room Widgets
-     *
-     * @param context any suitable context
-     */
-    public static void forceWidgetUpdate(Context context) {
-        // update room widgets
-        Intent intent = new Intent(context, RoomWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
-                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
-                        RoomWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        context.sendBroadcast(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

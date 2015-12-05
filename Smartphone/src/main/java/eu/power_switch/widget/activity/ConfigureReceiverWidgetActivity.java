@@ -21,8 +21,6 @@ package eu.power_switch.widget.activity;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -52,7 +50,6 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
-import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
  * Configuration Activity for Receiver widgets
@@ -63,22 +60,6 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     private AppCompatSpinner spinnerReceiver;
 
     private List<Room> roomsList;
-
-    /**
-     * Forces an Update of all Receiver Widgets
-     *
-     * @param context any suitable context
-     */
-    public static void forceWidgetUpdate(Context context) {
-        // update receiver widgets
-        Intent intent = new Intent(context, ReceiverWidgetProvider.class);
-        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
-                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
-                        ReceiverWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        context.sendBroadcast(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

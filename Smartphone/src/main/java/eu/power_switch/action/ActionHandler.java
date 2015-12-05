@@ -39,6 +39,7 @@ import eu.power_switch.obj.receiver.SceneItem;
 import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
  * Created by Markus on 05.12.2015.
@@ -66,6 +67,7 @@ public class ActionHandler {
 
             NetworkHandler.send(networkPackages);
 
+            ReceiverWidgetProvider.forceWidgetUpdate(context);
             UtilityService.forceWearDataUpdate(context);
         } catch (ActionNotSupportedException e) {
             Log.e("Action not supported by Receiver!", e);
@@ -123,6 +125,7 @@ public class ActionHandler {
                 NetworkHandler.send(networkPackages);
             }
 
+            ReceiverWidgetProvider.forceWidgetUpdate(context);
             UtilityService.forceWearDataUpdate(context);
         } catch (Exception e) {
             Log.e(e);
@@ -152,6 +155,7 @@ public class ActionHandler {
             }
             NetworkHandler.send(packages);
 
+            ReceiverWidgetProvider.forceWidgetUpdate(context);
             UtilityService.forceWearDataUpdate(context);
         } catch (Exception e) {
             Log.e(e);

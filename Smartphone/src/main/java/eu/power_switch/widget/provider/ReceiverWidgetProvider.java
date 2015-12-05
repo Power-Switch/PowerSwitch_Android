@@ -21,7 +21,9 @@ package eu.power_switch.widget.provider;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -46,6 +48,22 @@ import eu.power_switch.widget.WidgetIntentReceiver;
  * This class is responsible for updating existing Receiver widgets
  */
 public class ReceiverWidgetProvider extends AppWidgetProvider {
+
+    /**
+     * Forces an Update of all Receiver Widgets
+     *
+     * @param context any suitable context
+     */
+    public static void forceWidgetUpdate(Context context) {
+        // update receiver widgets
+        Intent intent = new Intent(context, ReceiverWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
+                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
+                        ReceiverWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(intent);
+    }
 
     @Override
     public void onEnabled(Context context) {

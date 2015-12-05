@@ -20,7 +20,9 @@ package eu.power_switch.widget.provider;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -39,6 +41,21 @@ import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
  */
 public class SceneWidgetProvider extends AppWidgetProvider {
 
+    /**
+     * Forces an Update of all Scene Widgets
+     *
+     * @param context any suitable context
+     */
+    public static void forceWidgetUpdate(Context context) {
+        // update scene widgets
+        Intent intent = new Intent(context, SceneWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
+                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
+                        SceneWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(intent);
+    }
 
     @Override
     public void onEnabled(Context context) {
