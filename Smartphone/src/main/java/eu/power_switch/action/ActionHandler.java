@@ -37,7 +37,9 @@ import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.obj.receiver.Scene;
 import eu.power_switch.obj.receiver.SceneItem;
 import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
@@ -67,8 +69,12 @@ public class ActionHandler {
 
             NetworkHandler.send(networkPackages);
 
-            ReceiverWidgetProvider.forceWidgetUpdate(context);
-            UtilityService.forceWearDataUpdate(context);
+            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+                ReceiverWidgetProvider.forceWidgetUpdate(context);
+            }
+            if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                UtilityService.forceWearDataUpdate(context);
+            }
         } catch (ActionNotSupportedException e) {
             Log.e("Action not supported by Receiver!", e);
             StatusMessageHandler.showStatusMessage(context,
@@ -119,14 +125,18 @@ public class ActionHandler {
 
             if (networkPackages.size() <= 0) {
                 Log.d(context.getString(R.string.no_receiver_supports_this_action));
-                Toast.makeText(context, context.getString(R.string.no_receiver_supports_this_action), Toast
-                        .LENGTH_LONG).show();
+                StatusMessageHandler.showStatusMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
+                        .LENGTH_LONG);
             } else {
                 NetworkHandler.send(networkPackages);
             }
 
-            ReceiverWidgetProvider.forceWidgetUpdate(context);
-            UtilityService.forceWearDataUpdate(context);
+            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+                ReceiverWidgetProvider.forceWidgetUpdate(context);
+            }
+            if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                UtilityService.forceWearDataUpdate(context);
+            }
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 1000);
@@ -155,8 +165,12 @@ public class ActionHandler {
             }
             NetworkHandler.send(packages);
 
-            ReceiverWidgetProvider.forceWidgetUpdate(context);
-            UtilityService.forceWearDataUpdate(context);
+            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+                ReceiverWidgetProvider.forceWidgetUpdate(context);
+            }
+            if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                UtilityService.forceWearDataUpdate(context);
+            }
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 1000);

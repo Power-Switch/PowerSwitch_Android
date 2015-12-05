@@ -43,7 +43,7 @@ public class PowerSwitch extends MultiDexApplication {
         // save original uncaught exception handler
         originalUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
 
-        // Set up our own UncaughtExeptionHandler to log errors we couldn't even think of
+        // Set up our own UncaughtExceptionHandler to log errors we couldn't even think of
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {

@@ -37,11 +37,9 @@ import eu.power_switch.obj.receiver.Button;
 import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.obj.receiver.Scene;
 import eu.power_switch.obj.receiver.device.Receiver;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
 
 public class IntentReceiver extends BroadcastReceiver {
 
@@ -151,10 +149,6 @@ public class IntentReceiver extends BroadcastReceiver {
                 throw new NullPointerException("extras are null!");
             }
 
-            // force receiver widget update to highlight last button
-            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
-                ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);
-            }
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);
             Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
