@@ -77,7 +77,7 @@ abstract class SceneHandler {
      * @param id ID of Scene
      */
     protected static void delete(Long id) {
-        TimerActionHandler.deleteBySceneId(id);
+        ActionHandler.deleteBySceneId(id);
 
         SceneItemHandler.deleteSceneItems(id);
         DatabaseHandler.database.delete(SceneTable.TABLE_NAME, SceneTable.COLUMN_ID + "=" + id, null);

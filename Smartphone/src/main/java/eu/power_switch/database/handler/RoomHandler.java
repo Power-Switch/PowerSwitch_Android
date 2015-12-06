@@ -63,7 +63,7 @@ abstract class RoomHandler {
      * @param id ID of Room
      */
     protected static void delete(Long id) {
-        TimerActionHandler.deleteByRoomId(id);
+        ActionHandler.deleteByRoomId(id);
 
         deleteReceiversOfRoom(id);
         DatabaseHandler.database.delete(RoomTable.TABLE_NAME, RoomTable.COLUMN_ID + "=" + id, null);

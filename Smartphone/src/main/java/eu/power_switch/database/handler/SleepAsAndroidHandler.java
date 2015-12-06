@@ -92,5 +92,4 @@ abstract class SleepAsAndroidHandler {
                     "=" + event.getId(), null);
         }
     }
-
 }

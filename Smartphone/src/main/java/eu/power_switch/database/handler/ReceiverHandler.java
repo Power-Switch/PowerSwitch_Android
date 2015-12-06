@@ -218,8 +218,8 @@ class ReceiverHandler {
 
         // delete sceneItems where receiver was used
         SceneItemHandler.deleteByReceiverId(id);
-        // delete timers where receiver was used
-        TimerActionHandler.deleteByReceiverId(id);
+        // delete actions where receiver was used
+        ActionHandler.deleteByReceiverId(id);
 
         deleteDetails(id);
         DatabaseHandler.database.delete(ReceiverTable.TABLE_NAME, ReceiverTable.COLUMN_ID + "=" + id, null);
