@@ -43,7 +43,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
  * Fragment containing all settings related to Smartphone app
@@ -109,7 +109,7 @@ public class GeneralSettingsFragment extends Fragment {
                     case R.id.checkBox_highlightLastActivatedButton:
                         SmartphonePreferencesHandler.setHighlightLastActivatedButton(isChecked);
                         // force receiver widget update
-                        ConfigureReceiverWidgetActivity.forceWidgetUpdate(getContext());
+                        ReceiverWidgetProvider.forceWidgetUpdate(getContext());
                         break;
                     default:
                         break;

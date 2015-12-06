@@ -57,9 +57,9 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.special.HolidaySpecialHandler;
 import eu.power_switch.wear.service.UtilityService;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
-import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
-import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import eu.power_switch.widget.provider.RoomWidgetProvider;
+import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * Main entry Activity for the app
@@ -223,11 +223,11 @@ public class MainActivity extends AppCompatActivity {
                 UtilityService.forceWearSettingsUpdate(context);
 
                 // update receiver widgets
-                ConfigureReceiverWidgetActivity.forceWidgetUpdate(context);
+                ReceiverWidgetProvider.forceWidgetUpdate(context);
                 // update room widgets
-                ConfigureRoomWidgetActivity.forceWidgetUpdate(context);
+                RoomWidgetProvider.forceWidgetUpdate(context);
                 // update scene widgets
-                ConfigureSceneWidgetActivity.forceWidgetUpdate(context);
+                SceneWidgetProvider.forceWidgetUpdate(context);
                 return null;
             }
         }.execute(this);

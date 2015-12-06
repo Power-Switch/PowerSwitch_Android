@@ -55,9 +55,9 @@ import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.obj.receiver.device.Receiver;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
-import eu.power_switch.widget.activity.ConfigureRoomWidgetActivity;
-import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import eu.power_switch.widget.provider.RoomWidgetProvider;
+import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * Dialog to edit a Room
@@ -149,11 +149,11 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
                                 TimersFragment.sendTimersChangedBroadcast(getActivity());
 
                                 // update receiver widgets
-                                ConfigureReceiverWidgetActivity.forceWidgetUpdate(getActivity());
+                                ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
                                 // update room widgets
-                                ConfigureRoomWidgetActivity.forceWidgetUpdate(getActivity());
+                                RoomWidgetProvider.forceWidgetUpdate(getActivity());
                                 // update scene widgets
-                                ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
+                                SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
                                 StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                         R.string.room_deleted, Snackbar.LENGTH_LONG);

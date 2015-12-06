@@ -54,8 +54,7 @@ import eu.power_switch.obj.receiver.Scene;
 import eu.power_switch.obj.receiver.SceneItem;
 import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
-import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
+import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * "Setup" Fragment used in Configure Scene Dialog
@@ -188,10 +187,8 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         // notify scenes fragment
         ScenesFragment.sendScenesChangedBroadcast(getActivity());
 
-        // update receiver widgets
-        ConfigureReceiverWidgetActivity.forceWidgetUpdate(getActivity());
         // update scene widgets
-        ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
+        SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
         StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
     }

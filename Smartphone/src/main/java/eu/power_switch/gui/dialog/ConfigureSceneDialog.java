@@ -52,7 +52,7 @@ import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
+import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * Dialog to create or modify a Scene
@@ -146,7 +146,7 @@ public class ConfigureSceneDialog extends DialogFragment {
                                         TimersFragment.sendTimersChangedBroadcast(getActivity());
 
                                         // update scene widgets
-                                        ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
+                                        SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
                                         StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                                 R.string.scene_deleted, Snackbar.LENGTH_LONG);

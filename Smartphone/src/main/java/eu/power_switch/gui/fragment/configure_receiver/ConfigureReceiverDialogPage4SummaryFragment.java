@@ -56,8 +56,7 @@ import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.obj.receiver.device.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
-import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
  * "Summary" Fragment used in Configure Receiver Dialog
@@ -395,9 +394,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         ScenesFragment.sendScenesChangedBroadcast(getActivity());
 
         // update receiver widgets
-        ConfigureReceiverWidgetActivity.forceWidgetUpdate(getActivity());
-        // update scene widgets
-        ConfigureSceneWidgetActivity.forceWidgetUpdate(getActivity());
+        ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
 
         StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
     }

@@ -55,7 +55,7 @@ import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.widget.activity.ConfigureReceiverWidgetActivity;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
  * Dialog to create or modify a Receiver
@@ -152,7 +152,7 @@ public class ConfigureReceiverDialog extends DialogFragment {
                                         TimersFragment.sendTimersChangedBroadcast(getActivity());
 
                                         // update receiver widgets
-                                        ConfigureReceiverWidgetActivity.forceWidgetUpdate(getActivity());
+                                        ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
 
                                         StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                                 R.string.receiver_deleted, Snackbar.LENGTH_LONG);
