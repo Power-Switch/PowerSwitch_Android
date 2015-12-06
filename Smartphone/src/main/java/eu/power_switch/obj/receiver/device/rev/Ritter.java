@@ -62,11 +62,11 @@ public class Ritter extends Receiver implements DipReceiver {
             dipList.add(new DipSwitch("3", dips.get(2)));
             dipList.add(new DipSwitch("4", dips.get(3)));
             dipList.add(new DipSwitch("5", dips.get(4)));
-            dipList.add(new DipSwitch("6", dips.get(4)));
-            dipList.add(new DipSwitch("A", dips.get(5)));
-            dipList.add(new DipSwitch("B", dips.get(6)));
-            dipList.add(new DipSwitch("C", dips.get(7)));
-            dipList.add(new DipSwitch("D", dips.get(8)));
+            dipList.add(new DipSwitch("6", dips.get(5)));
+            dipList.add(new DipSwitch("A", dips.get(6)));
+            dipList.add(new DipSwitch("B", dips.get(7)));
+            dipList.add(new DipSwitch("C", dips.get(8)));
+            dipList.add(new DipSwitch("D", dips.get(9)));
         } else {
             dipList.add(new DipSwitch("1", false));
             dipList.add(new DipSwitch("2", false));
