@@ -25,16 +25,16 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -56,12 +56,12 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
     private View rootView;
 
     private TextInputLayout floatingName;
-    private AppCompatEditText name;
+    private EditText name;
 
     private String originalName;
     private LinearLayout linearLayout_selectableReceivers;
 
-    private ArrayList<AppCompatCheckBox> receiverCheckboxList = new ArrayList<>();
+    private ArrayList<CheckBox> receiverCheckboxList = new ArrayList<>();
 
 
     /**
@@ -86,7 +86,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_scene_page_1, container, false);
 
         floatingName = (TextInputLayout) rootView.findViewById(R.id.scene_name_text_input_layout);
-        name = (AppCompatEditText) rootView.findViewById(R.id.editText_scene_name);
+        name = (EditText) rootView.findViewById(R.id.editText_scene_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -126,7 +126,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
             roomLayout.setOrientation(LinearLayout.VERTICAL);
             linearLayout_selectableReceivers.addView(roomLayout);
 
-            AppCompatTextView roomName = new AppCompatTextView(getActivity());
+            TextView roomName = new TextView(getActivity());
             roomName.setText(room.getName());
             roomLayout.addView(roomName);
 
@@ -135,7 +135,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
                 receiverLayout.setOrientation(LinearLayout.HORIZONTAL);
                 roomLayout.addView(receiverLayout);
 
-                final AppCompatCheckBox checkBox = (AppCompatCheckBox) inflater.inflate(R.layout.simple_checkbox, receiverLayout, false);
+                final CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.simple_checkbox, receiverLayout, false);
                 checkBox.setTag(R.string.room, room);
                 checkBox.setTag(R.string.receiver, receiver);
                 receiverLayout.addView(checkBox);
@@ -147,7 +147,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
                 });
                 receiverCheckboxList.add(checkBox);
 
-                AppCompatTextView textView_receiverName = new AppCompatTextView(getActivity());
+                TextView textView_receiverName = new TextView(getActivity());
                 textView_receiverName.setText(receiver.getName());
                 receiverLayout.addView(textView_receiverName);
 
@@ -174,7 +174,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         }
 
         for (Receiver receiver : activeReceivers) {
-            for (AppCompatCheckBox checkBox : receiverCheckboxList) {
+            for (CheckBox checkBox : receiverCheckboxList) {
                 Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
                 Room associatedRoom = (Room) checkBox.getTag(R.string.room);
                 if (associatedReceiver.getId().equals(receiver.getId()) && associatedRoom.getId().equals(receiver
@@ -212,7 +212,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
     private ArrayList<Room> getCheckedReceivers() {
         ArrayList<Room> checkedReceivers = new ArrayList<>();
 
-        for (AppCompatCheckBox checkBox : receiverCheckboxList) {
+        for (CheckBox checkBox : receiverCheckboxList) {
             if (checkBox.isChecked()) {
                 Room originalRoom = (Room) checkBox.getTag(R.string.room);
                 Room room = null;

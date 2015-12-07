@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -34,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,9 +184,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
             int i = 0;
             TableRow buttonRow = null;
-            final ArrayList<AppCompatButton> buttonList = new ArrayList<>();
+            final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
             for (final Button button : sceneItem.getReceiver().getButtons()) {
-                final AppCompatButton buttonView = (AppCompatButton) inflater.inflate(R.layout.simple_button,
+                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button,
                         buttonRow, false);
                 buttonList.add(buttonView);
                 buttonView.setText(button.getName());
@@ -232,15 +232,15 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public AppCompatTextView sceneName;
-        public AppCompatButton buttonActivateScene;
+        public TextView sceneName;
+        public android.widget.Button buttonActivateScene;
         public LinearLayout linearLayoutSceneItems;
         public LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.sceneName = (AppCompatTextView) itemView.findViewById(R.id.txt_scene_name);
-            this.buttonActivateScene = (AppCompatButton) itemView.findViewById(R.id.btn_activate_scene);
+            this.sceneName = (TextView) itemView.findViewById(R.id.txt_scene_name);
+            this.buttonActivateScene = (android.widget.Button) itemView.findViewById(R.id.btn_activate_scene);
             this.linearLayoutSceneItems = (LinearLayout) itemView.findViewById(R.id.layout_of_scene_items);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 

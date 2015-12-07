@@ -27,10 +27,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.AppCompatTextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,10 +62,10 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
 
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
-    private AppCompatTextView textViewName;
-    private AppCompatTextView textViewTime;
-    private AppCompatTextView textViewDays;
-    private AppCompatTextView textViewAction;
+    private TextView textViewName;
+    private TextView textViewTime;
+    private TextView textViewDays;
+    private TextView textViewAction;
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -106,10 +106,10 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
             }
         };
 
-        textViewName = (AppCompatTextView) rootView.findViewById(R.id.textView_name);
-        textViewTime = (AppCompatTextView) rootView.findViewById(R.id.textView_time);
-        textViewDays = (AppCompatTextView) rootView.findViewById(R.id.textView_execution_days);
-        textViewAction = (AppCompatTextView) rootView.findViewById(R.id.textView_action);
+        textViewName = (TextView) rootView.findViewById(R.id.textView_name);
+        textViewTime = (TextView) rootView.findViewById(R.id.textView_time);
+        textViewDays = (TextView) rootView.findViewById(R.id.textView_execution_days);
+        textViewAction = (TextView) rootView.findViewById(R.id.textView_action);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey("TimerId")) {

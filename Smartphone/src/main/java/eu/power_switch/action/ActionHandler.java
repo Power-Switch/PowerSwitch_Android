@@ -103,22 +103,22 @@ public class ActionHandler {
             List<NetworkPackage> networkPackages = new ArrayList<>();
             for (Receiver receiver : room.getReceivers()) {
                 Button button = receiver.getButton(buttonName);
-                for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                    try {
-                        NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                        networkPackages.add(networkPackage);
-                    } catch (ActionNotSupportedException e) {
-                        Log.e("Action not supported by Receiver!", e);
-                        StatusMessageHandler.showStatusMessage(context,
-                                context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
-                    } catch (GatewayNotSupportedException e) {
-                        Log.e("Gateway not supported by Receiver!", e);
-                        StatusMessageHandler.showStatusMessage(context,
-                                context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
-                    }
-                }
-
                 if (button != null) {
+                    for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
+                        try {
+                            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
+                            networkPackages.add(networkPackage);
+                        } catch (ActionNotSupportedException e) {
+                            Log.e("Action not supported by Receiver!", e);
+                            StatusMessageHandler.showStatusMessage(context,
+                                    context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
+                        } catch (GatewayNotSupportedException e) {
+                            Log.e("Gateway not supported by Receiver!", e);
+                            StatusMessageHandler.showStatusMessage(context,
+                                    context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
+                        }
+                    }
+
                     DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
                 }
             }

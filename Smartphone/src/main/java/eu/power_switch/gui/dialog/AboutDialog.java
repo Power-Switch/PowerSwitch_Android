@@ -23,11 +23,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.log.Log;
@@ -46,7 +46,7 @@ public class AboutDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         rootView = inflater.inflate(R.layout.dialog_about, null);
 
-        AppCompatTextView aboutTextView = (AppCompatTextView) rootView.findViewById(R.id.textView_about);
+        TextView aboutTextView = (TextView) rootView.findViewById(R.id.textView_about);
         aboutTextView.setMovementMethod(LinkMovementMethod.getInstance());
         String htmlSource = getString(R.string.version) + ": " + getString(R.string.app_version)
                 + "\n\n" + getString(R.string.app_about) + "\n\n" + getString(R.string.app_changelog);

@@ -35,7 +35,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -44,6 +43,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,7 +95,7 @@ public class BackupFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);
 
-        AppCompatTextView textViewBackupPath = (AppCompatTextView) rootView.findViewById(R.id.textView_backupPath);
+        TextView textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
         textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
 
         backups = new ArrayList<>();

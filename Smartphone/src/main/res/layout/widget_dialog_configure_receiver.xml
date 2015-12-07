@@ -24,31 +24,31 @@
     android:layout_margin="8dp"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/TextView_widgetRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/room"
         android:textColor="@color/accent_blue_a700"/>
 
-    <android.support.v7.widget.AppCompatSpinner
+    <Spinner
         android:id="@+id/Spinner_widgetRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textView_widgetSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/receiver"
         android:textColor="@color/accent_blue_a700"/>
 
-    <android.support.v7.widget.AppCompatSpinner
+    <Spinner
         android:id="@+id/spinner_widgetSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/button_widgetSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

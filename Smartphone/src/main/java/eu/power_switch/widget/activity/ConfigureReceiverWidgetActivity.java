@@ -25,8 +25,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatSpinner;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -35,6 +33,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.RemoteViews;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -56,8 +55,8 @@ import eu.power_switch.widget.WidgetIntentReceiver;
  */
 public class ConfigureReceiverWidgetActivity extends Activity {
 
-    private AppCompatSpinner spinnerRoom;
-    private AppCompatSpinner spinnerReceiver;
+    private Spinner spinnerRoom;
+    private Spinner spinnerReceiver;
 
     private List<Room> roomsList;
 
@@ -68,8 +67,8 @@ public class ConfigureReceiverWidgetActivity extends Activity {
 
         setContentView(R.layout.widget_dialog_configure_receiver);
 
-        spinnerRoom = (AppCompatSpinner) findViewById(R.id.Spinner_widgetRoom);
-        spinnerReceiver = (AppCompatSpinner) findViewById(R.id.spinner_widgetSwitch);
+        spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
+        spinnerReceiver = (Spinner) findViewById(R.id.spinner_widgetSwitch);
 
         roomsList = DatabaseHandler.getAllRooms();
 
@@ -109,7 +108,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
             }
         });
 
-        AppCompatButton save = (AppCompatButton) findViewById(R.id.button_widgetSave);
+        android.widget.Button save = (android.widget.Button) findViewById(R.id.button_widgetSave);
         save.setOnClickListener(new OnClickListener() {
 
             @Override

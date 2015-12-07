@@ -29,12 +29,12 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class CreateRoomDialog extends DialogFragment {
     private Dialog dialog;
     private int defaultTextColor;
     private View view;
-    private AppCompatEditText name;
+    private EditText name;
     private TextInputLayout floatingName;
     private LinkedList<String> roomNames;
 
@@ -80,7 +80,7 @@ public class CreateRoomDialog extends DialogFragment {
 
         floatingName = (TextInputLayout) view.findViewById(R.id.room_name_text_input_layout);
 
-        name = (AppCompatEditText) view.findViewById(R.id.editText_room_name);
+        name = (EditText) view.findViewById(R.id.editText_room_name);
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {

@@ -98,7 +98,7 @@ public class MainTabFragment extends Fragment {
                 case SettingsConstants.SAA_TAB_INDEX:
                     return new SleepAsAndroidFragment();
                 default:
-                    return null;
+                    return new RoomsFragment();
             }
         }
 

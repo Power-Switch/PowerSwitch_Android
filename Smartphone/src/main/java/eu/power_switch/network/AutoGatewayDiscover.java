@@ -84,7 +84,7 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
                 String hostAddress = packet.getAddress().getHostAddress();
 
                 try {
-                    // TODO: das ITGW schickt eine falsche IP mit, daher tausche ich sie aus, wenn sie nicht der HostIP
+                    // Das ITGW schickt eine falsche IP mit, daher tausche ich sie aus, wenn sie nicht der HostIP
                     // entspricht
 
                     // read IP address version

@@ -172,7 +172,6 @@ public abstract class Receiver {
                 return entry.getKey();
             }
         }
-        // TODO Exception?
         return null;
     }
 

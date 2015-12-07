@@ -164,8 +164,6 @@ public class RoomsActivity extends WearableActivity {
     private void refreshUI() {
         if (roomList.isEmpty()) {
             finish();
-        } else {
-            // TODO
         }
         roomsRecyclerViewAdapter.notifyDataSetChanged();
     }

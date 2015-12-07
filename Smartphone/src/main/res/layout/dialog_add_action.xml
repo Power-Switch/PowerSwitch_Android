@@ -27,7 +27,7 @@
     android:paddingRight="@dimen/dialog_horizontal_margin"
     android:paddingTop="@dimen/dialog_margin_top">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,38 +71,38 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/room"
             android:textColor="@color/accent_blue_a700"/>
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/spinner_receiver_action_room"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/timer_action_spinner_height"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/receiver"
             android:textColor="@color/accent_blue_a700"/>
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/spinner_receiver_action_receiver"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/timer_action_spinner_height"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/button"
             android:textColor="@color/accent_blue_a700"/>
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/spinner_receiver_action_button"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/timer_action_spinner_height"/>
@@ -116,26 +116,26 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/room"
             android:textColor="@color/accent_blue_a700"/>
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/spinner_room_action_room"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/timer_action_spinner_height"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/button"
             android:textColor="@color/accent_blue_a700"/>
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/spinner_room_action_button"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/timer_action_spinner_height"/>
@@ -149,14 +149,14 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/scene"
             android:textColor="@color/accent_blue_a700"/>
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/spinner_scene_action_scene"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/timer_action_spinner_height"/>

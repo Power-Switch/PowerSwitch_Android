@@ -30,7 +30,7 @@
 
         <TableRow>
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/textView_brand"
                 style="@style/sub_header"
                 android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                 android:paddingLeft="@dimen/dialog_horizontal_margin"
                 android:text="@string/brand"/>
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/textView_model"
                 style="@style/sub_header"
                 android:layout_width="match_parent"

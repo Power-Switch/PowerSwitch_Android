@@ -28,7 +28,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -36,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -62,7 +62,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     private ArrayList<Action> actions;
     private RecyclerView recyclerViewActions;
     private ActionRecyclerViewAdapter recyclerViewAdapter;
-    private AppCompatSpinner spinnerEventType;
+    private Spinner spinnerEventType;
     private FloatingActionButton addActionFAB;
 
     @Override
@@ -72,7 +72,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        spinnerEventType = (AppCompatSpinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
+        spinnerEventType = (Spinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.sleep_as_android_event_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

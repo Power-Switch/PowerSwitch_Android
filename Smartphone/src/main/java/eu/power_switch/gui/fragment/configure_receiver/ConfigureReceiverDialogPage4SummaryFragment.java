@@ -33,6 +33,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -80,19 +81,19 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
 
     private BroadcastReceiver broadcastReceiver;
 
-    private AppCompatTextView name;
-    private AppCompatTextView roomName;
-    private AppCompatTextView brand;
-    private AppCompatTextView model;
-    private AppCompatTextView channelMaster;
-    private AppCompatTextView channelSlave;
+    private TextView name;
+    private TextView roomName;
+    private TextView brand;
+    private TextView model;
+    private TextView channelMaster;
+    private TextView channelSlave;
     private LinearLayout linearLayoutMasterSlaveReceiver;
     private LinearLayout linearLayoutDipReceiver;
     private LinearLayout linearLayoutUniversalReceiver;
     private LinearLayout linearLayoutDips;
     private LinearLayout linearLayoutUniversalButtons;
     private LinearLayout linearLayoutAutoPairReceiver;
-    private AppCompatTextView seed;
+    private TextView seed;
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -151,12 +152,12 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
             }
         };
 
-        name = (AppCompatTextView) rootView.findViewById(R.id.textView_name);
-        roomName = (AppCompatTextView) rootView.findViewById(R.id.textView_roomName);
-        brand = (AppCompatTextView) rootView.findViewById(R.id.textView_brand);
-        model = (AppCompatTextView) rootView.findViewById(R.id.textView_model);
-        channelMaster = (AppCompatTextView) rootView.findViewById(R.id.textView_channelMaster);
-        channelSlave = (AppCompatTextView) rootView.findViewById(R.id.textView_channelSlave);
+        name = (TextView) rootView.findViewById(R.id.textView_name);
+        roomName = (TextView) rootView.findViewById(R.id.textView_roomName);
+        brand = (TextView) rootView.findViewById(R.id.textView_brand);
+        model = (TextView) rootView.findViewById(R.id.textView_model);
+        channelMaster = (TextView) rootView.findViewById(R.id.textView_channelMaster);
+        channelSlave = (TextView) rootView.findViewById(R.id.textView_channelSlave);
 
         linearLayoutMasterSlaveReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_masterSlaveReceiver);
 
@@ -164,7 +165,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         linearLayoutDips = (LinearLayout) rootView.findViewById(R.id.linearLayout_dips);
 
         linearLayoutAutoPairReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_autoPair);
-        seed = (AppCompatTextView) rootView.findViewById(R.id.textView_seed);
+        seed = (TextView) rootView.findViewById(R.id.textView_seed);
 
         linearLayoutUniversalReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalReceiver);
         linearLayoutUniversalButtons = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalButtons);
@@ -229,8 +230,8 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
                 switchCompat.setChecked(dipSwitch.isChecked());
                 switchCompat.setClickable(false);
 
-                linearLayoutDips.addView(switchCompat, new ViewGroup.LayoutParams(ViewGroup.LayoutParams
-                        .WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                linearLayoutDips.addView(switchCompat, new LinearLayout.LayoutParams(LinearLayout.LayoutParams
+                        .WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             }
         }
 
@@ -246,8 +247,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
                         + "Signal: " + universalButton.getSignal());
                 linearLayout.addView(textView);
 
-                linearLayoutUniversalButtons.addView(linearLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams
-                        .MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                linearLayoutUniversalButtons.addView(linearLayout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             }
         }
     }

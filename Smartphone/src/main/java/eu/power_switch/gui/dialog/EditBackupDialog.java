@@ -27,12 +27,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
@@ -53,7 +53,7 @@ public class EditBackupDialog extends DialogFragment {
     private Dialog dialog;
     private int defaultTextColor;
     private View rootView;
-    private AppCompatEditText name;
+    private EditText name;
 
     @NonNull
     @Override
@@ -69,7 +69,7 @@ public class EditBackupDialog extends DialogFragment {
         builder.setView(rootView);
 
         // restore name
-        name = (AppCompatEditText) rootView.findViewById(R.id.editText_backup_name);
+        name = (EditText) rootView.findViewById(R.id.editText_backup_name);
         name.setText(backupName);
         name.addTextChangedListener(new TextWatcher() {
 

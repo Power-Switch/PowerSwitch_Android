@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <android.support.v7.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/txt_room_name"
                     style="@style/sub_header"
                     android:layout_width="0dp"

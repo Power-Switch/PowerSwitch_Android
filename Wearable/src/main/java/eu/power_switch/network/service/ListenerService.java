@@ -203,7 +203,8 @@ public class ListenerService extends WearableListenerService {
 
                     // send data to Activity
                     sendDataUpdatedBroadcast(rooms, scenes);
-                } else if (event.getType() == DataEvent.TYPE_CHANGED
+                }
+                if (event.getType() == DataEvent.TYPE_CHANGED
                         && WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
 
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
@@ -212,7 +213,6 @@ public class ListenerService extends WearableListenerService {
 
                     extractSettings(settings);
                     // TODO: notify app about changes
-
                 }
             }
         }

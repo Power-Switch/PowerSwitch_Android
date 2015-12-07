@@ -24,9 +24,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import java.math.BigInteger;
@@ -70,10 +70,10 @@ public class DonationDialog extends DialogFragment {
     public static IabHelper iapHelper;
     private View rootView;
 
-    private AppCompatButton donate10;
-    private AppCompatButton donate5;
-    private AppCompatButton donate2;
-    private AppCompatButton donate1;
+    private Button donate10;
+    private Button donate5;
+    private Button donate2;
+    private Button donate1;
     private LinearLayout layoutDonationButtons;
     private LinearLayout layoutLoading;
 
@@ -113,13 +113,13 @@ public class DonationDialog extends DialogFragment {
         layoutLoading = (LinearLayout) rootView.findViewById(R.id.layout_loading);
 
         layoutDonationButtons = (LinearLayout) rootView.findViewById(R.id.layout_donate_buttons);
-        donate10 = (AppCompatButton) rootView.findViewById(R.id.button_donate_10);
+        donate10 = (Button) rootView.findViewById(R.id.button_donate_10);
         donate10.setOnClickListener(onClickListener);
-        donate5 = (AppCompatButton) rootView.findViewById(R.id.button_donate_5);
+        donate5 = (Button) rootView.findViewById(R.id.button_donate_5);
         donate5.setOnClickListener(onClickListener);
-        donate2 = (AppCompatButton) rootView.findViewById(R.id.button_donate_2);
+        donate2 = (Button) rootView.findViewById(R.id.button_donate_2);
         donate2.setOnClickListener(onClickListener);
-        donate1 = (AppCompatButton) rootView.findViewById(R.id.button_donate_1);
+        donate1 = (Button) rootView.findViewById(R.id.button_donate_1);
         donate1.setOnClickListener(onClickListener);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -46,13 +46,13 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/txt_backup_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <TextView
                     android:id="@+id/txt_backup_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -24,18 +24,18 @@
     android:layout_margin="8dp"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/TextView_widgetScene"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/scenes"/>
 
-    <android.support.v7.widget.AppCompatSpinner
+    <Spinner
         android:id="@+id/Spinner_widgetScene"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/button_widgetSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

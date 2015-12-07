@@ -130,7 +130,6 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 }
 
                 if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
-                    // TODO: rerender buttons
                     notifyDataSetChanged();
                 }
             }

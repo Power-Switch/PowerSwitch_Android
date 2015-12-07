@@ -78,34 +78,37 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
 
             StatusMessageHandler.showStatusMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
-            NetworkPackage networkPackage;
+            NetworkPackage currentNetworkPackage;
             while (NetworkHandler.networkPackagesQueue.size() > 0) {
 
                 synchronized (NetworkHandler.networkPackagesQueue) {
-                    networkPackage = NetworkHandler.networkPackagesQueue.get(0);
+                    currentNetworkPackage = NetworkHandler.networkPackagesQueue.get(0);
                 }
                 try {
-                    send(networkPackage);
+                    send(currentNetworkPackage);
+
+                    int delay = 1000;
                     synchronized (NetworkHandler.networkPackagesQueue) {
                         // remove NetworkPackage from queue
                         NetworkHandler.networkPackagesQueue.remove(0);
+
+                        // calculate time to wait before sending next package
+                        if (NetworkHandler.networkPackagesQueue.size() > 1) {
+                            NetworkPackage nextNetworkPackage = NetworkHandler.networkPackagesQueue.get(1);
+                            if (currentNetworkPackage.getHost().equals(nextNetworkPackage.getHost()) &&
+                                    currentNetworkPackage.getPort() == nextNetworkPackage.getPort()) {
+                                // if same gateway, wait gateway-specific time
+                                Log.d("Waiting Gateway specific time (" + currentNetworkPackage.getTimeout() + "ms) " +
+                                        "before sending next signal...");
+                                delay = currentNetworkPackage.getTimeout();
+                            }
+                        } else {
+                            delay = currentNetworkPackage.getTimeout();
+                        }
                     }
 
-//                    if (NetworkHandler.networkPackagesQueue.size() > 0) {
-                    // Wait before sending the next one
-                    // TODO: cant really access the next element when using iterator
-//                        if (networkPackage.getHost().equals(networkPackages[i + 1].getHost()) && networkPackage
-//                                .getPort() == networkPackages[i + 1].getPort()) {
-//                            // if same gateway, wait gateway-specific time
-//                            Log.d("Waiting Gateway specific time (" + networkPackage.getTimeout() + "ms) " +
-//                                    "before sending next signal...");
-//                            Thread.sleep(networkPackage.getTimeout());
-//                        } else {
-                    // else wait for the previous gateway to finish sending the signal
                     Log.d("Waiting for Gateway to finish sending Signal before sending next...");
-                    Thread.sleep(1000);
-//                        }
-//                    }
+                    Thread.sleep(delay);
                 } catch (UnknownHostException e) {
                     StatusMessageHandler.showStatusMessage(context, R.string.unknown_host, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender", e);

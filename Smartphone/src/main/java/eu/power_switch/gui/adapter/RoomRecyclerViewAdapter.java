@@ -24,8 +24,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +150,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     return;
                 }
 
-                AppCompatButton buttonView = (AppCompatButton) v;
+                android.widget.Button buttonView = (android.widget.Button) v;
                 String buttonName = buttonView.getText().toString();
 
                 // send signal
@@ -214,7 +213,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             holder.linearLayoutOfReceivers.addView(receiverLayout);
 
             // setup TextView to display device name
-            AppCompatTextView receiverName = (AppCompatTextView) receiverLayout.findViewById(R.id.txt_receiver_name);
+            TextView receiverName = (TextView) receiverLayout.findViewById(R.id.txt_receiver_name);
             receiverName.setText(receiver.getName());
             receiverName.setTextSize(18);
 
@@ -227,11 +226,11 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             }
 
             int i = 0;
-            final ArrayList<AppCompatButton> buttonViews = new ArrayList<>();
+            final ArrayList<android.widget.Button> buttonViews = new ArrayList<>();
             long lastActivatedButtonId = receiver.getLastActivatedButtonId();
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
-                final AppCompatButton buttonView = (AppCompatButton) inflater
+                final android.widget.Button buttonView = (android.widget.Button) inflater
                         .inflate(R.layout.simple_button,
                                 buttonRow, false);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
@@ -242,7 +241,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                 () == lastActivatedButtonId) {
                     buttonView.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.accent_blue_a700));
                 }
-                buttonView.setOnClickListener(new AppCompatButton.OnClickListener() {
+                buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
@@ -280,7 +279,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         receiver.setLastActivatedButtonId(button.getId());
 
                         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
-                            for (AppCompatButton button : buttonViews) {
+                            for (android.widget.Button button : buttonViews) {
                                 if (button != v) {
                                     button.setTextColor(defaultTextColor);
                                 } else {
@@ -332,9 +331,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public AppCompatTextView roomName;
-        public AppCompatButton buttonAllOn;
-        public AppCompatButton buttonAllOff;
+        public TextView roomName;
+        public android.widget.Button buttonAllOn;
+        public android.widget.Button buttonAllOff;
         public LinearLayout linearLayoutOfReceivers;
         public LinearLayout footer;
 
@@ -342,9 +341,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            this.roomName = (AppCompatTextView) itemView.findViewById(R.id.txt_room_name);
-            this.buttonAllOn = (AppCompatButton) itemView.findViewById(R.id.button_AllOn);
-            this.buttonAllOff = (AppCompatButton) itemView.findViewById(R.id.button_AllOff);
+            this.roomName = (TextView) itemView.findViewById(R.id.txt_room_name);
+            this.buttonAllOn = (android.widget.Button) itemView.findViewById(R.id.button_AllOn);
+            this.buttonAllOff = (android.widget.Button) itemView.findViewById(R.id.button_AllOff);
             this.linearLayoutOfReceivers = (LinearLayout) itemView.findViewById(R.id.layout_of_receivers);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
         }

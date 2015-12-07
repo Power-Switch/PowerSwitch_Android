@@ -23,7 +23,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textView_brand"
         style="@style/sub_header"
         android:layout_marginTop="@dimen/title_margin_top"
@@ -38,7 +38,7 @@
         android:layout_weight="1"
         android:choiceMode="singleChoice"/>
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textView_model"
         style="@style/sub_header"
         android:layout_marginTop="@dimen/title_margin_top"

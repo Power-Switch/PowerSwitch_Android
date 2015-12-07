@@ -20,14 +20,14 @@ package eu.power_switch.gui.fragment.settings;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
@@ -45,11 +45,11 @@ public class WearableSettingsFragment extends Fragment {
 
     private View rootView;
 
-    private AppCompatCheckBox autoCollapseRooms;
+    private CheckBox autoCollapseRooms;
     private LinearLayout vibrationDurationLayout;
-    private AppCompatCheckBox vibrateOnButtonPress;
-    private AppCompatEditText vibrationDuration;
-    private AppCompatCheckBox highlightLastActivatedButton;
+    private CheckBox vibrateOnButtonPress;
+    private EditText vibrationDuration;
+    private CheckBox highlightLastActivatedButton;
 
     private RadioButton radioButtonDarkBlue;
     private RadioButton radioButtonLightBlue;
@@ -86,17 +86,17 @@ public class WearableSettingsFragment extends Fragment {
             }
         };
 
-        autoCollapseRooms = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
+        autoCollapseRooms = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
         autoCollapseRooms.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        highlightLastActivatedButton = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
+        highlightLastActivatedButton = (CheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
         highlightLastActivatedButton.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        vibrateOnButtonPress = (AppCompatCheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
+        vibrateOnButtonPress = (CheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
         vibrateOnButtonPress.setOnCheckedChangeListener(onCheckedChangeListener);
 
         vibrationDurationLayout = (LinearLayout) rootView.findViewById(R.id.linearLayout_vibrationDuration);
-        vibrationDuration = (AppCompatEditText) rootView.findViewById(R.id.editText_vibrationDuration);
+        vibrationDuration = (EditText) rootView.findViewById(R.id.editText_vibrationDuration);
         vibrationDuration.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

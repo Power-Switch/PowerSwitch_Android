@@ -28,7 +28,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
@@ -211,7 +210,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
 
         // AutoPair
         layoutAutoPair = (LinearLayout) rootView.findViewById(R.id.linearLayout_autoPair);
-        AppCompatButton buttonPair = (AppCompatButton) rootView.findViewById(R.id.button_pair);
+        android.widget.Button buttonPair = (android.widget.Button) rootView.findViewById(R.id.button_pair);
         buttonPair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,7 +252,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 NetworkHandler.send(networkPackages);
             }
         });
-        AppCompatButton buttonUnpair = (AppCompatButton) rootView.findViewById(R.id.button_unpair);
+        android.widget.Button buttonUnpair = (android.widget.Button) rootView.findViewById(R.id.button_unpair);
         buttonUnpair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -295,7 +294,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 NetworkHandler.send(networkPackages);
             }
         });
-        AppCompatButton buttonUnpairAll = (AppCompatButton) rootView.findViewById(R.id.button_unpairAll);
+        android.widget.Button buttonUnpairAll = (android.widget.Button) rootView.findViewById(R.id.button_unpairAll);
         buttonUnpairAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

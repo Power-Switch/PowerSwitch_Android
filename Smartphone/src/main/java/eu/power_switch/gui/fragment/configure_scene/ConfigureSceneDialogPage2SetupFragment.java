@@ -28,7 +28,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -39,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -284,21 +284,21 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
                     receiverSceneItemHashMap.put(receiver.getId(), new SceneItem(receiver, receiver.getButtons()
                             .getFirst()));
                 }
-                final ArrayList<AppCompatButton> buttonList = new ArrayList<>();
+                final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
                 for (Button button : receiver.getButtons()) {
-                    AppCompatButton buttonView = (AppCompatButton) inflater.inflate(R.layout.simple_button, null, false);
+                    android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, null, false);
                     buttonList.add(buttonView);
 
                     if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId() == button.getId()) {
                         buttonView.setTextColor(getResources().getColor(R.color.accent_blue_a700));
                     }
                     buttonView.setText(button.getName());
-                    buttonView.setOnClickListener(new AppCompatButton.OnClickListener() {
+                    buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
                             sendSetupSceneChangedBroadcast(context);
-                            for (AppCompatButton button : buttonList) {
+                            for (android.widget.Button button : buttonList) {
                                 if (button == v) {
                                     button.setTextColor(getResources().getColor(R.color.accent_blue_a700));
 
@@ -337,12 +337,12 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public AppCompatTextView roomName;
+            public TextView roomName;
             public LinearLayout linearLayoutOfReceivers;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
-                this.roomName = (AppCompatTextView) itemView.findViewById(R.id.txt_room_name);
+                this.roomName = (TextView) itemView.findViewById(R.id.txt_room_name);
                 this.linearLayoutOfReceivers = (LinearLayout) itemView.findViewById(R.id.layout_of_receivers);
             }
         }

@@ -30,52 +30,52 @@
         android:paddingLeft="@dimen/dialog_horizontal_margin"
         android:paddingRight="@dimen/dialog_horizontal_margin">
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_name_title"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/name"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/ui_element_margin_double"
             android:layout_marginTop="@dimen/title_margin_top"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_time_title"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/time"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/ui_element_margin_double"
             android:layout_marginTop="@dimen/title_margin_top"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_execution_days_title"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/weekdays"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_execution_days"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/ui_element_margin_double"
             android:layout_marginTop="@dimen/title_margin_top"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_action_title"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/actions"/>
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

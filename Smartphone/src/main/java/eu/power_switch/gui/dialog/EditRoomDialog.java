@@ -27,7 +27,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -37,6 +36,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
 
     private View rootView;
     private String originalName;
-    private AppCompatEditText name;
+    private EditText name;
     private TextInputLayout floatingName;
     private ImageButton imageButtonSave;
     private ImageButton imageButtonCancel;
@@ -97,7 +97,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
 
         // restore name
         floatingName = (TextInputLayout) rootView.findViewById(R.id.room_name_text_input_layout);
-        name = (AppCompatEditText) rootView.findViewById(R.id.editText_room_name);
+        name = (EditText) rootView.findViewById(R.id.editText_room_name);
         name.setText(originalName);
         name.addTextChangedListener(new TextWatcher() {
 
@@ -125,7 +125,6 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         listOfReceivers.setLayoutManager(linearLayoutManager);
         listOfReceivers.setAdapter(adapter);
 
-        // TODO: interface evtl. in ArrayAdapter verschieben?
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listOfReceivers);

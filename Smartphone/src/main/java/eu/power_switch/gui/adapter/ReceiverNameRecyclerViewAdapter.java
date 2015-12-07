@@ -21,7 +21,6 @@ package eu.power_switch.gui.adapter;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -106,13 +106,13 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
 
     public class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         public LinearLayout mainLayout;
-        public AppCompatTextView receiverName;
+        public TextView receiverName;
         public ImageView dragHandle;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.mainLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_main);
-            this.receiverName = (AppCompatTextView) itemView.findViewById(R.id.txt_receiver_name);
+            this.receiverName = (TextView) itemView.findViewById(R.id.txt_receiver_name);
             this.dragHandle = (ImageView) itemView.findViewById(R.id.drag_handle);
         }
 

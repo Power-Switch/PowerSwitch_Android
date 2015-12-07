@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/ui_element_margin">
 
-        <android.support.v7.widget.AppCompatEditText
+        <EditText
             android:id="@+id/editText_room_name"
             android:layout_width="match_parent"
             android:layout_height="@dimen/ui_element_height"
@@ -39,11 +39,11 @@
 
             <requestFocus/>
 
-        </android.support.v7.widget.AppCompatEditText>
+        </EditText>
 
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:id="@+id/textView_order_title"
         style="@style/sub_header"
         android:layout_marginBottom="@dimen/title_margin_top"

@@ -32,7 +32,7 @@
 
         <TableRow>
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/textView_channelMaster"
                 style="@style/sub_header"
                 android:layout_width="match_parent"
@@ -40,7 +40,7 @@
                 android:paddingLeft="@dimen/dialog_horizontal_margin"
                 android:text="@string/channelMaster"/>
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/textView_channelSlave"
                 style="@style/sub_header"
                 android:layout_width="match_parent"
@@ -77,7 +77,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/textView_dips"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
@@ -199,28 +199,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
             android:text="@string/pair_manual"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <Button
             android:id="@+id/button_pair"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
             android:layout_gravity="center_horizontal"
             android:text="@string/pair"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <Button
             android:id="@+id/button_unpair"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
             android:layout_gravity="center_horizontal"
             android:text="@string/unpair"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <Button
             android:id="@+id/button_unpairAll"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
@@ -240,7 +240,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
                 android:id="@+id/TextView_universalButtons"
                 style="@style/sub_header"
                 android:layout_height="0dp"

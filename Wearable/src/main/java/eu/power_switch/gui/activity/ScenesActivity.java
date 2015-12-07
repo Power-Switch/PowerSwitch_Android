@@ -165,8 +165,6 @@ public class ScenesActivity extends WearableActivity {
     private void refreshUI() {
         if (sceneList.isEmpty()) {
             finish();
-        } else {
-            // TODO
         }
         sceneRecyclerViewAdapter.notifyDataSetChanged();
     }
