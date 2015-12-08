@@ -46,6 +46,7 @@ import java.util.HashMap;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.receiver.Button;
@@ -110,8 +111,8 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         recyclerViewSelectedReceivers.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("SceneId")) {
-            currentId = args.getLong("SceneId");
+        if (args != null && args.containsKey(ConfigureSceneDialog.SCENE_ID_KEY)) {
+            currentId = args.getLong(ConfigureSceneDialog.SCENE_ID_KEY);
             initializeSceneData(currentId);
         }
         checkValidity();

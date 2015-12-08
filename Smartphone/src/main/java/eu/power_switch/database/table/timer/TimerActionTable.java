@@ -61,6 +61,7 @@ public class TimerActionTable {
                 onCreate(db);
             case 7:
             case 8:
+                // upgrading data happens in Database.java
                 onCreate(db);
         }
     }

@@ -99,7 +99,6 @@ public class Database extends SQLiteOpenHelper {
             case 4:
             case 5:
                 break;
-
         }
 
         GatewayTable.onUpgrade(db, oldVersion, newVersion);
@@ -129,7 +128,6 @@ public class Database extends SQLiteOpenHelper {
         ReceiverActionTable.onUpgrade(db, oldVersion, newVersion);
         RoomActionTable.onUpgrade(db, oldVersion, newVersion);
         SceneActionTable.onUpgrade(db, oldVersion, newVersion);
-
 
         switch (oldVersion) {
             case 1:
@@ -232,7 +230,7 @@ public class Database extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE IF EXISTS " + "timer_scene_action");
 
                 // drop old table
-                db.execSQL("DROP TABLE timer_action");
+                db.execSQL("DROP TABLE IF EXISTS timer_action");
                 break;
         }
     }

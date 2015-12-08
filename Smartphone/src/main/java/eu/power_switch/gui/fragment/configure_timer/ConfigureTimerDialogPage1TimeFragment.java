@@ -38,6 +38,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
@@ -107,8 +108,8 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
         });
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("TimerId")) {
-            long timerId = args.getLong("TimerId");
+        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
+            long timerId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
             initializeTimerData(timerId);
         }
 

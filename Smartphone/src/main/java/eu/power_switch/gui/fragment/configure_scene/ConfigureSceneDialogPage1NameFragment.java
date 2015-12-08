@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.obj.receiver.Scene;
 import eu.power_switch.obj.receiver.SceneItem;
@@ -107,8 +108,8 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         addReceiversToLayout();
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("SceneId")) {
-            long sceneId = args.getLong("SceneId");
+        if (args != null && args.containsKey(ConfigureSceneDialog.SCENE_ID_KEY)) {
+            long sceneId = args.getLong(ConfigureSceneDialog.SCENE_ID_KEY);
             initializeSceneData(sceneId);
         }
 

@@ -57,10 +57,8 @@ public class AutoPairTable {
             case 5:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
-
                 break;
 
         }
     }
-
 }

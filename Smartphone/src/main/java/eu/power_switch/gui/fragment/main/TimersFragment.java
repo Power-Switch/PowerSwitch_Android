@@ -95,7 +95,7 @@ public class TimersFragment extends RecyclerViewFragment {
 
                 ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
                 Bundle sceneData = new Bundle();
-                sceneData.putLong("TimerId", timer.getId());
+                sceneData.putLong(ConfigureTimerDialog.TIMER_ID_KEY, timer.getId());
                 configureTimerDialog.setArguments(sceneData);
                 configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureTimerDialog.show(getFragmentManager(), null);

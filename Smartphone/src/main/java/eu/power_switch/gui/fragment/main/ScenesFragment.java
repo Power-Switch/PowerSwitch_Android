@@ -97,7 +97,7 @@ public class ScenesFragment extends RecyclerViewFragment {
 
                 ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
                 Bundle sceneData = new Bundle();
-                sceneData.putLong("SceneId", scene.getId());
+                sceneData.putLong(ConfigureSceneDialog.SCENE_ID_KEY, scene.getId());
                 configureSceneDialog.setArguments(sceneData);
                 configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureSceneDialog.show(getFragmentManager(), null);

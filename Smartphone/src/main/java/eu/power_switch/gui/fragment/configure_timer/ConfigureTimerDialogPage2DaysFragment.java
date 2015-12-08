@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -101,8 +102,8 @@ public class ConfigureTimerDialogPage2DaysFragment extends Fragment {
         toggleButtonSunday.setOnCheckedChangeListener(onCheckedChangeListener);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("TimerId")) {
-            long timerId = args.getLong("TimerId");
+        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
+            long timerId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
             initializeTimerData(timerId);
         }
 

@@ -44,6 +44,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
@@ -173,8 +174,8 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         updateUi();
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("ReceiverId")) {
-            long receiverId = args.getLong("ReceiverId");
+        if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
+            long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
             currentId = receiverId;
             initializeReceiverData(receiverId);
         }

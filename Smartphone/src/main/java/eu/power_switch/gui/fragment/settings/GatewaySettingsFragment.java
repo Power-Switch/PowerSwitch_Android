@@ -45,8 +45,7 @@ import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
-import eu.power_switch.gui.dialog.CreateGatewayDialog;
-import eu.power_switch.gui.dialog.EditGatewayDialog;
+import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
@@ -91,9 +90,9 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
                 switch (view.getId()) {
                     case R.id.add_gateway_fab:
-                        CreateGatewayDialog createGatewayDialog = new CreateGatewayDialog();
-                        createGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
-                        createGatewayDialog.show(getFragmentManager(), null);
+                        ConfigureGatewayDialog configureGatewayDialog = new ConfigureGatewayDialog();
+                        configureGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
+                        configureGatewayDialog.show(getFragmentManager(), null);
                         break;
                     case R.id.search_gateway_fab:
                         startAutoDiscovery();
@@ -117,17 +116,12 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, int position) {
                 Gateway gateway = gateways.get(position);
 
+                ConfigureGatewayDialog configureGatewayDialog = new ConfigureGatewayDialog();
                 Bundle gatewayData = new Bundle();
-                gatewayData.putLong("id", gateway.getId());
-                gatewayData.putString("name", gateway.getName());
-                gatewayData.putString("model", gateway.getModelAsString());
-                gatewayData.putString("address", gateway.getHost());
-                gatewayData.putInt("port", gateway.getPort());
-
-                EditGatewayDialog dia = new EditGatewayDialog();
-                dia.setTargetFragment(recyclerViewFragment, 0);
-                dia.setArguments(gatewayData);
-                dia.show(getFragmentManager(), null);
+                gatewayData.putLong(ConfigureGatewayDialog.GATEWAY_ID_KEY, gateway.getId());
+                configureGatewayDialog.setArguments(gatewayData);
+                configureGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
+                configureGatewayDialog.show(getFragmentManager(), null);
             }
         });
         recyclerViewGateways.setAdapter(gatewayRecyclerViewAdapter);
@@ -244,9 +238,9 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_gateway:
-                CreateGatewayDialog createGatewayDialog = new CreateGatewayDialog();
-                createGatewayDialog.setTargetFragment(this, 0);
-                createGatewayDialog.show(getFragmentManager(), null);
+                ConfigureGatewayDialog configureGatewayDialog = new ConfigureGatewayDialog();
+                configureGatewayDialog.setTargetFragment(this, 0);
+                configureGatewayDialog.show(getFragmentManager(), null);
             case R.id.search_gateways:
                 startAutoDiscovery();
             default:

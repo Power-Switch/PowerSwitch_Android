@@ -64,6 +64,8 @@ import eu.power_switch.widget.provider.ReceiverWidgetProvider;
  */
 public class ConfigureReceiverDialog extends DialogFragment {
 
+    public static final String RECEIVER_ID_KEY = "ReceiverId";
+
     private BroadcastReceiver broadcastReceiver;
 
     private View rootView;
@@ -89,7 +91,7 @@ public class ConfigureReceiverDialog extends DialogFragment {
         Bundle args = getArguments();
         if (args != null && args.containsKey("ReceiverId")) {
             // init dialog using existing receiver
-            receiverId = args.getLong("ReceiverId");
+            receiverId = args.getLong(RECEIVER_ID_KEY);
             customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
                     getTargetFragment(), receiverId);
         } else {
@@ -378,7 +380,7 @@ public class ConfigureReceiverDialog extends DialogFragment {
 
             if (fragment != null && receiverId != -1) {
                 Bundle bundle = new Bundle();
-                bundle.putLong("ReceiverId", receiverId);
+                bundle.putLong(RECEIVER_ID_KEY, receiverId);
                 fragment.setArguments(bundle);
             }
 

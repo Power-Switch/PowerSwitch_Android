@@ -39,6 +39,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -112,8 +113,8 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
         textViewAction = (TextView) rootView.findViewById(R.id.textView_action);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("TimerId")) {
-            currentId = args.getLong("TimerId");
+        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
+            currentId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
             initializeTimerData(currentId);
         }
 

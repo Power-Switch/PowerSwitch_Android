@@ -44,6 +44,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.receiver.ReceiverAlreadyExistsException;
+import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.obj.receiver.device.Receiver;
@@ -159,8 +160,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
         });
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("ReceiverId")) {
-            long receiverId = args.getLong("ReceiverId");
+        if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
+            long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
             initializeReceiverData(receiverId);
         }
         checkValidity();

@@ -40,6 +40,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
+import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -110,8 +111,8 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
         recyclerViewTimerActions.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("TimerId")) {
-            long timerId = args.getLong("TimerId");
+        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
+            long timerId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
             initializeTimerData(timerId);
         }
 

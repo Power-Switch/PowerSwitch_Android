@@ -57,11 +57,9 @@ public class ReceiverActionTable {
             case 4:
             case 5:
             case 6:
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-                onCreate(db);
             case 7:
             case 8:
-                db.execSQL(TABLE_CREATE);
+                onCreate(db);
                 break;
 
         }

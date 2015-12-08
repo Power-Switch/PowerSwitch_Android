@@ -310,7 +310,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 public boolean onLongClick(View v) {
                     ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
                     Bundle bundle = new Bundle();
-                    bundle.putLong("ReceiverId", receiver.getId());
+                    bundle.putLong(ConfigureReceiverDialog.RECEIVER_ID_KEY, receiver.getId());
                     configureReceiverDialog.setArguments(bundle);
                     configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureReceiverDialog.show(fragmentActivity.getSupportFragmentManager(), null);

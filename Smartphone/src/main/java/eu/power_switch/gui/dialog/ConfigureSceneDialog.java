@@ -61,6 +61,8 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  */
 public class ConfigureSceneDialog extends DialogFragment {
 
+    public static final String SCENE_ID_KEY = "SceneId";
+
     private BroadcastReceiver broadcastReceiver;
 
     private View rootView;
@@ -87,7 +89,7 @@ public class ConfigureSceneDialog extends DialogFragment {
         Bundle args = getArguments();
         if (args != null && args.containsKey("SceneId")) {
             // init dialog using existing scene
-            sceneId = args.getLong("SceneId");
+            sceneId = args.getLong(SCENE_ID_KEY);
             customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
                     getTargetFragment(),
                     sceneId);
@@ -357,7 +359,7 @@ public class ConfigureSceneDialog extends DialogFragment {
 
             if (fragment != null && sceneId != -1) {
                 Bundle bundle = new Bundle();
-                bundle.putLong("SceneId", sceneId);
+                bundle.putLong(SCENE_ID_KEY, sceneId);
                 fragment.setArguments(bundle);
             }
 

@@ -61,6 +61,8 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureTimerDialog extends DialogFragment {
 
+    public static final String TIMER_ID_KEY = "TimerId";
+
     private BroadcastReceiver broadcastReceiver;
 
     private View rootView;
@@ -84,9 +86,9 @@ public class ConfigureTimerDialog extends DialogFragment {
         rootView = inflater.inflate(R.layout.dialog_configure_timer, container, false);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("TimerId")) {
+        if (args != null && args.containsKey(TIMER_ID_KEY)) {
             // init dialog using existing scene
-            timerId = args.getLong("TimerId");
+            timerId = args.getLong(TIMER_ID_KEY);
             customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
                     getTargetFragment(),
                     timerId);
@@ -365,7 +367,7 @@ public class ConfigureTimerDialog extends DialogFragment {
 
             if (fragment != null && timerId != -1) {
                 Bundle bundle = new Bundle();
-                bundle.putLong("TimerId", timerId);
+                bundle.putLong(TIMER_ID_KEY, timerId);
                 fragment.setArguments(bundle);
             }
 
