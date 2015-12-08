@@ -19,8 +19,6 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
@@ -42,15 +40,12 @@ import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Button;
 import eu.power_switch.obj.receiver.Scene;
 import eu.power_switch.obj.receiver.SceneItem;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -124,25 +119,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
                 if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.no_active_gateway,
-                            R.string.open_settings, new Runnable() {
-                                @Override
-                                public void run() {
-                                    MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
-                                            .getString(R.string.menu_settings));
-                                    SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
-                                    Bundle arguments = new Bundle();
-                                    arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
-                                    settingsTabFragment.setArguments(arguments);
-                                    fragmentActivity.getSupportFragmentManager()
-                                            .beginTransaction()
-                                            .setCustomAnimations(R.anim
-                                                    .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                                    .slide_in_left, android.R.anim.slide_out_right)
-                                            .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                                            .addToBackStack(null).commit();
-                                }
-                            }, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
                     return;
                 }
 

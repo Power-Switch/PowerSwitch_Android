@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatEditText;
@@ -51,9 +50,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
-import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.gateway.Gateway;
@@ -65,7 +62,6 @@ import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.obj.receiver.device.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -218,24 +214,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
                 if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showStatusMessage(getContext(), R
-                            .string.no_active_gateway, R.string.open_settings, new Runnable() {
-                        @Override
-                        public void run() {
-                            MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
-                                    .getString(R.string.menu_settings));
-                            SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
-                            Bundle arguments = new Bundle();
-                            arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim
-                                            .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                            .slide_in_left, android.R.anim.slide_out_right)
-                                    .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                                    .addToBackStack(null).commit();
-                        }
-                    }, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
                     return;
                 }
 
@@ -260,24 +239,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
                 if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showStatusMessage(getContext(), R
-                            .string.no_active_gateway, R.string.open_settings, new Runnable() {
-                        @Override
-                        public void run() {
-                            MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
-                                    .getString(R.string.menu_settings));
-                            SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
-                            Bundle arguments = new Bundle();
-                            arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim
-                                            .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                            .slide_in_left, android.R.anim.slide_out_right)
-                                    .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                                    .addToBackStack(null).commit();
-                        }
-                    }, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
                     return;
                 }
 
@@ -302,24 +264,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
                 if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showStatusMessage(getContext(), R
-                            .string.no_active_gateway, R.string.open_settings, new Runnable() {
-                        @Override
-                        public void run() {
-                            MainActivity.addToBackstack(SettingsTabFragment.class, getContext()
-                                    .getString(R.string.menu_settings));
-                            SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
-                            Bundle arguments = new Bundle();
-                            arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
-                            getActivity().getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .setCustomAnimations(R.anim
-                                            .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                            .slide_in_left, android.R.anim.slide_out_right)
-                                    .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                                    .addToBackStack(null).commit();
-                        }
-                    }, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
                     return;
                 }
 

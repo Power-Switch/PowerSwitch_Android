@@ -64,6 +64,8 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  */
 public class EditRoomDialog extends DialogFragment implements OnStartDragListener {
 
+    public static final String ROOM_ID_KEY = "RoomId";
+
     private boolean modified = false;
 
     private View rootView;
@@ -77,13 +79,17 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
     private Room currentRoom;
     private LinkedList<String> roomNames;
     private ItemTouchHelper itemTouchHelper;
+    private long roomId;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle roomData = getArguments();
-        final long roomId = roomData.getLong("id");
-        originalName = roomData.getString("name");
+        roomId = roomData.getLong(ROOM_ID_KEY);
+
+        currentRoom = DatabaseHandler.getRoom(roomId);
+        originalName = currentRoom.getName();
+
         List<Room> rooms = DatabaseHandler.getAllRooms();
         roomNames = new LinkedList<>();
         for (Room room : rooms) {
@@ -115,8 +121,6 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
                 checkValidity();
             }
         });
-
-        currentRoom = DatabaseHandler.getRoom(roomId);
 
         final ArrayList<Receiver> receiverList = new ArrayList<>(currentRoom.getReceivers());
         RecyclerView listOfReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
@@ -179,7 +183,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
                 if (!modified) {
                     getDialog().dismiss();
                 } else {
-                    DatabaseHandler.updateRoom(roomId, getRoomName());
+                    DatabaseHandler.updateRoom(roomId, getCurrentRoomName());
 
                     // save receiver order
                     for (int position = 0; position < receiverList.size(); position++) {
@@ -201,15 +205,15 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
     }
 
     private void checkValidity() {
-        if (getRoomName().equals(originalName)) {
+        if (getCurrentRoomName().equals(originalName)) {
             setSaveButtonState(true);
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);
-        } else if (getRoomName().length() <= 0) {
+        } else if (getCurrentRoomName().length() <= 0) {
             setSaveButtonState(false);
             floatingName.setError(getString(R.string.please_enter_name));
             floatingName.setErrorEnabled(true);
-        } else if (roomNames.contains(getRoomName())) {
+        } else if (roomNames.contains(getCurrentRoomName())) {
             setSaveButtonState(false);
             floatingName.setError(getString(R.string.room_already_exists));
             floatingName.setErrorEnabled(true);
@@ -251,7 +255,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         itemTouchHelper.startDrag(viewHolder);
     }
 
-    private String getRoomName() {
+    private String getCurrentRoomName() {
         return name.getText().toString().trim();
     }
 }

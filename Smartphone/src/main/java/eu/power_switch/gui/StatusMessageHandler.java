@@ -19,15 +19,19 @@
 package eu.power_switch.gui;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -234,5 +238,57 @@ public class StatusMessageHandler {
                 lastToast = toast;
             }
         });
+    }
+
+    /**
+     * Shows "No active Gateway" Message
+     *
+     * @param recyclerViewFragment
+     */
+    public static void showNoActiveGatewayMessage(final RecyclerViewFragment recyclerViewFragment) {
+        showStatusMessage(recyclerViewFragment, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.addToBackstack(SettingsTabFragment.class, recyclerViewFragment.getActivity()
+                        .getString(R.string.menu_settings));
+                SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                Bundle arguments = new Bundle();
+                arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
+                settingsTabFragment.setArguments(arguments);
+                recyclerViewFragment.getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim
+                                .slide_in_right, R.anim.slide_out_left, android.R.anim
+                                .slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.mainContentFrameLayout, settingsTabFragment)
+                        .addToBackStack(null).commit();
+            }
+        }, Snackbar.LENGTH_LONG);
+    }
+
+    /**
+     * Shows "No active Gateway" Message
+     *
+     * @param fragmentActivity
+     */
+    public static void showNoActiveGatewayMessage(final FragmentActivity fragmentActivity) {
+        showStatusMessage(fragmentActivity, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
+                        .getString(R.string.menu_settings));
+                SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
+                Bundle arguments = new Bundle();
+                arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
+                settingsTabFragment.setArguments(arguments);
+                fragmentActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim
+                                .slide_in_right, R.anim.slide_out_left, android.R.anim
+                                .slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.mainContentFrameLayout, settingsTabFragment)
+                        .addToBackStack(null).commit();
+            }
+        }, Snackbar.LENGTH_LONG);
     }
 }
