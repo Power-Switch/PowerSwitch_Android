@@ -64,6 +64,9 @@ import eu.power_switch.widget.provider.ReceiverWidgetProvider;
  */
 public class ConfigureReceiverDialog extends DialogFragment {
 
+    /**
+     * ID of existing Receiver to Edit
+     */
     public static final String RECEIVER_ID_KEY = "ReceiverId";
 
     private BroadcastReceiver broadcastReceiver;

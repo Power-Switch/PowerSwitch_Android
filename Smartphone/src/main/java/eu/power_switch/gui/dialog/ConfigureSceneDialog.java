@@ -61,6 +61,9 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  */
 public class ConfigureSceneDialog extends DialogFragment {
 
+    /**
+     * ID of existing Scene to Edit
+     */
     public static final String SCENE_ID_KEY = "SceneId";
 
     private BroadcastReceiver broadcastReceiver;

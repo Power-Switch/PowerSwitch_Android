@@ -58,6 +58,9 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureGatewayDialog extends DialogFragment {
 
+    /**
+     * ID of existing Gateway to Edit
+     */
     public static final String GATEWAY_ID_KEY = "GatewayId";
 
     private boolean modified;
@@ -81,6 +84,7 @@ public class ConfigureGatewayDialog extends DialogFragment {
     private List<Gateway> existingGateways;
 
     private long gatewayId = -1;
+
     private String originalName;
     private String originalAddress;
     private int originalPort;
@@ -88,7 +92,7 @@ public class ConfigureGatewayDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_add_edit_gateway, null);
+        rootView = inflater.inflate(R.layout.dialog_configure_gateway, null);
 
         existingGateways = DatabaseHandler.getAllGateways();
 
@@ -188,12 +192,20 @@ public class ConfigureGatewayDialog extends DialogFragment {
             gatewayId = args.getLong(GATEWAY_ID_KEY);
             initializeGatewayData(gatewayId);
         } else {
+            // hide if new gateway
+            imageButtonDelete.setVisibility(View.GONE);
+
             setSaveButtonState(false);
         }
 
         return rootView;
     }
 
+    /**
+     * Loads existing gateway data into fields
+     *
+     * @param gatewayId ID of existing Gateway
+     */
     private void initializeGatewayData(long gatewayId) {
         Gateway gateway = DatabaseHandler.getGateway(gatewayId);
         originalName = gateway.getName();
@@ -210,8 +222,13 @@ public class ConfigureGatewayDialog extends DialogFragment {
                 model.setSelection(i);
             }
         }
+
+        modified = false;
     }
 
+    /**
+     * Checks if current configuration is valid and updates views accordingly
+     */
     private void checkValidity() {
         boolean nameIsValid;
         boolean addressIsValid;
@@ -250,6 +267,12 @@ public class ConfigureGatewayDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Checks if current name is valid
+     *
+     * @param name
+     * @return true if valid
+     */
     private boolean checkNameValidity(String name) {
         if (name.length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
@@ -262,6 +285,12 @@ public class ConfigureGatewayDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Checks if current host address is valid
+     *
+     * @param address
+     * @return true if valid
+     */
     private boolean checkAddressValidity(String address) {
         if (address.length() <= 0) {
             floatingAddress.setError(getString(R.string.please_enter_name));
@@ -284,6 +313,12 @@ public class ConfigureGatewayDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Checks if current Port is valid
+     *
+     * @param portText
+     * @return true if valid
+     */
     private boolean checkPortValidity(String portText) {
         if (portText.length() <= 0) {
             floatingPort.setError(getString(R.string.please_enter_name));
@@ -303,6 +338,10 @@ public class ConfigureGatewayDialog extends DialogFragment {
         }
     }
 
+    /**
+     * Saves current configuration to database
+     * Either updates an existing Gateway or creates a new one
+     */
     private void saveCurrentConfigurationToDatabase() {
 
         try {
@@ -372,7 +411,8 @@ public class ConfigureGatewayDialog extends DialogFragment {
         };
         dialog.setTitle(R.string.configure_gateway);
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager
+                .LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.show();
         return dialog;
     }

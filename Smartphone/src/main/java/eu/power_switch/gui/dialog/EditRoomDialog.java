@@ -238,7 +238,9 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         Dialog dialog = new Dialog(getActivity());
         dialog.setTitle(R.string.edit_room);
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
+                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.show();
         return dialog;
     }

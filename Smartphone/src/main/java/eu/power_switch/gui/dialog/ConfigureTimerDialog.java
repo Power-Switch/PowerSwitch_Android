@@ -61,6 +61,9 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureTimerDialog extends DialogFragment {
 
+    /**
+     * ID of existing Timer to Edit
+     */
     public static final String TIMER_ID_KEY = "TimerId";
 
     private BroadcastReceiver broadcastReceiver;

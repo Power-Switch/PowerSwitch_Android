@@ -85,8 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/editText_height"
                     android:hint="@string/hint_url"
-                    android:inputType="textUri"
-                    android:nextFocusDown="@+id/editText_port"/>
+                    android:inputType="textUri"/>
 
             </android.support.design.widget.TextInputLayout>
 
