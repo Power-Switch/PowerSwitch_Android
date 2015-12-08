@@ -106,7 +106,7 @@ public class IntentReceiver extends BroadcastReceiver {
                         Receiver receiver = room.getReceiver(extras.getString(ApiConstants.KEY_RECEIVER).trim());
                         Button button = receiver.getButton(extras.getString(ApiConstants.KEY_BUTTON).trim());
 
-                        ActionHandler.executeAction(context, receiver, button);
+                        ActionHandler.execute(context, receiver, button);
                     } catch (Exception e) {
                         Log.e("Error!", e);
                         Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
@@ -125,7 +125,7 @@ public class IntentReceiver extends BroadcastReceiver {
                         Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
                         String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
 
-                        ActionHandler.executeAction(context, room, buttonName);
+                        ActionHandler.execute(context, room, buttonName);
                     } catch (Exception e) {
                         Log.e("Error!", e);
                         Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
@@ -138,7 +138,7 @@ public class IntentReceiver extends BroadcastReceiver {
                     try {
                         Scene scene = DatabaseHandler.getScene(extras.getString(ApiConstants.KEY_SCENE).trim());
 
-                        ActionHandler.executeAction(context, scene);
+                        ActionHandler.execute(context, scene);
                     } catch (Exception e) {
                         Log.e("Error!", e);
                         Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)

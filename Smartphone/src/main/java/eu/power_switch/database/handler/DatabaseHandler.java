@@ -22,6 +22,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -29,6 +30,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.history.HistoryItem;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.obj.receiver.Scene;
@@ -1074,6 +1076,46 @@ public final class DatabaseHandler {
         openWritable();
         try {
             SleepAsAndroidHandler.setAlarmActions(event, actions);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+    }
+
+    /**
+     * ////////////////////////////////
+     * // History functions //
+     * ////////////////////////////////
+     */
+
+    /**
+     * Gets all HistoryItems in Database
+     *
+     * @return List of HistoryItems
+     */
+    public static LinkedList<HistoryItem> getHistory() {
+        openReadable();
+        LinkedList<HistoryItem> historyItems = new LinkedList<>();
+        try {
+            historyItems = HistoryHandler.getHistory();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return historyItems;
+    }
+
+    /**
+     * Adds a HistoryItem to database
+     *
+     * @param historyItem HistoryItem
+     */
+    public static void addHistoryItem(HistoryItem historyItem) {
+        openWritable();
+        try {
+            HistoryHandler.add(historyItem);
         } catch (Exception e) {
             Log.e(e);
         } finally {

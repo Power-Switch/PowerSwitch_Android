@@ -64,7 +64,9 @@
             android:id="@+id/listView_rooms"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:choiceMode="singleChoice"/>
+            android:choiceMode="singleChoice"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_room_fab"

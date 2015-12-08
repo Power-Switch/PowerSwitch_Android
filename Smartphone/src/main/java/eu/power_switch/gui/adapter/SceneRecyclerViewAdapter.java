@@ -123,7 +123,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     return;
                 }
 
-                ActionHandler.executeAction(fragmentActivity, scene);
+                ActionHandler.execute(fragmentActivity, scene);
             }
         });
 

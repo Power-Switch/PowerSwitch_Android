@@ -58,6 +58,6 @@ public class RoomAction extends Action {
 
     @Override
     public void execute(Context context) {
-        ActionHandler.executeAction(context, room, buttonName);
+        ActionHandler.execute(context, room, buttonName);
     }
 }

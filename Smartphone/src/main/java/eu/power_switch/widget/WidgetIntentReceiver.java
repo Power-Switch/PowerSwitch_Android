@@ -171,20 +171,20 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
                 Receiver receiver = room.getReceiver(receiverName);
                 Button button = receiver.getButton(buttonName);
 
-                ActionHandler.executeAction(context, receiver, button);
+                ActionHandler.execute(context, receiver, button);
             } else if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_BUTTON)) {
                 String roomName = extras.getString(KEY_ROOM);
                 String buttonName = extras.getString(KEY_BUTTON);
 
                 Room room = DatabaseHandler.getRoom(roomName);
 
-                ActionHandler.executeAction(context, room, buttonName);
+                ActionHandler.execute(context, room, buttonName);
             } else if (extras.containsKey(KEY_SCENE)) {
                 String sceneName = extras.getString(KEY_SCENE);
 
                 Scene scene = DatabaseHandler.getScene(sceneName);
 
-                ActionHandler.executeAction(context, scene);
+                ActionHandler.execute(context, scene);
             }
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);

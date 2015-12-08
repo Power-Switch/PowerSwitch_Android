@@ -22,6 +22,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import eu.power_switch.R;
@@ -29,6 +30,8 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.gateway.Gateway;
@@ -40,6 +43,7 @@ import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.timer.Timer;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
@@ -51,30 +55,18 @@ public class ActionHandler {
     /**
      * Execute Receiver Action
      *
-     * @param context
+     * @param context  any suitable context
      * @param receiver
      * @param button
      */
-    public static void executeAction(Context context, Receiver receiver, Button button) {
+    public static void execute(Context context, Receiver receiver, Button button) {
         try {
-            NetworkHandler.init(context);
+            executeReceiverAction(context, receiver, button);
 
-            List<NetworkPackage> networkPackages = new ArrayList<>();
-            for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                networkPackages.add(networkPackage);
-            }
-
-            DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-
-            NetworkHandler.send(networkPackages);
-
-            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
-                ReceiverWidgetProvider.forceWidgetUpdate(context);
-            }
-            if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
-                UtilityService.forceWearDataUpdate(context);
-            }
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                    .receiver_action_history_text, receiver.getName(), button.getName()));
+            DatabaseHandler.addHistoryItem(historyItem);
+            MainActivity.sendHistoryChangedBroadcast(context);
         } catch (ActionNotSupportedException e) {
             Log.e("Action not supported by Receiver!", e);
             StatusMessageHandler.showStatusMessage(context,
@@ -85,95 +77,169 @@ public class ActionHandler {
                     context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
         } catch (Exception e) {
             Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 1000);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+        }
+    }
+
+    private static void executeReceiverAction(Context context, Receiver receiver, Button button) throws Exception {
+        NetworkHandler.init(context);
+
+        List<NetworkPackage> networkPackages = new ArrayList<>();
+        for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
+            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
+            networkPackages.add(networkPackage);
+        }
+
+        DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+
+        NetworkHandler.send(networkPackages);
+
+        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+            ReceiverWidgetProvider.forceWidgetUpdate(context);
+        }
+        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+            UtilityService.forceWearDataUpdate(context);
         }
     }
 
     /**
      * Execute Room Action
      *
-     * @param context
+     * @param context    any suitable context
      * @param room
      * @param buttonName
      */
-    public static void executeAction(Context context, Room room, String buttonName) {
+    public static void execute(Context context, Room room, String buttonName) {
         try {
-            NetworkHandler.init(context);
+            executeRoomAction(context, room, buttonName);
 
-            List<NetworkPackage> networkPackages = new ArrayList<>();
-            for (Receiver receiver : room.getReceivers()) {
-                Button button = receiver.getButton(buttonName);
-                if (button != null) {
-                    for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                        try {
-                            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                            networkPackages.add(networkPackage);
-                        } catch (ActionNotSupportedException e) {
-                            Log.e("Action not supported by Receiver!", e);
-                            StatusMessageHandler.showStatusMessage(context,
-                                    context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
-                        } catch (GatewayNotSupportedException e) {
-                            Log.e("Gateway not supported by Receiver!", e);
-                            StatusMessageHandler.showStatusMessage(context,
-                                    context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
-                        }
-                    }
-
-                    DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-                }
-            }
-
-            if (networkPackages.size() <= 0) {
-                Log.d(context.getString(R.string.no_receiver_supports_this_action));
-                StatusMessageHandler.showStatusMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
-                        .LENGTH_LONG);
-            } else {
-                NetworkHandler.send(networkPackages);
-            }
-
-            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
-                ReceiverWidgetProvider.forceWidgetUpdate(context);
-            }
-            if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
-                UtilityService.forceWearDataUpdate(context);
-            }
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                    .room_action_history_text, room.getName(), buttonName));
+            DatabaseHandler.addHistoryItem(historyItem);
+            MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {
             Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 1000);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+        }
+    }
+
+    private static void executeRoomAction(Context context, Room room, String buttonName) throws Exception {
+        NetworkHandler.init(context);
+
+        List<NetworkPackage> networkPackages = new ArrayList<>();
+        for (Receiver receiver : room.getReceivers()) {
+            Button button = receiver.getButton(buttonName);
+            if (button != null) {
+                for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
+                    try {
+                        NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
+                        networkPackages.add(networkPackage);
+                    } catch (ActionNotSupportedException e) {
+                        Log.e("Action not supported by Receiver!", e);
+                        StatusMessageHandler.showStatusMessage(context,
+                                context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
+                    } catch (GatewayNotSupportedException e) {
+                        Log.e("Gateway not supported by Receiver!", e);
+                        StatusMessageHandler.showStatusMessage(context,
+                                context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
+                    }
+                }
+
+                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+            }
+        }
+
+        if (networkPackages.size() <= 0) {
+            Log.d(context.getString(R.string.no_receiver_supports_this_action));
+            StatusMessageHandler.showStatusMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
+                    .LENGTH_LONG);
+        } else {
+            NetworkHandler.send(networkPackages);
+        }
+
+        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+            ReceiverWidgetProvider.forceWidgetUpdate(context);
+        }
+        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+            UtilityService.forceWearDataUpdate(context);
         }
     }
 
     /**
      * Execute Scene Action
      *
-     * @param context
+     * @param context any suitable context
      * @param scene
      */
-    public static void executeAction(Context context, Scene scene) {
+    public static void execute(Context context, Scene scene) {
         try {
-            NetworkHandler.init(context);
+            executeScene(context, scene);
 
-            List<NetworkPackage> packages = new ArrayList<>();
-            for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                for (SceneItem sceneItem : scene.getSceneItems()) {
-                    packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
-                            sceneItem.getActiveButton().getName()));
-
-                    DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
-                            .getId(), sceneItem.getActiveButton().getId());
-                }
-            }
-            NetworkHandler.send(packages);
-
-            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
-                ReceiverWidgetProvider.forceWidgetUpdate(context);
-            }
-            if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
-                UtilityService.forceWearDataUpdate(context);
-            }
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                    .scene_action_history_text, scene.getName()));
+            DatabaseHandler.addHistoryItem(historyItem);
+            MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {
             Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 1000);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+        }
+    }
+
+    private static void executeScene(Context context, Scene scene) throws Exception {
+        NetworkHandler.init(context);
+
+        List<NetworkPackage> packages = new ArrayList<>();
+        for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
+            for (SceneItem sceneItem : scene.getSceneItems()) {
+                packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
+                        sceneItem.getActiveButton().getName()));
+
+                DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
+                        .getId(), sceneItem.getActiveButton().getId());
+            }
+        }
+        NetworkHandler.send(packages);
+
+        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+            ReceiverWidgetProvider.forceWidgetUpdate(context);
+        }
+        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+            UtilityService.forceWearDataUpdate(context);
+        }
+    }
+
+    /**
+     * Execute Timer actions
+     *
+     * @param context any suitable context
+     * @param timer
+     */
+    public static void execute(Context context, Timer timer) {
+        try {
+            for (Action action : timer.getActions()) {
+                switch (action.getActionType()) {
+                    case Action.ACTION_TYPE_RECEIVER:
+                        ReceiverAction receiverAction = (ReceiverAction) action;
+                        executeReceiverAction(context, receiverAction.getReceiver(), receiverAction.getButton());
+                        break;
+                    case Action.ACTION_TYPE_ROOM:
+                        RoomAction roomAction = (RoomAction) action;
+                        executeRoomAction(context, roomAction.getRoom(), roomAction.getButtonName());
+                        break;
+                    case Action.ACTION_TYPE_SCENE:
+                        SceneAction sceneAction = (SceneAction) action;
+                        executeScene(context, sceneAction.getScene());
+                        break;
+                }
+            }
+
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                    .timer_action_history_text, timer.getName()));
+            DatabaseHandler.addHistoryItem(historyItem);
+            MainActivity.sendHistoryChangedBroadcast(context);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
         }
     }
 }

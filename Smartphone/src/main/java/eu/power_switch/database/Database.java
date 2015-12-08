@@ -29,6 +29,7 @@ import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
+import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.database.table.receiver.AutoPairTable;
 import eu.power_switch.database.table.receiver.DipTable;
 import eu.power_switch.database.table.receiver.MasterSlaveTable;
@@ -51,7 +52,7 @@ import eu.power_switch.database.table.widget.SceneWidgetTable;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -86,6 +87,8 @@ public class Database extends SQLiteOpenHelper {
         ReceiverActionTable.onCreate(db);
         RoomActionTable.onCreate(db);
         SceneActionTable.onCreate(db);
+
+        HistoryTable.onCreate(db);
     }
 
     @Override
@@ -128,6 +131,8 @@ public class Database extends SQLiteOpenHelper {
         ReceiverActionTable.onUpgrade(db, oldVersion, newVersion);
         RoomActionTable.onUpgrade(db, oldVersion, newVersion);
         SceneActionTable.onUpgrade(db, oldVersion, newVersion);
+
+        HistoryTable.onUpgrade(db, oldVersion, newVersion);
 
         switch (oldVersion) {
             case 1:
@@ -231,6 +236,8 @@ public class Database extends SQLiteOpenHelper {
 
                 // drop old table
                 db.execSQL("DROP TABLE IF EXISTS timer_action");
+                break;
+            case 9:
                 break;
         }
     }

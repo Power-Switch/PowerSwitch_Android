@@ -55,7 +55,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_list_of_backups"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_backup_fab"

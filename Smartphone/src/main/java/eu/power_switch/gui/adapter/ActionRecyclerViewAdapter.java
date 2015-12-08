@@ -39,7 +39,7 @@ import eu.power_switch.action.Action;
 public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Action> actions;
     private Context context;
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener onDeleteClickListener;
 
 
     public ActionRecyclerViewAdapter(Context context, ArrayList<Action> actions) {
@@ -48,7 +48,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     }
 
     public void setOnDeleteClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+        this.onDeleteClickListener = onItemClickListener;
     }
 
     @Override
@@ -85,8 +85,8 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
             this.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(deleteTimerActionFAB, getLayoutPosition());
+                    if (onDeleteClickListener != null) {
+                        onDeleteClickListener.onItemClick(deleteTimerActionFAB, getLayoutPosition());
                     }
                 }
             });

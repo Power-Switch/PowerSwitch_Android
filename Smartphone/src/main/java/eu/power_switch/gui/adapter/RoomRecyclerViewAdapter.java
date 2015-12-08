@@ -131,7 +131,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 String buttonName = buttonView.getText().toString();
 
                 // send signal
-                ActionHandler.executeAction(fragmentActivity, room, buttonName);
+                ActionHandler.execute(fragmentActivity, room, buttonName);
 
                 // update list item
                 for (Receiver receiver : room.getReceivers()) {
@@ -232,7 +232,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         }
 
                         // send signal
-                        ActionHandler.executeAction(fragmentActivity, receiver, button);
+                        ActionHandler.execute(fragmentActivity, receiver, button);
 
                         // update list item
                         receiver.setLastActivatedButtonId(button.getId());

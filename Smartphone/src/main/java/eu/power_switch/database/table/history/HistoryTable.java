@@ -16,40 +16,45 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.gateway;
+package eu.power_switch.database.table.history;
 
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Gateway table description
+ * History table description
  */
-public class GatewayTable {
+public class HistoryTable {
 
-    public static final String TABLE_NAME = "gateways";
+    public static final String TABLE_NAME = "history_items";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ACTIVE = "active";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_MODEL = "model";
-    public static final String COLUMN_FIRMWARE = "firmware";
-    public static final String COLUMN_ADDRESS = "address";
-    public static final String COLUMN_PORT = "port";
+    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_TIME = "time";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTIVE + " integer not null, " +
-            COLUMN_NAME + " text not null, " +
-            COLUMN_MODEL + " text not null, " +
-            COLUMN_FIRMWARE + " text not null, " +
-            COLUMN_ADDRESS + " text not null, " +
-            COLUMN_PORT + " integer not null" + ");";
-    //@formatter:on
+            COLUMN_TIME + " integer not null," +
+            COLUMN_DESCRIPTION + " text not null" +
+        ");";
+    //formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        switch (oldVersion) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                onCreate(db);
+                break;
+        }
     }
 }

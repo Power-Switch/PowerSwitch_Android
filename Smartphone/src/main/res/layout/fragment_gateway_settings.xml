@@ -35,7 +35,9 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/padding"
             android:layout_marginTop="@dimen/padding"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"/>
 
     </LinearLayout>
 

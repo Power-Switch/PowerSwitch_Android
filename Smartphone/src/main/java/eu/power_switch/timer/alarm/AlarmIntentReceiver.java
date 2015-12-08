@@ -26,8 +26,10 @@ import android.os.Bundle;
 
 import java.util.Calendar;
 
-import eu.power_switch.action.Action;
+import eu.power_switch.R;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.TimerConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -117,13 +119,13 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                     WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
 
                     if (weekdayTimer.containsExecutionDay(currentTime.get(Calendar.DAY_OF_WEEK))) {
-                        executeActions(context, timer);
+                        ActionHandler.execute(context, timer);
                     } else {
                         Log.d("AlarmIntentReceiver", "timer executionDays doesn't contain current day, not executing timer");
                     }
                     break;
                 case Timer.EXECUTION_TYPE_INTERVAL:
-                    executeActions(context, timer);
+                    ActionHandler.execute(context, timer);
                     break;
                 default:
                     Log.e("AlarmIntentReceiver", "Unknown Timer executionType: " + timer.getExecutionType());
@@ -132,16 +134,10 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
 
         } catch (Exception e) {
             Log.e("Unknown Alarm Error: ", e);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
         }
 
         reinitializeAlarms(context);
-    }
-
-    private void executeActions(Context context, Timer timer) {
-        Log.d("AlarmIntentReceiver", "executing Actions...");
-        for (Action action : timer.getActions()) {
-            action.execute(context);
-        }
     }
 
     private void reinitializeAlarms(Context context) {

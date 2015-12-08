@@ -36,7 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:choiceMode="singleChoice"/>
+        android:choiceMode="singleChoice"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical"/>
 
     <TextView
         android:id="@+id/textView_model"
@@ -51,6 +53,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:choiceMode="singleChoice"/>
+        android:choiceMode="singleChoice"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical"/>
 
 </LinearLayout>

@@ -16,44 +16,43 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.action;
+package eu.power_switch.history;
 
-import android.content.Context;
-
-import eu.power_switch.obj.receiver.Scene;
+import java.util.Calendar;
 
 /**
- * SceneAction that holds a specific scene to activate on execution
+ * This Class represents a history element used in history drawer
  * <p/>
- * Created by Markus on 24.09.2015.
+ * Created by Markus on 08.12.2015.
  */
-public class SceneAction extends Action {
+public class HistoryItem {
 
-    private Scene scene;
+    private Long id;
+    private Calendar time;
+    private String description;
 
-    public SceneAction(long id, Scene scene) {
+    public HistoryItem(Long id, Long timeInMilliseconds, String description) {
         this.id = id;
-        this.scene = scene;
+        this.time = Calendar.getInstance();
+        this.time.setTimeInMillis(timeInMilliseconds);
+        this.description = description;
     }
 
-    public Scene getScene() {
-        return scene;
+    public HistoryItem(Long id, Calendar time, String description) {
+        this.id = id;
+        this.time = time;
+        this.description = description;
     }
 
-    @Override
-    public String getActionType() {
-        return ACTION_TYPE_SCENE;
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public String toString() {
-        return scene.getName();
+    public String getDescription() {
+        return description;
     }
 
-    @Override
-    public void execute(Context context) {
-        ActionHandler.execute(context, scene);
+    public Calendar getTime() {
+        return time;
     }
-
-
 }

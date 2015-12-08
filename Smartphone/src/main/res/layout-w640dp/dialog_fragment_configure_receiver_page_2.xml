@@ -56,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
-                android:choiceMode="singleChoice"/>
+                android:choiceMode="singleChoice"
+                android:fadeScrollbars="false"/>
 
             <ListView
                 android:id="@+id/listView_models"
@@ -64,7 +65,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_weight="1"
-                android:choiceMode="singleChoice"/>
+                android:choiceMode="singleChoice"
+                android:fadeScrollbars="false"/>
 
         </TableRow>
 

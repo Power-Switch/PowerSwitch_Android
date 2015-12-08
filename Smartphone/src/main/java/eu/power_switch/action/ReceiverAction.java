@@ -66,6 +66,6 @@ public class ReceiverAction extends Action {
 
     @Override
     public void execute(Context context) {
-        ActionHandler.executeAction(context, receiver, button);
+        ActionHandler.execute(context, receiver, button);
     }
 }

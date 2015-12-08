@@ -18,8 +18,10 @@
 
 package eu.power_switch.gui.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -29,15 +31,19 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -45,14 +51,17 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AboutDialog;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.main.MainTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
+import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.special.HolidaySpecialHandler;
@@ -69,9 +78,17 @@ public class MainActivity extends AppCompatActivity {
     public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
     private static Stack<String> lastFragmentTitles = new Stack<>();
+
     private static NavigationView navigationView;
+
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DrawerLayout drawerLayout;
+
+    private LinkedList<HistoryItem> historyItems = new LinkedList<>();
+    private RecyclerView recyclerViewHistory;
+    private HistoryItemRecyclerViewAdapter historyItemArrayAdapter;
+
+    private BroadcastReceiver broadcastReceiver;
 
     /**
      * Add class to Backstack
@@ -100,6 +117,18 @@ public class MainActivity extends AppCompatActivity {
      */
     public static View getNavigationView() {
         return navigationView;
+    }
+
+    /**
+     * Used to notify Room Fragment (this) that Rooms have changed
+     *
+     * @param context
+     */
+    public static void sendHistoryChangedBroadcast(Context context) {
+        Log.d(MainActivity.class, "sendHistoryChangedBroadcast");
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     @Override
@@ -147,6 +176,13 @@ public class MainActivity extends AppCompatActivity {
         ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         ab.setDisplayHomeAsUpEnabled(true);
 
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateHistory();
+            }
+        };
         // Find our drawer view
         navigationView = (NavigationView) findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(
@@ -157,6 +193,14 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
+        recyclerViewHistory = (RecyclerView) findViewById(R.id.recyclerview_history);
+        historyItemArrayAdapter = new HistoryItemRecyclerViewAdapter(this, historyItems);
+        recyclerViewHistory.setAdapter(historyItemArrayAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
+                getResources().getInteger(R.integer.backup_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+        recyclerViewHistory.setLayoutManager(layoutManager);
+        updateHistory();
 
         // Load first Fragment
         try {
@@ -173,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e(e);
             e.printStackTrace();
         }
+
 
         boolean autoDiscoverStatus = SmartphonePreferencesHandler.getAutoDiscover();
 
@@ -231,6 +276,14 @@ public class MainActivity extends AppCompatActivity {
                 return null;
             }
         }.execute(this);
+    }
+
+    private void updateHistory() {
+        historyItems.clear();
+        historyItems.addAll(DatabaseHandler.getHistory());
+
+        historyItemArrayAdapter.notifyDataSetChanged();
+        recyclerViewHistory.scrollToPosition(historyItems.size() - 1);
     }
 
     @Override
@@ -354,6 +407,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         appIsInForeground = true;
@@ -363,8 +425,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         appIsInForeground = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        super.onStop();
     }
 
     @Override

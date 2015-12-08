@@ -93,7 +93,7 @@ public class ListenerService extends WearableListenerService {
                 Receiver receiver = room.getReceiver(receiverName);
                 Button button = receiver.getButton(buttonName);
 
-                ActionHandler.executeAction(getApplicationContext(), receiver, button);
+                ActionHandler.execute(getApplicationContext(), receiver, button);
             } else if (messageData.contains("RoomName") && messageData.contains("ButtonName")) {
                 int start = messageData.indexOf("RoomName:") + 9;
                 int stop = messageData.indexOf("ButtonName:");
@@ -104,7 +104,7 @@ public class ListenerService extends WearableListenerService {
 
                 Room room = DatabaseHandler.getRoom(roomName);
 
-                ActionHandler.executeAction(getApplicationContext(), room, buttonName);
+                ActionHandler.execute(getApplicationContext(), room, buttonName);
             } else if (messageData.contains("SceneName")) {
                 int start = messageData.indexOf("SceneName:") + 10;
                 int stop = messageData.indexOf(";;");
@@ -112,7 +112,7 @@ public class ListenerService extends WearableListenerService {
 
                 Scene scene = DatabaseHandler.getScene(sceneName);
 
-                ActionHandler.executeAction(getApplicationContext(), scene);
+                ActionHandler.execute(getApplicationContext(), scene);
             }
         } catch (Exception e) {
             Log.e("parseMessage", e);
