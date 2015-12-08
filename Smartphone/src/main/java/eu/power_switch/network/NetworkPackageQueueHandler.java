@@ -89,9 +89,6 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
 
                     int delay = 1000;
                     synchronized (NetworkHandler.networkPackagesQueue) {
-                        // remove NetworkPackage from queue
-                        NetworkHandler.networkPackagesQueue.remove(0);
-
                         // calculate time to wait before sending next package
                         if (NetworkHandler.networkPackagesQueue.size() > 1) {
                             NetworkPackage nextNetworkPackage = NetworkHandler.networkPackagesQueue.get(1);
@@ -102,9 +99,10 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                                         "before sending next signal...");
                                 delay = currentNetworkPackage.getTimeout();
                             }
-                        } else {
-                            delay = currentNetworkPackage.getTimeout();
                         }
+
+                        // remove NetworkPackage from queue
+                        NetworkHandler.networkPackagesQueue.remove(0);
                     }
 
                     Log.d("Waiting for Gateway to finish sending Signal before sending next...");
