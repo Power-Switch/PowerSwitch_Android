@@ -233,38 +233,50 @@ public class ConfigureGatewayDialog extends DialogFragment {
         boolean nameIsValid;
         boolean addressIsValid;
         boolean portIsValid;
+        boolean gatewayAlreadyExists;
 
         try {
-            String name = this.name.getText().toString().trim();
-            String address = this.address.getText().toString().trim();
-            String portText = this.port.getText().toString();
-
-            boolean gatewayAlreadyExists = false;
-            for (Gateway gateway : existingGateways) {
-                if (gateway.getHost().equals(address) && portText.equals(String.valueOf(gateway.getPort()))) {
-                    gatewayAlreadyExists = true;
-                }
-            }
-
-            if (gatewayAlreadyExists) {
-                floatingName.setErrorEnabled(false);
-                floatingAddress.setError(getString(R.string.gateway_already_exists));
-                floatingAddress.setErrorEnabled(true);
-                floatingPort.setError(getString(R.string.gateway_already_exists));
-                floatingPort.setErrorEnabled(true);
-                setSaveButtonState(false);
-                return;
-            }
+            String name = getCurrentName();
+            String address = getCurrentAddress();
+            String portText = getCurrentPortText();
 
             nameIsValid = checkNameValidity(name);
             addressIsValid = checkAddressValidity(address);
             portIsValid = checkPortValidity(portText);
+            gatewayAlreadyExists = checkGatewayAlreadyExists();
 
-            setSaveButtonState(nameIsValid && addressIsValid && portIsValid);
+            setSaveButtonState(nameIsValid && addressIsValid && portIsValid && !gatewayAlreadyExists);
         } catch (Exception e) {
             Log.e(e);
             setSaveButtonState(false);
         }
+    }
+
+    /**
+     * Checks if current configuration already exists in database
+     *
+     * @return true if a similar gateway already exists
+     */
+    private boolean checkGatewayAlreadyExists() {
+        boolean gatewayAlreadyExists = false;
+        for (Gateway gateway : existingGateways) {
+            if (gateway.getId() != gatewayId) {
+                if (gateway.getHost().equals(getCurrentAddress()) &&
+                        getCurrentPortText().equals(String.valueOf(gateway.getPort()))) {
+                    gatewayAlreadyExists = true;
+                }
+            }
+        }
+
+        if (gatewayAlreadyExists) {
+            floatingName.setErrorEnabled(false);
+            floatingAddress.setError(getString(R.string.gateway_already_exists));
+            floatingAddress.setErrorEnabled(true);
+            floatingPort.setError(getString(R.string.gateway_already_exists));
+            floatingPort.setErrorEnabled(true);
+        }
+
+        return gatewayAlreadyExists;
     }
 
     /**
@@ -293,7 +305,7 @@ public class ConfigureGatewayDialog extends DialogFragment {
      */
     private boolean checkAddressValidity(String address) {
         if (address.length() <= 0) {
-            floatingAddress.setError(getString(R.string.please_enter_name));
+            floatingAddress.setError(getString(R.string.please_enter_host));
             floatingAddress.setErrorEnabled(true);
             return false;
         } else {
@@ -321,15 +333,22 @@ public class ConfigureGatewayDialog extends DialogFragment {
      */
     private boolean checkPortValidity(String portText) {
         if (portText.length() <= 0) {
-            floatingPort.setError(getString(R.string.please_enter_name));
+            floatingPort.setError(getString(R.string.please_enter_port));
             floatingPort.setErrorEnabled(true);
             return false;
         } else {
             try {
-                Integer.valueOf(portText);
-                floatingPort.setError(null);
-                floatingPort.setErrorEnabled(false);
-                return true;
+                // try to convert text to int
+                int port = Integer.valueOf(portText);
+                if (port > 65535 || port <= 0) {
+                    floatingPort.setError(getString(R.string.port_invalid));
+                    floatingPort.setErrorEnabled(true);
+                    return true;
+                } else {
+                    floatingPort.setError(null);
+                    floatingPort.setErrorEnabled(false);
+                    return true;
+                }
             } catch (Exception e) {
                 floatingPort.setError(getString(R.string.unknown_error));
                 floatingPort.setErrorEnabled(true);
@@ -339,31 +358,61 @@ public class ConfigureGatewayDialog extends DialogFragment {
     }
 
     /**
+     * Gets current name field value
+     *
+     * @return Name of Gateway
+     */
+    public String getCurrentName() {
+        return this.name.getText().toString().trim();
+    }
+
+    /**
+     * Gets current address field value
+     *
+     * @return Address of Gateway
+     */
+    public String getCurrentAddress() {
+        return this.address.getText().toString().trim();
+    }
+
+    /**
+     * Gets current port field value
+     *
+     * @return Port of Gateway (as String)
+     */
+    private String getCurrentPortText() {
+        return this.port.getText().toString().trim();
+    }
+
+    /**
      * Saves current configuration to database
      * Either updates an existing Gateway or creates a new one
      */
     private void saveCurrentConfigurationToDatabase() {
-
         try {
             if (gatewayId == -1) {
                 String gatewayModel = model.getSelectedItem().toString();
-                String gatewayName = name.getText().toString();
-                String gatewayAddress = address.getText().toString();
+                String gatewayName = getCurrentName();
+                String gatewayAddress = getCurrentAddress();
                 int gatewayPort = 49880;
-                if (port.getText().toString().length() != 0) {
-                    gatewayPort = Integer.parseInt(port.getText().toString());
+                if (getCurrentPortText().length() != 0) {
+                    gatewayPort = Integer.parseInt(getCurrentPortText());
                 }
 
                 Gateway newGateway;
 
-                if (gatewayModel.equals(BrematicGWY433.MODEL)) {
-                    newGateway = new BrematicGWY433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
-                } else if (gatewayModel.equals(ConnAir.MODEL)) {
-                    newGateway = new ConnAir((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
-                } else if (gatewayModel.equals(ITGW433.MODEL)) {
-                    newGateway = new ITGW433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
-                } else {
-                    throw new GatewayUnknownException();
+                switch (gatewayModel) {
+                    case BrematicGWY433.MODEL:
+                        newGateway = new BrematicGWY433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        break;
+                    case ConnAir.MODEL:
+                        newGateway = new ConnAir((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        break;
+                    case ITGW433.MODEL:
+                        newGateway = new ITGW433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        break;
+                    default:
+                        throw new GatewayUnknownException();
                 }
 
                 try {
@@ -374,16 +423,15 @@ public class ConfigureGatewayDialog extends DialogFragment {
                 }
             } else {
                 int portInt = 49880;
-                if (port.getText().toString().trim().length() > 0) {
-                    portInt = Integer.valueOf(port.getText().toString());
+                if (getCurrentPortText().length() > 0) {
+                    portInt = Integer.valueOf(getCurrentPortText());
                 }
-                DatabaseHandler.updateGateway(gatewayId, name.getText().toString().trim(), model.getSelectedItem()
-                        .toString(), address.getText().toString().trim(), portInt);
+                DatabaseHandler.updateGateway(gatewayId, getCurrentName(), model.getSelectedItem()
+                        .toString(), getCurrentAddress(), portInt);
             }
 
             GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
-
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(rootView.getContext(),

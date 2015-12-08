@@ -64,6 +64,9 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  */
 public class EditRoomDialog extends DialogFragment implements OnStartDragListener {
 
+    /**
+     * ID of existing Room to Edit
+     */
     public static final String ROOM_ID_KEY = "RoomId";
 
     private boolean modified = false;

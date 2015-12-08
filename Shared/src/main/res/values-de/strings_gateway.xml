@@ -21,4 +21,8 @@
 
     <string name="configure_gateway">Gateway einrichten</string>
 
+    <string name="port_invalid">Port ungültig</string>
+    <string name="please_enter_port">Bitte gib einen Port ein</string>
+    <string name="please_enter_host">Bitte gib einen Host ein</string>
+
 </resources>
