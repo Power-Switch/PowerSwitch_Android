@@ -41,6 +41,7 @@ import eu.power_switch.obj.receiver.Scene;
 import eu.power_switch.obj.receiver.SceneItem;
 import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.timer.Timer;
@@ -216,22 +217,7 @@ public class ActionHandler {
      */
     public static void execute(Context context, Timer timer) {
         try {
-            for (Action action : timer.getActions()) {
-                switch (action.getActionType()) {
-                    case Action.ACTION_TYPE_RECEIVER:
-                        ReceiverAction receiverAction = (ReceiverAction) action;
-                        executeReceiverAction(context, receiverAction.getReceiver(), receiverAction.getButton());
-                        break;
-                    case Action.ACTION_TYPE_ROOM:
-                        RoomAction roomAction = (RoomAction) action;
-                        executeRoomAction(context, roomAction.getRoom(), roomAction.getButtonName());
-                        break;
-                    case Action.ACTION_TYPE_SCENE:
-                        SceneAction sceneAction = (SceneAction) action;
-                        executeScene(context, sceneAction.getScene());
-                        break;
-                }
-            }
+            executeActions(context, timer.getActions());
 
             HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
                     .timer_action_history_text, timer.getName()));
@@ -240,6 +226,46 @@ public class ActionHandler {
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+        }
+    }
+
+    /**
+     * Execute Sleep As Android actions
+     *
+     * @param context any suitable context
+     * @param event
+     */
+    public static void execute(Context context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+        try {
+            List<Action> actions = DatabaseHandler.getAlarmActions(event);
+            executeActions(context, actions);
+
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                    .sleep_as_android_action_history_text, event.toString()));
+            DatabaseHandler.addHistoryItem(historyItem);
+            MainActivity.sendHistoryChangedBroadcast(context);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+        }
+    }
+
+    private static void executeActions(Context context, List<Action> actions) throws Exception {
+        for (Action action : actions) {
+            switch (action.getActionType()) {
+                case Action.ACTION_TYPE_RECEIVER:
+                    ReceiverAction receiverAction = (ReceiverAction) action;
+                    executeReceiverAction(context, receiverAction.getReceiver(), receiverAction.getButton());
+                    break;
+                case Action.ACTION_TYPE_ROOM:
+                    RoomAction roomAction = (RoomAction) action;
+                    executeRoomAction(context, roomAction.getRoom(), roomAction.getButtonName());
+                    break;
+                case Action.ACTION_TYPE_SCENE:
+                    SceneAction sceneAction = (SceneAction) action;
+                    executeScene(context, sceneAction.getScene());
+                    break;
+            }
         }
     }
 }

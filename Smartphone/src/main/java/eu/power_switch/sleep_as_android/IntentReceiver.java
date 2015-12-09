@@ -23,10 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import java.util.List;
-
-import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -69,28 +66,24 @@ public class IntentReceiver extends BroadcastReceiver {
             if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction()
                     .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm triggered!");
-                executeActions(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED);
+                ActionHandler.execute(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED);
+
             } else if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED.getIntentAction()
                     .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm snoozed...");
-                executeActions(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED);
+                ActionHandler.execute(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED);
+
             } else if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED.getIntentAction()
                     .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm dismissed...");
-                executeActions(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED);
+                ActionHandler.execute(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED);
+
             } else {
                 Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());
             }
 
         } catch (Exception e) {
             Log.e(e);
-        }
-    }
-
-    private void executeActions(Context context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
-        List<Action> actions = DatabaseHandler.getAlarmActions(event);
-        for (Action action : actions) {
-            action.execute(context);
         }
     }
 }

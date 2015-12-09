@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getResources().getInteger(R.integer.backup_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewHistory.setLayoutManager(layoutManager);
-        updateHistory();
 
         // Load first Fragment
         try {
@@ -420,6 +419,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         appIsInForeground = true;
 
+        updateHistory();
         HolidaySpecialHandler.showHolidaySpecial(this);
     }
 

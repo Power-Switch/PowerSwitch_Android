@@ -21,6 +21,8 @@ package eu.power_switch.database.handler;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 import eu.power_switch.database.table.history.HistoryTable;
@@ -51,6 +53,17 @@ class HistoryHandler {
             cursor.moveToNext();
         }
         cursor.close();
+
+        Collections.sort(historyItems, new Comparator<HistoryItem>() {
+            @Override
+            public int compare(HistoryItem t0, HistoryItem t1) {
+                if (t0.getTime().getTimeInMillis() - t1.getTime().getTimeInMillis() < 0) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
 
         return historyItems;
     }
