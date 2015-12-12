@@ -16,20 +16,19 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha2'
-    }
-}
+package eu.power_switch.shared.constants;
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
+/**
+ * Created by Markus on 11.12.2015.
+ */
+public class TutorialConstants {
+
+    public static final String MAIN_TABS_KEY_PREFIX = "main_tab_";
+
+    /**
+     * Private Constructor
+     */
+    private TutorialConstants() {
     }
+
 }

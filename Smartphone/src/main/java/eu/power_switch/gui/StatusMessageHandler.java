@@ -22,6 +22,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -57,8 +58,9 @@ public class StatusMessageHandler {
      * @param runnable                      code that should be executed when activating the action button
      * @param duration                      duration
      */
-    public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, int messageResourceId,
-                                         int actionButtonMessageResourceId, Runnable runnable, int duration) {
+    public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, @StringRes int messageResourceId,
+                                         @StringRes int actionButtonMessageResourceId, Runnable runnable, int
+                                                 duration) {
         Context context = recyclerViewFragment.getContext();
 
         if (MainActivity.isInForeground()) {
@@ -83,8 +85,9 @@ public class StatusMessageHandler {
      * @param runnable                      code that should be executed when activating the action button
      * @param duration                      duration
      */
-    public static void showStatusMessage(Context context, int messageResourceId,
-                                         int actionButtonMessageResourceId, Runnable runnable, int duration) {
+    public static void showStatusMessage(Context context, @StringRes int messageResourceId,
+                                         @StringRes int actionButtonMessageResourceId, Runnable runnable, int
+                                                 duration) {
         if (MainActivity.isInForeground()) {
             showSnackbar(MainActivity.getNavigationView(),
                     context.getString(messageResourceId),
@@ -125,7 +128,8 @@ public class StatusMessageHandler {
      * @param messageResourceId    status message resource id
      * @param duration             duration
      */
-    public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, int messageResourceId, int duration) {
+    public static void showStatusMessage(RecyclerViewFragment recyclerViewFragment, @StringRes int messageResourceId, int
+            duration) {
         Context context = recyclerViewFragment.getContext();
         showStatusMessage(recyclerViewFragment, context.getString(messageResourceId), duration);
     }
@@ -139,7 +143,7 @@ public class StatusMessageHandler {
      * @param messageResourceId status message resource id
      * @param duration          duration
      */
-    public static void showStatusMessage(Context context, int messageResourceId, int duration) {
+    public static void showStatusMessage(Context context, @StringRes int messageResourceId, int duration) {
         showStatusMessage(context, context.getString(messageResourceId), duration);
     }
 

@@ -34,6 +34,12 @@
             android:padding="@dimen/padding"
             android:text="Play Store Mode"/>
 
+        <Button
+            android:id="@+id/button_resetShowcases"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset Showcases (Tutorial)"/>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

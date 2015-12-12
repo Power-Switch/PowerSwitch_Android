@@ -25,11 +25,13 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import eu.power_switch.R;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Hidden Dialog Menu to access developer options
@@ -50,6 +52,14 @@ public class DeveloperOptionsDialog extends DialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SmartphonePreferencesHandler.setPlayStoreMode(isChecked);
+            }
+        });
+
+        Button resetShowcasesButton = (Button) rootView.findViewById(R.id.button_resetShowcases);
+        resetShowcasesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialShowcaseView.resetAll(getContext());
             }
         });
 

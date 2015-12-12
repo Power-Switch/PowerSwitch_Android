@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string name="tutorial__got_it">OKAY</string>
+
+    <string name="tutorial__room_explanation">
+        This tab displays all your receivers grouped by rooms. This is
+        the new Control Central for your home :)
+    </string>
+    <string name="tutorial__scene_explanation">This tab shows all your scenes. Using scenes you can save
+        configurations of receivers for easy access at later time. An example would be a scene called \"Garden lights\"
+        which turns on the pond lighting, the path lighting and the rear house lighting. Another example is the
+        \"Cinema\" scene which turns on the TV and amplifier but also turns off the ceiling light.</string>
+    <string name="tutorial__timer_explanation">This tab shows all your timers. With timers you can let PowerSwitch
+        automatically perform actions for a given time and day of the week. An action can be anything from
+        switching a single receiver or switching a hole room to activating a scene. An example could be
+        the coffee machine, that turns on every morning at 6:00 am during the work week.</string>
+    <string name="tutorial__sleep_as_android_explanation">In this tab you can configure actions for the alarm clock
+        app \"Sleep As Android\" Wie bei Timern können Aktionen auch hier sowohl einzelne
+        Steckdosen, ganze Räume oder auch Szenen sein. Mögliche Events sind das aktivieren des Alarms, das
+        Snoozen (wenn man noch ein bisschen im Bett bleiben möchte) oder wenn man den klingelden Wecker
+        abschaltet. Ein Beispiel wäre die Nachttischbeleuchtung, die beim Klingeln des Weckers an geht, beim
+        Szoozen wieder aus geht und beim deaktivieren des Weckers wird zusätzlich zum Nachttischlicht noch die
+        Kaffeemaschine eingeschaltet.</string>
+
+
+    <string name="tutorial__add_new_roms_and_devices_here">Add new Rooms and Receivers using the + button</string>
+    <string name="tutorial__first_add_room">At first create a room to add your devices to</string>
+
+</resources>

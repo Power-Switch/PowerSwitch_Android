@@ -42,6 +42,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -281,7 +283,7 @@ public class ConfigureReceiverDialog extends DialogFragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                getDialog().cancel();
+                                cancel();
                             }
                         })
                         .setNeutralButton(android.R.string.no, null)

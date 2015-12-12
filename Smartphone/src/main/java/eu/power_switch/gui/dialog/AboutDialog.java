@@ -48,8 +48,13 @@ public class AboutDialog extends DialogFragment {
 
         TextView aboutTextView = (TextView) rootView.findViewById(R.id.textView_about);
         aboutTextView.setMovementMethod(LinkMovementMethod.getInstance());
-        String htmlSource = getString(R.string.version) + ": " + getString(R.string.app_version)
-                + "\n\n" + getString(R.string.app_about) + "\n\n" + getString(R.string.app_changelog);
+        String htmlSource = getString(R.string.version) + ": " + getString(R.string.app_version) +
+                "<br /><br />" +
+                getString(R.string.app_about) +
+                "<br /><br />" +
+                getString(R.string.app_changelog) +
+                "<br /><br />" +
+                getString(R.string.used_libraries);
         aboutTextView.setText(Html.fromHtml(htmlSource));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

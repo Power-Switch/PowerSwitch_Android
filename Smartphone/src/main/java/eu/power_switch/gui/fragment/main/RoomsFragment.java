@@ -48,6 +48,9 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Fragment containing a List of all Rooms and Receivers
@@ -125,7 +128,6 @@ public class RoomsFragment extends RecyclerViewFragment {
                 updateUI();
             }
         };
-
 
         return rootView;
     }

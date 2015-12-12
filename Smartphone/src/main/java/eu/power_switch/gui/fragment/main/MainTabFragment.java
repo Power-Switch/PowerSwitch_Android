@@ -29,9 +29,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.tutorial.TutorialHelper;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Fragment holding the room, scene and timer Fragments in a TabLayout
@@ -59,6 +63,21 @@ public class MainTabFragment extends Fragment {
 
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                showTutorial(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
         tabLayout.setTabsFromPagerAdapter(customTabAdapter);
@@ -70,7 +89,51 @@ public class MainTabFragment extends Fragment {
             tabViewPager.setCurrentItem(tabIndex);
         }
 
+        showTutorial(SettingsConstants.ROOMS_TAB_INDEX);
+
         return rootView;
+    }
+
+    private void showTutorial(int position) {
+
+        ArrayList<View> views = new ArrayList<>();
+        tabLayout.findViewsWithText(views, customTabAdapter.getPageTitle(position), View.FIND_VIEWS_WITH_TEXT);
+
+        View dummyView;
+        if (views.size() > 0) {
+            dummyView = views.get(0);
+        } else {
+            dummyView = new View(getContext());
+        }
+
+        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(position).toString());
+
+        String contentText;
+        switch (position) {
+            case SettingsConstants.ROOMS_TAB_INDEX:
+                contentText = getString(R.string.tutorial__room_explanation);
+                break;
+            case SettingsConstants.SCENES_TAB_INDEX:
+                contentText = getString(R.string.tutorial__scene_explanation);
+                break;
+            case SettingsConstants.TIMERS_TAB_INDEX:
+                contentText = getString(R.string.tutorial__timer_explanation);
+                break;
+            case SettingsConstants.SAA_TAB_INDEX:
+                contentText = getString(R.string.tutorial__sleep_as_android_explanation);
+                break;
+            default:
+                return;
+        }
+
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(dummyView)
+                .setUseAutoRadius(false)
+                .setRadius(64 * 3)
+                .setDismissText(getString(R.string.tutorial__got_it))
+                .setContentText(contentText)
+                .singleUse(showcaseKey)
+                .show();
     }
 
     @Override

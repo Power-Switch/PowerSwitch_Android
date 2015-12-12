@@ -159,6 +159,20 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
             }
         });
 
+        // TODO: Showcase is rendered behind the Dialog, maybe needs fix in library
+//        MaterialShowcaseView materialShowcaseView = new MaterialShowcaseView.Builder(getActivity())
+//                .setTarget(name)
+//                .setUseAutoRadius(false)
+//                .setRadius(64 * 2)
+//                .setDismissText(getString(R.string.tutorial__got_it))
+//                .setContentText(getString(R.string.tutorial__first_add_room))
+//                .setDelay(500)
+//                .setDismissOnTouch(true)
+////                .singleUse("tutorial__first_add_room");
+//                .build();
+//        materialShowcaseView.bringToFront();
+//        materialShowcaseView.show(getActivity());
+
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
             long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);

@@ -72,24 +72,30 @@
     <!-- application information -->
     <string name="version">Version</string>
     <string name="app_about">
-<![CDATA[
-        <br /><br />This app is developed by<br />
+    <![CDATA[
+        This app is developed by<br />
         <br />
         Max Rosin &amp; Markus Ressel<br />
         More information at: <a href="http://power-switch.eu">power-switch.eu</a><br />
         <br />
         Join the <a href="https://plus.google.com/communities/101925642491277812164">PowerSwitch G+ Community</a>!<br />
-        <br />]]>
+    ]]>
     </string>
     <string name="app_changelog">
-<![CDATA[
-Changelog:<br />
-<a href="http://power-switch.eu/download/">http://power-switch.eu/download</a><br />
-<br />
-Source Code on GitHub:<br />
-<a href="https://github.com/Power-Switch/PowerSwitch_Android">https://github.com/Power-Switch/PowerSwitch_Android</a><br />
-]]>
-</string>
+    <![CDATA[
+        Changelog:<br />
+        <a href="http://power-switch.eu/download/">http://power-switch.eu/download</a><br />
+        <br />
+        Source Code on GitHub:<br />
+        <a href="https://github.com/Power-Switch/PowerSwitch_Android">https://github.com/Power-Switch/PowerSwitch_Android</a><br />
+    ]]>
+    </string>
+    <string name="used_libraries">
+    <![CDATA[
+        Used Libraries:<br />
+        <a href="https://github.com/deano2390/MaterialShowcaseView">MaterialShowcaseView</a><br />
+    ]]>
+    </string>
 
     <string-array name="main_tab_names">
         <item>@string/rooms</item>

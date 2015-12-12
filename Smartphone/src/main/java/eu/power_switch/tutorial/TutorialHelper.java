@@ -16,20 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha2'
-    }
-}
+package eu.power_switch.tutorial;
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
+import eu.power_switch.shared.constants.TutorialConstants;
+
+/**
+ * Created by Markus on 12.12.2015.
+ */
+public class TutorialHelper {
+
+    public static String getMainTabKey(String pageTitle) {
+        return TutorialConstants.MAIN_TABS_KEY_PREFIX + pageTitle;
     }
+
 }
