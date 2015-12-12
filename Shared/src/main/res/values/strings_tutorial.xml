@@ -23,32 +23,25 @@
 
     <string name="tutorial__room_explanation">
         This tab displays all your receivers grouped by rooms.\n
-        \n
-        The new Control Center for your home :)
+        \nThe new Control Center for your home :)
     </string>
     <string name="tutorial__scene_explanation">This tab shows all your scenes.\n
-        \n
-        Using scenes you can save configurations of receivers for easy access at later time.\n
-        \n
-        An example would be a scene called \"Garden lights\" which turns on the pond lighting, the path lighting and
+        \nUsing scenes you can save configurations of receivers for easy access at later time.\n
+        \nAn example would be a scene called \"Garden lights\" which turns on the pond lighting, the path lighting and
         the rear house lighting. Another example is the \"Cinema\" scene which turns on the TV and amplifier but also
         turns off the ceiling light.
     </string>
     <string name="tutorial__timer_explanation">This tab shows all your timers.\n
-        \n
-        With timers you can let PowerSwitch
+        \nWith timers you can let PowerSwitch
         automatically perform actions for a given time and day of the week. An action can be anything from
         switching a single receiver or switching a hole room to activating a scene.\n
-        \n
-        An example could be the coffee machine, that turns on every morning at 6:00 am during the work week.
+        \nAn example could be the coffee machine, that turns on every morning at 6:00 am during the work week.
     </string>
     <string name="tutorial__sleep_as_android_explanation">In this tab you can configure actions for the alarm clock
         app \"Sleep As Android\".\n
-        \n
-        Just like with timers you can add receiver, room and scene actions. Possible events are the ringing alarm,
+        \nJust like with timers you can add receiver, room and scene actions. Possible events are the ringing alarm,
         snoozing and disabling an active alarm.\n
-        \n
-        An example would be turning on your bedside lamp when an alarm goes off, turning the light off again when
+        \nAn example would be turning on your bedside lamp when an alarm goes off, turning the light off again when
         you snooze the alarm and when you finally disable the alarm to stand up the light goes on again and the
         coffee machine starts to work.
     </string>
