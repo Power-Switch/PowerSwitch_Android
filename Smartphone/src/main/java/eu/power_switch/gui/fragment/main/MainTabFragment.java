@@ -143,6 +143,7 @@ public class MainTabFragment extends Fragment {
                 .setTarget(dummyView)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
+                .setDismissOnTouch(true)
                 .setDismissText(getString(R.string.tutorial__got_it))
                 .setContentText(contentText)
                 .singleUse(showcaseKey)

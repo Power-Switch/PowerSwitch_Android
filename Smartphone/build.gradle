@@ -69,7 +69,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
 
     // External Libraries
-    compile 'com.github.deano2390:MaterialShowcaseView:1.0.5'
+//    compile 'com.github.deano2390:MaterialShowcaseView:1.0.5'
+    compile project(':library')
 
     // PowerSwitch Modules
     compile project(':Shared')
