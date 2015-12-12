@@ -19,6 +19,7 @@
 package eu.power_switch.gui.fragment.main;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,7 @@ public class MainTabFragment extends Fragment {
     private CustomTabAdapter customTabAdapter;
     private TabLayout tabLayout;
     private ViewPager tabViewPager;
+    private int currentTab = 0;
 
     private boolean skipTutorial = false;
 
@@ -74,6 +76,7 @@ public class MainTabFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
+                currentTab = position;
                 if (!skipTutorial) {
                     showTutorial(position);
                 }
@@ -93,9 +96,8 @@ public class MainTabFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(TAB_INDEX_KEY)) {
-            int tabIndex = args.getInt(TAB_INDEX_KEY);
-            tabViewPager.setCurrentItem(tabIndex);
-
+            currentTab = args.getInt(TAB_INDEX_KEY);
+            tabViewPager.setCurrentItem(currentTab);
         }
 
         skipTutorial = false;
@@ -105,10 +107,10 @@ public class MainTabFragment extends Fragment {
         return rootView;
     }
 
-    private void showTutorial(int position) {
+    private void showTutorial(int tabIndex) {
 
         ArrayList<View> views = new ArrayList<>();
-        tabLayout.findViewsWithText(views, customTabAdapter.getPageTitle(position), View.FIND_VIEWS_WITH_TEXT);
+        tabLayout.findViewsWithText(views, customTabAdapter.getPageTitle(tabIndex), View.FIND_VIEWS_WITH_TEXT);
 
         View dummyView;
         if (views.size() > 0) {
@@ -117,10 +119,10 @@ public class MainTabFragment extends Fragment {
             dummyView = new View(getContext());
         }
 
-        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(position).toString());
+        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(tabIndex).toString());
 
         String contentText;
-        switch (position) {
+        switch (tabIndex) {
             case SettingsConstants.ROOMS_TAB_INDEX:
                 contentText = getString(R.string.tutorial__room_explanation);
                 break;
