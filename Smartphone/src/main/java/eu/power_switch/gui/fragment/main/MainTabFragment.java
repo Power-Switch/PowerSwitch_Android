@@ -44,9 +44,13 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  */
 public class MainTabFragment extends Fragment {
 
+    public static final String TAB_INDEX_KEY = "tabIndex";
+
     private CustomTabAdapter customTabAdapter;
     private TabLayout tabLayout;
     private ViewPager tabViewPager;
+
+    private boolean skipTutorial = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,7 +74,9 @@ public class MainTabFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                showTutorial(position);
+                if (!skipTutorial) {
+                    showTutorial(position);
+                }
             }
 
             @Override
@@ -79,17 +85,22 @@ public class MainTabFragment extends Fragment {
             }
         });
 
+        skipTutorial = true;
+
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
         tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("tabIndex")) {
-            int tabIndex = args.getInt("tabIndex");
+        if (args != null && args.containsKey(TAB_INDEX_KEY)) {
+            int tabIndex = args.getInt(TAB_INDEX_KEY);
             tabViewPager.setCurrentItem(tabIndex);
+
         }
 
-        showTutorial(SettingsConstants.ROOMS_TAB_INDEX);
+        skipTutorial = false;
+
+        showTutorial(tabViewPager.getCurrentItem());
 
         return rootView;
     }

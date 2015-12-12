@@ -257,7 +257,7 @@ public class StatusMessageHandler {
                         .getString(R.string.menu_settings));
                 SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
                 Bundle arguments = new Bundle();
-                arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
+                arguments.putInt(SettingsTabFragment.TAB_INDEX_KEY, SettingsConstants.GATEWAYS_TAB_INDEX);
                 settingsTabFragment.setArguments(arguments);
                 recyclerViewFragment.getActivity().getSupportFragmentManager()
                         .beginTransaction()
@@ -283,7 +283,7 @@ public class StatusMessageHandler {
                         .getString(R.string.menu_settings));
                 SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
                 Bundle arguments = new Bundle();
-                arguments.putInt("tabIndex", SettingsConstants.GATEWAYS_TAB_INDEX);
+                arguments.putInt(SettingsTabFragment.TAB_INDEX_KEY, SettingsConstants.GATEWAYS_TAB_INDEX);
                 settingsTabFragment.setArguments(arguments);
                 fragmentActivity.getSupportFragmentManager()
                         .beginTransaction()

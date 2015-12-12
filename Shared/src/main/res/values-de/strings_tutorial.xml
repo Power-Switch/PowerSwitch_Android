@@ -22,24 +22,41 @@
     <string name="tutorial__got_it">OKAY</string>
 
     <string name="tutorial__room_explanation">In diesem Tab werden alle deine Empfänger (gruppiert nach
-        Räumen) angezeigt. Die neue Hauptschaltzentrale deines Heims :)
+        Räumen) angezeigt.\n
+        \n
+        Die neue Hauptschaltzentrale deines Heims :)
     </string>
-    <string name="tutorial__scene_explanation">In diesem Tab werden Szenen angezeigt. Mit einer Szene kannst du eine
+    <string name="tutorial__scene_explanation">In diesem Tab werden Szenen angezeigt.\n
+        \n
+        Mit einer Szene kannst du eine
         bestimmte Konfiguration von An- oder Ausgeschalteten Steckdosen für den schnellen Zugriff zu einem späteren
-        Zeitpunkt speichern. Ein Beispiel wäre die Szene \"Gartenbeleuchtung\", welche die Funksteckdose am Teich, am
+        Zeitpunkt speichern.\n
+        \n
+        Ein Beispiel wäre die Szene \"Gartenbeleuchtung\", welche die Funksteckdose am Teich, am
         Weg und hinter der Laube einschaltet. Ein weiteres Beispiel ist der \"Kinoabend\", der den Fernseher und den
-        Verstärker ein-, die Deckenbeleuchtung aber aussschaltet.</string>
-    <string name="tutorial__timer_explanation">In diesem Tab werden Timer angezeigt. Mit Timern kannst du zu
+        Verstärker ein-, die Deckenbeleuchtung aber aussschaltet.
+    </string>
+    <string name="tutorial__timer_explanation">In diesem Tab werden Timer angezeigt.\n
+        \n
+        Mit Timern kannst du zu
         einer bestimmten Tageszeit an bestimmten Wochentagen automatisch aktionen Ausführen. Eine Aktion kann
-        dabei eine einzelne Funksteckdose, ein ganzer Raum oder auch eine Szene sein. Ein Beispiel für einen
-        Timer wäre die Kaffeemaschine, die morgens um 6:00 von Montag bis Freitag an gehen soll.</string>
+        dabei eine einzelne Funksteckdose, ein ganzer Raum oder auch eine Szene sein.\n
+        \n
+        Ein Beispiel für einen
+        Timer wäre die Kaffeemaschine, die morgens um 6:00 von Montag bis Freitag an gehen soll.
+    </string>
     <string name="tutorial__sleep_as_android_explanation">In diesem Tab kannst du für Wecker Events der \"Sleep As
-        Android\" App Aktionen festlegen. Wie bei Timern können Aktionen auch hier sowohl einzelne
+        Android\" App Aktionen festlegen.\n
+        \n
+        Wie bei Timern können Aktionen auch hier sowohl einzelne
         Steckdosen, ganze Räume oder auch Szenen sein. Mögliche Events sind das aktivieren des Alarms, das
         Snoozen (wenn man noch ein bisschen im Bett bleiben möchte) oder wenn man den klingelden Wecker
-        abschaltet. Ein Beispiel wäre die Nachttischbeleuchtung, die beim Klingeln des Weckers an geht, beim
+        abschaltet.\n
+        \n
+        Ein Beispiel wäre die Nachttischbeleuchtung, die beim Klingeln des Weckers an geht, beim
         Szoozen wieder aus geht und beim deaktivieren des Weckers wird zusätzlich zum Nachttischlicht noch die
-        Kaffeemaschine eingeschaltet.</string>
+        Kaffeemaschine eingeschaltet.
+    </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>
 

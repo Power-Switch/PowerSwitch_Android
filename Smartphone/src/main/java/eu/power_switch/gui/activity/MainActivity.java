@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Fragment tabLayoutFragment = MainTabFragment.class.newInstance();
             Bundle arguments = new Bundle();
-            arguments.putInt("tabIndex", SmartphonePreferencesHandler.getStartupDefaultTab());
+            arguments.putInt(MainTabFragment.TAB_INDEX_KEY, SmartphonePreferencesHandler.getStartupDefaultTab());
             tabLayoutFragment.setArguments(arguments);
             lastFragmentClasses.push(tabLayoutFragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));

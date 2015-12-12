@@ -41,6 +41,9 @@ import eu.power_switch.shared.constants.SettingsConstants;
  * Created by Markus on 30.08.2015.
  */
 public class SettingsTabFragment extends Fragment {
+
+    public static final String TAB_INDEX_KEY = "tabIndex";
+
     private CustomTabAdapter customTabAdapter;
     private TabLayout tabLayout;
     private ViewPager tabViewPager;
@@ -67,8 +70,8 @@ public class SettingsTabFragment extends Fragment {
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey("tabIndex")) {
-            int tabIndex = args.getInt("tabIndex");
+        if (args != null && args.containsKey(TAB_INDEX_KEY)) {
+            int tabIndex = args.getInt(TAB_INDEX_KEY);
             tabViewPager.setCurrentItem(tabIndex);
         }
 
