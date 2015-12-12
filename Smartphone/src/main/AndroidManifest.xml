@@ -62,6 +62,7 @@
         </activity>
         <activity
             android:name=".widget.activity.ConfigureReceiverWidgetActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
@@ -70,6 +71,7 @@
         </activity>
         <activity
             android:name=".widget.activity.ConfigureRoomWidgetActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
@@ -78,6 +80,7 @@
         </activity>
         <activity
             android:name=".widget.activity.ConfigureSceneWidgetActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
