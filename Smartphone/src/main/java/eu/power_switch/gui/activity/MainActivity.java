@@ -31,6 +31,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -40,8 +41,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -173,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the menu icon instead of the launcher icon.
         final ActionBar ab = getSupportActionBar();
+
         ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -193,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        initMenuItems(navigationView.getMenu());
 
         recyclerViewHistory = (RecyclerView) findViewById(R.id.recyclerview_history);
         historyItemArrayAdapter = new HistoryItemRecyclerViewAdapter(this, historyItems);
@@ -277,6 +284,53 @@ public class MainActivity extends AppCompatActivity {
         }.execute(this);
     }
 
+    private void initMenuItems(Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem currentMenuItem = menu.getItem(i);
+
+            int tintColor;
+            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+                tintColor = ContextCompat.getColor(this, R.color.textColorSecondary);
+            } else {
+                tintColor = ContextCompat.getColor(this, R.color.textColorSecondaryInverse);
+            }
+
+            IconicsDrawable iconicsDrawable = null;
+            switch (currentMenuItem.getItemId()) {
+                case R.id.home:
+                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home);
+                    iconicsDrawable.color(ContextCompat.getColor(this, R.color.accent_blue_a700));
+                    break;
+                case R.id.backup_restore:
+                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore);
+                    iconicsDrawable.color(tintColor);
+                    break;
+                case R.id.settings:
+                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_settings);
+                    iconicsDrawable.color(tintColor);
+                    break;
+                case R.id.help:
+                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_help);
+                    iconicsDrawable.color(tintColor);
+                    break;
+                case R.id.donate:
+                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_money);
+                    iconicsDrawable.color(tintColor);
+                    break;
+                case R.id.about:
+                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_info);
+                    iconicsDrawable.color(tintColor);
+                    break;
+                default:
+                    break;
+            }
+
+            if (iconicsDrawable != null) {
+                currentMenuItem.setIcon(iconicsDrawable);
+            }
+        }
+    }
+
     private void updateHistory() {
         historyItems.clear();
         historyItems.addAll(DatabaseHandler.getHistory());
@@ -301,7 +355,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectNavigationItem(MenuItem menuItem) {
         try {
-            Class newFragmentClass = null;
+
+            Fragment fragment = null;
 
             switch (menuItem.getItemId()) {
                 case android.R.id.home:
@@ -322,10 +377,10 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawers();
                     return;
                 case R.id.backup_restore:
-                    newFragmentClass = BackupFragment.class;
+                    fragment = BackupFragment.class.newInstance();
                     break;
                 case R.id.settings:
-                    newFragmentClass = SettingsTabFragment.class;
+                    fragment = SettingsTabFragment.class.newInstance();
                     break;
                 case R.id.help:
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://power-switch.eu/faq/"));
@@ -340,20 +395,34 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawers();
                     return;
                 case R.id.about:
+//                    fragment = new LibsBuilder()
+//                            //get the fragment
+//                            .withAboutIconShown(true)
+//                            .withAboutVersionShown(true)
+//                            .withAboutDescription("This is a small sample which can be set in the about my app description file.<br /><b>You can style this with html markup :D</b>")
+//                            .withActivityStyle(Libs.ActivityStyle.DARK)
+//                            .supportFragment();
+//                    break;
+
+//                    getSupportFragmentManager()
+//                            .beginTransaction()
+//                            .setCustomAnimations(R.anim
+//                                    .slide_in_right, R.anim.slide_out_left, android.R.anim
+//                                    .slide_in_left, android.R.anim.slide_out_right)
+//                            .replace(R.id.mainContentFrameLayout, fragment)
+//                            .addToBackStack(fragment.getTag()).commit();
+
                     AboutDialog aboutDialog = new AboutDialog();
                     aboutDialog.show(getSupportFragmentManager(), null);
-
-                    drawerLayout.closeDrawers();
                     return;
                 default:
 
             }
 
-            if (newFragmentClass != null && (lastFragmentClasses.isEmpty()) || !lastFragmentClasses.peek()
-                    .equals(newFragmentClass)) {
-                lastFragmentClasses.push(newFragmentClass);
+            if (fragment != null && (lastFragmentClasses.isEmpty()) || !lastFragmentClasses.peek()
+                    .equals(fragment.getClass())) {
+                lastFragmentClasses.push(fragment.getClass());
                 lastFragmentTitles.push(String.valueOf(menuItem.getTitle()));
-                Fragment fragment = (Fragment) lastFragmentClasses.peek().newInstance();
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim

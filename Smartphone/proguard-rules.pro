@@ -20,3 +20,7 @@
 -keep class eu.power_switch.obj.** {
     *;
 }
+-keep class .R
+-keep class **.R$* {
+    <fields>;
+}
