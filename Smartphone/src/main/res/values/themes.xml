@@ -38,6 +38,15 @@
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+
+        <!-- About Libraries -->
+        <item name="about_libraries_window_background">@color/windowBackground</item>
+        <item name="about_libraries_card">@color/cardview_background</item>
+        <item name="about_libraries_title_openSource">@color/textColorPrimary</item>
+        <item name="about_libraries_text_openSource">@color/textColorSecondary</item>
+        <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
+        <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
+        <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
     </style>
 
     <!-- Base Light Theme -->
@@ -59,6 +68,15 @@
         <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
         <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+
+        <!-- About Libraries -->
+        <item name="about_libraries_window_background">@color/windowBackgroundInverse</item>
+        <item name="about_libraries_card">@color/cardview_backgroundInverse</item>
+        <item name="about_libraries_title_openSource">@color/textColorPrimaryInverse</item>
+        <item name="about_libraries_text_openSource">@color/textColorSecondaryInverse</item>
+        <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
+        <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
+        <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
     </style>
 
     <!-- Base Dark Blue -->
