@@ -72,18 +72,30 @@
     <!-- application information -->
     <string name="app_description_html">
     <![CDATA[
-        This app is developed by<br />
+        This app was originally started by<br />
         <br />
         Max Rosin &amp; Markus Ressel<br />
+        <br />
+        and is now maintained and developed by<br />
+        <br />
+        Markus Ressel<br />
+        <br />
         More information at: <a href="http://power-switch.eu">power-switch.eu</a><br />
+        <br />
         <br />
         Join the <a href="https://plus.google.com/communities/101925642491277812164">PowerSwitch G+ Community</a>!<br />
         <br />
-        Changelog:<br />
+        <br />
+        <b>Changelog:</b><br />
         <a href="http://power-switch.eu/download/">http://power-switch.eu/download</a><br />
         <br />
-        Source Code on GitHub:<br />
+        <br />
+        <b>Source Code on GitHub:</b><br />
         <a href="https://github.com/Power-Switch/PowerSwitch_Android">https://github.com/Power-Switch/PowerSwitch_Android</a><br />
+        <br />
+        <br />
+        <br />
+        <b>PowerSwitch uses the following libraries:</b>
     ]]>
     </string>
 
