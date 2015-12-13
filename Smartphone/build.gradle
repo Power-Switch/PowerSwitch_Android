@@ -74,11 +74,10 @@ dependencies {
 //    compile 'com.github.deano2390:MaterialShowcaseView:1.0.5'
     compile project(':library')
 
-    // TODO: strange problems with app_name string resource
-//    // AboutLibraries
-//    compile('com.mikepenz:aboutlibraries:5.3.3@aar') {
-//        transitive = true
-//    }
+    // AboutLibraries
+    compile('com.mikepenz:aboutlibraries:5.3.3@aar') {
+        transitive = true
+    }
 
     // Iconics (use SVG resources)
     compile 'com.mikepenz:iconics-core:2.5.1@aar'

@@ -45,6 +45,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
@@ -57,7 +58,6 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.AboutDialog;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.main.MainTabFragment;
@@ -395,28 +395,14 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawers();
                     return;
                 case R.id.about:
-//                    fragment = new LibsBuilder()
-//                            //get the fragment
-//                            .withAboutIconShown(true)
-//                            .withAboutVersionShown(true)
-//                            .withAboutDescription("This is a small sample which can be set in the about my app description file.<br /><b>You can style this with html markup :D</b>")
-//                            .withActivityStyle(Libs.ActivityStyle.DARK)
-//                            .supportFragment();
-//                    break;
-
-//                    getSupportFragmentManager()
-//                            .beginTransaction()
-//                            .setCustomAnimations(R.anim
-//                                    .slide_in_right, R.anim.slide_out_left, android.R.anim
-//                                    .slide_in_left, android.R.anim.slide_out_right)
-//                            .replace(R.id.mainContentFrameLayout, fragment)
-//                            .addToBackStack(fragment.getTag()).commit();
-
-                    AboutDialog aboutDialog = new AboutDialog();
-                    aboutDialog.show(getSupportFragmentManager(), null);
-                    return;
-                default:
-
+                    fragment = new LibsBuilder()
+                            //get the fragment
+                            .withAboutIconShown(true)
+                            .withAboutVersionShown(true)
+                            .withAboutDescription(getString(R.string.app_description_html))
+                            .supportFragment();
+                    fragment.setHasOptionsMenu(true);
+                    break;
             }
 
             if (fragment != null && (lastFragmentClasses.isEmpty()) || !lastFragmentClasses.peek()
@@ -435,7 +421,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Highlight the selected item
-            menuItem.setChecked(true);
+            if (menuItem.isCheckable()) {
+                menuItem.setChecked(true);
+            }
 
             // close the drawer
             drawerLayout.closeDrawers();
