@@ -56,6 +56,7 @@ import java.util.Stack;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.DonationDialog;
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         // Set the menu icon instead of the launcher icon.
         final ActionBar ab = getSupportActionBar();
 
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        ab.setHomeAsUpIndicator(IconicsHelper.getMenuIcon(this));
         ab.setDisplayHomeAsUpEnabled(true);
 
 

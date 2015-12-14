@@ -39,6 +39,19 @@ public class IconicsHelper {
     private IconicsHelper() {
     }
 
+    public static IconicsDrawable getMenuIcon(Context context) {
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_menu)
+                .sizeDp(24);
+
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
+        } else {
+            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
+        }
+
+        return iconicsDrawable;
+    }
+
     public static IconicsDrawable getAddIcon(Context context, @ColorRes int colorResourceId) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_plus)
                 .color(ContextCompat.getColor(context, colorResourceId))
