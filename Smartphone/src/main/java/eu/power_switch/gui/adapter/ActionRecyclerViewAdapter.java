@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
+import eu.power_switch.gui.IconicsHelper;
 
 /**
  * Adapter to visualize Action items in RecyclerView
@@ -81,6 +82,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
             super(itemView);
             this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
             this.deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_timer_action_fab);
+            deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(context, android.R.color.white));
 
             this.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
                 @Override

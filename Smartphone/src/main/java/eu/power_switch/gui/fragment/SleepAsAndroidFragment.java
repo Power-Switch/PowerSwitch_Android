@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddAlarmEventActionDialog;
@@ -118,6 +119,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         recyclerViewActions.setLayoutManager(layoutManager);
 
         addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action_fab);
+        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

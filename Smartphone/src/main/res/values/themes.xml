@@ -31,7 +31,6 @@
         <item name="dialog_bottomBar_next_color">@color/textColorPrimary</item>
         <item name="button_backgroundDrawable">@drawable/button_shape_selector_dark</item>
         <item name="cardview_backgroundColor">@color/cardview_background</item>
-        <item name="reorder_handle_color">@drawable/ic_reorder_white_24dp</item>
 
         <!-- text color -->
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
@@ -61,7 +60,6 @@
         <item name="dialog_bottomBar_next_color">@color/textColorPrimaryInverse</item>
         <item name="button_backgroundDrawable">@drawable/button_shape_selector_light</item>
         <item name="cardview_backgroundColor">@color/cardview_backgroundInverse</item>
-        <item name="reorder_handle_color">@drawable/ic_reorder_24dp</item>
 
         <!-- text color -->
         <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>

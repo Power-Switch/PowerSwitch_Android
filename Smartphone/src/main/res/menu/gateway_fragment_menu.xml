@@ -22,13 +22,11 @@
 
     <item
         android:id="@+id/create_gateway"
-        android:icon="@drawable/ic_add_white_24dp"
         android:title="@string/create_gateway"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/search_gateways"
-        android:icon="@drawable/ic_autorenew_white_24dp"
         android:title="@string/search_gateway"
         app:showAsAction="ifRoom"/>
 

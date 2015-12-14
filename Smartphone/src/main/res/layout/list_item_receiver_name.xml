@@ -40,8 +40,6 @@
         android:layout_width="64dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical|right"
-        android:backgroundTint="?attr/colorPrimary"
-        android:scaleType="center"
-        android:src="?attr/reorder_handle_color"/>
+        android:scaleType="center"/>
 
 </LinearLayout>

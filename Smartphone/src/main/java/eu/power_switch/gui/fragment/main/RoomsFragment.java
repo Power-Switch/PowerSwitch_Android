@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
@@ -46,11 +47,9 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.receiver.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 /**
  * Fragment containing a List of all Rooms and Receivers
@@ -94,6 +93,7 @@ public class RoomsFragment extends RecyclerViewFragment {
         updateUI();
 
         addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_receiver_fab);
+        addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         final RecyclerViewFragment recyclerViewFragment = this;
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +172,13 @@ public class RoomsFragment extends RecyclerViewFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.room_fragment_menu, menu);
+
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            menu.findItem(R.id.create_receiver).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        } else {
+            menu.findItem(R.id.create_receiver).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

@@ -44,6 +44,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.receiver.ReceiverAlreadyExistsException;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.obj.receiver.Room;
@@ -149,6 +150,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
         updateRoomNamesList();
 
         addRoomFAB = (FloatingActionButton) rootView.findViewById(R.id.add_room_fab);
+        addRoomFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         final Fragment fragment = this;
         addRoomFAB.setOnClickListener(new View.OnClickListener() {
             @Override

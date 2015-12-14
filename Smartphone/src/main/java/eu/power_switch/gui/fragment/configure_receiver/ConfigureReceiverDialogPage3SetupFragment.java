@@ -49,6 +49,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.network.NetworkHandler;
@@ -287,6 +288,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
         layoutUniversal = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalButtons);
         FloatingActionButton addUniversalButtonFAB = (FloatingActionButton) rootView.findViewById(R.id
                 .add_universalButton_fab);
+        addUniversalButtonFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         buttonsList = (LinearLayout) rootView.findViewById(R.id.universalButtons_List);
 
         addUniversalButtonFAB.setOnClickListener(new View.OnClickListener() {

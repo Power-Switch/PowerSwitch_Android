@@ -39,11 +39,13 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 
@@ -105,6 +107,7 @@ public class TimersFragment extends RecyclerViewFragment {
         refreshTimers();
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.add_timer_fab);
+        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,6 +169,13 @@ public class TimersFragment extends RecyclerViewFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.timer_fragment_menu, menu);
+
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            menu.findItem(R.id.create_timer).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        } else {
+            menu.findItem(R.id.create_timer).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        }
+        
         super.onCreateOptionsMenu(menu, inflater);
     }
 

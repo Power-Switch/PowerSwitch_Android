@@ -36,6 +36,7 @@ import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.log.Log;
@@ -140,6 +141,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
             this.backupName = (TextView) itemView.findViewById(R.id.txt_backup_name);
             this.backupDate = (TextView) itemView.findViewById(R.id.txt_backup_date);
             this.deleteButton = (FloatingActionButton) itemView.findViewById(R.id.delete_backup_fab);
+            deleteButton.setImageDrawable(IconicsHelper.getDeleteIcon(context, android.R.color.white));
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {

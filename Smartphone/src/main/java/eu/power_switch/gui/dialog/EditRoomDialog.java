@@ -26,6 +26,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +46,7 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
@@ -137,6 +139,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         itemTouchHelper.attachToRecyclerView(listOfReceivers);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
+        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,6 +175,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         });
 
         imageButtonCancel = (ImageButton) rootView.findViewById(R.id.imageButton_cancel);
+        imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,6 +184,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         });
 
         imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
+        imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,11 +234,11 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
 
     private void setSaveButtonState(boolean enabled) {
         if (enabled) {
-            imageButtonSave.setColorFilter(getResources().getColor(eu.power_switch.shared.R.color
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
                     .active_green));
             imageButtonSave.setClickable(true);
         } else {
-            imageButtonSave.setColorFilter(getResources().getColor(eu.power_switch.shared.R.color
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
                     .inactive_gray));
             imageButtonSave.setClickable(false);
         }

@@ -42,6 +42,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
@@ -51,6 +52,7 @@ import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -104,9 +106,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         };
 
         searchGatewayFAB = (FloatingActionButton) rootView.findViewById(R.id.search_gateway_fab);
+        searchGatewayFAB.setImageDrawable(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.white));
         searchGatewayFAB.setOnClickListener(onClickListener);
 
         addGatewayFAB = (FloatingActionButton) rootView.findViewById(R.id.add_gateway_fab);
+        addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         addGatewayFAB.setOnClickListener(onClickListener);
 
         recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_gateways);
@@ -253,6 +257,16 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.gateway_fragment_menu, menu);
+
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+            menu.findItem(R.id.search_gateways).setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.white));
+        } else {
+            menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+            menu.findItem(R.id.search_gateways).setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.black));
+        }
+
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

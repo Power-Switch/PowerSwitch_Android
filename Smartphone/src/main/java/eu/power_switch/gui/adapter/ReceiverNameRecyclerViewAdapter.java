@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.obj.receiver.device.Receiver;
 import eu.power_switch.shared.log.Log;
@@ -114,6 +115,7 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
             this.mainLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_main);
             this.receiverName = (TextView) itemView.findViewById(R.id.txt_receiver_name);
             this.dragHandle = (ImageView) itemView.findViewById(R.id.drag_handle);
+            this.dragHandle.setImageDrawable(IconicsHelper.getReorderIcon(context));
         }
 
         @Override

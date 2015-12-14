@@ -54,6 +54,7 @@ import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.exception.backup.RestoreBackupException;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
@@ -61,6 +62,7 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -163,6 +165,7 @@ public class BackupFragment extends RecyclerViewFragment {
         recyclerViewBackups.setLayoutManager(layoutManager);
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_backup_fab);
+        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,6 +270,11 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.backup_fragment_menu, menu);
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        } else {
+            menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

@@ -326,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (iconicsDrawable != null) {
+                iconicsDrawable.sizeDp(24);
                 currentMenuItem.setIcon(iconicsDrawable);
             }
         }

@@ -33,6 +33,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -44,6 +45,7 @@ import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1TimeFragment;
@@ -131,6 +133,7 @@ public class ConfigureTimerDialog extends DialogFragment {
         tabLayout.setupWithViewPager(tabViewPager);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
+        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
         // hide if new receiver
         if (timerId == -1) {
             imageButtonDelete.setVisibility(View.GONE);
@@ -159,6 +162,7 @@ public class ConfigureTimerDialog extends DialogFragment {
         });
 
         imageButtonCancel = (ImageButton) rootView.findViewById(R.id.imageButton_cancel);
+        imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +185,7 @@ public class ConfigureTimerDialog extends DialogFragment {
         });
 
         imageButtonNext = (ImageButton) rootView.findViewById(R.id.imageButton_next);
+        imageButtonNext.setImageDrawable(IconicsHelper.getNextIcon(getActivity()));
         imageButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +195,7 @@ public class ConfigureTimerDialog extends DialogFragment {
         });
 
         imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
+        imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,11 +255,11 @@ public class ConfigureTimerDialog extends DialogFragment {
 
     private void setSaveButtonState(boolean enabled) {
         if (enabled) {
-            imageButtonSave.setColorFilter(getResources().getColor(eu.power_switch.shared.R.color
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
                     .active_green));
             imageButtonSave.setClickable(true);
         } else {
-            imageButtonSave.setColorFilter(getResources().getColor(eu.power_switch.shared.R.color
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
                     .inactive_gray));
             imageButtonSave.setClickable(false);
         }

@@ -63,7 +63,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|right"
                     android:contentDescription="@string/delete"
-                    android:src="@drawable/ic_delete_white_48dp"
                     app:backgroundTint="@color/delete_color"
                     app:borderWidth="0dp"
                     app:elevation="4dp"

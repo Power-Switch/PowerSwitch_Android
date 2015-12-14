@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -92,6 +93,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
 
         final Fragment fragment = this;
         FloatingActionButton addTimerActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_timer_action);
+        addTimerActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         addTimerActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,6 +192,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
                 super(itemView);
                 action = (TextView) itemView.findViewById(R.id.txt_action_description);
                 deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_timer_action_fab);
+                deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), android.R.color.white));
             }
         }
     }
