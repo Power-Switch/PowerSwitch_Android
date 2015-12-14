@@ -43,6 +43,8 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class AddAlarmEventActionDialog extends AddActionDialog {
 
+    public static final String EVENT_ID_KEY = "eventId";
+
     ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT currentEventType =
             ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
 
@@ -60,8 +62,8 @@ public class AddAlarmEventActionDialog extends AddActionDialog {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = getArguments();
-        if (args != null && args.containsKey("eventId")) {
-            int eventId = args.getInt("eventId");
+        if (args != null && args.containsKey(EVENT_ID_KEY)) {
+            int eventId = args.getInt(EVENT_ID_KEY);
             currentEventType = ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.getById(eventId);
         }
 

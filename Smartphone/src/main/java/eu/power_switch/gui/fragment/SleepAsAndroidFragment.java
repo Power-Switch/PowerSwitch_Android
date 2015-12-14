@@ -31,6 +31,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,8 +49,10 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddAlarmEventActionDialog;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -70,6 +75,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_sleep_as_android, container, false);
+        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -125,7 +131,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
             public void onClick(View v) {
                 AddAlarmEventActionDialog addAlarmEventActionDialog = new AddAlarmEventActionDialog();
                 Bundle args = new Bundle();
-                args.putInt("eventId", spinnerEventType.getSelectedItemPosition());
+                args.putInt(AddAlarmEventActionDialog.EVENT_ID_KEY, spinnerEventType.getSelectedItemPosition());
                 addAlarmEventActionDialog.setArguments(args);
                 addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
@@ -171,6 +177,49 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     public void onStop() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (super.onOptionsItemSelected(menuItem)) {
+            return true;
+        }
+
+        switch (menuItem.getItemId()) {
+            case R.id.add_action:
+                AddAlarmEventActionDialog addAlarmEventActionDialog = new AddAlarmEventActionDialog();
+                Bundle args = new Bundle();
+                args.putInt(AddAlarmEventActionDialog.EVENT_ID_KEY, spinnerEventType.getSelectedItemPosition());
+                addAlarmEventActionDialog.setArguments(args);
+                addAlarmEventActionDialog.setTargetFragment(this, 0);
+                addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
+            default:
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.sleep_as_android_fragment_menu, menu);
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        } else {
+            menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            addActionFAB.setVisibility(View.GONE);
+        } else {
+            addActionFAB.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
