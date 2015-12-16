@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -45,7 +46,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.mikepenz.aboutlibraries.LibsConfiguration;
+import com.mikepenz.aboutlibraries.entity.Library;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
@@ -128,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Used to notify Room Fragment (this) that Rooms have changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendHistoryChangedBroadcast(Context context) {
         Log.d(MainActivity.class, "sendHistoryChangedBroadcast");
@@ -140,28 +144,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate);
-        switch (SmartphonePreferencesHandler.getTheme()) {
-            case SettingsConstants.THEME_DARK_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                break;
-            case SettingsConstants.THEME_DARK_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
-                setTheme(R.style.PowerSwitchTheme_Dark_Red);
-                break;
-            case SettingsConstants.THEME_LIGHT_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Blue);
-                setTheme(R.style.PowerSwitchTheme_Light_Blue);
-                break;
-            case SettingsConstants.THEME_LIGHT_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
-                setTheme(R.style.PowerSwitchTheme_Light_Red);
-                break;
-            default:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                break;
-        }
+        applyTheme();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -285,6 +268,31 @@ public class MainActivity extends AppCompatActivity {
         }.execute(this);
     }
 
+    private void applyTheme() {
+        switch (SmartphonePreferencesHandler.getTheme()) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
+                setTheme(R.style.PowerSwitchTheme_Dark_Red);
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Blue);
+                setTheme(R.style.PowerSwitchTheme_Light_Blue);
+                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
+                setTheme(R.style.PowerSwitchTheme_Light_Red);
+                break;
+            default:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                break;
+        }
+    }
+
     private void initMenuItems(Menu menu) {
         for (int i = 0; i < menu.size(); i++) {
             MenuItem currentMenuItem = menu.getItem(i);
@@ -401,7 +409,75 @@ public class MainActivity extends AppCompatActivity {
                             //get the fragment
                             .withAboutIconShown(true)
                             .withAboutVersionShown(true)
+                            .withLicenseShown(true)
+                            .withVersionShown(true)
+                            .withAutoDetect(true)
                             .withAboutDescription(getString(R.string.app_description_html))
+                            .withAboutSpecial1(getString(R.string.changelog))
+                            .withAboutSpecial1Description(getString(R.string.changelog))
+                            .withAboutSpecial2(getString(R.string.github))
+                            .withAboutSpecial2Description(getString(R.string.github))
+                            .withAboutSpecial3(getString(R.string.license))
+                            .withAboutSpecial3Description(getString(R.string.gpl_v3_description_html))
+                            .withListener(new LibsConfiguration.LibsListener() {
+                                @Override
+                                public void onIconClicked(View v) {
+                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/"));
+                                    startActivity(browserIntent);
+                                }
+
+                                @Override
+                                public boolean onLibraryAuthorClicked(View v, Library library) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onLibraryContentClicked(View v, Library library) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onLibraryBottomClicked(View v, Library library) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onExtraClicked(View v, Libs.SpecialButton specialButton) {
+                                    if (specialButton == Libs.SpecialButton.SPECIAL1) {
+                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/download/"));
+                                        startActivity(browserIntent);
+                                        return true;
+                                    } else if (specialButton == Libs.SpecialButton.SPECIAL2) {
+                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Power-Switch/PowerSwitch_Android"));
+                                        startActivity(browserIntent);
+                                        return true;
+                                    } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
+                                        return false;
+                                    }
+
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onIconLongClicked(View v) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onLibraryAuthorLongClicked(View v, Library library) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onLibraryContentLongClicked(View v, Library library) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onLibraryBottomLongClicked(View v, Library library) {
+                                    return false;
+                                }
+                            })
                             .supportFragment();
                     fragment.setHasOptionsMenu(true);
                     break;
@@ -436,7 +512,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case BackupFragment.REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {

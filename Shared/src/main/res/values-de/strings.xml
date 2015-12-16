@@ -58,37 +58,4 @@
     <string name="missing_wifi_connection">Keine WLAN Verbindung!</string>
     <string name="missing_network_connection">Keine Netzwerkverbindung!</string>
 
-    <!-- application information -->
-    <string name="version">Version</string>
-    <string name="app_description_html">
-    <![CDATA[
-        Diese App wurde ursprünglich erstellt von<br />
-        <br />
-        Max Rosin &amp; Markus Ressel<br />
-        <br />
-        und wird gepflegt und weiterentwickelt von<br />
-        <br />
-        Markus Ressel<br />
-        <br />
-        <br />
-        Weitere Informationen unter: <a href="http://power-switch.eu">power-switch.eu</a><br />
-        <br />
-        <br />
-        Tritt der <a href="https://plus.google.com/communities/101925642491277812164">PowerSwitch G+ Community</a> bei!<br />
-        <br />
-        <br />
-        <b>Changelog:</b><br />
-        <a href="http://power-switch.eu/download/">http://power-switch.eu/download</a><br />
-        <br />
-        <br />
-        <b>Source Code auf GitHub:</b><br />
-        <a href="https://github.com/Power-Switch/PowerSwitch_Android">https://github.com/Power-Switch/PowerSwitch_Android</a><br />
-        <br />
-        <br />
-        <br />
-        <b>PowerSwitch verwendet die folgenden Libraries:</b>
-    ]]>
-    </string>
-
-
 </resources>
