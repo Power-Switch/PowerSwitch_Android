@@ -22,11 +22,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.database.table.scene.SceneTable;
-import eu.power_switch.obj.receiver.Scene;
-import eu.power_switch.obj.receiver.SceneItem;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.SceneItem;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -89,7 +90,7 @@ abstract class SceneHandler {
      * @param name Name of Scene
      * @return Scene
      */
-    protected static Scene get(String name) {
+    protected static Scene get(String name) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_NAME + "=='" + name + "'", null,
                 null, null, null);
         cursor.moveToFirst();
@@ -104,7 +105,7 @@ abstract class SceneHandler {
      * @param id ID of Scene
      * @return Scene
      */
-    protected static Scene get(Long id) {
+    protected static Scene get(Long id) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_ID + "==" + id, null, null, null,
                 null);
         cursor.moveToFirst();
@@ -113,12 +114,26 @@ abstract class SceneHandler {
         return scene;
     }
 
+    public static LinkedList<Scene> getByApartment(Long id) throws Exception {
+        LinkedList<Scene> scenes = new LinkedList<>();
+        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_APARTMENT_ID +
+                "==" + id, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            scenes.add(dbToScene(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return scenes;
+    }
+
     /**
      * Gets all Scenes from Database
      *
      * @return List of Scene
      */
-    protected static List<Scene> getAll() {
+    protected static List<Scene> getAll() throws Exception {
         List<Scene> scenes = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
@@ -137,13 +152,12 @@ abstract class SceneHandler {
      * @param c cursor pointing to a Scene database entry
      * @return Scene
      */
-    private static Scene dbToScene(Cursor c) {
+    private static Scene dbToScene(Cursor c) throws Exception {
         Scene scene = new Scene(c.getLong(0), c.getString(1));
         for (SceneItem item : SceneItemHandler.getSceneItems(scene.getId())) {
             scene.addSceneItem(item);
         }
         return scene;
     }
-
 
 }

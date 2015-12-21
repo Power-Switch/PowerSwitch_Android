@@ -22,11 +22,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.database.table.room.RoomTable;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
@@ -62,7 +63,7 @@ abstract class RoomHandler {
      *
      * @param id ID of Room
      */
-    protected static void delete(Long id) {
+    protected static void delete(Long id) throws Exception {
         ActionHandler.deleteByRoomId(id);
 
         deleteReceiversOfRoom(id);
@@ -74,7 +75,7 @@ abstract class RoomHandler {
      *
      * @param roomId ID of Room
      */
-    private static void deleteReceiversOfRoom(Long roomId) {
+    private static void deleteReceiversOfRoom(Long roomId) throws Exception {
         ArrayList<Receiver> receivers = ReceiverHandler.getByRoom(roomId);
         for (Receiver receiver : receivers) {
             ReceiverHandler.delete(receiver.getId());
@@ -87,7 +88,7 @@ abstract class RoomHandler {
      * @param name Name of Room
      * @return Room
      */
-    protected static Room get(String name) {
+    protected static Room get(String name) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_NAME + "=='" +
                 name + "'", null, null, null, null);
         cursor.moveToFirst();
@@ -103,7 +104,7 @@ abstract class RoomHandler {
      * @param id ID of Room
      * @return Room
      */
-    protected static Room get(Long id) {
+    protected static Room get(Long id) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_ID + "==" + id,
                 null, null, null, null);
         cursor.moveToFirst();
@@ -116,12 +117,31 @@ abstract class RoomHandler {
         return room;
     }
 
+    public static LinkedList<Room> getByApartment(Long id) throws Exception {
+        LinkedList<Room> rooms = new LinkedList<>();
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_APARTMENT_ID +
+                        "==" + id,
+                null, null, null, null);
+        cursor.moveToFirst();
+
+        boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
+
+        while (!cursor.isAfterLast()) {
+            Room room = dbToRoom(cursor);
+            room.setCollapsed(autoCollapseRooms);
+            rooms.add(room);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return rooms;
+    }
+
     /**
      * Gets all Rooms from Database
      *
      * @return List of Rooms
      */
-    protected static List<Room> getAll() {
+    protected static List<Room> getAll() throws Exception {
         List<Room> rooms = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
@@ -144,9 +164,10 @@ abstract class RoomHandler {
      * @param c cursor pointing to a Room database entry
      * @return Room
      */
-    private static Room dbToRoom(Cursor c) {
+    private static Room dbToRoom(Cursor c) throws Exception {
         Room room = new Room(c.getLong(0), c.getString(1));
         room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
         return room;
     }
+
 }

@@ -18,59 +18,48 @@
 
 package eu.power_switch.obj.receiver;
 
-import eu.power_switch.obj.receiver.device.Receiver;
-
 /**
- * Represents a SceneItem
- * A SceneItem is associated with a Receiver and one of its buttons.
+ * Represents a dip switch used in DipReceivers
  */
-public class SceneItem {
+public class DipSwitch {
 
     /**
-     * Associated Receiver
+     * Name of Dip
      */
-    private Receiver receiver;
+    private String name;
 
     /**
-     * Associated Button
+     * State of Dip
      */
-    private Button activeButton;
+    private boolean state;
 
     /**
-     * Constructor
+     * Default Constructor
      *
-     * @param receiver
-     * @param activeButton
+     * @param name  Name of Dip
+     * @param state State of Dip
      */
-    public SceneItem(Receiver receiver, Button activeButton) {
-        this.receiver = receiver;
-        this.activeButton = activeButton;
+    public DipSwitch(String name, boolean state) {
+        this.name = name;
+        this.state = state;
     }
 
     /**
-     * Get associated Receiver
+     * Get Name of Dip
      *
-     * @return Receiver
+     * @return name
      */
-    public Receiver getReceiver() {
-        return receiver;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Get associated Button
+     * Get state of Dip
      *
-     * @return Button
+     * @return state (true if enabled)
      */
-    public Button getActiveButton() {
-        return activeButton;
+    public boolean isChecked() {
+        return state;
     }
 
-    /**
-     * Set associated Button
-     *
-     * @param button
-     */
-    public void setActiveButton(Button button) {
-        this.activeButton = button;
-    }
 }

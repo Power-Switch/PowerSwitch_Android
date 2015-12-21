@@ -16,18 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.room;
+package eu.power_switch.database.table.apartment;
 
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Room table description
+ * Apartment table description
  */
-public class RoomTable {
+public class ApartmentTable {
 
-    public static final String TABLE_NAME = "rooms";
+    public static final String TABLE_NAME = "apartments";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_APARTMENT_ID = "apartment_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_POSITION = "position";
 
@@ -45,16 +44,12 @@ public class RoomTable {
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-            case 1:
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-                onCreate(db);
-        }
-
         if (oldVersion <= 10) {
-            // TODO: add column for apartment_id
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(db);
 
-//            db.execSQL();
+            // TODO: Add default Apartment if none exists
+            // TODO: Add existing rooms to the default apartment
         }
     }
 }

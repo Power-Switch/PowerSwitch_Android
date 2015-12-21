@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver.device;
+package eu.power_switch.obj.receiver;
 
 import java.util.LinkedList;
 import java.util.List;

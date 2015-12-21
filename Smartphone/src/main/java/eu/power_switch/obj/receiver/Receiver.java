@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver.device;
+package eu.power_switch.obj.receiver;
 
 import android.content.Context;
 
@@ -30,7 +30,7 @@ import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.Button;
+import eu.power_switch.obj.Button;
 
 /**
  * Represents any kind of device that can receive network signals
@@ -108,7 +108,7 @@ public abstract class Receiver {
             put("FSS 31000W", "eu.power_switch.obj.receiver.device.vivanco.FSS31000W");
             put("FSS 33600W", "eu.power_switch.obj.receiver.device.vivanco.FSS33600W");
             // Universal
-            put("Universal", "eu.power_switch.obj.receiver.device.UniversalReceiver");
+            put("Universal", "eu.power_switch.obj.receiver.UniversalReceiver");
         }
     };
 

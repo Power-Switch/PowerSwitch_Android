@@ -27,11 +27,11 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.table.scene.SceneItemTable;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.Scene;
-import eu.power_switch.obj.receiver.SceneItem;
-import eu.power_switch.obj.receiver.UniversalButton;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.SceneItem;
+import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -90,7 +90,7 @@ abstract class SceneItemHandler {
      * @param sceneId ID of Scene
      * @return list of SceneItems
      */
-    protected static List<SceneItem> getSceneItems(Long sceneId) {
+    protected static List<SceneItem> getSceneItems(Long sceneId) throws Exception {
         LinkedList<SceneItem> sceneItems = new LinkedList<>();
 
         Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, null,
@@ -130,7 +130,7 @@ abstract class SceneItemHandler {
      * @param c cursor pointing to a SceneItem database entry
      * @return SceneItem
      */
-    private static SceneItem dbToSceneItem(Cursor c) {
+    private static SceneItem dbToSceneItem(Cursor c) throws Exception {
         long receiverId = c.getLong(1);
         long activeButtonId = c.getLong(2);
 

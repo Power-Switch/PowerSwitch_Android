@@ -44,7 +44,7 @@ import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;

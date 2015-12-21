@@ -39,7 +39,7 @@ import eu.power_switch.shared.constants.ExternalAppConstants;
  */
 abstract class SleepAsAndroidHandler {
 
-    protected static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+    protected static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
@@ -58,7 +58,7 @@ abstract class SleepAsAndroidHandler {
         return actions;
     }
 
-    protected static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) {
+    protected static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
         deleteAlarmActions(event);
         addAlarmActions(event, actions);
     }
@@ -76,7 +76,7 @@ abstract class SleepAsAndroidHandler {
         }
     }
 
-    private static void deleteAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+    private static void deleteAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         for (Action action : getAlarmActions(event)) {
             DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID + "=" + action.getId(), null);
             // delete alarmXXXactions

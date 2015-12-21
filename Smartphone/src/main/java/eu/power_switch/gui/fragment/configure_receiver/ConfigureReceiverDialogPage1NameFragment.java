@@ -47,8 +47,8 @@ import eu.power_switch.exception.receiver.ReceiverAlreadyExistsException;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 

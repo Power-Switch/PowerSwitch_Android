@@ -44,7 +44,7 @@ abstract class TimerHandler {
      *
      * @param timer Timer
      */
-    protected static Long add(Timer timer) {
+    protected static Long add(Timer timer) throws Exception {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, timer.isActive());
         values.put(TimerTable.COLUMN_NAME, timer.getName());
@@ -85,7 +85,7 @@ abstract class TimerHandler {
      *
      * @param timerId ID of Timer
      */
-    protected static void delete(Long timerId) {
+    protected static void delete(Long timerId) throws Exception {
         AlarmHandler.cancelAlarm(DatabaseHandler.context, get(timerId));
 
         TimerActionHandler.delete(timerId);
@@ -106,7 +106,7 @@ abstract class TimerHandler {
      *
      * @param timer new Timer Object with same ID as existing one
      */
-    protected static void update(Timer timer) {
+    protected static void update(Timer timer) throws Exception {
         AlarmHandler.cancelAlarm(DatabaseHandler.context, get(timer.getId()));
 
         TimerActionHandler.update(timer);
@@ -139,7 +139,7 @@ abstract class TimerHandler {
      * @param timerId
      * @return Timer
      */
-    protected static Timer get(Long timerId) {
+    protected static Timer get(Long timerId) throws Exception {
         String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
                 TimerTable.COLUMN_EXECUTION_TIME, TimerTable.COLUMN_EXECUTION_INTERVAL,
                 TimerTable.COLUMN_EXECUTION_TYPE};
@@ -157,7 +157,7 @@ abstract class TimerHandler {
      *
      * @return List of Timer
      */
-    protected static List<Timer> getAll() {
+    protected static List<Timer> getAll() throws Exception {
         List<Timer> timers = new ArrayList<>();
         String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
                 TimerTable.COLUMN_EXECUTION_TIME, TimerTable.COLUMN_EXECUTION_INTERVAL,
@@ -178,7 +178,7 @@ abstract class TimerHandler {
      *
      * @return List of Timer
      */
-    protected static List<Timer> getAll(boolean isActive) {
+    protected static List<Timer> getAll(boolean isActive) throws Exception {
         List<Timer> timers = new ArrayList<>();
         int isActiveInt = isActive ? 1 : 0;
         String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
@@ -224,7 +224,7 @@ abstract class TimerHandler {
      * @param c cursor pointing to a Timer database entry
      * @return Timer
      */
-    private static Timer dbToTimer(Cursor c) {
+    private static Timer dbToTimer(Cursor c) throws Exception {
         Long timerId = c.getLong(0);
         int rawActive = c.getInt(1);
         boolean active;

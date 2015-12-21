@@ -27,6 +27,7 @@ public class SceneTable {
 
     public static final String TABLE_NAME = "scenes";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_APARTMENT_ID = "apartment_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_POSITION = "position";
 

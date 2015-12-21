@@ -16,50 +16,61 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver.device;
+package eu.power_switch.obj;
+
+import eu.power_switch.obj.receiver.Receiver;
 
 /**
- * Represents a dip switch used in DipReceivers
+ * Represents a SceneItem
+ * A SceneItem is associated with a Receiver and one of its buttons.
  */
-public class DipSwitch {
+public class SceneItem {
 
     /**
-     * Name of Dip
+     * Associated Receiver
      */
-    private String name;
+    private Receiver receiver;
 
     /**
-     * State of Dip
+     * Associated Button
      */
-    private boolean state;
+    private Button activeButton;
 
     /**
-     * Default Constructor
+     * Constructor
      *
-     * @param name  Name of Dip
-     * @param state State of Dip
+     * @param receiver
+     * @param activeButton
      */
-    public DipSwitch(String name, boolean state) {
-        this.name = name;
-        this.state = state;
+    public SceneItem(Receiver receiver, Button activeButton) {
+        this.receiver = receiver;
+        this.activeButton = activeButton;
     }
 
     /**
-     * Get Name of Dip
+     * Get associated Receiver
      *
-     * @return name
+     * @return Receiver
      */
-    public String getName() {
-        return name;
+    public Receiver getReceiver() {
+        return receiver;
     }
 
     /**
-     * Get state of Dip
+     * Get associated Button
      *
-     * @return state (true if enabled)
+     * @return Button
      */
-    public boolean isChecked() {
-        return state;
+    public Button getActiveButton() {
+        return activeButton;
     }
 
+    /**
+     * Set associated Button
+     *
+     * @param button
+     */
+    public void setActiveButton(Button button) {
+        this.activeButton = button;
+    }
 }

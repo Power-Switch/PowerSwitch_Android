@@ -33,10 +33,10 @@ import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.Scene;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -102,7 +102,7 @@ abstract class ActionHandler {
      * @param id ID of Action
      * @return Action
      */
-    protected static Action get(long id) {
+    protected static Action get(long id) throws Exception {
         String[] columns = {ActionTable.COLUMN_ID, ActionTable.COLUMN_ACTION_TYPE};
         Cursor cursor = DatabaseHandler.database.query(ActionTable.TABLE_NAME, columns,
                 ActionTable.COLUMN_ID + "=" + id, null, null, null, null);
@@ -118,7 +118,7 @@ abstract class ActionHandler {
         return action;
     }
 
-    private static Action dbToAction(Cursor cursor) {
+    private static Action dbToAction(Cursor cursor) throws Exception {
         long actionId = cursor.getLong(0);
         String actionType = cursor.getString(1);
 

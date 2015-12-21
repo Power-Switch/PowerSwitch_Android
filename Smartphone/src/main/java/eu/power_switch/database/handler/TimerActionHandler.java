@@ -61,7 +61,7 @@ abstract class TimerActionHandler {
      *
      * @param timerId ID of Timer
      */
-    protected static void delete(Long timerId) {
+    protected static void delete(Long timerId) throws Exception {
         ArrayList<Action> actions = getByTimerId(timerId);
 
         for (Action action : actions) {
@@ -86,7 +86,7 @@ abstract class TimerActionHandler {
      * @param timerId ID of Timer
      * @return List of Actions
      */
-    protected static ArrayList<Action> getByTimerId(long timerId) {
+    protected static ArrayList<Action> getByTimerId(long timerId) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {TimerActionTable.COLUMN_TIMER_ID, TimerActionTable.COLUMN_ACTION_ID};
@@ -109,7 +109,7 @@ abstract class TimerActionHandler {
      *
      * @param timer new Timer
      */
-    protected static void update(Timer timer) {
+    protected static void update(Timer timer) throws Exception {
         // delete current actions
         delete(timer.getId());
         // add new actions

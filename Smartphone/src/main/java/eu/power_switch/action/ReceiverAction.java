@@ -20,9 +20,9 @@ package eu.power_switch.action;
 
 import android.content.Context;
 
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.receiver.Receiver;
 
 /**
  * ReceiverAction that holds a specific room/receiver/button combination to activate on execution

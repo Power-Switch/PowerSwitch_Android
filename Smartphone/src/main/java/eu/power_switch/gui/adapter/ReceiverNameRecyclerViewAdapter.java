@@ -36,7 +36,7 @@ import java.util.Collections;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.animation.AnimationHandler;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 
 /**

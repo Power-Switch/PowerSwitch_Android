@@ -20,7 +20,7 @@ package eu.power_switch.action;
 
 import android.content.Context;
 
-import eu.power_switch.obj.receiver.Scene;
+import eu.power_switch.obj.Scene;
 
 /**
  * SceneAction that holds a specific scene to activate on execution

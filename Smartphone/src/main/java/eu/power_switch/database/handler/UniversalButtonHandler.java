@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.database.table.receiver.UniversalButtonTable;
-import eu.power_switch.obj.receiver.UniversalButton;
+import eu.power_switch.obj.UniversalButton;
 
 /**
  * Provides database methods for managing Universal Buttons (used on Universal Receivers)

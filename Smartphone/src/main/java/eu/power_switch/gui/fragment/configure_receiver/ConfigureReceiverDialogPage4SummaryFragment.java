@@ -48,16 +48,15 @@ import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.UniversalButton;
-import eu.power_switch.obj.receiver.device.AutoPairReceiver;
-import eu.power_switch.obj.receiver.device.DipReceiver;
-import eu.power_switch.obj.receiver.device.DipSwitch;
-import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
-import eu.power_switch.obj.receiver.device.Receiver;
-import eu.power_switch.obj.receiver.device.UniversalReceiver;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.receiver.AutoPairReceiver;
+import eu.power_switch.obj.receiver.DipReceiver;
+import eu.power_switch.obj.receiver.DipSwitch;
+import eu.power_switch.obj.receiver.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
@@ -336,7 +335,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         return false;
     }
 
-    public void saveCurrentConfigurationToDatabase() {
+    public void saveCurrentConfigurationToDatabase() throws Exception {
         Room room = DatabaseHandler.getRoom(currentRoomName);
         String receiverName = currentName;
         String modelName = currentModel;
@@ -344,38 +343,21 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         String className = Receiver.receiverMap.get(modelName);
         String type = ReceiverReflectionMagic.getType(className);
 
-        Constructor<?> constructor = null;
-        try {
-            constructor = ReceiverReflectionMagic.getConstructor(className, type);
-        } catch (Exception e) {
-            Log.e("AddReceiverDialog", e);
-        }
+        Constructor<?> constructor = ReceiverReflectionMagic.getConstructor(className, type);
 
         Receiver receiver = null;
         if (Receiver.TYPE_MASTER_SLAVE.equals(type)) {
-            try {
-                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentMaster, currentSlave, room
-                        .getId());
-            } catch (Exception e) {
-                Log.e("AddReceiverDialog", e);
-            }
+            receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentMaster, currentSlave, room
+                    .getId());
         } else if (Receiver.TYPE_DIPS.equals(type)) {
             LinkedList<Boolean> dipValues = new LinkedList<>();
             for (DipSwitch dipSwitch : currentDips) {
                 dipValues.add(dipSwitch.isChecked());
             }
 
-            try {
-                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, dipValues, room.getId());
-            } catch (Exception e) {
-                Log.e("AddReceiverDialog", e);
-            }
+            receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, dipValues, room.getId());
         } else if (Receiver.TYPE_AUTOPAIR.equals(type)) {
-            try {
-                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentSeed, room.getId());
-            } catch (Exception e) {
-                Log.e("AddReceiverDialog", e);
-            }
+            receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentSeed, room.getId());
         } else if (Receiver.TYPE_UNIVERSAL.equals(type)) {
             receiver = new UniversalReceiver(getActivity(), currentId, currentName, currentUniversalButtons,
                     room.getId());

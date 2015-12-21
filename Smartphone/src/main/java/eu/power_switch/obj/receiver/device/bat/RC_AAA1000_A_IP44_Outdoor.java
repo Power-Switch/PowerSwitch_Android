@@ -30,10 +30,10 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.device.DipReceiver;
-import eu.power_switch.obj.receiver.device.DipSwitch;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.receiver.DipReceiver;
+import eu.power_switch.obj.receiver.DipSwitch;
+import eu.power_switch.obj.receiver.Receiver;
 
 public class RC_AAA1000_A_IP44_Outdoor extends Receiver implements DipReceiver {
 

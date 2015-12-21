@@ -24,8 +24,8 @@ import android.database.Cursor;
 import java.util.LinkedList;
 
 import eu.power_switch.database.table.receiver.DipTable;
-import eu.power_switch.obj.receiver.device.DipReceiver;
-import eu.power_switch.obj.receiver.device.DipSwitch;
+import eu.power_switch.obj.receiver.DipReceiver;
+import eu.power_switch.obj.receiver.DipSwitch;
 
 /**
  * Provides database methods for managing DipReceivers

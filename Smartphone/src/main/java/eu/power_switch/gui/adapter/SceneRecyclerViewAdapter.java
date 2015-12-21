@@ -42,9 +42,9 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.Scene;
-import eu.power_switch.obj.receiver.SceneItem;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.SceneItem;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 

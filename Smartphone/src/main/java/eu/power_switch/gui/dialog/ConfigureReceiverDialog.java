@@ -218,7 +218,11 @@ public class ConfigureReceiverDialog extends DialogFragment {
                     ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
                             customTabAdapter.getSummaryFragment();
                     if (summaryFragment.checkSetupValidity()) {
-                        summaryFragment.saveCurrentConfigurationToDatabase();
+                        try {
+                            summaryFragment.saveCurrentConfigurationToDatabase();
+                        } catch (Exception e) {
+                            StatusMessageHandler.showStatusMessage(getActivity(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+                        }
                         getDialog().dismiss();
                     }
                 }

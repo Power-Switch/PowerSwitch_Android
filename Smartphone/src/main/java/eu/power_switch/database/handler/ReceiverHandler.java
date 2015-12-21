@@ -29,11 +29,11 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.table.receiver.ReceiverTable;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.obj.receiver.device.AutoPairReceiver;
-import eu.power_switch.obj.receiver.device.DipReceiver;
-import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
-import eu.power_switch.obj.receiver.device.Receiver;
-import eu.power_switch.obj.receiver.device.UniversalReceiver;
+import eu.power_switch.obj.receiver.AutoPairReceiver;
+import eu.power_switch.obj.receiver.DipReceiver;
+import eu.power_switch.obj.receiver.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -46,7 +46,7 @@ class ReceiverHandler {
      *
      * @param receiver Receiver
      */
-    protected static void add(Receiver receiver) {
+    protected static void add(Receiver receiver) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_NAME, receiver.getName());
         values.put(ReceiverTable.COLUMN_ROOM_ID, receiver.getRoomId());
@@ -127,7 +127,7 @@ class ReceiverHandler {
      * @param id ID of Receiver
      * @return Receiver
      */
-    protected static Receiver get(Long id) {
+    protected static Receiver get(Long id) throws Exception {
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
                 ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
                 ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
@@ -146,7 +146,7 @@ class ReceiverHandler {
      * @param receiverName Name of Receiver
      * @return Receiver
      */
-    protected static Receiver getByRoom(Long roomId, String receiverName) {
+    protected static Receiver getByRoom(Long roomId, String receiverName) throws Exception {
         for (Receiver receiver : getByRoom(roomId)) {
             if (receiverName.equals(receiver.getName())) {
                 return receiver;
@@ -162,7 +162,7 @@ class ReceiverHandler {
      * @param roomId ID of Room
      * @return List of Receivers
      */
-    protected static ArrayList<Receiver> getByRoom(Long roomId) {
+    protected static ArrayList<Receiver> getByRoom(Long roomId) throws Exception {
         ArrayList<Receiver> receivers = new ArrayList<>();
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
                 ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
@@ -192,7 +192,7 @@ class ReceiverHandler {
      *
      * @return List of Receivers
      */
-    protected static List<Receiver> getAll() {
+    protected static List<Receiver> getAll() throws Exception {
         List<Receiver> receivers = new ArrayList<>();
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
                 ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
@@ -337,7 +337,7 @@ class ReceiverHandler {
      * @param c cursor pointing to a Receiver database entry
      * @return Receiver
      */
-    private static Receiver dbToReceiver(Cursor c) {
+    private static Receiver dbToReceiver(Cursor c) throws Exception {
         return ReceiverReflectionMagic.fromDatabase(DatabaseHandler.context, c);
     }
 }

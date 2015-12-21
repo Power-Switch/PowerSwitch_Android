@@ -29,9 +29,9 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.device.AutoPairReceiver;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.receiver.AutoPairReceiver;
+import eu.power_switch.obj.receiver.Receiver;
 
 public class ITL1000 extends Receiver implements AutoPairReceiver {
 

@@ -43,7 +43,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
-import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.Room;
 
 /**
  * Dialog to create a new Room

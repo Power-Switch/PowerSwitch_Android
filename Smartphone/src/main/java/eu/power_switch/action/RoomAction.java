@@ -20,7 +20,7 @@ package eu.power_switch.action;
 
 import android.content.Context;
 
-import eu.power_switch.obj.receiver.Room;
+import eu.power_switch.obj.Room;
 
 /**
  * RoomAction that holds a specific room/button combination to activate on execution

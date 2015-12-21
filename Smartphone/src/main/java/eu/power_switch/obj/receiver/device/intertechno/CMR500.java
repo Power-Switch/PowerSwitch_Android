@@ -29,9 +29,9 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.receiver.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 
 public class CMR500 extends Receiver implements MasterSlaveReceiver {

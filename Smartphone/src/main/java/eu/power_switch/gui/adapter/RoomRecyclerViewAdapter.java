@@ -43,9 +43,9 @@ import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 

@@ -25,12 +25,12 @@ import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
 
-import eu.power_switch.obj.receiver.UniversalButton;
-import eu.power_switch.obj.receiver.device.AutoPairReceiver;
-import eu.power_switch.obj.receiver.device.DipReceiver;
-import eu.power_switch.obj.receiver.device.MasterSlaveReceiver;
-import eu.power_switch.obj.receiver.device.Receiver;
-import eu.power_switch.obj.receiver.device.UniversalReceiver;
+import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.receiver.AutoPairReceiver;
+import eu.power_switch.obj.receiver.DipReceiver;
+import eu.power_switch.obj.receiver.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -45,7 +45,7 @@ public abstract class ReceiverReflectionMagic {
      * @param context The application context for all database operations.
      * @return The complete Receiver object.
      */
-    public static Receiver fromDatabase(Context context, Cursor cursor) {
+    public static Receiver fromDatabase(Context context, Cursor cursor) throws Exception {
         Long id = cursor.getLong(0);
         String name = cursor.getString(1);
         String model = cursor.getString(2);
@@ -62,27 +62,21 @@ public abstract class ReceiverReflectionMagic {
 
         Receiver receiver = null;
 
-        try {
-            Constructor<?> constructor = getConstructor(className, type);
+        Constructor<?> constructor = getConstructor(className, type);
 
-            if (type.equals(Receiver.TYPE_DIPS)) {
-                LinkedList<Boolean> dips = DipHandler.getDips(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId);
-            } else if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
-                Character channelMaster = MasterSlaveReceiverHandler.getMaster(id);
-                int channelSlave = MasterSlaveReceiverHandler.getSlave(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId);
-            } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
-                long seed = AutoPairHandler.getSeed(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId);
-            } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
-                List<UniversalButton> buttons = UniversalButtonHandler.getUniversalButtons(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId);
-            }
-
-        } catch (Exception e) {
-            Log.e(e);
-            e.printStackTrace();
+        if (type.equals(Receiver.TYPE_DIPS)) {
+            LinkedList<Boolean> dips = DipHandler.getDips(id);
+            receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId);
+        } else if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
+            Character channelMaster = MasterSlaveReceiverHandler.getMaster(id);
+            int channelSlave = MasterSlaveReceiverHandler.getSlave(id);
+            receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId);
+        } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
+            long seed = AutoPairHandler.getSeed(id);
+            receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId);
+        } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
+            List<UniversalButton> buttons = UniversalButtonHandler.getUniversalButtons(id);
+            receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId);
         }
 
         if (receiver != null) {
@@ -126,28 +120,22 @@ public abstract class ReceiverReflectionMagic {
      * @param javaPath The java path of the Receiver.
      * @return The type of the Receiver or null if unknown.
      */
-    public static String getType(String javaPath) {
+    public static String getType(String javaPath) throws ClassNotFoundException {
 
-        try {
-            Class<?> myClass = Class.forName(javaPath);
-            Class<?>[] implementedInterfaces = myClass.getInterfaces();
+        Class<?> myClass = Class.forName(javaPath);
+        Class<?>[] implementedInterfaces = myClass.getInterfaces();
 
-            for (Class<?> someClass : implementedInterfaces) {
-                if (someClass.equals(MasterSlaveReceiver.class)) {
-                    return Receiver.TYPE_MASTER_SLAVE;
-                } else if (someClass.equals(DipReceiver.class)) {
-                    return Receiver.TYPE_DIPS;
-                } else if (someClass.equals(AutoPairReceiver.class)) {
-                    return Receiver.TYPE_AUTOPAIR;
-                }
+        for (Class<?> someClass : implementedInterfaces) {
+            if (someClass.equals(MasterSlaveReceiver.class)) {
+                return Receiver.TYPE_MASTER_SLAVE;
+            } else if (someClass.equals(DipReceiver.class)) {
+                return Receiver.TYPE_DIPS;
+            } else if (someClass.equals(AutoPairReceiver.class)) {
+                return Receiver.TYPE_AUTOPAIR;
             }
-            if (myClass.equals(UniversalReceiver.class)) {
-                return Receiver.TYPE_UNIVERSAL;
-            }
-
-        } catch (ClassNotFoundException e) {
-            Log.e(e);
-            e.printStackTrace();
+        }
+        if (myClass.equals(UniversalReceiver.class)) {
+            return Receiver.TYPE_UNIVERSAL;
         }
 
         // throw new Exception("Unknown Receiver Type");

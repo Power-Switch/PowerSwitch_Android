@@ -16,40 +16,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver.device;
-
-import java.util.ArrayList;
+package eu.power_switch.obj.receiver;
 
 /**
- * Interface all MasterSlave Receivers have to implement
+ * Interface all AutoPair Receivers have to implement
  */
-public interface MasterSlaveReceiver {
+public interface AutoPairReceiver {
 
-    /**
-     * Get Master Channel
-     *
-     * @return master channel
-     */
-    char getMaster();
+    long getSeed();
 
-    /**
-     * Get Slave channel
-     *
-     * @return slave channel
-     */
-    int getSlave();
-
-    /**
-     * Get a list of all possible Master channels
-     *
-     * @return list of Master channels
-     */
-    ArrayList<String> getMasterNames();
-
-    /**
-     * Get a list of all possible slave channels
-     *
-     * @return list of Slave channels
-     */
-    ArrayList<String> getSlaveNames();
 }

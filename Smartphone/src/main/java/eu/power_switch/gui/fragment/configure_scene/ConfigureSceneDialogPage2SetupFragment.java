@@ -49,11 +49,11 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.Scene;
-import eu.power_switch.obj.receiver.SceneItem;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.SceneItem;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 

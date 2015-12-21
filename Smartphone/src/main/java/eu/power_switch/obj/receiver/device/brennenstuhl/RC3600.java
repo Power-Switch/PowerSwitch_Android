@@ -22,9 +22,9 @@ import android.content.Context;
 
 import eu.power_switch.R;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.device.AutoPairReceiver;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.receiver.AutoPairReceiver;
+import eu.power_switch.obj.receiver.Receiver;
 
 public class RC3600 extends Receiver implements AutoPairReceiver {
 

@@ -16,12 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver;
+package eu.power_switch.obj;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.Receiver;
 
 /**
  * Represents a room that can contain receivers

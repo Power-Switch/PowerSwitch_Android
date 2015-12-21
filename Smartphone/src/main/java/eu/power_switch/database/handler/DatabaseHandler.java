@@ -31,11 +31,11 @@ import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.history.HistoryItem;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.Room;
-import eu.power_switch.obj.receiver.Scene;
-import eu.power_switch.obj.receiver.UniversalButton;
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
@@ -121,6 +121,7 @@ public final class DatabaseHandler {
         lock.lock();
         try {
             database = dbHelper.getWritableDatabase();
+            database.beginTransaction();
         } catch (Exception e) {
             Log.e(e);
             lock.unlock();
@@ -132,6 +133,9 @@ public final class DatabaseHandler {
      */
     private static void close() {
         try {
+            if (database.inTransaction()) {
+                database.endTransaction();
+            }
             dbHelper.close();
         } catch (Exception e) {
             Log.e("Error closing Database", e);
@@ -157,6 +161,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             RoomHandler.add(room);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -174,6 +179,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             RoomHandler.update(id, newName);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -190,6 +196,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             RoomHandler.delete(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -270,6 +277,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             ReceiverHandler.add(receiver);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -286,6 +294,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             ReceiverHandler.update(receiver);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -378,6 +387,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             ReceiverHandler.delete(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -423,25 +433,6 @@ public final class DatabaseHandler {
         return buttons;
     }
 
-//    /**
-//     * Gets ID of last activated Button of a Receiver
-//     *
-//     * @param id ID of Receiver
-//     * @return ID of last activated Button, -1 if not set
-//     */
-//    public static long getLastActivatedButtonId(Long id) {
-//        openReadable();
-//        long buttonId = -1;
-//        try {
-//            buttonId = ReceiverHandler.getLastActivatedButtonId(id);
-//        } catch (Exception e) {
-//            Log.e(e);
-//        } finally {
-//            close();
-//        }
-//        return buttonId;
-//    }
-
     /**
      * Sets ID of last activated Button of a Receiver
      *
@@ -453,6 +444,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             ReceiverHandler.setLastActivatedButtonId(receiverId, buttonId);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -477,6 +469,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             SceneHandler.add(scene);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -493,6 +486,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             SceneHandler.update(scene);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -509,6 +503,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             SceneHandler.delete(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -592,6 +587,7 @@ public final class DatabaseHandler {
         long id;
         try {
             id = GatewayHandler.add(gateway);
+            database.setTransactionSuccessful();
             close();
         } catch (Exception e) {
             close();
@@ -609,6 +605,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             GatewayHandler.enable(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -625,6 +622,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             GatewayHandler.disable(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -645,6 +643,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             GatewayHandler.update(id, name, model, address, port);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -661,6 +660,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             GatewayHandler.delete(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -741,6 +741,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             WidgetHandler.addReceiverWidget(receiverWidget);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -757,6 +758,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             WidgetHandler.deleteReceiverWidget(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -791,6 +793,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             WidgetHandler.addRoomWidget(roomWidget);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -807,6 +810,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             WidgetHandler.deleteRoomWidget(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -841,6 +845,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             WidgetHandler.addSceneWidget(sceneWidget);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -857,6 +862,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             WidgetHandler.deleteSceneWidget(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -874,6 +880,7 @@ public final class DatabaseHandler {
         SceneWidget sceneWidget = null;
         try {
             sceneWidget = WidgetHandler.getSceneWidget(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -949,6 +956,7 @@ public final class DatabaseHandler {
         long id = -1;
         try {
             id = TimerHandler.add(timer);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -967,6 +975,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             TimerHandler.enable(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -983,6 +992,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             TimerHandler.disable(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -999,6 +1009,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             TimerHandler.delete(id);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -1015,6 +1026,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             TimerHandler.update(timer);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -1032,6 +1044,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             ReceiverHandler.setPositionInRoom(receiverId, position);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -1076,6 +1089,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             SleepAsAndroidHandler.setAlarmActions(event, actions);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -1116,6 +1130,7 @@ public final class DatabaseHandler {
         openWritable();
         try {
             HistoryHandler.add(historyItem);
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
         } finally {

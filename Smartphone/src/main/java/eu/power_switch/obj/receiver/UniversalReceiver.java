@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver.device;
+package eu.power_switch.obj.receiver;
 
 import android.content.Context;
 
@@ -25,8 +25,8 @@ import java.util.List;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.Button;
-import eu.power_switch.obj.receiver.UniversalButton;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.UniversalButton;
 
 public class UniversalReceiver extends Receiver {
 
@@ -34,7 +34,7 @@ public class UniversalReceiver extends Receiver {
 
     public UniversalReceiver(Context context, Long id, String name, List<UniversalButton> buttons, Long
             roomId) {
-        super(context, id, name, BRAND_UNIVERSAL, BRAND_UNIVERSAL, Receiver.TYPE_UNIVERSAL, roomId);
+        super(context, id, name, BRAND_UNIVERSAL, BRAND_UNIVERSAL, TYPE_UNIVERSAL, roomId);
         universalButtons.addAll(buttons);
         for (UniversalButton universalButton : universalButtons) {
             this.buttons.add(new Button(universalButton.getId(), universalButton.getName(), universalButton

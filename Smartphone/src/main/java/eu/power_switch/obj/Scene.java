@@ -16,11 +16,11 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver;
+package eu.power_switch.obj;
 
 import java.util.ArrayList;
 
-import eu.power_switch.obj.receiver.device.Receiver;
+import eu.power_switch.obj.receiver.Receiver;
 
 /**
  * Represents a Scene
