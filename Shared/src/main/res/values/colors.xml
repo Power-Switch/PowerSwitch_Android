@@ -22,9 +22,9 @@
 
 
     <!-- Grey 900 #212121 -->
-    <color name="primary">#212121</color>
+    <color name="primaryColor">#212121</color>
     <!-- Grey 100 #F5F5F5 -->
-    <color name="primaryInverse">#F5F5F5</color>
+    <color name="primaryColorInverse">#F5F5F5</color>
 
     <!--&lt;!&ndash; Black #000000 &ndash;&gt;-->
     <!--<color name="primary_dark">#000000</color>-->
@@ -32,9 +32,9 @@
     <!--<color name="primary_darkInverse">#FFFFFF</color>-->
 
     <!-- Grey 800 #424242 -->
-    <color name="primary_light">#424242</color>
+    <color name="primaryColor_light">#424242</color>
     <!-- Grey 200 #EEEEEE -->
-    <color name="primary_lightInverse">#EEEEEE</color>
+    <color name="primaryColor_lightInverse">#EEEEEE</color>
 
     <!-- Light Blue A700 #0091EA -->
     <color name="accent_blue_a700">#FF0091EA</color>
@@ -57,7 +57,7 @@
     <color name="windowBackground">#FF313031</color>
     <color name="windowBackgroundInverse">#CECFCE</color>
 
-    <color name="cardview_background">@color/primary_light</color>
-    <color name="cardview_backgroundInverse">@color/primary_lightInverse</color>
+    <color name="cardview_background">@color/primaryColor_light</color>
+    <color name="cardview_backgroundInverse">@color/primaryColor_lightInverse</color>
 
 </resources>

@@ -19,7 +19,6 @@
 package eu.power_switch.gui.fragment.main;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -56,7 +55,7 @@ public class MainTabFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tabs_room_scene_timer, container, false);
+        View rootView = inflater.inflate(R.layout.main_tabs, container, false);
 
         // Create the adapter that will return a fragment
         // for each of the two primary sections of the app.

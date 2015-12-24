@@ -89,7 +89,7 @@ public class StatusMessageHandler {
                                          @StringRes int actionButtonMessageResourceId, Runnable runnable, int
                                                  duration) {
         if (MainActivity.isInForeground()) {
-            showSnackbar(MainActivity.getNavigationView(),
+            showSnackbar(MainActivity.getMainAppView(),
                     context.getString(messageResourceId),
                     context.getString(actionButtonMessageResourceId), runnable,
                     duration);
@@ -158,7 +158,7 @@ public class StatusMessageHandler {
      */
     public static void showStatusMessage(Context context, String message, int duration) {
         if (MainActivity.isInForeground()) {
-            showStatusSnackbar(MainActivity.getNavigationView(), message, duration);
+            showStatusSnackbar(MainActivity.getMainAppView(), message, duration);
         } else {
             showStatusToast(context, message, duration);
         }
@@ -200,7 +200,7 @@ public class StatusMessageHandler {
         Log.d("Status Snackbar: [" + message + "] with action: [" + actionButtonMessage + "]");
 
         if (parent == null) {
-            parent = MainActivity.getNavigationView();
+            parent = MainActivity.getMainAppView();
         }
 
         Snackbar snackbar = Snackbar.make(parent, message, duration);

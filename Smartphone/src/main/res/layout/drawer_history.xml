@@ -18,17 +18,19 @@
   -->
 
 <LinearLayout
+    android:id="@+id/linearLayout_historyDrawer"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="end"
-    android:layout_marginTop="25dp"
     android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <TextView
         style="@style/header_settings"
-        android:text="History"/>
+        android:paddingTop="16dp"
+        android:text="@string/history"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_history"

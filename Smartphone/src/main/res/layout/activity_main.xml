@@ -23,30 +23,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- The ActionBar -->
-        <include
-            layout="@layout/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <!-- The ActionBar -->
+            <include
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <!-- The main content view -->
-        <FrameLayout
-            android:id="@+id/mainContentFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            <!-- The main content view -->
+            <FrameLayout
+                android:id="@+id/mainContentFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-    </LinearLayout>
-
-    <!-- The navigation drawer -->
-    <include layout="@layout/drawer_navigation"/>
-
-    <!--The history drawer -->
-    <include layout="@layout/drawer_history"/>
+    </android.support.design.widget.AppBarLayout>
 
 </android.support.v4.widget.DrawerLayout>

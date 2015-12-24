@@ -22,8 +22,8 @@
     <!-- Base Dark Theme -->
     <style name="PowerSwitchWearThemeBase.Dark" parent="android:Theme.DeviceDefault">
         <!-- material design -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryLight">@color/primary_light</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryLight">@color/primaryColor_light</item>
         <item name="colorAccent">#FF999999</item>
         <item name="android:windowBackground">@color/black</item>
 
@@ -42,8 +42,8 @@
     <!-- Base Light Theme -->
     <style name="PowerSwitchWearThemeBase.Light" parent="android:Theme.DeviceDefault.Light">
         <!-- material design -->
-        <item name="colorPrimary">@color/primaryInverse</item>
-        <item name="colorPrimaryLight">@color/primary_lightInverse</item>
+        <item name="colorPrimary">@color/primaryColorInverse</item>
+        <item name="colorPrimaryLight">@color/primaryColor_lightInverse</item>
         <item name="colorAccent">#FF333333</item>
         <item name="android:windowBackground">@color/windowBackgroundInverse</item>
 

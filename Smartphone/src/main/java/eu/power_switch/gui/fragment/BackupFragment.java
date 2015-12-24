@@ -62,6 +62,7 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -69,8 +70,6 @@ import eu.power_switch.shared.log.Log;
  * Fragment holding a list of all Backups
  */
 public class BackupFragment extends RecyclerViewFragment {
-
-    public static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
     private View rootView;
     private ArrayList<Backup> backups;
@@ -153,7 +152,7 @@ public class BackupFragment extends RecyclerViewFragment {
 
                 EditBackupDialog editBackupDialog = new EditBackupDialog();
                 Bundle backupData = new Bundle();
-                backupData.putString("name", backup.getName());
+                backupData.putString(EditBackupDialog.NAME_KEY, backup.getName());
                 editBackupDialog.setArguments(backupData);
                 editBackupDialog.setTargetFragment(recyclerViewFragment, 0);
                 editBackupDialog.show(getActivity().getSupportFragmentManager(), null);
@@ -238,13 +237,13 @@ public class BackupFragment extends RecyclerViewFragment {
                         @Override
                         public void run() {
                             ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSIONS);
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
                         }
                     }, Snackbar.LENGTH_INDEFINITE);
         } else {
             Log.d("Displaying default storage permission dialog to request permission");
             ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_PERMISSIONS);
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
         }
     }
 

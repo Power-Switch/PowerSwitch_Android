@@ -77,6 +77,11 @@ dependencies {
         transitive = true
     }
 
+    // MaterialDrawer
+    compile('com.mikepenz:materialdrawer:4.6.1@aar') {
+        transitive = true
+    }
+
     // Iconics (use SVG resources)
     compile 'com.mikepenz:iconics-core:2.5.1@aar'
     // Fonts

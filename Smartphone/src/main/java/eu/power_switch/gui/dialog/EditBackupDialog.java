@@ -48,6 +48,8 @@ import eu.power_switch.shared.log.Log;
  */
 public class EditBackupDialog extends DialogFragment {
 
+    public static final String NAME_KEY = "name";
+
     private boolean modified = false;
 
     private Dialog dialog;
@@ -60,7 +62,7 @@ public class EditBackupDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Bundle roomData = getArguments();
-        final String backupName = roomData.getString("name");
+        final String backupName = roomData.getString(NAME_KEY);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj;
 
+import android.location.Location;
+
 import java.util.LinkedList;
 
 /**
@@ -45,6 +47,8 @@ public class Apartment {
      * List of all Scenes that this Apartment contains
      */
     private LinkedList<Scene> scenes;
+
+    private Location location;
 
     public Apartment(Long id, String name, LinkedList<Room> rooms, LinkedList<Scene> scenes) {
         this.id = id;

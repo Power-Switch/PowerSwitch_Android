@@ -20,10 +20,10 @@
 <resources>
 
     <!-- Base Dark Theme -->
-    <style name="PowerSwitchThemeBase.Dark" parent="Theme.AppCompat.NoActionBar">
+    <style name="PowerSwitchThemeBase.Dark" parent="MaterialDrawerTheme">
         <!-- material design -->
-        <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryLight">@color/primary_light</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryLight">@color/primaryColor_light</item>
         <item name="colorAccent">#FF999999</item>
         <item name="android:windowBackground">@color/windowBackground</item>
 
@@ -46,13 +46,29 @@
         <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
         <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
         <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
+
+        <!-- MaterialDrawer -->
+        <!-- ...and here we setting appcompat’s color theming attrs -->
+        <item name="colorPrimaryDark">@color/primaryColor</item>
+
+        <!-- MaterialDrawer specific values -->
+        <item name="material_drawer_background">@color/material_drawer_dark_background</item>
+        <item name="material_drawer_primary_text">@color/material_drawer_dark_primary_text</item>
+        <item name="material_drawer_primary_icon">@color/material_drawer_dark_primary_icon</item>
+        <item name="material_drawer_secondary_text">@color/material_drawer_dark_secondary_text</item>
+        <item name="material_drawer_hint_text">@color/material_drawer_dark_hint_text</item>
+        <item name="material_drawer_divider">@color/material_drawer_dark_divider</item>
+        <item name="material_drawer_selected">@color/material_drawer_dark_selected</item>
+        <item name="material_drawer_selected_text">@color/material_drawer_dark_selected_text</item>
+        <item name="material_drawer_header_selection_text">@color/material_drawer_dark_header_selection_text</item>
+
     </style>
 
     <!-- Base Light Theme -->
-    <style name="PowerSwitchThemeBase.Light" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="PowerSwitchThemeBase.Light" parent="MaterialDrawerTheme.Light">
         <!-- material design -->
-        <item name="colorPrimary">@color/primaryInverse</item>
-        <item name="colorPrimaryLight">@color/primary_lightInverse</item>
+        <item name="colorPrimary">@color/primaryColorInverse</item>
+        <item name="colorPrimaryLight">@color/primaryColor_lightInverse</item>
         <item name="colorAccent">#FF333333</item>
         <item name="android:windowBackground">@color/windowBackgroundInverse</item>
 
@@ -75,6 +91,21 @@
         <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
         <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
         <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
+
+        <!-- MaterialDrawer -->
+        <!-- ...and here we setting appcompat’s color theming attrs -->
+        <item name="colorPrimaryDark">@color/primaryColorInverse</item>
+
+        <!-- MaterialDrawer specific values -->
+        <item name="material_drawer_background">@color/material_drawer_background</item>
+        <item name="material_drawer_primary_text">@color/material_drawer_primary_text</item>
+        <item name="material_drawer_primary_icon">@color/material_drawer_primary_icon</item>
+        <item name="material_drawer_secondary_text">@color/material_drawer_secondary_text</item>
+        <item name="material_drawer_hint_text">@color/material_drawer_hint_text</item>
+        <item name="material_drawer_divider">@color/material_drawer_divider</item>
+        <item name="material_drawer_selected">@color/material_drawer_selected</item>
+        <item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>
+        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
     </style>
 
     <!-- Base Dark Blue -->

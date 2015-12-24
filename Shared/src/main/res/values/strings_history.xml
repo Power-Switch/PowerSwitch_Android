@@ -25,4 +25,6 @@
     <string name="timer_action_history_text">Timer: %1$s activated</string>
     <string name="sleep_as_android_action_history_text">Sleep As Android %1$s event activated</string>
 
+    <string name="history">History</string>
+
 </resources>

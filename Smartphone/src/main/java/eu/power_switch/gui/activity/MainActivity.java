@@ -23,27 +23,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.mikepenz.aboutlibraries.Libs;
@@ -52,6 +49,14 @@ import com.mikepenz.aboutlibraries.LibsConfiguration;
 import com.mikepenz.aboutlibraries.entity.Library;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -72,6 +77,7 @@ import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.special.HolidaySpecialHandler;
@@ -89,16 +95,17 @@ public class MainActivity extends AppCompatActivity {
     private static Stack<Class> lastFragmentClasses = new Stack<>();
     private static Stack<String> lastFragmentTitles = new Stack<>();
 
-    private static NavigationView navigationView;
+    private static AppBarLayout appBarLayout;
 
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private DrawerLayout drawerLayout;
-
     private LinkedList<HistoryItem> historyItems = new LinkedList<>();
     private RecyclerView recyclerViewHistory;
     private HistoryItemRecyclerViewAdapter historyItemArrayAdapter;
 
     private BroadcastReceiver broadcastReceiver;
+    private Toolbar toolbar;
+    private Drawer navigationDrawer;
+    private Drawer historyDrawer;
 
     /**
      * Add class to Backstack
@@ -123,10 +130,10 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Get Main App View
      *
-     * @return navigationView
+     * @return View
      */
-    public static View getNavigationView() {
-        return navigationView;
+    public static View getMainAppView() {
+        return appBarLayout;
     }
 
     /**
@@ -143,29 +150,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate);
+        // set Theme before anything else in onCreate();
         applyTheme();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
+
         // Set a Toolbar to replace the ActionBar.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Find our drawer view
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        // Tie DrawerLayout events to the ActionBarToggle (to animate hamburger icon)
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawerLayout.setDrawerListener(actionBarDrawerToggle);
-
-        // Set the menu icon instead of the launcher icon.
-        final ActionBar ab = getSupportActionBar();
-
-        ab.setHomeAsUpIndicator(IconicsHelper.getMenuIcon(this));
-        ab.setDisplayHomeAsUpEnabled(true);
-
+        initNavigationDrawer();
+        initHistoryDrawer();
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -173,24 +171,6 @@ public class MainActivity extends AppCompatActivity {
                 updateHistory();
             }
         };
-        // Find our drawer view
-        navigationView = (NavigationView) findViewById(R.id.navigationView);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        selectNavigationItem(menuItem);
-                        return true;
-                    }
-                });
-        initMenuItems(navigationView.getMenu());
-
-        recyclerViewHistory = (RecyclerView) findViewById(R.id.recyclerview_history);
-        historyItemArrayAdapter = new HistoryItemRecyclerViewAdapter(this, historyItems);
-        recyclerViewHistory.setAdapter(historyItemArrayAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.backup_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewHistory.setLayoutManager(layoutManager);
 
         // Load first Fragment
         try {
@@ -268,6 +248,236 @@ public class MainActivity extends AppCompatActivity {
         }.execute(this);
     }
 
+    private void initNavigationDrawer() {
+        // Set the menu icon instead of the launcher icon.
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(IconicsHelper.getMenuIcon(this));
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        int tintColor;
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            tintColor = ContextCompat.getColor(this, R.color.textColorSecondary);
+        } else {
+            tintColor = ContextCompat.getColor(this, R.color.textColorSecondaryInverse);
+        }
+
+        // if you want to update the items at a later time it is recommended to keep it in a variable
+        final PrimaryDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home)
+                        .color(ContextCompat.getColor(this, R.color.accent_blue_a700))
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        while (lastFragmentClasses.size() > 1) {
+                            lastFragmentClasses.pop();
+                        }
+                        while (lastFragmentTitles.size() > 1) {
+                            lastFragmentTitles.pop();
+                        }
+
+                        setTitle(R.string.app_name);
+
+                        navigationDrawer.closeDrawer();
+                        return true;
+                    }
+                });
+        final SecondaryDrawerItem itemBackupRestore = new SecondaryDrawerItem().withName(R.string.menu_backup_restore)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(getString(R.string.menu_backup_restore),
+                                    BackupFragment.class.newInstance());
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
+                    }
+                });
+        final SecondaryDrawerItem itemSettings = new SecondaryDrawerItem().withName(R.string.menu_settings)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_settings)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(getString(R.string.menu_settings),
+                                    SettingsTabFragment.class.newInstance());
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
+                    }
+                });
+        final SecondaryDrawerItem itemHelp = new SecondaryDrawerItem().withName(R.string.menu_help)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_help)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://power-switch.eu/faq/"));
+                        startActivity(browserIntent);
+
+                        navigationDrawer.closeDrawer();
+                        return true;
+                    }
+                });
+        final SecondaryDrawerItem itemDonate = new SecondaryDrawerItem().withName(R.string.donate)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_money)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        DonationDialog donationDialog = new DonationDialog();
+                        donationDialog.show(getSupportFragmentManager(), null);
+
+                        navigationDrawer.closeDrawer();
+                        return true;
+                    }
+                });
+        final SecondaryDrawerItem itemAbout = new SecondaryDrawerItem().withName(R.string.menu_about)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_info)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        Fragment fragment = new LibsBuilder()
+                                //get the fragment
+                                .withAboutIconShown(true)
+                                .withAboutVersionShown(true)
+                                .withLicenseShown(true)
+                                .withVersionShown(true)
+                                .withAutoDetect(true)
+                                .withAboutDescription(getString(R.string.app_description_html))
+                                .withAboutSpecial1(getString(R.string.changelog))
+                                .withAboutSpecial1Description(getString(R.string.changelog))
+                                .withAboutSpecial2(getString(R.string.github))
+                                .withAboutSpecial2Description(getString(R.string.github))
+                                .withAboutSpecial3(getString(R.string.license))
+                                .withAboutSpecial3Description(getString(R.string.gpl_v3_description_html))
+                                .withListener(new LibsConfiguration.LibsListener() {
+                                    @Override
+                                    public void onIconClicked(View v) {
+                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/"));
+                                        startActivity(browserIntent);
+                                    }
+
+                                    @Override
+                                    public boolean onLibraryAuthorClicked(View v, Library library) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onLibraryContentClicked(View v, Library library) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onLibraryBottomClicked(View v, Library library) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onExtraClicked(View v, Libs.SpecialButton specialButton) {
+                                        if (specialButton == Libs.SpecialButton.SPECIAL1) {
+                                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/download/"));
+                                            startActivity(browserIntent);
+                                            return true;
+                                        } else if (specialButton == Libs.SpecialButton.SPECIAL2) {
+                                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Power-Switch/PowerSwitch_Android"));
+                                            startActivity(browserIntent);
+                                            return true;
+                                        } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
+                                            return false;
+                                        }
+
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onIconLongClicked(View v) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onLibraryAuthorLongClicked(View v, Library library) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onLibraryContentLongClicked(View v, Library library) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onLibraryBottomLongClicked(View v, Library library) {
+                                        return false;
+                                    }
+                                })
+                                .supportFragment();
+                        fragment.setHasOptionsMenu(true);
+                        startFragmentTransaction(getString(R.string.menu_about), fragment);
+
+                        navigationDrawer.closeDrawer();
+                        return true;
+                    }
+                });
+
+        //                .withActionBarDrawerToggle(actionBarDrawerToggle)
+//                        selectNavigationItem(drawerItem);
+        AccountHeader accountHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header_background)
+                .build();
+
+        navigationDrawer = new DrawerBuilder(this)
+                .withToolbar(toolbar)
+                .withTranslucentStatusBar(true)
+                .withAccountHeader(accountHeader)
+                .withHeaderPadding(true)
+//                .withActionBarDrawerToggle(actionBarDrawerToggle)
+                .addDrawerItems(
+                        itemHome,
+                        new DividerDrawerItem(),
+                        itemBackupRestore,
+                        itemSettings,
+                        new DividerDrawerItem(),
+                        itemHelp,
+                        itemDonate,
+                        itemAbout)
+                .build();
+    }
+
+    private void initHistoryDrawer() {
+        View historyView = LayoutInflater.from(this).inflate(R.layout.drawer_history, null, false);
+
+        recyclerViewHistory = (RecyclerView) historyView.findViewById(R.id.recyclerview_history);
+        historyItemArrayAdapter = new HistoryItemRecyclerViewAdapter(this, historyItems);
+        recyclerViewHistory.setAdapter(historyItemArrayAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        recyclerViewHistory.setLayoutManager(layoutManager);
+
+        historyDrawer = new DrawerBuilder()
+                .withActivity(this)
+                .withCustomView(historyView)
+                .withHeaderPadding(true)
+                .withDrawerGravity(Gravity.END)
+                .append(navigationDrawer);
+    }
+
     private void applyTheme() {
         switch (SmartphonePreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
@@ -293,54 +503,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initMenuItems(Menu menu) {
-        for (int i = 0; i < menu.size(); i++) {
-            MenuItem currentMenuItem = menu.getItem(i);
-
-            int tintColor;
-            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-                tintColor = ContextCompat.getColor(this, R.color.textColorSecondary);
-            } else {
-                tintColor = ContextCompat.getColor(this, R.color.textColorSecondaryInverse);
-            }
-
-            IconicsDrawable iconicsDrawable = null;
-            switch (currentMenuItem.getItemId()) {
-                case R.id.home:
-                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home);
-                    iconicsDrawable.color(ContextCompat.getColor(this, R.color.accent_blue_a700));
-                    break;
-                case R.id.backup_restore:
-                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore);
-                    iconicsDrawable.color(tintColor);
-                    break;
-                case R.id.settings:
-                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_settings);
-                    iconicsDrawable.color(tintColor);
-                    break;
-                case R.id.help:
-                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_help);
-                    iconicsDrawable.color(tintColor);
-                    break;
-                case R.id.donate:
-                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_money);
-                    iconicsDrawable.color(tintColor);
-                    break;
-                case R.id.about:
-                    iconicsDrawable = new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_info);
-                    iconicsDrawable.color(tintColor);
-                    break;
-                default:
-                    break;
-            }
-
-            if (iconicsDrawable != null) {
-                iconicsDrawable.sizeDp(24);
-                currentMenuItem.setIcon(iconicsDrawable);
-            }
-        }
-    }
-
     private void updateHistory() {
         historyItems.clear();
         historyItems.addAll(DatabaseHandler.getHistory());
@@ -349,144 +511,12 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewHistory.scrollToPosition(historyItems.size() - 1);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        actionBarDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        actionBarDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    private void selectNavigationItem(MenuItem menuItem) {
+    private void startFragmentTransaction(String menuItemTitle, Fragment fragment) {
         try {
-
-            Fragment fragment = null;
-
-            switch (menuItem.getItemId()) {
-                case android.R.id.home:
-                    drawerLayout.openDrawer(GravityCompat.START);
-                    break;
-                case R.id.home:
-                    getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                    while (lastFragmentClasses.size() > 1) {
-                        lastFragmentClasses.pop();
-                    }
-                    while (lastFragmentTitles.size() > 1) {
-                        lastFragmentTitles.pop();
-                    }
-
-                    setTitle(R.string.app_name);
-
-                    menuItem.setChecked(true);
-                    drawerLayout.closeDrawers();
-                    return;
-                case R.id.backup_restore:
-                    fragment = BackupFragment.class.newInstance();
-                    break;
-                case R.id.settings:
-                    fragment = SettingsTabFragment.class.newInstance();
-                    break;
-                case R.id.help:
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://power-switch.eu/faq/"));
-                    startActivity(browserIntent);
-
-                    drawerLayout.closeDrawers();
-                    return;
-                case R.id.donate:
-                    DonationDialog donationDialog = new DonationDialog();
-                    donationDialog.show(getSupportFragmentManager(), null);
-
-                    drawerLayout.closeDrawers();
-                    return;
-                case R.id.about:
-                    fragment = new LibsBuilder()
-                            //get the fragment
-                            .withAboutIconShown(true)
-                            .withAboutVersionShown(true)
-                            .withLicenseShown(true)
-                            .withVersionShown(true)
-                            .withAutoDetect(true)
-                            .withAboutDescription(getString(R.string.app_description_html))
-                            .withAboutSpecial1(getString(R.string.changelog))
-                            .withAboutSpecial1Description(getString(R.string.changelog))
-                            .withAboutSpecial2(getString(R.string.github))
-                            .withAboutSpecial2Description(getString(R.string.github))
-                            .withAboutSpecial3(getString(R.string.license))
-                            .withAboutSpecial3Description(getString(R.string.gpl_v3_description_html))
-                            .withListener(new LibsConfiguration.LibsListener() {
-                                @Override
-                                public void onIconClicked(View v) {
-                                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/"));
-                                    startActivity(browserIntent);
-                                }
-
-                                @Override
-                                public boolean onLibraryAuthorClicked(View v, Library library) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onLibraryContentClicked(View v, Library library) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onLibraryBottomClicked(View v, Library library) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onExtraClicked(View v, Libs.SpecialButton specialButton) {
-                                    if (specialButton == Libs.SpecialButton.SPECIAL1) {
-                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/download/"));
-                                        startActivity(browserIntent);
-                                        return true;
-                                    } else if (specialButton == Libs.SpecialButton.SPECIAL2) {
-                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Power-Switch/PowerSwitch_Android"));
-                                        startActivity(browserIntent);
-                                        return true;
-                                    } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
-                                        return false;
-                                    }
-
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onIconLongClicked(View v) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onLibraryAuthorLongClicked(View v, Library library) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onLibraryContentLongClicked(View v, Library library) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onLibraryBottomLongClicked(View v, Library library) {
-                                    return false;
-                                }
-                            })
-                            .supportFragment();
-                    fragment.setHasOptionsMenu(true);
-                    break;
-            }
-
             if (fragment != null && (lastFragmentClasses.isEmpty()) || !lastFragmentClasses.peek()
                     .equals(fragment.getClass())) {
                 lastFragmentClasses.push(fragment.getClass());
-                lastFragmentTitles.push(String.valueOf(menuItem.getTitle()));
+                lastFragmentTitles.push(String.valueOf(menuItemTitle));
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim
@@ -495,16 +525,9 @@ public class MainActivity extends AppCompatActivity {
                         .replace(R.id.mainContentFrameLayout, fragment)
                         .addToBackStack(fragment.getTag()).commit();
 
-                setTitle(menuItem.getTitle());
+                setTitle(menuItemTitle);
             }
 
-            // Highlight the selected item
-            if (menuItem.isCheckable()) {
-                menuItem.setChecked(true);
-            }
-
-            // close the drawer
-            drawerLayout.closeDrawers();
         } catch (Exception e) {
             Log.e(e);
             e.printStackTrace();
@@ -514,14 +537,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case BackupFragment.REQUEST_CODE_ASK_PERMISSIONS:
+            case PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
                     BackupFragment.sendBackupsChangedBroadcast(this);
                 } else {
                     // Permission Denied
-                    StatusMessageHandler.showStatusMessage(this, R.string.permission_denied, Snackbar
-                            .LENGTH_LONG);
+                    StatusMessageHandler.showStatusMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
+                }
+                break;
+            case PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    // TODO: update geofences?
+                } else {
+                    // Permission Denied
+                    StatusMessageHandler.showStatusMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
                 }
                 break;
             default:
