@@ -161,7 +161,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
     private void showTutorial() {
         new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(getView())
+                .setTarget(spinnerEventType)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)
