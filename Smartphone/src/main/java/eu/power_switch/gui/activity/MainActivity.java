@@ -265,9 +265,10 @@ public class MainActivity extends AppCompatActivity {
 
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back)
                         .color(ContextCompat.getColor(this, R.color.accent_blue_a700))
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -289,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home)
                         .color(tintColor)
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -307,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_alarm)
                         .color(tintColor)
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -325,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
                         .color(tintColor)
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -343,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_settings)
                         .color(tintColor)
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -361,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_help)
                         .color(tintColor)
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -375,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_money)
                         .color(tintColor)
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -389,6 +396,7 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_info)
                         .color(tintColor)
                         .sizeDp(24))
+                .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
