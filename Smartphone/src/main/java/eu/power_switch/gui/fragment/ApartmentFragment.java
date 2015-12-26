@@ -18,8 +18,11 @@
 
 package eu.power_switch.gui.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -27,12 +30,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
+import eu.power_switch.wear.service.UtilityService;
 
 /**
  * Created by Markus on 25.12.2015.
@@ -43,6 +52,19 @@ public class ApartmentFragment extends RecyclerViewFragment {
     private ApartmentRecyclerViewAdapter apartmentArrayAdapter;
     private ArrayList<Apartment> apartments;
     private FloatingActionButton fab;
+
+    /**
+     * Used to notify other Fragments that the selected Apartment has changed
+     *
+     * @param context any suitable context
+     */
+    public static void sendApartmentChangedBroadcast(Context context) {
+        Log.d("ApartmentFragment", "sendApartmentChangedBroadcast");
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        UtilityService.forceWearDataUpdate(context);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,9 +87,11 @@ public class ApartmentFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DatabaseHandler.addApartment(new Apartment(null, "Dummy Apartment", new LinkedList<Room>(), new LinkedList<Scene>()));
 //                CreateApartmentDialog createApartmentDialog = new CreateApartmentDialog();
 //                createApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
 //                createApartmentDialog.show(getFragmentManager(), null);
+                apartmentArrayAdapter.notifyDataSetChanged();
             }
         });
 

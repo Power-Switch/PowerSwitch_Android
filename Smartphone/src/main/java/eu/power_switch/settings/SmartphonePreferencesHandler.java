@@ -414,4 +414,13 @@ public class SmartphonePreferencesHandler {
         Log.d(SmartphonePreferencesHandler.class, "getCurrentApartmentId: " + currentApartmentIdCache);
         return currentApartmentIdCache;
     }
+
+    public static void setCurrentApartmentId(Long apartmentId) {
+        Log.d(SmartphonePreferencesHandler.class, "setCurrentApartmentId: " + apartmentId);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, apartmentId);
+        editor.apply();
+
+        currentApartmentIdCache = apartmentId;
+    }
 }

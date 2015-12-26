@@ -38,8 +38,19 @@ import eu.power_switch.shared.log.Log;
  */
 public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
 
+    /**
+     * Lock Object used to lock thread on empty queue and wakeup again on notify
+     */
     public static final Object lock = new Object();
+
+    /**
+     * Context
+     */
     private Context context;
+
+    /**
+     * Socket used to send NetworkPackages over UDP
+     */
     private DatagramSocket socket;
 
     public NetworkPackageQueueHandler(Context context) {

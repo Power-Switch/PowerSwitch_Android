@@ -49,6 +49,11 @@ public class Apartment {
      */
     private LinkedList<Scene> scenes;
 
+    /**
+     * Flag to indicate that this Apartment is the currently active one
+     */
+    private boolean isActive;
+
     private Location location;
 
     public Apartment(Long id, String name, List<Room> rooms, List<Scene> scenes) {
@@ -84,5 +89,13 @@ public class Apartment {
 
     public void setScenes(LinkedList<Scene> scenes) {
         this.scenes = scenes;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

@@ -25,14 +25,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * * Adapter to visualize Gateway items in RecyclerView
@@ -69,7 +69,21 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
     public void onBindViewHolder(ApartmentRecyclerViewAdapter.ViewHolder holder, final int position) {
         final Apartment apartment = apartments.get(position);
 
+        holder.active.setChecked(apartment.isActive());
+        holder.active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
+                apartment.setActive(isChecked);
+            }
+        });
+
         holder.name.setText(apartment.getName());
+
+        String contentSummary = "";
+        contentSummary += context.getString(R.string.rooms) + ": " + apartment.getRooms().size() + "\n";
+        contentSummary += context.getString(R.string.scenes) + ": " + apartment.getScenes().size();
+        holder.contentSummary.setText(contentSummary);
 
         if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
@@ -92,12 +106,16 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public RadioButton active;
         public TextView name;
+        public TextView contentSummary;
         public LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
+            this.active = (RadioButton) itemView.findViewById(R.id.radioButton_active);
             this.name = (TextView) itemView.findViewById(R.id.txt_apartment_name);
+            this.contentSummary = (TextView) itemView.findViewById(R.id.txt_content_summary);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
