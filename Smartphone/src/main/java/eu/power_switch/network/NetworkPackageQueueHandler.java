@@ -108,6 +108,8 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                     Log.d("Waiting for Gateway to finish sending Signal before sending next...");
                     Thread.sleep(delay);
                 } catch (UnknownHostException e) {
+                    removeQueueHead();
+
                     StatusMessageHandler.showStatusMessage(context, R.string.unknown_host, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender", e);
                     try {
@@ -117,6 +119,8 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                         Log.e("UDP Sender", e1);
                     }
                 } catch (Exception e) {
+                    removeQueueHead();
+
                     StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender: Unknown error while sending message in background:", e);
                     try {
@@ -136,12 +140,23 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
             // queue worked off
             StatusMessageHandler.showStatusMessage(context, R.string.sent, Snackbar.LENGTH_SHORT);
         } else {
-            synchronized (NetworkHandler.networkPackagesQueue) {
-                // remove all NetworkPackage from queue and abort
-                NetworkHandler.networkPackagesQueue.clear();
-            }
+            clearQueue();
 
             StatusMessageHandler.showStatusMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
+        }
+    }
+
+    private void removeQueueHead() {
+        synchronized (NetworkHandler.networkPackagesQueue) {
+            // remove NetworkPackage from queue
+            NetworkHandler.networkPackagesQueue.remove(0);
+        }
+    }
+
+    private void clearQueue() {
+        synchronized (NetworkHandler.networkPackagesQueue) {
+            // remove NetworkPackage from queue
+            NetworkHandler.networkPackagesQueue.clear();
         }
     }
 
