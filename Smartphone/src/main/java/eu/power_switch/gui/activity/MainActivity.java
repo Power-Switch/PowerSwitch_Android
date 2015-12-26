@@ -71,6 +71,7 @@ import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.BackupFragment;
+import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.gui.fragment.main.MainTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
@@ -302,6 +303,24 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        final PrimaryDrawerItem itemSleepAsAndroid = new PrimaryDrawerItem().withName(R.string.menu_sleep_as_android)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_alarm)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(getString(R.string.menu_sleep_as_android),
+                                    SleepAsAndroidFragment.class.newInstance());
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
+                    }
+                });
         final PrimaryDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
                         .color(tintColor)
@@ -470,6 +489,7 @@ public class MainActivity extends AppCompatActivity {
                         itemHome,
                         new DividerDrawerItem(),
                         itemApartments,
+                        itemSleepAsAndroid,
                         new DividerDrawerItem(),
                         itemBackupRestore,
                         itemSettings,

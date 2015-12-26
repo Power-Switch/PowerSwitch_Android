@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -131,9 +130,6 @@ public class MainTabFragment extends Fragment {
             case SettingsConstants.TIMERS_TAB_INDEX:
                 contentText = getString(R.string.tutorial__timer_explanation);
                 break;
-            case SettingsConstants.SAA_TAB_INDEX:
-                contentText = getString(R.string.tutorial__sleep_as_android_explanation);
-                break;
             default:
                 return;
         }
@@ -171,8 +167,6 @@ public class MainTabFragment extends Fragment {
                     return new ScenesFragment();
                 case SettingsConstants.TIMERS_TAB_INDEX:
                     return new TimersFragment();
-                case SettingsConstants.SAA_TAB_INDEX:
-                    return new SleepAsAndroidFragment();
                 default:
                     return new RoomsFragment();
             }
@@ -183,7 +177,7 @@ public class MainTabFragment extends Fragment {
          */
         @Override
         public int getCount() {
-            return 4;
+            return 3;
         }
 
         @Override
@@ -195,8 +189,6 @@ public class MainTabFragment extends Fragment {
                     return context.getString(R.string.scenes);
                 case SettingsConstants.TIMERS_TAB_INDEX:
                     return context.getString(R.string.timers);
-                case SettingsConstants.SAA_TAB_INDEX:
-                    return "SAA";
                 default:
                     return "";
             }
