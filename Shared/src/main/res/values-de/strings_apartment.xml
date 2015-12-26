@@ -19,8 +19,8 @@
 
 <resources>
 
-    <string name="apartment_removed">Apartment removed</string>
+    <string name="apartment_removed">Wohnung entfernt</string>
 
-    <string name="remove_apartment_message">The Apartment and all rooms and scenes associated with it will be gone forever!</string>
+    <string name="remove_apartment_message">Die Wohnung und alle in ihr enthaltenen Räume und Szenen werden für immer verloren sein!</string>
 
 </resources>

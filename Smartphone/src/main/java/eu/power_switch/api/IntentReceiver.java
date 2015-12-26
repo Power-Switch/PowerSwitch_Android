@@ -32,10 +32,11 @@ import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
-import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
@@ -92,17 +93,19 @@ public class IntentReceiver extends BroadcastReceiver {
     private void parseActionIntent(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
-            if (extras != null) {
+            if (extras != null && extras.containsKey(ApiConstants.KEY_APARTMENT)) {
+                // NOTE: Every action needs the Apartment:<ApartmentName> Extra (and some other)
+
                 if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras
-                        .containsKey
-                                (ApiConstants.KEY_BUTTON)) {
+                        .containsKey(ApiConstants.KEY_BUTTON)) {
                     // Expects the following Extras:
                     // Room:<RoomName>
                     // Receiver:<ReceiverName>
                     // Button:<ButtonName>
 
                     try {
-                        Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
+                        Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                        Room room = apartment.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
                         Receiver receiver = room.getReceiver(extras.getString(ApiConstants.KEY_RECEIVER).trim());
                         Button button = receiver.getButton(extras.getString(ApiConstants.KEY_BUTTON).trim());
 
@@ -122,7 +125,8 @@ public class IntentReceiver extends BroadcastReceiver {
                     // pressed for each Receiver in the specified Room
 
                     try {
-                        Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
+                        Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                        Room room = apartment.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
                         String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
 
                         ActionHandler.execute(context, room, buttonName);
@@ -136,7 +140,8 @@ public class IntentReceiver extends BroadcastReceiver {
                     // Scene:<SceneName>
 
                     try {
-                        Scene scene = DatabaseHandler.getScene(extras.getString(ApiConstants.KEY_SCENE).trim());
+                        Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                        Scene scene = apartment.getScene(extras.getString(ApiConstants.KEY_SCENE).trim());
 
                         ActionHandler.execute(context, scene);
                     } catch (Exception e) {

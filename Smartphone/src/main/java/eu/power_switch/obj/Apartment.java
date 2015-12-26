@@ -98,4 +98,22 @@ public class Apartment {
     public void setActive(boolean active) {
         isActive = active;
     }
+
+    public Room getRoom(String name) {
+        for (Room room : rooms) {
+            if (room.getName().equals(name)) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    public Scene getScene(String name) {
+        for (Scene scene : scenes) {
+            if (scene.getName().equals(name)) {
+                return scene;
+            }
+        }
+        return null;
+    }
 }

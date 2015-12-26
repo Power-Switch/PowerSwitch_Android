@@ -57,6 +57,7 @@ import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
@@ -95,7 +96,7 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         currentRoom = DatabaseHandler.getRoom(roomId);
         originalName = currentRoom.getName();
 
-        List<Room> rooms = DatabaseHandler.getAllRooms();
+        List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
         roomNames = new LinkedList<>();
         for (Room room : rooms) {
             roomNames.add(room.getName());

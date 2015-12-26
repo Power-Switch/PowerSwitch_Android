@@ -165,6 +165,43 @@ public final class DatabaseHandler {
         }
     }
 
+    /**
+     * Deletes an Apartment from Database
+     *
+     * @param id ID of Apartment
+     */
+    public static void deleteApartment(Long id) {
+        openWritable();
+        try {
+            ApartmentHandler.delete(id);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            close();
+        } finally {
+            close();
+        }
+    }
+
+    /**
+     * Get an Apartment by Name
+     *
+     * @param name Name of Apartment
+     * @return Apartment
+     */
+    public static Apartment getApartment(String name) {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(name);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
+
     public static List<Apartment> getAllApartments() {
         openReadable();
         List<Apartment> apartments = null;

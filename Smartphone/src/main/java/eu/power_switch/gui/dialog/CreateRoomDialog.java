@@ -67,7 +67,7 @@ public class CreateRoomDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        List<Room> rooms = DatabaseHandler.getAllRooms();
+        List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
         roomNames = new LinkedList<>();
         for (Room room : rooms) {
             roomNames.add(room.getName());

@@ -23,7 +23,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
@@ -70,11 +70,20 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         final Apartment apartment = apartments.get(position);
 
         holder.active.setChecked(apartment.isActive());
-        holder.active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.active.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
-                apartment.setActive(isChecked);
+
+                for (Apartment currentApartment : apartments) {
+                    if (currentApartment.getId().equals(apartment.getId())) {
+                        currentApartment.setActive(true);
+                    } else {
+                        currentApartment.setActive(false);
+                    }
+                }
+
+                ApartmentFragment.sendApartmentChangedBroadcast(context);
             }
         });
 

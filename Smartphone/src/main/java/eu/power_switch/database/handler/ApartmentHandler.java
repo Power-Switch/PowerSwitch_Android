@@ -29,6 +29,7 @@ import eu.power_switch.database.table.apartment.ApartmentTable;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Provides database methods for managing Apartments
@@ -67,6 +68,11 @@ abstract class ApartmentHandler {
         LinkedList<Room> rooms = RoomHandler.getByApartment(id);
         for (Room room : rooms) {
             RoomHandler.delete(room.getId());
+        }
+
+        LinkedList<Scene> scenes = SceneHandler.getByApartment(id);
+        for (Scene scene : scenes) {
+            SceneHandler.delete(scene.getId());
         }
 
         DatabaseHandler.database.delete(ApartmentTable.TABLE_NAME, ApartmentTable.COLUMN_ID + "=" + id, null);
@@ -136,6 +142,9 @@ abstract class ApartmentHandler {
         LinkedList<Scene> scenes = SceneHandler.getByApartment(id);
 
         Apartment apartment = new Apartment(id, name, rooms, scenes);
+        if (SmartphonePreferencesHandler.getCurrentApartmentId().equals(id)) {
+            apartment.setActive(true);
+        }
         return apartment;
     }
 }

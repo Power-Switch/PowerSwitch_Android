@@ -56,6 +56,7 @@ public class ApiConstants {
     public static final String KEY_RECEIVER = "Receiver";
     public static final String KEY_ROOM = "Room";
     public static final String KEY_SCENE = "Scene";
+    public static final String KEY_APARTMENT = "Apartment";
 
 
     /**
