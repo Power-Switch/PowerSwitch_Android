@@ -34,6 +34,11 @@ public class Room {
     private Long id;
 
     /**
+     * ID of Apartment this Room is contained in
+     */
+    private Long apartmentId;
+
+    /**
      * Name of this Room
      */
     private String name;
@@ -54,8 +59,9 @@ public class Room {
      * @param id
      * @param name
      */
-    public Room(Long id, String name) {
+    public Room(Long id, Long apartmentId, String name) {
         this.id = id;
+        this.apartmentId = apartmentId;
         this.name = name;
         receivers = new LinkedList<>();
     }
@@ -94,6 +100,15 @@ public class Room {
      */
     public Long getId() {
         return id;
+    }
+
+    /**
+     * Get ID of the Apartment this Room is located in
+     *
+     * @return ID of Apartment
+     */
+    public Long getApartmentId() {
+        return apartmentId;
     }
 
     /**

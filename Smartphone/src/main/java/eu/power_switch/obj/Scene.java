@@ -32,10 +32,17 @@ public class Scene {
      * List containing all SceneItems
      */
     ArrayList<SceneItem> items;
+
     /**
      * ID of this Scene
      */
     private Long id;
+
+    /**
+     * ID of Apartment this Scene belongs to
+     */
+    private Long apartmentId;
+
     /**
      * Name of this Scene
      */
@@ -47,8 +54,9 @@ public class Scene {
      * @param id
      * @param name
      */
-    public Scene(Long id, String name) {
+    public Scene(Long id, Long apartmentId, String name) {
         this.id = id;
+        this.apartmentId = apartmentId;
         this.name = name;
         items = new ArrayList<>();
     }
@@ -60,6 +68,15 @@ public class Scene {
      */
     public Long getId() {
         return id;
+    }
+
+    /**
+     * Get ID of Apartment this Scene belongs to
+     *
+     * @return ID of Apartment
+     */
+    public Long getApartmentId() {
+        return apartmentId;
     }
 
     /**

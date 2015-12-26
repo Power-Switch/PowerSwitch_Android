@@ -38,8 +38,10 @@ public class SettingsConstants {
     public static final String AUTO_COLLAPSE_ROOMS_KEY = "autoCollapseRooms";
     public static final String AUTO_COLLAPSE_TIMERS_KEY = "autoCollapseTimers";
     public static final String THEME_KEY = "theme";
+    public static final String USE_COMPACT_DRAWER_KEY = "useCompactDrawer";
     public static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
     public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
+    public static final String CURRENT_APARTMENT_ID_KEY = "currentApartmentId";
     public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 75;
 
     // Main Tabs

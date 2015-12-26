@@ -41,6 +41,7 @@
 
     <!-- main menu -->
     <string name="menu_home">Home</string>
+    <string name="menu_apartments">Apartments</string>
     <string name="menu_backup_restore">Backup/Restore</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_help">Help</string>

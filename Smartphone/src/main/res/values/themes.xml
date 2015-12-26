@@ -22,10 +22,14 @@
     <!-- Base Dark Theme -->
     <style name="PowerSwitchThemeBase.Dark" parent="MaterialDrawerTheme">
         <!-- material design -->
+        <!-- MaterialDrawer -->
+        <!-- ...and here we setting appcompat’s color theming attrs -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryLight">@color/primaryColor_light</item>
+        <item name="colorPrimaryDark">@color/primaryColor_dark</item>
         <item name="colorAccent">#FF999999</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowBackground">@color/windowBackgroundInverse</item>
+        <item name="android:colorBackground">@color/windowBackground</item>
 
         <!-- custom views -->
         <item name="dialog_bottomBar_next_color">@color/textColorPrimary</item>
@@ -47,10 +51,6 @@
         <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
         <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
 
-        <!-- MaterialDrawer -->
-        <!-- ...and here we setting appcompat’s color theming attrs -->
-        <item name="colorPrimaryDark">@color/primaryColor</item>
-
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/material_drawer_dark_background</item>
         <item name="material_drawer_primary_text">@color/material_drawer_dark_primary_text</item>
@@ -67,6 +67,9 @@
     <!-- Base Light Theme -->
     <style name="PowerSwitchThemeBase.Light" parent="MaterialDrawerTheme.Light">
         <!-- material design -->
+        <!-- MaterialDrawer -->
+        <!-- ...and here we setting appcompat’s color theming attrs -->
+        <item name="colorPrimaryDark">@color/primaryColor_darkInverse</item>
         <item name="colorPrimary">@color/primaryColorInverse</item>
         <item name="colorPrimaryLight">@color/primaryColor_lightInverse</item>
         <item name="colorAccent">#FF333333</item>
@@ -91,10 +94,6 @@
         <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
         <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
         <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
-
-        <!-- MaterialDrawer -->
-        <!-- ...and here we setting appcompat’s color theming attrs -->
-        <item name="colorPrimaryDark">@color/primaryColorInverse</item>
 
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/material_drawer_background</item>

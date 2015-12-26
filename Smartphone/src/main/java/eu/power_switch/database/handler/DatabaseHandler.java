@@ -31,6 +31,7 @@ import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.history.HistoryItem;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.UniversalButton;
@@ -145,6 +146,39 @@ public final class DatabaseHandler {
     }
 
     /**
+     * /////////////////////////
+     * // Apartment functions //
+     * /////////////////////////
+     */
+
+    public static void addApartment(Apartment apartment) {
+        openWritable();
+        try {
+            ApartmentHandler.add(apartment);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            close();
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
+    public static List<Apartment> getAllApartments() {
+        openReadable();
+        List<Apartment> apartments = null;
+        try {
+            apartments = ApartmentHandler.getAll();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartments;
+    }
+
+    /**
      *
      * ////////////////////
      * // Room functions //
@@ -164,6 +198,8 @@ public final class DatabaseHandler {
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
+            close();
+            throw e;
         } finally {
             close();
         }
@@ -182,6 +218,8 @@ public final class DatabaseHandler {
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
+            close();
+            throw e;
         } finally {
             close();
         }
@@ -252,6 +290,24 @@ public final class DatabaseHandler {
         List<Room> rooms = null;
         try {
             rooms = RoomHandler.getAll();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return rooms;
+    }
+
+    /**
+     * Get all rooms of a specific Apartment.
+     *
+     * @return a list of rooms
+     */
+    public static List<Room> getRooms(Long apartmentId) {
+        openReadable();
+        List<Room> rooms = null;
+        try {
+            rooms = RoomHandler.getByApartment(apartmentId);
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -547,6 +603,24 @@ public final class DatabaseHandler {
             close();
         }
         return scene;
+    }
+
+    /**
+     * Get all scenes of a specific Apartment.
+     *
+     * @return a list of scenes
+     */
+    public static List<Scene> getScenes(Long apartmentId) {
+        openReadable();
+        List<Scene> scenes = null;
+        try {
+            scenes = SceneHandler.getByApartment(apartmentId);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return scenes;
     }
 
     /**

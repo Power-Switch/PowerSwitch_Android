@@ -44,6 +44,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Dialog to create a new Room
@@ -100,7 +101,7 @@ public class CreateRoomDialog extends DialogFragment {
         builder.setPositiveButton(R.string.create, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DatabaseHandler.addRoom(new Room(null, getRoomName()));
+                DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName()));
 
                 ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
                 RoomsFragment.sendReceiverChangedBroadcast(getActivity());

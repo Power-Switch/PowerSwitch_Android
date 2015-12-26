@@ -147,7 +147,7 @@ public class RoomsFragment extends RecyclerViewFragment {
 
     private void fillListWithRooms() {
         // Get Rooms and Receivers
-        rooms.addAll(DatabaseHandler.getAllRooms());
+        rooms.addAll(DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId()));
     }
 
     @Override
@@ -196,6 +196,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }

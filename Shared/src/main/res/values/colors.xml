@@ -20,21 +20,23 @@
     <color name="transparent">#00000000</color>
     <color name="half_transparent">#7F000000</color>
 
+    <color name="primaryColor_dark">@color/primaryColor</color>
+    <color name="primaryColor_darkInverse">@color/primaryColorInverse</color>
 
     <!-- Grey 900 #212121 -->
     <color name="primaryColor">#212121</color>
-    <!-- Grey 100 #F5F5F5 -->
-    <color name="primaryColorInverse">#F5F5F5</color>
+    <!-- Grey 200 #EEEEEE -->
+    <color name="primaryColorInverse">#EEEEEE</color>
 
     <!--&lt;!&ndash; Black #000000 &ndash;&gt;-->
-    <!--<color name="primary_dark">#000000</color>-->
+    <!--<color name="primaryColor_dark">#000000</color>-->
     <!--&lt;!&ndash; White #FFFFFF &ndash;&gt;-->
-    <!--<color name="primary_darkInverse">#FFFFFF</color>-->
+    <!--<color name="primaryColor_darkInverse">#FFFFFF</color>-->
 
     <!-- Grey 800 #424242 -->
     <color name="primaryColor_light">#424242</color>
-    <!-- Grey 200 #EEEEEE -->
-    <color name="primaryColor_lightInverse">#EEEEEE</color>
+    <!-- Grey 100 #F5F5F5 -->
+    <color name="primaryColor_lightInverse">#F5F5F5</color>
 
     <!-- Light Blue A700 #0091EA -->
     <color name="accent_blue_a700">#FF0091EA</color>

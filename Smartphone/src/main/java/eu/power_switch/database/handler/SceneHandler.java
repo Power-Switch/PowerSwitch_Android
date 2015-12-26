@@ -153,7 +153,7 @@ abstract class SceneHandler {
      * @return Scene
      */
     private static Scene dbToScene(Cursor c) throws Exception {
-        Scene scene = new Scene(c.getLong(0), c.getString(1));
+        Scene scene = new Scene(c.getLong(0), c.getLong(3), c.getString(1));
         for (SceneItem item : SceneItemHandler.getSceneItems(scene.getId())) {
             scene.addSceneItem(item);
         }

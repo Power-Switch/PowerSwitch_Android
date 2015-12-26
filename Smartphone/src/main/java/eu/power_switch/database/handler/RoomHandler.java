@@ -43,6 +43,7 @@ abstract class RoomHandler {
     protected static void add(Room room) {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, room.getName());
+        values.put(RoomTable.COLUMN_APARTMENT_ID, room.getApartmentId());
         DatabaseHandler.database.insert(RoomTable.TABLE_NAME, null, values);
     }
 
@@ -165,7 +166,7 @@ abstract class RoomHandler {
      * @return Room
      */
     private static Room dbToRoom(Cursor c) throws Exception {
-        Room room = new Room(c.getLong(0), c.getString(1));
+        Room room = new Room(c.getLong(0), c.getLong(3), c.getString(1));
         room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
         return room;
     }

@@ -53,5 +53,6 @@
     <integer name="timer_grid_span_count">1</integer>
     <integer name="backup_grid_span_count">1</integer>
     <integer name="gateway_grid_span_count">1</integer>
+    <integer name="apartments_grid_span_count">1</integer>
 
 </resources>

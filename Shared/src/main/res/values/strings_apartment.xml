@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
@@ -17,12 +18,4 @@
   -->
 
 <resources>
-
-    <integer name="room_grid_span_count">2</integer>
-    <integer name="scene_grid_span_count">2</integer>
-    <integer name="timer_grid_span_count">2</integer>
-    <integer name="backup_grid_span_count">2</integer>
-    <integer name="gateway_grid_span_count">2</integer>
-    <integer name="apartments_grid_span_count">2</integer>
-
 </resources>

@@ -147,7 +147,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     }
 
     private void fillListWithScenes() {
-        scenes.addAll(DatabaseHandler.getAllScenes());
+        scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
     }
 
     @Override
@@ -196,6 +196,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);

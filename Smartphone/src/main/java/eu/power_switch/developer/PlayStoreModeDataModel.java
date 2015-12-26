@@ -25,12 +25,13 @@ import java.util.Calendar;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
 import eu.power_switch.timer.Timer;
@@ -45,19 +46,21 @@ public class PlayStoreModeDataModel {
 
     private Context context;
 
+    private Apartment apartment;
+
     private ArrayList<Room> rooms = new ArrayList<>();
     private ArrayList<Scene> scenes = new ArrayList<>();
 
     // Scenes
-    private Scene scene_kinoabend = new Scene((long) 0, "Kinoabend");
-    private Scene scene_abendessen = new Scene((long) 1, "Abendessen");
-    private Scene scene_feier = new Scene((long) 2, "Feier");
+    private Scene scene_kinoabend = new Scene((long) 0, (long) 0, "Kinoabend");
+    private Scene scene_abendessen = new Scene((long) 1, (long) 0, "Abendessen");
+    private Scene scene_feier = new Scene((long) 2, (long) 0, "Feier");
     // Rooms
-    private Room wohnzimmer = new Room((long) 0, "Wohnzimmer");
-    private Room schlafzimmer = new Room((long) 1, "Schlafzimmer");
-    private Room kueche = new Room((long) 2, "Küche");
-    private Room kinderzimmer = new Room((long) 3, "Kinderzimmer");
-    private Room garten = new Room((long) 4, "Garten");
+    private Room wohnzimmer = new Room((long) 0, (long) 0, "Wohnzimmer");
+    private Room schlafzimmer = new Room((long) 1, (long) 0, "Schlafzimmer");
+    private Room kueche = new Room((long) 2, (long) 0, "Küche");
+    private Room kinderzimmer = new Room((long) 3, (long) 0, "Kinderzimmer");
+    private Room garten = new Room((long) 4, (long) 0, "Garten");
     // Receiver
     private Receiver sofa_wohnzimmer;
     private Receiver ecklampe_wohnzimmer;
@@ -84,6 +87,8 @@ public class PlayStoreModeDataModel {
         initReceiver();
         initRooms();
         initScenes();
+
+        apartment = new Apartment((long) 0, "Heimat", getRooms(), getScenes());
     }
 
     /**

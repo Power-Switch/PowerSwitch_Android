@@ -34,7 +34,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -53,6 +52,7 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.MiniDrawer;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
@@ -69,6 +69,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.DonationDialog;
+import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.main.MainTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
@@ -97,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static AppBarLayout appBarLayout;
 
-    private ActionBarDrawerToggle actionBarDrawerToggle;
     private LinkedList<HistoryItem> historyItems = new LinkedList<>();
     private RecyclerView recyclerViewHistory;
     private HistoryItemRecyclerViewAdapter historyItemArrayAdapter;
@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Drawer navigationDrawer;
     private Drawer historyDrawer;
+    private MiniDrawer miniDrawer;
 
     /**
      * Add class to Backstack
@@ -277,13 +278,31 @@ public class MainActivity extends AppCompatActivity {
                             lastFragmentTitles.pop();
                         }
 
-                        setTitle(R.string.app_name);
+                        setTitle(R.string.powerswitch_app_name);
 
                         navigationDrawer.closeDrawer();
                         return true;
                     }
                 });
-        final SecondaryDrawerItem itemBackupRestore = new SecondaryDrawerItem().withName(R.string.menu_backup_restore)
+        final PrimaryDrawerItem itemApartments = new PrimaryDrawerItem().withName(R.string.menu_apartments)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(getString(R.string.menu_apartments),
+                                    ApartmentFragment.class.newInstance());
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
+                    }
+                });
+        final PrimaryDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
                         .color(tintColor)
                         .sizeDp(24))
@@ -301,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final SecondaryDrawerItem itemSettings = new SecondaryDrawerItem().withName(R.string.menu_settings)
+        final PrimaryDrawerItem itemSettings = new PrimaryDrawerItem().withName(R.string.menu_settings)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_settings)
                         .color(tintColor)
                         .sizeDp(24))
@@ -436,11 +455,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        //                .withActionBarDrawerToggle(actionBarDrawerToggle)
-//                        selectNavigationItem(drawerItem);
         AccountHeader accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header_background)
+                .withCompactStyle(false)
                 .build();
 
         navigationDrawer = new DrawerBuilder(this)
@@ -448,9 +466,10 @@ public class MainActivity extends AppCompatActivity {
                 .withTranslucentStatusBar(true)
                 .withAccountHeader(accountHeader)
                 .withHeaderPadding(true)
-//                .withActionBarDrawerToggle(actionBarDrawerToggle)
                 .addDrawerItems(
                         itemHome,
+                        new DividerDrawerItem(),
+                        itemApartments,
                         new DividerDrawerItem(),
                         itemBackupRestore,
                         itemSettings,

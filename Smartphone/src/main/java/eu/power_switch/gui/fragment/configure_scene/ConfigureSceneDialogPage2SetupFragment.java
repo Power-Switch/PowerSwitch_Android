@@ -54,6 +54,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
@@ -176,7 +177,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
     }
 
     public void saveCurrentConfigurationToDatabase() {
-        Scene newScene = new Scene(currentId, currentName);
+        Scene newScene = new Scene(currentId, SmartphonePreferencesHandler.getCurrentApartmentId(), currentName);
         newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
 
         if (currentId == -1) {

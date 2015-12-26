@@ -18,6 +18,7 @@
 
 package eu.power_switch.database.table.apartment;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -33,7 +34,6 @@ public class ApartmentTable {
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
-            // COLUMN_APARTMENT_ID + " integer not null, " +
             COLUMN_NAME + " text not null, " +
             COLUMN_POSITION + " integer" +
             ");";
@@ -41,15 +41,18 @@ public class ApartmentTable {
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ID, 0);
+        values.put(COLUMN_NAME, "Home");
+        values.put(COLUMN_POSITION, 0);
+        db.insert(TABLE_NAME, null, values);
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion <= 10) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
-
-            // TODO: Add default Apartment if none exists
-            // TODO: Add existing rooms to the default apartment
         }
     }
 }

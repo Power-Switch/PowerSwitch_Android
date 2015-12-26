@@ -49,6 +49,7 @@ import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -197,7 +198,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     private void updateRoomNamesList() {
         // Get Rooms
         roomList.clear();
-        List<Room> rooms = DatabaseHandler.getAllRooms();
+        List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
         for (Room room : rooms) {
             roomList.add(room.getName());
         }

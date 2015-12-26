@@ -45,6 +45,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -122,7 +123,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
-        for (Room room : DatabaseHandler.getAllRooms()) {
+        for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId())) {
             LinearLayout roomLayout = new LinearLayout(getActivity());
             roomLayout.setOrientation(LinearLayout.VERTICAL);
             linearLayout_selectableReceivers.addView(roomLayout);
@@ -226,7 +227,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
 
                 if (room == null) {
                     // copy room
-                    room = new Room(originalRoom.getId(), originalRoom.getName());
+                    room = new Room(originalRoom.getId(), originalRoom.getApartmentId(), originalRoom.getName());
                     // add room to list
                     checkedReceivers.add(room);
                 }

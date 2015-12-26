@@ -35,7 +35,8 @@ public class SceneTable {
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
             COLUMN_NAME + " text not null, " +
-            COLUMN_POSITION + " integer" +
+            COLUMN_POSITION + " integer," +
+            COLUMN_APARTMENT_ID + " integer not null " +
             ");";
     //@formatter:on
 
@@ -53,6 +54,12 @@ public class SceneTable {
                 onCreate(db);
             case 3:
                 break;
+        }
+
+        if (oldVersion <= 10) {
+            // TODO: add column for apartment_id
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_APARTMENT_ID +
+                    " integer not null DEFAULT 0");
         }
     }
 }

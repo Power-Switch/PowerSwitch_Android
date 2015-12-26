@@ -21,6 +21,7 @@ package eu.power_switch.obj;
 import android.location.Location;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Represents an Apartment that contains Rooms and Scenes
@@ -50,11 +51,11 @@ public class Apartment {
 
     private Location location;
 
-    public Apartment(Long id, String name, LinkedList<Room> rooms, LinkedList<Scene> scenes) {
+    public Apartment(Long id, String name, List<Room> rooms, List<Scene> scenes) {
         this.id = id;
         this.name = name;
-        this.rooms = rooms;
-        this.scenes = scenes;
+        this.rooms = new LinkedList<>(rooms);
+        this.scenes = new LinkedList<>(scenes);
     }
 
     public Long getId() {

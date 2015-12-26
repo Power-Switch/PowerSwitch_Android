@@ -34,9 +34,9 @@ public class RoomTable {
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
-            // COLUMN_APARTMENT_ID + " integer not null, " +
             COLUMN_NAME + " text not null, " +
-            COLUMN_POSITION + " integer" +
+            COLUMN_POSITION + " integer," +
+            COLUMN_APARTMENT_ID + " integer not null " +
             ");";
     //formatter:on
 
@@ -53,8 +53,8 @@ public class RoomTable {
 
         if (oldVersion <= 10) {
             // TODO: add column for apartment_id
-
-//            db.execSQL();
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_APARTMENT_ID +
+                    " integer not null DEFAULT 0");
         }
     }
 }

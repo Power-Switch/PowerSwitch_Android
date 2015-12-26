@@ -48,6 +48,8 @@ public class SmartphonePreferencesHandler {
     private static boolean vibrateOnButtonPressCache;
     private static int vibrationDurationCache;
     private static boolean highlightLastActivatedButtonCache;
+    private static boolean useCompactDrawerCache;
+    private static long currentApartmentIdCache;
 
     private SmartphonePreferencesHandler() {
     }
@@ -84,6 +86,8 @@ public class SmartphonePreferencesHandler {
         vibrateOnButtonPressCache = sharedPreferences.getBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
         vibrationDurationCache = sharedPreferences.getInt(SettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
         highlightLastActivatedButtonCache = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
+        useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, false);
+        currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, 0);
     }
 
     /**
@@ -380,5 +384,34 @@ public class SmartphonePreferencesHandler {
         editor.apply();
 
         startupDefaultTabCache = tabIndex;
+    }
+
+    /**
+     * Retrieves setting for the compact drawer style
+     *
+     * @return tab index
+     */
+    public static boolean getUseCompactDrawer() {
+        Log.d(SmartphonePreferencesHandler.class, "getUseCompactDrawer: " + useCompactDrawerCache);
+        return useCompactDrawerCache;
+    }
+
+    /**
+     * Sets setting for the compact drawer style
+     *
+     * @param useCompactDrawer true if compact drawer style should be used
+     */
+    public static void setUseCompactDrawer(boolean useCompactDrawer) {
+        Log.d(SmartphonePreferencesHandler.class, "setUseCompactDrawer: " + useCompactDrawer);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, useCompactDrawer);
+        editor.apply();
+
+        useCompactDrawerCache = useCompactDrawer;
+    }
+
+    public static Long getCurrentApartmentId() {
+        Log.d(SmartphonePreferencesHandler.class, "getCurrentApartmentId: " + currentApartmentIdCache);
+        return currentApartmentIdCache;
     }
 }
