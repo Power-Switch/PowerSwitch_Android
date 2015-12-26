@@ -40,9 +40,11 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 12.09.2015.
@@ -124,8 +126,13 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
     }
 
     private void initializeTimerData(long timerId) {
-        currentActions.clear();
-        currentActions.addAll(DatabaseHandler.getTimer(timerId).getActions());
+        try {
+            currentActions.clear();
+            currentActions.addAll(DatabaseHandler.getTimer(timerId).getActions());
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     private ArrayList<Action> getCurrentTimerActions() {

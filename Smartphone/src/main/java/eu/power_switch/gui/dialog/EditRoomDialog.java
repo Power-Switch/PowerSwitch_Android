@@ -58,6 +58,7 @@ import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
@@ -93,13 +94,18 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         Bundle roomData = getArguments();
         roomId = roomData.getLong(ROOM_ID_KEY);
 
-        currentRoom = DatabaseHandler.getRoom(roomId);
-        originalName = currentRoom.getName();
+        try {
+            currentRoom = DatabaseHandler.getRoom(roomId);
+            originalName = currentRoom.getName();
 
-        List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
-        roomNames = new LinkedList<>();
-        for (Room room : rooms) {
-            roomNames.add(room.getName());
+            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            roomNames = new LinkedList<>();
+            for (Room room : rooms) {
+                roomNames.add(room.getName());
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -149,24 +155,29 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                DatabaseHandler.deleteRoom(roomId);
+                                try {
+                                    DatabaseHandler.deleteRoom(roomId);
 
-                                // notify rooms fragment
-                                RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-                                // notify scenes fragment
-                                ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                // notify timers fragment
-                                TimersFragment.sendTimersChangedBroadcast(getActivity());
+                                    // notify rooms fragment
+                                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+                                    // notify scenes fragment
+                                    ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                                    // notify timers fragment
+                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
 
-                                // update receiver widgets
-                                ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
-                                // update room widgets
-                                RoomWidgetProvider.forceWidgetUpdate(getActivity());
-                                // update scene widgets
-                                SceneWidgetProvider.forceWidgetUpdate(getActivity());
+                                    // update receiver widgets
+                                    ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+                                    // update room widgets
+                                    RoomWidgetProvider.forceWidgetUpdate(getActivity());
+                                    // update scene widgets
+                                    SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
-                                StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                        R.string.room_deleted, Snackbar.LENGTH_LONG);
+                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                            R.string.room_deleted, Snackbar.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                }
 
                                 // close dialog
                                 getDialog().dismiss();
@@ -192,18 +203,23 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
                 if (!modified) {
                     getDialog().dismiss();
                 } else {
-                    DatabaseHandler.updateRoom(roomId, getCurrentRoomName());
+                    try {
+                        DatabaseHandler.updateRoom(roomId, getCurrentRoomName());
 
-                    // save receiver order
-                    for (int position = 0; position < receiverList.size(); position++) {
-                        Receiver receiver = receiverList.get(position);
-                        DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
+                        // save receiver order
+                        for (int position = 0; position < receiverList.size(); position++) {
+                            Receiver receiver = receiverList.get(position);
+                            DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
+                        }
+
+                        RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+
+                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
+                        getDialog().dismiss();
+                    } catch (Exception e) {
+                        Log.e(e);
+                        StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
                     }
-
-                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-
-                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
-                    getDialog().dismiss();
                 }
             }
         });

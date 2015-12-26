@@ -42,6 +42,7 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
@@ -59,6 +60,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     private Spinner spinnerReceiver;
 
     private List<Room> roomsList;
+    private ArrayList<String> roomNamesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +72,13 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
         spinnerReceiver = (Spinner) findViewById(R.id.spinner_widgetSwitch);
 
-        roomsList = DatabaseHandler.getAllRooms();
-
-        ArrayList<String> roomNamesList = new ArrayList<>();
+        try {
+            roomsList = DatabaseHandler.getAllRooms();
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(this, R.string.unknown_error, 5000);
+        }
+        roomNamesList = new ArrayList<>();
         for (Room room : roomsList) {
             roomNamesList.add(room.getName());
         }
@@ -91,15 +97,19 @@ public class ConfigureReceiverWidgetActivity extends Activity {
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
-                ArrayList<String> receiverList = new ArrayList<>();
-                for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(roomsList.get(arg2).getId())) {
-                    receiverList.add(receiver.getName());
+                try {
+                    ArrayList<String> receiverList = new ArrayList<>();
+                    for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(roomsList.get(arg2).getId())) {
+                        receiverList.add(receiver.getName());
+                    }
+                    ArrayAdapter<String> adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this,
+                            android.R.layout.simple_spinner_dropdown_item, receiverList);
+                    adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerReceiver.setAdapter(adapterReceiver);
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(arg1.getContext(), R.string.unknown_error, 5000);
                 }
-                ArrayAdapter<String> adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this,
-                        android.R.layout.simple_spinner_dropdown_item, receiverList);
-                adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinnerReceiver.setAdapter(adapterReceiver);
             }
 
             @Override
@@ -131,7 +141,11 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                     // save new widget data to database
                     ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId, selectedRoom.getId(),
                             selectedReceiver.getId());
-                    DatabaseHandler.addReceiverWidget(receiverWidget);
+                    try {
+                        DatabaseHandler.addReceiverWidget(receiverWidget);
+                    } catch (Exception e) {
+                        Log.e(e);
+                    }
                     // When the configuration is complete, get an instance of
                     // the AppWidgetManager by calling getInstance(Context):
                     AppWidgetManager appWidgetManager = AppWidgetManager

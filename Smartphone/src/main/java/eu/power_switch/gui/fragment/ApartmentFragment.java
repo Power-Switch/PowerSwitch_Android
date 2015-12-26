@@ -81,7 +81,12 @@ public class ApartmentFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
-        apartments = new ArrayList<>(DatabaseHandler.getAllApartments());
+        try {
+            apartments = new ArrayList<>(DatabaseHandler.getAllApartments());
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+        }
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_apartments);
         apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
 
@@ -140,11 +145,16 @@ public class ApartmentFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseHandler.addApartment(new Apartment(null, "Dummy Apartment", new LinkedList<Room>(), new LinkedList<Scene>()));
+                try {
+                    DatabaseHandler.addApartment(new Apartment(null, "Dummy Apartment", new LinkedList<Room>(), new LinkedList<Scene>()));
 //                CreateApartmentDialog createApartmentDialog = new CreateApartmentDialog();
 //                createApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
 //                createApartmentDialog.show(getFragmentManager(), null);
-                apartmentArrayAdapter.notifyDataSetChanged();
+                    apartmentArrayAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                }
             }
         });
 
@@ -153,9 +163,14 @@ public class ApartmentFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(this, "received intent: " + intent.getAction());
-                apartments.clear();
-                apartments.addAll(DatabaseHandler.getAllApartments());
-                apartmentArrayAdapter.notifyDataSetChanged();
+                try {
+                    apartments.clear();
+                    apartments.addAll(DatabaseHandler.getAllApartments());
+                    apartmentArrayAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                }
             }
         };
 

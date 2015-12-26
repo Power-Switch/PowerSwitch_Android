@@ -71,30 +71,34 @@ public class RoomWidgetProvider extends AppWidgetProvider {
             RemoteViews remoteViews = new RemoteViews(context.getResources()
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_room);
 
-            RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
-            if (roomWidget != null) {
-                Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
+            try {
+                RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
+                if (roomWidget != null) {
+                    Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
 
-                if (room != null) {
-                    // update UI
-                    remoteViews.setTextViewText(R.id.textView_room_widget_name, room.getName());
+                    if (room != null) {
+                        // update UI
+                        remoteViews.setTextViewText(R.id.textView_room_widget_name, room.getName());
 
-                    // set button action
-                    remoteViews.setOnClickPendingIntent(R.id.button_on,
-                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R.string.on),
-                                    ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
-                    remoteViews.setOnClickPendingIntent(R.id.button_off,
-                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R
-                                            .string.off),
-                                    ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
-                    remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
+                        // set button action
+                        remoteViews.setOnClickPendingIntent(R.id.button_on,
+                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R.string.on),
+                                        ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
+                        remoteViews.setOnClickPendingIntent(R.id.button_off,
+                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R
+                                                .string.off),
+                                        ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
+                        remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
+                    } else {
+                        remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_deleted));
+                        remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
+                    }
                 } else {
-                    remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_deleted));
+                    remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.unknown_error));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
                 }
-            } else {
-                remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.unknown_error));
-                remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
+            } catch (Exception e) {
+                Log.e(e);
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
@@ -105,7 +109,11 @@ public class RoomWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         Log.d("Deleting Room Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
-            DatabaseHandler.deleteRoomWidget(appWidgetId);
+            try {
+                DatabaseHandler.deleteRoomWidget(appWidgetId);
+            } catch (Exception e) {
+                Log.e(e);
+            }
         }
         super.onDeleted(context, appWidgetIds);
     }

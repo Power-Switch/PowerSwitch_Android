@@ -40,6 +40,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -141,7 +142,12 @@ public class TimersFragment extends RecyclerViewFragment {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             timers.addAll(playStoreModeDataModel.getTimers());
         } else {
-            timers.addAll(DatabaseHandler.getAllTimers());
+            try {
+                timers.addAll(DatabaseHandler.getAllTimers());
+            } catch (Exception e) {
+                Log.e(e);
+                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            }
         }
 
         timerRecyclerViewAdapter.notifyDataSetChanged();
@@ -175,7 +181,7 @@ public class TimersFragment extends RecyclerViewFragment {
         } else {
             menu.findItem(R.id.create_timer).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
         }
-        
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 

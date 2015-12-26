@@ -96,7 +96,12 @@ public class ConfigureGatewayDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_configure_gateway, null);
 
-        existingGateways = DatabaseHandler.getAllGateways();
+        try {
+            existingGateways = DatabaseHandler.getAllGateways();
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
 
         TextWatcher textWatcher = new TextWatcher() {
 
@@ -143,10 +148,15 @@ public class ConfigureGatewayDialog extends DialogFragment {
                                 (android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        DatabaseHandler.deleteGateway(gatewayId);
-                                        GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-                                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                                R.string.gateway_removed, Snackbar.LENGTH_LONG);
+                                        try {
+                                            DatabaseHandler.deleteGateway(gatewayId);
+                                            GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
+                                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                                    R.string.gateway_removed, Snackbar.LENGTH_LONG);
+                                        } catch (Exception e) {
+                                            Log.e(e);
+                                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                        }
 
                                         // close dialog
                                         getDialog().dismiss();
@@ -212,23 +222,28 @@ public class ConfigureGatewayDialog extends DialogFragment {
      * @param gatewayId ID of existing Gateway
      */
     private void initializeGatewayData(long gatewayId) {
-        Gateway gateway = DatabaseHandler.getGateway(gatewayId);
-        originalName = gateway.getName();
-        originalAddress = gateway.getHost();
-        originalPort = gateway.getPort();
+        try {
+            Gateway gateway = DatabaseHandler.getGateway(gatewayId);
+            originalName = gateway.getName();
+            originalAddress = gateway.getHost();
+            originalPort = gateway.getPort();
 
-        name.setText(originalName);
-        address.setText(originalAddress);
-        port.setText(String.valueOf(originalPort));
+            name.setText(originalName);
+            address.setText(originalAddress);
+            port.setText(String.valueOf(originalPort));
 
-        // restore spinner position
-        for (int i = 0; i < model.getCount(); i++) {
-            if (model.getItemAtPosition(i).equals(gateway.getModel())) {
-                model.setSelection(i);
+            // restore spinner position
+            for (int i = 0; i < model.getCount(); i++) {
+                if (model.getItemAtPosition(i).equals(gateway.getModel())) {
+                    model.setSelection(i);
+                }
             }
-        }
 
-        modified = false;
+            modified = false;
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     /**

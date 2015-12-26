@@ -40,6 +40,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
@@ -146,8 +147,13 @@ public class RoomsFragment extends RecyclerViewFragment {
     }
 
     private void fillListWithRooms() {
-        // Get Rooms and Receivers
-        rooms.addAll(DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId()));
+        try {
+            // Get Rooms and Receivers
+            rooms.addAll(DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId()));
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     @Override

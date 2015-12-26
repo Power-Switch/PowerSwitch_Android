@@ -41,6 +41,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -147,7 +148,12 @@ public class ScenesFragment extends RecyclerViewFragment {
     }
 
     private void fillListWithScenes() {
-        scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
+        try {
+            scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     @Override

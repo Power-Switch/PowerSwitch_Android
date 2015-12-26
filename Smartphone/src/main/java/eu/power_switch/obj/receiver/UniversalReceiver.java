@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.log.Log;
 
 public class UniversalReceiver extends Receiver {
 
@@ -44,10 +45,15 @@ public class UniversalReceiver extends Receiver {
 
     @Override
     protected String getSignal(Gateway gateway, String action) {
-        for (UniversalButton button : DatabaseHandler.getButtons(id)) {
-            if (button.getName().equals(action)) {
-                return button.getSignal();
+        try {
+            for (UniversalButton button : DatabaseHandler.getButtons(id)) {
+                if (button.getName().equals(action)) {
+                    return button.getSignal();
+                }
             }
+        } catch (Exception e) {
+            Log.e(e);
+            return null;
         }
         return null;
     }

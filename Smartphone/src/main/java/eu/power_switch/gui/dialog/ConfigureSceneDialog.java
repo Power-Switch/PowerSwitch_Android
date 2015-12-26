@@ -146,18 +146,23 @@ public class ConfigureSceneDialog extends DialogFragment {
                                 (android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        DatabaseHandler.deleteScene(sceneId);
+                                        try {
+                                            DatabaseHandler.deleteScene(sceneId);
 
-                                        // notify scenes fragment
-                                        ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                        // notify timers fragment
-                                        TimersFragment.sendTimersChangedBroadcast(getActivity());
+                                            // notify scenes fragment
+                                            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                                            // notify timers fragment
+                                            TimersFragment.sendTimersChangedBroadcast(getActivity());
 
-                                        // update scene widgets
-                                        SceneWidgetProvider.forceWidgetUpdate(getActivity());
+                                            // update scene widgets
+                                            SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
-                                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                                R.string.scene_deleted, Snackbar.LENGTH_LONG);
+                                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                                    R.string.scene_deleted, Snackbar.LENGTH_LONG);
+                                        } catch (Exception e) {
+                                            Log.e(e);
+                                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                        }
 
                                         // close dialog
                                         getDialog().dismiss();

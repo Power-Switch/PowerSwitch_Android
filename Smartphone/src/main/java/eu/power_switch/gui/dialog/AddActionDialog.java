@@ -43,6 +43,7 @@ import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -78,6 +79,9 @@ public abstract class AddActionDialog extends DialogFragment {
     private ArrayAdapter<String> receiverSpinnerArrayAdapter;
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
     private ArrayList<String> receiverNames;
+    private ArrayList<String> roomNames;
+    private ArrayList<String> sceneNames;
+    private ArrayList<String> buttonNamesAll;
 
     @NonNull
     @Override
@@ -116,32 +120,37 @@ public abstract class AddActionDialog extends DialogFragment {
         radioButtonSceneAction = (RadioButton) rootView.findViewById(R.id.radioButton_scene_action);
         radioButtonSceneAction.setOnClickListener(onClickListener);
 
-        ArrayList<Room> availableRooms = (ArrayList<Room>) DatabaseHandler.getAllRooms();
-        ArrayList<String> roomNames = new ArrayList<>();
-        for (Room room : availableRooms) {
-            roomNames.add(room.getName());
-        }
+        try {
+            ArrayList<Room> availableRooms = (ArrayList<Room>) DatabaseHandler.getAllRooms();
+            roomNames = new ArrayList<>();
+            for (Room room : availableRooms) {
+                roomNames.add(room.getName());
+            }
 
-        ArrayList<Receiver> availableReceivers = (ArrayList<Receiver>) DatabaseHandler.getAllReceivers();
-        receiverNames = new ArrayList<>();
-        for (Receiver receiver : availableReceivers) {
-            receiverNames.add(receiver.getName());
-        }
+            ArrayList<Receiver> availableReceivers = (ArrayList<Receiver>) DatabaseHandler.getAllReceivers();
+            receiverNames = new ArrayList<>();
+            for (Receiver receiver : availableReceivers) {
+                receiverNames.add(receiver.getName());
+            }
 
-        buttonNamesReceiver = new ArrayList<>();
-        final ArrayList<String> buttonNamesAll = new ArrayList<>();
-        for (Receiver receiver : availableReceivers) {
-            for (Button button : receiver.getButtons()) {
-                if (!buttonNamesAll.contains(button.getName())) {
-                    buttonNamesAll.add(button.getName());
+            buttonNamesReceiver = new ArrayList<>();
+            buttonNamesAll = new ArrayList<>();
+            for (Receiver receiver : availableReceivers) {
+                for (Button button : receiver.getButtons()) {
+                    if (!buttonNamesAll.contains(button.getName())) {
+                        buttonNamesAll.add(button.getName());
+                    }
                 }
             }
-        }
 
-        ArrayList<Scene> availableScenes = (ArrayList<Scene>) DatabaseHandler.getAllScenes();
-        ArrayList<String> sceneNames = new ArrayList<>();
-        for (Scene scene : availableScenes) {
-            sceneNames.add(scene.getName());
+            ArrayList<Scene> availableScenes = (ArrayList<Scene>) DatabaseHandler.getAllScenes();
+            sceneNames = new ArrayList<>();
+            for (Scene scene : availableScenes) {
+                sceneNames.add(scene.getName());
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
         // Receiver Action
@@ -290,36 +299,43 @@ public abstract class AddActionDialog extends DialogFragment {
 
     protected Action getCurrentSelection() {
         Action action = null;
-        if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            Log.d(spinner_receiver_action_room.getSelectedItem().toString());
-            Log.d(spinner_receiver_action_receiver.getSelectedItem().toString());
-            Log.d(spinner_receiver_action_button.getSelectedItem().toString());
 
-            Room selectedRoom = DatabaseHandler.getRoom(spinner_receiver_action_room.getSelectedItem().toString());
-            Receiver selectedReceiver = selectedRoom.getReceiver(
-                    spinner_receiver_action_receiver.getSelectedItem().toString());
-            Button selectedButton = null;
-            for (Button button : selectedReceiver.getButtons()) {
-                if (button.getName().equals(spinner_receiver_action_button.getSelectedItem().toString())) {
-                    selectedButton = button;
+        try {
+            if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
+                Log.d(spinner_receiver_action_room.getSelectedItem().toString());
+                Log.d(spinner_receiver_action_receiver.getSelectedItem().toString());
+                Log.d(spinner_receiver_action_button.getSelectedItem().toString());
+
+                Room selectedRoom = DatabaseHandler.getRoom(spinner_receiver_action_room.getSelectedItem().toString());
+                Receiver selectedReceiver = selectedRoom.getReceiver(
+                        spinner_receiver_action_receiver.getSelectedItem().toString());
+                Button selectedButton = null;
+                for (Button button : selectedReceiver.getButtons()) {
+                    if (button.getName().equals(spinner_receiver_action_button.getSelectedItem().toString())) {
+                        selectedButton = button;
+                    }
                 }
+
+                action = new ReceiverAction(-1, selectedRoom, selectedReceiver, selectedButton);
+            } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
+                Log.d(spinner_room_action_room.getSelectedItem().toString());
+                Log.d(spinner_room_action_button.getSelectedItem().toString());
+
+                Room selectedRoom = DatabaseHandler.getRoom(spinner_room_action_room.getSelectedItem().toString());
+
+                action = new RoomAction(-1, selectedRoom, spinner_room_action_button.getSelectedItem()
+                        .toString());
+            } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
+                Log.d(spinner_scene_action_scene.getSelectedItem().toString());
+
+                Scene selectedScene = DatabaseHandler.getScene(spinner_scene_action_scene.getSelectedItem().toString());
+
+                action = new SceneAction(-1, selectedScene);
             }
 
-            action = new ReceiverAction(-1, selectedRoom, selectedReceiver, selectedButton);
-        } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            Log.d(spinner_room_action_room.getSelectedItem().toString());
-            Log.d(spinner_room_action_button.getSelectedItem().toString());
-
-            Room selectedRoom = DatabaseHandler.getRoom(spinner_room_action_room.getSelectedItem().toString());
-
-            action = new RoomAction(-1, selectedRoom, spinner_room_action_button.getSelectedItem()
-                    .toString());
-        } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-            Log.d(spinner_scene_action_scene.getSelectedItem().toString());
-
-            Scene selectedScene = DatabaseHandler.getScene(spinner_scene_action_scene.getSelectedItem().toString());
-
-            action = new SceneAction(-1, selectedScene);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
         return action;

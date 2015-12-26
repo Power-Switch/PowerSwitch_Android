@@ -216,7 +216,12 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         if (SmartphonePreferencesHandler.getPlayStoreMode()) {
             gateways.addAll(PlayStoreModeDataModel.getGateways());
         } else {
-            gateways.addAll(DatabaseHandler.getAllGateways());
+            try {
+                gateways.addAll(DatabaseHandler.getAllGateways());
+            } catch (Exception e) {
+                Log.e(e);
+                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            }
         }
     }
 

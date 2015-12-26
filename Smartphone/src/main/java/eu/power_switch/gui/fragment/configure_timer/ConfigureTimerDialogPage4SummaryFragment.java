@@ -43,6 +43,7 @@ import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -125,19 +126,25 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
     }
 
     private void initializeTimerData(long timerId) {
-        final Timer timer = DatabaseHandler.getTimer(timerId);
+        try {
+            final Timer timer = DatabaseHandler.getTimer(timerId);
 
-        currentId = timerId;
-        currentIsActive = timer.isActive();
-        currentName = timer.getName();
-        currentActions = timer.getActions();
-        currentExecutionType = timer.getExecutionType();
-        currentExecutionTime = timer.getExecutionTime();
-        currentExecutionInterval = timer.getExecutionInterval();
+            currentId = timerId;
+            currentIsActive = timer.isActive();
+            currentName = timer.getName();
+            currentActions = timer.getActions();
+            currentExecutionType = timer.getExecutionType();
+            currentExecutionTime = timer.getExecutionTime();
+            currentExecutionInterval = timer.getExecutionInterval();
 
-        if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
-            WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
-            currentExecutionDays = weekdayTimer.getExecutionDays();
+            if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
+                WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
+                currentExecutionDays = weekdayTimer.getExecutionDays();
+            }
+
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
         updateUi();
@@ -229,31 +236,36 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
     }
 
     public void saveCurrentConfigurationToDatabase() {
-        if (currentId == -1) {
-            if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-                Timer timer = new IntervalTimer(0, true, currentName, currentExecutionTime, currentExecutionInterval,
-                        currentActions);
-                DatabaseHandler.addTimer(timer);
-            } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-                Timer timer = new WeekdayTimer(0, true, currentName, currentExecutionTime, currentExecutionDays,
-                        currentActions);
-                DatabaseHandler.addTimer(timer);
+        try {
+            if (currentId == -1) {
+                if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
+                    Timer timer = new IntervalTimer(0, true, currentName, currentExecutionTime, currentExecutionInterval,
+                            currentActions);
+                    DatabaseHandler.addTimer(timer);
+                } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
+                    Timer timer = new WeekdayTimer(0, true, currentName, currentExecutionTime, currentExecutionDays,
+                            currentActions);
+                    DatabaseHandler.addTimer(timer);
+                }
+            } else {
+                if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
+                    Timer timer = new IntervalTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentExecutionInterval,
+                            currentActions);
+                    DatabaseHandler.updateTimer(timer);
+                } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
+                    Timer timer = new WeekdayTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentExecutionDays,
+                            currentActions);
+                    DatabaseHandler.updateTimer(timer);
+                }
             }
-        } else {
-            if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-                Timer timer = new IntervalTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentExecutionInterval,
-                        currentActions);
-                DatabaseHandler.updateTimer(timer);
-            } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-                Timer timer = new WeekdayTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentExecutionDays,
-                        currentActions);
-                DatabaseHandler.updateTimer(timer);
-            }
-        }
 
-        TimersFragment.sendTimersChangedBroadcast(getContext());
-        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                R.string.timer_saved, Snackbar.LENGTH_LONG);
+            TimersFragment.sendTimersChangedBroadcast(getContext());
+            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                    R.string.timer_saved, Snackbar.LENGTH_LONG);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     @Override

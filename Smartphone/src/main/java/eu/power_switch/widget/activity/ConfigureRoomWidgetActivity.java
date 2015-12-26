@@ -57,7 +57,11 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
         setContentView(R.layout.widget_dialog_configure_room);
 
-        roomsList = DatabaseHandler.getAllRooms();
+        try {
+            roomsList = DatabaseHandler.getAllRooms();
+        } catch (Exception e) {
+            Log.e(e);
+        }
         spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
 
         ArrayList<String> roomNamesList = new ArrayList<>();
@@ -89,7 +93,11 @@ public class ConfigureRoomWidgetActivity extends Activity {
                     Room room = roomsList.get(spinnerRoom.getSelectedItemPosition());
                     // save new widget data to database
                     RoomWidget roomWidget = new RoomWidget(appWidgetId, room.getId());
-                    DatabaseHandler.addRoomWidget(roomWidget);
+                    try {
+                        DatabaseHandler.addRoomWidget(roomWidget);
+                    } catch (Exception e) {
+                        Log.e(e);
+                    }
 
                     // When the configuration is complete, get an instance of
                     // the AppWidgetManager by calling getInstance(Context):

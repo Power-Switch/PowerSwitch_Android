@@ -56,6 +56,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
@@ -122,36 +123,41 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
     }
 
     private void initializeSceneData(long sceneId) {
-        Scene scene = DatabaseHandler.getScene(sceneId);
+        try {
+            Scene scene = DatabaseHandler.getScene(sceneId);
 
-        currentName = scene.getName();
+            currentName = scene.getName();
 
-        ArrayList<Room> checkedReceivers = new ArrayList<>();
-        HashMap<Long, SceneItem> map = new HashMap<>();
+            ArrayList<Room> checkedReceivers = new ArrayList<>();
+            HashMap<Long, SceneItem> map = new HashMap<>();
 
-        for (SceneItem sceneItem : scene.getSceneItems()) {
-            map.put(sceneItem.getReceiver().getId(), sceneItem);
+            for (SceneItem sceneItem : scene.getSceneItems()) {
+                map.put(sceneItem.getReceiver().getId(), sceneItem);
 
-            boolean roomFound = false;
-            for (Room room : checkedReceivers) {
-                if (room.getId() == sceneItem.getReceiver().getRoomId()) {
+                boolean roomFound = false;
+                for (Room room : checkedReceivers) {
+                    if (room.getId() == sceneItem.getReceiver().getRoomId()) {
+                        room.addReceiver(sceneItem.getReceiver());
+                        roomFound = true;
+                    }
+                }
+
+                if (!roomFound) {
+                    Room room = DatabaseHandler.getRoom(sceneItem.getReceiver().getRoomId());
+                    room.getReceivers().clear();
                     room.addReceiver(sceneItem.getReceiver());
-                    roomFound = true;
+                    checkedReceivers.add(room);
                 }
             }
 
-            if (!roomFound) {
-                Room room = DatabaseHandler.getRoom(sceneItem.getReceiver().getRoomId());
-                room.getReceivers().clear();
-                room.addReceiver(sceneItem.getReceiver());
-                checkedReceivers.add(room);
-            }
+            rooms.clear();
+            rooms.addAll(checkedReceivers);
+
+            customRecyclerViewAdapter.setReceiverSceneItemHashMap(map);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
-
-        rooms.clear();
-        rooms.addAll(checkedReceivers);
-
-        customRecyclerViewAdapter.setReceiverSceneItemHashMap(map);
     }
 
     public boolean checkValidity() {
@@ -160,7 +166,12 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         }
 
         if (currentId == -1) {
-            if (DatabaseHandler.getScene(currentName) != null) {
+            try {
+                if (DatabaseHandler.getScene(currentName) != null) {
+                    return false;
+                }
+            } catch (Exception e) {
+                Log.e(e);
                 return false;
             }
         }
@@ -180,19 +191,24 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         Scene newScene = new Scene(currentId, SmartphonePreferencesHandler.getCurrentApartmentId(), currentName);
         newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
 
-        if (currentId == -1) {
-            DatabaseHandler.addScene(newScene);
-        } else {
-            DatabaseHandler.updateScene(newScene);
+        try {
+            if (currentId == -1) {
+                DatabaseHandler.addScene(newScene);
+            } else {
+                DatabaseHandler.updateScene(newScene);
+            }
+
+            // notify scenes fragment
+            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+
+            // update scene widgets
+            SceneWidgetProvider.forceWidgetUpdate(getActivity());
+
+            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
-
-        // notify scenes fragment
-        ScenesFragment.sendScenesChangedBroadcast(getActivity());
-
-        // update scene widgets
-        SceneWidgetProvider.forceWidgetUpdate(getActivity());
-
-        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

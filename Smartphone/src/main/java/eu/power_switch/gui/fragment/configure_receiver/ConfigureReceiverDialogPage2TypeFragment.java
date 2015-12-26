@@ -36,9 +36,11 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * "Type" Fragment used in Configure Receiver Dialog
@@ -230,17 +232,23 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
 
             modelListView.setItemChecked(0, true);
         } else {
-            // init existing receiver
-            final Receiver receiver = DatabaseHandler.getReceiver(receiverId);
+            try {
+                // init existing receiver
+                final Receiver receiver = DatabaseHandler.getReceiver(receiverId);
 
-            int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand());
-            brandListView.setItemChecked(brandPosition, true);
-            brandListView.smoothScrollToPosition(brandPosition);
-            updateModelList(receiver.getBrand());
+                int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand());
+                brandListView.setItemChecked(brandPosition, true);
+                brandListView.smoothScrollToPosition(brandPosition);
+                updateModelList(receiver.getBrand());
 
-            int modelPosition = modelNamesAdapter.getPosition(receiver.getModel());
-            modelListView.setItemChecked(modelPosition, true);
-            modelListView.smoothScrollToPosition(modelPosition);
+                int modelPosition = modelNamesAdapter.getPosition(receiver.getModel());
+                modelListView.setItemChecked(modelPosition, true);
+                modelListView.smoothScrollToPosition(modelPosition);
+
+            } catch (Exception e) {
+                Log.e(e);
+                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            }
         }
     }
 

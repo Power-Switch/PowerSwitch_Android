@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -47,6 +48,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * "Name" Fragment used in Configure Scene Dialog
@@ -123,67 +125,77 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
-        for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId())) {
-            LinearLayout roomLayout = new LinearLayout(getActivity());
-            roomLayout.setOrientation(LinearLayout.VERTICAL);
-            linearLayout_selectableReceivers.addView(roomLayout);
+        try {
+            for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId())) {
+                LinearLayout roomLayout = new LinearLayout(getActivity());
+                roomLayout.setOrientation(LinearLayout.VERTICAL);
+                linearLayout_selectableReceivers.addView(roomLayout);
 
-            TextView roomName = new TextView(getActivity());
-            roomName.setText(room.getName());
-            roomLayout.addView(roomName);
+                TextView roomName = new TextView(getActivity());
+                roomName.setText(room.getName());
+                roomLayout.addView(roomName);
 
-            for (Receiver receiver : room.getReceivers()) {
-                LinearLayout receiverLayout = new LinearLayout(getActivity());
-                receiverLayout.setOrientation(LinearLayout.HORIZONTAL);
-                roomLayout.addView(receiverLayout);
+                for (Receiver receiver : room.getReceivers()) {
+                    LinearLayout receiverLayout = new LinearLayout(getActivity());
+                    receiverLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    roomLayout.addView(receiverLayout);
 
-                final CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.simple_checkbox, receiverLayout, false);
-                checkBox.setTag(R.string.room, room);
-                checkBox.setTag(R.string.receiver, receiver);
-                receiverLayout.addView(checkBox);
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        checkValidity();
-                    }
-                });
-                receiverCheckboxList.add(checkBox);
+                    final CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.simple_checkbox, receiverLayout, false);
+                    checkBox.setTag(R.string.room, room);
+                    checkBox.setTag(R.string.receiver, receiver);
+                    receiverLayout.addView(checkBox);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            checkValidity();
+                        }
+                    });
+                    receiverCheckboxList.add(checkBox);
 
-                TextView textView_receiverName = new TextView(getActivity());
-                textView_receiverName.setText(receiver.getName());
-                receiverLayout.addView(textView_receiverName);
+                    TextView textView_receiverName = new TextView(getActivity());
+                    textView_receiverName.setText(receiver.getName());
+                    receiverLayout.addView(textView_receiverName);
 
-                receiverLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        checkBox.setChecked(!checkBox.isChecked());
-                    }
-                });
+                    receiverLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            checkBox.setChecked(!checkBox.isChecked());
+                        }
+                    });
+                }
             }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
     }
 
     private void initializeSceneData(long sceneId) {
-        Scene scene = DatabaseHandler.getScene(sceneId);
+        try {
+            Scene scene = DatabaseHandler.getScene(sceneId);
 
-        originalName = scene.getName();
-        name.setText(scene.getName());
+            originalName = scene.getName();
+            name.setText(scene.getName());
 
-        ArrayList<Receiver> activeReceivers = new ArrayList<>();
-        for (SceneItem sceneItem : scene.getSceneItems()) {
-            Receiver receiver = DatabaseHandler.getReceiver(sceneItem.getActiveButton().getReceiverId());
-            activeReceivers.add(receiver);
-        }
+            ArrayList<Receiver> activeReceivers = new ArrayList<>();
+            for (SceneItem sceneItem : scene.getSceneItems()) {
+                Receiver receiver = DatabaseHandler.getReceiver(sceneItem.getActiveButton().getReceiverId());
+                activeReceivers.add(receiver);
+            }
 
-        for (Receiver receiver : activeReceivers) {
-            for (CheckBox checkBox : receiverCheckboxList) {
-                Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
-                Room associatedRoom = (Room) checkBox.getTag(R.string.room);
-                if (associatedReceiver.getId().equals(receiver.getId()) && associatedRoom.getId().equals(receiver
-                        .getRoomId())) {
-                    checkBox.setChecked(true);
+            for (Receiver receiver : activeReceivers) {
+                for (CheckBox checkBox : receiverCheckboxList) {
+                    Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
+                    Room associatedRoom = (Room) checkBox.getTag(R.string.room);
+                    if (associatedReceiver.getId().equals(receiver.getId()) && associatedRoom.getId().equals(receiver
+                            .getRoomId())) {
+                        checkBox.setChecked(true);
+                    }
                 }
             }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
     }
 

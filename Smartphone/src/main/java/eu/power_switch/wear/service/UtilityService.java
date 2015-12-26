@@ -243,21 +243,25 @@ public class UtilityService extends IntentService {
                 sendDataToWearable(rooms, receivers, buttons, scenes);
                 return;
             }
-            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            try {
 
-            List<Receiver> receivers = new ArrayList<>();
-            for (Room room : rooms) {
-                receivers.addAll(room.getReceivers());
+                List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+
+                List<Receiver> receivers = new ArrayList<>();
+                for (Room room : rooms) {
+                    receivers.addAll(room.getReceivers());
+                }
+
+                List<Button> buttons = new ArrayList<>();
+                for (Receiver receiver : receivers) {
+                    buttons.addAll(receiver.getButtons());
+                }
+                List<Scene> scenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId());
+
+                sendDataToWearable(rooms, receivers, buttons, scenes);
+            } catch (Exception e) {
+                Log.e(e);
             }
-
-            List<Button> buttons = new ArrayList<>();
-            for (Receiver receiver : receivers) {
-                buttons.addAll(receiver.getButtons());
-            }
-
-            List<Scene> scenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId());
-
-            sendDataToWearable(rooms, receivers, buttons, scenes);
         } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
             sendSettingsToWearable();
         }

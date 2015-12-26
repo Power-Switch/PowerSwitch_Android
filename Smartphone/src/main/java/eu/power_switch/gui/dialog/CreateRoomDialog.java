@@ -41,10 +41,12 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to create a new Room
@@ -67,10 +69,15 @@ public class CreateRoomDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
-        roomNames = new LinkedList<>();
-        for (Room room : rooms) {
-            roomNames.add(room.getName());
+        try {
+            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            roomNames = new LinkedList<>();
+            for (Room room : rooms) {
+                roomNames.add(room.getName());
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -101,12 +108,17 @@ public class CreateRoomDialog extends DialogFragment {
         builder.setPositiveButton(R.string.create, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName()));
+                try {
+                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName()));
 
-                ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
-                RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-                Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)
-                        .show();
+                    ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
+                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+                    Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)
+                            .show();
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                }
             }
         });
 

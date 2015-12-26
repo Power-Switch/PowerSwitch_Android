@@ -34,7 +34,9 @@ import java.util.Calendar;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.alarm.AlarmHandler;
@@ -134,14 +136,19 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // check if user pressed the button
                 if (buttonView.isPressed()) {
-                    if (isChecked) {
-                        DatabaseHandler.enableTimer(timer.getId());
-                        AlarmHandler.createAlarm(context, timer);
-                    } else {
-                        DatabaseHandler.disableTimer(timer.getId());
-                        AlarmHandler.cancelAlarm(context, timer);
+                    try {
+                        if (isChecked) {
+                            DatabaseHandler.enableTimer(timer.getId());
+                            AlarmHandler.createAlarm(context, timer);
+                        } else {
+                            DatabaseHandler.disableTimer(timer.getId());
+                            AlarmHandler.cancelAlarm(context, timer);
+                        }
+                        timer.setActive(isChecked);
+                    } catch (Exception e) {
+                        Log.e(e);
+                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
                     }
-                    timer.setActive(isChecked);
                 }
             }
         });

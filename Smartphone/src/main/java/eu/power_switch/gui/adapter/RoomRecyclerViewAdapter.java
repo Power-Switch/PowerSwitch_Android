@@ -42,12 +42,13 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Room items (containing Receivers) in RecyclerView
@@ -121,27 +122,34 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                 }
 
-                List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
-                if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
-                    return;
-                }
+                try {
+                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
-                android.widget.Button buttonView = (android.widget.Button) v;
-                String buttonName = buttonView.getText().toString();
-
-                // send signal
-                ActionHandler.execute(fragmentActivity, room, buttonName);
-
-                // update list item
-                for (Receiver receiver : room.getReceivers()) {
-                    Button button = receiver.getButton(buttonName);
-                    if (button != null) {
-                        receiver.setLastActivatedButtonId(button.getId());
+                    if (activeGateways.isEmpty()) {
+                        StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
+                        return;
                     }
-                }
 
-                updateReceiverViews(holder, room);
+                    android.widget.Button buttonView = (android.widget.Button) v;
+                    String buttonName = buttonView.getText().toString();
+
+                    // send signal
+                    ActionHandler.execute(fragmentActivity, room, buttonName);
+
+                    // update list item
+                    for (Receiver receiver : room.getReceivers()) {
+                        Button button = receiver.getButton(buttonName);
+                        if (button != null) {
+                            receiver.setLastActivatedButtonId(button.getId());
+                        }
+                    }
+
+                    updateReceiverViews(holder, room);
+
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                }
             }
         };
 
@@ -225,9 +233,15 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         if (SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
                             VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                         }
-                        List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
-                        if (activeGateways.isEmpty()) {
-                            StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
+                        try {
+                            List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                            if (activeGateways.isEmpty()) {
+                                StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
+                                return;
+                            }
+                        } catch (Exception e) {
+                            Log.e(e);
+                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
                             return;
                         }
 

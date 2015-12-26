@@ -71,24 +71,28 @@ public class SceneWidgetProvider extends AppWidgetProvider {
             RemoteViews remoteViews = new RemoteViews(context.getResources()
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
 
-            SceneWidget sceneWidget = DatabaseHandler.getSceneWidget(appWidgetId);
-            if (sceneWidget != null) {
-                // update UI
-                Scene scene = DatabaseHandler.getScene(sceneWidget.getSceneId());
-                if (scene != null) {
+            try {
+                SceneWidget sceneWidget = DatabaseHandler.getSceneWidget(appWidgetId);
+                if (sceneWidget != null) {
+                    // update UI
+                    Scene scene = DatabaseHandler.getScene(sceneWidget.getSceneId());
+                    if (scene != null) {
 
-                    remoteViews.setTextViewText(R.id.textView_scene_widget_name, scene.getName());
-                    // set button action
-                    remoteViews.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
-                            WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
-                    remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.VISIBLE);
+                        remoteViews.setTextViewText(R.id.textView_scene_widget_name, scene.getName());
+                        // set button action
+                        remoteViews.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
+                                WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
+                        remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.VISIBLE);
+                    } else {
+                        remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_deleted));
+                        remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
+                    }
                 } else {
-                    remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_deleted));
+                    remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.unknown_error));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
                 }
-            } else {
-                remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.unknown_error));
-                remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
+            } catch (Exception e) {
+                Log.e(e);
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
@@ -101,7 +105,11 @@ public class SceneWidgetProvider extends AppWidgetProvider {
         Log.d("Deleting Scene Widgets: " + Arrays.toString(appWidgetIds));
 
         for (int appWidgetId : appWidgetIds) {
-            DatabaseHandler.deleteSceneWidget(appWidgetId);
+            try {
+                DatabaseHandler.deleteSceneWidget(appWidgetId);
+            } catch (Exception e) {
+                Log.e(e);
+            }
         }
         super.onDeleted(context, appWidgetIds);
     }

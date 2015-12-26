@@ -31,7 +31,9 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Gateway items in RecyclerView
@@ -78,12 +80,17 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // check if user pressed the button
                 if (buttonView.isPressed()) {
-                    if (isChecked) {
-                        DatabaseHandler.enableGateway(gateway.getId());
-                    } else {
-                        DatabaseHandler.disableGateway(gateway.getId());
+                    try {
+                        if (isChecked) {
+                            DatabaseHandler.enableGateway(gateway.getId());
+                        } else {
+                            DatabaseHandler.disableGateway(gateway.getId());
+                        }
+                        gateway.setActive(isChecked);
+                    } catch (Exception e) {
+                        Log.e(e);
+                        StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_gateway, 5000);
                     }
-                    gateway.setActive(isChecked);
                 }
             }
         });

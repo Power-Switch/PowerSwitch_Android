@@ -203,26 +203,35 @@ public class MainActivity extends AppCompatActivity {
                     List<Gateway> foundGateways = NetworkHandler.searchGateways();
 
                     if (foundGateways != null) {
-                        if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways()
-                                .isEmpty()) {
-                            StatusMessageHandler.showStatusMessage(context, R.string.no_gateway_found, Snackbar
-                                    .LENGTH_LONG);
-                        } else {
-                            for (Gateway gateway : foundGateways) {
-                                if (gateway == null) {
-                                    continue;
-                                }
-                                try {
-                                    DatabaseHandler.addGateway(gateway);
-                                    StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
-                                } catch (GatewayAlreadyExistsException e) {
-                                    DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
-                                    StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                        try {
+                            if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways().isEmpty()) {
+                                StatusMessageHandler.showStatusMessage(context, R.string.no_gateway_found, Snackbar
+                                        .LENGTH_LONG);
+                            } else {
+                                for (Gateway gateway : foundGateways) {
+                                    if (gateway == null) {
+                                        continue;
+                                    }
+                                    try {
+                                        DatabaseHandler.addGateway(gateway);
+                                        StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                    } catch (GatewayAlreadyExistsException e) {
+                                        try {
+                                            DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
+                                            StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                        } catch (Exception e1) {
+                                            Log.e(e1);
+                                            StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_gateway, Snackbar.LENGTH_LONG);
+                                        }
+                                    } catch (Exception e) {
+                                        Log.e(e);
+                                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                                    }
                                 }
                             }
+                        } catch (Exception e) {
+                            Log.e(e);
+                            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
                         }
                     }
                     return null;
@@ -551,8 +560,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateHistory() {
-        historyItems.clear();
-        historyItems.addAll(DatabaseHandler.getHistory());
+        try {
+            historyItems.clear();
+            historyItems.addAll(DatabaseHandler.getHistory());
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(this, R.string.unknown_error, Snackbar.LENGTH_LONG);
+        }
 
         historyItemArrayAdapter.notifyDataSetChanged();
         recyclerViewHistory.scrollToPosition(historyItems.size() - 1);

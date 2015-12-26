@@ -57,6 +57,7 @@ import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
@@ -183,24 +184,30 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
     }
 
     private void initializeReceiverData(long receiverId) {
-        final Receiver receiver = DatabaseHandler.getReceiver(receiverId);
+        try {
+            final Receiver receiver = DatabaseHandler.getReceiver(receiverId);
 
-        currentId = receiverId;
-        currentName = receiver.getName();
-        currentRoomName = DatabaseHandler.getRoom(receiver.getRoomId()).getName();
-        currentType = receiver.getType();
-        currentBrand = receiver.getBrand();
-        currentModel = receiver.getModel();
+            currentId = receiverId;
+            currentName = receiver.getName();
+            currentRoomName = DatabaseHandler.getRoom(receiver.getRoomId()).getName();
+            currentType = receiver.getType();
+            currentBrand = receiver.getBrand();
+            currentModel = receiver.getModel();
 
-        if (currentType.equals(Receiver.TYPE_MASTER_SLAVE)) {
-            currentMaster = ((MasterSlaveReceiver) receiver).getMaster();
-            currentSlave = ((MasterSlaveReceiver) receiver).getSlave();
-        } else if (currentType.equals(Receiver.TYPE_DIPS)) {
-            currentDips = ((DipReceiver) receiver).getDips();
-        } else if (currentType.equals(Receiver.TYPE_AUTOPAIR)) {
-            currentSeed = ((AutoPairReceiver) receiver).getSeed();
-        } else if (currentType.equals(Receiver.TYPE_UNIVERSAL)) {
-            currentUniversalButtons = ((UniversalReceiver) receiver).getUniversalButtons();
+            if (currentType.equals(Receiver.TYPE_MASTER_SLAVE)) {
+                currentMaster = ((MasterSlaveReceiver) receiver).getMaster();
+                currentSlave = ((MasterSlaveReceiver) receiver).getSlave();
+            } else if (currentType.equals(Receiver.TYPE_DIPS)) {
+                currentDips = ((DipReceiver) receiver).getDips();
+            } else if (currentType.equals(Receiver.TYPE_AUTOPAIR)) {
+                currentSeed = ((AutoPairReceiver) receiver).getSeed();
+            } else if (currentType.equals(Receiver.TYPE_UNIVERSAL)) {
+                currentUniversalButtons = ((UniversalReceiver) receiver).getUniversalButtons();
+            }
+
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
         updateUi();

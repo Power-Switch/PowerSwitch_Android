@@ -151,7 +151,7 @@ public final class DatabaseHandler {
      * /////////////////////////
      */
 
-    public static void addApartment(Apartment apartment) {
+    public static void addApartment(Apartment apartment) throws Exception {
         openWritable();
         try {
             ApartmentHandler.add(apartment);
@@ -170,7 +170,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Apartment
      */
-    public static void deleteApartment(Long id) {
+    public static void deleteApartment(Long id) throws Exception {
         openWritable();
         try {
             ApartmentHandler.delete(id);
@@ -189,7 +189,7 @@ public final class DatabaseHandler {
      * @param name Name of Apartment
      * @return Apartment
      */
-    public static Apartment getApartment(String name) {
+    public static Apartment getApartment(String name) throws Exception {
         openReadable();
         Apartment apartment = null;
         try {
@@ -202,7 +202,7 @@ public final class DatabaseHandler {
         return apartment;
     }
 
-    public static List<Apartment> getAllApartments() {
+    public static List<Apartment> getAllApartments() throws Exception {
         openReadable();
         List<Apartment> apartments = null;
         try {
@@ -228,7 +228,7 @@ public final class DatabaseHandler {
      *
      * @param room the new room
      */
-    public static void addRoom(Room room) {
+    public static void addRoom(Room room) throws Exception {
         openWritable();
         try {
             RoomHandler.add(room);
@@ -248,7 +248,7 @@ public final class DatabaseHandler {
      * @param id      the ID of the Room
      * @param newName the new Name
      */
-    public static void updateRoom(Long id, String newName) {
+    public static void updateRoom(Long id, String newName) throws Exception {
         openWritable();
         try {
             RoomHandler.update(id, newName);
@@ -267,7 +267,7 @@ public final class DatabaseHandler {
      *
      * @param id the ID of the room
      */
-    public static void deleteRoom(Long id) {
+    public static void deleteRoom(Long id) throws Exception {
         openWritable();
         try {
             RoomHandler.delete(id);
@@ -285,7 +285,7 @@ public final class DatabaseHandler {
      * @param name the name of the room
      * @return a room object
      */
-    public static Room getRoom(String name) {
+    public static Room getRoom(String name) throws Exception {
         openReadable();
         Room room = null;
         try {
@@ -304,7 +304,7 @@ public final class DatabaseHandler {
      * @param id the ID of the room
      * @return a room object
      */
-    public static Room getRoom(Long id) {
+    public static Room getRoom(Long id) throws Exception {
         openReadable();
         Room room = null;
         try {
@@ -322,7 +322,7 @@ public final class DatabaseHandler {
      *
      * @return a list of all rooms
      */
-    public static List<Room> getAllRooms() {
+    public static List<Room> getAllRooms() throws Exception {
         openReadable();
         List<Room> rooms = null;
         try {
@@ -340,7 +340,7 @@ public final class DatabaseHandler {
      *
      * @return a list of rooms
      */
-    public static List<Room> getRooms(Long apartmentId) {
+    public static List<Room> getRooms(Long apartmentId) throws Exception {
         openReadable();
         List<Room> rooms = null;
         try {
@@ -366,7 +366,7 @@ public final class DatabaseHandler {
      *
      * @param receiver the new Receiver
      */
-    public static void addReceiver(Receiver receiver) {
+    public static void addReceiver(Receiver receiver) throws Exception {
         openWritable();
         try {
             ReceiverHandler.add(receiver);
@@ -383,7 +383,7 @@ public final class DatabaseHandler {
      *
      * @param receiver the edited Receiver
      */
-    public static void updateReceiver(Receiver receiver) {
+    public static void updateReceiver(Receiver receiver) throws Exception {
         openWritable();
         try {
             ReceiverHandler.update(receiver);
@@ -401,7 +401,7 @@ public final class DatabaseHandler {
      * @param id ID of the Receiver
      * @return Receiver, can be null
      */
-    public static Receiver getReceiver(Long id) {
+    public static Receiver getReceiver(Long id) throws Exception {
         openReadable();
         Receiver receiver = null;
         try {
@@ -420,7 +420,7 @@ public final class DatabaseHandler {
      * @param id ID of room
      * @return List of Receivers
      */
-    public static ArrayList<Receiver> getReceiverByRoomId(Long id) {
+    public static ArrayList<Receiver> getReceiverByRoomId(Long id) throws Exception {
         openReadable();
         ArrayList<Receiver> receivers = null;
         try {
@@ -440,7 +440,7 @@ public final class DatabaseHandler {
      * @param receiverName Name of Receiver
      * @return List of Receivers
      */
-    public static Receiver getReceiverByRoomId(Long roomId, String receiverName) {
+    public static Receiver getReceiverByRoomId(Long roomId, String receiverName) throws Exception {
         openReadable();
         Receiver receiver = null;
         try {
@@ -458,7 +458,7 @@ public final class DatabaseHandler {
      *
      * @return List of Receivers
      */
-    public static List<Receiver> getAllReceivers() {
+    public static List<Receiver> getAllReceivers() throws Exception {
         openReadable();
         List<Receiver> receivers = null;
         try {
@@ -476,7 +476,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Receiver
      */
-    public static void deleteReceiver(Long id) {
+    public static void deleteReceiver(Long id) throws Exception {
         openWritable();
         try {
             ReceiverHandler.delete(id);
@@ -494,7 +494,7 @@ public final class DatabaseHandler {
      * @param id ID of Button
      * @return Button
      */
-    public static UniversalButton getButton(Long id) {
+    public static UniversalButton getButton(Long id) throws Exception {
         openReadable();
         UniversalButton button = null;
         try {
@@ -513,7 +513,7 @@ public final class DatabaseHandler {
      * @param receiverId ID of Receiver
      * @return List of Buttons
      */
-    public static List<UniversalButton> getButtons(Long receiverId) {
+    public static List<UniversalButton> getButtons(Long receiverId) throws Exception {
         openReadable();
         List<UniversalButton> buttons = null;
         try {
@@ -533,7 +533,7 @@ public final class DatabaseHandler {
      * @param buttonId   ID of Button
      * @return ID of last activated Button, -1 if not set
      */
-    public static void setLastActivatedButtonId(Long receiverId, Long buttonId) {
+    public static void setLastActivatedButtonId(Long receiverId, Long buttonId) throws Exception {
         openWritable();
         try {
             ReceiverHandler.setLastActivatedButtonId(receiverId, buttonId);
@@ -558,7 +558,7 @@ public final class DatabaseHandler {
      *
      * @param scene the new Scene
      */
-    public static void addScene(Scene scene) {
+    public static void addScene(Scene scene) throws Exception {
         openWritable();
         try {
             SceneHandler.add(scene);
@@ -575,7 +575,7 @@ public final class DatabaseHandler {
      *
      * @param scene the edited Scene
      */
-    public static void updateScene(Scene scene) {
+    public static void updateScene(Scene scene) throws Exception {
         openWritable();
         try {
             SceneHandler.update(scene);
@@ -592,7 +592,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Scene
      */
-    public static void deleteScene(Long id) {
+    public static void deleteScene(Long id) throws Exception {
         openWritable();
         try {
             SceneHandler.delete(id);
@@ -610,7 +610,7 @@ public final class DatabaseHandler {
      * @param name Name of Scene
      * @return Scene
      */
-    public static Scene getScene(String name) {
+    public static Scene getScene(String name) throws Exception {
         openReadable();
         Scene scene = null;
         try {
@@ -629,7 +629,7 @@ public final class DatabaseHandler {
      * @param id ID of Scene
      * @return Scene
      */
-    public static Scene getScene(Long id) {
+    public static Scene getScene(Long id) throws Exception {
         openReadable();
         Scene scene = null;
         try {
@@ -647,7 +647,7 @@ public final class DatabaseHandler {
      *
      * @return a list of scenes
      */
-    public static List<Scene> getScenes(Long apartmentId) {
+    public static List<Scene> getScenes(Long apartmentId) throws Exception {
         openReadable();
         List<Scene> scenes = null;
         try {
@@ -665,7 +665,7 @@ public final class DatabaseHandler {
      *
      * @return List of Scenes
      */
-    public static List<Scene> getAllScenes() {
+    public static List<Scene> getAllScenes() throws Exception {
         openReadable();
         List<Scene> scenes = null;
         try {
@@ -712,7 +712,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
-    public static void enableGateway(Long id) {
+    public static void enableGateway(Long id) throws Exception {
         openWritable();
         try {
             GatewayHandler.enable(id);
@@ -729,7 +729,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
-    public static void disableGateway(Long id) {
+    public static void disableGateway(Long id) throws Exception {
         openWritable();
         try {
             GatewayHandler.disable(id);
@@ -750,7 +750,7 @@ public final class DatabaseHandler {
      * @param address new Address (Host) of Gateway
      * @param port    new Port of Gateway
      */
-    public static void updateGateway(Long id, String name, String model, String address, Integer port) {
+    public static void updateGateway(Long id, String name, String model, String address, Integer port) throws Exception {
         openWritable();
         try {
             GatewayHandler.update(id, name, model, address, port);
@@ -767,7 +767,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
-    public static void deleteGateway(Long id) {
+    public static void deleteGateway(Long id) throws Exception {
         openWritable();
         try {
             GatewayHandler.delete(id);
@@ -785,7 +785,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    public static Gateway getGateway(Long id) {
+    public static Gateway getGateway(Long id) throws Exception {
         openReadable();
         Gateway gateway = null;
         try {
@@ -803,7 +803,7 @@ public final class DatabaseHandler {
      *
      * @return List of Gateways
      */
-    public static List<Gateway> getAllGateways() {
+    public static List<Gateway> getAllGateways() throws Exception {
         openReadable();
         List<Gateway> gateways = null;
         try {
@@ -822,7 +822,7 @@ public final class DatabaseHandler {
      * @param isActive true if Gateway is enabled
      * @return List of Gateways
      */
-    public static List<Gateway> getAllGateways(boolean isActive) {
+    public static List<Gateway> getAllGateways(boolean isActive) throws Exception {
         openReadable();
         List<Gateway> gateways = null;
         try {
@@ -848,7 +848,7 @@ public final class DatabaseHandler {
      *
      * @param receiverWidget WidgetInfo Object
      */
-    public static void addReceiverWidget(ReceiverWidget receiverWidget) {
+    public static void addReceiverWidget(ReceiverWidget receiverWidget) throws Exception {
         openWritable();
         try {
             WidgetHandler.addReceiverWidget(receiverWidget);
@@ -865,7 +865,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    public static void deleteReceiverWidget(int id) {
+    public static void deleteReceiverWidget(int id) throws Exception {
         openWritable();
         try {
             WidgetHandler.deleteReceiverWidget(id);
@@ -882,7 +882,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    public static ReceiverWidget getReceiverWidget(int id) {
+    public static ReceiverWidget getReceiverWidget(int id) throws Exception {
         openReadable();
         ReceiverWidget receiverWidget = null;
         try {
@@ -900,7 +900,7 @@ public final class DatabaseHandler {
      *
      * @param roomWidget WidgetInfo Object
      */
-    public static void addRoomWidget(RoomWidget roomWidget) {
+    public static void addRoomWidget(RoomWidget roomWidget) throws Exception {
         openWritable();
         try {
             WidgetHandler.addRoomWidget(roomWidget);
@@ -917,7 +917,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    public static void deleteRoomWidget(int id) {
+    public static void deleteRoomWidget(int id) throws Exception {
         openWritable();
         try {
             WidgetHandler.deleteRoomWidget(id);
@@ -934,7 +934,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    public static RoomWidget getRoomWidget(int id) {
+    public static RoomWidget getRoomWidget(int id) throws Exception {
         openReadable();
         RoomWidget roomWidget = null;
         try {
@@ -952,7 +952,7 @@ public final class DatabaseHandler {
      *
      * @param sceneWidget WidgetInfo Object
      */
-    public static void addSceneWidget(SceneWidget sceneWidget) {
+    public static void addSceneWidget(SceneWidget sceneWidget) throws Exception {
         openWritable();
         try {
             WidgetHandler.addSceneWidget(sceneWidget);
@@ -969,7 +969,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    public static void deleteSceneWidget(int id) {
+    public static void deleteSceneWidget(int id) throws Exception {
         openWritable();
         try {
             WidgetHandler.deleteSceneWidget(id);
@@ -986,7 +986,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    public static SceneWidget getSceneWidget(int id) {
+    public static SceneWidget getSceneWidget(int id) throws Exception {
         openWritable();
         SceneWidget sceneWidget = null;
         try {
@@ -1007,7 +1007,7 @@ public final class DatabaseHandler {
      * @param id ID of Timer
      * @return Timer
      */
-    public static Timer getTimer(Long id) {
+    public static Timer getTimer(Long id) throws Exception {
         openReadable();
         Timer timer = null;
         try {
@@ -1025,7 +1025,7 @@ public final class DatabaseHandler {
      *
      * @return a list of all Timers
      */
-    public static List<Timer> getAllTimers() {
+    public static List<Timer> getAllTimers() throws Exception {
         openReadable();
         List<Timer> timers = null;
         try {
@@ -1044,7 +1044,7 @@ public final class DatabaseHandler {
      * @param isActive true if Timer is active
      * @return a list of all active/inactive Timers
      */
-    public static List<Timer> getAllTimers(boolean isActive) {
+    public static List<Timer> getAllTimers(boolean isActive) throws Exception {
         openReadable();
         List<Timer> timers = null;
         try {
@@ -1062,7 +1062,7 @@ public final class DatabaseHandler {
      *
      * @param timer Timer Object
      */
-    public static long addTimer(Timer timer) {
+    public static long addTimer(Timer timer) throws Exception {
         openWritable();
         long id = -1;
         try {
@@ -1082,7 +1082,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
-    public static void enableTimer(Long id) {
+    public static void enableTimer(Long id) throws Exception {
         openWritable();
         try {
             TimerHandler.enable(id);
@@ -1099,7 +1099,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
-    public static void disableTimer(Long id) {
+    public static void disableTimer(Long id) throws Exception {
         openWritable();
         try {
             TimerHandler.disable(id);
@@ -1116,7 +1116,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
-    public static void deleteTimer(Long id) {
+    public static void deleteTimer(Long id) throws Exception {
         openWritable();
         try {
             TimerHandler.delete(id);
@@ -1133,7 +1133,7 @@ public final class DatabaseHandler {
      *
      * @param timer new Timer with same ID as old one
      */
-    public static void updateTimer(Timer timer) {
+    public static void updateTimer(Timer timer) throws Exception {
         openWritable();
         try {
             TimerHandler.update(timer);
@@ -1151,7 +1151,7 @@ public final class DatabaseHandler {
      * @param receiverId ID of Receiver
      * @param position   position in room
      */
-    public static void setPositionInRoom(Long receiverId, Long position) {
+    public static void setPositionInRoom(Long receiverId, Long position) throws Exception {
         openWritable();
         try {
             ReceiverHandler.setPositionInRoom(receiverId, position);
@@ -1177,7 +1177,7 @@ public final class DatabaseHandler {
      * @param event alarm event
      * @return List of Actions
      */
-    public static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+    public static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         openReadable();
         List<Action> actions = new ArrayList<>();
         try {
@@ -1196,7 +1196,7 @@ public final class DatabaseHandler {
      * @param event   alarm event
      * @param actions List of Actions
      */
-    public static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) {
+    public static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
         openWritable();
         try {
             SleepAsAndroidHandler.setAlarmActions(event, actions);
@@ -1219,7 +1219,7 @@ public final class DatabaseHandler {
      *
      * @return List of HistoryItems
      */
-    public static LinkedList<HistoryItem> getHistory() {
+    public static LinkedList<HistoryItem> getHistory() throws Exception {
         openReadable();
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
         try {
@@ -1237,7 +1237,7 @@ public final class DatabaseHandler {
      *
      * @param historyItem HistoryItem
      */
-    public static void addHistoryItem(HistoryItem historyItem) {
+    public static void addHistoryItem(HistoryItem historyItem) throws Exception {
         openWritable();
         try {
             HistoryHandler.add(historyItem);

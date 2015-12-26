@@ -41,12 +41,13 @@ import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Scene items in RecyclerView
@@ -117,10 +118,15 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                 }
 
-                List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
-                if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
-                    return;
+                try {
+                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                    if (activeGateways.isEmpty()) {
+                        StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
+                        return;
+                    }
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
                 }
 
                 ActionHandler.execute(fragmentActivity, scene);

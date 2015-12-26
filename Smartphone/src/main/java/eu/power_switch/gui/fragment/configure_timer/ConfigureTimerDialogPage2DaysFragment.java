@@ -34,8 +34,10 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 
@@ -111,40 +113,45 @@ public class ConfigureTimerDialogPage2DaysFragment extends Fragment {
     }
 
     private void initializeTimerData(long timerId) {
-        Timer timer = DatabaseHandler.getTimer(timerId);
+        try {
+            Timer timer = DatabaseHandler.getTimer(timerId);
 
 //        currentExecutionInterval = timer.getExecutionInterval();
 
-        if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
-            WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
+            if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
+                WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
 
-            for (WeekdayTimer.Day day : weekdayTimer.getExecutionDays()) {
-                switch (day) {
-                    case MONDAY:
-                        toggleButtonMonday.setChecked(true);
-                        break;
-                    case TUESDAY:
-                        toggleButtonTuesday.setChecked(true);
-                        break;
-                    case WEDNESDAY:
-                        toggleButtonWednesday.setChecked(true);
-                        break;
-                    case THURSDAY:
-                        toggleButtonThursday.setChecked(true);
-                        break;
-                    case FRIDAY:
-                        toggleButtonFriday.setChecked(true);
-                        break;
-                    case SATURDAY:
-                        toggleButtonSaturday.setChecked(true);
-                        break;
-                    case SUNDAY:
-                        toggleButtonSunday.setChecked(true);
-                        break;
+                for (WeekdayTimer.Day day : weekdayTimer.getExecutionDays()) {
+                    switch (day) {
+                        case MONDAY:
+                            toggleButtonMonday.setChecked(true);
+                            break;
+                        case TUESDAY:
+                            toggleButtonTuesday.setChecked(true);
+                            break;
+                        case WEDNESDAY:
+                            toggleButtonWednesday.setChecked(true);
+                            break;
+                        case THURSDAY:
+                            toggleButtonThursday.setChecked(true);
+                            break;
+                        case FRIDAY:
+                            toggleButtonFriday.setChecked(true);
+                            break;
+                        case SATURDAY:
+                            toggleButtonSaturday.setChecked(true);
+                            break;
+                        case SUNDAY:
+                            toggleButtonSunday.setChecked(true);
+                            break;
+                    }
                 }
-            }
-        } else if (Timer.EXECUTION_TYPE_INTERVAL.equals(timer.getExecutionType())) {
+            } else if (Timer.EXECUTION_TYPE_INTERVAL.equals(timer.getExecutionType())) {
 
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
     }
 

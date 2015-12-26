@@ -57,7 +57,11 @@ public class ConfigureSceneWidgetActivity extends Activity {
 
         setContentView(R.layout.widget_dialog_configure_scene);
 
-        scenesList = DatabaseHandler.getAllScenes();
+        try {
+            scenesList = DatabaseHandler.getAllScenes();
+        } catch (Exception e) {
+            Log.e(e);
+        }
         spinnerScene = (Spinner) findViewById(R.id.Spinner_widgetScene);
 
         ArrayList<String> sceneNamesList = new ArrayList<>();
@@ -89,7 +93,11 @@ public class ConfigureSceneWidgetActivity extends Activity {
                     Scene scene = scenesList.get(spinnerScene.getSelectedItemPosition());
                     // save new widget data to database
                     SceneWidget sceneWidget = new SceneWidget(appWidgetId, scene.getId());
-                    DatabaseHandler.addSceneWidget(sceneWidget);
+                    try {
+                        DatabaseHandler.addSceneWidget(sceneWidget);
+                    } catch (Exception e) {
+                        Log.e(e);
+                    }
 
                     // When the configuration is complete, get an instance of
                     // the AppWidgetManager by calling getInstance(Context):

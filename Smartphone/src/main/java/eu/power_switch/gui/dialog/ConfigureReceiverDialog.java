@@ -149,21 +149,26 @@ public class ConfigureReceiverDialog extends DialogFragment {
                                 (android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        DatabaseHandler.deleteReceiver(receiverId);
+                                        try {
+                                            DatabaseHandler.deleteReceiver(receiverId);
 
-                                        // notify rooms fragment
-                                        RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+                                            // notify rooms fragment
+                                            RoomsFragment.sendReceiverChangedBroadcast(getActivity());
 
-                                        // scenes could change too if receiver was used in a scene
-                                        ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                        // same for timers
-                                        TimersFragment.sendTimersChangedBroadcast(getActivity());
+                                            // scenes could change too if receiver was used in a scene
+                                            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                                            // same for timers
+                                            TimersFragment.sendTimersChangedBroadcast(getActivity());
 
-                                        // update receiver widgets
-                                        ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+                                            // update receiver widgets
+                                            ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
 
-                                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                                R.string.receiver_deleted, Snackbar.LENGTH_LONG);
+                                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                                    R.string.receiver_deleted, Snackbar.LENGTH_LONG);
+                                        } catch (Exception e) {
+                                            Log.e(e);
+                                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                        }
 
                                         // close dialog
                                         getDialog().dismiss();

@@ -97,8 +97,13 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
             }
         });
 
-        actions = new ArrayList<>(DatabaseHandler.getAlarmActions(
-                SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED));
+        try {
+            actions = new ArrayList<>(DatabaseHandler.getAlarmActions(
+                    SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED));
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+        }
 
         recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_alarm_event_actions);
         recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);
@@ -109,11 +114,16 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                actions.remove(position);
-                                DatabaseHandler.setAlarmActions(
-                                        SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())
-                                        , actions);
-                                StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
+                                try {
+                                    DatabaseHandler.setAlarmActions(
+                                            SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())
+                                            , actions);
+                                    actions.remove(position);
+                                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                                }
 
                                 recyclerViewAdapter.notifyDataSetChanged();
                             }
@@ -172,9 +182,14 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        actions.clear();
-        actions.addAll(DatabaseHandler.getAlarmActions(
-                SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())));
+        try {
+            actions.clear();
+            actions.addAll(DatabaseHandler.getAlarmActions(
+                    SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())));
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
 
         recyclerViewAdapter.notifyDataSetChanged();
     }

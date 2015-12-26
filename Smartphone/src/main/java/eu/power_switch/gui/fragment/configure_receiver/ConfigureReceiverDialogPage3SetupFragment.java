@@ -54,8 +54,8 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
@@ -212,75 +212,91 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
         buttonPair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                try {
+                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
-                if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
-                    return;
-                }
-
-                ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
-                for (Gateway gateway : activeGateways) {
-                    try {
-                        networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
-                        networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
-                    } catch (Exception e) {
-                        Log.e(e);
+                    if (activeGateways.isEmpty()) {
+                        StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
+                        return;
                     }
-                }
 
-                NetworkHandler.init(getContext());
-                NetworkHandler.send(networkPackages);
+                    ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
+                    for (Gateway gateway : activeGateways) {
+                        try {
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
+                        } catch (Exception e) {
+                            Log.e(e);
+                        }
+                    }
+
+                    NetworkHandler.init(getContext());
+                    NetworkHandler.send(networkPackages);
+
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                }
             }
         });
         android.widget.Button buttonUnpair = (android.widget.Button) rootView.findViewById(R.id.button_unpair);
         buttonUnpair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                try {
+                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
-                if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
-                    return;
-                }
-
-                ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
-                for (Gateway gateway : activeGateways) {
-                    try {
-                        networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
-                        networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
-                    } catch (Exception e) {
-                        Log.e(e);
+                    if (activeGateways.isEmpty()) {
+                        StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
+                        return;
                     }
-                }
 
-                NetworkHandler.init(getContext());
-                NetworkHandler.send(networkPackages);
+                    ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
+                    for (Gateway gateway : activeGateways) {
+                        try {
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
+                        } catch (Exception e) {
+                            Log.e(e);
+                        }
+                    }
+
+                    NetworkHandler.init(getContext());
+                    NetworkHandler.send(networkPackages);
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                }
             }
         });
         android.widget.Button buttonUnpairAll = (android.widget.Button) rootView.findViewById(R.id.button_unpairAll);
         buttonUnpairAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                try {
+                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
 
-                if (activeGateways.isEmpty()) {
-                    StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
-                    return;
-                }
-
-                ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
-                for (Gateway gateway : activeGateways) {
-                    try {
-                        networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
-                        networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
-                    } catch (Exception e) {
-                        Log.e(e);
+                    if (activeGateways.isEmpty()) {
+                        StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
+                        return;
                     }
-                }
 
-                NetworkHandler.init(getContext());
-                NetworkHandler.send(networkPackages);
+                    ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
+                    for (Gateway gateway : activeGateways) {
+                        try {
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
+                        } catch (Exception e) {
+                            Log.e(e);
+                        }
+                    }
+
+                    NetworkHandler.init(getContext());
+                    NetworkHandler.send(networkPackages);
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                }
             }
         });
 
@@ -320,9 +336,13 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
     }
 
     private void initializeReceiverData(long receiverId) {
-        Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-
-        initType(receiver);
+        try {
+            Receiver receiver = DatabaseHandler.getReceiver(receiverId);
+            initType(receiver);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     private void initData(final MasterSlaveReceiver receiver) {

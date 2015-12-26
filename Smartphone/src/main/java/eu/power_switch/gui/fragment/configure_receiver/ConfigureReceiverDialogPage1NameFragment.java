@@ -45,6 +45,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.receiver.ReceiverAlreadyExistsException;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.obj.Room;
@@ -187,20 +188,30 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     }
 
     private void initializeReceiverData(long receiverId) {
-        Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-        Room room = DatabaseHandler.getRoom(receiver.getRoomId());
+        try {
+            Receiver receiver = DatabaseHandler.getReceiver(receiverId);
+            Room room = DatabaseHandler.getRoom(receiver.getRoomId());
 
-        originalName = receiver.getName();
-        name.setText(receiver.getName());
-        roomsListView.setItemChecked(roomNamesAdapter.getPosition(room.getName()), true);
+            originalName = receiver.getName();
+            name.setText(receiver.getName());
+            roomsListView.setItemChecked(roomNamesAdapter.getPosition(room.getName()), true);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     private void updateRoomNamesList() {
-        // Get Rooms
-        roomList.clear();
-        List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
-        for (Room room : rooms) {
-            roomList.add(room.getName());
+        try {
+            // Get Rooms
+            roomList.clear();
+            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            for (Room room : rooms) {
+                roomList.add(room.getName());
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
         roomNamesAdapter.notifyDataSetChanged();
     }

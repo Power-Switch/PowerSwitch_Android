@@ -141,9 +141,14 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
     }
 
     private void reinitializeAlarms(Context context) {
-        for (Timer timer : DatabaseHandler.getAllTimers(true)) {
-            AlarmHandler.cancelAlarm(context, timer);
-            AlarmHandler.createAlarm(context, timer);
+        try {
+            for (Timer timer : DatabaseHandler.getAllTimers(true)) {
+                AlarmHandler.cancelAlarm(context, timer);
+                AlarmHandler.createAlarm(context, timer);
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
         }
     }
 }

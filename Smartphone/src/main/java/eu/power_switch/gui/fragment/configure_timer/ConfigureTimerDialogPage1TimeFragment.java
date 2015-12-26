@@ -38,6 +38,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -119,13 +120,18 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
     }
 
     private void initializeTimerData(long timerId) {
-        Timer timer = DatabaseHandler.getTimer(timerId);
+        try {
+            Timer timer = DatabaseHandler.getTimer(timerId);
 
-        name.setText(timer.getName());
+            name.setText(timer.getName());
 
-        Calendar c = timer.getExecutionTime();
-        timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
-        timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
+            Calendar c = timer.getExecutionTime();
+            timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+            timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     private String getCurrentName() {

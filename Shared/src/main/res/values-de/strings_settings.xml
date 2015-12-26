@@ -59,6 +59,7 @@
     <string name="gateway_saved">Gateway gespeichert</string>
     <string name="gateway_found">Gateway gefunden</string>
     <string name="gateway_already_exists_it_has_been_enabled">Gateway existiert bereits. Es wurde aktiviert.</string>
+    <string name="error_enabling_gateway">Fehler beim aktivieren des Gateways</string>
     <string name="gateway_already_exists">Gateway existiert bereits</string>
     <string name="cant_understand_gateway">Das Gateway spricht eine fremde Sprache :(</string>
     <string name="no_gateway_found">Kein Gateway gefunden</string>
