@@ -43,7 +43,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Created by Markus on 27.12.2015.
  */
-public class ConfigureApartmentDialog extends ConfigureDialog {
+public class ConfigureApartmentDialog extends ConfigurationDialog {
 
     /**
      * ID of existing Apartment to Edit
@@ -60,7 +60,7 @@ public class ConfigureApartmentDialog extends ConfigureDialog {
     private String originalName;
 
     @Override
-    protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_configure_apartment_content, null);
 
         setDeleteAction(new Runnable() {
@@ -130,6 +130,11 @@ public class ConfigureApartmentDialog extends ConfigureDialog {
 
             setSaveButtonState(false);
         }
+    }
+
+    @Override
+    protected int getDialogTitle() {
+        return R.string.configure_apartment;
     }
 
     /**

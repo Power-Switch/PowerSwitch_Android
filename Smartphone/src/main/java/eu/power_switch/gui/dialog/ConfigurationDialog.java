@@ -23,29 +23,35 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 
 /**
+ * Abstract class defining a configuration Dialog
+ * <p/>
+ * Every configuration Dialog has a bottom bar with 3 Buttons (Delete, Cancel, Save) and a contentView
+ * <p/>
  * Created by Markus on 27.12.2015.
  */
-public abstract class ConfigureDialog extends DialogFragment {
+public abstract class ConfigurationDialog extends DialogFragment {
 
     protected ImageButton imageButtonDelete;
     protected ImageButton imageButtonCancel;
     protected ImageButton imageButtonSave;
 
     private String title = "Configuration";
+
     private boolean modified;
     private View rootView;
     private View contentView;
@@ -56,9 +62,9 @@ public abstract class ConfigureDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_configure, null);
 
-        NestedScrollView contentViewContainer = (NestedScrollView) rootView.findViewById(R.id.contentView);
+        FrameLayout contentViewContainer = (FrameLayout) rootView.findViewById(R.id.contentView);
 
-        contentView = initView(inflater, container, savedInstanceState);
+        contentView = initContentView(inflater, container, savedInstanceState);
         contentViewContainer.addView(contentView);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
@@ -114,13 +120,9 @@ public abstract class ConfigureDialog extends DialogFragment {
         return rootView;
     }
 
-    protected abstract View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+    protected abstract View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
     protected abstract void initExistingData(Bundle arguments);
-
-    protected void setDialogTitle(String title) {
-        this.title = title;
-    }
 
     /**
      * Set a deleteAction
@@ -154,7 +156,7 @@ public abstract class ConfigureDialog extends DialogFragment {
                 }
             }
         };
-        dialog.setTitle(title);
+        dialog.setTitle(getDialogTitle());
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager
                 .LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -162,7 +164,15 @@ public abstract class ConfigureDialog extends DialogFragment {
         return dialog;
     }
 
-    public ConfigureDialog Builder() {
+    protected abstract
+    @StringRes
+    int getDialogTitle();
+
+    protected void setDialogTitle(String title) {
+        this.title = title;
+    }
+
+    public ConfigurationDialog Builder() {
         return this;
     }
 

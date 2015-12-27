@@ -23,13 +23,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v4.widget.NestedScrollView
+    <FrameLayout
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fadeScrollbars="false"
-        android:windowSoftInputMode="adjustResize"/>
+        android:layout_weight="1"/>
 
     <include layout="@layout/dialog_bottom_bar"/>
 

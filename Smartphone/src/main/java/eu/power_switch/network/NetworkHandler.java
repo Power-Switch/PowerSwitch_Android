@@ -23,16 +23,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.design.widget.Snackbar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
-import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
@@ -244,34 +240,4 @@ public abstract class NetworkHandler {
             return null;
         }
     }
-
-    /**
-     * sends an array of NetworkPackages
-     *
-     * @param networkPackages
-     */
-    @Deprecated
-    private void send(NetworkPackage... networkPackages) {
-        if (networkPackages.length == 0) {
-            return;
-        }
-
-        if (isWifiAvailable(context) || isGprsAvailable(context)) {
-            synchronized (lockObject) {
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                        new UDP(context).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, networkPackages);
-                    } else {
-                        new UDP(context).execute(networkPackages).get(1000, TimeUnit.MILLISECONDS);
-                    }
-                } catch (Exception e) {
-                    Log.e(e);
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            StatusMessageHandler.showStatusMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
-        }
-    }
-
 }

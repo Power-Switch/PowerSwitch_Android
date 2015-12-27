@@ -51,7 +51,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Dialog to edit a Gateway
  */
-public class ConfigureGatewayDialog extends ConfigureDialog {
+public class ConfigureGatewayDialog extends ConfigurationDialog {
 
     /**
      * ID of existing Gateway to Edit
@@ -79,7 +79,7 @@ public class ConfigureGatewayDialog extends ConfigureDialog {
     private int originalPort;
 
     @Override
-    protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_configure_gateway_content, null);
 
         setDeleteAction(new Runnable() {
@@ -173,6 +173,11 @@ public class ConfigureGatewayDialog extends ConfigureDialog {
 
             setSaveButtonState(false);
         }
+    }
+
+    @Override
+    protected int getDialogTitle() {
+        return R.string.configure_gateway;
     }
 
     /**

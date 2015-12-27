@@ -18,15 +18,10 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,9 +31,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -46,7 +39,6 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
@@ -66,57 +58,34 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
 /**
  * Dialog to edit a Room
  */
-public class EditRoomDialog extends DialogFragment implements OnStartDragListener {
+public class EditRoomDialog extends ConfigurationDialog implements OnStartDragListener {
 
     /**
      * ID of existing Room to Edit
      */
     public static final String ROOM_ID_KEY = "RoomId";
 
-    private boolean modified = false;
-
     private View rootView;
     private String originalName;
     private EditText name;
     private TextInputLayout floatingName;
-    private ImageButton imageButtonSave;
-    private ImageButton imageButtonCancel;
-    private ImageButton imageButtonDelete;
 
     private Room currentRoom;
     private LinkedList<String> roomNames;
     private ItemTouchHelper itemTouchHelper;
     private long roomId;
 
-    @Nullable
+    private ArrayList<Receiver> receivers;
+    private ReceiverNameRecyclerViewAdapter receiverNameRecyclerViewAdapter;
+    private RecyclerView listOfReceivers;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle roomData = getArguments();
-        roomId = roomData.getLong(ROOM_ID_KEY);
-
-        try {
-            currentRoom = DatabaseHandler.getRoom(roomId);
-            originalName = currentRoom.getName();
-
-            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
-            roomNames = new LinkedList<>();
-            for (Room room : rooms) {
-                roomNames.add(room.getName());
-            }
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        rootView = inflater.inflate(R.layout.dialog_edit_room, null);
-        builder.setView(rootView);
+    protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.dialog_edit_room_content, null);
 
         // restore name
         floatingName = (TextInputLayout) rootView.findViewById(R.id.room_name_text_input_layout);
         name = (EditText) rootView.findViewById(R.id.editText_room_name);
-        name.setText(originalName);
         name.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -129,27 +98,25 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
 
             @Override
             public void afterTextChanged(Editable s) {
-                modified = true;
+                setModified(true);
                 checkValidity();
             }
         });
 
-        final ArrayList<Receiver> receiverList = new ArrayList<>(currentRoom.getReceivers());
-        RecyclerView listOfReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
-        ReceiverNameRecyclerViewAdapter adapter = new ReceiverNameRecyclerViewAdapter(getContext(), receiverList, this);
+        receivers = new ArrayList<>();
+        listOfReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
+        receiverNameRecyclerViewAdapter = new ReceiverNameRecyclerViewAdapter(getContext(), receivers, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         listOfReceivers.setLayoutManager(linearLayoutManager);
-        listOfReceivers.setAdapter(adapter);
+        listOfReceivers.setAdapter(receiverNameRecyclerViewAdapter);
 
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(receiverNameRecyclerViewAdapter);
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listOfReceivers);
 
-        imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
-        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
-        imageButtonDelete.setOnClickListener(new View.OnClickListener() {
+        setDeleteAction(new Runnable() {
             @Override
-            public void onClick(View v) {
+            public void run() {
                 new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
                         .room_will_be_gone_forever)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -186,47 +153,35 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
             }
         });
 
-        imageButtonCancel = (ImageButton) rootView.findViewById(R.id.imageButton_cancel);
-        imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
-        imageButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDialog().cancel();
-            }
-        });
-
-        imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
-        imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
-        imageButtonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!modified) {
-                    getDialog().dismiss();
-                } else {
-                    try {
-                        DatabaseHandler.updateRoom(roomId, getCurrentRoomName());
-
-                        // save receiver order
-                        for (int position = 0; position < receiverList.size(); position++) {
-                            Receiver receiver = receiverList.get(position);
-                            DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
-                        }
-
-                        RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-
-                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
-                        getDialog().dismiss();
-                    } catch (Exception e) {
-                        Log.e(e);
-                        StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-                    }
-                }
-            }
-        });
-
-        checkValidity();
-
         return rootView;
+    }
+
+    @Override
+    protected void initExistingData(Bundle arguments) {
+        roomId = arguments.getLong(ROOM_ID_KEY);
+
+        try {
+            currentRoom = DatabaseHandler.getRoom(roomId);
+            originalName = currentRoom.getName();
+            name.setText(originalName);
+
+            receivers.addAll(currentRoom.getReceivers());
+            receiverNameRecyclerViewAdapter.notifyDataSetChanged();
+
+            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            roomNames = new LinkedList<>();
+            for (Room room : rooms) {
+                roomNames.add(room.getName());
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
+    }
+
+    @Override
+    protected int getDialogTitle() {
+        return R.string.configure_room;
     }
 
     private void checkValidity() {
@@ -249,34 +204,30 @@ public class EditRoomDialog extends DialogFragment implements OnStartDragListene
         }
     }
 
-    private void setSaveButtonState(boolean enabled) {
-        if (enabled) {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .active_green));
-            imageButtonSave.setClickable(true);
-        } else {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .inactive_gray));
-            imageButtonSave.setClickable(false);
-        }
-    }
-
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity());
-        dialog.setTitle(R.string.edit_room);
-        dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow()
-                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        dialog.show();
-        return dialog;
+    protected void saveCurrentConfigurationToDatabase() {
+        try {
+            DatabaseHandler.updateRoom(roomId, getCurrentRoomName());
+
+            // save receiver order
+            for (int position = 0; position < receivers.size(); position++) {
+                Receiver receiver = receivers.get(position);
+                DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
+            }
+
+            RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+
+            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
+            getDialog().dismiss();
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
     }
 
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        modified = true;
+        setModified(true);
         itemTouchHelper.startDrag(viewHolder);
     }
 

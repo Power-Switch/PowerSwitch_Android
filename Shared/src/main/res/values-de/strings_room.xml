@@ -23,7 +23,7 @@
     <string name="rooms">Räume</string>
 
     <!-- edit room dialog -->
-    <string name="edit_room">Raum bearbeiten</string>
+    <string name="configure_room">Raum einrichten</string>
     <string name="room_already_exists">Raum existiert bereits</string>
     <string name="room_will_be_gone_forever">Der Raum wird für immer verloren sein!</string>
     <string name="room_saved">Raum gespeichert</string>

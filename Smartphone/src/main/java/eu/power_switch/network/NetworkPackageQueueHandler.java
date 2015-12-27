@@ -64,7 +64,12 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
 
             Log.d(this, "start working");
 
-            if (NetworkHandler.networkPackagesQueue.size() > 0) {
+            int queueSize;
+            synchronized (NetworkHandler.networkPackagesQueue) {
+                queueSize = NetworkHandler.networkPackagesQueue.size();
+            }
+
+            if (queueSize > 0) {
                 processQueue();
             }
 
