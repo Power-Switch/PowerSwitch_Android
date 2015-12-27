@@ -17,16 +17,18 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <string name="configure_apartment">Wohnung einrichten</string>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-    <string name="apartment_will_be_gone_forever">Es wird für immer verloren sein!</string>
-    <string name="apartment_removed">Wohnung entfernt</string>
-    <string name="apartment_saved">Apartment gespeichert</string>
+    <include layout="@layout/dialog_bottom_bar"/>
 
-    <string name="remove_apartment_message">Die Wohnung und alle in ihr enthaltenen Räume und Szenen werden für immer verloren sein!</string>
-
-    <string name="apartment">Wohnung</string>
-
-</resources>
+</LinearLayout>

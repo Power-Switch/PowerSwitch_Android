@@ -19,7 +19,11 @@
 
 <resources>
 
+    <string name="configure_apartment">Configure Apartment</string>
+
+    <string name="apartment_will_be_gone_forever">It will be lost forever!</string>
     <string name="apartment_removed">Apartment removed</string>
+    <string name="apartment_saved">Apartment saved</string>
 
     <string name="remove_apartment_message">The Apartment and all rooms and scenes associated with it will be gone forever!</string>
     <string name="apartment">Apartment</string>

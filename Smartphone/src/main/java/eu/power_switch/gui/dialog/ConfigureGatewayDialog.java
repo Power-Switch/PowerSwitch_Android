@@ -465,16 +465,21 @@ public class ConfigureGatewayDialog extends DialogFragment {
         Dialog dialog = new Dialog(getActivity()) {
             @Override
             public void onBackPressed() {
-                // ask to really close
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getDialog().cancel();
-                            }
-                        })
-                        .setNeutralButton(android.R.string.no, null)
-                        .show();
+                if (modified) {
+                    // ask to really close
+                    new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getDialog().cancel();
+                                }
+                            })
+                            .setNeutralButton(android.R.string.no, null)
+                            .setMessage(R.string.all_changes_will_be_lost)
+                            .show();
+                } else {
+                    getDialog().cancel();
+                }
             }
         };
         dialog.setTitle(R.string.configure_gateway);

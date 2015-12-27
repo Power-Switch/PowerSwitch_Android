@@ -20,14 +20,11 @@ package eu.power_switch.gui.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -35,16 +32,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
+import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.Scene;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -115,28 +110,14 @@ public class ApartmentFragment extends RecyclerViewFragment {
         apartmentArrayAdapter.setOnItemLongClickListener(new ApartmentRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, final int position) {
-                final Apartment apartment = apartments.get(position);
+                Apartment apartment = apartments.get(position);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            DatabaseHandler.deleteApartment(apartment.getId());
-                            apartments.remove(position);
-
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.apartment_removed, Snackbar.LENGTH_LONG);
-                            sendApartmentChangedBroadcast(getContext());
-                        } catch (Exception e) {
-                            Log.e(e);
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, Snackbar.LENGTH_LONG);
-                        }
-                    }
-                }).setNeutralButton(android.R.string.cancel, null).setTitle(getString(R.string
-                        .are_you_sure))
-                        .setMessage(R.string.remove_apartment_message);
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                ConfigureApartmentDialog configureApartmentDialog = new ConfigureApartmentDialog();
+                configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
+                Bundle arguments = new Bundle();
+                arguments.putLong(ConfigureApartmentDialog.APARTMENT_ID_KEY, apartment.getId());
+                configureApartmentDialog.setArguments(arguments);
+                configureApartmentDialog.show(getFragmentManager(), null);
             }
         });
 
@@ -146,11 +127,9 @@ public class ApartmentFragment extends RecyclerViewFragment {
             @Override
             public void onClick(View v) {
                 try {
-                    DatabaseHandler.addApartment(new Apartment(null, "Dummy Apartment", new LinkedList<Room>(), new LinkedList<Scene>()));
-//                CreateApartmentDialog createApartmentDialog = new CreateApartmentDialog();
-//                createApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
-//                createApartmentDialog.show(getFragmentManager(), null);
-                    apartmentArrayAdapter.notifyDataSetChanged();
+                    ConfigureApartmentDialog configureApartmentDialog = new ConfigureApartmentDialog();
+                    configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
+                    configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     Log.e(e);
                     StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);

@@ -49,32 +49,6 @@
     <string name="highlight_last_activated_button">Highlight last activated Button</string>
     <string name="gateways">Gateways</string>
 
-    <!-- add gateway -->
-    <string name="hint_name">Name</string>
-    <string name="hint_room">Room</string>
-    <string name="hint_ip">IP-Address</string>
-    <string name="port">Port</string>
-    <string name="hint_port">Port (49880)</string>
-    <string name="edit_gateway">Edit Gateway</string>
-    <string name="address">Address</string>
-    <string name="firmware">Firmware</string>
-    <string name="hint_url">Address (example: myaddress.dyndns.org)</string>
-    <string name="predefined_port">49880</string>
-    <string name="gateway_model">Model</string>
-    <string name="gateway_type">Type</string>
-    <string name="gateway_saved">Gateway successfully saved</string>
-    <string name="gateway_found">Gateway found</string>
-    <string name="gateway_already_exists_it_has_been_enabled">Gateway already exists. It has been enabled.</string>
-    <string name="error_enabling_gateway">Error enabling Gateway</string>
-    <string name="gateway_already_exists">Gateway already exists</string>
-    <string name="cant_understand_gateway">Can\'t understand Gateway :(</string>
-    <string name="no_gateway_found">No Gateway found</string>
-    <string name="malformed_url">Malformed URL</string>
-    <string name="gateway_will_be_gone_forever">It will be lost forever!</string>
-
     <string name="autodiscover_response_message">New: %1$d, Existing: %2$d, Unknown: %3$d</string>
-
-    <string name="gateway_created">Gateway created</string>
-    <string name="gateway_removed">Gateway removed</string>
 
 </resources>

@@ -184,6 +184,24 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Updates an Apartment in Database
+     *
+     * @param id ID of Apartment
+     */
+    public static void updateApartment(Long id, String newName) throws Exception {
+        openWritable();
+        try {
+            ApartmentHandler.update(id, newName);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            close();
+        } finally {
+            close();
+        }
+    }
+
+    /**
      * Get an Apartment by Name
      *
      * @param name Name of Apartment
@@ -194,6 +212,25 @@ public final class DatabaseHandler {
         Apartment apartment = null;
         try {
             apartment = ApartmentHandler.get(name);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
+
+    /**
+     * Get an Apartment by Name
+     *
+     * @param id ID of Apartment
+     * @return Apartment
+     */
+    public static Apartment getApartment(Long id) throws Exception {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(id);
         } catch (Exception e) {
             Log.e(e);
         } finally {

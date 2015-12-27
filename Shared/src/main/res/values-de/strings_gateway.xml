@@ -21,6 +21,29 @@
 
     <string name="configure_gateway">Gateway einrichten</string>
 
+    <!-- configure gateway -->
+    <string name="hint_name">Name</string>
+    <string name="hint_room">Raum</string>
+    <string name="hint_ip">IP-Address</string>
+    <string name="edit_gateway">Gateway bearbeiten</string>
+    <string name="address">Addresse</string>
+    <string name="firmware">Firmware</string>
+    <string name="hint_url">Addresse (Beispiel: myaddress.dyndns.org)</string>
+    <string name="gateway_model">Modell</string>
+    <string name="gateway_type">Typ</string>
+    <string name="gateway_saved">Gateway gespeichert</string>
+    <string name="gateway_found">Gateway gefunden</string>
+    <string name="gateway_already_exists_it_has_been_enabled">Gateway existiert bereits. Es wurde aktiviert.</string>
+    <string name="error_enabling_gateway">Fehler beim aktivieren des Gateways</string>
+    <string name="gateway_already_exists">Gateway existiert bereits</string>
+    <string name="cant_understand_gateway">Das Gateway spricht eine fremde Sprache :(</string>
+    <string name="no_gateway_found">Kein Gateway gefunden</string>
+    <string name="malformed_url">Ungültige URL</string>
+
+    <string name="gateway_will_be_gone_forever">Das Gateway wird für immer verloren sein!</string>
+    <string name="gateway_created">Gateway erstellt</string>
+    <string name="gateway_removed">Gateway entfernt</string>
+
     <string name="port_invalid">Port ungültig</string>
     <string name="please_enter_port">Bitte gib einen Port ein</string>
     <string name="please_enter_host">Bitte gib einen Host ein</string>

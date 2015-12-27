@@ -20,6 +20,7 @@ package eu.power_switch.obj;
 
 import android.location.Location;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,12 +43,12 @@ public class Apartment {
     /**
      * List of all Rooms that this Apartment contains
      */
-    private LinkedList<Room> rooms;
+    private List<Room> rooms;
 
     /**
      * List of all Scenes that this Apartment contains
      */
-    private LinkedList<Scene> scenes;
+    private List<Scene> scenes;
 
     /**
      * Flag to indicate that this Apartment is the currently active one
@@ -56,11 +57,18 @@ public class Apartment {
 
     private Location location;
 
+    public Apartment(Long id, String name) {
+        this.id = id;
+        this.name = name;
+        this.rooms = Collections.EMPTY_LIST;
+        this.scenes = Collections.EMPTY_LIST;
+    }
+
     public Apartment(Long id, String name, List<Room> rooms, List<Scene> scenes) {
         this.id = id;
         this.name = name;
-        this.rooms = new LinkedList<>(rooms);
-        this.scenes = new LinkedList<>(scenes);
+        this.rooms = rooms;
+        this.scenes = scenes;
     }
 
     public Long getId() {
@@ -75,19 +83,19 @@ public class Apartment {
         this.name = name;
     }
 
-    public LinkedList<Room> getRooms() {
+    public List<Room> getRooms() {
         return rooms;
     }
 
-    public void setRooms(LinkedList<Room> rooms) {
+    public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
 
-    public LinkedList<Scene> getScenes() {
+    public List<Scene> getScenes() {
         return scenes;
     }
 
-    public void setScenes(LinkedList<Scene> scenes) {
+    public void setScenes(List<Scene> scenes) {
         this.scenes = scenes;
     }
 
