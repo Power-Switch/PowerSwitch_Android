@@ -18,25 +18,19 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import java.util.List;
@@ -45,7 +39,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayUnknownException;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
@@ -58,14 +51,12 @@ import eu.power_switch.shared.log.Log;
 /**
  * Dialog to edit a Gateway
  */
-public class ConfigureGatewayDialog extends DialogFragment {
+public class ConfigureGatewayDialog extends ConfigureDialog {
 
     /**
      * ID of existing Gateway to Edit
      */
     public static final String GATEWAY_ID_KEY = "GatewayId";
-
-    private boolean modified;
 
     private View rootView;
     private TextInputLayout floatingName;
@@ -79,10 +70,6 @@ public class ConfigureGatewayDialog extends DialogFragment {
     private TextInputLayout floatingPort;
     private EditText port;
 
-    private ImageButton imageButtonDelete;
-    private ImageButton imageButtonCancel;
-    private ImageButton imageButtonSave;
-
     private List<Gateway> existingGateways;
 
     private long gatewayId = -1;
@@ -91,57 +78,13 @@ public class ConfigureGatewayDialog extends DialogFragment {
     private String originalAddress;
     private int originalPort;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_configure_gateway, null);
+    protected View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.dialog_configure_gateway_content, null);
 
-        try {
-            existingGateways = DatabaseHandler.getAllGateways();
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-        }
-
-        TextWatcher textWatcher = new TextWatcher() {
-
+        setDeleteAction(new Runnable() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                modified = true;
-                checkValidity();
-            }
-        };
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.gateway_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.txt_edit_gateway_name);
-        name.addTextChangedListener(textWatcher);
-
-        model = (Spinner) rootView.findViewById(R.id.spinner_gateway_type);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.gateway_array,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        model.setAdapter(adapter);
-
-        floatingAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_address_text_input_layout);
-        address = (EditText) rootView.findViewById(R.id.txt_edit_gateway_address);
-        address.addTextChangedListener(textWatcher);
-
-        floatingPort = (TextInputLayout) rootView.findViewById(R.id.gateway_port_text_input_layout);
-        port = (EditText) rootView.findViewById(R.id.txt_edit_gateway_port);
-        port.addTextChangedListener(textWatcher);
-
-        imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
-        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
-        imageButtonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void run() {
                 new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
                         .gateway_will_be_gone_forever)
                         .setPositiveButton
@@ -165,46 +108,64 @@ public class ConfigureGatewayDialog extends DialogFragment {
             }
         });
 
-        imageButtonCancel = (ImageButton) rootView.findViewById(R.id.imageButton_cancel);
-        imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
-        imageButtonCancel.setOnClickListener(new View.OnClickListener() {
+        try {
+            existingGateways = DatabaseHandler.getAllGateways();
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
+
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                if (modified) {
-                    // ask to really close
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getDialog().cancel();
-                                }
-                            })
-                            .setNeutralButton(android.R.string.no, null)
-                            .setMessage(R.string.all_changes_will_be_lost)
-                            .show();
-                } else {
-                    getDialog().dismiss();
-                }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                setModified(true);
+                checkValidity();
+            }
+        };
+        floatingName = (TextInputLayout) rootView.findViewById(R.id.gateway_name_text_input_layout);
+        name = (EditText) rootView.findViewById(R.id.txt_edit_gateway_name);
+        name.addTextChangedListener(textWatcher);
+
+        model = (Spinner) rootView.findViewById(R.id.spinner_gateway_type);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.gateway_array,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        model.setAdapter(adapter);
+        model.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setModified(true);
+                checkValidity();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
-        imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
-        imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
-        imageButtonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!modified) {
-                    getDialog().dismiss();
-                } else {
-                    saveCurrentConfigurationToDatabase();
-                    getDialog().dismiss();
-                }
-            }
-        });
+        floatingAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_address_text_input_layout);
+        address = (EditText) rootView.findViewById(R.id.txt_edit_gateway_address);
+        address.addTextChangedListener(textWatcher);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(GATEWAY_ID_KEY)) {
-            gatewayId = args.getLong(GATEWAY_ID_KEY);
+        floatingPort = (TextInputLayout) rootView.findViewById(R.id.gateway_port_text_input_layout);
+        port = (EditText) rootView.findViewById(R.id.txt_edit_gateway_port);
+        port.addTextChangedListener(textWatcher);
+
+        return rootView;
+    }
+
+    @Override
+    protected void initExistingData(Bundle arguments) {
+        if (arguments != null && arguments.containsKey(GATEWAY_ID_KEY)) {
+            gatewayId = arguments.getLong(GATEWAY_ID_KEY);
             initializeGatewayData(gatewayId);
         } else {
             // hide if new gateway
@@ -212,8 +173,6 @@ public class ConfigureGatewayDialog extends DialogFragment {
 
             setSaveButtonState(false);
         }
-
-        return rootView;
     }
 
     /**
@@ -239,7 +198,7 @@ public class ConfigureGatewayDialog extends DialogFragment {
                 }
             }
 
-            modified = false;
+            setModified(false);
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
@@ -408,7 +367,8 @@ public class ConfigureGatewayDialog extends DialogFragment {
      * Saves current configuration to database
      * Either updates an existing Gateway or creates a new one
      */
-    private void saveCurrentConfigurationToDatabase() {
+    @Override
+    protected void saveCurrentConfigurationToDatabase() {
         try {
             if (gatewayId == -1) {
                 String gatewayModel = model.getSelectedItem().toString();
@@ -456,49 +416,6 @@ public class ConfigureGatewayDialog extends DialogFragment {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(rootView.getContext(),
                     R.string.unknown_error, Snackbar.LENGTH_LONG);
-        }
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity()) {
-            @Override
-            public void onBackPressed() {
-                if (modified) {
-                    // ask to really close
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getDialog().cancel();
-                                }
-                            })
-                            .setNeutralButton(android.R.string.no, null)
-                            .setMessage(R.string.all_changes_will_be_lost)
-                            .show();
-                } else {
-                    getDialog().cancel();
-                }
-            }
-        };
-        dialog.setTitle(R.string.configure_gateway);
-        dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager
-                .LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        dialog.show();
-        return dialog;
-    }
-
-    private void setSaveButtonState(boolean enabled) {
-        if (enabled) {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .active_green));
-            imageButtonSave.setClickable(true);
-        } else {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .inactive_gray));
-            imageButtonSave.setClickable(false);
         }
     }
 }
