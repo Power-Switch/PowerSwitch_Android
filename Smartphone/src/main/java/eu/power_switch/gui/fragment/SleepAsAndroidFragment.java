@@ -115,10 +115,9 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    DatabaseHandler.setAlarmActions(
-                                            SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())
-                                            , actions);
                                     actions.remove(position);
+                                    DatabaseHandler.setAlarmActions(SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType
+                                            .getSelectedItemPosition()), actions);
                                     StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     Log.e(e);
