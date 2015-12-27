@@ -23,4 +23,6 @@
 
     <string name="remove_apartment_message">Die Wohnung und alle in ihr enthaltenen Räume und Szenen werden für immer verloren sein!</string>
 
+    <string name="apartment">Wohnung</string>
+
 </resources>

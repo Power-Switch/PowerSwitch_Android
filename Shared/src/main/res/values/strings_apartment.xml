@@ -22,5 +22,6 @@
     <string name="apartment_removed">Apartment removed</string>
 
     <string name="remove_apartment_message">The Apartment and all rooms and scenes associated with it will be gone forever!</string>
+    <string name="apartment">Apartment</string>
 
 </resources>

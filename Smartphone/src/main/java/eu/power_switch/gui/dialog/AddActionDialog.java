@@ -44,6 +44,7 @@ import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -69,6 +70,7 @@ public abstract class AddActionDialog extends DialogFragment {
     private LinearLayout linearLayoutReceiverAction;
     private LinearLayout linearLayoutRoomAction;
     private LinearLayout linearLayoutSceneAction;
+    private Spinner spinner_apartment;
     private Spinner spinner_receiver_action_room;
     private Spinner spinner_receiver_action_receiver;
     private Spinner spinner_receiver_action_button;
@@ -82,6 +84,9 @@ public abstract class AddActionDialog extends DialogFragment {
     private ArrayList<String> roomNames;
     private ArrayList<String> sceneNames;
     private ArrayList<String> buttonNamesAll;
+    private ArrayList<String> apartmentNames;
+    private Apartment currentApartment;
+    private ArrayAdapter<String> roomSpinnerArrayAdapter;
 
     @NonNull
     @Override
@@ -121,6 +126,12 @@ public abstract class AddActionDialog extends DialogFragment {
         radioButtonSceneAction.setOnClickListener(onClickListener);
 
         try {
+            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
+            apartmentNames = new ArrayList<>();
+            for (Apartment apartment : availableApartments) {
+                apartmentNames.add(apartment.getName());
+            }
+
             ArrayList<Room> availableRooms = (ArrayList<Room>) DatabaseHandler.getAllRooms();
             roomNames = new ArrayList<>();
             for (Room room : availableRooms) {
@@ -153,11 +164,28 @@ public abstract class AddActionDialog extends DialogFragment {
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
+        spinner_apartment = (Spinner) rootView.findViewById(R.id.spinner_apartment);
+        ArrayAdapter<String> apartmentSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, apartmentNames);
+        apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_apartment.setAdapter(apartmentSpinnerArrayAdapter);
+        spinner_apartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateLists();
+                setPositiveButtonVisibility(checkValidity());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+        });
+
         // Receiver Action
         linearLayoutReceiverAction = (LinearLayout) rootView.findViewById(R.id.linearLayout_receiver_action);
 
         spinner_receiver_action_room = (Spinner) rootView.findViewById(R.id.spinner_receiver_action_room);
-        ArrayAdapter<String> roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
+        roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_room.setAdapter(roomSpinnerArrayAdapter);
         spinner_receiver_action_room.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -237,6 +265,37 @@ public abstract class AddActionDialog extends DialogFragment {
 
         return dialog;
     }
+
+    protected void updateLists() {
+        try {
+            Apartment apartment = DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
+            currentApartment = apartment;
+
+            updateRoomList();
+            updateScenesList();
+        } catch (Exception e) {
+            Log.e(e);
+        }
+    }
+
+    private void updateRoomList() {
+        roomNames.clear();
+
+        for (Room room : currentApartment.getRooms()) {
+            roomNames.add(room.getName());
+        }
+
+        spinner_receiver_action_room.setSelection(0);
+
+        roomSpinnerArrayAdapter.notifyDataSetChanged();
+
+        updateReceiverList();
+    }
+
+    private void updateScenesList() {
+
+    }
+
 
     private void updateReceiverList() {
         receiverNames.clear();

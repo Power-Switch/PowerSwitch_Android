@@ -65,6 +65,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/title_margin_top"
+        android:text="@string/apartment"
+        android:textColor="@color/accent_blue_a700"/>
+
+    <Spinner
+        android:id="@+id/spinner_apartment"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/timer_action_spinner_height"/>
+
     <LinearLayout
         android:id="@+id/linearLayout_receiver_action"
         android:layout_width="match_parent"
