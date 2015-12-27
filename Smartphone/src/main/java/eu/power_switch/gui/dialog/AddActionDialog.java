@@ -87,6 +87,8 @@ public abstract class AddActionDialog extends DialogFragment {
     private ArrayList<String> apartmentNames;
     private Apartment currentApartment;
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
+    private ArrayAdapter<String> sceneSpinnerArrayAdapter;
+    private ArrayAdapter<String> buttonAllSpinnerArrayAdapter;
 
     @NonNull
     @Override
@@ -218,10 +220,23 @@ public abstract class AddActionDialog extends DialogFragment {
             }
         });
 
+
         spinner_receiver_action_button = (Spinner) rootView.findViewById(R.id.spinner_receiver_action_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNamesReceiver);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_button.setAdapter(buttonSpinnerArrayAdapter);
+        spinner_receiver_action_button.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+        });
+
 
         updateReceiverButtonList();
 
@@ -230,19 +245,53 @@ public abstract class AddActionDialog extends DialogFragment {
 
         spinner_room_action_room = (Spinner) rootView.findViewById(R.id.spinner_room_action_room);
         spinner_room_action_room.setAdapter(roomSpinnerArrayAdapter);
+        spinner_room_action_room.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateRoomButtonsList();
+                setPositiveButtonVisibility(checkValidity());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+        });
 
         spinner_room_action_button = (Spinner) rootView.findViewById(R.id.spinner_room_action_button);
-        ArrayAdapter<String> buttonAllSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNamesAll);
+        buttonAllSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNamesAll);
         buttonAllSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room_action_button.setAdapter(buttonAllSpinnerArrayAdapter);
+        spinner_room_action_button.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+        });
 
         // Scene Action
         linearLayoutSceneAction = (LinearLayout) rootView.findViewById(R.id.linearLayout_scene_action);
 
         spinner_scene_action_scene = (Spinner) rootView.findViewById(R.id.spinner_scene_action_scene);
-        ArrayAdapter<String> sceneSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sceneNames);
+        sceneSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sceneNames);
         sceneSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_scene_action_scene.setAdapter(sceneSpinnerArrayAdapter);
+        spinner_scene_action_scene.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                setPositiveButtonVisibility(checkValidity());
+            }
+        });
 
         builder.setTitle(R.string.add_action);
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
@@ -268,14 +317,24 @@ public abstract class AddActionDialog extends DialogFragment {
 
     protected void updateLists() {
         try {
-            Apartment apartment = DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
-            currentApartment = apartment;
+            currentApartment = DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
 
             updateRoomList();
             updateScenesList();
         } catch (Exception e) {
             Log.e(e);
         }
+    }
+
+    private void updateScenesList() {
+        sceneNames.clear();
+
+        for (Scene scene : currentApartment.getScenes()) {
+            sceneNames.add(scene.getName());
+        }
+
+        spinner_scene_action_scene.setSelection(0);
+        sceneSpinnerArrayAdapter.notifyDataSetChanged();
     }
 
     private void updateRoomList() {
@@ -286,22 +345,19 @@ public abstract class AddActionDialog extends DialogFragment {
         }
 
         spinner_receiver_action_room.setSelection(0);
+        spinner_room_action_room.setSelection(0);
 
         roomSpinnerArrayAdapter.notifyDataSetChanged();
 
         updateReceiverList();
+        updateRoomButtonsList();
     }
-
-    private void updateScenesList() {
-
-    }
-
 
     private void updateReceiverList() {
         receiverNames.clear();
 
         try {
-            Room selectedRoom = DatabaseHandler.getRoom(spinner_receiver_action_room.getSelectedItem().toString());
+            Room selectedRoom = getSelectedRoom();
             if (selectedRoom != null) {
                 for (Receiver receiver : selectedRoom.getReceivers()) {
                     receiverNames.add(receiver.getName());
@@ -320,23 +376,52 @@ public abstract class AddActionDialog extends DialogFragment {
         buttonNamesReceiver.clear();
 
         try {
-            Room selectedRoom = DatabaseHandler.getRoom(spinner_receiver_action_room.getSelectedItem().toString());
-            Receiver selectedReceiver = DatabaseHandler.getReceiverByRoomId(selectedRoom.getId(), spinner_receiver_action_receiver
-                    .getSelectedItem().toString());
+            Room selectedRoom = getSelectedRoom();
+            Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver_action_receiver.getSelectedItem()
+                    .toString());
 
             if (selectedReceiver != null) {
                 for (Button button : selectedReceiver.getButtons()) {
                     buttonNamesReceiver.add(button.getName());
                 }
-                if (buttonNamesReceiver.size() > 0) {
-                    spinner_receiver_action_button.setSelection(0);
-                }
             }
+
+            spinner_receiver_action_button.setSelection(0);
         } catch (Exception e) {
             Log.e(e);
         }
 
         buttonSpinnerArrayAdapter.notifyDataSetChanged();
+    }
+
+    private void updateRoomButtonsList() {
+        buttonNamesAll.clear();
+
+        try {
+            Room selectedRoom = getSelectedRoom();
+
+            for (Receiver receiver : selectedRoom.getReceivers()) {
+                for (Button button : receiver.getButtons()) {
+                    buttonNamesAll.add(button.getName());
+                }
+            }
+
+            spinner_room_action_button.setSelection(0);
+        } catch (Exception e) {
+            Log.e(e);
+        }
+
+        buttonAllSpinnerArrayAdapter.notifyDataSetChanged();
+    }
+
+    private Room getSelectedRoom() {
+        if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
+            return currentApartment.getRoom(spinner_receiver_action_room.getSelectedItem().toString());
+        } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
+            return currentApartment.getRoom(spinner_room_action_room.getSelectedItem().toString());
+        } else {
+            return null;
+        }
     }
 
     private void updateActionType(String timerActionType) {
@@ -365,9 +450,9 @@ public abstract class AddActionDialog extends DialogFragment {
                 Log.d(spinner_receiver_action_receiver.getSelectedItem().toString());
                 Log.d(spinner_receiver_action_button.getSelectedItem().toString());
 
-                Room selectedRoom = DatabaseHandler.getRoom(spinner_receiver_action_room.getSelectedItem().toString());
-                Receiver selectedReceiver = selectedRoom.getReceiver(
-                        spinner_receiver_action_receiver.getSelectedItem().toString());
+                Room selectedRoom = getSelectedRoom();
+                Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver_action_receiver.getSelectedItem()
+                        .toString());
                 Button selectedButton = null;
                 for (Button button : selectedReceiver.getButtons()) {
                     if (button.getName().equals(spinner_receiver_action_button.getSelectedItem().toString())) {
@@ -380,7 +465,7 @@ public abstract class AddActionDialog extends DialogFragment {
                 Log.d(spinner_room_action_room.getSelectedItem().toString());
                 Log.d(spinner_room_action_button.getSelectedItem().toString());
 
-                Room selectedRoom = DatabaseHandler.getRoom(spinner_room_action_room.getSelectedItem().toString());
+                Room selectedRoom = getSelectedRoom();
 
                 action = new RoomAction(-1, selectedRoom, spinner_room_action_button.getSelectedItem()
                         .toString());
@@ -404,6 +489,7 @@ public abstract class AddActionDialog extends DialogFragment {
         if (currentActionType == null) {
             return false;
         }
+
         if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
             if (spinner_receiver_action_room.getSelectedItem() == null
                     || spinner_receiver_action_receiver.getSelectedItem() == null
