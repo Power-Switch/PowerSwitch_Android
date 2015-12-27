@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.main;
+package eu.power_switch.gui.fragment;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -43,12 +43,13 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Fragment containing a List of all Timers
@@ -62,6 +63,7 @@ public class TimersFragment extends RecyclerViewFragment {
     private RecyclerView recyclerViewTimers;
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
+    private FloatingActionButton addTimerFAB;
 
     /**
      * Used to notify Timer Fragment (this) that Timers have changed
@@ -107,9 +109,9 @@ public class TimersFragment extends RecyclerViewFragment {
 
         refreshTimers();
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.add_timer_fab);
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-        fab.setOnClickListener(new View.OnClickListener() {
+        addTimerFAB = (FloatingActionButton) rootView.findViewById(R.id.add_timer_fab);
+        addTimerFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        addTimerFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
@@ -119,7 +121,7 @@ public class TimersFragment extends RecyclerViewFragment {
         });
 
         if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            fab.setVisibility(View.GONE);
+            addTimerFAB.setVisibility(View.GONE);
         }
 
         // BroadcastReceiver to get notifications from background service if room data has changed
@@ -131,7 +133,20 @@ public class TimersFragment extends RecyclerViewFragment {
             }
         };
 
+        showTutorial();
+
         return rootView;
+    }
+
+    private void showTutorial() {
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(addTimerFAB)
+                .setUseAutoRadius(true)
+                .setDismissOnTouch(true)
+                .setDismissText(getString(R.string.tutorial__got_it))
+                .setContentText(getString(R.string.tutorial__timer_explanation))
+                .singleUse(TutorialConstants.TIMERS_KEY)
+                .show();
     }
 
     private void refreshTimers() {

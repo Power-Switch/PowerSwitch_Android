@@ -72,6 +72,7 @@ import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
+import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.main.MainTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
@@ -333,6 +334,26 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        // if you want to update the items at a later time it is recommended to keep it in a variable
+        final PrimaryDrawerItem itemTimer = new PrimaryDrawerItem().withName(R.string.timers)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withSelectable(false)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(getString(R.string.timers),
+                                    TimersFragment.class.newInstance());
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
+                    }
+                });
         final PrimaryDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
                         .color(tintColor)
@@ -507,6 +528,7 @@ public class MainActivity extends AppCompatActivity {
                         new DividerDrawerItem(),
                         itemApartments,
                         itemSleepAsAndroid,
+                        itemTimer,
                         new DividerDrawerItem(),
                         itemBackupRestore,
                         itemSettings,

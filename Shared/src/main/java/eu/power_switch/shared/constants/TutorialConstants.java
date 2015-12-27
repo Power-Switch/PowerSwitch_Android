@@ -25,6 +25,7 @@ public class TutorialConstants {
 
     public static final String MAIN_TABS_KEY_PREFIX = "main_tab_";
     public static final String SLEEP_AS_ANDROID_KEY = "SLEEP_AS_ANDOID_KEY";
+    public static final String TIMERS_KEY = "TIMERS_KEY";
 
     /**
      * Private Constructor

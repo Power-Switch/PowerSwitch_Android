@@ -47,7 +47,6 @@ public class SettingsConstants {
     // Main Tabs
     public static final int ROOMS_TAB_INDEX = 0;
     public static final int SCENES_TAB_INDEX = 1;
-    public static final int TIMERS_TAB_INDEX = 2;
 
     // Settings Tabs
     public static final int GENERAL_SETTINGS_TAB_INDEX = 0;

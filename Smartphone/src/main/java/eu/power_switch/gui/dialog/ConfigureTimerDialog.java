@@ -48,11 +48,11 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1TimeFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2DaysFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4SummaryFragment;
-import eu.power_switch.gui.fragment.main.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 

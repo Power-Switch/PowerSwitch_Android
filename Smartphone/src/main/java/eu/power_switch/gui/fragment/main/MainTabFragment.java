@@ -127,9 +127,6 @@ public class MainTabFragment extends Fragment {
             case SettingsConstants.SCENES_TAB_INDEX:
                 contentText = getString(R.string.tutorial__scene_explanation);
                 break;
-            case SettingsConstants.TIMERS_TAB_INDEX:
-                contentText = getString(R.string.tutorial__timer_explanation);
-                break;
             default:
                 return;
         }
@@ -165,8 +162,6 @@ public class MainTabFragment extends Fragment {
                     return new RoomsFragment();
                 case SettingsConstants.SCENES_TAB_INDEX:
                     return new ScenesFragment();
-                case SettingsConstants.TIMERS_TAB_INDEX:
-                    return new TimersFragment();
                 default:
                     return new RoomsFragment();
             }
@@ -177,7 +172,7 @@ public class MainTabFragment extends Fragment {
          */
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
@@ -187,8 +182,6 @@ public class MainTabFragment extends Fragment {
                     return context.getString(R.string.rooms);
                 case SettingsConstants.SCENES_TAB_INDEX:
                     return context.getString(R.string.scenes);
-                case SettingsConstants.TIMERS_TAB_INDEX:
-                    return context.getString(R.string.timers);
                 default:
                     return "";
             }
