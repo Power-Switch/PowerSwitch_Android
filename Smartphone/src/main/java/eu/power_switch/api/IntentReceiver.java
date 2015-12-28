@@ -93,63 +93,62 @@ public class IntentReceiver extends BroadcastReceiver {
     private void parseActionIntent(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
-            if (extras != null && extras.containsKey(ApiConstants.KEY_APARTMENT)) {
-                // NOTE: Every action needs the Apartment:<ApartmentName> Extra (and some other)
+//            if (extras != null && extras.containsKey(ApiConstants.KEY_APARTMENT)) {
+//                // NOTE: Every action needs the Apartment:<ApartmentName> Extra (and some other)
 
-                if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras
-                        .containsKey(ApiConstants.KEY_BUTTON)) {
-                    // Expects the following Extras:
-                    // Room:<RoomName>
-                    // Receiver:<ReceiverName>
-                    // Button:<ButtonName>
+            if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras
+                    .containsKey(ApiConstants.KEY_BUTTON)) {
+                // Expects the following Extras:
+                // Room:<RoomName>
+                // Receiver:<ReceiverName>
+                // Button:<ButtonName>
 
-                    try {
-                        Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                        Room room = apartment.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
-                        Receiver receiver = room.getReceiver(extras.getString(ApiConstants.KEY_RECEIVER).trim());
-                        Button button = receiver.getButton(extras.getString(ApiConstants.KEY_BUTTON).trim());
+                try {
+                    Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
+                    Receiver receiver = room.getReceiver(extras.getString(ApiConstants.KEY_RECEIVER).trim());
+                    Button button = receiver.getButton(extras.getString(ApiConstants.KEY_BUTTON).trim());
 
-                        ActionHandler.execute(context, receiver, button);
-                    } catch (Exception e) {
-                        Log.e("Error!", e);
-                        Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                                .show();
-                    }
-
-                } else if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
-                    // Expects the following Extras:
-                    // Room:<RoomName>
-                    // Button:<ButtonName>
-                    //
-                    // Where ButtonName is the name of the Button that is
-                    // pressed for each Receiver in the specified Room
-
-                    try {
-                        Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                        Room room = apartment.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
-                        String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
-
-                        ActionHandler.execute(context, room, buttonName);
-                    } catch (Exception e) {
-                        Log.e("Error!", e);
-                        Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                                .show();
-                    }
-                } else if (extras.containsKey(ApiConstants.KEY_SCENE)) {
-                    // Expects the following Extras:
-                    // Scene:<SceneName>
-
-                    try {
-                        Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                        Scene scene = apartment.getScene(extras.getString(ApiConstants.KEY_SCENE).trim());
-
-                        ActionHandler.execute(context, scene);
-                    } catch (Exception e) {
-                        Log.e("Error!", e);
-                        Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                                .show();
-                    }
+                    ActionHandler.execute(context, receiver, button);
+                } catch (Exception e) {
+                    Log.e("Error!", e);
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
+                            .show();
                 }
+
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
+                // Expects the following Extras:
+                // Room:<RoomName>
+                // Button:<ButtonName>
+                //
+                // Where ButtonName is the name of the Button that is
+                // pressed for each Receiver in the specified Room
+
+                try {
+                    Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                    Room room = apartment.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
+                    String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
+
+                    ActionHandler.execute(context, room, buttonName);
+                } catch (Exception e) {
+                    Log.e("Error!", e);
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
+                            .show();
+                }
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
+                // Expects the following Extras:
+                // Scene:<SceneName>
+
+                try {
+                    Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                    Scene scene = apartment.getScene(extras.getString(ApiConstants.KEY_SCENE).trim());
+
+                    ActionHandler.execute(context, scene);
+                } catch (Exception e) {
+                    Log.e("Error!", e);
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
+                            .show();
+                }
+//                }
             } else {
                 throw new NullPointerException("extras are null!");
             }
