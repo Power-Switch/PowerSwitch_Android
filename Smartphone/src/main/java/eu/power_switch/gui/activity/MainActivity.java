@@ -94,9 +94,19 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final int IDENTIFIER_ROOMS_SCENES = 10;
+    private static final int IDENTIFIER_APARTMENTS = 11;
+    private static final int IDENTIFIER_SLEEP_AS_ANDROID = 12;
+    private static final int IDENTIFIER_TIMERS = 13;
+    private static final int IDENTIFIER_BACKUP_RESTORE = 14;
+    private static final int IDENTIFIER_SETTINGS = 15;
+    private static final int IDENTIFIER_ABOUT = 16;
+
+
     public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
     private static Stack<String> lastFragmentTitles = new Stack<>();
+    private static Stack<Integer> drawerPositionStack = new Stack<>();
 
     private static AppBarLayout appBarLayout;
 
@@ -183,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
             tabLayoutFragment.setArguments(arguments);
             lastFragmentClasses.push(tabLayoutFragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
+            drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.mainContentFrameLayout, tabLayoutFragment)
                     .commit();
@@ -283,6 +294,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        while (drawerPositionStack.size() > 1) {
+                            drawerPositionStack.pop();
+                        }
                         while (lastFragmentClasses.size() > 1) {
                             lastFragmentClasses.pop();
                         }
@@ -291,19 +305,44 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         setTitle(R.string.powerswitch_app_name);
+                        navigationDrawer.setSelection(IDENTIFIER_ROOMS_SCENES);
 
                         navigationDrawer.closeDrawer();
                         return true;
+                    }
+                });
+        final PrimaryDrawerItem itemRoomsScenes = new PrimaryDrawerItem().withName(R.string.menu_rooms_scenes)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_lamp)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_ROOMS_SCENES)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
+
+                        try {
+                            startFragmentTransaction(getString(R.string.menu_rooms_scenes),
+                                    MainTabFragment.class.newInstance());
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
                     }
                 });
         final PrimaryDrawerItem itemApartments = new PrimaryDrawerItem().withName(R.string.menu_apartments)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home)
                         .color(tintColor)
                         .sizeDp(24))
-                .withSelectable(false)
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_APARTMENTS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        drawerPositionStack.push(IDENTIFIER_APARTMENTS);
                         try {
                             startFragmentTransaction(getString(R.string.menu_apartments),
                                     ApartmentFragment.class.newInstance());
@@ -319,10 +358,12 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_alarm)
                         .color(tintColor)
                         .sizeDp(24))
-                .withSelectable(false)
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_SLEEP_AS_ANDROID)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        drawerPositionStack.push(IDENTIFIER_SLEEP_AS_ANDROID);
                         try {
                             startFragmentTransaction(getString(R.string.menu_sleep_as_android),
                                     SleepAsAndroidFragment.class.newInstance());
@@ -339,10 +380,12 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time)
                         .color(tintColor)
                         .sizeDp(24))
-                .withSelectable(false)
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_TIMERS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        drawerPositionStack.push(IDENTIFIER_TIMERS);
                         try {
                             startFragmentTransaction(getString(R.string.timers),
                                     TimersFragment.class.newInstance());
@@ -358,10 +401,12 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
                         .color(tintColor)
                         .sizeDp(24))
-                .withSelectable(false)
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_BACKUP_RESTORE)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        drawerPositionStack.push(IDENTIFIER_BACKUP_RESTORE);
                         try {
                             startFragmentTransaction(getString(R.string.menu_backup_restore),
                                     BackupFragment.class.newInstance());
@@ -377,10 +422,12 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_settings)
                         .color(tintColor)
                         .sizeDp(24))
-                .withSelectable(false)
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_SETTINGS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        drawerPositionStack.push(IDENTIFIER_SETTINGS);
                         try {
                             startFragmentTransaction(getString(R.string.menu_settings),
                                     SettingsTabFragment.class.newInstance());
@@ -426,10 +473,12 @@ public class MainActivity extends AppCompatActivity {
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_info)
                         .color(tintColor)
                         .sizeDp(24))
-                .withSelectable(false)
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_ABOUT)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        drawerPositionStack.push(IDENTIFIER_ABOUT);
                         Fragment fragment = new LibsBuilder()
                                 //get the fragment
                                 .withAboutIconShown(true)
@@ -527,6 +576,8 @@ public class MainActivity extends AppCompatActivity {
                         itemHome,
                         new DividerDrawerItem(),
                         itemApartments,
+                        itemRoomsScenes,
+                        new DividerDrawerItem(),
                         itemSleepAsAndroid,
                         itemTimer,
                         new DividerDrawerItem(),
@@ -537,6 +588,8 @@ public class MainActivity extends AppCompatActivity {
                         itemDonate,
                         itemAbout)
                 .build();
+
+        navigationDrawer.setSelection(IDENTIFIER_ROOMS_SCENES);
     }
 
     private void initHistoryDrawer() {
@@ -649,8 +702,10 @@ public class MainActivity extends AppCompatActivity {
 
         lastFragmentClasses.pop();
         lastFragmentTitles.pop();
+        drawerPositionStack.pop();
         if (!lastFragmentTitles.isEmpty()) {
             setTitle(lastFragmentTitles.peek());
+            navigationDrawer.setSelection(drawerPositionStack.peek(), false);
         }
     }
 

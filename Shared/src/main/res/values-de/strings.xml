@@ -32,6 +32,7 @@
 
     <!-- main menu -->
     <string name="menu_home">Home</string>
+    <string name="menu_rooms_scenes">Räume/Szenen</string>
     <string name="menu_apartments">Wohnungen</string>
     <string name="menu_backup_restore">Sichern/Wiederherstellen</string>
     <string name="menu_settings">Einstellungen</string>
