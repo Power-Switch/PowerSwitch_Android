@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -129,6 +130,12 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
             imageButtonDelete.setVisibility(View.GONE);
 
             setSaveButtonState(false);
+        }
+
+        // Disable delete Button if only one apartment is left
+        if (existingApartments.size() <= 1) {
+            imageButtonDelete.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
+            imageButtonDelete.setClickable(false);
         }
     }
 

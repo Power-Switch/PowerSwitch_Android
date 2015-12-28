@@ -196,12 +196,10 @@ public abstract class ConfigurationDialog extends DialogFragment {
 
     protected void setSaveButtonState(boolean enabled) {
         if (enabled) {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .active_green));
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), R.color.active_green));
             imageButtonSave.setClickable(true);
         } else {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .inactive_gray));
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
             imageButtonSave.setClickable(false);
         }
     }
