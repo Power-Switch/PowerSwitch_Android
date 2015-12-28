@@ -39,6 +39,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -74,7 +75,18 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    DatabaseHandler.deleteApartment(apartmentId);
+                                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                                    if (SmartphonePreferencesHandler.getCurrentApartmentId()
+                                            .equals(apartment.getId())) {
+                                        DatabaseHandler.deleteApartment(apartmentId);
+                                        // update current Apartment selection
+                                        Apartment firstApartment = DatabaseHandler.getAllApartments().get(0);
+                                        SmartphonePreferencesHandler.setCurrentApartmentId(firstApartment.getId());
+                                    } else {
+                                        DatabaseHandler.deleteApartment(apartmentId);
+                                    }
+
+
                                     ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
                                     StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.apartment_removed, Snackbar.LENGTH_LONG);
