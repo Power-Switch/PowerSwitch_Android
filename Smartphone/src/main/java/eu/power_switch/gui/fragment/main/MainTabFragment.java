@@ -28,11 +28,16 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.tutorial.TutorialHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -49,7 +54,6 @@ public class MainTabFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager tabViewPager;
     private int currentTab = 0;
-
     private boolean skipTutorial = false;
 
     @Override
@@ -64,6 +68,15 @@ public class MainTabFragment extends Fragment {
         // for when the user swipes between sections.
         tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
+
+        TextView textView_currentApartmentInfo = (TextView) rootView.findViewById(R.id.textView_currentApartmentInfo);
+        try {
+            Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+            textView_currentApartmentInfo.setText(apartment.getName());
+        } catch (Exception e) {
+            Log.e(e);
+            textView_currentApartmentInfo.setText(R.string.unknown_error);
+        }
 
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

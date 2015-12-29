@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -29,8 +30,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import eu.power_switch.R;
@@ -39,6 +46,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
@@ -60,6 +68,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
 
     private List<Apartment> existingApartments;
     private String originalName;
+    private LinearLayout linearLayoutSelectableGateways;
+
+    private Collection<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -129,7 +140,66 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
         name = (EditText) rootView.findViewById(R.id.txt_edit_apartment_name);
         name.addTextChangedListener(textWatcher);
 
+        linearLayoutSelectableGateways = (LinearLayout) rootView.findViewById(R.id.linearLayout_gateways);
+        addGatewaysToLayout();
+
         return rootView;
+    }
+
+    private void addGatewaysToLayout() {
+        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+
+        try {
+            List<Gateway> gateways = DatabaseHandler.getAllGateways();
+            for (Gateway gateway : gateways) {
+                LinearLayout gatewayLayout = new LinearLayout(getActivity());
+                gatewayLayout.setOrientation(LinearLayout.VERTICAL);
+                linearLayoutSelectableGateways.addView(gatewayLayout);
+
+                TextView gatewayName = new TextView(getActivity());
+                TextView gatewayHost = new TextView(getActivity());
+                gatewayName.setText(gateway.getName());
+                gatewayHost.setText(String.format("%s:%d", gateway.getHost(), gateway.getPort()));
+                gatewayLayout.addView(gatewayName);
+                gatewayLayout.addView(gatewayHost);
+
+                final CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.simple_checkbox, gatewayLayout, false);
+                checkBox.setTag(R.string.gateways, gateway);
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        setModified(true);
+                        checkValidity();
+                    }
+                });
+                gatewayCheckboxList.add(checkBox);
+                gatewayLayout.addView(checkBox);
+
+                gatewayLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkBox.setChecked(!checkBox.isChecked());
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
+    }
+
+    private ArrayList<Gateway> getCheckedGateways() {
+        ArrayList<Gateway> checkedGateways = new ArrayList<>();
+
+        for (CheckBox checkBox : gatewayCheckboxList) {
+            if (checkBox.isChecked()) {
+                Gateway gateway = (Gateway) checkBox.getTag(R.string.gateways);
+                checkedGateways.add(gateway);
+            }
+        }
+
+        return checkedGateways;
     }
 
     @Override
@@ -166,6 +236,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
             originalName = apartment.getName();
             name.setText(originalName);
+
+            for (Gateway gateway : apartment.getAssociatedGateways()) {
+                for (CheckBox checkBox : gatewayCheckboxList) {
+                    Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
+                    if (gateway.getId().equals(checkBoxGateway.getId())) {
+                        checkBox.setChecked(true);
+                    }
+                }
+            }
 
             setModified(false);
         } catch (Exception e) {
@@ -229,7 +308,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
             if (apartmentId == -1) {
                 String apartmentName = getCurrentName();
 
-                Apartment newApartment = new Apartment((long) -1, apartmentName);
+                Apartment newApartment = new Apartment((long) -1, apartmentName, getCheckedGateways());
 
                 try {
                     DatabaseHandler.addApartment(newApartment);
@@ -238,7 +317,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
                             R.string.unknown_error, Snackbar.LENGTH_LONG);
                 }
             } else {
-                DatabaseHandler.updateApartment(apartmentId, getCurrentName());
+                DatabaseHandler.updateApartment(apartmentId, getCurrentName(), getCheckedGateways());
             }
 
             ApartmentFragment.sendApartmentChangedBroadcast(getActivity());

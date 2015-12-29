@@ -34,11 +34,12 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
-import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.ExternalAppConstants;
@@ -86,9 +87,12 @@ public class ActionHandler {
         NetworkHandler.init(context);
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
-        for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-            networkPackages.add(networkPackage);
+        Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+        for (Gateway gateway : apartment.getAssociatedGateways()) {
+            if (gateway.isActive()) {
+                NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
+                networkPackages.add(networkPackage);
+            }
         }
 
         DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
@@ -131,18 +135,22 @@ public class ActionHandler {
         for (Receiver receiver : room.getReceivers()) {
             Button button = receiver.getButton(buttonName);
             if (button != null) {
-                for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                    try {
-                        NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                        networkPackages.add(networkPackage);
-                    } catch (ActionNotSupportedException e) {
-                        Log.e("Action not supported by Receiver!", e);
-                        StatusMessageHandler.showStatusMessage(context,
-                                context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
-                    } catch (GatewayNotSupportedException e) {
-                        Log.e("Gateway not supported by Receiver!", e);
-                        StatusMessageHandler.showStatusMessage(context,
-                                context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
+
+                Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+                for (Gateway gateway : apartment.getAssociatedGateways()) {
+                    if (gateway.isActive()) {
+                        try {
+                            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
+                            networkPackages.add(networkPackage);
+                        } catch (ActionNotSupportedException e) {
+                            Log.e("Action not supported by Receiver!", e);
+                            StatusMessageHandler.showStatusMessage(context,
+                                    context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
+                        } catch (GatewayNotSupportedException e) {
+                            Log.e("Gateway not supported by Receiver!", e);
+                            StatusMessageHandler.showStatusMessage(context,
+                                    context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
+                        }
                     }
                 }
 
@@ -190,15 +198,20 @@ public class ActionHandler {
         NetworkHandler.init(context);
 
         List<NetworkPackage> packages = new ArrayList<>();
-        for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-            for (SceneItem sceneItem : scene.getSceneItems()) {
-                packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
-                        sceneItem.getActiveButton().getName()));
+        Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+        for (Gateway gateway : apartment.getAssociatedGateways()) {
+            if (gateway.isActive()) {
+                for (SceneItem sceneItem : scene.getSceneItems()) {
 
-                DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
-                        .getId(), sceneItem.getActiveButton().getId());
+                    packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
+                            sceneItem.getActiveButton().getName()));
+
+                    DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
+                            .getId(), sceneItem.getActiveButton().getId());
+                }
             }
         }
+
         NetworkHandler.send(packages);
 
         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {

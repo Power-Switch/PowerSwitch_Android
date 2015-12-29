@@ -88,7 +88,7 @@ public class PlayStoreModeDataModel {
         initRooms();
         initScenes();
 
-        apartment = new Apartment((long) 0, "Heimat", getRooms(), getScenes());
+        apartment = new Apartment((long) 0, "Heimat", getRooms(), getScenes(), getGateways());
     }
 
     /**

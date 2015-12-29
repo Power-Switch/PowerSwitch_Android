@@ -186,12 +186,14 @@ public final class DatabaseHandler {
     /**
      * Updates an Apartment in Database
      *
-     * @param id ID of Apartment
+     * @param id       ID of Apartment
+     * @param newName  new Name of Apartment
+     * @param gateways Associated Gateways
      */
-    public static void updateApartment(Long id, String newName) throws Exception {
+    public static void updateApartment(Long id, String newName, List<Gateway> gateways) throws Exception {
         openWritable();
         try {
-            ApartmentHandler.update(id, newName);
+            ApartmentHandler.update(id, newName, gateways);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);

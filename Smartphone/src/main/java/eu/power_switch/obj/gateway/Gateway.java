@@ -91,7 +91,7 @@ public abstract class Gateway {
      *
      * @return
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

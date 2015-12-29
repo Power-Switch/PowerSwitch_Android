@@ -29,4 +29,7 @@
 
     <string name="apartment">Wohnung</string>
 
+    <string name="associated_gateways">Verwendete Gateways</string>
+    <string name="apartment_info_title">Wohnung</string>
+
 </resources>

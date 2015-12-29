@@ -16,6 +16,6 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':Smartphone', ':Wearable', ':Shared'
 include ':library'
 project(':library').projectDir = new File(settingsDir, '../MaterialShowcaseView/library')
+include ':Shared', ':Wearable', ':Smartphone'

@@ -21,8 +21,9 @@ package eu.power_switch.obj;
 import android.location.Location;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+
+import eu.power_switch.obj.gateway.Gateway;
 
 /**
  * Represents an Apartment that contains Rooms and Scenes
@@ -51,6 +52,11 @@ public class Apartment {
     private List<Scene> scenes;
 
     /**
+     * List of associated Gateways that will send network signals
+     */
+    private List<Gateway> gateways;
+
+    /**
      * Flag to indicate that this Apartment is the currently active one
      */
     private boolean isActive;
@@ -62,13 +68,23 @@ public class Apartment {
         this.name = name;
         this.rooms = Collections.EMPTY_LIST;
         this.scenes = Collections.EMPTY_LIST;
+        this.gateways = Collections.EMPTY_LIST;
     }
 
-    public Apartment(Long id, String name, List<Room> rooms, List<Scene> scenes) {
+    public Apartment(Long id, String name, List<Gateway> gateways) {
+        this.id = id;
+        this.name = name;
+        this.rooms = Collections.EMPTY_LIST;
+        this.scenes = Collections.EMPTY_LIST;
+        this.gateways = gateways;
+    }
+
+    public Apartment(Long id, String name, List<Room> rooms, List<Scene> scenes, List<Gateway> gateways) {
         this.id = id;
         this.name = name;
         this.rooms = rooms;
         this.scenes = scenes;
+        this.gateways = gateways;
     }
 
     public Long getId() {
@@ -97,6 +113,10 @@ public class Apartment {
 
     public void setScenes(List<Scene> scenes) {
         this.scenes = scenes;
+    }
+
+    public List<Gateway> getAssociatedGateways() {
+        return gateways;
     }
 
     public boolean isActive() {

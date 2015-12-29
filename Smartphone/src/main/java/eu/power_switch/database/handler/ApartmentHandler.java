@@ -25,10 +25,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentTable;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
@@ -45,18 +47,23 @@ abstract class ApartmentHandler {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
         DatabaseHandler.database.insert(ApartmentTable.TABLE_NAME, null, values);
+        addAssociatedGateways(apartment.getId(), apartment.getAssociatedGateways());
     }
 
     /**
      * Updates a Apartment in Database
      *
-     * @param id      ID of Apartment
-     * @param newName new Apartment name
+     * @param id       ID of Apartment
+     * @param newName  new Apartment name
+     * @param gateways
      */
-    protected static void update(Long id, String newName) {
+    protected static void update(Long id, String newName, List<Gateway> gateways) {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, newName);
         DatabaseHandler.database.update(ApartmentTable.TABLE_NAME, values, ApartmentTable.COLUMN_ID + "==" + id, null);
+
+        removeAssociatedGateways(id);
+        addAssociatedGateways(id, gateways);
     }
 
     /**
@@ -75,6 +82,7 @@ abstract class ApartmentHandler {
             SceneHandler.delete(scene.getId());
         }
 
+        removeAssociatedGateways(id);
         DatabaseHandler.database.delete(ApartmentTable.TABLE_NAME, ApartmentTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -136,15 +144,71 @@ abstract class ApartmentHandler {
      * @return Apartment
      */
     private static Apartment dbToApartment(Cursor c) throws Exception {
-        Long id = c.getLong(0);
+        Long apartmentId = c.getLong(0);
         String name = c.getString(1);
-        LinkedList<Room> rooms = RoomHandler.getByApartment(id);
-        LinkedList<Scene> scenes = SceneHandler.getByApartment(id);
+        LinkedList<Room> rooms = RoomHandler.getByApartment(apartmentId);
+        LinkedList<Scene> scenes = SceneHandler.getByApartment(apartmentId);
+        LinkedList<Gateway> gateways = getAssociatedGateways(apartmentId);
 
-        Apartment apartment = new Apartment(id, name, rooms, scenes);
-        if (SmartphonePreferencesHandler.getCurrentApartmentId().equals(id)) {
+        Apartment apartment = new Apartment(apartmentId, name, rooms, scenes, gateways);
+        if (SmartphonePreferencesHandler.getCurrentApartmentId().equals(apartmentId)) {
             apartment.setActive(true);
         }
         return apartment;
+    }
+
+    /**
+     * Get Gateways that are associated with an Apartment
+     *
+     * @param apartmentId ID of Apartment
+     * @return
+     */
+    private static LinkedList<Gateway> getAssociatedGateways(Long apartmentId) {
+        LinkedList<Gateway> associatedGateways = new LinkedList<>();
+
+        String[] columns = {
+                ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID,
+                ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID
+        };
+        Cursor cursor = DatabaseHandler.database.query(ApartmentGatewayRelationTable.TABLE_NAME, columns,
+                ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long gatewayId = cursor.getLong(1);
+            Gateway gateway = GatewayHandler.get(gatewayId);
+            associatedGateways.add(gateway);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return associatedGateways;
+    }
+
+    /**
+     * Add relation info about associated Gateways to Database
+     *
+     * @param apartmentId        ID of Apartment
+     * @param associatedGateways List of Gateways
+     */
+    private static void addAssociatedGateways(Long apartmentId, List<Gateway> associatedGateways) {
+        // add current
+        for (Gateway gateway : associatedGateways) {
+            ContentValues gatewayRelationValues = new ContentValues();
+            gatewayRelationValues.put(ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID, apartmentId);
+            gatewayRelationValues.put(ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID, gateway.getId());
+            DatabaseHandler.database.insert(ApartmentGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
+        }
+    }
+
+    /**
+     * Remove all current associated Gateways
+     *
+     * @param apartmentId ID of Apartment
+     */
+    private static void removeAssociatedGateways(Long apartmentId) {
+        // delete old associated gateways
+        DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME,
+                ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId, null);
     }
 }

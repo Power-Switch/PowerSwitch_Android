@@ -28,6 +28,7 @@ import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
+import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.database.table.history.HistoryTable;
@@ -54,7 +55,7 @@ import eu.power_switch.shared.log.Log;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 12;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -65,6 +66,7 @@ public class Database extends SQLiteOpenHelper {
         GatewayTable.onCreate(db);
 
         ApartmentTable.onCreate(db);
+        ApartmentGatewayRelationTable.onCreate(db);
 
         RoomTable.onCreate(db);
 
@@ -115,6 +117,7 @@ public class Database extends SQLiteOpenHelper {
             GatewayTable.onUpgrade(db, oldVersion, newVersion);
 
             ApartmentTable.onUpgrade(db, oldVersion, newVersion);
+            ApartmentGatewayRelationTable.onUpgrade(db, oldVersion, newVersion);
 
             RoomTable.onUpgrade(db, oldVersion, newVersion);
 
@@ -250,6 +253,8 @@ public class Database extends SQLiteOpenHelper {
                 case 9:
                     break;
                 case 10:
+                case 11:
+                case 12:
                     break;
             }
 

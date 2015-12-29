@@ -28,4 +28,8 @@
     <string name="remove_apartment_message">The Apartment and all rooms and scenes associated with it will be gone forever!</string>
     <string name="apartment">Apartment</string>
 
+    <string name="associated_gateways">Associated Gateways</string>
+
+    <string name="apartment_info_title">Apartment</string>
+
 </resources>

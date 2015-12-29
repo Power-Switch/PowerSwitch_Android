@@ -47,6 +47,16 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            style="@style/sub_header"
+            android:text="@string/associated_gateways"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_gateways"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
