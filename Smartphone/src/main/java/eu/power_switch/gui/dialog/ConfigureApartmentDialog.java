@@ -192,9 +192,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
 
                 TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
                 if (gateway.isActive()) {
-                    gatewayDisabled.setVisibility(View.VISIBLE);
-                } else {
                     gatewayDisabled.setVisibility(View.GONE);
+                } else {
+                    gatewayDisabled.setVisibility(View.VISIBLE);
                 }
             }
         } catch (Exception e) {
