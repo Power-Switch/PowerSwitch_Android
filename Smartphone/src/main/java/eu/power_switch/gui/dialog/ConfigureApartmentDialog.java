@@ -159,6 +159,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
             List<Gateway> gateways = DatabaseHandler.getAllGateways();
             for (Gateway gateway : gateways) {
                 LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
+                // every inflated layout has to be added manually, attaching while inflating will only generate every
+                // child one, but not for every gateway
                 linearLayoutSelectableGateways.addView(gatewayLayout);
 
                 final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
