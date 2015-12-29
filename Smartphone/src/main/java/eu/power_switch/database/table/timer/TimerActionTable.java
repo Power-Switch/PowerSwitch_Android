@@ -43,7 +43,7 @@ public class TimerActionTable {
                 ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + "), " +
             "PRIMARY KEY (" + COLUMN_TIMER_ID + ", " + COLUMN_ACTION_ID + ")" +
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

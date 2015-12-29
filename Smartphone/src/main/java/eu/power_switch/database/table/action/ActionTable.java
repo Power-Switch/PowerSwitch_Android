@@ -36,7 +36,7 @@ public class ActionTable {
             COLUMN_ID + " integer primary key autoincrement," +
             COLUMN_ACTION_TYPE + " text not null" +
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

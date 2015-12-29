@@ -39,7 +39,7 @@ public class SceneActionTable {
                 ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID +
             ")" +
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

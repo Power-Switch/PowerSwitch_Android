@@ -37,7 +37,7 @@ public class ApartmentTable {
             COLUMN_NAME + " text not null, " +
             COLUMN_POSITION + " integer" +
             ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

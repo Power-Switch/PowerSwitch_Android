@@ -24,6 +24,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayUnknownException;
@@ -109,6 +110,10 @@ abstract class GatewayHandler {
      * @param id ID of Gateway
      */
     protected static void delete(Long id) {
+        // delete from associations with apartments
+        DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME, ApartmentGatewayRelationTable
+                .COLUMN_GATEWAY_ID + "=" + id, null);
+
         DatabaseHandler.database.delete(GatewayTable.TABLE_NAME, GatewayTable.COLUMN_ID + "=" + id, null);
     }
 

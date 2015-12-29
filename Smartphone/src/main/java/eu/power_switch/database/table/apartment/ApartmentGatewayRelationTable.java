@@ -18,6 +18,8 @@
 
 package eu.power_switch.database.table.apartment;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import eu.power_switch.database.table.gateway.GatewayTable;
@@ -41,7 +43,7 @@ public class ApartmentGatewayRelationTable {
                 GatewayTable.TABLE_NAME + "(" + GatewayTable.COLUMN_ID + "), " +
             "PRIMARY KEY (" + COLUMN_APARTMENT_ID + ", " + COLUMN_GATEWAY_ID + ")" +
             ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
@@ -50,6 +52,35 @@ public class ApartmentGatewayRelationTable {
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion <= 11) {
             onCreate(db);
+
+            // enable existing gateways for existing apartments on version upgrade
+            try {
+                Cursor cursor = db.query(ApartmentTable.TABLE_NAME, null, null, null, null, null, null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    Long apartmentId = cursor.getLong(0);
+
+                    Cursor cursor1 = db.query(GatewayTable.TABLE_NAME, null, null, null, null, null, null);
+                    cursor1.moveToFirst();
+                    while (!cursor1.isAfterLast()) {
+                        Long gatewayId = cursor1.getLong(0);
+
+                        ContentValues values = new ContentValues();
+                        values.put(ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID, apartmentId);
+                        values.put(ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID, gatewayId);
+                        db.insert(ApartmentGatewayRelationTable.TABLE_NAME, null, values);
+
+                        cursor1.moveToNext();
+                    }
+                    cursor1.close();
+
+                    cursor.moveToNext();
+                }
+                cursor.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

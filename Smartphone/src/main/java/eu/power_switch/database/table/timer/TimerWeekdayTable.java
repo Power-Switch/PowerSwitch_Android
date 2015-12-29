@@ -40,7 +40,7 @@ public class TimerWeekdayTable {
             ")" +
 
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

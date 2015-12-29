@@ -38,7 +38,7 @@ public class ReceiverWidgetTable {
             COLUMN_RECEIVER_ID + " integer not null," +
             COLUMN_WIDGET_APP_ID + " integer not null" +
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

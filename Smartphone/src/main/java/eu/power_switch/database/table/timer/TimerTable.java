@@ -43,7 +43,7 @@ public class TimerTable {
             COLUMN_EXECUTION_INTERVAL + " integer not null, " +
             COLUMN_EXECUTION_TYPE + " text not null " +
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

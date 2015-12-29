@@ -50,8 +50,6 @@ public abstract class ConfigurationDialog extends DialogFragment {
     protected ImageButton imageButtonCancel;
     protected ImageButton imageButtonSave;
 
-    private String title = "Configuration";
-
     private boolean modified;
     private View rootView;
     private View contentView;
@@ -167,10 +165,6 @@ public abstract class ConfigurationDialog extends DialogFragment {
     protected abstract
     @StringRes
     int getDialogTitle();
-
-    protected void setDialogTitle(String title) {
-        this.title = title;
-    }
 
     public ConfigurationDialog Builder() {
         return this;

@@ -36,7 +36,7 @@ public class HistoryTable {
             COLUMN_TIME + " integer not null," +
             COLUMN_DESCRIPTION + " text not null" +
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

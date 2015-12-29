@@ -37,7 +37,7 @@ public class SleepAsAndroidActionTable {
             COLUMN_ALARM_TYPE_ID + " integer not null," +
             COLUMN_ACTION_ID + " integer not null" +
         ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);

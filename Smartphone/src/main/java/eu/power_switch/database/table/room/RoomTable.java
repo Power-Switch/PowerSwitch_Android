@@ -38,7 +38,7 @@ public class RoomTable {
             COLUMN_POSITION + " integer," +
             COLUMN_APARTMENT_ID + " integer not null " +
             ");";
-    //formatter:on
+    //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
