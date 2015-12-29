@@ -28,29 +28,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/transparent"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
             android:gravity="right"
             android:singleLine="true"
             android:text="@string/apartment_info_title"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?attr/colorAccent"
             android:textSize="24sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
             android:gravity="center"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:singleLine="true"
             android:text="|"
-            android:textColor="@color/colorPrimary"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="24sp"/>
 
         <TextView
@@ -58,9 +63,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/transparent"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
             android:gravity="left"
             android:singleLine="true"
+            android:text="Home"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="24sp"/>
 
     </LinearLayout>
