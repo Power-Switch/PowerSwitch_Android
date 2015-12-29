@@ -1288,4 +1288,42 @@ public final class DatabaseHandler {
         }
     }
 
+    public static Apartment getContainingApartment(Receiver receiver) {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(receiver);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
+
+    public static Apartment getContainingApartment(Room room) {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(room);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
+
+    public static Apartment getContainingApartment(Scene scene) {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(scene);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
 }

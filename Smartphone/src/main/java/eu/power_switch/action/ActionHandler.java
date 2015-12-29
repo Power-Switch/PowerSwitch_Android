@@ -87,7 +87,7 @@ public class ActionHandler {
         NetworkHandler.init(context);
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
-        Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+        Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
         for (Gateway gateway : apartment.getAssociatedGateways()) {
             if (gateway.isActive()) {
                 NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
@@ -131,12 +131,12 @@ public class ActionHandler {
     private static void executeRoomAction(Context context, Room room, String buttonName) throws Exception {
         NetworkHandler.init(context);
 
+        Apartment apartment = DatabaseHandler.getContainingApartment(room);
+
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
             Button button = receiver.getButton(buttonName);
             if (button != null) {
-
-                Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
                 for (Gateway gateway : apartment.getAssociatedGateways()) {
                     if (gateway.isActive()) {
                         try {
@@ -198,7 +198,8 @@ public class ActionHandler {
         NetworkHandler.init(context);
 
         List<NetworkPackage> packages = new ArrayList<>();
-        Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+
+        Apartment apartment = DatabaseHandler.getContainingApartment(scene);
         for (Gateway gateway : apartment.getAssociatedGateways()) {
             if (gateway.isActive()) {
                 for (SceneItem sceneItem : scene.getSceneItems()) {

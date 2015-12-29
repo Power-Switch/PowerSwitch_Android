@@ -31,6 +31,7 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
@@ -116,6 +117,36 @@ abstract class ApartmentHandler {
         Apartment Apartment = dbToApartment(cursor);
         cursor.close();
         return Apartment;
+    }
+
+    /**
+     * Gets the containing Apartment of a receiver
+     *
+     * @param receiver Receiver
+     * @return containing Apartment
+     */
+    public static Apartment get(Receiver receiver) throws Exception {
+        return get(RoomHandler.get(receiver.getRoomId()).getApartmentId());
+    }
+
+    /**
+     * Gets the containing Apartment of a room
+     *
+     * @param room Room
+     * @return containing Apartment
+     */
+    public static Apartment get(Room room) throws Exception {
+        return get(room.getApartmentId());
+    }
+
+    /**
+     * Gets the containing Apartment of a scene
+     *
+     * @param scene Scene
+     * @return containing Apartment
+     */
+    public static Apartment get(Scene scene) throws Exception {
+        return get(scene.getApartmentId());
     }
 
     /**
