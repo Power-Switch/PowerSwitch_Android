@@ -20,8 +20,18 @@
     <color name="transparent">#00000000</color>
     <color name="half_transparent">#7F000000</color>
 
-    <color name="primaryColor_dark">@color/primaryColor</color>
-    <color name="primaryColor_darkInverse">@color/primaryColorInverse</color>
+    <!-- Blue 500 #2196F3 -->
+    <color name="primary_dark_blue_500">#FF2196F3</color>
+    <!-- Blue 700 #1976D2 -->
+    <color name="primary_dark_blue_700">#FF1976D2</color>
+    <!-- Blue 800 #1565C0 -->
+    <color name="primary_dark_blue_800">#FF1565C0</color>
+    <!-- Blue 900 #0D47A1 -->
+    <color name="primary_dark_blue_900">#FF0D47A1</color>
+
+
+    <color name="primaryColor_dark">@color/primary_dark_blue_800</color>
+    <color name="primaryColor_darkInverse">@color/primary_dark_blue_700</color>
 
     <!-- Grey 900 #212121 -->
     <color name="primaryColor">#212121</color>
@@ -40,6 +50,7 @@
 
     <!-- Light Blue A700 #0091EA -->
     <color name="accent_blue_a700">#FF0091EA</color>
+    <color name="accent_blue_a400">#FF2979FF</color>
     <!-- Red A700 #D50000 -->
     <color name="accent_red_a700">#D50000</color>
 
