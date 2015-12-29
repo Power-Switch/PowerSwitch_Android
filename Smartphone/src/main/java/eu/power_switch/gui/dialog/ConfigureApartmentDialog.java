@@ -165,9 +165,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
 
                 final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
                 checkBox.setTag(R.string.gateways, gateway);
-                if (apartmentId == -1) {
-                    checkBox.setChecked(true);
-                }
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -230,9 +227,13 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
             apartmentId = args.getLong(APARTMENT_ID_KEY);
             initializeApartmentData(apartmentId);
         } else {
+            // enable all gateways by default
+            for (CheckBox checkBox : gatewayCheckboxList) {
+                checkBox.setChecked(true);
+            }
+
             // hide if new apartment
             imageButtonDelete.setVisibility(View.GONE);
-
             setSaveButtonState(false);
         }
 
@@ -241,6 +242,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
             imageButtonDelete.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
             imageButtonDelete.setClickable(false);
         }
+
+        setModified(false);
     }
 
     @Override
@@ -268,7 +271,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
                 }
             }
 
-            setModified(false);
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
