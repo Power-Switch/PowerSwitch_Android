@@ -51,6 +51,8 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * Dialog to configure (create/edit) an Apartment
+ * <p/>
  * Created by Markus on 27.12.2015.
  */
 public class ConfigureApartmentDialog extends ConfigurationDialog {
@@ -146,6 +148,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
         return rootView;
     }
 
+    /**
+     * Generate Gateway items and add them to view
+     */
     private void addGatewaysToLayout() {
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
@@ -153,19 +158,14 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
         try {
             List<Gateway> gateways = DatabaseHandler.getAllGateways();
             for (Gateway gateway : gateways) {
-                LinearLayout gatewayLayout = new LinearLayout(getActivity());
-                gatewayLayout.setOrientation(LinearLayout.VERTICAL);
+                LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
                 linearLayoutSelectableGateways.addView(gatewayLayout);
 
-                TextView gatewayName = new TextView(getActivity());
-                TextView gatewayHost = new TextView(getActivity());
-                gatewayName.setText(gateway.getName());
-                gatewayHost.setText(String.format("%s:%d", gateway.getHost(), gateway.getPort()));
-                gatewayLayout.addView(gatewayName);
-                gatewayLayout.addView(gatewayHost);
-
-                final CheckBox checkBox = (CheckBox) inflater.inflate(R.layout.simple_checkbox, gatewayLayout, false);
+                final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
                 checkBox.setTag(R.string.gateways, gateway);
+                if (apartmentId == -1) {
+                    checkBox.setChecked(true);
+                }
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -174,7 +174,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
                     }
                 });
                 gatewayCheckboxList.add(checkBox);
-                gatewayLayout.addView(checkBox);
 
                 gatewayLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -182,6 +181,22 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
                         checkBox.setChecked(!checkBox.isChecked());
                     }
                 });
+
+                TextView gatewayName = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayName);
+                gatewayName.setText(gateway.getName());
+
+                TextView gatewayType = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayType);
+                gatewayType.setText(gateway.getModel());
+
+                TextView gatewayHost = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayHost);
+                gatewayHost.setText(String.format("%s:%d", gateway.getHost(), gateway.getPort()));
+
+                TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
+                if (gateway.isActive()) {
+                    gatewayDisabled.setVisibility(View.VISIBLE);
+                } else {
+                    gatewayDisabled.setVisibility(View.GONE);
+                }
             }
         } catch (Exception e) {
             Log.e(e);
@@ -189,6 +204,11 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
         }
     }
 
+    /**
+     * Get selected Gateways
+     *
+     * @return List of Gateways
+     */
     private ArrayList<Gateway> getCheckedGateways() {
         ArrayList<Gateway> checkedGateways = new ArrayList<>();
 

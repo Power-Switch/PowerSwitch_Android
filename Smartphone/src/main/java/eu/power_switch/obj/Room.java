@@ -56,8 +56,9 @@ public class Room {
     /**
      * Constructor
      *
-     * @param id
-     * @param name
+     * @param id          ID of this Room
+     * @param apartmentId ID of Apartment
+     * @param name        Name of this Room
      */
     public Room(Long id, Long apartmentId, String name) {
         this.id = id;

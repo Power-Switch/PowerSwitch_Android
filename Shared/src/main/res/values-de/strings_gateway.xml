@@ -44,6 +44,8 @@
     <string name="gateway_created">Gateway erstellt</string>
     <string name="gateway_removed">Gateway entfernt</string>
 
+    <string name="disabled">Deaktiviert</string>
+
     <string name="port_invalid">Port ungültig</string>
     <string name="please_enter_port">Bitte gib einen Port ein</string>
     <string name="please_enter_host">Bitte gib einen Host ein</string>

@@ -51,8 +51,9 @@ public class Scene {
     /**
      * Constructor
      *
-     * @param id
-     * @param name
+     * @param id          ID of this Scene
+     * @param apartmentId ID of Apartment
+     * @param name        Name of this Scene
      */
     public Scene(Long id, Long apartmentId, String name) {
         this.id = id;
