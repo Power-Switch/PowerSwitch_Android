@@ -23,6 +23,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import eu.power_switch.database.table.room.RoomTable;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -75,7 +76,7 @@ public class ReceiverTable {
             case 8:
 
                 // insert data from old timer_action table into ActionTable and TimerActionTable
-                String[] columns = {COLUMN_ID, COLUMN_CLASSNAME};
+                String[] columns = {COLUMN_ID, COLUMN_CLASSNAME, COLUMN_TYPE};
                 Cursor cursor = db.query(TABLE_NAME, columns,
                         null, null, null, null, null);
                 cursor.moveToFirst();
@@ -83,7 +84,14 @@ public class ReceiverTable {
                 while (!cursor.isAfterLast()) {
                     long id = cursor.getLong(0);
                     String className = cursor.getString(1);
-                    String newClassName = className.replace("eu.power_switch.obj.device.", "eu.power_switch.obj.receiver.device.");
+                    String type = cursor.getString(2);
+
+                    String newClassName;
+                    if (Receiver.TYPE_UNIVERSAL.equals(type)) {
+                        newClassName = "eu.power_switch.obj.receiver.UniversalReceiver";
+                    } else {
+                        newClassName = className.replace("eu.power_switch.obj.device.", "eu.power_switch.obj.receiver.device.");
+                    }
 
                     Log.d("old className: " + className);
                     Log.d("new className: " + newClassName);
