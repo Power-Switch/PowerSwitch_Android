@@ -30,7 +30,7 @@
     <color name="primary_dark_blue_900">#FF0D47A1</color>
 
 
-    <color name="primaryColor_dark">@color/primary_dark_blue_800</color>
+    <color name="primaryColor_dark">@color/primaryColor</color>
     <color name="primaryColor_darkInverse">@color/primary_dark_blue_700</color>
 
     <!-- Grey 900 #212121 -->
