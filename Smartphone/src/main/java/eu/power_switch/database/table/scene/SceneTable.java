@@ -57,7 +57,6 @@ public class SceneTable {
         }
 
         if (oldVersion <= 10) {
-            // TODO: add column for apartment_id
             db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_APARTMENT_ID +
                     " integer not null DEFAULT 0");
         }
