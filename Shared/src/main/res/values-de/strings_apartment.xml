@@ -32,4 +32,8 @@
     <string name="associated_gateways">Verwendete Gateways</string>
     <string name="apartment_info_title">Wohnung</string>
 
+    <string name="create_apartment">Wohnung erstellen</string>
+
+    <string name="apartment_already_exists">Apartment existiert bereits</string>
+
 </resources>

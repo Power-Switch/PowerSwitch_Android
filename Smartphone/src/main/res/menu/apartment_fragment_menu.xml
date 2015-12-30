@@ -17,23 +17,12 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <string name="configure_apartment">Configure Apartment</string>
+    <item
+        android:id="@+id/create_apartment"
+        android:title="@string/create_apartment"
+        app:showAsAction="ifRoom"/>
 
-    <string name="apartment_will_be_gone_forever">It will be lost forever!</string>
-    <string name="apartment_removed">Apartment removed</string>
-    <string name="apartment_saved">Apartment saved</string>
-
-    <string name="remove_apartment_message">The Apartment and all rooms and scenes associated with it will be gone forever!</string>
-    <string name="apartment">Apartment</string>
-
-    <string name="associated_gateways">Associated Gateways</string>
-
-    <string name="apartment_info_title">Apartment</string>
-
-    <string name="create_apartment">Create Apartment</string>
-
-    <string name="apartment_already_exists">Apartment already exists</string>
-
-</resources>
+</menu>

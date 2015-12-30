@@ -45,6 +45,16 @@
         you snooze the alarm and when you finally disable the alarm to stand up the light goes on again and the
         coffee machine starts to work.
     </string>
+    <string name="tutorial__apartment_explanation">
+        In this tab you add and configure apartments.\n
+        \nDifferent apartments have different rooms and scenes. You can assign Gateways to each
+        apartmens, so network signals are only sent to gateways in the correct apartment.\n
+        \nSelect an apartment by tapping it, modify it by press&amp;hold.
+    </string>
+    <string name="tutorial__backup_explanation">
+        Create and restore backups of PowerSwitch in this tab.\n
+        \nBackups contain the complete app state, including rooms, scenes, timers, settings etc.
+    </string>
 
 
     <string name="tutorial__add_new_roms_and_devices_here">Add new Rooms and Receivers using the + button</string>

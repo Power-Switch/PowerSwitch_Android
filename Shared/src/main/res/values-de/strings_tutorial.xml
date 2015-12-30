@@ -50,6 +50,16 @@
         Szoozen wieder aus geht und beim deaktivieren des Weckers wird zusätzlich zum Nachttischlicht noch die
         Kaffeemaschine eingeschaltet.
     </string>
+    <string name="tutorial__apartment_explanation">
+        In diesem Tab kannst du Wohnungen erstellen und verwalten.\n
+        \nVerschiedene Wohnungen haben verschiedene Räume und Szenen. Außerdem kannst du Gateways bestimmten
+        Wohnungen zuweisen, sodass Netzwerksignale nur an die Gateways in der richtigen Wohnung gesendet werden.\n
+        \nWähle eine Wohnung mit einem klick aus, halte es gedrückt um es zu konfigurieren.
+    </string>
+    <string name="tutorial__backup_explanation">
+        In diesem Tab kannst du Sicherungen von PowerSwitch erstellen und einen alten Zustand wiederherstellen.\n
+        \nSicherungen enthalten den kompletten Appstatus, inklusive Räume, Szenen, Timer, Einstellungen etc.
+    </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>
 

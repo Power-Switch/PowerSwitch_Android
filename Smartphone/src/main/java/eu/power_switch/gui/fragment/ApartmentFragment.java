@@ -28,6 +28,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,8 +45,11 @@ import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Created by Markus on 25.12.2015.
@@ -152,13 +158,73 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 }
             }
         };
+        showTutorial();
 
         return rootView;
+    }
+
+    private void showTutorial() {
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(fab)
+                .setUseAutoRadius(false)
+                .setRadius(64 * 3)
+                .setDismissOnTouch(true)
+                .setDismissText(getString(R.string.tutorial__got_it))
+                .setContentText(getString(R.string.tutorial__apartment_explanation))
+                .singleUse(TutorialConstants.APARTMENT_KEY)
+                .show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.apartment_fragment_menu, menu);
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            menu.findItem(R.id.create_apartment)
+                    .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        } else {
+            menu.findItem(R.id.create_apartment)
+                    .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (super.onOptionsItemSelected(menuItem)) {
+            return true;
+        }
+
+        switch (menuItem.getItemId()) {
+            case R.id.create_apartment:
+                try {
+                    ConfigureApartmentDialog configureApartmentDialog = new ConfigureApartmentDialog();
+                    configureApartmentDialog.setTargetFragment(this, 0);
+                    configureApartmentDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    Log.e(e);
+                    StatusMessageHandler.showStatusMessage(this, R.string.unknown_error, 5000);
+                }
+            default:
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(menuItem);
     }
 
     @Override
     public RecyclerView getRecyclerView() {
         return recyclerViewApartments;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

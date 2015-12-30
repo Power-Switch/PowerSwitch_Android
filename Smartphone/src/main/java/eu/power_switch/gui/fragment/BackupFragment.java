@@ -64,7 +64,9 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Fragment holding a list of all Backups
@@ -185,7 +187,21 @@ public class BackupFragment extends RecyclerViewFragment {
 
         refreshBackups();
 
+        showTutorial();
+
         return rootView;
+    }
+
+    private void showTutorial() {
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(fab)
+                .setUseAutoRadius(false)
+                .setRadius(64 * 3)
+                .setDismissOnTouch(true)
+                .setDismissText(getString(R.string.tutorial__got_it))
+                .setContentText(getString(R.string.tutorial__backup_explanation))
+                .singleUse(TutorialConstants.BACKUP_KEY)
+                .show();
     }
 
     private void refreshBackups() {
@@ -214,11 +230,7 @@ public class BackupFragment extends RecyclerViewFragment {
         if (Build.VERSION.SDK_INT >= 23) {
             // Marshmallow+
             int hasWriteExternalStoragePermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (hasWriteExternalStoragePermission == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                return false;
-            }
+            return hasWriteExternalStoragePermission == PackageManager.PERMISSION_GRANTED;
         } else {
             // Pre-Marshmallow
             return true;
