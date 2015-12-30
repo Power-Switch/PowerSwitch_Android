@@ -32,6 +32,7 @@
     <string name="scene_saved">Szene gespeichert</string>
 
     <string name="please_select_receivers">Bitte wähle Empfänger aus</string>
+    <string name="scene_name_already_exists">Es existiert bereits eine Szene mit diesem Namen</string>
 
     <!-- Scenes -->
     <string name="activate">Aktivieren</string>

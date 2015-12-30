@@ -32,6 +32,7 @@
     <string name="scene_saved">Scene saved</string>
 
     <string name="please_select_receivers">Please select some Receivers</string>
+    <string name="scene_name_already_exists">Scene name already exists</string>
 
 
     <!-- Scenes -->

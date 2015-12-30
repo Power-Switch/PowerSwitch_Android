@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -62,10 +63,11 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
     private TextInputLayout floatingName;
     private EditText name;
 
-    private String originalName;
     private LinearLayout linearLayout_selectableReceivers;
 
     private ArrayList<CheckBox> receiverCheckboxList = new ArrayList<>();
+    private long sceneId;
+    private List<Scene> existingScenes;
 
 
     /**
@@ -107,12 +109,19 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
             }
         });
 
+        try {
+            existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId());
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
+
         linearLayout_selectableReceivers = (LinearLayout) rootView.findViewById(R.id.linearLayout_selectableReceivers);
         addReceiversToLayout();
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureSceneDialog.SCENE_ID_KEY)) {
-            long sceneId = args.getLong(ConfigureSceneDialog.SCENE_ID_KEY);
+            sceneId = args.getLong(ConfigureSceneDialog.SCENE_ID_KEY);
             initializeSceneData(sceneId);
         }
 
@@ -174,7 +183,6 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         try {
             Scene scene = DatabaseHandler.getScene(sceneId);
 
-            originalName = scene.getName();
             name.setText(scene.getName());
 
             ArrayList<Receiver> activeReceivers = new ArrayList<>();
@@ -201,11 +209,8 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
 
     private boolean checkValidity() {
         // TODO: Performance Optimierung
-        String currentSceneName = getCurrentSceneName();
 
-        if (currentSceneName.trim().length() <= 0) {
-            floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
+        if (!checkNameValidity()) {
             sendNameSceneChangedBroadcast(getActivity(), null, getCheckedReceivers());
             return false;
         }
@@ -213,13 +218,33 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         if (getCheckedReceivers().isEmpty()) {
             floatingName.setError(getString(R.string.please_select_receivers));
             floatingName.setErrorEnabled(true);
-            sendNameSceneChangedBroadcast(getActivity(), currentSceneName, getCheckedReceivers());
+            sendNameSceneChangedBroadcast(getActivity(), getCurrentSceneName(), getCheckedReceivers());
             return false;
         }
 
         floatingName.setError(null);
         floatingName.setErrorEnabled(false);
         sendNameSceneChangedBroadcast(getActivity(), getCurrentSceneName(), getCheckedReceivers());
+        return true;
+    }
+
+    private boolean checkNameValidity() {
+        if (getCurrentSceneName().length() <= 0) {
+            floatingName.setError(getString(R.string.please_enter_name));
+            floatingName.setErrorEnabled(true);
+            sendNameSceneChangedBroadcast(getActivity(), null, getCheckedReceivers());
+            return false;
+        } else {
+            for (Scene scene : existingScenes) {
+                if (!scene.getId().equals(sceneId) & scene.getName().equals(getCurrentSceneName())) {
+                    floatingName.setError(getString(R.string.scene_name_already_exists));
+                    floatingName.setErrorEnabled(true);
+                    sendNameSceneChangedBroadcast(getActivity(), null, getCheckedReceivers());
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
