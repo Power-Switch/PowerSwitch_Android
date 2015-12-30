@@ -319,7 +319,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
 
     private boolean checkNameAlreadyExists() {
         for (Apartment apartment : existingApartments) {
-            if (apartment.getName().equals(getCurrentName())) {
+            if (!apartment.getId().equals(apartmentId) && apartment.getName().equals(getCurrentName())) {
                 return true;
             }
         }
