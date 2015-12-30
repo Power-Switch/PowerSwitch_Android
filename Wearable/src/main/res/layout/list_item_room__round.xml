@@ -32,7 +32,7 @@
         android:layout_height="48dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="@color/accent_blue_a700"
+        android:textColor="?attr/colorAccent"
         android:textSize="@dimen/font_title_size"/>
 
     <LinearLayout

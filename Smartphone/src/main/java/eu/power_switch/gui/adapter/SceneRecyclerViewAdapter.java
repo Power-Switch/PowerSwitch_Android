@@ -175,7 +175,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);
 
-                final int accentColor = ContextCompat.getColor(fragmentActivity, R.color.accent_blue_a700);
+                final int accentColor = ContextCompat.getColor(fragmentActivity, R.color.color_light_blue_a700);
                 if (sceneItem.getActiveButton().equals(button)) {
                     buttonView.setTextColor(accentColor);
                 }

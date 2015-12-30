@@ -28,8 +28,8 @@
         <item name="colorPrimaryLight">@color/primaryColor_light</item>
         <item name="colorPrimaryDark">@color/primaryColor_dark</item>
         <item name="colorAccent">#FF999999</item>
-        <item name="android:windowBackground">@color/windowBackgroundInverse</item>
-        <item name="android:colorBackground">@color/windowBackground</item>
+        <item name="android:windowBackground">@color/windowBackgroundColorInverse</item>
+        <item name="android:colorBackground">@color/windowBackgroundColor</item>
 
         <!-- custom views -->
         <item name="dialog_bottomBar_next_color">@color/textColorPrimary</item>
@@ -43,7 +43,7 @@
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
 
         <!-- About Libraries -->
-        <item name="about_libraries_window_background">@color/windowBackground</item>
+        <item name="about_libraries_window_background">@color/windowBackgroundColor</item>
         <item name="about_libraries_card">@color/cardview_background</item>
         <item name="about_libraries_title_openSource">@color/textColorPrimary</item>
         <item name="about_libraries_text_openSource">@color/textColorSecondary</item>
@@ -73,7 +73,7 @@
         <item name="colorPrimary">@color/primaryColorInverse</item>
         <item name="colorPrimaryLight">@color/primaryColor_lightInverse</item>
         <item name="colorAccent">#FF333333</item>
-        <item name="android:windowBackground">@color/windowBackgroundInverse</item>
+        <item name="android:windowBackground">@color/windowBackgroundColorInverse</item>
 
         <!-- custom views -->
         <item name="dialog_bottomBar_next_color">@color/textColorPrimaryInverse</item>
@@ -87,7 +87,7 @@
         <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
 
         <!-- About Libraries -->
-        <item name="about_libraries_window_background">@color/windowBackgroundInverse</item>
+        <item name="about_libraries_window_background">@color/windowBackgroundColorInverse</item>
         <item name="about_libraries_card">@color/cardview_backgroundInverse</item>
         <item name="about_libraries_title_openSource">@color/textColorPrimaryInverse</item>
         <item name="about_libraries_text_openSource">@color/textColorSecondaryInverse</item>
@@ -109,8 +109,8 @@
 
     <!-- Base Dark Blue -->
     <style name="PowerSwitchThemeBase.Dark.Blue" parent="PowerSwitchThemeBase.Dark">
-        <item name="colorAccent">@color/accent_blue_a700</item>
-        <item name="android:textColorLink">@color/accent_blue_a700</item>
+        <item name="colorAccent">@color/color_light_blue_a700</item>
+        <item name="android:textColorLink">@color/color_light_blue_a700</item>
 
         <!-- dialog -->
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleDarkBlue</item>
@@ -118,14 +118,14 @@
 
     <!-- Base Dark Red -->
     <style name="PowerSwitchThemeBase.Dark.Red" parent="PowerSwitchThemeBase.Dark">
-        <item name="colorAccent">@color/accent_red_a700</item>
-        <item name="android:textColorLink">@color/accent_red_a700</item>
+        <item name="colorAccent">@color/color_red_a700</item>
+        <item name="android:textColorLink">@color/color_red_a700</item>
     </style>
 
     <!-- Base Light Blue -->
     <style name="PowerSwitchThemeBase.Light.Blue" parent="PowerSwitchThemeBase.Light">
-        <item name="colorAccent">@color/accent_blue_a700</item>
-        <item name="android:textColorLink">@color/accent_blue_a700</item>
+        <item name="colorAccent">@color/color_light_blue_a700</item>
+        <item name="android:textColorLink">@color/color_light_blue_a700</item>
 
         <!-- dialog -->
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleLightBlue</item>
@@ -133,8 +133,8 @@
 
     <!-- Base Light Red -->
     <style name="PowerSwitchThemeBase.Light.Red" parent="PowerSwitchThemeBase.Light">
-        <item name="colorAccent">@color/accent_red_a700</item>
-        <item name="android:textColorLink">@color/accent_red_a700</item>
+        <item name="colorAccent">@color/color_red_a700</item>
+        <item name="android:textColorLink">@color/color_red_a700</item>
     </style>
 
     <!-- Themes -->

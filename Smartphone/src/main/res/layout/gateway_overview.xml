@@ -64,7 +64,7 @@
         android:layout_marginRight="4dp"
         android:layout_weight="0"
         android:text="@string/disabled"
-        android:textColor="@color/accent_red_a700"
+        android:textColor="@color/color_red_a700"
         android:visibility="gone"/>
 
 </LinearLayout>

@@ -56,7 +56,7 @@
             android:layout_marginLeft="@dimen/ui_element_margin_double"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/gateway_type"
-            android:textColor="@color/accent_blue_a700"/>
+            android:textColor="?attr/colorAccent"/>
 
         <Spinner
             android:id="@+id/spinner_gateway_type"

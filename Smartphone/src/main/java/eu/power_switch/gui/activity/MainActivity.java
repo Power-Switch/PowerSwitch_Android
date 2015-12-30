@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back)
-                        .color(ContextCompat.getColor(this, R.color.accent_blue_a700))
+                        .color(ContextCompat.getColor(this, R.color.color_light_blue_a700))
                         .sizeDp(24))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {

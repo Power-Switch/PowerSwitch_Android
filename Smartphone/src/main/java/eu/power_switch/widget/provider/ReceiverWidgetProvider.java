@@ -106,7 +106,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                             if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() &&
                                     receiver.getLastActivatedButtonId().equals(button.getId())) {
                                 buttonView.setTextColor(R.id.button_widget_universal,
-                                        ContextCompat.getColor(context, R.color.accent_blue_a700));
+                                        ContextCompat.getColor(context, R.color.color_light_blue_a700));
                             }
 
                             PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, room,

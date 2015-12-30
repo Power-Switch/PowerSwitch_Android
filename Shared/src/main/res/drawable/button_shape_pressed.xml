@@ -25,6 +25,6 @@
         android:radius="2dp"/>
 
     <solid
-        android:color="@color/accent_blue_a700"/>
+        android:color="@color/color_light_blue_a700"/>
 
 </shape>

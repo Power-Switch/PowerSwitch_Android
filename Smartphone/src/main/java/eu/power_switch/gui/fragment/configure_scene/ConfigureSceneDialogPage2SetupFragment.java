@@ -176,11 +176,8 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
             }
         }
 
-        if (rooms.isEmpty()) {
-            return false;
-        }
+        return !rooms.isEmpty();
 
-        return true;
     }
 
     private void updateSceneItemList() {
@@ -308,7 +305,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
                     buttonList.add(buttonView);
 
                     if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId() == button.getId()) {
-                        buttonView.setTextColor(getResources().getColor(R.color.accent_blue_a700));
+                        buttonView.setTextColor(getResources().getColor(R.color.color_light_blue_a700));
                     }
                     buttonView.setText(button.getName());
                     buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
@@ -318,7 +315,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
                             sendSetupSceneChangedBroadcast(context);
                             for (android.widget.Button button : buttonList) {
                                 if (button == v) {
-                                    button.setTextColor(getResources().getColor(R.color.accent_blue_a700));
+                                    button.setTextColor(getResources().getColor(R.color.color_light_blue_a700));
 
                                     for (Button receiverButton : receiver.getButtons()) {
                                         if (receiverButton.getName().equals(button.getText())) {

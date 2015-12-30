@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/type"
-            android:textColor="@color/accent_blue_a700"/>
+            android:textColor="?attr/colorAccent"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
             android:text="@string/apartment"
-            android:textColor="@color/accent_blue_a700"/>
+            android:textColor="@color/color_light_blue_a700"/>
 
         <Spinner
             android:id="@+id/spinner_apartment"
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:text="@string/room"
-                android:textColor="@color/accent_blue_a700"/>
+                android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
                 android:id="@+id/spinner_receiver_action_room"
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:text="@string/receiver"
-                android:textColor="@color/accent_blue_a700"/>
+                android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
                 android:id="@+id/spinner_receiver_action_receiver"
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:text="@string/button"
-                android:textColor="@color/accent_blue_a700"/>
+                android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
                 android:id="@+id/spinner_receiver_action_button"
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:text="@string/room"
-                android:textColor="@color/accent_blue_a700"/>
+                android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
                 android:id="@+id/spinner_room_action_room"
@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:text="@string/button"
-                android:textColor="@color/accent_blue_a700"/>
+                android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
                 android:id="@+id/spinner_room_action_button"
@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:text="@string/scene"
-                android:textColor="@color/accent_blue_a700"/>
+                android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
                 android:id="@+id/spinner_scene_action_scene"

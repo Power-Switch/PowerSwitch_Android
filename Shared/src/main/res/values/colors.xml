@@ -17,60 +17,80 @@
   -->
 
 <resources>
-    <color name="transparent">#00000000</color>
-    <color name="half_transparent">#7F000000</color>
+    <color name="color_transparent">#00000000</color>
+    <color name="color_half_transparent">#7F000000</color>
 
-    <!-- Blue 500 #2196F3 -->
-    <color name="primary_dark_blue_500">#FF2196F3</color>
-    <!-- Blue 700 #1976D2 -->
-    <color name="primary_dark_blue_700">#FF1976D2</color>
-    <!-- Blue 800 #1565C0 -->
-    <color name="primary_dark_blue_800">#FF1565C0</color>
-    <!-- Blue 900 #0D47A1 -->
-    <color name="primary_dark_blue_900">#FF0D47A1</color>
-
-
-    <color name="primaryColor_dark">@color/primaryColor</color>
-    <color name="primaryColor_darkInverse">@color/primary_dark_blue_700</color>
-
-    <!-- Grey 900 #212121 -->
-    <color name="primaryColor">#212121</color>
-    <!-- Grey 200 #EEEEEE -->
-    <color name="primaryColorInverse">#EEEEEE</color>
-
-    <!--&lt;!&ndash; Black #000000 &ndash;&gt;-->
-    <!--<color name="primaryColor_dark">#000000</color>-->
-    <!--&lt;!&ndash; White #FFFFFF &ndash;&gt;-->
-    <!--<color name="primaryColor_darkInverse">#FFFFFF</color>-->
-
-    <!-- Grey 800 #424242 -->
-    <color name="primaryColor_light">#424242</color>
     <!-- Grey 100 #F5F5F5 -->
-    <color name="primaryColor_lightInverse">#F5F5F5</color>
+    <color name="color_gray_100">#FFF5F5F5</color>
+    <!-- Grey 200 #EEEEEE -->
+    <color name="color_gray_200">#FFEEEEEE</color>
+    <!-- Grey 800 #424242 -->
+    <color name="color_gray_800">#FF424242</color>
+    <!-- Grey 900 #212121 -->
+    <color name="color_gray_900">#FF212121</color>
+    <!-- Grey 950 #109090 -->
+    <color name="color_gray_950">#FF101010</color>
 
+    <!--&lt;!&ndash; Blue 500 #2196F3 &ndash;&gt;-->
+    <!--<color name="color_blue_500">#FF2196F3</color>-->
+    <!-- Blue 700 #1976D2 -->
+    <color name="color_blue_700">#FF1976D2</color>
+    <!--&lt;!&ndash; Blue 800 #1565C0 &ndash;&gt;-->
+    <!--<color name="color_blue_800">#FF1565C0</color>-->
+    <!--&lt;!&ndash; Blue 900 #0D47A1 &ndash;&gt;-->
+    <!--<color name="color_blue_900">#FF0D47A1</color>-->
+
+    <!--&lt;!&ndash; Blue A700 #2962FF &ndash;&gt;-->
+    <!--<color name="color_blue_a700">#FF2962FF</color>-->
+
+
+    <!-- Light Blue 700 #0288D1 -->
+    <color name="color_light_blue_700">#FF0288D1</color>
+    <!-- Light Blue 800 #0277BD -->
+    <color name="color_light_blue_800">#FF0277BD</color>
+    <!-- Light Blue 900 #01579B -->
+    <color name="color_light_blue_900">#FF01579B</color>
+
+
+    <!-- Light Blue A400 #00B0FF -->
+    <color name="color_light_blue_a400">#FF00B0FF</color>
     <!-- Light Blue A700 #0091EA -->
-    <color name="accent_blue_a700">#FF0091EA</color>
-    <color name="accent_blue_a400">#FF2979FF</color>
-    <!-- Red A700 #D50000 -->
-    <color name="accent_red_a700">#D50000</color>
+    <color name="color_light_blue_a700">#FF0091EA</color>
 
-    <color name="textColorPrimary">#FFFFFFFF</color>
+    <!-- Red 900 #B71C1C -->
+    <color name="color_red_900">#FFB71C1C</color>
+
+    <!-- Red A700 #DD2C00 -->
+    <color name="color_red_a700">#DD2C00</color>
+
+
+    <color name="primaryColor_dark">@color/color_gray_950</color>
+    <color name="primaryColor_darkInverse">@color/color_light_blue_a700</color>
+
+    <color name="primaryColor">@color/color_gray_900</color>
+    <color name="primaryColorInverse">@color/color_gray_200</color>
+
+    <color name="primaryColor_light">@color/color_gray_800</color>
+    <color name="primaryColor_lightInverse">@color/color_gray_100</color>
+
+    <color name="textColorPrimary">@android:color/white</color>
     <color name="textColorSecondary">#B2FFFFFF</color>
     <!-- inverse text color: 87% black -->
     <color name="textColorPrimaryInverse">#DE000000</color>
     <color name="textColorSecondaryInverse">#8A000000</color>
 
-
-    <!-- Red 900 #B71C1C -->
-    <color name="delete_color">#FFB71C1C</color>
+    <color name="delete_color">@color/color_red_900</color>
 
     <color name="inactive_gray">#FF555555</color>
     <color name="active_green">#FF009900</color>
 
-    <color name="windowBackground">#FF313031</color>
-    <color name="windowBackgroundInverse">#CECFCE</color>
+    <color name="windowBackgroundColor">#FF313031</color>
+    <color name="windowBackgroundColorInverse">#FFCECFCE</color>
 
-    <color name="cardview_background">@color/primaryColor_light</color>
-    <color name="cardview_backgroundInverse">@color/primaryColor_lightInverse</color>
+    <color name="navigationBarColor">@color/color_gray_950</color>
+    <color name="navigationBarColorInverse">@color/color_light_blue_a700</color>
+
+    <color name="cardview_background">@color/color_gray_800</color>
+    <color name="cardview_backgroundInverse">@color/color_gray_100</color>
 
 </resources>

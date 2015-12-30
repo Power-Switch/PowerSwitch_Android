@@ -224,7 +224,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() && lastActivatedButtonId != -1 && button
                         .getId
                                 () == lastActivatedButtonId) {
-                    buttonView.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.accent_blue_a700));
+                    buttonView.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.color_light_blue_a700));
                 }
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
 
@@ -257,7 +257,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                     button.setTextColor(defaultTextColor);
                                 } else {
                                     button.setTextColor(ContextCompat.getColor(fragmentActivity, R.color
-                                            .accent_blue_a700));
+                                            .color_light_blue_a700));
                                 }
                             }
                         }
