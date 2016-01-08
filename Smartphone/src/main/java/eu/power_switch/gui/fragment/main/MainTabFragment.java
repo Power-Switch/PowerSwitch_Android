@@ -18,24 +18,31 @@
 
 package eu.power_switch.gui.fragment.main;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.dialog.ApartmentChooserDialog;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.tutorial.TutorialHelper;
@@ -55,6 +62,8 @@ public class MainTabFragment extends Fragment {
     private ViewPager tabViewPager;
     private int currentTab = 0;
     private boolean skipTutorial = false;
+    private TextView textView_currentApartmentInfo;
+    private BroadcastReceiver broadcastReceiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,14 +78,18 @@ public class MainTabFragment extends Fragment {
         tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
 
-        TextView textView_currentApartmentInfo = (TextView) rootView.findViewById(R.id.textView_currentApartmentInfo);
-        try {
-            Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
-            textView_currentApartmentInfo.setText(apartment.getName());
-        } catch (Exception e) {
-            Log.e(e);
-            textView_currentApartmentInfo.setText(R.string.unknown_error);
-        }
+        LinearLayout linearLayout_currentApartmentInfo = (LinearLayout) rootView.findViewById(R.id
+                .linearLayout_currentApartmentInfo);
+        linearLayout_currentApartmentInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ApartmentChooserDialog apartmentChooserDialog = new ApartmentChooserDialog();
+                apartmentChooserDialog.show(getFragmentManager(), null);
+            }
+        });
+
+        textView_currentApartmentInfo = (TextView) rootView.findViewById(R.id.textView_currentApartmentInfo);
+        updateCurrentApartmentInfo();
 
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -99,6 +112,14 @@ public class MainTabFragment extends Fragment {
             }
         });
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(this, "received intent: " + intent.getAction());
+                updateCurrentApartmentInfo();
+            }
+        };
+
         skipTutorial = true;
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
@@ -116,6 +137,16 @@ public class MainTabFragment extends Fragment {
         showTutorial(tabViewPager.getCurrentItem());
 
         return rootView;
+    }
+
+    private void updateCurrentApartmentInfo() {
+        try {
+            Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+            textView_currentApartmentInfo.setText(apartment.getName());
+        } catch (Exception e) {
+            Log.e(e);
+            textView_currentApartmentInfo.setText(R.string.unknown_error);
+        }
     }
 
     private void showTutorial(int tabIndex) {
@@ -158,6 +189,20 @@ public class MainTabFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
     }
 
     private static class CustomTabAdapter extends FragmentPagerAdapter {

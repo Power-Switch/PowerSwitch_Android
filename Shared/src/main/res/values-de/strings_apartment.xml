@@ -36,4 +36,6 @@
 
     <string name="apartment_already_exists">Apartment existiert bereits</string>
 
+    <string name="select_apartment">Wohnung auswählen</string>
+
 </resources>

@@ -17,25 +17,25 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/dialog_horizontal_margin"
+    android:layout_marginRight="@dimen/dialog_horizontal_margin"
+    android:layout_marginTop="@dimen/dialog_margin_top"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <string name="configure_apartment">Configure Apartment</string>
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center"-->
+    <!--android:text="@string/select_apartment"/>-->
 
-    <string name="apartment_will_be_gone_forever">It will be lost forever!</string>
-    <string name="apartment_removed">Apartment removed</string>
-    <string name="apartment_saved">Apartment saved</string>
+    <ListView
+        android:id="@+id/recyclerview_apartments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-    <string name="remove_apartment_message">The Apartment and all rooms and scenes associated with it will be gone forever!</string>
-    <string name="apartment">Apartment</string>
-
-    <string name="associated_gateways">Associated Gateways</string>
-
-    <string name="apartment_info_title">Apartment</string>
-
-    <string name="create_apartment">Create Apartment</string>
-
-    <string name="apartment_already_exists">Apartment already exists</string>
-
-    <string name="select_apartment">Select Apartment</string>
-
-</resources>
+</LinearLayout>
