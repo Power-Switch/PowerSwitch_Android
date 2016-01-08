@@ -72,11 +72,11 @@ public class ActionHandler {
         } catch (ActionNotSupportedException e) {
             Log.e("Action not supported by Receiver!", e);
             StatusMessageHandler.showStatusMessage(context,
-                    context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
+                    context.getString(R.string.action_not_supported_by_receiver), 5000);
         } catch (GatewayNotSupportedException e) {
             Log.e("Gateway not supported by Receiver!", e);
             StatusMessageHandler.showStatusMessage(context,
-                    context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
+                    context.getString(R.string.gateway_not_supported_by_receiver), 5000);
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
@@ -88,6 +88,11 @@ public class ActionHandler {
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
+
+        if (apartment.getAssociatedGateways().isEmpty()) {
+
+        }
+
         for (Gateway gateway : apartment.getAssociatedGateways()) {
             if (gateway.isActive()) {
                 NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
@@ -145,11 +150,11 @@ public class ActionHandler {
                         } catch (ActionNotSupportedException e) {
                             Log.e("Action not supported by Receiver!", e);
                             StatusMessageHandler.showStatusMessage(context,
-                                    context.getString(R.string.action_not_supported_by_receiver), Toast.LENGTH_LONG);
+                                    context.getString(R.string.action_not_supported_by_receiver), 5000);
                         } catch (GatewayNotSupportedException e) {
                             Log.e("Gateway not supported by Receiver!", e);
                             StatusMessageHandler.showStatusMessage(context,
-                                    context.getString(R.string.gateway_not_supported_by_receiver), Toast.LENGTH_LONG);
+                                    context.getString(R.string.gateway_not_supported_by_receiver), 5000);
                         }
                     }
                 }

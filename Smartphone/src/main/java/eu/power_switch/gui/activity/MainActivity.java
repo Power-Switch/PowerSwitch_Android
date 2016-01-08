@@ -653,6 +653,8 @@ public class MainActivity extends AppCompatActivity {
                     .equals(fragment.getClass())) {
                 lastFragmentClasses.push(fragment.getClass());
                 lastFragmentTitles.push(String.valueOf(menuItemTitle));
+                // TODO: push the correct IDENTIFIER to stack
+                drawerPositionStack.push(IDENTIFIER_SETTINGS);
                 getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim

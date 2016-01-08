@@ -33,6 +33,7 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -232,6 +233,12 @@ public abstract class NetworkHandler {
                 // "HCGW:VC:ITECHNO;MC:ITGW-433;FW:300;IP:192.168.2.100;;"
                 if (brand.contains("ITECHNO") && (model.contains("HCGW22") || model.contains("ITGW-433"))) {
                     return new ITGW433((long) -1, true, "AutoDiscovered", firmware, host, 49880);
+                }
+
+                // RaspyRFM Gateway
+                // "HCGW:VC:Seegel Systeme;MC:RaspyRFM;FW:1.00;IP:192.168.2.125;;"
+                if (model.contains("RaspyRFM")) {
+                    return new RaspyRFM((long) -1, true, "AutoDiscovered", firmware, host, 49880);
                 }
             }
             return null;

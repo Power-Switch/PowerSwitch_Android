@@ -32,6 +32,7 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.obj.gateway.RaspyRFM;
 
 /**
  * Provides database methods for managing Gateways
@@ -189,11 +190,7 @@ abstract class GatewayHandler {
         String address = c.getString(5);
         int port = c.getInt(6);
 
-        if (rawActive > 0) {
-            active = true;
-        } else {
-            active = false;
-        }
+        active = rawActive > 0;
 
         if (rawModel.equals(BrematicGWY433.MODEL)) {
             gateway = new BrematicGWY433(id, active, name, firmware, address, port);
@@ -201,6 +198,8 @@ abstract class GatewayHandler {
             gateway = new ConnAir(id, active, name, firmware, address, port);
         } else if (rawModel.equals(ITGW433.MODEL)) {
             gateway = new ITGW433(id, active, name, firmware, address, port);
+        } else if (rawModel.equals(RaspyRFM.MODEL)) {
+            gateway = new RaspyRFM(id, active, name, firmware, address, port);
         } else {
             throw new GatewayUnknownException();
         }

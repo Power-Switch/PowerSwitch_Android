@@ -16,14 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.gateway;
+package eu.power_switch.obj.gateway;
 
 /**
- * Created by Markus on 16.07.2015.
+ * ConnAir represents a ConnAir Gateway from Simple-Solutions
  */
-public class GatewayNotSupportedException extends Exception {
+public class RaspyRFM extends Gateway {
 
-    public GatewayNotSupportedException() {
-        super("Gateway found but not supported!");
+    /**
+     * Model constant
+     */
+    public static final String MODEL = "RaspyRFM";
+
+    public RaspyRFM(Long id, boolean active, String name, String firmware, String address, int port) {
+        super(id, active, name, MODEL, firmware, address, port);
+    }
+
+    @Override
+    public int getTimeout() {
+        return 0;
+    }
+
+    @Override
+    public String getModelAsString() {
+        return MODEL;
     }
 }

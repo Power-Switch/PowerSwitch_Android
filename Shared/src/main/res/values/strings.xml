@@ -79,9 +79,10 @@
 
     <!-- supported gateways, brands and models -->
     <string-array name="gateway_array">
+        <item>Brematic GWY433</item>
         <item>ConnAir</item>
         <item>ITGW-433</item>
-        <item>Brematic GWY433</item>
+        <item>RaspyRFM</item>
     </string-array>
     <string-array name="brand_array">
         <item>BAT</item>

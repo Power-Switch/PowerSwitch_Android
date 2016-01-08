@@ -46,6 +46,7 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -317,9 +318,9 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
      */
     private boolean checkPortValidity(String portText) {
         if (portText.length() <= 0) {
-            floatingPort.setError(getString(R.string.please_enter_port));
-            floatingPort.setErrorEnabled(true);
-            return false;
+            floatingPort.setError(null);
+            floatingPort.setErrorEnabled(false);
+            return true;
         } else {
             try {
                 // try to convert text to int
@@ -347,7 +348,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
      * @return Name of Gateway
      */
     public String getCurrentName() {
-        return this.name.getText().toString().trim();
+        return name.getText().toString().trim();
     }
 
     /**
@@ -356,7 +357,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
      * @return Address of Gateway
      */
     public String getCurrentAddress() {
-        return this.address.getText().toString().trim();
+        return address.getText().toString().trim();
     }
 
     /**
@@ -365,7 +366,11 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
      * @return Port of Gateway (as String)
      */
     private String getCurrentPortText() {
-        return this.port.getText().toString().trim();
+        if (port.getText().toString().trim().length() == 0) {
+            return "49880";
+        } else {
+            return port.getText().toString().trim();
+        }
     }
 
     /**
@@ -395,6 +400,9 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
                         break;
                     case ITGW433.MODEL:
                         newGateway = new ITGW433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        break;
+                    case RaspyRFM.MODEL:
+                        newGateway = new RaspyRFM((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
                         break;
                     default:
                         throw new GatewayUnknownException();
