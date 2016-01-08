@@ -26,11 +26,11 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
@@ -46,7 +46,7 @@ public class RCS1000NComfort extends Receiver implements DipReceiver {
     private String headConnAir = "TXP:0,0,10,5600,350,25,";
     private String tailConnAir = tx433version + sSpeedConnAir + ";";
 
-    private String sSpeedITGW = "125,";
+    private String sSpeedITGW = "32,";
     private String headITGW = "0,0,10,11200,350,26,0,";
     private String tailITGW = tx433version + sSpeedITGW + "0";
 
