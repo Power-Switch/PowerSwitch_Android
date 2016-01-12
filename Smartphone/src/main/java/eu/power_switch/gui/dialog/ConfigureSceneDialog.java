@@ -103,12 +103,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                try {
-                    setModified(true);
-                    setSaveButtonState(checkValidity());
-                } catch (Exception e) {
-                    setSaveButtonState(false);
-                }
+                notifyConfigurationChanged();
             }
         };
     }
@@ -130,10 +125,8 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
         }
     }
 
-    /**
-     * Updates all necessary UI components
-     */
-    private boolean checkValidity() {
+    @Override
+    protected boolean checkValidity() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureSceneDialogPage2SetupFragment setupFragment =
                 customTabAdapter.getSetupFragment();

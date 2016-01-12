@@ -98,8 +98,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
 
             @Override
             public void afterTextChanged(Editable s) {
-                setModified(true);
-                checkValidity();
+                notifyConfigurationChanged();
             }
         });
 
@@ -184,23 +183,24 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
         return R.string.configure_room;
     }
 
-    private void checkValidity() {
+    @Override
+    protected boolean checkValidity() {
         if (getCurrentRoomName().equals(originalName)) {
-            setSaveButtonState(true);
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);
+            return true;
         } else if (getCurrentRoomName().length() <= 0) {
-            setSaveButtonState(false);
             floatingName.setError(getString(R.string.please_enter_name));
             floatingName.setErrorEnabled(true);
+            return false;
         } else if (roomNames.contains(getCurrentRoomName())) {
-            setSaveButtonState(false);
             floatingName.setError(getString(R.string.room_already_exists));
             floatingName.setErrorEnabled(true);
+            return false;
         } else {
-            setSaveButtonState(true);
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);
+            return true;
         }
     }
 

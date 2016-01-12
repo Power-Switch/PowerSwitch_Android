@@ -100,12 +100,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                try {
-                    setModified(true);
-                    setSaveButtonState(checkValidity());
-                } catch (Exception e) {
-                    setSaveButtonState(false);
-                }
+                notifyConfigurationChanged();
             }
         };
     }
@@ -129,10 +124,8 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
         }
     }
 
-    /**
-     * checks validity of current configuration
-     */
-    private boolean checkValidity() {
+    @Override
+    protected boolean checkValidity() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureTimerDialogPage4SummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();

@@ -134,7 +134,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setModified(true);
+                notifyConfigurationChanged();
                 checkValidity();
             }
         };
@@ -168,8 +168,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        setModified(true);
-                        checkValidity();
+                        notifyConfigurationChanged();
                     }
                 });
                 gatewayCheckboxList.add(checkBox);
@@ -277,22 +276,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
         }
     }
 
-    /**
-     * Checks if current configuration is valid and updates views accordingly
-     */
-    private void checkValidity() {
+    @Override
+    protected boolean checkValidity() {
         boolean nameIsValid;
 
-        try {
-            String name = getCurrentName();
+        String name = getCurrentName();
 
-            nameIsValid = checkNameValidity(name);
+        nameIsValid = checkNameValidity(name);
 
-            setSaveButtonState(nameIsValid);
-        } catch (Exception e) {
-            Log.e(e);
-            setSaveButtonState(false);
-        }
+        return nameIsValid;
     }
 
     /**

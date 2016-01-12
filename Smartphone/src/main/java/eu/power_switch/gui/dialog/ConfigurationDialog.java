@@ -36,6 +36,7 @@ import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Abstract class defining a configuration Dialog
@@ -166,10 +167,6 @@ public abstract class ConfigurationDialog extends DialogFragment {
     @StringRes
     int getDialogTitle();
 
-    public ConfigurationDialog Builder() {
-        return this;
-    }
-
     /**
      * Get modification state of this Dialog
      *
@@ -186,6 +183,27 @@ public abstract class ConfigurationDialog extends DialogFragment {
      */
     protected void setModified(boolean modified) {
         this.modified = modified;
+    }
+
+    /**
+     * Checks if the current dialog configuration is valid
+     *
+     * @return true if the current configuration is valid, false otherwise
+     */
+    protected abstract boolean checkValidity() throws Exception;
+
+    /**
+     * Call this method when the configuration of the dialog has changed and UI has to be updated
+     * f.ex. bottom bar buttons
+     */
+    protected void notifyConfigurationChanged() {
+        setModified(true);
+        try {
+            setSaveButtonState(checkValidity());
+        } catch (Exception e) {
+            Log.e(e);
+            setSaveButtonState(false);
+        }
     }
 
     protected void setSaveButtonState(boolean enabled) {

@@ -127,8 +127,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setModified(true);
-                checkValidity();
+                notifyConfigurationChanged();
             }
         };
         floatingName = (TextInputLayout) rootView.findViewById(R.id.gateway_name_text_input_layout);
@@ -143,8 +142,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
         model.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setModified(true);
-                checkValidity();
+                notifyConfigurationChanged();
             }
 
             @Override
@@ -211,30 +209,23 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
         }
     }
 
-    /**
-     * Checks if current configuration is valid and updates views accordingly
-     */
-    private void checkValidity() {
+    @Override
+    protected boolean checkValidity() {
         boolean nameIsValid;
         boolean addressIsValid;
         boolean portIsValid;
         boolean gatewayAlreadyExists;
 
-        try {
-            String name = getCurrentName();
-            String address = getCurrentAddress();
-            String portText = getCurrentPortText();
+        String name = getCurrentName();
+        String address = getCurrentAddress();
+        String portText = getCurrentPortText();
 
-            nameIsValid = checkNameValidity(name);
-            addressIsValid = checkAddressValidity(address);
-            portIsValid = checkPortValidity(portText);
-            gatewayAlreadyExists = checkGatewayAlreadyExists();
+        nameIsValid = checkNameValidity(name);
+        addressIsValid = checkAddressValidity(address);
+        portIsValid = checkPortValidity(portText);
+        gatewayAlreadyExists = checkGatewayAlreadyExists();
 
-            setSaveButtonState(nameIsValid && addressIsValid && portIsValid && !gatewayAlreadyExists);
-        } catch (Exception e) {
-            Log.e(e);
-            setSaveButtonState(false);
-        }
+        return nameIsValid && addressIsValid && portIsValid && !gatewayAlreadyExists;
     }
 
     /**

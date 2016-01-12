@@ -111,18 +111,13 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                try {
-                    setModified(true);
-                    setSaveButtonState(checkValidity());
-                } catch (Exception e) {
-                    Log.e(e);
-                    setSaveButtonState(false);
-                }
+                notifyConfigurationChanged();
             }
         };
     }
 
-    private boolean checkValidity() {
+    @Override
+    protected boolean checkValidity() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
