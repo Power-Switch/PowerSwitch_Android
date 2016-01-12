@@ -60,10 +60,14 @@
         In diesem Tab kannst du Sicherungen von PowerSwitch erstellen und einen alten Zustand wiederherstellen.\n
         \nSicherungen enthalten den kompletten Appstatus, inklusive Räume, Szenen, Timer, Einstellungen etc.
     </string>
+    <string name="tutorial__gateways_explanation">
+        gateways sind toll!
+    </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>
 
     <string name="tutorial__first_add_room">Erstelle als erstes einen Raum, um anschließend deine Funksteckdosen einem Raum
         zuweisen zu können</string>
+    <string name="tutorial__wearable_settings_explanation">Die wear app ist auch toll!</string>
 
 </resources>

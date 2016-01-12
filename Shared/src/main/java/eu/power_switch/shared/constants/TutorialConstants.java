@@ -24,6 +24,7 @@ package eu.power_switch.shared.constants;
 public class TutorialConstants {
 
     public static final String MAIN_TABS_KEY_PREFIX = "main_tab_";
+    public static final String SETTINGS_TABS_KEY_PREFIX = "settings_tab_";
     public static final String SLEEP_AS_ANDROID_KEY = "SLEEP_AS_ANDOID_KEY";
     public static final String TIMERS_KEY = "TIMERS_KEY";
     public static final String APARTMENT_KEY = "APARTMENT_KEY";

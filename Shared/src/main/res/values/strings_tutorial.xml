@@ -55,9 +55,13 @@
         Create and restore backups of PowerSwitch in this tab.\n
         \nBackups contain the complete app state, including rooms, scenes, timers, settings etc.
     </string>
-
+    <string name="tutorial__gateways_explanation">
+        gateways sind toll!
+    </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Add new Rooms and Receivers using the + button</string>
     <string name="tutorial__first_add_room">At first create a room to add your devices to</string>
+    <string name="tutorial__wearable_settings_explanation">Die wear app ist auch toll!</string>
+
 
 </resources>

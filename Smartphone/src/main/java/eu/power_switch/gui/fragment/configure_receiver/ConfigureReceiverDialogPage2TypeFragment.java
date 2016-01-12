@@ -161,6 +161,14 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
             }
 
             setModelVisibility(View.VISIBLE);
+        } else if (brandName.equals(Receiver.BRAND_HAMA)) {
+            modelNamesAdapter.clear();
+            String[] array = getResources().getStringArray(R.array.model_hama_array);
+            for (String string : array) {
+                modelNamesAdapter.add(string);
+            }
+
+            setModelVisibility(View.VISIBLE);
         } else if (brandName.equals(Receiver.BRAND_INTERTECHNO)) {
             modelNamesAdapter.clear();
             String[] array = getResources().getStringArray(R.array.model_intertechno_array);
@@ -202,8 +210,13 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
 
             setModelVisibility(View.VISIBLE);
         } else if (brandName.equals(Receiver.BRAND_UNIVERSAL)) {
-            setModelVisibility(View.INVISIBLE);
+            modelNamesAdapter.clear();
+            String[] array = getResources().getStringArray(R.array.model_universal_array);
+            for (String string : array) {
+                modelNamesAdapter.add(string);
+            }
 
+            setModelVisibility(View.VISIBLE);
         } else if (brandName.equals(Receiver.BRAND_VIVANCO)) {
             modelNamesAdapter.clear();
             String[] array = getResources().getStringArray(R.array.model_vivanco_array);

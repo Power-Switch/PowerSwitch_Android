@@ -88,6 +88,7 @@
         <item>BAT</item>
         <item>Brennenstuhl</item>
         <item>Elro</item>
+        <item>Hama</item>
         <item>Intertechno</item>
         <item>Mumbi</item>
         <item>Pollin Electronic</item>
@@ -116,6 +117,9 @@
         <item>AB440SC</item>
         <item>AB440WD</item>
         <!-- <item>AB600D</item> -->
+    </string-array>
+    <string-array name="model_hama_array">
+        <item>Hama</item>
     </string-array>
     <string-array name="model_intertechno_array">
         <item>CMR 300</item>
@@ -163,6 +167,10 @@
     </string-array>
     <string-array name="model_pollin_electronic_array">
         <item>Set 2605</item>
+    </string-array>
+    <string-array name="model_universal_array">
+        <item>Custom Buttons</item>
+        <item>HX2262 Compat.</item>
     </string-array>
     <string-array name="model_vivanco_array">
         <item>FSS 31000W</item>

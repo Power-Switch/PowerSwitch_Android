@@ -31,9 +31,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.tutorial.TutorialHelper;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Fragment holding all settings related Fragments in a TabLayout
@@ -64,6 +68,22 @@ public class SettingsTabFragment extends Fragment {
         tabViewPager.setAdapter(customTabAdapter);
 
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                showTutorial(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
         tabLayout.setTabsFromPagerAdapter(customTabAdapter);
@@ -76,6 +96,48 @@ public class SettingsTabFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    private void showTutorial(int tabIndex) {
+
+        ArrayList<View> views = new ArrayList<>();
+        tabLayout.findViewsWithText(views, customTabAdapter.getPageTitle(tabIndex), View.FIND_VIEWS_WITH_TEXT);
+
+        View dummyView;
+        if (views.size() > 0) {
+            dummyView = views.get(0);
+        } else {
+            dummyView = new View(getContext());
+        }
+
+        String showcaseKey = TutorialHelper.getSettingsTabKey(customTabAdapter.getPageTitle(tabIndex).toString());
+
+        String contentText;
+        switch (tabIndex) {
+            case SettingsConstants.GENERAL_SETTINGS_TAB_INDEX:
+                // No tutorial for general Settings (as of yet),
+                // should be self explanatory for each and every item in itself
+                return;
+            case SettingsConstants.GATEWAYS_TAB_INDEX:
+                contentText = getString(R.string.tutorial__gateways_explanation);
+                break;
+            case SettingsConstants.WEARABLE_TAB_INDEX:
+                contentText = getString(R.string.tutorial__wearable_settings_explanation);
+                break;
+            default:
+                return;
+        }
+
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(dummyView)
+                .setUseAutoRadius(false)
+                .setRadius(64 * 3)
+                .setDismissOnTouch(true)
+                .setDismissText(getString(R.string.tutorial__got_it))
+                .setContentText(contentText)
+                .singleUse(showcaseKey)
+                .show();
+
     }
 
     @Override

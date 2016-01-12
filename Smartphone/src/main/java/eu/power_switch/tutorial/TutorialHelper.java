@@ -29,4 +29,7 @@ public class TutorialHelper {
         return TutorialConstants.MAIN_TABS_KEY_PREFIX + pageTitle;
     }
 
+    public static String getSettingsTabKey(String pageTitle) {
+        return TutorialConstants.SETTINGS_TABS_KEY_PREFIX + pageTitle;
+    }
 }

@@ -29,8 +29,8 @@ import java.util.Set;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.network.NetworkPackage;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.Button;
+import eu.power_switch.obj.gateway.Gateway;
 
 /**
  * Represents any kind of device that can receive network signals
@@ -118,6 +118,7 @@ public abstract class Receiver {
     public static final String BRAND_BAT = "BAT";
     public static final String BRAND_BRENNENSTUHL = "Brennenstuhl";
     public static final String BRAND_ELRO = "Elro";
+    public static final String BRAND_HAMA = "Hama";
     public static final String BRAND_INTERTECHNO = "Intertechno";
     public static final String BRAND_MUMBI = "Mumbi";
     public static final String BRAND_POLLIN_ELECTRONIC = "Pollin Electronic";
