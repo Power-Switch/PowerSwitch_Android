@@ -210,7 +210,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     }
 
     @Override
-    protected boolean checkValidity() {
+    protected boolean isValid() {
         boolean nameIsValid;
         boolean addressIsValid;
         boolean portIsValid;

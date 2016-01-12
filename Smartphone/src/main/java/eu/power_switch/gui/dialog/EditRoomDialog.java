@@ -184,7 +184,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
     }
 
     @Override
-    protected boolean checkValidity() {
+    protected boolean isValid() {
         if (getCurrentRoomName().equals(originalName)) {
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);

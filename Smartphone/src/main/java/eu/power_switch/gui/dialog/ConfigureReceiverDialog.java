@@ -117,7 +117,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean checkValidity() {
+    protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();

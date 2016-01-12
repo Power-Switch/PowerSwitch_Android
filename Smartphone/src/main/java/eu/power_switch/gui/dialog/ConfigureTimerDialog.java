@@ -125,7 +125,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean checkValidity() {
+    protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureTimerDialogPage4SummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();

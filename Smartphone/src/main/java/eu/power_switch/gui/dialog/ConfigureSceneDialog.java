@@ -126,7 +126,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean checkValidity() {
+    protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureSceneDialogPage2SetupFragment setupFragment =
                 customTabAdapter.getSetupFragment();

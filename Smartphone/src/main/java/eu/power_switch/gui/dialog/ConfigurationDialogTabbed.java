@@ -151,28 +151,40 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         return rootView;
     }
 
+    /**
+     * Initialize this dialog
+     *
+     * @param inflater           LayoutInflater
+     * @param container          ViewGroup
+     * @param savedInstanceState Bundle
+     */
     protected abstract void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
-    private void updateBottomBarButtons() {
-        if (tabViewPager.getCurrentItem() == customTabAdapter.getCount() - 1) {
-            imageButtonSave.setVisibility(View.VISIBLE);
-            imageButtonNext.setVisibility(View.GONE);
-        } else {
-            imageButtonSave.setVisibility(View.GONE);
-            imageButtonNext.setVisibility(View.VISIBLE);
-        }
-    }
-
+    /**
+     * Initialize your dialog in here using passed in arguments
+     *
+     * @param arguments arguments passed in via setArguments()
+     */
     protected abstract void initExistingData(Bundle arguments);
 
     protected void setDialogTitle(String title) {
         this.title = title;
     }
 
-    public FragmentPagerAdapter getTabAdapter() {
+    /**
+     * Get pager adapter of this configuration dialog
+     *
+     * @return FragmentPagerAdapter
+     */
+    protected FragmentPagerAdapter getTabAdapter() {
         return customTabAdapter;
     }
 
+    /**
+     * Set FragmentPagerAdapter of this configuration dialog
+     *
+     * @param fragmentPagerAdapter
+     */
     protected void setTabAdapter(FragmentPagerAdapter fragmentPagerAdapter) {
         customTabAdapter = fragmentPagerAdapter;
 
@@ -254,7 +266,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      *
      * @return true if the current configuration is valid, false otherwise
      */
-    protected abstract boolean checkValidity() throws Exception;
+    protected abstract boolean isValid() throws Exception;
 
     /**
      * Call this method when the configuration of the dialog has changed and UI has to be updated
@@ -263,13 +275,28 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
     protected void notifyConfigurationChanged() {
         setModified(true);
         try {
-            setSaveButtonState(checkValidity());
+            setSaveButtonState(isValid());
         } catch (Exception e) {
             Log.e(e);
             setSaveButtonState(false);
         }
     }
 
+    private void updateBottomBarButtons() {
+        if (tabViewPager.getCurrentItem() == customTabAdapter.getCount() - 1) {
+            imageButtonSave.setVisibility(View.VISIBLE);
+            imageButtonNext.setVisibility(View.GONE);
+        } else {
+            imageButtonSave.setVisibility(View.GONE);
+            imageButtonNext.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Set the state of the save button in the bottom bar
+     *
+     * @param enabled true: green and clickable, false: gray and NOT clickable
+     */
     protected void setSaveButtonState(boolean enabled) {
         if (enabled) {
             imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color

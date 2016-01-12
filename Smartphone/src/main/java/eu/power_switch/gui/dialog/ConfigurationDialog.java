@@ -63,7 +63,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
 
         FrameLayout contentViewContainer = (FrameLayout) rootView.findViewById(R.id.contentView);
 
-        contentView = initContentView(inflater, container, savedInstanceState);
+        contentView = initContentView(inflater, contentViewContainer, savedInstanceState);
         contentViewContainer.addView(contentView);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
@@ -119,8 +119,22 @@ public abstract class ConfigurationDialog extends DialogFragment {
         return rootView;
     }
 
+    /**
+     * Initialize the content view of this configuration dialog in here.
+     * Inflate your custom layout, find its views and bind their logic
+     *
+     * @param inflater           Layoutinflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     protected abstract View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
 
+    /**
+     * Initialize your dialog in here using passed in arguments
+     *
+     * @param arguments arguments passed in via setArguments()
+     */
     protected abstract void initExistingData(Bundle arguments);
 
     /**
@@ -190,7 +204,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
      *
      * @return true if the current configuration is valid, false otherwise
      */
-    protected abstract boolean checkValidity() throws Exception;
+    protected abstract boolean isValid() throws Exception;
 
     /**
      * Call this method when the configuration of the dialog has changed and UI has to be updated
@@ -199,13 +213,18 @@ public abstract class ConfigurationDialog extends DialogFragment {
     protected void notifyConfigurationChanged() {
         setModified(true);
         try {
-            setSaveButtonState(checkValidity());
+            setSaveButtonState(isValid());
         } catch (Exception e) {
             Log.e(e);
             setSaveButtonState(false);
         }
     }
 
+    /**
+     * Set the state of the save button in the bottom bar
+     *
+     * @param enabled true: green and clickable, false: gray and NOT clickable
+     */
     protected void setSaveButtonState(boolean enabled) {
         if (enabled) {
             imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), R.color.active_green));

@@ -135,7 +135,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
             @Override
             public void afterTextChanged(Editable s) {
                 notifyConfigurationChanged();
-                checkValidity();
+                isValid();
             }
         };
         floatingName = (TextInputLayout) rootView.findViewById(R.id.apartment_name_text_input_layout);
@@ -277,7 +277,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
     }
 
     @Override
-    protected boolean checkValidity() {
+    protected boolean isValid() {
         boolean nameIsValid;
 
         String name = getCurrentName();
