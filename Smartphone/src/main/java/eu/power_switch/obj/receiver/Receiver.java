@@ -62,6 +62,8 @@ public abstract class Receiver {
             put("AB440S", "eu.power_switch.obj.receiver.device.elro.AB440S");
             put("AB440SC", "eu.power_switch.obj.receiver.device.elro.AB440SC");
             put("AB440WD", "eu.power_switch.obj.receiver.device.elro.AB440WD");
+            // Hama
+            put("Hama", "eu.power_switch.obj.receiver.device.hama.Hama");
             // Intertechno
             put("CMR 300", "eu.power_switch.obj.receiver.device.intertechno.CMR300");
             put("CMR 500", "eu.power_switch.obj.receiver.device.intertechno.CMR500");

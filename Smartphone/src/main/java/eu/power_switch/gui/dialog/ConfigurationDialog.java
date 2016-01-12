@@ -58,7 +58,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_configure, null);
+        rootView = inflater.inflate(R.layout.dialog_configuration, null);
 
         FrameLayout contentViewContainer = (FrameLayout) rootView.findViewById(R.id.contentView);
 

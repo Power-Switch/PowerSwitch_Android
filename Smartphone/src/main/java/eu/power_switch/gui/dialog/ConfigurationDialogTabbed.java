@@ -23,23 +23,29 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 
 /**
+ * Abstract class defining a configuration Dialog with multiple tabs
+ * <p/>
+ * Every configuration Dialog has a bottom bar with 4 Buttons (Delete, Cancel, Next, Save)
+ * <p/>
  * Created by Markus on 27.12.2015.
  */
-public abstract class ConfigureDialogTabbed extends DialogFragment {
+public abstract class ConfigurationDialogTabbed extends DialogFragment {
 
     protected ImageButton imageButtonDelete;
     protected ImageButton imageButtonCancel;
@@ -48,18 +54,36 @@ public abstract class ConfigureDialogTabbed extends DialogFragment {
     private String title = "Configuration";
     private boolean modified;
     private View rootView;
-    private View contentView;
     private Runnable deleteAction;
+    private TabLayout tabLayout;
+    private ViewPager tabViewPager;
+    private FragmentPagerAdapter customTabAdapter;
+    private ImageButton imageButtonNext;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_configure, null);
+        rootView = inflater.inflate(R.layout.dialog_configuration_tabbed, null);
 
-        FrameLayout contentViewContainer = (FrameLayout) rootView.findViewById(R.id.contentView);
+        tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
+        tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
-        contentView = initView(inflater, container, savedInstanceState);
-        contentViewContainer.addView(contentView);
+            @Override
+            public void onPageSelected(int position) {
+                updateBottomBarButtons();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout_configure_dialog);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
@@ -95,6 +119,16 @@ public abstract class ConfigureDialogTabbed extends DialogFragment {
             }
         });
 
+        imageButtonNext = (ImageButton) rootView.findViewById(R.id.imageButton_next);
+        imageButtonNext.setImageDrawable(IconicsHelper.getNextIcon(getActivity()));
+        imageButtonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tabViewPager.setCurrentItem(tabViewPager.getCurrentItem() + 1, true);
+                updateBottomBarButtons();
+            }
+        });
+
         imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
         imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -109,17 +143,43 @@ public abstract class ConfigureDialogTabbed extends DialogFragment {
             }
         });
 
+        init(inflater, container, savedInstanceState);
+
         initExistingData(getArguments());
 
         return rootView;
     }
 
-    protected abstract View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+    protected abstract void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+
+    private void updateBottomBarButtons() {
+        if (tabViewPager.getCurrentItem() == customTabAdapter.getCount() - 1) {
+            imageButtonSave.setVisibility(View.VISIBLE);
+            imageButtonNext.setVisibility(View.GONE);
+        } else {
+            imageButtonSave.setVisibility(View.GONE);
+            imageButtonNext.setVisibility(View.VISIBLE);
+        }
+    }
 
     protected abstract void initExistingData(Bundle arguments);
 
     protected void setDialogTitle(String title) {
         this.title = title;
+    }
+
+    public FragmentPagerAdapter getTabAdapter() {
+        return customTabAdapter;
+    }
+
+    protected void setTabAdapter(FragmentPagerAdapter fragmentPagerAdapter) {
+        customTabAdapter = fragmentPagerAdapter;
+
+        tabViewPager.setAdapter(customTabAdapter);
+        tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
+
+        tabLayout.setTabsFromPagerAdapter(customTabAdapter);
+        tabLayout.setupWithViewPager(tabViewPager);
     }
 
     /**
@@ -158,11 +218,19 @@ public abstract class ConfigureDialogTabbed extends DialogFragment {
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager
                 .LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+
         dialog.show();
         return dialog;
     }
 
-    public ConfigureDialogTabbed Builder() {
+    public ConfigurationDialogTabbed Builder() {
         return this;
     }
 

@@ -18,34 +18,24 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
@@ -61,7 +51,7 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialog extends DialogFragment {
+public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     /**
      * ID of existing Scene to Edit
@@ -70,76 +60,15 @@ public class ConfigureSceneDialog extends DialogFragment {
 
     private BroadcastReceiver broadcastReceiver;
 
-    private View rootView;
-    private TabLayout tabLayout;
-    private CustomTabAdapter customTabAdapter;
-    private ViewPager tabViewPager;
-
-    private boolean modified;
-
     private long sceneId = -1;
 
-    private ImageButton imageButtonDelete;
-    private ImageButton imageButtonCancel;
-    private ImageButton imageButtonSave;
-    private ImageButton imageButtonNext;
-
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening ConfigureSceneDialog...");
-        rootView = inflater.inflate(R.layout.dialog_configure_scene, container, false);
+    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setDialogTitle(getString(R.string.configure_scene));
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey("SceneId")) {
-            // init dialog using existing scene
-            sceneId = args.getLong(SCENE_ID_KEY);
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
-                    getTargetFragment(),
-                    sceneId);
-        } else {
-            customTabAdapter = new CustomTabAdapter(getActivity(), getChildFragmentManager(), (RecyclerViewFragment)
-                    getTargetFragment());
-        }
-
-        // Set up the tabViewPager, attaching the adapter and setting up a listener
-        // for when the user swipes between sections.
-        tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost_add_scene_dialog);
-        tabViewPager.setAdapter(customTabAdapter);
-        tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
-
-        tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        setDeleteAction(new Runnable() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                updateUI();
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                updateUI();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
-        tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout_configure_scene_dialog);
-        tabLayout.setTabsFromPagerAdapter(customTabAdapter);
-        tabLayout.setupWithViewPager(tabViewPager);
-
-        imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
-        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
-        // hide if new receiver
-        if (sceneId == -1) {
-            imageButtonDelete.setVisibility(View.GONE);
-        }
-        imageButtonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void run() {
                 new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
                         .scene_will_be_gone_forever)
                         .setPositiveButton
@@ -171,135 +100,54 @@ public class ConfigureSceneDialog extends DialogFragment {
             }
         });
 
-        imageButtonCancel = (ImageButton) rootView.findViewById(R.id.imageButton_cancel);
-        imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
-        imageButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // ask to really close
-                if (modified) {
-                    new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    getDialog().cancel();
-                                }
-                            })
-                            .setNeutralButton(android.R.string.no, null)
-                            .setMessage(R.string.all_changes_will_be_lost)
-                            .show();
-                } else {
-                    getDialog().dismiss();
-                }
-            }
-        });
-
-        imageButtonNext = (ImageButton) rootView.findViewById(R.id.imageButton_next);
-        imageButtonNext.setImageDrawable(IconicsHelper.getNextIcon(getActivity()));
-        imageButtonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tabViewPager.setCurrentItem(tabViewPager.getCurrentItem() + 1, true);
-                updateUI();
-            }
-        });
-
-        imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
-        imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
-        imageButtonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!modified) {
-                    getDialog().dismiss();
-                } else {
-                    Log.d("Saving scene");
-                    CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
-                    ConfigureSceneDialogPage2SetupFragment setupFragment =
-                            customTabAdapter.getSetupFragment();
-                    setupFragment.saveCurrentConfigurationToDatabase();
-                    getDialog().dismiss();
-                }
-            }
-        });
-        if (sceneId == -1) {
-            setSaveButtonState(false);
-        }
-
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 try {
-                    modified = true;
-                    updateUI();
+                    setModified(true);
+                    setSaveButtonState(checkValidity());
                 } catch (Exception e) {
                     setSaveButtonState(false);
                 }
             }
         };
+    }
 
-        return rootView;
+    @Override
+    protected void initExistingData(Bundle arguments) {
+        if (arguments != null && arguments.containsKey(SCENE_ID_KEY)) {
+            // init dialog using existing scene
+            sceneId = arguments.getLong(SCENE_ID_KEY);
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+                    (RecyclerViewFragment) getTargetFragment(), sceneId));
+            imageButtonDelete.setVisibility(View.VISIBLE);
+            setSaveButtonState(true);
+        } else {
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+                    (RecyclerViewFragment) getTargetFragment()));
+            imageButtonDelete.setVisibility(View.GONE);
+            setSaveButtonState(false);
+        }
     }
 
     /**
      * Updates all necessary UI components
      */
-    private void updateUI() {
-        if (tabViewPager.getCurrentItem() == customTabAdapter.getCount() - 1) {
-            imageButtonSave.setVisibility(View.VISIBLE);
-            imageButtonNext.setVisibility(View.GONE);
-        } else {
-            imageButtonSave.setVisibility(View.GONE);
-            imageButtonNext.setVisibility(View.VISIBLE);
-        }
-
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) tabViewPager.getAdapter();
+    private boolean checkValidity() {
+        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureSceneDialogPage2SetupFragment setupFragment =
                 customTabAdapter.getSetupFragment();
-        boolean validity = setupFragment.checkValidity();
-        setSaveButtonState(validity);
-    }
-
-    private void setSaveButtonState(boolean enabled) {
-        if (enabled) {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .active_green));
-            imageButtonSave.setClickable(true);
-        } else {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .inactive_gray));
-            imageButtonSave.setClickable(false);
-        }
+        return setupFragment.checkValidity();
     }
 
     @Override
-    @NonNull
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity()) {
-            @Override
-            public void onBackPressed() {
-                // ask to really close
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getDialog().cancel();
-                            }
-                        })
-                        .setNeutralButton(android.R.string.no, null)
-                        .show();
-            }
-        };
-        dialog.setTitle(R.string.configure_scene);
-        dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialog.show();
-        dialog.getWindow().setAttributes(lp);
-        return dialog;
+    protected void saveCurrentConfigurationToDatabase() {
+        Log.d("Saving scene");
+        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+        ConfigureSceneDialogPage2SetupFragment setupFragment =
+                customTabAdapter.getSetupFragment();
+        setupFragment.saveCurrentConfigurationToDatabase();
+        getDialog().dismiss();
     }
 
     @Override
