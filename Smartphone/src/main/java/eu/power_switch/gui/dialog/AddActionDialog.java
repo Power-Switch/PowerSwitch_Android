@@ -36,6 +36,7 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
@@ -400,11 +401,13 @@ public abstract class AddActionDialog extends DialogFragment {
         try {
             Room selectedRoom = getSelectedRoom();
 
+            HashSet<String> uniqueButtonNames = new HashSet<>();
             for (Receiver receiver : selectedRoom.getReceivers()) {
                 for (Button button : receiver.getButtons()) {
-                    buttonNamesAll.add(button.getName());
+                    uniqueButtonNames.add(button.getName());
                 }
             }
+            buttonNamesAll.addAll(uniqueButtonNames);
 
             spinner_room_action_button.setSelection(0);
         } catch (Exception e) {
