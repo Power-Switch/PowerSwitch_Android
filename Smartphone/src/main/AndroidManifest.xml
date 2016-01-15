@@ -177,6 +177,11 @@
             <!--<action android:name="eu.power_switch.wear.UPDATE_DATA"/>-->
             <!--</intent-filter>-->
         </service>
+
+        <!-- LG Dual Window -->
+        <meta-data
+            android:name="com.lge.support.SPLIT_WINDOW"
+            android:value="true"/>
     </application>
 
 </manifest>
