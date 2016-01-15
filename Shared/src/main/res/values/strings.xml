@@ -90,6 +90,7 @@
         <item>Elro</item>
         <item>Hama</item>
         <item>Intertechno</item>
+        <item>Intertek</item>
         <item>Mumbi</item>
         <item>Pollin Electronic</item>
         <item>REV</item>
@@ -152,6 +153,9 @@
         <item>PA3 1000</item>
         <item>PAR 1500</item>
         <item>YCR 1000</item>
+    </string-array>
+    <string-array name="model_intertek_array">
+        <item>Model 1919361</item>
     </string-array>
     <string-array name="model_mumbi_array">
         <item>m-FS300</item>

@@ -137,96 +137,130 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     }
 
     private void updateModelList(String brandName) {
-        if (brandName.equals(Receiver.BRAND_BAT)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_bat_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
-            }
+        switch (brandName) {
+            case Receiver.BRAND_BAT: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_bat_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_BRENNENSTUHL)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_brennenstuhl_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_BRENNENSTUHL: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_brennenstuhl_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_ELRO)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_elro_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_ELRO: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_elro_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_HAMA)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_hama_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_HAMA: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_hama_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_INTERTECHNO)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_intertechno_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_INTERTECHNO: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_intertechno_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_MUMBI)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_mumbi_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_INTERTEK: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_intertek_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_POLLIN_ELECTRONIC)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_pollin_electronic_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_MUMBI: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_mumbi_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_REV)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_rev_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_POLLIN_ELECTRONIC: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_pollin_electronic_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_ROHRMOTOR24)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_rohrmotor24_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_REV: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_rev_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_UNIVERSAL)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_universal_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_ROHRMOTOR24: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_rohrmotor24_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else if (brandName.equals(Receiver.BRAND_VIVANCO)) {
-            modelNamesAdapter.clear();
-            String[] array = getResources().getStringArray(R.array.model_vivanco_array);
-            for (String string : array) {
-                modelNamesAdapter.add(string);
+                setModelVisibility(View.VISIBLE);
+                break;
             }
+            case Receiver.BRAND_UNIVERSAL: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_universal_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
 
-            setModelVisibility(View.VISIBLE);
-        } else {
-            setModelVisibility(View.GONE);
+                setModelVisibility(View.VISIBLE);
+                break;
+            }
+            case Receiver.BRAND_VIVANCO: {
+                modelNamesAdapter.clear();
+                String[] array = getResources().getStringArray(R.array.model_vivanco_array);
+                for (String string : array) {
+                    modelNamesAdapter.add(string);
+                }
+
+                setModelVisibility(View.VISIBLE);
+                break;
+            }
+            default:
+                setModelVisibility(View.GONE);
+                break;
         }
 
         if (modelNamesAdapter.getCount() > modelListView.getSelectedItemPosition()) {

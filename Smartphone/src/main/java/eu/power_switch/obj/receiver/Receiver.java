@@ -95,6 +95,8 @@ public abstract class Receiver {
             put("PA3 1000", "eu.power_switch.obj.receiver.device.intertechno.PA3_1000");
             put("PAR 1500", "eu.power_switch.obj.receiver.device.intertechno.PAR_1500");
             put("YCR 1000", "eu.power_switch.obj.receiver.device.intertechno.YCR1000");
+            //Intertek
+            put("Model 1919361", "eu.power_switch.obj.receiver.device.intertek.Model_1919361");
             // Mumbi
             put("m-FS300", "eu.power_switch.obj.receiver.device.mumbi.m_FS300");
             // Pollin
@@ -122,6 +124,7 @@ public abstract class Receiver {
     public static final String BRAND_ELRO = "Elro";
     public static final String BRAND_HAMA = "Hama";
     public static final String BRAND_INTERTECHNO = "Intertechno";
+    public static final String BRAND_INTERTEK = "Intertek";
     public static final String BRAND_MUMBI = "Mumbi";
     public static final String BRAND_POLLIN_ELECTRONIC = "Pollin Electronic";
     public static final String BRAND_REV = "REV";
