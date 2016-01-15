@@ -81,6 +81,7 @@
     <string-array name="gateway_array">
         <item>Brematic GWY433</item>
         <item>ConnAir</item>
+        <item>EZcontrol XS1</item>
         <item>ITGW-433</item>
         <item>RaspyRFM</item>
     </string-array>

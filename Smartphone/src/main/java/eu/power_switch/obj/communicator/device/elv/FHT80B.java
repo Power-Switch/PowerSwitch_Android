@@ -16,30 +16,41 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.gateway;
+package eu.power_switch.obj.communicator.device.elv;
+
+import eu.power_switch.obj.HeatingControl;
+import eu.power_switch.obj.communicator.Communicator;
 
 /**
- * ConnAir represents a ConnAir Gateway from Simple-Solutions
+ * ELV FHT80B-2/3 Heating Control
+ * <p/>
+ * Created by Markus on 15.01.2016.
  */
-public class ConnAir extends Gateway {
+public class FHT80B extends Communicator implements HeatingControl {
 
     /**
-     * Model constant
+     * Currently set targetTemperature
      */
-    public static final String MODEL = "ConnAir";
+    private double targetTemperature;
 
-    public ConnAir(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
-        capabilities.add(Capability.SEND);
+    public FHT80B(Long id) {
+        super(id);
     }
 
     @Override
-    public int getTimeout() {
-        return 0;
+    public Object getValue(Object key) {
+        return null;
     }
 
     @Override
-    public String getModelAsString() {
-        return MODEL;
+    public double getTargetTemperature() {
+        return targetTemperature;
+    }
+
+    @Override
+    public void setTargetTemperature(double targetTemperature) throws Exception {
+        // TODO: sende Befehl an Gateway
+
+        this.targetTemperature = targetTemperature;
     }
 }

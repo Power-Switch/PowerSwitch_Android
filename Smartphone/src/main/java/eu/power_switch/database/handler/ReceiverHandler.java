@@ -52,7 +52,7 @@ class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_ROOM_ID, receiver.getRoomId());
         values.put(ReceiverTable.COLUMN_MODEL, receiver.getModel());
         values.put(ReceiverTable.COLUMN_CLASSNAME, receiver.getClass().getName());
-        values.put(ReceiverTable.COLUMN_TYPE, receiver.getType());
+        values.put(ReceiverTable.COLUMN_TYPE, receiver.getType().toString());
         values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, RoomHandler.get(receiver.getRoomId()).getReceivers().size());
 
         Long dbInsertReturnValue = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
@@ -71,20 +71,25 @@ class ReceiverHandler {
      * @param receiverId ID of the new Receiver in database
      */
     private static void insertDetails(Receiver receiver, Long receiverId) {
-        String type = receiver.getType();
-        if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
-            MasterSlaveReceiver receiverAsMasterSlave = (MasterSlaveReceiver) receiver;
-            MasterSlaveReceiverHandler.add(receiverId, receiverAsMasterSlave.getMaster(),
-                    receiverAsMasterSlave.getSlave());
-        } else if (type.equals(Receiver.TYPE_DIPS)) {
-            DipReceiver receiverAsDipReceiver = (DipReceiver) receiver;
-            DipHandler.add(receiverId, receiverAsDipReceiver);
-        } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
-            UniversalReceiver receiverAsUniversalReceiver = (UniversalReceiver) receiver;
-            UniversalButtonHandler.addUniversalButtons(receiverId, receiverAsUniversalReceiver.getUniversalButtons());
-        } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
-            AutoPairReceiver receiverAsAutoPairReceiver = (AutoPairReceiver) receiver;
-            AutoPairHandler.add(receiverId, receiverAsAutoPairReceiver.getSeed());
+        Receiver.Type type = receiver.getType();
+        switch (type) {
+            case MASTER_SLAVE:
+                MasterSlaveReceiver receiverAsMasterSlave = (MasterSlaveReceiver) receiver;
+                MasterSlaveReceiverHandler.add(receiverId, receiverAsMasterSlave.getMaster(),
+                        receiverAsMasterSlave.getSlave());
+                break;
+            case DIPS:
+                DipReceiver receiverAsDipReceiver = (DipReceiver) receiver;
+                DipHandler.add(receiverId, receiverAsDipReceiver);
+                break;
+            case UNIVERSAL:
+                UniversalReceiver receiverAsUniversalReceiver = (UniversalReceiver) receiver;
+                UniversalButtonHandler.addUniversalButtons(receiverId, receiverAsUniversalReceiver.getUniversalButtons());
+                break;
+            case AUTOPAIR:
+                AutoPairReceiver receiverAsAutoPairReceiver = (AutoPairReceiver) receiver;
+                AutoPairHandler.add(receiverId, receiverAsAutoPairReceiver.getSeed());
+                break;
         }
     }
 
@@ -101,7 +106,7 @@ class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_ROOM_ID, receiver.getRoomId());
         values.put(ReceiverTable.COLUMN_MODEL, receiver.getModel());
         values.put(ReceiverTable.COLUMN_CLASSNAME, receiver.getClass().getName());
-        values.put(ReceiverTable.COLUMN_TYPE, receiver.getType());
+        values.put(ReceiverTable.COLUMN_TYPE, receiver.getType().toString());
 
         DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
                 ReceiverTable.COLUMN_ID + "=" + receiver.getId(), null);
@@ -233,15 +238,19 @@ class ReceiverHandler {
      * @param id ID of Receiver
      */
     private static void deleteDetails(Long id) {
-        String type = getType(id);
-        if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
-            MasterSlaveReceiverHandler.delete(id);
-        } else if (type.equals(Receiver.TYPE_DIPS)) {
-            DipHandler.delete(id);
-        } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
-            UniversalButtonHandler.deleteUniversalButtons(id);
-        } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
-            AutoPairHandler.delete(id);
+        switch (getType(id)) {
+            case DIPS:
+                DipHandler.delete(id);
+                break;
+            case MASTER_SLAVE:
+                MasterSlaveReceiverHandler.delete(id);
+                break;
+            case UNIVERSAL:
+                UniversalButtonHandler.deleteUniversalButtons(id);
+                break;
+            case AUTOPAIR:
+                AutoPairHandler.delete(id);
+                break;
         }
     }
 
@@ -251,12 +260,12 @@ class ReceiverHandler {
      * @param id ID of Receiver
      * @return Type of Receiver
      */
-    protected static String getType(Long id) {
+    protected static Receiver.Type getType(Long id) {
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_TYPE};
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID +
                 "=" + id, null, null, null, null);
         cursor.moveToFirst();
-        String type = cursor.getString(1);
+        Receiver.Type type = Receiver.Type.getEnum(cursor.getString(1));
         cursor.close();
         return type;
     }

@@ -44,6 +44,7 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
+import eu.power_switch.obj.gateway.EZcontrol_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
@@ -388,6 +389,9 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
                         break;
                     case ConnAir.MODEL:
                         newGateway = new ConnAir((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        break;
+                    case EZcontrol_XS1.MODEL:
+                        newGateway = new EZcontrol_XS1((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
                         break;
                     case ITGW433.MODEL:
                         newGateway = new ITGW433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);

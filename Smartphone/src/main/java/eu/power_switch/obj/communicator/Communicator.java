@@ -16,30 +16,45 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.gateway;
+package eu.power_switch.obj.communicator;
 
 /**
- * ConnAir represents a ConnAir Gateway from Simple-Solutions
+ * This class represents a network device, that is able to send data to the smartphone application as well as receive
+ * data from it for executing actions or setting values
+ * <p/>
+ * Created by Markus on 15.01.2016.
  */
-public class ConnAir extends Gateway {
+public abstract class Communicator {
 
     /**
-     * Model constant
+     * ID of this communicator
      */
-    public static final String MODEL = "ConnAir";
+    protected Long id;
 
-    public ConnAir(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
-        capabilities.add(Capability.SEND);
+    /**
+     * Name of this Communicator
+     */
+    protected String name;
+
+    /**
+     * Brand of this Communicator
+     */
+    protected String brand;
+
+    /**
+     * Model of this Communicator
+     */
+    protected String model;
+
+    /**
+     * Constructor
+     *
+     * @param id ID of this Communicator
+     */
+    public Communicator(Long id) {
+        this.id = id;
     }
 
-    @Override
-    public int getTimeout() {
-        return 0;
-    }
+    public abstract Object getValue(Object key);
 
-    @Override
-    public String getModelAsString() {
-        return MODEL;
-    }
 }

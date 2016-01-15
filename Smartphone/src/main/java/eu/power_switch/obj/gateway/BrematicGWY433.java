@@ -30,6 +30,7 @@ public class BrematicGWY433 extends Gateway {
 
     public BrematicGWY433(Long id, boolean active, String name, String firmware, String address, int port) {
         super(id, active, name, MODEL, firmware, address, port);
+        capabilities.add(Capability.SEND);
     }
 
     @Override

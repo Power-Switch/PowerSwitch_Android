@@ -16,30 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.gateway;
+package eu.power_switch.obj.sensor;
 
 /**
- * ConnAir represents a ConnAir Gateway from Simple-Solutions
+ * This class represents a network device that is only able to broadcast data to the smartphone application, like a
+ * temperature sensor, light intensity sensor etc.
+ * <p/>
+ * Created by Markus on 15.01.2016.
  */
-public class ConnAir extends Gateway {
+public abstract class Sensor {
 
     /**
-     * Model constant
+     * ID of this Sensor
      */
-    public static final String MODEL = "ConnAir";
+    Long id;
 
-    public ConnAir(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
-        capabilities.add(Capability.SEND);
+    /**
+     * Constructor
+     *
+     * @param id ID of this Sensor
+     */
+    public Sensor(Long id) {
+        this.id = id;
     }
 
-    @Override
-    public int getTimeout() {
-        return 0;
-    }
-
-    @Override
-    public String getModelAsString() {
-        return MODEL;
-    }
 }

@@ -61,7 +61,7 @@ public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveRec
     private int channelSlave;
 
     public IT1500(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId) {
-        super(context, id, name, BRAND, MODEL, TYPE_MASTER_SLAVE, roomId);
+        super(context, id, name, BRAND, MODEL, Type.MASTER_SLAVE, roomId);
         buttons.add(new Button(Button.BUTTON_ON_ID, context.getString(R.string.on), id));
         buttons.add(new Button(Button.BUTTON_OFF_ID, context.getString(R.string.off), id));
         this.channelMaster = channelMaster;
@@ -69,7 +69,7 @@ public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveRec
     }
 
     public IT1500(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, TYPE_AUTOPAIR, roomId);
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
         buttons.add(new Button(Button.BUTTON_ON_ID, context.getString(R.string.on), id));
         buttons.add(new Button(Button.BUTTON_OFF_ID, context.getString(R.string.off), id));
 
@@ -128,7 +128,7 @@ public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveRec
 
     @Override
     protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
-        if (getType().equals(TYPE_MASTER_SLAVE)) {
+        if (getType().equals(Type.MASTER_SLAVE)) {
             return getMasterSlaveSignal(gateway, action);
         } else {
             return getAutoPairSignal(gateway, action);

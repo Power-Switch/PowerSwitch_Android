@@ -405,18 +405,23 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
     }
 
     private void initType(Receiver receiver) {
-        if (Receiver.TYPE_AUTOPAIR.equals(receiver.getType())) {
-            currentAutoPairReceiver = receiver;
-            updateUi(receiver);
-        } else if (Receiver.TYPE_DIPS.equals(receiver.getType())) {
-            updateUi(receiver);
-            initData((DipReceiver) receiver);
-        } else if (Receiver.TYPE_MASTER_SLAVE.equals(receiver.getType())) {
-            updateUi(receiver);
-            initData((MasterSlaveReceiver) receiver);
-        } else if (Receiver.TYPE_UNIVERSAL.equals(receiver.getType())) {
-            updateUi(receiver);
-            initData((UniversalReceiver) receiver);
+        switch (receiver.getType()) {
+            case DIPS:
+                updateUi(receiver);
+                initData((DipReceiver) receiver);
+                break;
+            case MASTER_SLAVE:
+                updateUi(receiver);
+                initData((MasterSlaveReceiver) receiver);
+                break;
+            case UNIVERSAL:
+                updateUi(receiver);
+                initData((UniversalReceiver) receiver);
+                break;
+            case AUTOPAIR:
+                currentAutoPairReceiver = receiver;
+                updateUi(receiver);
+                break;
         }
     }
 
@@ -426,26 +431,33 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
             layoutDip.setVisibility(View.GONE);
             layoutAutoPair.setVisibility(View.GONE);
             layoutUniversal.setVisibility(View.GONE);
-        } else if (Receiver.TYPE_AUTOPAIR.equals(receiver.getType())) {
-            layoutMasterSlave.setVisibility(View.GONE);
-            layoutDip.setVisibility(View.GONE);
-            layoutAutoPair.setVisibility(View.VISIBLE);
-            layoutUniversal.setVisibility(View.GONE);
-        } else if (Receiver.TYPE_DIPS.equals(receiver.getType())) {
-            layoutMasterSlave.setVisibility(View.GONE);
-            layoutDip.setVisibility(View.VISIBLE);
-            layoutAutoPair.setVisibility(View.GONE);
-            layoutUniversal.setVisibility(View.GONE);
-        } else if (Receiver.TYPE_MASTER_SLAVE.equals(receiver.getType())) {
-            layoutMasterSlave.setVisibility(View.VISIBLE);
-            layoutDip.setVisibility(View.GONE);
-            layoutAutoPair.setVisibility(View.GONE);
-            layoutUniversal.setVisibility(View.GONE);
-        } else if (Receiver.TYPE_UNIVERSAL.equals(receiver.getType())) {
-            layoutMasterSlave.setVisibility(View.GONE);
-            layoutDip.setVisibility(View.GONE);
-            layoutAutoPair.setVisibility(View.GONE);
-            layoutUniversal.setVisibility(View.VISIBLE);
+        } else {
+            switch (receiver.getType()) {
+                case DIPS:
+                    layoutMasterSlave.setVisibility(View.GONE);
+                    layoutDip.setVisibility(View.VISIBLE);
+                    layoutAutoPair.setVisibility(View.GONE);
+                    layoutUniversal.setVisibility(View.GONE);
+                    break;
+                case MASTER_SLAVE:
+                    layoutMasterSlave.setVisibility(View.VISIBLE);
+                    layoutDip.setVisibility(View.GONE);
+                    layoutAutoPair.setVisibility(View.GONE);
+                    layoutUniversal.setVisibility(View.GONE);
+                    break;
+                case UNIVERSAL:
+                    layoutMasterSlave.setVisibility(View.GONE);
+                    layoutDip.setVisibility(View.GONE);
+                    layoutAutoPair.setVisibility(View.GONE);
+                    layoutUniversal.setVisibility(View.VISIBLE);
+                    break;
+                case AUTOPAIR:
+                    layoutMasterSlave.setVisibility(View.GONE);
+                    layoutDip.setVisibility(View.GONE);
+                    layoutAutoPair.setVisibility(View.VISIBLE);
+                    layoutUniversal.setVisibility(View.GONE);
+                    break;
+            }
         }
     }
 

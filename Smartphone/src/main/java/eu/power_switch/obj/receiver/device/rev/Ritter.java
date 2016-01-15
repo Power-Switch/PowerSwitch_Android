@@ -26,11 +26,11 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
@@ -53,7 +53,7 @@ public class Ritter extends Receiver implements DipReceiver {
     private LinkedList<DipSwitch> dipList;
 
     public Ritter(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, BRAND, MODEL, TYPE_DIPS, roomId);
+        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId);
         dipList = new LinkedList<>();
 
         if (dips != null && dips.size() == 10) {

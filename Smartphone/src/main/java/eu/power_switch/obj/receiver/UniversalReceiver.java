@@ -35,7 +35,7 @@ public class UniversalReceiver extends Receiver {
 
     public UniversalReceiver(Context context, Long id, String name, List<UniversalButton> buttons, Long
             roomId) {
-        super(context, id, name, BRAND_UNIVERSAL, BRAND_UNIVERSAL, TYPE_UNIVERSAL, roomId);
+        super(context, id, name, BRAND_UNIVERSAL, BRAND_UNIVERSAL, Type.UNIVERSAL, roomId);
         universalButtons.addAll(buttons);
         for (UniversalButton universalButton : universalButtons) {
             this.buttons.add(new Button(universalButton.getId(), universalButton.getName(), universalButton

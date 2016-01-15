@@ -16,30 +16,15 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.gateway;
+package eu.power_switch.obj;
 
 /**
- * ConnAir represents a ConnAir Gateway from Simple-Solutions
+ * Created by Markus on 15.01.2016.
  */
-public class ConnAir extends Gateway {
+public interface HeatingControl {
 
-    /**
-     * Model constant
-     */
-    public static final String MODEL = "ConnAir";
+    double getTargetTemperature();
 
-    public ConnAir(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
-        capabilities.add(Capability.SEND);
-    }
+    void setTargetTemperature(double targetTemperature) throws Exception;
 
-    @Override
-    public int getTimeout() {
-        return 0;
-    }
-
-    @Override
-    public String getModelAsString() {
-        return MODEL;
-    }
 }

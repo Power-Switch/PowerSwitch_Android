@@ -19,18 +19,19 @@
 package eu.power_switch.obj.gateway;
 
 /**
- * ConnAir represents a ConnAir Gateway from Simple-Solutions
+ * Created by Markus on 15.01.2016.
  */
-public class ConnAir extends Gateway {
+public class EZcontrol_XS1 extends Gateway {
 
     /**
      * Model constant
      */
-    public static final String MODEL = "ConnAir";
+    public static final String MODEL = "EZcontrol XS1";
 
-    public ConnAir(Long id, boolean active, String name, String firmware, String address, int port) {
+    public EZcontrol_XS1(Long id, boolean active, String name, String firmware, String address, int port) {
         super(id, active, name, MODEL, firmware, address, port);
         capabilities.add(Capability.SEND);
+        capabilities.add(Capability.RECEIVE);
     }
 
     @Override

@@ -49,7 +49,7 @@ public abstract class ReceiverReflectionMagic {
         Long id = cursor.getLong(0);
         String name = cursor.getString(1);
         String model = cursor.getString(2);
-        String type = cursor.getString(3);
+        Receiver.Type type = Receiver.Type.getEnum(cursor.getString(3));
         String className = cursor.getString(4);
         Long roomId = cursor.getLong(5);
 
@@ -64,25 +64,28 @@ public abstract class ReceiverReflectionMagic {
 
         Constructor<?> constructor = getConstructor(className, type);
 
-        if (type.equals(Receiver.TYPE_DIPS)) {
-            LinkedList<Boolean> dips = DipHandler.getDips(id);
-            receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId);
-        } else if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
-            Character channelMaster = MasterSlaveReceiverHandler.getMaster(id);
-            int channelSlave = MasterSlaveReceiverHandler.getSlave(id);
-            receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId);
-        } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
-            long seed = AutoPairHandler.getSeed(id);
-            receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId);
-        } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
-            List<UniversalButton> buttons = UniversalButtonHandler.getUniversalButtons(id);
-            receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId);
+        switch (type) {
+            case MASTER_SLAVE:
+                Character channelMaster = MasterSlaveReceiverHandler.getMaster(id);
+                int channelSlave = MasterSlaveReceiverHandler.getSlave(id);
+                receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId);
+                break;
+            case DIPS:
+                LinkedList<Boolean> dips = DipHandler.getDips(id);
+                receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId);
+                break;
+            case UNIVERSAL:
+                List<UniversalButton> buttons = UniversalButtonHandler.getUniversalButtons(id);
+                receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId);
+                break;
+            case AUTOPAIR:
+                long seed = AutoPairHandler.getSeed(id);
+                receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId);
+                break;
         }
 
-        if (receiver != null) {
-            receiver.setPositionInRoom(positionInRoom);
-            receiver.setLastActivatedButtonId(lastActivatedButtonId);
-        }
+        receiver.setPositionInRoom(positionInRoom);
+        receiver.setLastActivatedButtonId(lastActivatedButtonId);
 
         return receiver;
     }
@@ -97,21 +100,23 @@ public abstract class ReceiverReflectionMagic {
      * @throws NoSuchMethodException
      * @throws IllegalArgumentException
      */
-    public static Constructor<?> getConstructor(String className, String type) throws ClassNotFoundException, NoSuchMethodException, IllegalArgumentException {
-        Constructor<?> constructor = null;
+    public static Constructor<?> getConstructor(String className, Receiver.Type type) throws ClassNotFoundException,
+            NoSuchMethodException, IllegalArgumentException {
         Class<?> myClass = Class.forName(className);
 
-        if (type.equals(Receiver.TYPE_DIPS)) {
-            constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
-        } else if (type.equals(Receiver.TYPE_MASTER_SLAVE)) {
-            constructor = myClass.getConstructor(Context.class, Long.class, String.class, char.class, int.class,
-                    Long.class);
-        } else if (type.equals(Receiver.TYPE_AUTOPAIR)) {
-            constructor = myClass.getConstructor(Context.class, Long.class, String.class, long.class, Long.class);
-        } else if (type.equals(Receiver.TYPE_UNIVERSAL)) {
-            constructor = myClass.getConstructor(Context.class, Long.class, String.class, List.class, Long.class);
+        switch (type) {
+            case DIPS:
+                return myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
+            case MASTER_SLAVE:
+                return myClass.getConstructor(Context.class, Long.class, String.class, char.class, int.class,
+                        Long.class);
+            case UNIVERSAL:
+                return myClass.getConstructor(Context.class, Long.class, String.class, List.class, Long.class);
+            case AUTOPAIR:
+                return myClass.getConstructor(Context.class, Long.class, String.class, long.class, Long.class);
+            default:
+                throw new ClassNotFoundException("Unknown type " + type.toString());
         }
-        return constructor;
     }
 
     /**
@@ -120,26 +125,25 @@ public abstract class ReceiverReflectionMagic {
      * @param javaPath The java path of the Receiver.
      * @return The type of the Receiver or null if unknown.
      */
-    public static String getType(String javaPath) throws ClassNotFoundException {
+    public static Receiver.Type getType(String javaPath) throws ClassNotFoundException {
 
         Class<?> myClass = Class.forName(javaPath);
         Class<?>[] implementedInterfaces = myClass.getInterfaces();
 
         for (Class<?> someClass : implementedInterfaces) {
             if (someClass.equals(MasterSlaveReceiver.class)) {
-                return Receiver.TYPE_MASTER_SLAVE;
+                return Receiver.Type.MASTER_SLAVE;
             } else if (someClass.equals(DipReceiver.class)) {
-                return Receiver.TYPE_DIPS;
+                return Receiver.Type.DIPS;
             } else if (someClass.equals(AutoPairReceiver.class)) {
-                return Receiver.TYPE_AUTOPAIR;
+                return Receiver.Type.AUTOPAIR;
             }
         }
         if (myClass.equals(UniversalReceiver.class)) {
-            return Receiver.TYPE_UNIVERSAL;
+            return Receiver.Type.UNIVERSAL;
         }
 
-        // throw new Exception("Unknown Receiver Type");
-        return null;
+        throw new ClassNotFoundException("Unknown Receiver Type/Classpath");
     }
 
     /**

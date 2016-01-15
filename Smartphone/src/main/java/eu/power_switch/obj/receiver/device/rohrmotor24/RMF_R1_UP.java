@@ -25,11 +25,11 @@ import java.util.Random;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 
@@ -50,7 +50,7 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
     private long seed = -1;
 
     public RMF_R1_UP(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, TYPE_AUTOPAIR, roomId);
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
         buttons.add(new Button(Button.BUTTON_UP_ID, context.getString(R.string.up), id));
         if (seed == -1) {
             // init seed for this receiver instance, to always generate the same codes from now on

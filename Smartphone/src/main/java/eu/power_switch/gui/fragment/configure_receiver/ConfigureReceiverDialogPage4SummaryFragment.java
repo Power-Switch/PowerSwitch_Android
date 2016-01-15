@@ -73,7 +73,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
     private String currentRoomName;
     private String currentBrand;
     private String currentModel;
-    private String currentType;
+    private Receiver.Type currentType;
     private List<DipSwitch> currentDips;
     private char currentMaster;
     private int currentSlave;
@@ -194,15 +194,20 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
             currentBrand = receiver.getBrand();
             currentModel = receiver.getModel();
 
-            if (currentType.equals(Receiver.TYPE_MASTER_SLAVE)) {
-                currentMaster = ((MasterSlaveReceiver) receiver).getMaster();
-                currentSlave = ((MasterSlaveReceiver) receiver).getSlave();
-            } else if (currentType.equals(Receiver.TYPE_DIPS)) {
-                currentDips = ((DipReceiver) receiver).getDips();
-            } else if (currentType.equals(Receiver.TYPE_AUTOPAIR)) {
-                currentSeed = ((AutoPairReceiver) receiver).getSeed();
-            } else if (currentType.equals(Receiver.TYPE_UNIVERSAL)) {
-                currentUniversalButtons = ((UniversalReceiver) receiver).getUniversalButtons();
+            switch (currentType) {
+                case DIPS:
+                    currentDips = ((DipReceiver) receiver).getDips();
+                    break;
+                case MASTER_SLAVE:
+                    currentMaster = ((MasterSlaveReceiver) receiver).getMaster();
+                    currentSlave = ((MasterSlaveReceiver) receiver).getSlave();
+                    break;
+                case UNIVERSAL:
+                    currentUniversalButtons = ((UniversalReceiver) receiver).getUniversalButtons();
+                    break;
+                case AUTOPAIR:
+                    currentSeed = ((AutoPairReceiver) receiver).getSeed();
+                    break;
             }
 
         } catch (Exception e) {
@@ -261,26 +266,31 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
 
     private void updateUiVisibility() {
         if (currentType != null) {
-            if (currentType.equals(Receiver.TYPE_UNIVERSAL)) {
-                linearLayoutMasterSlaveReceiver.setVisibility(View.GONE);
-                linearLayoutDipReceiver.setVisibility(View.GONE);
-                linearLayoutAutoPairReceiver.setVisibility(View.GONE);
-                linearLayoutUniversalReceiver.setVisibility(View.VISIBLE);
-            } else if (currentType.equals(Receiver.TYPE_AUTOPAIR)) {
-                linearLayoutMasterSlaveReceiver.setVisibility(View.GONE);
-                linearLayoutDipReceiver.setVisibility(View.GONE);
-                linearLayoutAutoPairReceiver.setVisibility(View.VISIBLE);
-                linearLayoutUniversalReceiver.setVisibility(View.GONE);
-            } else if (currentType.equals(Receiver.TYPE_DIPS)) {
-                linearLayoutMasterSlaveReceiver.setVisibility(View.GONE);
-                linearLayoutDipReceiver.setVisibility(View.VISIBLE);
-                linearLayoutAutoPairReceiver.setVisibility(View.GONE);
-                linearLayoutUniversalReceiver.setVisibility(View.GONE);
-            } else if (currentType.equals(Receiver.TYPE_MASTER_SLAVE)) {
-                linearLayoutMasterSlaveReceiver.setVisibility(View.VISIBLE);
-                linearLayoutDipReceiver.setVisibility(View.GONE);
-                linearLayoutAutoPairReceiver.setVisibility(View.GONE);
-                linearLayoutUniversalReceiver.setVisibility(View.GONE);
+            switch (currentType) {
+                case DIPS:
+                    linearLayoutMasterSlaveReceiver.setVisibility(View.GONE);
+                    linearLayoutDipReceiver.setVisibility(View.VISIBLE);
+                    linearLayoutAutoPairReceiver.setVisibility(View.GONE);
+                    linearLayoutUniversalReceiver.setVisibility(View.GONE);
+                    break;
+                case MASTER_SLAVE:
+                    linearLayoutMasterSlaveReceiver.setVisibility(View.VISIBLE);
+                    linearLayoutDipReceiver.setVisibility(View.GONE);
+                    linearLayoutAutoPairReceiver.setVisibility(View.GONE);
+                    linearLayoutUniversalReceiver.setVisibility(View.GONE);
+                    break;
+                case UNIVERSAL:
+                    linearLayoutMasterSlaveReceiver.setVisibility(View.GONE);
+                    linearLayoutDipReceiver.setVisibility(View.GONE);
+                    linearLayoutAutoPairReceiver.setVisibility(View.GONE);
+                    linearLayoutUniversalReceiver.setVisibility(View.VISIBLE);
+                    break;
+                case AUTOPAIR:
+                    linearLayoutMasterSlaveReceiver.setVisibility(View.GONE);
+                    linearLayoutDipReceiver.setVisibility(View.GONE);
+                    linearLayoutAutoPairReceiver.setVisibility(View.VISIBLE);
+                    linearLayoutUniversalReceiver.setVisibility(View.GONE);
+                    break;
             }
         } else {
             linearLayoutMasterSlaveReceiver.setVisibility(View.GONE);
@@ -308,35 +318,27 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
             return false;
         }
 
-        if (currentType.equals(Receiver.TYPE_DIPS)) {
-            if (currentDips == null) {
-                return false;
-            }
-            return true;
-        } else if (currentType.equals(Receiver.TYPE_MASTER_SLAVE)) {
-            if (currentMaster == '\u0000') {
-                return false;
-            }
-            if (currentSlave <= 0) {
-                return false;
-            }
-            return true;
-        } else if (currentType.equals(Receiver.TYPE_AUTOPAIR)) {
-            if (currentSeed == -1) {
-                return false;
-            }
-            return true;
-        } else if (currentType.equals(Receiver.TYPE_UNIVERSAL)) {
-            if (currentUniversalButtons == null || currentUniversalButtons.size() == 0) {
-                return false;
-            } else {
-                for (UniversalButton universalButton : currentUniversalButtons) {
-                    if (universalButton.getName().length() == 0 || universalButton.getSignal().length() == 0) {
-                        return false;
-                    }
+        switch (currentType) {
+            case DIPS:
+                return currentDips != null;
+            case MASTER_SLAVE:
+                if (currentMaster == '\u0000') {
+                    return false;
                 }
-                return true;
-            }
+                return currentSlave > 0;
+            case UNIVERSAL:
+                if (currentUniversalButtons == null || currentUniversalButtons.size() == 0) {
+                    return false;
+                } else {
+                    for (UniversalButton universalButton : currentUniversalButtons) {
+                        if (universalButton.getName().length() == 0 || universalButton.getSignal().length() == 0) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            case AUTOPAIR:
+                return currentSeed != -1;
         }
 
         return false;
@@ -348,34 +350,37 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         String modelName = currentModel;
 
         String className = Receiver.receiverMap.get(modelName);
-        String type = ReceiverReflectionMagic.getType(className);
+        Receiver.Type type = ReceiverReflectionMagic.getType(className);
 
         Constructor<?> constructor = ReceiverReflectionMagic.getConstructor(className, type);
 
         Receiver receiver = null;
-        if (Receiver.TYPE_MASTER_SLAVE.equals(type)) {
-            receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentMaster, currentSlave, room
-                    .getId());
-        } else if (Receiver.TYPE_DIPS.equals(type)) {
-            LinkedList<Boolean> dipValues = new LinkedList<>();
-            for (DipSwitch dipSwitch : currentDips) {
-                dipValues.add(dipSwitch.isChecked());
-            }
+        switch (type) {
+            case DIPS:
+                LinkedList<Boolean> dipValues = new LinkedList<>();
+                for (DipSwitch dipSwitch : currentDips) {
+                    dipValues.add(dipSwitch.isChecked());
+                }
 
-            receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, dipValues, room.getId());
-        } else if (Receiver.TYPE_AUTOPAIR.equals(type)) {
-            receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentSeed, room.getId());
-        } else if (Receiver.TYPE_UNIVERSAL.equals(type)) {
-            receiver = new UniversalReceiver(getActivity(), currentId, currentName, currentUniversalButtons,
-                    room.getId());
+                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, dipValues, room.getId());
+                break;
+            case MASTER_SLAVE:
+                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentMaster, currentSlave, room
+                        .getId());
+                break;
+            case UNIVERSAL:
+                receiver = new UniversalReceiver(getActivity(), currentId, currentName, currentUniversalButtons,
+                        room.getId());
+                break;
+            case AUTOPAIR:
+                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentSeed, room.getId());
+                break;
         }
 
-        if (receiver != null) {
-            if (currentId == -1) {
-                DatabaseHandler.addReceiver(receiver);
-            } else {
-                DatabaseHandler.updateReceiver(receiver);
-            }
+        if (currentId == -1) {
+            DatabaseHandler.addReceiver(receiver);
+        } else {
+            DatabaseHandler.updateReceiver(receiver);
         }
 
 

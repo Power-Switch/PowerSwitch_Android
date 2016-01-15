@@ -132,27 +132,58 @@ public abstract class Receiver {
     public static final String BRAND_UNIVERSAL = "Universal";
     public static final String BRAND_VIVANCO = "Vivanco";
 
-    /**
-     * Type constants
-     */
-    public static final String TYPE_DIPS = "Dips";
-    public static final String TYPE_MASTER_SLAVE = "MasterSlave";
-    public static final String TYPE_UNIVERSAL = "Universal";
-    public static final String TYPE_AUTOPAIR = "AutoPair";
-
     protected Context context;
-
+    /**
+     * ID of this Receiver
+     */
     protected Long id;
+    /**
+     * Name of this Receiver
+     */
     protected String name;
+    /**
+     * Brand of this Receiver
+     */
     protected String brand;
+    /**
+     * Model of this Receiver
+     */
     protected String model;
+    /**
+     * Buttons of this Receiver
+     */
     protected LinkedList<Button> buttons;
+    /**
+     * Room ID of this Receiver
+     */
     protected Long roomId;
-    protected String type;
+    /**
+     * Type of this Receiver {@see TYPE}
+     */
+    protected Type type;
+
+    /**
+     * Position in room (list) of this Receiver
+     */
     protected Integer positionInRoom = -1;
+
+    /**
+     * ID of last activated Button of this Receiver
+     */
     protected Long lastActivatedButtonId = (long) -1;
 
-    public Receiver(Context context, Long id, String name, String brand, String model, String type, Long roomId) {
+    /**
+     * Constructor
+     *
+     * @param context any suitable context
+     * @param id      ID of this Receiver
+     * @param name    Name of this Receiver
+     * @param brand   Brand of this Receiver
+     * @param model   Model of this Receiver
+     * @param type    Type of this Receiver {@see TYPE}
+     * @param roomId  Room ID of this Receiver
+     */
+    public Receiver(Context context, Long id, String name, String brand, String model, Type type, Long roomId) {
         this.context = context;
         this.id = id;
         this.name = name;
@@ -205,7 +236,7 @@ public abstract class Receiver {
         return roomId;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
@@ -240,4 +271,49 @@ public abstract class Receiver {
         }
         return null;
     }
+
+    /**
+     * Type constants
+     */
+    public enum Type {
+        DIPS,
+        MASTER_SLAVE,
+        UNIVERSAL,
+        AUTOPAIR;
+
+        /**
+         * @param name
+         * @return
+         */
+        public static Type getEnum(String name) {
+            if (DIPS.toString().equals(name)) {
+                return DIPS;
+            } else if (MASTER_SLAVE.toString().equals(name)) {
+                return MASTER_SLAVE;
+            } else if (UNIVERSAL.toString().equals(name)) {
+                return UNIVERSAL;
+            } else if (AUTOPAIR.toString().equals(name)) {
+                return AUTOPAIR;
+            } else {
+                throw new RuntimeException("Unknown Type!");
+            }
+        }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case DIPS:
+                    return "Dips";
+                case MASTER_SLAVE:
+                    return "MasterSlave";
+                case UNIVERSAL:
+                    return "Universal";
+                case AUTOPAIR:
+                    return "AutoPair";
+                default:
+                    throw new RuntimeException("Unknown Type!");
+            }
+        }
+    }
+
 }

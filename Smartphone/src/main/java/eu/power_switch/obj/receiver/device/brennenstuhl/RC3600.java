@@ -34,7 +34,7 @@ public class RC3600 extends Receiver implements AutoPairReceiver {
     private long seed = -1;
 
     public RC3600(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, TYPE_AUTOPAIR, roomId);
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
         buttons.add(new Button(Button.BUTTON_ON_ID, context.getString(R.string.on), id));
         buttons.add(new Button(Button.BUTTON_OFF_ID, context.getString(R.string.off), id));
         this.seed = seed;

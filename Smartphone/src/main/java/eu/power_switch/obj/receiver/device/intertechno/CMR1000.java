@@ -53,7 +53,7 @@ public class CMR1000 extends Receiver implements MasterSlaveReceiver {
     private int channelSlave;
 
     public CMR1000(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId) {
-        super(context, id, name, BRAND, MODEL, TYPE_MASTER_SLAVE, roomId);
+        super(context, id, name, BRAND, MODEL, Type.MASTER_SLAVE, roomId);
         buttons.add(new Button(Button.BUTTON_ON_ID, context.getString(R.string.on), id));
         buttons.add(new Button(Button.BUTTON_OFF_ID, context.getString(R.string.off), id));
         this.channelMaster = channelMaster;

@@ -51,7 +51,7 @@ public class RCS1000NComfort extends Receiver implements DipReceiver {
     private String tailITGW = tx433version + sSpeedITGW + "0";
 
     public RCS1000NComfort(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, BRAND, MODEL, TYPE_DIPS, roomId);
+        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId);
         dipList = new LinkedList<>();
 
         if (dips != null && dips.size() == 10) {

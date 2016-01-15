@@ -87,7 +87,7 @@ public class ReceiverTable {
                     String type = cursor.getString(2);
 
                     String newClassName;
-                    if (Receiver.TYPE_UNIVERSAL.equals(type)) {
+                    if (Receiver.Type.UNIVERSAL.toString().equals(type)) {
                         newClassName = "eu.power_switch.obj.receiver.UniversalReceiver";
                     } else {
                         newClassName = className.replace("eu.power_switch.obj.device.", "eu.power_switch.obj.receiver.device.");

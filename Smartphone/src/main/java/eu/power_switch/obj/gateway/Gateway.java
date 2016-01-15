@@ -18,6 +18,9 @@
 
 package eu.power_switch.obj.gateway;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Represents a Gateway that can receive network packages from the app and convert them for the actual wireless devices
  */
@@ -26,48 +29,44 @@ public abstract class Gateway {
     /**
      * ID of this Gateway
      */
-    private Long id;
-
+    protected Long id;
     /**
      * Boolean whether this Gateway is active
      */
-    private boolean active;
-
+    protected boolean active;
     /**
      * Name of this Gateway
      */
-    private String name;
-
+    protected String name;
     /**
      * Model name of this Gateway
      */
-    private String model;
-
+    protected String model;
     /**
      * Firmware version of this Gateway
      */
-    private String firmware;
-
+    protected String firmware;
     /**
      * Host address where this Gateway is accessible
      */
-    private String host;
-
+    protected String host;
     /**
      * Port on which data can be exchanged with this Gateway
      */
-    private int port;
+    protected int port;
+
+    protected Set<Capability> capabilities = new HashSet<>();
 
     /**
      * Constructor
      *
      * @param id
      * @param active   true if this gateway is used to send network signals
-     * @param name
-     * @param model
-     * @param firmware
-     * @param address
-     * @param port
+     * @param name     name of this gateway
+     * @param model    model of this gateway
+     * @param firmware firmware version of this gateway
+     * @param address  host address of this gateway
+     * @param port     port of this gateway
      */
     public Gateway(long id, boolean active, String name, String model, String firmware, String address, int port) {
         this.id = id;
@@ -160,6 +159,15 @@ public abstract class Gateway {
     }
 
     /**
+     * Returns a set of {@link Capability} this gateway has
+     *
+     * @return
+     */
+    public Set<Capability> getCapabilities() {
+        return capabilities;
+    }
+
+    /**
      * @return String representation of this Gateway
      */
     @Override
@@ -178,4 +186,9 @@ public abstract class Gateway {
     }
 
     public abstract String getModelAsString();
+
+    public enum Capability {
+        SEND,
+        RECEIVE
+    }
 }

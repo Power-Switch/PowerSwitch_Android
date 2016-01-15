@@ -30,6 +30,7 @@ import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayUnknownException;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
+import eu.power_switch.obj.gateway.EZcontrol_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
@@ -192,16 +193,24 @@ abstract class GatewayHandler {
 
         active = rawActive > 0;
 
-        if (rawModel.equals(BrematicGWY433.MODEL)) {
-            gateway = new BrematicGWY433(id, active, name, firmware, address, port);
-        } else if (rawModel.equals(ConnAir.MODEL)) {
-            gateway = new ConnAir(id, active, name, firmware, address, port);
-        } else if (rawModel.equals(ITGW433.MODEL)) {
-            gateway = new ITGW433(id, active, name, firmware, address, port);
-        } else if (rawModel.equals(RaspyRFM.MODEL)) {
-            gateway = new RaspyRFM(id, active, name, firmware, address, port);
-        } else {
-            throw new GatewayUnknownException();
+        switch (rawModel) {
+            case BrematicGWY433.MODEL:
+                gateway = new BrematicGWY433(id, active, name, firmware, address, port);
+                break;
+            case ConnAir.MODEL:
+                gateway = new ConnAir(id, active, name, firmware, address, port);
+                break;
+            case EZcontrol_XS1.MODEL:
+                gateway = new EZcontrol_XS1(id, active, name, firmware, address, port);
+                break;
+            case ITGW433.MODEL:
+                gateway = new ITGW433(id, active, name, firmware, address, port);
+                break;
+            case RaspyRFM.MODEL:
+                gateway = new RaspyRFM(id, active, name, firmware, address, port);
+                break;
+            default:
+                throw new GatewayUnknownException();
         }
 
         return gateway;
