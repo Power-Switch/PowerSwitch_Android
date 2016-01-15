@@ -21,15 +21,15 @@ package eu.power_switch.obj.receiver.device.brennenstuhl;
 import android.content.Context;
 
 import eu.power_switch.R;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.Button;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 
 public class RC3600 extends Receiver implements AutoPairReceiver {
 
-    static String BRAND = Receiver.BRAND_BRENNENSTUHL;
-    static String MODEL = Receiver.getModelName(RC3600.class.getCanonicalName());
+    private static final String BRAND = Receiver.BRAND_BRENNENSTUHL;
+    private static final String MODEL = Receiver.getModelName(RC3600.class.getCanonicalName());
 
     private long seed = -1;
 

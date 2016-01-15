@@ -26,11 +26,11 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
@@ -38,10 +38,10 @@ import eu.power_switch.obj.receiver.Receiver;
 public class AB440ID extends Receiver implements DipReceiver {
     // dips are 12345 678
 
-    static String BRAND = Receiver.BRAND_ELRO;
-    static String MODEL = Receiver.getModelName(AB440ID.class.getCanonicalName());
+    private static final String BRAND = Receiver.BRAND_ELRO;
+    private static final String MODEL = Receiver.getModelName(AB440ID.class.getCanonicalName());
 
-    LinkedList<DipSwitch> dipList;
+    protected LinkedList<DipSwitch> dipList;
 
     private String tx433version = "1,";
 
@@ -90,7 +90,7 @@ public class AB440ID extends Receiver implements DipReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action)  throws GatewayNotSupportedException, ActionNotSupportedException {
+    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         boolean actionSupported = false;
         for (Button button : buttons) {
             if (button.getName().equals(action)) {

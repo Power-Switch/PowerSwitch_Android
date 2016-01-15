@@ -26,11 +26,11 @@ import java.util.Random;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
@@ -38,8 +38,8 @@ import eu.power_switch.shared.log.Log;
 
 public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveReceiver {
 
-    static String BRAND = Receiver.BRAND_INTERTECHNO;
-    static String MODEL = Receiver.getModelName(ITR1500.class.getCanonicalName());
+    private static final String BRAND = Receiver.BRAND_INTERTECHNO;
+    private static final String MODEL = Receiver.getModelName(ITR1500.class.getCanonicalName());
 
     private String headConnAir = "TXP:0,0,6,11125,89,25,";
     private String headITGW = "0,0,6,11125,89,26,0,";

@@ -63,7 +63,8 @@ dependencies {
     compile 'com.android.support:support-annotations:23.1.1'
 
     // Google Play Services
-    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.google.android.gms:play-services-location:8.4.0'
+    compile 'com.google.android.gms:play-services-wearable:8.4.0'
 
     // MultiDex
     compile 'com.android.support:multidex:1.0.1'
@@ -117,3 +118,5 @@ sourceSets {
 configurations.all {
     resolutionStrategy.force 'com.android.support:support-annotations:23.0.0'
 }
+
+//apply plugin: 'com.google.gms.google-services'

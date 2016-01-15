@@ -25,11 +25,11 @@ import java.util.Random;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 
@@ -38,8 +38,8 @@ import eu.power_switch.obj.receiver.Receiver;
  */
 public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
 
-    static String BRAND = Receiver.BRAND_BAT;
-    static String MODEL = Receiver.getModelName(RC_AAA3680_A_IP20.class.getCanonicalName());
+    private static final String BRAND = Receiver.BRAND_BAT;
+    private static final String MODEL = Receiver.getModelName(RC_AAA3680_A_IP20.class.getCanonicalName());
 
     private String headAutoPairConnAir = "TXP:0,0,6,0,505,25,6,14,";
     private String headAutoPairITGW = "TXP:0,0,6,0,505,26,0,6,14,";

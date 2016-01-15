@@ -37,10 +37,10 @@ import eu.power_switch.obj.receiver.Receiver;
 
 public class RCS1000NComfort extends Receiver implements DipReceiver {
 
-    static String BRAND = Receiver.BRAND_BRENNENSTUHL;
-    static String MODEL = Receiver.getModelName(RCS1000NComfort.class.getCanonicalName());
+    private static final String BRAND = Receiver.BRAND_BRENNENSTUHL;
+    private static final String MODEL = Receiver.getModelName(RCS1000NComfort.class.getCanonicalName());
 
-    LinkedList<DipSwitch> dipList;
+    protected LinkedList<DipSwitch> dipList;
     private String tx433version = "1,";
     private String sSpeedConnAir = "14";
     private String headConnAir = "TXP:0,0,10,5600,350,25,";

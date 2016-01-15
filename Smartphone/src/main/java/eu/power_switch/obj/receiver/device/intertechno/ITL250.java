@@ -25,18 +25,18 @@ import java.util.Random;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 
 public class ITL250 extends Receiver implements AutoPairReceiver {
 
-    static String BRAND = Receiver.BRAND_INTERTECHNO;
-    static String MODEL = Receiver.getModelName(ITL250.class.getCanonicalName());
+    private static final String BRAND = Receiver.BRAND_INTERTECHNO;
+    private static final String MODEL = Receiver.getModelName(ITL250.class.getCanonicalName());
 
     private String headAutoPairConnAir = "TXP:0,0,5,10976,98,66,3,29,";
     private String headAutoPairITGW = "0,0,5,10976,98,67,0,3,29,";

@@ -26,11 +26,11 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
@@ -38,11 +38,12 @@ import eu.power_switch.obj.receiver.Receiver;
 public class AB440D_200W extends Receiver implements DipReceiver {
     // dips are 12345 ABCDE
 
-    static String BRAND = Receiver.BRAND_ELRO;
-    static String MODEL = Receiver.getModelName(AB440D_200W.class.getCanonicalName());
+    private static final String BRAND = Receiver.BRAND_ELRO;
+    private static final String MODEL = Receiver.getModelName(AB440D_200W.class.getCanonicalName());
+
+    protected LinkedList<DipSwitch> dipList;
 
     private String tx433version = "1,";
-
     private String sSpeedConnAir = "14";
     private String headConnAir = "TXP:0,0,10,5600,350,25,";
     private String tailConnAir = tx433version + sSpeedConnAir + ";";
@@ -50,8 +51,6 @@ public class AB440D_200W extends Receiver implements DipReceiver {
     private String sSpeedITGW = "125,";
     private String headITGW = "0,0,10,11200,350,26,0,";
     private String tailITGW = tx433version + sSpeedITGW + "0";
-
-    private LinkedList<DipSwitch> dipList;
 
     public AB440D_200W(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
         super(context, id, name, BRAND, MODEL, TYPE_DIPS, roomId);
