@@ -38,7 +38,7 @@ import eu.power_switch.obj.receiver.Receiver;
  */
 public class RMF_Motor extends Receiver implements AutoPairReceiver {
 
-    static String BRAND = Receiver.BRAND_ROHRMOTOR24;
+    private static final Brand BRAND = Brand.ROHRMOTOR24;
     static String MODEL = Receiver.getModelName(RMF_Motor.class.getCanonicalName());
 
     private String headAutoPairConnAir = "TXP:0,0,10,10920,91,41,57,18,";

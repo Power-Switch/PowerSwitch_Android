@@ -37,7 +37,7 @@ import eu.power_switch.obj.receiver.Receiver;
 
 public class RCS1000NComfort extends Receiver implements DipReceiver {
 
-    private static final String BRAND = Receiver.BRAND_BRENNENSTUHL;
+    private static final Brand BRAND = Brand.BRENNENSTUHL;
     private static final String MODEL = Receiver.getModelName(RCS1000NComfort.class.getCanonicalName());
 
     protected LinkedList<DipSwitch> dipList;

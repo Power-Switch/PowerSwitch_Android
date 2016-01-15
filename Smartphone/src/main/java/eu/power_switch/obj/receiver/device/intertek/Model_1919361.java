@@ -28,7 +28,7 @@ import eu.power_switch.obj.receiver.device.elro.AB440SC;
 
 public class Model_1919361 extends AB440SC implements DipReceiver {
 
-    private static final String BRAND = Receiver.BRAND_INTERTEK;
+    private static final Brand BRAND = Brand.INTERTEK;
     private static final String MODEL = Receiver.getModelName(Model_1919361.class.getCanonicalName());
 
     public Model_1919361(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {

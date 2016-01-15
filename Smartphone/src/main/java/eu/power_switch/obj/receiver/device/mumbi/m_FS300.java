@@ -38,7 +38,7 @@ import eu.power_switch.obj.receiver.Receiver;
 public class m_FS300 extends Receiver implements DipReceiver {
     // dips are 12345 ABCDE
 
-    static String BRAND = Receiver.BRAND_MUMBI;
+    private static final Brand BRAND = Brand.MUMBI;
     static String MODEL = Receiver.getModelName(m_FS300.class.getCanonicalName());
 
     private String tx433version = "1,";

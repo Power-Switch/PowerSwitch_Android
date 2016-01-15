@@ -38,7 +38,7 @@ import eu.power_switch.obj.receiver.Receiver;
 public class Ritter extends Receiver implements DipReceiver {
     // dips are 123456 ABCD
 
-    static String BRAND = Receiver.BRAND_REV;
+    private static final Brand BRAND = Brand.REV;
     static String MODEL = Receiver.getModelName(Ritter.class.getCanonicalName());
 
     private String tx433version = "1,";

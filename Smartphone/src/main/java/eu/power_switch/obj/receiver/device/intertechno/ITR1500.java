@@ -38,7 +38,7 @@ import eu.power_switch.shared.log.Log;
 
 public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveReceiver {
 
-    private static final String BRAND = Receiver.BRAND_INTERTECHNO;
+    private static final Brand BRAND = Brand.INTERTECHNO;
     private static final String MODEL = Receiver.getModelName(ITR1500.class.getCanonicalName());
 
     private String headConnAir = "TXP:0,0,6,11125,89,25,";

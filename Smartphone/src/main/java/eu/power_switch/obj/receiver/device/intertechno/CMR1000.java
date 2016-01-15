@@ -36,7 +36,7 @@ import eu.power_switch.shared.log.Log;
 
 public class CMR1000 extends Receiver implements MasterSlaveReceiver {
 
-    private static final String BRAND = Receiver.BRAND_INTERTECHNO;
+    private static final Brand BRAND = Brand.INTERTECHNO;
     private static final String MODEL = Receiver.getModelName(CMR1000.class.getCanonicalName());
 
     private String tx433version = "1,";

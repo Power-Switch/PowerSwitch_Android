@@ -38,7 +38,7 @@ import eu.power_switch.obj.receiver.Receiver;
  */
 public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
 
-    private static final String BRAND = Receiver.BRAND_BAT;
+    private static final Brand BRAND = Brand.BAT;
     private static final String MODEL = Receiver.getModelName(RC_AAA3680_A_IP20.class.getCanonicalName());
 
     private String headAutoPairConnAir = "TXP:0,0,6,0,505,25,6,14,";

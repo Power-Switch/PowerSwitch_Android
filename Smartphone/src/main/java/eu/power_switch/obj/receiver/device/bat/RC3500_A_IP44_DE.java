@@ -37,7 +37,7 @@ import eu.power_switch.obj.receiver.Receiver;
 
 public class RC3500_A_IP44_DE extends Receiver implements DipReceiver {
 
-    private static final String BRAND = Receiver.BRAND_BAT;
+    private static final Brand BRAND = Brand.BAT;
     private static final String MODEL = Receiver.getModelName(RC3500_A_IP44_DE.class.getCanonicalName());
 
     protected LinkedList<DipSwitch> dipList;

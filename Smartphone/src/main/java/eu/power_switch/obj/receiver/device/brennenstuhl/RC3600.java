@@ -28,7 +28,7 @@ import eu.power_switch.obj.receiver.Receiver;
 
 public class RC3600 extends Receiver implements AutoPairReceiver {
 
-    private static final String BRAND = Receiver.BRAND_BRENNENSTUHL;
+    private static final Brand BRAND = Brand.BRENNENSTUHL;
     private static final String MODEL = Receiver.getModelName(RC3600.class.getCanonicalName());
 
     private long seed = -1;

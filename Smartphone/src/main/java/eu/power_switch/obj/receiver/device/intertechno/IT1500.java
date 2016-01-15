@@ -38,7 +38,7 @@ import eu.power_switch.shared.log.Log;
 
 public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveReceiver {
 
-    private static final String BRAND = Receiver.BRAND_INTERTECHNO;
+    private static final Brand BRAND = Brand.INTERTECHNO;
     private static final String MODEL = Receiver.getModelName(IT1500.class.getCanonicalName());
 
     private String tx433version = "1,";

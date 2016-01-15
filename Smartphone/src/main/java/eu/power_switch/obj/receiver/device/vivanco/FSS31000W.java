@@ -38,9 +38,11 @@ import eu.power_switch.obj.receiver.Receiver;
 public class FSS31000W extends Receiver implements DipReceiver {
     // dips are 12345 ABCDE
 
-    private static final String BRAND = Receiver.BRAND_VIVANCO;
+    private static final Brand BRAND = Brand.VIVANCO;
     private static final String MODEL = Receiver.getModelName(FSS31000W.class.getCanonicalName());
+
     protected LinkedList<DipSwitch> dipList;
+
     private String tx433version = "1,";
     private String sSpeedConnAir = "14";
     private String headConnAir = "TXP:0,0,10,5600,350,25,";

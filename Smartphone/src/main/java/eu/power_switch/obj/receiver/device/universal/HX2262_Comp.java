@@ -35,7 +35,7 @@ import eu.power_switch.obj.receiver.Receiver;
 
 public class HX2262_Comp extends Receiver implements AutoPairReceiver {
 
-    static String BRAND = Receiver.BRAND_UNIVERSAL;
+    private static final Brand BRAND = Brand.UNIVERSAL;
     static String MODEL = Receiver.getModelName(HX2262_Comp.class.getCanonicalName());
 
     private String tx433version = "1,";

@@ -116,22 +116,6 @@ public abstract class Receiver {
         }
     };
 
-    /**
-     * Brand constants
-     */
-    public static final String BRAND_BAT = "BAT";
-    public static final String BRAND_BRENNENSTUHL = "Brennenstuhl";
-    public static final String BRAND_ELRO = "Elro";
-    public static final String BRAND_HAMA = "Hama";
-    public static final String BRAND_INTERTECHNO = "Intertechno";
-    public static final String BRAND_INTERTEK = "Intertek";
-    public static final String BRAND_MUMBI = "Mumbi";
-    public static final String BRAND_POLLIN_ELECTRONIC = "Pollin Electronic";
-    public static final String BRAND_REV = "REV";
-    public static final String BRAND_ROHRMOTOR24 = "Rohrmotor 24";
-    public static final String BRAND_UNIVERSAL = "Universal";
-    public static final String BRAND_VIVANCO = "Vivanco";
-
     protected Context context;
     /**
      * ID of this Receiver
@@ -144,7 +128,7 @@ public abstract class Receiver {
     /**
      * Brand of this Receiver
      */
-    protected String brand;
+    protected Brand brand;
     /**
      * Model of this Receiver
      */
@@ -183,7 +167,7 @@ public abstract class Receiver {
      * @param type    Type of this Receiver {@see TYPE}
      * @param roomId  Room ID of this Receiver
      */
-    public Receiver(Context context, Long id, String name, String brand, String model, Type type, Long roomId) {
+    public Receiver(Context context, Long id, String name, Brand brand, String model, Type type, Long roomId) {
         this.context = context;
         this.id = id;
         this.name = name;
@@ -220,7 +204,7 @@ public abstract class Receiver {
         return name;
     }
 
-    public String getBrand() {
+    public Brand getBrand() {
         return brand;
     }
 
@@ -282,8 +266,10 @@ public abstract class Receiver {
         AUTOPAIR;
 
         /**
-         * @param name
-         * @return
+         * Get enum from string representation
+         *
+         * @param name name of enum
+         * @return enum
          */
         public static Type getEnum(String name) {
             if (DIPS.toString().equals(name)) {
@@ -295,10 +281,13 @@ public abstract class Receiver {
             } else if (AUTOPAIR.toString().equals(name)) {
                 return AUTOPAIR;
             } else {
-                throw new RuntimeException("Unknown Type!");
+                return valueOf(name);
             }
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public String toString() {
             switch (this) {
@@ -311,7 +300,93 @@ public abstract class Receiver {
                 case AUTOPAIR:
                     return "AutoPair";
                 default:
-                    throw new RuntimeException("Unknown Type!");
+                    return super.toString();
+            }
+        }
+    }
+
+    /**
+     * Brand constants
+     */
+    public enum Brand {
+        BAT,
+        BRENNENSTUHL,
+        ELRO,
+        HAMA,
+        INTERTECHNO,
+        INTERTEK,
+        MUMBI,
+        POLLIN_ELECTRONIC,
+        REV,
+        ROHRMOTOR24,
+        UNIVERSAL,
+        VIVANCO;
+
+        /**
+         * Get enum from string representation
+         *
+         * @param name name of enum
+         * @return enum
+         */
+        public static Brand getEnum(String name) {
+            if (BAT.toString().equals(name)) {
+                return BAT;
+            } else if (BRENNENSTUHL.toString().equals(name)) {
+                return BRENNENSTUHL;
+            } else if (ELRO.toString().equals(name)) {
+                return ELRO;
+            } else if (HAMA.toString().equals(name)) {
+                return HAMA;
+            } else if (INTERTECHNO.toString().equals(name)) {
+                return INTERTECHNO;
+            } else if (INTERTEK.toString().equals(name)) {
+                return INTERTEK;
+            } else if (MUMBI.toString().equals(name)) {
+                return MUMBI;
+            } else if (POLLIN_ELECTRONIC.toString().equals(name)) {
+                return POLLIN_ELECTRONIC;
+            } else if (REV.toString().equals(name)) {
+                return REV;
+            } else if (ROHRMOTOR24.toString().equals(name)) {
+                return ROHRMOTOR24;
+            } else if (UNIVERSAL.toString().equals(name)) {
+                return UNIVERSAL;
+            } else if (VIVANCO.toString().equals(name)) {
+                return VIVANCO;
+            } else {
+                return valueOf(name);
+            }
+        }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case BAT:
+                    return "BAT";
+                case BRENNENSTUHL:
+                    return "Brennenstuhl";
+                case ELRO:
+                    return "Elro";
+                case HAMA:
+                    return "Hama";
+                case INTERTECHNO:
+                    return "Intertechno";
+                case INTERTEK:
+                    return "Intertek";
+                case MUMBI:
+                    return "Mumbi";
+                case POLLIN_ELECTRONIC:
+                    return "Pollin Electronic";
+                case REV:
+                    return "REV";
+                case ROHRMOTOR24:
+                    return "Rohrmotor 24";
+                case UNIVERSAL:
+                    return "Universal";
+                case VIVANCO:
+                    return "Vivanco";
+                default:
+                    return super.toString();
             }
         }
     }

@@ -35,7 +35,7 @@ import eu.power_switch.obj.receiver.Receiver;
 
 public class Hama extends Receiver implements AutoPairReceiver {
 
-    private static final String BRAND = Receiver.BRAND_HAMA;
+    private static final Brand BRAND = Brand.HAMA;
     private static final String MODEL = Receiver.getModelName(Hama.class.getCanonicalName());
 
     private String headAutoPairConnAir = "TXP:0,0,5,10976,98,66,3,29,";

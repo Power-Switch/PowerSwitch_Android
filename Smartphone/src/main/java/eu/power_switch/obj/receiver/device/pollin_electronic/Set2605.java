@@ -38,7 +38,7 @@ import eu.power_switch.obj.receiver.Receiver;
 public class Set2605 extends Receiver implements DipReceiver {
     // dips are 12345 ABCDE
 
-    static String BRAND = Receiver.BRAND_POLLIN_ELECTRONIC;
+    private static final Brand BRAND = Brand.POLLIN_ELECTRONIC;
     static String MODEL = Receiver.getModelName(Set2605.class.getCanonicalName());
 
     private String tx433version = "1,";

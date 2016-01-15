@@ -71,7 +71,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
     private long currentId = -1;
     private String currentName;
     private String currentRoomName;
-    private String currentBrand;
+    private Receiver.Brand currentBrand;
     private String currentModel;
     private Receiver.Type currentType;
     private List<DipSwitch> currentDips;
@@ -120,7 +120,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
                     String brand = intent.getStringExtra("brand");
                     String model = intent.getStringExtra("model");
 
-                    currentBrand = brand;
+                    currentBrand = Receiver.Brand.getEnum(brand);
                     currentModel = model;
 
                     Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(currentModel));
@@ -226,7 +226,11 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
     private void updateUiValues() {
         name.setText(currentName);
         roomName.setText(currentRoomName);
-        brand.setText(currentBrand);
+        if (currentBrand == null) {
+            brand.setText("");
+        } else {
+            brand.setText(currentBrand.toString());
+        }
         model.setText(currentModel);
         channelMaster.setText("" + currentMaster);
         channelSlave.setText("" + currentSlave);

@@ -38,7 +38,7 @@ import eu.power_switch.obj.receiver.Receiver;
 public class AB440ID extends Receiver implements DipReceiver {
     // dips are 12345 678
 
-    private static final String BRAND = Receiver.BRAND_ELRO;
+    private static final Brand BRAND = Brand.ELRO;
     private static final String MODEL = Receiver.getModelName(AB440ID.class.getCanonicalName());
 
     protected LinkedList<DipSwitch> dipList;

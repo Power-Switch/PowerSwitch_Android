@@ -36,7 +36,7 @@ import eu.power_switch.shared.log.Log;
 
 public class Telecontrol extends Receiver implements MasterSlaveReceiver {
 
-    static String BRAND = Receiver.BRAND_REV;
+    private static final Brand BRAND = Brand.REV;
     static String MODEL = Receiver.getModelName(Telecontrol.class.getCanonicalName());
 
     private String tx433version = "1,";

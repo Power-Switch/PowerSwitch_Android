@@ -42,6 +42,8 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
+import static eu.power_switch.obj.receiver.Receiver.Brand;
+
 /**
  * "Type" Fragment used in Configure Receiver Dialog
  * <p/>
@@ -69,8 +71,8 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     public static void sendBrandModelChangedBroadcast(Context context, String brand, String model) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED);
         intent.putExtra("brand", brand);
-        if (brand.equals(Receiver.BRAND_UNIVERSAL)) {
-            model = Receiver.BRAND_UNIVERSAL;
+        if (brand.equals(Brand.UNIVERSAL.toString())) {
+            model = Brand.UNIVERSAL.toString();
         }
         intent.putExtra("model", model);
 
@@ -137,8 +139,10 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     }
 
     private void updateModelList(String brandName) {
-        switch (brandName) {
-            case Receiver.BRAND_BAT: {
+        Brand brandEnum = Brand.getEnum(brandName);
+
+        switch (brandEnum) {
+            case BAT: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_bat_array);
                 for (String string : array) {
@@ -148,7 +152,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_BRENNENSTUHL: {
+            case BRENNENSTUHL: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_brennenstuhl_array);
                 for (String string : array) {
@@ -158,7 +162,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_ELRO: {
+            case ELRO: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_elro_array);
                 for (String string : array) {
@@ -168,7 +172,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_HAMA: {
+            case HAMA: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_hama_array);
                 for (String string : array) {
@@ -178,7 +182,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_INTERTECHNO: {
+            case INTERTECHNO: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_intertechno_array);
                 for (String string : array) {
@@ -188,7 +192,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_INTERTEK: {
+            case INTERTEK: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_intertek_array);
                 for (String string : array) {
@@ -198,7 +202,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_MUMBI: {
+            case MUMBI: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_mumbi_array);
                 for (String string : array) {
@@ -208,7 +212,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_POLLIN_ELECTRONIC: {
+            case POLLIN_ELECTRONIC: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_pollin_electronic_array);
                 for (String string : array) {
@@ -218,7 +222,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_REV: {
+            case REV: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_rev_array);
                 for (String string : array) {
@@ -228,7 +232,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_ROHRMOTOR24: {
+            case ROHRMOTOR24: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_rohrmotor24_array);
                 for (String string : array) {
@@ -238,7 +242,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_UNIVERSAL: {
+            case UNIVERSAL: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_universal_array);
                 for (String string : array) {
@@ -248,7 +252,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 setModelVisibility(View.VISIBLE);
                 break;
             }
-            case Receiver.BRAND_VIVANCO: {
+            case VIVANCO: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_vivanco_array);
                 for (String string : array) {
@@ -286,7 +290,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand());
                 brandListView.setItemChecked(brandPosition, true);
                 brandListView.smoothScrollToPosition(brandPosition);
-                updateModelList(receiver.getBrand());
+                updateModelList(receiver.getBrand().toString());
 
                 int modelPosition = modelNamesAdapter.getPosition(receiver.getModel());
                 modelListView.setItemChecked(modelPosition, true);
