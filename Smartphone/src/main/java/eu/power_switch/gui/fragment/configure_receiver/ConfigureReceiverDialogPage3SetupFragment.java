@@ -27,6 +27,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
@@ -81,8 +82,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
     private ArrayAdapter channelSlaveNamesAdapter;
 
     private TableLayout layoutMasterSlave;
-    private LinearLayout layoutDip;
-    private LinearLayout layoutAutoPair;
+    private NestedScrollView layoutDip;
+    private NestedScrollView layoutAutoPair;
     private LinearLayout layoutUniversal;
     private LinearLayout buttonsList;
 
@@ -128,11 +129,16 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                 if (intent.getAction().equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
                     String model = intent.getStringExtra("model");
 
-                    Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));
-                    initType(receiver);
+                    try {
+                        Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));
+                        initType(receiver);
 
-                    sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
-                            dipSwitchArrayList, getCurrentSeed(), getCurrentUniversalButtons());
+                        sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
+                                dipSwitchArrayList, getCurrentSeed(), getCurrentUniversalButtons());
+                    } catch (Exception e) {
+                        Log.e(e);
+                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+                    }
                 }
             }
         };
@@ -164,7 +170,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
         });
 
         // Dips
-        layoutDip = (LinearLayout) rootView.findViewById(R.id.linearLayout_dip);
+        layoutDip = (NestedScrollView) rootView.findViewById(R.id.scrollView_dip);
         dipViewList = new ArrayList<>();
         SwitchCompat dip0 = (SwitchCompat) rootView.findViewById(R.id.switch_dip0);
         SwitchCompat dip1 = (SwitchCompat) rootView.findViewById(R.id.switch_dip1);
@@ -207,7 +213,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
 
 
         // AutoPair
-        layoutAutoPair = (LinearLayout) rootView.findViewById(R.id.linearLayout_autoPair);
+        layoutAutoPair = (NestedScrollView) rootView.findViewById(R.id.scrollView_autoPair);
         android.widget.Button buttonPair = (android.widget.Button) rootView.findViewById(R.id.button_pair);
         buttonPair.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -347,16 +353,12 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
 
     private void initData(final MasterSlaveReceiver receiver) {
         channelMasterNamesAdapter.clear();
-        for (String string : receiver.getMasterNames()) {
-            channelMasterNamesAdapter.add(string);
-        }
+        channelMasterNamesAdapter.addAll(receiver.getMasterNames());
         channelMasterNamesAdapter.notifyDataSetChanged();
 
 
         channelSlaveNamesAdapter.clear();
-        for (String string : receiver.getSlaveNames()) {
-            channelSlaveNamesAdapter.add(string);
-        }
+        channelSlaveNamesAdapter.addAll(receiver.getSlaveNames());
         channelSlaveNamesAdapter.notifyDataSetChanged();
 
         int channelMasterPosition = channelMasterNamesAdapter.getPosition(receiver.getMaster() + "");

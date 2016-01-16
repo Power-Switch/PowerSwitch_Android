@@ -31,7 +31,6 @@ import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
-import eu.power_switch.shared.log.Log;
 
 /**
  *
@@ -153,41 +152,36 @@ public abstract class ReceiverReflectionMagic {
      * @param javaPath path to class
      * @return Receiver object
      */
-    public static Receiver getDummy(Context context, String javaPath) {
+    public static Receiver getDummy(Context context, String javaPath) throws Exception {
         long dummyReceiverId = 0;
         String dummyReceiverName = "dummy";
 
-        try {
-            Class<?> myClass = Class.forName(javaPath);
-            Class<?>[] implementedInterfaces = myClass.getInterfaces();
+        Class<?> myClass = Class.forName(javaPath);
+        Class<?>[] implementedInterfaces = myClass.getInterfaces();
 
-            for (Class<?> someClass : implementedInterfaces) {
-                if (someClass.equals(MasterSlaveReceiver.class)) {
-                    Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, char
-                            .class, int.class, Long.class);
-                    return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, 'A', 0,
-                            null);
-                } else if (someClass.equals(DipReceiver.class)) {
-                    Constructor<?> constructor;
-                    constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
-                    return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, new
-                            LinkedList<Boolean>(), null);
-                } else if (someClass.equals(AutoPairReceiver.class)) {
-                    Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, long
-                            .class, Long.class);
-                    return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, -1, null);
-                }
+        for (Class<?> someClass : implementedInterfaces) {
+            if (someClass.equals(MasterSlaveReceiver.class)) {
+                Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, char
+                        .class, int.class, Long.class);
+                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, 'A', 0,
+                        null);
+            } else if (someClass.equals(DipReceiver.class)) {
+                Constructor<?> constructor;
+                constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
+                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, new
+                        LinkedList<Boolean>(), null);
+            } else if (someClass.equals(AutoPairReceiver.class)) {
+                Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, long
+                        .class, Long.class);
+                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, -1, null);
             }
-
-            if (myClass.equals(UniversalReceiver.class)) {
-                return new UniversalReceiver(context, dummyReceiverId, dummyReceiverName, new
-                        LinkedList<UniversalButton>(), null);
-            }
-        } catch (Exception e) {
-            Log.e(e);
-            e.printStackTrace();
         }
 
-        return null;
+        if (myClass.equals(UniversalReceiver.class)) {
+            return new UniversalReceiver(context, dummyReceiverId, dummyReceiverName, new
+                    LinkedList<UniversalButton>(), null);
+        }
+
+        throw new RuntimeException("Unknown Receiver");
     }
 }

@@ -123,8 +123,13 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
                     currentBrand = Receiver.Brand.getEnum(brand);
                     currentModel = model;
 
-                    Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(currentModel));
-                    currentType = receiver.getType();
+                    try {
+                        Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(currentModel));
+                        currentType = receiver.getType();
+                    } catch (Exception e) {
+                        Log.e(e);
+                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+                    }
                 } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED)) {
                     String name = intent.getStringExtra("name");
                     String roomName = intent.getStringExtra("roomName");

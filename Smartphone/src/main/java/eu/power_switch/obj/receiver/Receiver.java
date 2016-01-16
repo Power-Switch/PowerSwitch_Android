@@ -112,7 +112,8 @@ public abstract class Receiver {
             put("FSS 31000W", "eu.power_switch.obj.receiver.device.vivanco.FSS31000W");
             put("FSS 33600W", "eu.power_switch.obj.receiver.device.vivanco.FSS33600W");
             // Universal
-            put("Universal", "eu.power_switch.obj.receiver.UniversalReceiver");
+            put("Custom Buttons", "eu.power_switch.obj.receiver.UniversalReceiver");
+            put("HX2262 Compat.", "eu.power_switch.obj.receiver.device.universal.HX2262_Comp");
         }
     };
 
@@ -260,10 +261,16 @@ public abstract class Receiver {
      * Type constants
      */
     public enum Type {
-        DIPS,
-        MASTER_SLAVE,
-        UNIVERSAL,
-        AUTOPAIR;
+        DIPS("Dips"),
+        MASTER_SLAVE("MasterSlave"),
+        UNIVERSAL("Universal"),
+        AUTOPAIR("AutoPair");
+
+        private String name;
+
+        Type(String name) {
+            this.name = name;
+        }
 
         /**
          * Get enum from string representation
@@ -272,17 +279,17 @@ public abstract class Receiver {
          * @return enum
          */
         public static Type getEnum(String name) {
-            if (DIPS.toString().equals(name)) {
-                return DIPS;
-            } else if (MASTER_SLAVE.toString().equals(name)) {
-                return MASTER_SLAVE;
-            } else if (UNIVERSAL.toString().equals(name)) {
-                return UNIVERSAL;
-            } else if (AUTOPAIR.toString().equals(name)) {
-                return AUTOPAIR;
-            } else {
-                return valueOf(name);
+            for (Type v : values()) {
+                if (v.toString().equalsIgnoreCase(name)) {
+                    return v;
+                }
             }
+
+            return valueOf(name);
+        }
+
+        public String getName() {
+            return name;
         }
 
         /**
@@ -290,17 +297,10 @@ public abstract class Receiver {
          */
         @Override
         public String toString() {
-            switch (this) {
-                case DIPS:
-                    return "Dips";
-                case MASTER_SLAVE:
-                    return "MasterSlave";
-                case UNIVERSAL:
-                    return "Universal";
-                case AUTOPAIR:
-                    return "AutoPair";
-                default:
-                    return super.toString();
+            if (name != null) {
+                return getName();
+            } else {
+                return super.toString();
             }
         }
     }
@@ -309,18 +309,24 @@ public abstract class Receiver {
      * Brand constants
      */
     public enum Brand {
-        BAT,
-        BRENNENSTUHL,
-        ELRO,
-        HAMA,
-        INTERTECHNO,
-        INTERTEK,
-        MUMBI,
-        POLLIN_ELECTRONIC,
-        REV,
-        ROHRMOTOR24,
-        UNIVERSAL,
-        VIVANCO;
+        BAT("BAT"),
+        BRENNENSTUHL("Brennenstuhl"),
+        ELRO("Elro"),
+        HAMA("Hama"),
+        INTERTECHNO("Intertechno"),
+        INTERTEK("Intertek"),
+        MUMBI("Mumbi"),
+        POLLIN_ELECTRONIC("Pollin Electronic"),
+        REV("REV"),
+        ROHRMOTOR24("Rohrmotor 24"),
+        UNIVERSAL("Universal"),
+        VIVANCO("Vivanco");
+
+        private String name;
+
+        Brand(String name) {
+            this.name = name;
+        }
 
         /**
          * Get enum from string representation
@@ -329,64 +335,25 @@ public abstract class Receiver {
          * @return enum
          */
         public static Brand getEnum(String name) {
-            if (BAT.toString().equals(name)) {
-                return BAT;
-            } else if (BRENNENSTUHL.toString().equals(name)) {
-                return BRENNENSTUHL;
-            } else if (ELRO.toString().equals(name)) {
-                return ELRO;
-            } else if (HAMA.toString().equals(name)) {
-                return HAMA;
-            } else if (INTERTECHNO.toString().equals(name)) {
-                return INTERTECHNO;
-            } else if (INTERTEK.toString().equals(name)) {
-                return INTERTEK;
-            } else if (MUMBI.toString().equals(name)) {
-                return MUMBI;
-            } else if (POLLIN_ELECTRONIC.toString().equals(name)) {
-                return POLLIN_ELECTRONIC;
-            } else if (REV.toString().equals(name)) {
-                return REV;
-            } else if (ROHRMOTOR24.toString().equals(name)) {
-                return ROHRMOTOR24;
-            } else if (UNIVERSAL.toString().equals(name)) {
-                return UNIVERSAL;
-            } else if (VIVANCO.toString().equals(name)) {
-                return VIVANCO;
-            } else {
-                return valueOf(name);
+            for (Brand v : values()) {
+                if (v.toString().equalsIgnoreCase(name)) {
+                    return v;
+                }
             }
+
+            return valueOf(name);
+        }
+
+        public String getName() {
+            return name;
         }
 
         @Override
         public String toString() {
-            switch (this) {
-                case BAT:
-                    return "BAT";
-                case BRENNENSTUHL:
-                    return "Brennenstuhl";
-                case ELRO:
-                    return "Elro";
-                case HAMA:
-                    return "Hama";
-                case INTERTECHNO:
-                    return "Intertechno";
-                case INTERTEK:
-                    return "Intertek";
-                case MUMBI:
-                    return "Mumbi";
-                case POLLIN_ELECTRONIC:
-                    return "Pollin Electronic";
-                case REV:
-                    return "REV";
-                case ROHRMOTOR24:
-                    return "Rohrmotor 24";
-                case UNIVERSAL:
-                    return "Universal";
-                case VIVANCO:
-                    return "Vivanco";
-                default:
-                    return super.toString();
+            if (name != null) {
+                return getName();
+            } else {
+                return super.toString();
             }
         }
     }
