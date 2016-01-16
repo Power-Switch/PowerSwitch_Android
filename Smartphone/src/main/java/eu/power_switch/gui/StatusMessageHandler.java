@@ -253,8 +253,8 @@ public class StatusMessageHandler {
         showStatusMessage(recyclerViewFragment, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
             @Override
             public void run() {
-                MainActivity.addToBackstack(SettingsTabFragment.class, recyclerViewFragment.getActivity()
-                        .getString(R.string.menu_settings));
+                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class,
+                        recyclerViewFragment.getActivity().getString(R.string.menu_settings));
                 SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
                 Bundle arguments = new Bundle();
                 arguments.putInt(SettingsTabFragment.TAB_INDEX_KEY, SettingsConstants.GATEWAYS_TAB_INDEX);
@@ -279,7 +279,7 @@ public class StatusMessageHandler {
         showStatusMessage(fragmentActivity, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
             @Override
             public void run() {
-                MainActivity.addToBackstack(SettingsTabFragment.class, fragmentActivity
+                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class, fragmentActivity
                         .getString(R.string.menu_settings));
                 SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
                 Bundle arguments = new Bundle();

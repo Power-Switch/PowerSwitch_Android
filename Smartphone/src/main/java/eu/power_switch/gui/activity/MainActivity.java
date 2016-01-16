@@ -94,14 +94,13 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private static final int IDENTIFIER_ROOMS_SCENES = 10;
-    private static final int IDENTIFIER_APARTMENTS = 11;
-    private static final int IDENTIFIER_SLEEP_AS_ANDROID = 12;
-    private static final int IDENTIFIER_TIMERS = 13;
-    private static final int IDENTIFIER_BACKUP_RESTORE = 14;
-    private static final int IDENTIFIER_SETTINGS = 15;
-    private static final int IDENTIFIER_ABOUT = 16;
-
+    public static final int IDENTIFIER_ROOMS_SCENES = 10;
+    public static final int IDENTIFIER_APARTMENTS = 11;
+    public static final int IDENTIFIER_SLEEP_AS_ANDROID = 12;
+    public static final int IDENTIFIER_TIMERS = 13;
+    public static final int IDENTIFIER_BACKUP_RESTORE = 14;
+    public static final int IDENTIFIER_SETTINGS = 15;
+    public static final int IDENTIFIER_ABOUT = 16;
 
     public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
@@ -126,9 +125,10 @@ public class MainActivity extends AppCompatActivity {
      * @param newFragmentClass Classname
      * @param title            Header title
      */
-    public static void addToBackstack(Class newFragmentClass, String title) {
+    public static void addToBackstack(int menuItemIdentifier, Class newFragmentClass, String title) {
         lastFragmentClasses.push(newFragmentClass);
         lastFragmentTitles.push(title);
+        drawerPositionStack.push(menuItemIdentifier);
     }
 
     /**
@@ -159,6 +159,30 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public void startFragmentTransaction(int menuItemIdentifier, String menuItemTitle, Fragment fragment) {
+        try {
+            if (fragment != null && (lastFragmentClasses.isEmpty()) || !lastFragmentClasses.peek()
+                    .equals(fragment.getClass())) {
+                lastFragmentClasses.push(fragment.getClass());
+                lastFragmentTitles.push(String.valueOf(menuItemTitle));
+                drawerPositionStack.push(menuItemIdentifier);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim
+                                .slide_in_right, R.anim.slide_out_left, android.R.anim
+                                .slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.mainContentFrameLayout, fragment)
+                        .addToBackStack(fragment.getTag()).commit();
+
+                setTitle(menuItemTitle);
+            }
+
+        } catch (Exception e) {
+            Log.e(e);
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -320,10 +344,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
-
                         try {
-                            startFragmentTransaction(getString(R.string.menu_rooms_scenes),
+                            startFragmentTransaction(IDENTIFIER_ROOMS_SCENES, getString(R.string.menu_rooms_scenes),
                                     MainTabFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
@@ -342,9 +364,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        drawerPositionStack.push(IDENTIFIER_APARTMENTS);
                         try {
-                            startFragmentTransaction(getString(R.string.menu_apartments),
+                            startFragmentTransaction(IDENTIFIER_APARTMENTS, getString(R.string.menu_apartments),
                                     ApartmentFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
@@ -363,9 +384,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        drawerPositionStack.push(IDENTIFIER_SLEEP_AS_ANDROID);
                         try {
-                            startFragmentTransaction(getString(R.string.menu_sleep_as_android),
+                            startFragmentTransaction(IDENTIFIER_SLEEP_AS_ANDROID, getString(R.string.menu_sleep_as_android),
                                     SleepAsAndroidFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
@@ -385,9 +405,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        drawerPositionStack.push(IDENTIFIER_TIMERS);
                         try {
-                            startFragmentTransaction(getString(R.string.timers),
+                            startFragmentTransaction(IDENTIFIER_TIMERS, getString(R.string.timers),
                                     TimersFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
@@ -406,9 +425,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        drawerPositionStack.push(IDENTIFIER_BACKUP_RESTORE);
                         try {
-                            startFragmentTransaction(getString(R.string.menu_backup_restore),
+                            startFragmentTransaction(IDENTIFIER_BACKUP_RESTORE, getString(R.string.menu_backup_restore),
                                     BackupFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
@@ -427,9 +445,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        drawerPositionStack.push(IDENTIFIER_SETTINGS);
                         try {
-                            startFragmentTransaction(getString(R.string.menu_settings),
+                            startFragmentTransaction(IDENTIFIER_SETTINGS, getString(R.string.menu_settings),
                                     SettingsTabFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
@@ -478,7 +495,6 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        drawerPositionStack.push(IDENTIFIER_ABOUT);
                         Fragment fragment = new LibsBuilder()
                                 //get the fragment
                                 .withAboutIconShown(true)
@@ -554,7 +570,7 @@ public class MainActivity extends AppCompatActivity {
                                 })
                                 .supportFragment();
                         fragment.setHasOptionsMenu(true);
-                        startFragmentTransaction(getString(R.string.menu_about), fragment);
+                        startFragmentTransaction(IDENTIFIER_ABOUT, getString(R.string.menu_about), fragment);
 
                         navigationDrawer.closeDrawer();
                         return true;
@@ -645,31 +661,6 @@ public class MainActivity extends AppCompatActivity {
 
         historyItemArrayAdapter.notifyDataSetChanged();
         recyclerViewHistory.scrollToPosition(historyItems.size() - 1);
-    }
-
-    private void startFragmentTransaction(String menuItemTitle, Fragment fragment) {
-        try {
-            if (fragment != null && (lastFragmentClasses.isEmpty()) || !lastFragmentClasses.peek()
-                    .equals(fragment.getClass())) {
-                lastFragmentClasses.push(fragment.getClass());
-                lastFragmentTitles.push(String.valueOf(menuItemTitle));
-                // TODO: push the correct IDENTIFIER to stack
-                drawerPositionStack.push(IDENTIFIER_SETTINGS);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim
-                                .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                .slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.mainContentFrameLayout, fragment)
-                        .addToBackStack(fragment.getTag()).commit();
-
-                setTitle(menuItemTitle);
-            }
-
-        } catch (Exception e) {
-            Log.e(e);
-            e.printStackTrace();
-        }
     }
 
     @Override
