@@ -18,6 +18,13 @@
 
 package eu.power_switch.obj.gateway;
 
+import java.util.Set;
+
+import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkPackage;
+import eu.power_switch.obj.communicator.Communicator;
+import eu.power_switch.obj.sensor.Sensor;
+
 /**
  * Created by Markus on 15.01.2016.
  */
@@ -28,10 +35,32 @@ public class EZcontrol_XS1 extends Gateway {
      */
     public static final String MODEL = "EZcontrol XS1";
 
+    private Set<Communicator> communicators;
+    private Set<Sensor> sensors;
+
     public EZcontrol_XS1(Long id, boolean active, String name, String firmware, String address, int port) {
         super(id, active, name, MODEL, firmware, address, port);
         capabilities.add(Capability.SEND);
         capabilities.add(Capability.RECEIVE);
+
+        requestActors();
+        requestSensors();
+    }
+
+    private void requestActors() {
+        communicators = NetworkHandler.getActors(this);
+    }
+
+    private void requestSensors() {
+        sensors = NetworkHandler.getSensors(this);
+    }
+
+    public Set<Communicator> getCommunicators() {
+        return communicators;
+    }
+
+    public Set<Sensor> getSensors() {
+        return sensors;
     }
 
     @Override
@@ -42,5 +71,10 @@ public class EZcontrol_XS1 extends Gateway {
     @Override
     public String getModelAsString() {
         return MODEL;
+    }
+
+    @Override
+    public NetworkPackage.CommunicationType getCommunicationType() {
+        return NetworkPackage.CommunicationType.HTTP;
     }
 }

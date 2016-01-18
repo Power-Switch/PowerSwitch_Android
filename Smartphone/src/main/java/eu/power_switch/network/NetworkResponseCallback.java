@@ -16,37 +16,20 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.gateway;
-
-import eu.power_switch.network.NetworkPackage;
+package eu.power_switch.network;
 
 /**
- * ConnAir represents a ConnAir Gateway from Simple-Solutions
+ * Interface used to send network response messages (received after request or from a sensor) to the requesting party
+ * <p/>
+ * Created by Markus on 18.01.2016.
  */
-public class RaspyRFM extends Gateway {
+public interface NetworkResponseCallback {
 
     /**
-     * Model constant
+     * This Method is called when a response is received after a request has been sent to a gateway
+     *
+     * @param message response message
      */
-    public static final String MODEL = "RaspyRFM";
+    void receiveResponse(String message);
 
-    public RaspyRFM(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
-        capabilities.add(Capability.SEND);
-    }
-
-    @Override
-    public int getTimeout() {
-        return 0;
-    }
-
-    @Override
-    public String getModelAsString() {
-        return MODEL;
-    }
-
-    @Override
-    public NetworkPackage.CommunicationType getCommunicationType() {
-        return NetworkPackage.CommunicationType.UDP;
-    }
 }

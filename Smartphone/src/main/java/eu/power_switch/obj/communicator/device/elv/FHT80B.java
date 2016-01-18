@@ -18,8 +18,14 @@
 
 package eu.power_switch.obj.communicator.device.elv;
 
+import org.json.JSONObject;
+
+import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.HeatingControl;
 import eu.power_switch.obj.communicator.Communicator;
+import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.log.Log;
 
 /**
  * ELV FHT80B-2/3 Heating Control
@@ -37,8 +43,19 @@ public class FHT80B extends Communicator implements HeatingControl {
         super(id);
     }
 
+    public Object requestValue(Gateway gateway, Object key) {
+        String signal = getSignal(gateway, key);
+        NetworkPackage networkPackage = new NetworkPackage(gateway.getCommunicationType(), gateway.getHost(), gateway
+                .getPort(), signal, gateway.getTimeout());
+        NetworkHandler.send(networkPackage);
+
+        return null;
+    }
+
+
+
     @Override
-    public Object getValue(Object key) {
+    public JSONObject setValue(Gateway gateway, Object key, Object value) {
         return null;
     }
 
@@ -52,5 +69,14 @@ public class FHT80B extends Communicator implements HeatingControl {
         // TODO: sende Befehl an Gateway
 
         this.targetTemperature = targetTemperature;
+    }
+
+    private String getSignal(Gateway gateway, Object key) {
+        return null;
+    }
+
+    @Override
+    public void receiveResponse(String message) {
+        Log.d("received response: ", message);
     }
 }

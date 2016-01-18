@@ -243,7 +243,8 @@ public abstract class Receiver {
 
     public NetworkPackage getNetworkPackage(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String signal = getSignal(gateway, action);
-        return new NetworkPackage(gateway.getHost(), gateway.getPort(), signal, gateway.getTimeout());
+        return new NetworkPackage(gateway.getCommunicationType(), gateway.getHost(), gateway.getPort(), signal,
+                gateway.getTimeout());
     }
 
     protected abstract String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException;

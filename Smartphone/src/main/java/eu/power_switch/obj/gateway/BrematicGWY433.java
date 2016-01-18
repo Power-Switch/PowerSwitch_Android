@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj.gateway;
 
+import eu.power_switch.network.NetworkPackage;
+
 /**
  * BrematicGWY433 represents a Brematic GWY 433 Gateway from Brennenstuhl
  */
@@ -41,5 +43,10 @@ public class BrematicGWY433 extends Gateway {
     @Override
     public String getModelAsString() {
         return MODEL;
+    }
+
+    @Override
+    public NetworkPackage.CommunicationType getCommunicationType() {
+        return NetworkPackage.CommunicationType.UDP;
     }
 }

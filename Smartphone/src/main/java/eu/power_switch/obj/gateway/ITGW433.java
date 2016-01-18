@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj.gateway;
 
+import eu.power_switch.network.NetworkPackage;
+
 /**
  * ITGW433 represents a ITGW-433 Gateway from Intertechno
  */
@@ -41,5 +43,10 @@ public class ITGW433 extends Gateway {
     @Override
     public String getModelAsString() {
         return MODEL;
+    }
+
+    @Override
+    public NetworkPackage.CommunicationType getCommunicationType() {
+        return NetworkPackage.CommunicationType.UDP;
     }
 }

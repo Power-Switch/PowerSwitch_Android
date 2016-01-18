@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj.gateway;
 
+import eu.power_switch.network.NetworkPackage;
+
 /**
  * ConnAir represents a ConnAir Gateway from Simple-Solutions
  */
@@ -41,5 +43,10 @@ public class ConnAir extends Gateway {
     @Override
     public String getModelAsString() {
         return MODEL;
+    }
+
+    @Override
+    public NetworkPackage.CommunicationType getCommunicationType() {
+        return NetworkPackage.CommunicationType.UDP;
     }
 }

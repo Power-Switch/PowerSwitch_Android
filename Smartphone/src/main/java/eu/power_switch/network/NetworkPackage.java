@@ -27,21 +27,22 @@ public class NetworkPackage {
      * Destination host of this network package
      */
     private String host;
-
     /**
      * Destination port of this network package
      */
     private int port;
-
     /**
      * Message of this network package
      */
     private String message;
-
     /**
      * Time to wait after sending this package before sending the next one
      */
     private int timeout;
+    /**
+     * Type of this Network Package
+     */
+    private CommunicationType communicationType;
 
     /**
      * Default Constructor
@@ -51,11 +52,21 @@ public class NetworkPackage {
      * @param message Message
      * @param timeout Timeout
      */
-    public NetworkPackage(String host, int port, String message, int timeout) {
+    public NetworkPackage(CommunicationType communicationType, String host, int port, String message, int timeout) {
+        this.communicationType = communicationType;
         this.host = host;
         this.port = port;
         this.message = message;
         this.timeout = timeout;
+    }
+
+    /**
+     * Get Type of this Network Package
+     *
+     * @return type {@see CommunicationType}
+     */
+    public CommunicationType getCommunicationType() {
+        return communicationType;
     }
 
     /**
@@ -96,5 +107,10 @@ public class NetworkPackage {
      */
     public int getTimeout() {
         return timeout;
+    }
+
+    public enum CommunicationType {
+        UDP,
+        HTTP
     }
 }

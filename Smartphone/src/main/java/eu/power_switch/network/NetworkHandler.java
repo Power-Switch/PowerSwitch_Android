@@ -25,15 +25,21 @@ import android.os.AsyncTask;
 import android.os.Build;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
+import eu.power_switch.obj.gateway.EZcontrol_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
+import eu.power_switch.obj.sensor.Sensor;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -117,6 +123,15 @@ public abstract class NetworkHandler {
         synchronized (NetworkPackageQueueHandler.lock) {
             NetworkPackageQueueHandler.lock.notify();
         }
+    }
+
+    /**
+     * sends an array of NetworkPackages
+     *
+     * @param networkPackages
+     */
+    public static synchronized void send(NetworkPackage... networkPackages) {
+        send(Arrays.asList(networkPackages));
     }
 
     /**
@@ -246,5 +261,18 @@ public abstract class NetworkHandler {
             Log.e("Error parsing Gateway AutoDiscover message: " + message, e);
             return null;
         }
+    }
+
+    public static Set<Communicator> getActors(EZcontrol_XS1 eZcontrol_xs1) {
+        Set<Communicator> communicators = new HashSet<>();
+
+
+        return communicators;
+    }
+
+    public static Set<Sensor> getSensors(EZcontrol_XS1 eZcontrol_xs1) {
+        Set<Sensor> sensors = new HashSet<>();
+
+        return sensors;
     }
 }

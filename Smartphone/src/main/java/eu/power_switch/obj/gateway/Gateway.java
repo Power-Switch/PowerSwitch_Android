@@ -21,6 +21,8 @@ package eu.power_switch.obj.gateway;
 import java.util.HashSet;
 import java.util.Set;
 
+import eu.power_switch.network.NetworkPackage;
+
 /**
  * Represents a Gateway that can receive network packages from the app and convert them for the actual wireless devices
  */
@@ -186,6 +188,8 @@ public abstract class Gateway {
     }
 
     public abstract String getModelAsString();
+
+    public abstract NetworkPackage.CommunicationType getCommunicationType();
 
     public enum Capability {
         SEND,

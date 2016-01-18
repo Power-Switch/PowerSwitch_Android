@@ -22,9 +22,13 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 
 import eu.power_switch.R;
@@ -177,21 +181,48 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
     }
 
     private void send(NetworkPackage networkPackage) throws Exception {
-        InetAddress host = InetAddress.getByName(networkPackage.getHost());
-        int port = networkPackage.getPort();
+        switch (networkPackage.getCommunicationType()) {
+            case UDP:
+                InetAddress host = InetAddress.getByName(networkPackage.getHost());
+                int port = networkPackage.getPort();
 
-        socket = new DatagramSocket(null);
-        socket.setReuseAddress(true);
-        socket.connect(host, port);
+                socket = new DatagramSocket(null);
+                socket.setReuseAddress(true);
+                socket.connect(host, port);
 
-        byte[] messageBuffer = networkPackage.getMessage().getBytes();
-        DatagramPacket messagePacket = new DatagramPacket(messageBuffer, messageBuffer.length, host, port);
-        socket.send(messagePacket);
+                byte[] messageBuffer = networkPackage.getMessage().getBytes();
+                DatagramPacket messagePacket = new DatagramPacket(messageBuffer, messageBuffer.length, host, port);
+                socket.send(messagePacket);
 
-        Log.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port
-                + " Message: \"" + new String(messageBuffer) + "\" sent.");
+                Log.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port
+                        + " Message: \"" + new String(messageBuffer) + "\" sent.");
 
-        socket.disconnect();
-        socket.close();
+                socket.disconnect();
+                socket.close();
+                break;
+            case HTTP:
+                URL url = new URL("http://" + networkPackage.getHost() + ":" + networkPackage.getPort() + "/" +
+                        networkPackage.getMessage());
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                try {
+                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                    readStream(in);
+                } finally {
+                    urlConnection.disconnect();
+                }
+                break;
+        }
+    }
+
+    private void readStream(InputStream inputStream) {
+        String response;
+
+        java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
+        if (s.hasNext()) {
+            response = s.next();
+            Log.d("HTTP Response", response);
+        } else {
+            return;
+        }
     }
 }

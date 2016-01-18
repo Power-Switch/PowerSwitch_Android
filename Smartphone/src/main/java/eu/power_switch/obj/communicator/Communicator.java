@@ -18,13 +18,20 @@
 
 package eu.power_switch.obj.communicator;
 
+import org.json.JSONObject;
+
+import java.util.Map;
+
+import eu.power_switch.network.NetworkResponseCallback;
+import eu.power_switch.obj.gateway.Gateway;
+
 /**
  * This class represents a network device, that is able to send data to the smartphone application as well as receive
  * data from it for executing actions or setting values
  * <p/>
  * Created by Markus on 15.01.2016.
  */
-public abstract class Communicator {
+public abstract class Communicator implements NetworkResponseCallback {
 
     /**
      * ID of this communicator
@@ -47,6 +54,11 @@ public abstract class Communicator {
     protected String model;
 
     /**
+     *
+     */
+    protected Map<Object, Object> values;
+
+    /**
      * Constructor
      *
      * @param id ID of this Communicator
@@ -55,6 +67,10 @@ public abstract class Communicator {
         this.id = id;
     }
 
-    public abstract Object getValue(Object key);
+    public Object getValue(Gateway gateway, Object key) {
+        return values.get(key);
+    }
+
+    public abstract JSONObject setValue(Gateway gateway, Object key, Object value);
 
 }
