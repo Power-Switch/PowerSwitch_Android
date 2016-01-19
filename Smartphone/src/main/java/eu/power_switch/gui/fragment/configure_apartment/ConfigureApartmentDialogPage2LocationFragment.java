@@ -90,9 +90,11 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         mapView.getMapAsync(this);
 
         geofenceRadiusEditText = (EditText) rootView.findViewById(R.id.geofenceRadiusEditText);
-        geofenceRadiusEditText.setText(String.valueOf(currentGeofenceRadius));
+        geofenceRadiusEditText.setText(String.valueOf((int) currentGeofenceRadius));
 
         geofenceRadiusSeekbar = (SeekBar) rootView.findViewById(R.id.geofenceRadiusSeekbar);
+        geofenceRadiusSeekbar.setMax(2000);
+        geofenceRadiusSeekbar.setProgress((int) currentGeofenceRadius);
         geofenceRadiusSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -109,8 +111,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 updateGeofenceRadius(seekBar.getProgress());
             }
         });
-        geofenceRadiusSeekbar.setMax(2000);
-        geofenceRadiusSeekbar.setProgress((int) currentGeofenceRadius);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureApartmentDialog.APARTMENT_ID_KEY)) {
