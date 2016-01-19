@@ -194,7 +194,7 @@ public final class DatabaseHandler {
      * @param location       Location
      * @param geofenceRadius Geofence radius (in meter)
      */
-    public static void updateApartment(Long id, String newName, List<Gateway> gateways, LatLng location, int
+    public static void updateApartment(Long id, String newName, List<Gateway> gateways, LatLng location, double
             geofenceRadius) throws Exception {
         openWritable();
         try {

@@ -62,7 +62,8 @@ abstract class ApartmentHandler {
      * @param location
      * @param geofenceRadius
      */
-    protected static void update(Long id, String newName, List<Gateway> gateways, LatLng location, int geofenceRadius) {
+    protected static void update(Long id, String newName, List<Gateway> gateways, LatLng location, double
+            geofenceRadius) {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, newName);
         // TODO: Save Location and Geofence Radius to DB

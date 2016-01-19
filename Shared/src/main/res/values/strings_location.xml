@@ -20,5 +20,6 @@
 <resources>
 
     <string name="location">Location</string>
+    <string name="radius">Radius</string>
 
 </resources>

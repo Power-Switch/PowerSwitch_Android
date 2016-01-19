@@ -18,15 +18,20 @@
 
 package eu.power_switch.gui.fragment.configure_apartment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.SeekBar;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -63,12 +68,14 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     private String currentName;
     private List<Gateway> currentCheckedGateways;
     private LatLng currentLocation;
-    private int currentGeofenceRadius = 100;
+    private double currentGeofenceRadius = 100;
     private MapView mapView;
     private GoogleMap googleMap;
     private LocationHandler locationHandler;
     private Marker clickMarker;
     private Circle geofenceCircle;
+    private SeekBar geofenceRadiusSeekbar;
+    private EditText geofenceRadiusEditText;
 
     @Nullable
     @Override
@@ -82,6 +89,29 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        geofenceRadiusEditText = (EditText) rootView.findViewById(R.id.geofenceRadiusEditText);
+        geofenceRadiusEditText.setText(String.valueOf(currentGeofenceRadius));
+
+        geofenceRadiusSeekbar = (SeekBar) rootView.findViewById(R.id.geofenceRadiusSeekbar);
+        geofenceRadiusSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                updateGeofenceRadius(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                updateGeofenceRadius(seekBar.getProgress());
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                updateGeofenceRadius(seekBar.getProgress());
+            }
+        });
+        geofenceRadiusSeekbar.setMax(2000);
+        geofenceRadiusSeekbar.setProgress((int) currentGeofenceRadius);
+
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureApartmentDialog.APARTMENT_ID_KEY)) {
             apartmentId = args.getLong(ConfigureApartmentDialog.APARTMENT_ID_KEY);
@@ -93,6 +123,16 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         return rootView;
     }
 
+    private void updateGeofenceRadius(double radius) {
+        currentGeofenceRadius = radius;
+
+        if (geofenceCircle != null) {
+            geofenceCircle.setRadius(radius);
+        }
+
+        geofenceRadiusEditText.setText(String.valueOf((int) radius));
+    }
+
     private void initializeApartmentData(long apartmentId) {
         try {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
@@ -100,6 +140,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             currentCheckedGateways = apartment.getAssociatedGateways();
             currentLocation = apartment.getLocation();
             currentGeofenceRadius = apartment.getGeofenceRadius();
+            updateGeofenceRadius(currentGeofenceRadius);
 
         } catch (Exception e) {
             Log.e(e);
@@ -142,6 +183,12 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         this.googleMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+                .PERMISSION_GRANTED && ActivityCompat
+                .checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        } else {
+            googleMap.setMyLocationEnabled(true);
+        }
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -150,7 +197,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
 
                 if (clickMarker == null) {
                     clickMarker = googleMap.addMarker(new MarkerOptions().position(latLng)
-                            .title(getString(R.string.location)));
+                            .title(getString(R.string.location))
+                            .draggable(true));
                 } else {
                     clickMarker.setPosition(latLng);
                 }
@@ -166,6 +214,28 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                     geofenceCircle.setRadius(currentGeofenceRadius);
                 }
 
+            }
+        });
+        googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                if (clickMarker.getId().equals(marker.getId())) {
+                    geofenceCircle.setCenter(marker.getPosition());
+                }
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+                if (clickMarker.getId().equals(marker.getId())) {
+                    geofenceCircle.setCenter(marker.getPosition());
+                }
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                if (clickMarker.getId().equals(marker.getId())) {
+                    geofenceCircle.setCenter(marker.getPosition());
+                }
             }
         });
 

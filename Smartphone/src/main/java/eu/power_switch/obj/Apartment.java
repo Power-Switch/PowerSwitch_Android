@@ -69,7 +69,7 @@ public class Apartment {
     /**
      * Geofence Radius of this Apartment
      */
-    private int geofenceRadius;
+    private double geofenceRadius;
 
     public Apartment(Long id, String name) {
         this.id = id;
@@ -79,7 +79,7 @@ public class Apartment {
         this.gateways = Collections.EMPTY_LIST;
     }
 
-    public Apartment(Long id, String name, List<Gateway> gateways, LatLng location, int geofenceRadius) {
+    public Apartment(Long id, String name, List<Gateway> gateways, LatLng location, double geofenceRadius) {
         this.id = id;
         this.name = name;
         this.rooms = Collections.EMPTY_LIST;
@@ -159,7 +159,7 @@ public class Apartment {
         return location;
     }
 
-    public int getGeofenceRadius() {
+    public double getGeofenceRadius() {
         return geofenceRadius;
     }
 }
