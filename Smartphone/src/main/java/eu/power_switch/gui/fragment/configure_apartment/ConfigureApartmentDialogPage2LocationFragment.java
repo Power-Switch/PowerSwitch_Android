@@ -26,6 +26,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+
 import java.util.List;
 
 import eu.power_switch.R;
@@ -43,19 +47,23 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage2LocationFragment extends Fragment {
+public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyCallback {
 
     private long apartmentId;
     private View rootView;
 
     private String currentName;
     private List<Gateway> currentCheckedGateways;
+    private MapView mapView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_apartment_page_2, container, false);
+
+        mapView = (MapView) rootView.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureApartmentDialog.APARTMENT_ID_KEY)) {
@@ -109,5 +117,34 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment {
 
     public boolean checkValidity() {
         return false;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 }

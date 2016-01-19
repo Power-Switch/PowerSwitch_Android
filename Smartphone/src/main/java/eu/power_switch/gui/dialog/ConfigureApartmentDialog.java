@@ -65,7 +65,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -84,6 +83,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             imageButtonDelete.setVisibility(View.VISIBLE);
             setSaveButtonState(true);
         } else {
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+                    (RecyclerViewFragment) getTargetFragment()));
             // hide if new apartment
             imageButtonDelete.setVisibility(View.GONE);
             setSaveButtonState(false);

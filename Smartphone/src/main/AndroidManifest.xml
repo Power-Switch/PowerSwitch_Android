@@ -23,21 +23,23 @@
     android:versionCode="70"
     android:versionName="@string/app_version">
 
+
     <!-- Smartphone ONLY Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
+
+    <!-- IMPLICIT THROUGH PLAY SERVICES -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> -->
+    <!-- <uses-permission android:name="android.permission.INTERNET"/> -->
 
     <!-- Shared Permissions -->
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <!-- Wear ONLY Permissions -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-
 
     <application
         android:name="eu.power_switch.application.PowerSwitch"
@@ -181,6 +183,14 @@
             <!--</intent-filter>-->
         </service>
 
+        <!-- Google Play Services Version Number -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+        <!-- Google Maps API Key-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB4bVF6jhwXE35xvNLP7LOdpsM5uleCoEs"/>
         <!-- LG Dual Window -->
         <meta-data
             android:name="com.lge.support.SPLIT_WINDOW"
