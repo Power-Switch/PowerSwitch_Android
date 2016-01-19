@@ -37,11 +37,9 @@ public class GeofenceIntentService extends IntentService {
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
      */
-    public GeofenceIntentService(String name) {
-        super(name);
+    public GeofenceIntentService() {
+        super("GeofenceIntentService");
     }
 
     @Override

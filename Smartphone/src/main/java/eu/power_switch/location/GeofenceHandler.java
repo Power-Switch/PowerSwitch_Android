@@ -21,6 +21,7 @@ package eu.power_switch.location;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +29,7 @@ import android.support.v4.app.ActivityCompat;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
@@ -37,6 +39,58 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 21.12.2015.
  */
 public class GeofenceHandler {
+
+    /**
+     * Creates a Geofence Object with given parameters
+     *
+     * @param id                 ID of Geofence
+     * @param latitude           Latitude of Geofence location
+     * @param longitude          Longitude of Geofence location
+     * @param radius             Radius in meter of geofence, for best results with WiFi networks this value should be >= 100
+     * @param expirationDuration ???
+     * @return Geofence
+     */
+    public static Geofence createGeofence(String id, double latitude, double longitude, int radius,
+                                          long expirationDuration) {
+        Geofence geofence = new Geofence.Builder()
+                // Set the request ID of the geofence. This is a string to identify this
+                // geofence.
+                .setRequestId(id)
+
+                .setCircularRegion(
+                        latitude,
+                        longitude,
+                        radius
+                )
+                .setExpirationDuration(expirationDuration)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+
+        return geofence;
+    }
+
+    /**
+     * @return
+     */
+    private GeofencingRequest getGeofencingRequest() {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
+        builder.addGeofences(mGeofenceList);
+        return builder.build();
+    }
+
+    private PendingIntent getGeofencePendingIntent(Context context) {
+        // Reuse the PendingIntent if we already have it.
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+        Intent intent = new Intent(context, GeofenceIntentService.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // calling addGeofences() and removeGeofences().
+        return PendingIntent.getService(context, 0, intent, PendingIntent.
+                FLAG_UPDATE_CURRENT);
+    }
 
     public void addGeofences(Context context, GoogleApiClient googleApiClient, PendingIntent geofencePendingIntent) {
 
@@ -67,10 +121,6 @@ public class GeofenceHandler {
     }
 
     private PendingIntent getGeofencePendingIntent() {
-        return null;
-    }
-
-    private GeofencingRequest getGeofencingRequest() {
         return null;
     }
 
