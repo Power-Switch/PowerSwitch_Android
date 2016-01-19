@@ -64,42 +64,6 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setDialogTitle(getString(R.string.configure_scene));
-
-        setDeleteAction(new Runnable() {
-            @Override
-            public void run() {
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                        .scene_will_be_gone_forever)
-                        .setPositiveButton
-                                (android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        try {
-                                            DatabaseHandler.deleteScene(sceneId);
-
-                                            // notify scenes fragment
-                                            ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                            // notify timers fragment
-                                            TimersFragment.sendTimersChangedBroadcast(getActivity());
-
-                                            // update scene widgets
-                                            SceneWidgetProvider.forceWidgetUpdate(getActivity());
-
-                                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                                    R.string.scene_deleted, Snackbar.LENGTH_LONG);
-                                        } catch (Exception e) {
-                                            Log.e(e);
-                                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-                                        }
-
-                                        // close dialog
-                                        getDialog().dismiss();
-                                    }
-                                }).setNeutralButton(android.R.string.cancel, null).show();
-            }
-        });
-
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -126,6 +90,11 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
+    protected int getDialogTitle() {
+        return R.string.configure_scene;
+    }
+
+    @Override
     protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureSceneDialogPage2SetupFragment setupFragment =
@@ -141,6 +110,38 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                 customTabAdapter.getSetupFragment();
         setupFragment.saveCurrentConfigurationToDatabase();
         getDialog().dismiss();
+    }
+
+    @Override
+    protected void deleteExistingConfigurationFromDatabase() {
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
+                .scene_will_be_gone_forever)
+                .setPositiveButton
+                        (android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    DatabaseHandler.deleteScene(sceneId);
+
+                                    // notify scenes fragment
+                                    ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                                    // notify timers fragment
+                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
+
+                                    // update scene widgets
+                                    SceneWidgetProvider.forceWidgetUpdate(getActivity());
+
+                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                            R.string.scene_deleted, Snackbar.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                }
+
+                                // close dialog
+                                getDialog().dismiss();
+                            }
+                        }).setNeutralButton(android.R.string.cancel, null).show();
     }
 
     @Override

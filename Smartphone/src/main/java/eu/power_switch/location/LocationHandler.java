@@ -65,17 +65,20 @@ public class LocationHandler {
                     .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                         @Override
                         public void onConnected(@Nullable Bundle bundle) {
+                            Log.d("GoogleApiClient connected");
                             isGoogleApiConnected = true;
                         }
 
                         @Override
                         public void onConnectionSuspended(int i) {
+                            Log.d("GoogleApiClient connection suspended");
                             isGoogleApiConnected = false;
                         }
                     })
                     .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                            Log.e("GoogleApiClient connection failed");
                             isGoogleApiConnected = false;
                         }
                     })
@@ -113,11 +116,7 @@ public class LocationHandler {
             // Marshmallow+
             int hasLocationPermission = ContextCompat.checkSelfPermission(activity, Manifest
                     .permission.ACCESS_FINE_LOCATION);
-            if (hasLocationPermission == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
-                return false;
-            }
+            return hasLocationPermission == PackageManager.PERMISSION_GRANTED;
         } else {
             // Pre-Marshmallow
             return true;

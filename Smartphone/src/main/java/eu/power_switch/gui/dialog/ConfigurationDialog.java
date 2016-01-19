@@ -54,7 +54,6 @@ public abstract class ConfigurationDialog extends DialogFragment {
     private boolean modified;
     private View rootView;
     private View contentView;
-    private Runnable deleteAction;
 
     @Nullable
     @Override
@@ -71,9 +70,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (deleteAction != null) {
-                    deleteAction.run();
-                }
+                deleteExistingConfigurationFromDatabase();
             }
         });
 
@@ -136,15 +133,6 @@ public abstract class ConfigurationDialog extends DialogFragment {
      * @param arguments arguments passed in via setArguments()
      */
     protected abstract void initExistingData(Bundle arguments);
-
-    /**
-     * Set a deleteAction
-     *
-     * @param runnable Runnable containing delete actions
-     */
-    protected void setDeleteAction(Runnable runnable) {
-        this.deleteAction = runnable;
-    }
 
     @NonNull
     @Override
@@ -237,7 +225,13 @@ public abstract class ConfigurationDialog extends DialogFragment {
 
     /**
      * This method is called when the user wants to save the current configuration to database and close the dialog
-     * Save the current configuration of your object to database in this method
+     * Save the current configuration of your object to database in this method.
      */
     protected abstract void saveCurrentConfigurationToDatabase();
+
+    /**
+     * This method is called when the user wants to delete the existing configuration from database (if one exists) and      * close
+     * the dialog. Delete the existing configuration of your object from the database in this method.
+     */
+    protected abstract void deleteExistingConfigurationFromDatabase();
 }

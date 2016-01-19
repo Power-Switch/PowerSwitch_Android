@@ -69,45 +69,6 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening ConfigureReceiverDialog...");
 
-        setDialogTitle(getString(R.string.configure_receiver));
-
-        setDeleteAction(new Runnable() {
-            @Override
-            public void run() {
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                        .receiver_will_be_gone_forever)
-                        .setPositiveButton
-                                (android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        try {
-                                            DatabaseHandler.deleteReceiver(receiverId);
-
-                                            // notify rooms fragment
-                                            RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-
-                                            // scenes could change too if receiver was used in a scene
-                                            ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                            // same for timers
-                                            TimersFragment.sendTimersChangedBroadcast(getActivity());
-
-                                            // update receiver widgets
-                                            ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
-
-                                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                                    R.string.receiver_deleted, Snackbar.LENGTH_LONG);
-                                        } catch (Exception e) {
-                                            Log.e(e);
-                                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-                                        }
-
-                                        // close dialog
-                                        getDialog().dismiss();
-                                    }
-                                }).setNeutralButton(android.R.string.cancel, null).show();
-            }
-        });
-
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -145,6 +106,11 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
+    protected int getDialogTitle() {
+        return R.string.configure_receiver;
+    }
+
+    @Override
     protected void saveCurrentConfigurationToDatabase() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
@@ -157,6 +123,41 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
             }
             getDialog().dismiss();
         }
+    }
+
+    @Override
+    protected void deleteExistingConfigurationFromDatabase() {
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
+                .receiver_will_be_gone_forever)
+                .setPositiveButton
+                        (android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    DatabaseHandler.deleteReceiver(receiverId);
+
+                                    // notify rooms fragment
+                                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+
+                                    // scenes could change too if receiver was used in a scene
+                                    ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                                    // same for timers
+                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
+
+                                    // update receiver widgets
+                                    ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+
+                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                            R.string.receiver_deleted, Snackbar.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                }
+
+                                // close dialog
+                                getDialog().dismiss();
+                            }
+                        }).setNeutralButton(android.R.string.cancel, null).show();
     }
 
     @Override

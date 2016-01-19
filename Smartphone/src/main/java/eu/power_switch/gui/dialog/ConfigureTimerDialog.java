@@ -66,37 +66,6 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening ConfigureTimerDialog...");
 
-        setDialogTitle(getString(R.string.configure_timer));
-
-        setDeleteAction(new Runnable() {
-            @Override
-            public void run() {
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                        .timer_will_be_gone_forever)
-                        .setPositiveButton
-                                (android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        try {
-                                            DatabaseHandler.deleteTimer(timerId);
-
-                                            // notify scenes fragment
-                                            TimersFragment.sendTimersChangedBroadcast(getActivity());
-
-                                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                                    R.string.timer_deleted, Snackbar.LENGTH_LONG);
-                                        } catch (Exception e) {
-                                            Log.e(e);
-                                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-                                        }
-
-                                        // close dialog
-                                        getDialog().dismiss();
-                                    }
-                                }).setNeutralButton(android.R.string.cancel, null).show();
-            }
-        });
-
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -125,6 +94,11 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
+    protected int getDialogTitle() {
+        return R.string.configure_timer;
+    }
+
+    @Override
     protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
         ConfigureTimerDialogPage4SummaryFragment summaryFragment =
@@ -144,6 +118,33 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
             summaryFragment.saveCurrentConfigurationToDatabase();
             getDialog().dismiss();
         }
+    }
+
+    @Override
+    protected void deleteExistingConfigurationFromDatabase() {
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
+                .timer_will_be_gone_forever)
+                .setPositiveButton
+                        (android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    DatabaseHandler.deleteTimer(timerId);
+
+                                    // notify scenes fragment
+                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
+
+                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                            R.string.timer_deleted, Snackbar.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                }
+
+                                // close dialog
+                                getDialog().dismiss();
+                            }
+                        }).setNeutralButton(android.R.string.cancel, null).show();
     }
 
     @Override

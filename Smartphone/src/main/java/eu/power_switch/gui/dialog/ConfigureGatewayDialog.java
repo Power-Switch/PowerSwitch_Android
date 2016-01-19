@@ -84,32 +84,6 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_configure_gateway_content, null);
 
-        setDeleteAction(new Runnable() {
-            @Override
-            public void run() {
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                        .gateway_will_be_gone_forever)
-                        .setPositiveButton
-                                (android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        try {
-                                            DatabaseHandler.deleteGateway(gatewayId);
-                                            GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-                                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                                    R.string.gateway_removed, Snackbar.LENGTH_LONG);
-                                        } catch (Exception e) {
-                                            Log.e(e);
-                                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-                                        }
-
-                                        // close dialog
-                                        getDialog().dismiss();
-                                    }
-                                }).setNeutralButton(android.R.string.cancel, null).show();
-            }
-        });
-
         try {
             existingGateways = DatabaseHandler.getAllGateways();
         } catch (Exception e) {
@@ -425,5 +399,29 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
             StatusMessageHandler.showStatusMessage(rootView.getContext(),
                     R.string.unknown_error, Snackbar.LENGTH_LONG);
         }
+    }
+
+    @Override
+    protected void deleteExistingConfigurationFromDatabase() {
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
+                .gateway_will_be_gone_forever)
+                .setPositiveButton
+                        (android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    DatabaseHandler.deleteGateway(gatewayId);
+                                    GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
+                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                            R.string.gateway_removed, Snackbar.LENGTH_LONG);
+                                } catch (Exception e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                }
+
+                                // close dialog
+                                getDialog().dismiss();
+                            }
+                        }).setNeutralButton(android.R.string.cancel, null).show();
     }
 }

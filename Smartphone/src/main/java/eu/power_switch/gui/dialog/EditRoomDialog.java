@@ -113,45 +113,6 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listOfReceivers);
 
-        setDeleteAction(new Runnable() {
-            @Override
-            public void run() {
-                new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                        .room_will_be_gone_forever)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DatabaseHandler.deleteRoom(roomId);
-
-                                    // notify rooms fragment
-                                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-                                    // notify scenes fragment
-                                    ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                    // notify timers fragment
-                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
-
-                                    // update receiver widgets
-                                    ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
-                                    // update room widgets
-                                    RoomWidgetProvider.forceWidgetUpdate(getActivity());
-                                    // update scene widgets
-                                    SceneWidgetProvider.forceWidgetUpdate(getActivity());
-
-                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                            R.string.room_deleted, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-                                }
-
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
-            }
-        });
-
         return rootView;
     }
 
@@ -223,6 +184,43 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
+    }
+
+    @Override
+    protected void deleteExistingConfigurationFromDatabase() {
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
+                .room_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DatabaseHandler.deleteRoom(roomId);
+
+                            // notify rooms fragment
+                            RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+                            // notify scenes fragment
+                            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                            // notify timers fragment
+                            TimersFragment.sendTimersChangedBroadcast(getActivity());
+
+                            // update receiver widgets
+                            ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+                            // update room widgets
+                            RoomWidgetProvider.forceWidgetUpdate(getActivity());
+                            // update scene widgets
+                            SceneWidgetProvider.forceWidgetUpdate(getActivity());
+
+                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                    R.string.room_deleted, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            Log.e(e);
+                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                        }
+
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                }).setNeutralButton(android.R.string.cancel, null).show();
     }
 
     @Override

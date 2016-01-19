@@ -18,36 +18,33 @@
 
 package eu.power_switch.gui.dialog;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1NameFragment;
+import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage2LocationFragment;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -55,191 +52,53 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public class ConfigureApartmentDialog extends ConfigurationDialog {
+public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     /**
      * ID of existing Apartment to Edit
      */
     public static final String APARTMENT_ID_KEY = "ApartmentId";
 
-    private View rootView;
-    private TextInputLayout floatingName;
-    private EditText name;
+    private BroadcastReceiver broadcastReceiver;
 
     private long apartmentId = -1;
 
-    private List<Apartment> existingApartments;
-    private String originalName;
-    private LinearLayout linearLayoutSelectableGateways;
-
-    private Collection<CheckBox> gatewayCheckboxList = new ArrayList<>();
-
     @Override
-    protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_configure_apartment_content, null);
+    protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        setDeleteAction(new Runnable() {
+        broadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void run() {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.are_you_sure)
-                        .setMessage(R.string.apartment_will_be_gone_forever)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                                    if (SmartphonePreferencesHandler.getCurrentApartmentId()
-                                            .equals(apartment.getId())) {
-                                        DatabaseHandler.deleteApartment(apartmentId);
-                                        // update current Apartment selection
-                                        Apartment firstApartment = DatabaseHandler.getAllApartments().get(0);
-                                        SmartphonePreferencesHandler.setCurrentApartmentId(firstApartment.getId());
-                                    } else {
-                                        DatabaseHandler.deleteApartment(apartmentId);
-                                    }
-
-
-                                    ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                            R.string.apartment_removed, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-                                }
-
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
-            }
-        });
-
-        try {
-            existingApartments = DatabaseHandler.getAllApartments();
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-        }
-
-        TextWatcher textWatcher = new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onReceive(Context context, Intent intent) {
                 notifyConfigurationChanged();
-                isValid();
             }
         };
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.apartment_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.txt_edit_apartment_name);
-        name.addTextChangedListener(textWatcher);
-
-        linearLayoutSelectableGateways = (LinearLayout) rootView.findViewById(R.id.linearLayout_gateways);
-        addGatewaysToLayout();
-
-        return rootView;
-    }
-
-    /**
-     * Generate Gateway items and add them to view
-     */
-    private void addGatewaysToLayout() {
-        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
-
-        try {
-            List<Gateway> gateways = DatabaseHandler.getAllGateways();
-            for (Gateway gateway : gateways) {
-                LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
-                // every inflated layout has to be added manually, attaching while inflating will only generate every
-                // child one, but not for every gateway
-                linearLayoutSelectableGateways.addView(gatewayLayout);
-
-                final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
-                checkBox.setTag(R.string.gateways, gateway);
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        notifyConfigurationChanged();
-                    }
-                });
-                gatewayCheckboxList.add(checkBox);
-
-                gatewayLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        checkBox.setChecked(!checkBox.isChecked());
-                    }
-                });
-
-                TextView gatewayName = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayName);
-                gatewayName.setText(gateway.getName());
-
-                TextView gatewayType = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayType);
-                gatewayType.setText(gateway.getModel());
-
-                TextView gatewayHost = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayHost);
-                gatewayHost.setText(String.format("%s:%d", gateway.getHost(), gateway.getPort()));
-
-                TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
-                if (gateway.isActive()) {
-                    gatewayDisabled.setVisibility(View.GONE);
-                } else {
-                    gatewayDisabled.setVisibility(View.VISIBLE);
-                }
-            }
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-        }
-    }
-
-    /**
-     * Get selected Gateways
-     *
-     * @return List of Gateways
-     */
-    private ArrayList<Gateway> getCheckedGateways() {
-        ArrayList<Gateway> checkedGateways = new ArrayList<>();
-
-        for (CheckBox checkBox : gatewayCheckboxList) {
-            if (checkBox.isChecked()) {
-                Gateway gateway = (Gateway) checkBox.getTag(R.string.gateways);
-                checkedGateways.add(gateway);
-            }
-        }
-
-        return checkedGateways;
     }
 
     @Override
     protected void initExistingData(Bundle args) {
         if (args != null && args.containsKey(APARTMENT_ID_KEY)) {
             apartmentId = args.getLong(APARTMENT_ID_KEY);
-            initializeApartmentData(apartmentId);
-        } else {
-            // enable all gateways by default
-            for (CheckBox checkBox : gatewayCheckboxList) {
-                checkBox.setChecked(true);
-            }
 
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+                    (RecyclerViewFragment) getTargetFragment(), apartmentId));
+            imageButtonDelete.setVisibility(View.VISIBLE);
+            setSaveButtonState(true);
+        } else {
             // hide if new apartment
             imageButtonDelete.setVisibility(View.GONE);
             setSaveButtonState(false);
         }
 
-        // Disable delete Button if only one apartment is left
-        if (existingApartments.size() <= 1) {
-            imageButtonDelete.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
-            imageButtonDelete.setClickable(false);
+        try {
+            // Disable delete Button if only one apartment is left
+            if (DatabaseHandler.getAllApartments().size() <= 1) {
+                imageButtonDelete.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
+                imageButtonDelete.setClickable(false);
+            }
+        } catch (Exception e) {
+            dismiss();
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
 
         setModified(false);
@@ -250,82 +109,12 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
         return R.string.configure_apartment;
     }
 
-    /**
-     * Loads existing apartment data into fields
-     *
-     * @param apartmentId ID of existing Apartment
-     */
-    private void initializeApartmentData(Long apartmentId) {
-        try {
-            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-            originalName = apartment.getName();
-            name.setText(originalName);
-
-            for (Gateway gateway : apartment.getAssociatedGateways()) {
-                for (CheckBox checkBox : gatewayCheckboxList) {
-                    Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
-                    if (gateway.getId().equals(checkBoxGateway.getId())) {
-                        checkBox.setChecked(true);
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-        }
-    }
-
     @Override
     protected boolean isValid() {
-        boolean nameIsValid;
-
-        String name = getCurrentName();
-
-        nameIsValid = checkNameValidity(name);
-
-        return nameIsValid;
-    }
-
-    /**
-     * Checks if current name is valid
-     *
-     * @param name
-     * @return true if valid
-     */
-    private boolean checkNameValidity(String name) {
-        if (name.length() <= 0) {
-            floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
-            return false;
-        } else if (checkNameAlreadyExists()) {
-            floatingName.setError(getString(R.string.apartment_already_exists));
-            floatingName.setErrorEnabled(true);
-            return false;
-        } else {
-            floatingName.setError(null);
-            floatingName.setErrorEnabled(false);
-            return true;
-        }
-    }
-
-    private boolean checkNameAlreadyExists() {
-        for (Apartment apartment : existingApartments) {
-            if (!apartment.getId().equals(apartmentId) && apartment.getName().equals(getCurrentName())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Gets current name field value
-     *
-     * @return Name of Apartment
-     */
-    public String getCurrentName() {
-        return this.name.getText().toString().trim();
+        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+        ConfigureApartmentDialogPage2LocationFragment setupFragment =
+                customTabAdapter.getSetupFragment();
+        return setupFragment.checkValidity();
     }
 
     /**
@@ -334,28 +123,131 @@ public class ConfigureApartmentDialog extends ConfigurationDialog {
      */
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        try {
-            if (apartmentId == -1) {
-                String apartmentName = getCurrentName();
+        Log.d("Saving scene");
+        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+        ConfigureApartmentDialogPage2LocationFragment setupFragment =
+                customTabAdapter.getSetupFragment();
+        setupFragment.saveCurrentConfigurationToDatabase();
+        getDialog().dismiss();
+    }
 
-                Apartment newApartment = new Apartment((long) -1, apartmentName, getCheckedGateways());
+    @Override
+    protected void deleteExistingConfigurationFromDatabase() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.are_you_sure)
+                .setMessage(R.string.apartment_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                            if (SmartphonePreferencesHandler.getCurrentApartmentId()
+                                    .equals(apartment.getId())) {
+                                DatabaseHandler.deleteApartment(apartmentId);
+                                // update current Apartment selection
+                                Apartment firstApartment = DatabaseHandler.getAllApartments().get(0);
+                                SmartphonePreferencesHandler.setCurrentApartmentId(firstApartment.getId());
+                            } else {
+                                DatabaseHandler.deleteApartment(apartmentId);
+                            }
 
-                try {
-                    DatabaseHandler.addApartment(newApartment);
-                } catch (Exception e) {
-                    StatusMessageHandler.showStatusMessage(rootView.getContext(),
-                            R.string.unknown_error, Snackbar.LENGTH_LONG);
-                }
-            } else {
-                DatabaseHandler.updateApartment(apartmentId, getCurrentName(), getCheckedGateways());
+
+                            ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
+                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                    R.string.apartment_removed, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            Log.e(e);
+                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                        }
+
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                }).setNeutralButton(android.R.string.cancel, null).show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
+    }
+
+    private static class CustomTabAdapter extends FragmentPagerAdapter {
+
+        private Context context;
+        private long apartmentId;
+        private ConfigureApartmentDialogPage2LocationFragment setupFragment;
+        private RecyclerViewFragment recyclerViewFragment;
+
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+            super(fm);
+            this.context = context;
+            this.apartmentId = -1;
+            this.recyclerViewFragment = recyclerViewFragment;
+        }
+
+        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
+            super(fm);
+            this.context = context;
+            this.apartmentId = id;
+            this.recyclerViewFragment = recyclerViewFragment;
+        }
+
+        public ConfigureApartmentDialogPage2LocationFragment getSetupFragment() {
+            return setupFragment;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            switch (position) {
+                case 0:
+                    return context.getString(R.string.name);
+                case 1:
+                    return context.getString(R.string.location);
             }
 
-            ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.apartment_saved,
-                    Snackbar.LENGTH_LONG);
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(rootView.getContext(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+            return "" + (position + 1);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            Fragment fragment = null;
+
+            switch (i) {
+                case 0:
+                    fragment = new ConfigureApartmentDialogPage1NameFragment();
+                    break;
+                case 1:
+                    fragment = new ConfigureApartmentDialogPage2LocationFragment();
+                    fragment.setTargetFragment(recyclerViewFragment, 0);
+
+                    setupFragment = (ConfigureApartmentDialogPage2LocationFragment) fragment;
+            }
+
+            if (fragment != null && apartmentId != -1) {
+                Bundle bundle = new Bundle();
+                bundle.putLong(APARTMENT_ID_KEY, apartmentId);
+                fragment.setArguments(bundle);
+            }
+
+            return fragment;
+        }
+
+        /**
+         * @return the number of pages to display
+         */
+        @Override
+        public int getCount() {
+            return 2;
         }
     }
 }

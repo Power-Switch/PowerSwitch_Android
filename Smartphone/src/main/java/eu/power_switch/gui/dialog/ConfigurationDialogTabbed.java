@@ -23,6 +23,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -52,10 +53,8 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
     protected ImageButton imageButtonCancel;
     protected ImageButton imageButtonSave;
 
-    private String title = "Configuration";
     private boolean modified;
     private View rootView;
-    private Runnable deleteAction;
     private TabLayout tabLayout;
     private ViewPager tabViewPager;
     private FragmentPagerAdapter customTabAdapter;
@@ -91,9 +90,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (deleteAction != null) {
-                    deleteAction.run();
-                }
+                deleteExistingConfigurationFromDatabase();
             }
         });
 
@@ -167,9 +164,9 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      */
     protected abstract void initExistingData(Bundle arguments);
 
-    protected void setDialogTitle(String title) {
-        this.title = title;
-    }
+    protected abstract
+    @StringRes
+    int getDialogTitle();
 
     /**
      * Get pager adapter of this configuration dialog
@@ -195,15 +192,6 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         tabLayout.setupWithViewPager(tabViewPager);
     }
 
-    /**
-     * Set a deleteAction
-     *
-     * @param runnable Runnable containing delete actions
-     */
-    protected void setDeleteAction(Runnable runnable) {
-        this.deleteAction = runnable;
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -227,7 +215,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
                 }
             }
         };
-        dialog.setTitle(title);
+        dialog.setTitle(getDialogTitle());
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager
                 .LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -314,4 +302,10 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      * Save the current configuration of your object to database in this method
      */
     protected abstract void saveCurrentConfigurationToDatabase();
+
+    /**
+     * This method is called when the user wants to delete the existing configuration from database (if one exists) and      * close
+     * the dialog. Delete the existing configuration of your object from the database in this method.
+     */
+    protected abstract void deleteExistingConfigurationFromDatabase();
 }

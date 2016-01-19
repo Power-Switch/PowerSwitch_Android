@@ -40,6 +40,10 @@ import eu.power_switch.shared.log.Log;
  */
 public class GeofenceHandler {
 
+    public static PendingIntent getGeofencePendingIntent(Geofence geofence) {
+        return null;
+    }
+
     /**
      * Creates a Geofence Object with given parameters
      *
@@ -70,21 +74,17 @@ public class GeofenceHandler {
         return geofence;
     }
 
-    /**
-     * @return
-     */
-    private GeofencingRequest getGeofencingRequest() {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
-        builder.addGeofences(mGeofenceList);
-        return builder.build();
-    }
+//    /**
+//     * @return
+//     */
+//    private static GeofencingRequest getGeofencingRequest() {
+//        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
+//        builder.addGeofences(mGeofenceList);
+//        return builder.build();
+//    }
 
     private PendingIntent getGeofencePendingIntent(Context context) {
-        // Reuse the PendingIntent if we already have it.
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
-        }
         Intent intent = new Intent(context, GeofenceIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofences() and removeGeofences().
@@ -92,7 +92,8 @@ public class GeofenceHandler {
                 FLAG_UPDATE_CURRENT);
     }
 
-    public void addGeofences(Context context, GoogleApiClient googleApiClient, PendingIntent geofencePendingIntent) {
+    public void addGeofences(Context context, GoogleApiClient googleApiClient, GeofencingRequest geofencingRequest,
+                             PendingIntent geofencePendingIntent) {
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED) {
@@ -110,12 +111,12 @@ public class GeofenceHandler {
 
         LocationServices.GeofencingApi.addGeofences(
                 googleApiClient,
-                getGeofencingRequest(),
-                getGeofencePendingIntent()
+                geofencingRequest,
+                geofencePendingIntent
         ).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-
+                Log.d(status.getStatusMessage());
             }
         });
     }
@@ -132,7 +133,7 @@ public class GeofenceHandler {
         ).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
-                Log.d(status);
+                Log.d(status.getStatusMessage());
             }
         }); // Result processed in onResult().
     }
