@@ -19,6 +19,7 @@
 package eu.power_switch.location;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -92,13 +93,13 @@ public class GeofenceHandler {
                 FLAG_UPDATE_CURRENT);
     }
 
-    public void addGeofences(Context context, GoogleApiClient googleApiClient, GeofencingRequest geofencingRequest,
+    public void addGeofences(Activity activity, GoogleApiClient googleApiClient, GeofencingRequest geofencingRequest,
                              PendingIntent geofencePendingIntent) {
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED) {
             // TODO: Consider calling
-            LocationHandler.requestLocationPermission();
+            LocationHandler.requestLocationPermission(activity);
 
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding

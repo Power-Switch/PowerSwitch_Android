@@ -40,90 +40,50 @@ import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * Class used to access device Location using Google Location API
+ * <p/>
  * Created by Markus on 21.12.2015.
  */
 public class LocationHandler {
 
-    private static Activity activity;
-    private static GoogleApiClient googleApiClient;
+    private Activity activity;
+    private boolean isGoogleApiConnected;
+    private GoogleApiClient googleApiClient;
 
-    private static boolean isGoogleApiConnected;
-
-    private LocationHandler() {
-    }
-
-    public static void init(Activity activity) {
-        LocationHandler.activity = activity;
+    public LocationHandler(Activity activity) {
+        this.activity = activity;
 
         if (!checkLocationPermission()) {
-            requestLocationPermission();
+            requestLocationPermission(activity);
         }
 
         // Create an instance of GoogleAPIClient.
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(activity)
-                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(@Nullable Bundle bundle) {
-                            Log.d("GoogleApiClient connected");
-                            isGoogleApiConnected = true;
-                        }
+        googleApiClient = new GoogleApiClient.Builder(activity)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+                        Log.d("GoogleApiClient connected");
+                        isGoogleApiConnected = true;
+                    }
 
-                        @Override
-                        public void onConnectionSuspended(int i) {
-                            Log.d("GoogleApiClient connection suspended");
-                            isGoogleApiConnected = false;
-                        }
-                    })
-                    .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                            Log.e("GoogleApiClient connection failed");
-                            isGoogleApiConnected = false;
-                        }
-                    })
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        Log.d("GoogleApiClient connection suspended");
+                        isGoogleApiConnected = false;
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.e("GoogleApiClient connection failed");
+                        isGoogleApiConnected = false;
+                    }
+                })
+                .addApi(LocationServices.API)
+                .build();
     }
 
-    public static void connect() {
-        if (googleApiClient != null && !isGoogleApiConnected) {
-            googleApiClient.connect();
-        }
-    }
-
-    public static void disconnect() {
-        if (googleApiClient != null && isGoogleApiConnected) {
-            googleApiClient.disconnect();
-        }
-    }
-
-    public static Location getLastLocation() {
-        // TODO: get permission
-
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
-                .PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermission();
-            return null;
-        }
-        return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-    }
-
-    private static boolean checkLocationPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            // Marshmallow+
-            int hasLocationPermission = ContextCompat.checkSelfPermission(activity, Manifest
-                    .permission.ACCESS_FINE_LOCATION);
-            return hasLocationPermission == PackageManager.PERMISSION_GRANTED;
-        } else {
-            // Pre-Marshmallow
-            return true;
-        }
-    }
-
-    public static void requestLocationPermission() {
+    public static void requestLocationPermission(final Activity activity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission
                 .ACCESS_FINE_LOCATION)) {
             // Provide an additional rationale to the user if the permission was not granted
@@ -142,6 +102,46 @@ public class LocationHandler {
             Log.d("Displaying default location permission dialog to request permission");
             ActivityCompat.requestPermissions(activity, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
+        }
+    }
+
+    public void connect() {
+        if (googleApiClient != null && !isGoogleApiConnected) {
+            googleApiClient.connect();
+        }
+    }
+
+    public void disconnect() {
+        if (googleApiClient != null && isGoogleApiConnected) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    public Location getLastLocation() {
+        // TODO: get permission
+
+        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+                .PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission(activity);
+            return null;
+        }
+        return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+    }
+
+    public boolean isConnected() {
+        return isGoogleApiConnected;
+    }
+
+    private boolean checkLocationPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            // Marshmallow+
+            int hasLocationPermission = ContextCompat.checkSelfPermission(activity, Manifest
+                    .permission.ACCESS_FINE_LOCATION);
+            return hasLocationPermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            // Pre-Marshmallow
+            return true;
         }
     }
 

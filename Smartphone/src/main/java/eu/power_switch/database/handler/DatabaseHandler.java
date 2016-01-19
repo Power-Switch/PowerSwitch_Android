@@ -21,6 +21,8 @@ package eu.power_switch.database.handler;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -186,14 +188,17 @@ public final class DatabaseHandler {
     /**
      * Updates an Apartment in Database
      *
-     * @param id       ID of Apartment
-     * @param newName  new Name of Apartment
-     * @param gateways Associated Gateways
+     * @param id             ID of Apartment
+     * @param newName        new Name of Apartment
+     * @param gateways       Associated Gateways
+     * @param location       Location
+     * @param geofenceRadius Geofence radius (in meter)
      */
-    public static void updateApartment(Long id, String newName, List<Gateway> gateways) throws Exception {
+    public static void updateApartment(Long id, String newName, List<Gateway> gateways, LatLng location, int
+            geofenceRadius) throws Exception {
         openWritable();
         try {
-            ApartmentHandler.update(id, newName, gateways);
+            ApartmentHandler.update(id, newName, gateways, location, geofenceRadius);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);

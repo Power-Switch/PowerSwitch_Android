@@ -18,17 +18,25 @@
 
 package eu.power_switch.gui.fragment.configure_apartment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -38,6 +46,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.location.LocationHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.log.Log;
@@ -49,12 +58,17 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyCallback {
 
-    private long apartmentId;
+    private long apartmentId = -1;
     private View rootView;
-
     private String currentName;
     private List<Gateway> currentCheckedGateways;
+    private LatLng currentLocation;
+    private int currentGeofenceRadius = 100;
     private MapView mapView;
+    private GoogleMap googleMap;
+    private LocationHandler locationHandler;
+    private Marker clickMarker;
+    private Circle geofenceCircle;
 
     @Nullable
     @Override
@@ -62,8 +76,11 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_apartment_page_2, container, false);
 
+        locationHandler = new LocationHandler(getActivity());
+
         mapView = (MapView) rootView.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureApartmentDialog.APARTMENT_ID_KEY)) {
@@ -81,6 +98,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
             currentName = apartment.getName();
             currentCheckedGateways = apartment.getAssociatedGateways();
+            currentLocation = apartment.getLocation();
+            currentGeofenceRadius = apartment.getGeofenceRadius();
 
         } catch (Exception e) {
             Log.e(e);
@@ -93,7 +112,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             if (apartmentId == -1) {
                 String apartmentName = currentName;
 
-                Apartment newApartment = new Apartment((long) -1, apartmentName, currentCheckedGateways);
+                Apartment newApartment = new Apartment((long) -1, apartmentName, currentCheckedGateways,
+                        currentLocation, currentGeofenceRadius);
 
                 try {
                     DatabaseHandler.addApartment(newApartment);
@@ -102,7 +122,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                             R.string.unknown_error, Snackbar.LENGTH_LONG);
                 }
             } else {
-                DatabaseHandler.updateApartment(apartmentId, currentName, currentCheckedGateways);
+                DatabaseHandler.updateApartment(apartmentId, currentName, currentCheckedGateways, currentLocation, currentGeofenceRadius);
             }
 
             ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
@@ -120,8 +140,53 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Log.d(latLng.toString());
+                currentLocation = latLng;
 
+                if (clickMarker == null) {
+                    clickMarker = googleMap.addMarker(new MarkerOptions().position(latLng)
+                            .title(getString(R.string.location)));
+                } else {
+                    clickMarker.setPosition(latLng);
+                }
+
+                if (geofenceCircle == null) {
+                    geofenceCircle = googleMap.addCircle(new CircleOptions().center(latLng)
+                            .radius(currentGeofenceRadius)
+                            .fillColor(ContextCompat.getColor(getContext(), R.color.geofenceFillColor))
+                            .strokeColor(Color.BLUE)
+                            .strokeWidth(2));
+                } else {
+                    geofenceCircle.setCenter(latLng);
+                    geofenceCircle.setRadius(currentGeofenceRadius);
+                }
+
+            }
+        });
+
+        if (apartmentId != -1) {
+            try {
+                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(apartment.getLocation(), 14));
+            } catch (Exception e) {
+                Log.e(e);
+            }
+        } else {
+            LatLng latLng = new LatLng(52.4369683282584, 13.373247385025024);
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+        }
+//        Location location = locationHandler.getLastLocation();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        locationHandler.connect();
     }
 
     @Override
@@ -140,6 +205,12 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     public void onPause() {
         super.onPause();
         mapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        locationHandler.disconnect();
+        super.onStop();
     }
 
     @Override

@@ -21,6 +21,8 @@ package eu.power_switch.database.handler;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,13 +56,19 @@ abstract class ApartmentHandler {
     /**
      * Updates a Apartment in Database
      *
-     * @param id       ID of Apartment
-     * @param newName  new Apartment name
+     * @param id             ID of Apartment
+     * @param newName        new Apartment name
      * @param gateways
+     * @param location
+     * @param geofenceRadius
      */
-    protected static void update(Long id, String newName, List<Gateway> gateways) {
+    protected static void update(Long id, String newName, List<Gateway> gateways, LatLng location, int geofenceRadius) {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, newName);
+        // TODO: Save Location and Geofence Radius to DB
+//        values.put(ApartmentTable.COLUMN_LATITUDE, location.latitude);
+//        values.put(ApartmentTable.COLUMN_LONGITUDE, location.longitude);
+//        values.put(ApartmentTable.COLUMN_GEOFENCE_RADIUS, geofenceRadius);
         DatabaseHandler.database.update(ApartmentTable.TABLE_NAME, values, ApartmentTable.COLUMN_ID + "==" + id, null);
 
         removeAssociatedGateways(id);

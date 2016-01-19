@@ -18,7 +18,7 @@
 
 package eu.power_switch.obj;
 
-import android.location.Location;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +61,15 @@ public class Apartment {
      */
     private boolean isActive;
 
-    private Location location;
+    /**
+     * Location of this Apartment
+     */
+    private LatLng location;
+
+    /**
+     * Geofence Radius of this Apartment
+     */
+    private int geofenceRadius;
 
     public Apartment(Long id, String name) {
         this.id = id;
@@ -71,12 +79,14 @@ public class Apartment {
         this.gateways = Collections.EMPTY_LIST;
     }
 
-    public Apartment(Long id, String name, List<Gateway> gateways) {
+    public Apartment(Long id, String name, List<Gateway> gateways, LatLng location, int geofenceRadius) {
         this.id = id;
         this.name = name;
         this.rooms = Collections.EMPTY_LIST;
         this.scenes = Collections.EMPTY_LIST;
         this.gateways = gateways;
+        this.location = location;
+        this.geofenceRadius = geofenceRadius;
     }
 
     public Apartment(Long id, String name, List<Room> rooms, List<Scene> scenes, List<Gateway> gateways) {
@@ -143,5 +153,13 @@ public class Apartment {
             }
         }
         return null;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public int getGeofenceRadius() {
+        return geofenceRadius;
     }
 }
