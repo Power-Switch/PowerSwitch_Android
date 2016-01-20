@@ -20,13 +20,13 @@ package eu.power_switch.gui.fragment.configure_apartment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,12 +36,8 @@ import android.widget.SeekBar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -51,6 +47,9 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.gui.map.Geofence;
+import eu.power_switch.gui.map.MapViewHandler;
+import eu.power_switch.gui.map.OnMapReadyListener;
 import eu.power_switch.location.LocationHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
@@ -61,7 +60,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyCallback {
+public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyListener {
 
     private long apartmentId = -1;
     private View rootView;
@@ -69,11 +68,9 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     private List<Gateway> currentCheckedGateways;
     private LatLng currentLocation;
     private double currentGeofenceRadius = 100;
-    private MapView mapView;
-    private GoogleMap googleMap;
     private LocationHandler locationHandler;
-    private Marker clickMarker;
-    private Circle geofenceCircle;
+    private MapViewHandler mapViewHandler;
+    private Geofence geofence;
     private SeekBar geofenceRadiusSeekbar;
     private EditText geofenceRadiusEditText;
 
@@ -85,12 +82,29 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
 
         locationHandler = new LocationHandler(getActivity());
 
-        mapView = (MapView) rootView.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
+        mapViewHandler = new MapViewHandler(getActivity(), mapView, savedInstanceState);
+        mapViewHandler.addOnMapReadyListener(this);
+        mapViewHandler.initMapAsync();
 
         geofenceRadiusEditText = (EditText) rootView.findViewById(R.id.geofenceRadiusEditText);
         geofenceRadiusEditText.setText(String.valueOf((int) currentGeofenceRadius));
+        geofenceRadiusEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         geofenceRadiusSeekbar = (SeekBar) rootView.findViewById(R.id.geofenceRadiusSeekbar);
         geofenceRadiusSeekbar.setMax(2000);
@@ -126,8 +140,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     private void updateGeofenceRadius(double radius) {
         currentGeofenceRadius = radius;
 
-        if (geofenceCircle != null) {
-            geofenceCircle.setRadius(radius);
+        if (geofence != null) {
+            geofence.setRadius(radius);
         }
 
         geofenceRadiusEditText.setText(String.valueOf((int) radius));
@@ -182,7 +196,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        this.googleMap = googleMap;
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED && ActivityCompat
                 .checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -195,46 +208,33 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 Log.d(latLng.toString());
                 currentLocation = latLng;
 
-                if (clickMarker == null) {
-                    clickMarker = googleMap.addMarker(new MarkerOptions().position(latLng)
-                            .title(getString(R.string.location))
-                            .draggable(true));
+                if (geofence == null) {
+                    geofence = mapViewHandler.addGeofence(latLng, currentGeofenceRadius);
                 } else {
-                    clickMarker.setPosition(latLng);
+                    geofence.setCenter(latLng);
+                    geofence.setRadius(currentGeofenceRadius);
                 }
-
-                if (geofenceCircle == null) {
-                    geofenceCircle = googleMap.addCircle(new CircleOptions().center(latLng)
-                            .radius(currentGeofenceRadius)
-                            .fillColor(ContextCompat.getColor(getContext(), R.color.geofenceFillColor))
-                            .strokeColor(Color.BLUE)
-                            .strokeWidth(2));
-                } else {
-                    geofenceCircle.setCenter(latLng);
-                    geofenceCircle.setRadius(currentGeofenceRadius);
-                }
-
             }
         });
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
-                if (clickMarker.getId().equals(marker.getId())) {
-                    geofenceCircle.setCenter(marker.getPosition());
+                if (geofence.getMarker().getId().equals(marker.getId())) {
+                    geofence.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDrag(Marker marker) {
-                if (clickMarker.getId().equals(marker.getId())) {
-                    geofenceCircle.setCenter(marker.getPosition());
+                if (geofence.getMarker().getId().equals(marker.getId())) {
+                    geofence.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if (clickMarker.getId().equals(marker.getId())) {
-                    geofenceCircle.setCenter(marker.getPosition());
+                if (geofence.getMarker().getId().equals(marker.getId())) {
+                    geofence.setCenter(marker.getPosition());
                 }
             }
         });
@@ -262,19 +262,19 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+        mapViewHandler.getMapView().onResume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        mapViewHandler.getMapView().onDestroy();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
+        mapViewHandler.getMapView().onPause();
     }
 
     @Override
@@ -286,6 +286,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+        mapViewHandler.getMapView().onLowMemory();
     }
 }

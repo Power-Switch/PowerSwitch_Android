@@ -26,35 +26,38 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/textView_geofence_radius"
         style="@style/sub_header"
+        android:layout_marginLeft="4dp"
         android:layout_marginTop="@dimen/title_margin_top"
         android:text="@string/radius"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
         android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/geofenceRadiusEditText"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"/>
+
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/geofenceRadiusEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:text="m"/>
 
         <SeekBar
             android:id="@+id/geofenceRadiusSeekbar"
             android:layout_width="match_parent"
-            android:layout_height="48dp"/>
+            android:layout_height="48dp"
+            android:paddingLeft="8dp"/>
 
     </LinearLayout>
 
