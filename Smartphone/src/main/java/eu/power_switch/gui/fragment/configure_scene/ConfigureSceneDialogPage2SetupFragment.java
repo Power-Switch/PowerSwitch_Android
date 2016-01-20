@@ -78,7 +78,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
     /**
      * Used to notify parent Dialog that configuration has changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendSetupSceneChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_SCENE_CHANGED);

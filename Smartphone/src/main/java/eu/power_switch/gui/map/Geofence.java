@@ -30,11 +30,6 @@ import com.google.android.gms.maps.model.Marker;
 public class Geofence {
 
     /**
-     * ID of this Geofence
-     */
-    private String id;
-
-    /**
      * Marker representing the center point of this Geofence
      */
     private Marker marker;
@@ -44,14 +39,9 @@ public class Geofence {
      */
     private Circle circle;
 
-    public Geofence(String id, Marker marker, Circle circle) {
-        this.id = id;
+    public Geofence(Marker marker, Circle circle) {
         this.marker = marker;
         this.circle = circle;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public void setCenter(LatLng latLng) {

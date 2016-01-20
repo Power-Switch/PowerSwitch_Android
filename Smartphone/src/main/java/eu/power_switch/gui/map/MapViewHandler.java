@@ -155,8 +155,8 @@ public class MapViewHandler implements OnMapReadyCallback {
         Circle circle = googleMap.addCircle(circleOptions);
 
         circles.put(circle.getId(), circle);
-        Geofence geofence = new Geofence(circle.getId(), marker, circle);
-        geofences.put(geofence.getId(), geofence);
+        Geofence geofence = new Geofence(marker, circle);
+        geofences.put(marker.getId(), geofence);
 
         return geofence;
     }

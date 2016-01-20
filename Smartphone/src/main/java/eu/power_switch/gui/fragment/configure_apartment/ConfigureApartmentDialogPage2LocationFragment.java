@@ -19,12 +19,17 @@
 package eu.power_switch.gui.fragment.configure_apartment;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -39,6 +44,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
@@ -53,6 +59,7 @@ import eu.power_switch.gui.map.OnMapReadyListener;
 import eu.power_switch.location.LocationHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -73,6 +80,17 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     private Geofence geofence;
     private SeekBar geofenceRadiusSeekbar;
     private EditText geofenceRadiusEditText;
+    private BroadcastReceiver broadcastReceiver;
+
+    /**
+     * Used to notify parent Dialog that configuration has changed
+     *
+     * @param context any suitable context
+     */
+    public static void sendSetupApartmentChangedBroadcast(Context context) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
 
     @Nullable
     @Override
@@ -92,17 +110,24 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         geofenceRadiusEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    int radius = Integer.valueOf(s.toString());
 
+                    updateGeofenceRadius(radius);
+                    if (radius != geofenceRadiusSeekbar.getProgress()) {
+                        if (radius <= geofenceRadiusSeekbar.getMax()) {
+                            geofenceRadiusSeekbar.setProgress(radius);
+                        }
+                    }
+                }
             }
         });
 
@@ -113,18 +138,41 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 updateGeofenceRadius(progress);
+                if (geofenceRadiusEditText.getText().length() > 0 &&
+                        Integer.valueOf(geofenceRadiusEditText.getText().toString()) != progress) {
+                    geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
+                }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 updateGeofenceRadius(seekBar.getProgress());
+                if (geofenceRadiusEditText.getText().length() > 0 &&
+                        Integer.valueOf(geofenceRadiusEditText.getText().toString()) != seekBar.getProgress()) {
+                    geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
+                }
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 updateGeofenceRadius(seekBar.getProgress());
+                if (geofenceRadiusEditText.getText().length() > 0 &&
+                        Integer.valueOf(geofenceRadiusEditText.getText().toString()) != seekBar.getProgress()) {
+                    geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
+                }
             }
         });
+
+        // BroadcastReceiver to get notifications from background service if room data has changed
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                currentName = intent.getStringExtra("name");
+                currentCheckedGateways = (ArrayList<Gateway>) intent.getSerializableExtra("checkedGateways");
+
+                sendSetupApartmentChangedBroadcast(getContext());
+            }
+        };
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureApartmentDialog.APARTMENT_ID_KEY)) {
@@ -143,8 +191,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         if (geofence != null) {
             geofence.setRadius(radius);
         }
-
-        geofenceRadiusEditText.setText(String.valueOf((int) radius));
     }
 
     private void initializeApartmentData(long apartmentId) {
@@ -154,6 +200,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             currentCheckedGateways = apartment.getAssociatedGateways();
             currentLocation = apartment.getLocation();
             currentGeofenceRadius = apartment.getGeofenceRadius();
+
             updateGeofenceRadius(currentGeofenceRadius);
 
         } catch (Exception e) {
@@ -246,17 +293,17 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             } catch (Exception e) {
                 Log.e(e);
             }
-        } else {
-            LatLng latLng = new LatLng(52.4369683282584, 13.373247385025024);
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
         }
-//        Location location = locationHandler.getLastLocation();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         locationHandler.connect();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -280,6 +327,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     @Override
     public void onStop() {
         locationHandler.disconnect();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

@@ -39,6 +39,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -71,17 +72,17 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment {
 
 
     /**
-     * Used to notify the setup page that some info has changed
+     * Used to notify the location page that some info has changed
      *
      * @param context
      * @param name             Current Name of Scene
      * @param selectedGateways Currently selected Gateways to associate in Apartment
      */
-    public static void sendNameSceneChangedBroadcast(Context context, String name, ArrayList<Gateway>
+    public static void sendNameApartmentChangedBroadcast(Context context, String name, ArrayList<Gateway>
             selectedGateways) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_SCENE_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
         intent.putExtra("name", name);
-        intent.putExtra("selectedGateways", selectedGateways);
+        intent.putExtra("checkedGateways", selectedGateways);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -111,10 +112,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO: Notify about changes
-//                sendNameSceneChangedBroadcast(getContext(), );
-//                notifyConfigurationChanged();
-//                isValid();
+                sendNameApartmentChangedBroadcast(getContext(), getCurrentName(), getCheckedGateways());
             }
         };
         floatingName = (TextInputLayout) rootView.findViewById(R.id.apartment_name_text_input_layout);
@@ -167,10 +165,13 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment {
 
     private boolean checkValidity() {
         boolean nameIsValid;
+        nameIsValid = checkNameValidity(getCurrentName());
 
-        String name = getCurrentName();
-
-        nameIsValid = checkNameValidity(name);
+        if (nameIsValid) {
+            sendNameApartmentChangedBroadcast(getContext(), getCurrentName(), getCheckedGateways());
+        } else {
+            sendNameApartmentChangedBroadcast(getContext(), null, getCheckedGateways());
+        }
 
         return nameIsValid;
     }
@@ -236,7 +237,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment {
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        // TODO: Notify about changes
+                        sendNameApartmentChangedBroadcast(getContext(), getCurrentName(), getCheckedGateways());
                     }
                 });
                 gatewayCheckboxList.add(checkBox);
@@ -255,7 +256,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment {
                 gatewayType.setText(gateway.getModel());
 
                 TextView gatewayHost = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayHost);
-                gatewayHost.setText(String.format("%s:%d", gateway.getHost(), gateway.getPort()));
+                gatewayHost.setText(String.format(Locale.getDefault(), "%s:%d", gateway.getHost(), gateway.getPort()));
 
                 TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
                 if (gateway.isActive()) {
