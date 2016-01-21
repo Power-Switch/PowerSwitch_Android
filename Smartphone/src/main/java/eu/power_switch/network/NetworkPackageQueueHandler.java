@@ -94,7 +94,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
     }
 
     private void processQueue() {
-        if (NetworkHandler.isWifiAvailable(context) || NetworkHandler.isGprsAvailable(context)) {
+        if (NetworkHandler.isWifiAvailable() || NetworkHandler.isGprsAvailable()) {
 
             StatusMessageHandler.showStatusMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
 

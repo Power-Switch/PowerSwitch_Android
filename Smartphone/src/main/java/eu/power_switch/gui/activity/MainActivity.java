@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
         boolean autoDiscoverStatus = SmartphonePreferencesHandler.getAutoDiscover();
 
-        if (autoDiscoverStatus && NetworkHandler.isWifiAvailable(this)) {
+        if (autoDiscoverStatus && NetworkHandler.isWifiAvailable()) {
             new AsyncTask<Context, Void, Void>() {
 
                 @Override

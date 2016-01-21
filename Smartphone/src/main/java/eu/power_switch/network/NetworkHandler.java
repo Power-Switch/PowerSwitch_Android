@@ -21,6 +21,8 @@ package eu.power_switch.network;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 
@@ -80,7 +82,7 @@ public abstract class NetworkHandler {
      *
      * @return false if WLAN is not available
      */
-    public static boolean isWifiAvailable(Context context) {
+    public static boolean isWifiAvailable() {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
@@ -95,7 +97,7 @@ public abstract class NetworkHandler {
      *
      * @return false if GPRS is not available
      */
-    public static boolean isGprsAvailable(Context context) {
+    public static boolean isGprsAvailable() {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
@@ -103,6 +105,21 @@ public abstract class NetworkHandler {
                 ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
         Log.d("isGprsAvailable: " + isGprsAvailable);
         return isGprsAvailable;
+    }
+
+    /**
+     * Get SSID of connected WiFi Network
+     *
+     * @return SSID of connected WiFi Network, null if no WiFi connection
+     */
+    public static String getConnectedWifiSSID() {
+        if (isWifiAvailable()) {
+            WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo info = wifiManager.getConnectionInfo();
+            return info.getSSID();
+        } else {
+            return null;
+        }
     }
 
     /**
