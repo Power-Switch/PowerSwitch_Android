@@ -37,7 +37,7 @@ import java.util.concurrent.ExecutionException;
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
-import eu.power_switch.obj.gateway.EZcontrol_XS1;
+import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
@@ -280,14 +280,14 @@ public abstract class NetworkHandler {
         }
     }
 
-    public static Set<Communicator> getActors(EZcontrol_XS1 eZcontrol_xs1) {
+    public static Set<Communicator> getActors(EZControl_XS1 eZcontrol_xs1) {
         Set<Communicator> communicators = new HashSet<>();
 
 
         return communicators;
     }
 
-    public static Set<Sensor> getSensors(EZcontrol_XS1 eZcontrol_xs1) {
+    public static Set<Sensor> getSensors(EZControl_XS1 eZcontrol_xs1) {
         Set<Sensor> sensors = new HashSet<>();
 
         return sensors;

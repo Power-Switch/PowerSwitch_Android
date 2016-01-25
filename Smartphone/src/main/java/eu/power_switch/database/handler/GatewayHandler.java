@@ -30,7 +30,7 @@ import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.exception.gateway.GatewayUnknownException;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
-import eu.power_switch.obj.gateway.EZcontrol_XS1;
+import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
@@ -200,8 +200,8 @@ abstract class GatewayHandler {
             case ConnAir.MODEL:
                 gateway = new ConnAir(id, active, name, firmware, address, port);
                 break;
-            case EZcontrol_XS1.MODEL:
-                gateway = new EZcontrol_XS1(id, active, name, firmware, address, port);
+            case EZControl_XS1.MODEL:
+                gateway = new EZControl_XS1(id, active, name, firmware, address, port);
                 break;
             case ITGW433.MODEL:
                 gateway = new ITGW433(id, active, name, firmware, address, port);

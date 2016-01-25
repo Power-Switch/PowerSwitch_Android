@@ -28,7 +28,7 @@ import eu.power_switch.obj.sensor.Sensor;
 /**
  * Created by Markus on 15.01.2016.
  */
-public class EZcontrol_XS1 extends Gateway {
+public class EZControl_XS1 extends Gateway {
 
     /**
      * Model constant
@@ -38,7 +38,7 @@ public class EZcontrol_XS1 extends Gateway {
     private Set<Communicator> communicators;
     private Set<Sensor> sensors;
 
-    public EZcontrol_XS1(Long id, boolean active, String name, String firmware, String address, int port) {
+    public EZControl_XS1(Long id, boolean active, String name, String firmware, String address, int port) {
         super(id, active, name, MODEL, firmware, address, port);
         capabilities.add(Capability.SEND);
         capabilities.add(Capability.RECEIVE);
