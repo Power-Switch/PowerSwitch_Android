@@ -56,12 +56,22 @@
         \nBackups contain the complete app state, including rooms, scenes, timers, settings etc.
     </string>
     <string name="tutorial__gateways_explanation">
-        gateways sind toll!
+        In this tab you can add and configure Gateways.\n
+        \nGateways are the connection between PowerSwitch (your smartphone) and your power plugs.
+        If you want to be able to control your power plugs on the go simply enter a DynDNS address
+        instead of an IP. After proper router configuration you are good to go :)\n
+        \nAdd a Gateway by pressing the plus button, modify them with press&amp;hold.
+    </string>
+    <string name="tutorial__wearable_settings_explanation">
+        In this tab you can manage any setting of the wearable companion app.\n
+        \nChange vibration feedback, highlight the last used button, choose a different theme&#8230;\n
+        \nNote: To properly sync settings with your watch, please open the wearable companion app
+        on your watch while changing settings. Then close and reopen the wearable app and the changes should apply.
     </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Add new Rooms and Receivers using the + button</string>
+
     <string name="tutorial__first_add_room">At first create a room to add your devices to</string>
-    <string name="tutorial__wearable_settings_explanation">Die wear app ist auch toll!</string>
 
 
 </resources>

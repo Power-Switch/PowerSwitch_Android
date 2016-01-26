@@ -61,13 +61,24 @@
         \nSicherungen enthalten den kompletten Appstatus, inklusive Räume, Szenen, Timer, Einstellungen etc.
     </string>
     <string name="tutorial__gateways_explanation">
-        gateways sind toll!
+        In diesem Tab kannst du Gateways erstellen und verwalten.\n
+        \nGateways sind die Verbindung zwischen PowerSwitch (deinem Smartphone) und deinen Funksteckdosen.
+        Wenn du auch von unterwegs aus steuern möchtest, gib anstelle einer IP eine DynDNS Adresse an.
+        Nach korrekter Router Konfiguration ist alles bereit :)\n
+        \nFüge ein Gateway mit dem Plus Button hinzu, halte eins gedrückt um es zu konfigurieren.
+    </string>
+    <string name="tutorial__wearable_settings_explanation">
+        In diesem Tab kannst du alle Einstellungen der Wearable App konfigurieren.\n
+        \nÄndere die Vibration, wähle ein anderes Theme&#8230;\n
+        \nAchtung: Damit alle Daten korrekt mit der Wearable App synchronisiert werden sollte die
+        Wearable App auf der Smartwatch geöffnet sein, während du Einstellungen dazu auf dem
+        Smartphone änderst. Beende die Wearable App danach kurz, um die neuen Einstellungen auf
+        der Smartwatch zu laden.
     </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>
 
     <string name="tutorial__first_add_room">Erstelle als erstes einen Raum, um anschließend deine Funksteckdosen einem Raum
         zuweisen zu können</string>
-    <string name="tutorial__wearable_settings_explanation">Die wear app ist auch toll!</string>
 
 </resources>
