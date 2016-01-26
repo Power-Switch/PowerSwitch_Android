@@ -44,13 +44,13 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 21.12.2015.
  */
-public class LocationHandler {
+public class LocationApiHandler {
 
     private Activity activity;
     private boolean isGoogleApiConnected;
     private GoogleApiClient googleApiClient;
 
-    public LocationHandler(Activity activity) {
+    public LocationApiHandler(Activity activity) {
         this.activity = activity;
 
         if (!checkLocationPermission()) {

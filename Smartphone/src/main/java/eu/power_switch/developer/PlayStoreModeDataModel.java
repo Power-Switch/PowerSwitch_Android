@@ -20,11 +20,14 @@ package eu.power_switch.developer;
 
 import android.content.Context;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -38,7 +41,7 @@ import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 
 /**
- * This Class represents a demo Room/Recever/Scene setup for use in Play Store images
+ * This Class represents a demo Room/Receiver/Scene setup for use in Play Store images
  * <p/>
  * Created by Markus on 30.07.2015.
  */
@@ -88,7 +91,8 @@ public class PlayStoreModeDataModel {
         initRooms();
         initScenes();
 
-        apartment = new Apartment((long) 0, "Heimat", getRooms(), getScenes(), getGateways());
+        apartment = new Apartment((long) 0, "Heimat", getRooms(), getScenes(), getGateways(),
+                new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100));
     }
 
     /**

@@ -28,7 +28,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
+import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentTable;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -49,8 +51,20 @@ abstract class ApartmentHandler {
     protected static void add(Apartment apartment) {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
-        DatabaseHandler.database.insert(ApartmentTable.TABLE_NAME, null, values);
-        addAssociatedGateways(apartment.getId(), apartment.getAssociatedGateways());
+        long apartmentId = DatabaseHandler.database.insert(ApartmentTable.TABLE_NAME, null, values);
+        // notice that apartmentId here may be different than
+        // apartment.getId() because it was just inserted into database
+        addAssociatedGateways(apartmentId, apartment.getAssociatedGateways());
+        addGeofence(apartmentId, apartment);
+    }
+
+    private static void addGeofence(long apartmentId, Apartment apartment) {
+        Long geofenceId = GeofenceHandler.add(apartment);
+
+        ContentValues values = new ContentValues();
+        values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, apartmentId);
+        values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
+        DatabaseHandler.database.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -66,12 +80,12 @@ abstract class ApartmentHandler {
             geofenceRadius) {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, newName);
-        // TODO: Save Location and Geofence Radius to DB
-//        values.put(ApartmentTable.COLUMN_LATITUDE, location.latitude);
-//        values.put(ApartmentTable.COLUMN_LONGITUDE, location.longitude);
-//        values.put(ApartmentTable.COLUMN_GEOFENCE_RADIUS, geofenceRadius);
         DatabaseHandler.database.update(ApartmentTable.TABLE_NAME, values, ApartmentTable.COLUMN_ID + "==" + id, null);
 
+        // update associated geofence
+        GeofenceHandler.update(getAssociatedGeofenceId(id), true, newName, location, geofenceRadius);
+
+        // update associated gateways
         removeAssociatedGateways(id);
         addAssociatedGateways(id, gateways);
     }
@@ -190,18 +204,33 @@ abstract class ApartmentHandler {
         LinkedList<Scene> scenes = SceneHandler.getByApartment(apartmentId);
         LinkedList<Gateway> gateways = getAssociatedGateways(apartmentId);
 
-        Apartment apartment = new Apartment(apartmentId, name, rooms, scenes, gateways);
+        Geofence geofence = GeofenceHandler.get(getAssociatedGeofenceId(apartmentId));
+
+        Apartment apartment = new Apartment(apartmentId, name, rooms, scenes, gateways, geofence);
         if (SmartphonePreferencesHandler.getCurrentApartmentId().equals(apartmentId)) {
             apartment.setActive(true);
         }
         return apartment;
     }
 
+    private static Long getAssociatedGeofenceId(Long apartmentId) {
+        String[] columns = {ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID,
+                ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID};
+        Cursor cursor = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME,
+                columns, ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID + "=" + apartmentId,
+                null, null, null, null);
+        cursor.moveToFirst();
+
+        Long geofenceId = cursor.getLong(1);
+        cursor.close();
+        return geofenceId;
+    }
+
     /**
      * Get Gateways that are associated with an Apartment
      *
      * @param apartmentId ID of Apartment
-     * @return
+     * @return List of Gateways
      */
     private static LinkedList<Gateway> getAssociatedGateways(Long apartmentId) {
         LinkedList<Gateway> associatedGateways = new LinkedList<>();

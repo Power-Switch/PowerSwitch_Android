@@ -21,6 +21,8 @@ package eu.power_switch.database.table.apartment;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import eu.power_switch.database.table.geofence.GeofenceTable;
+
 /**
  * Apartment table description
  */
@@ -42,11 +44,25 @@ public class ApartmentTable {
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
 
+        String apartmentName = "Home";
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, 0);
-        values.put(COLUMN_NAME, "Home");
+        values.put(COLUMN_NAME, apartmentName);
         values.put(COLUMN_POSITION, 0);
         db.insert(TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(GeofenceTable.COLUMN_ACTIVE, true);
+        values.put(GeofenceTable.COLUMN_NAME, apartmentName);
+        values.put(GeofenceTable.COLUMN_LATITUDE, 0);
+        values.put(GeofenceTable.COLUMN_LONGITUDE, 0);
+        values.put(GeofenceTable.COLUMN_RADIUS, -1);
+        long geofenceId = db.insert(GeofenceTable.TABLE_NAME, null, values);
+
+        values = new ContentValues();
+        values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, 0);
+        values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
+        db.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -29,8 +29,10 @@ import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
+import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
+import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.geofence.GeofenceTable;
 import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.database.table.receiver.AutoPairTable;
@@ -56,7 +58,7 @@ import eu.power_switch.shared.log.Log;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -66,25 +68,19 @@ public class Database extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         GatewayTable.onCreate(db);
 
-        ApartmentTable.onCreate(db);
-        ApartmentGatewayRelationTable.onCreate(db);
-
-        RoomTable.onCreate(db);
-
-        SceneTable.onCreate(db);
-        SceneItemTable.onCreate(db);
-
         ReceiverTable.onCreate(db);
         MasterSlaveTable.onCreate(db);
         DipTable.onCreate(db);
         AutoPairTable.onCreate(db);
         UniversalButtonTable.onCreate(db);
 
-        ReceiverWidgetTable.onCreate(db);
-        RoomWidgetTable.onCreate(db);
-        SceneWidgetTable.onCreate(db);
+        RoomTable.onCreate(db);
 
-        GeofenceTable.onCreate(db);
+        SceneTable.onCreate(db);
+        SceneItemTable.onCreate(db);
+
+        GeofenceTable.onCreate(db); // has to be created before ApartmentTable
+        GeofenceActionTable.onCreate(db);
 
         TimerTable.onCreate(db);
         TimerWeekdayTable.onCreate(db);
@@ -98,6 +94,14 @@ public class Database extends SQLiteOpenHelper {
         SceneActionTable.onCreate(db);
 
         HistoryTable.onCreate(db);
+
+        ApartmentGatewayRelationTable.onCreate(db);
+        ApartmentGeofenceRelationTable.onCreate(db);
+        ApartmentTable.onCreate(db); // has to be created after relational tables
+
+        ReceiverWidgetTable.onCreate(db);
+        RoomWidgetTable.onCreate(db);
+        SceneWidgetTable.onCreate(db);
     }
 
     @Override
@@ -121,6 +125,7 @@ public class Database extends SQLiteOpenHelper {
 
             ApartmentTable.onUpgrade(db, oldVersion, newVersion);
             ApartmentGatewayRelationTable.onUpgrade(db, oldVersion, newVersion);
+            ApartmentGeofenceRelationTable.onUpgrade(db, oldVersion, newVersion);
 
             RoomTable.onUpgrade(db, oldVersion, newVersion);
 
@@ -138,6 +143,7 @@ public class Database extends SQLiteOpenHelper {
             SceneWidgetTable.onUpgrade(db, oldVersion, newVersion);
 
             GeofenceTable.onUpgrade(db, oldVersion, newVersion);
+            GeofenceActionTable.onUpgrade(db, oldVersion, newVersion);
 
             TimerTable.onUpgrade(db, oldVersion, newVersion);
             TimerWeekdayTable.onUpgrade(db, oldVersion, newVersion);
@@ -254,12 +260,32 @@ public class Database extends SQLiteOpenHelper {
 
                     // drop old table
                     db.execSQL("DROP TABLE IF EXISTS timer_action");
-                    break;
                 case 9:
-                    break;
                 case 10:
                 case 11:
                 case 12:
+                    cursor = db.query(ApartmentTable.TABLE_NAME, new String[]{ApartmentTable.COLUMN_ID, ApartmentTable.COLUMN_NAME}, null, null, null, null, null);
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        Long apartmentId = cursor.getLong(0);
+                        String apartmentName = cursor.getString(1);
+
+                        ContentValues values = new ContentValues();
+                        values.put(GeofenceTable.COLUMN_ACTIVE, true);
+                        values.put(GeofenceTable.COLUMN_NAME, apartmentName);
+                        values.put(GeofenceTable.COLUMN_LATITUDE, 0);
+                        values.put(GeofenceTable.COLUMN_LONGITUDE, 0);
+                        values.put(GeofenceTable.COLUMN_RADIUS, -1);
+                        long geofenceId = db.insert(GeofenceTable.TABLE_NAME, null, values);
+
+                        values = new ContentValues();
+                        values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, apartmentId);
+                        values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
+                        db.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
+
+                        cursor.moveToNext();
+                    }
+                    cursor.close();
                     break;
             }
 

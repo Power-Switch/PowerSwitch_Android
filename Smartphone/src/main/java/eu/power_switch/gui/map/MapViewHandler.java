@@ -299,4 +299,21 @@ public class MapViewHandler implements OnMapReadyCallback {
             googleMap.moveCamera(cameraUpdate);
         }
     }
+
+    /**
+     * Move the map camera to a specific location
+     *
+     * @param location new location of camera
+     * @param zoom     zoom level
+     * @param animated true if movement should be animated, false otherwise
+     */
+    public void moveCamera(LatLng location, float zoom, boolean animated) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, zoom);
+
+        if (animated) {
+            googleMap.animateCamera(cameraUpdate);
+        } else {
+            googleMap.moveCamera(cameraUpdate);
+        }
+    }
 }

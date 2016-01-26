@@ -20,27 +20,31 @@ package eu.power_switch.database.table.geofence;
 
 import android.database.sqlite.SQLiteDatabase;
 
-/**
- * Geofence table description
- */
-public class GeofenceTable {
+import eu.power_switch.database.table.action.ActionTable;
 
-    public static final String TABLE_NAME = "geofences";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ACTIVE = "active";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_LATITUDE = "latitude";
-    public static final String COLUMN_LONGITUDE = "longitude";
-    public static final String COLUMN_RADIUS = "radius";
+/**
+ * GeofenceAction table description
+ * <p/>
+ * Created by Markus on 24.09.2015.
+ */
+public class GeofenceActionTable {
+
+    public static final String TABLE_NAME = "geofence_actions";
+    public static final String COLUMN_GEOFENCE_ID = "geofence_id";
+    public static final String COLUMN_ACTION_ID = "action_id";
+    public static final String COLUMN_EVENT_TYPE = "event_type";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTIVE + " integer not null, " +
-            COLUMN_NAME + " text not null, " +
-            COLUMN_LATITUDE + " real not null, " +
-            COLUMN_LONGITUDE + " real not null, " +
-            COLUMN_RADIUS + " real not null " + ");";
+            COLUMN_GEOFENCE_ID + " integer not null," +
+            COLUMN_ACTION_ID + " integer not null," +
+            COLUMN_EVENT_TYPE + " text not null," +
+            "FOREIGN KEY(" + COLUMN_GEOFENCE_ID + ") REFERENCES " +
+                GeofenceTable.TABLE_NAME + "(" + GeofenceTable.COLUMN_ID + "), " +
+            "FOREIGN KEY(" + COLUMN_ACTION_ID+ ") REFERENCES " +
+                ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + "), " +
+            "PRIMARY KEY (" + COLUMN_GEOFENCE_ID + ", " + COLUMN_ACTION_ID + ")" +
+        ");";
     //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {

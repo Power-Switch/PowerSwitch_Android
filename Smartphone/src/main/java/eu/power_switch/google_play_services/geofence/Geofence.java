@@ -20,6 +20,12 @@ package eu.power_switch.google_play_services.geofence;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import eu.power_switch.action.Action;
+
 /**
  * Internal representation of a Geofence
  * <p/>
@@ -31,26 +37,23 @@ public class Geofence {
      * ID of this Geofence
      */
     private long id;
-
     /**
      * Flag if this Geofence is in active use
      */
     private boolean active;
-
     /**
      * Name of this Geofence
      */
     private String name;
-
     /**
      * Center location of this Geofence
      */
     private LatLng centerLocation;
-
     /**
      * Radius of this Geofence
      */
     private double radius;
+    private HashMap<EventType, List<Action>> actionsMap;
 
     public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius) {
         this.id = id;
@@ -58,6 +61,11 @@ public class Geofence {
         this.name = name;
         this.centerLocation = centerLocation;
         this.radius = radius;
+        actionsMap = new HashMap<>();
+
+        for (EventType eventType : EventType.values()) {
+            actionsMap.put(eventType, new ArrayList<Action>());
+        }
     }
 
     /**
@@ -112,5 +120,17 @@ public class Geofence {
      */
     public double getRadius() {
         return radius;
+    }
+
+    public List<Action> getActions(EventType eventType) {
+        return actionsMap.get(eventType);
+    }
+
+    /**
+     * Possible event types for actions
+     */
+    public enum EventType {
+        ENTER,
+        EXIT
     }
 }

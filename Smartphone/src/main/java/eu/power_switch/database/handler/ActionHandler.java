@@ -22,6 +22,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
@@ -52,7 +53,7 @@ abstract class ActionHandler {
      * @param actions
      * @return List of IDs of inserted Actions
      */
-    protected static ArrayList<Long> add(ArrayList<Action> actions) {
+    protected static ArrayList<Long> add(List<Action> actions) {
         ArrayList<Long> ids = new ArrayList<>();
         for (Action action : actions) {
             ContentValues values = new ContentValues();

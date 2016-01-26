@@ -53,7 +53,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.location.AddressNotFoundException;
-import eu.power_switch.google_play_services.location.LocationHandler;
+import eu.power_switch.google_play_services.location.LocationApiHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
@@ -80,7 +80,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     private List<Gateway> currentCheckedGateways;
     private LatLng currentLocation;
     private double currentGeofenceRadius = 100;
-    private LocationHandler locationHandler;
+    private LocationApiHandler locationApiHandler;
     private MapViewHandler mapViewHandler;
     private Geofence geofence;
     private SeekBar geofenceRadiusSeekbar;
@@ -105,7 +105,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_apartment_page_2, container, false);
 
-        locationHandler = new LocationHandler(getActivity());
+        locationApiHandler = new LocationApiHandler(getActivity());
 
         final MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
         mapViewHandler = new MapViewHandler(getContext(), this, mapView, savedInstanceState);
@@ -130,7 +130,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                         geofence.setCenter(location);
                         geofence.setRadius(currentGeofenceRadius);
                     }
-                    mapViewHandler.moveCamera(location, true);
+                    mapViewHandler.moveCamera(location, 14, true);
 
                     searchAddressTextInputLayout.setError(null);
                     searchAddressTextInputLayout.setErrorEnabled(false);
@@ -237,8 +237,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
             currentName = apartment.getName();
             currentCheckedGateways = apartment.getAssociatedGateways();
-            currentLocation = apartment.getLocation();
-            currentGeofenceRadius = apartment.getGeofenceRadius();
+            currentLocation = apartment.getGeofence().getCenterLocation();
+            currentGeofenceRadius = apartment.getGeofence().getRadius();
 
             updateGeofenceRadius(currentGeofenceRadius);
 
@@ -254,7 +254,9 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 String apartmentName = currentName;
 
                 Apartment newApartment = new Apartment((long) -1, apartmentName, currentCheckedGateways,
-                        currentLocation, currentGeofenceRadius);
+                        new eu.power_switch.google_play_services.geofence.Geofence(
+                                (long) -1, true, currentName, currentLocation, currentGeofenceRadius)
+                );
 
                 try {
                     DatabaseHandler.addApartment(newApartment);
@@ -334,7 +336,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         if (apartmentId != -1) {
             try {
                 Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(apartment.getLocation(), 14));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(apartment.getGeofence().getCenterLocation(), 14));
             } catch (Exception e) {
                 Log.e(e);
             }
@@ -344,7 +346,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     @Override
     public void onStart() {
         super.onStart();
-        locationHandler.connect();
+        locationApiHandler.connect();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
@@ -371,7 +373,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
 
     @Override
     public void onStop() {
-        locationHandler.disconnect();
+        locationApiHandler.disconnect();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
     }

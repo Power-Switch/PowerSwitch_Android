@@ -34,13 +34,13 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
-import eu.power_switch.google_play_services.location.LocationHandler;
+import eu.power_switch.google_play_services.location.LocationApiHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 21.12.2015.
  */
-public class GeofenceHandler {
+public class GeofenceApiHandler {
 
     public static PendingIntent getGeofencePendingIntent(Geofence geofence) {
         return null;
@@ -100,7 +100,7 @@ public class GeofenceHandler {
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED) {
             // TODO: Consider calling
-            LocationHandler.requestLocationPermission(activity);
+            LocationApiHandler.requestLocationPermission(activity);
 
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding

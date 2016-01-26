@@ -29,6 +29,7 @@ import java.util.List;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.geofence.GeofenceTable;
 import eu.power_switch.google_play_services.geofence.Geofence;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -51,6 +52,18 @@ abstract class GeofenceHandler {
         values.put(GeofenceTable.COLUMN_LATITUDE, geofence.getCenterLocation().latitude);
         values.put(GeofenceTable.COLUMN_LONGITUDE, geofence.getCenterLocation().longitude);
         values.put(GeofenceTable.COLUMN_RADIUS, geofence.getRadius());
+
+        long newId = DatabaseHandler.database.insert(GeofenceTable.TABLE_NAME, null, values);
+        return newId;
+    }
+
+    public static Long add(Apartment apartment) {
+        ContentValues values = new ContentValues();
+        values.put(GeofenceTable.COLUMN_ACTIVE, true);
+        values.put(GeofenceTable.COLUMN_NAME, apartment.getName());
+        values.put(GeofenceTable.COLUMN_LATITUDE, apartment.getGeofence().getCenterLocation().latitude);
+        values.put(GeofenceTable.COLUMN_LONGITUDE, apartment.getGeofence().getCenterLocation().longitude);
+        values.put(GeofenceTable.COLUMN_RADIUS, apartment.getGeofence().getRadius());
 
         long newId = DatabaseHandler.database.insert(GeofenceTable.TABLE_NAME, null, values);
         return newId;
@@ -102,31 +115,6 @@ abstract class GeofenceHandler {
     }
 
     /**
-     * Creates a Geofence Object out of Database information
-     *
-     * @param c cursor pointing to a geofence database entry
-     * @return Geofence, can be null
-     */
-    private static Geofence dbToGeofence(Cursor c) {
-        try {
-            Geofence geofence;
-            Long id = c.getLong(0);
-            boolean active = c.getInt(1) > 0;
-            String name = c.getString(2);
-            double latitude = c.getDouble(3);
-            double longitude = c.getDouble(4);
-            double radius = c.getDouble(5);
-
-            geofence = new Geofence(id, active, name, new LatLng(latitude, longitude), radius);
-            return geofence;
-        } catch (Exception e) {
-            Log.e(e);
-        }
-
-        return null;
-    }
-
-    /**
      * Gets all Geofences from Database
      *
      * @return List of Geofences
@@ -164,5 +152,49 @@ abstract class GeofenceHandler {
 
         cursor.close();
         return geofences;
+    }
+
+    /**
+     * Update Geofence in Database
+     *
+     * @param geofenceId        ID of Geofence to update
+     * @param active            new active state
+     * @param newName           new Name of Geofence
+     * @param newLocation       new center location of Geofence
+     * @param newGeofenceRadius new geofence radius
+     */
+    public static void update(Long geofenceId, boolean active, String newName, LatLng newLocation, double newGeofenceRadius) {
+        ContentValues values = new ContentValues();
+        values.put(GeofenceTable.COLUMN_ACTIVE, active);
+        values.put(GeofenceTable.COLUMN_NAME, newName);
+        values.put(GeofenceTable.COLUMN_LATITUDE, newLocation.latitude);
+        values.put(GeofenceTable.COLUMN_LONGITUDE, newLocation.longitude);
+        values.put(GeofenceTable.COLUMN_RADIUS, newGeofenceRadius);
+        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + geofenceId, null);
+    }
+
+    /**
+     * Creates a Geofence Object out of Database information
+     *
+     * @param c cursor pointing to a geofence database entry
+     * @return Geofence, can be null
+     */
+    private static Geofence dbToGeofence(Cursor c) {
+        try {
+            Geofence geofence;
+            Long id = c.getLong(0);
+            boolean active = c.getInt(1) > 0;
+            String name = c.getString(2);
+            double latitude = c.getDouble(3);
+            double longitude = c.getDouble(4);
+            double radius = c.getDouble(5);
+
+            geofence = new Geofence(id, active, name, new LatLng(latitude, longitude), radius);
+            return geofence;
+        } catch (Exception e) {
+            Log.e(e);
+        }
+
+        return null;
     }
 }
