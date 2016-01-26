@@ -30,11 +30,43 @@
         android:layout_weight="1"/>
 
     <TextView
+        style="@style/sub_header"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="@dimen/title_margin_top"
+        android:text="@string/search_address"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/searchAddressTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/searchAddressEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPostalAddress"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/searchAddressImageButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"/>
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/textView_geofence_radius"
         style="@style/sub_header"
         android:layout_marginLeft="4dp"
         android:layout_marginTop="@dimen/title_margin_top"
-        android:text="@string/radius"/>
+        android:text="@string/geofence_radius"/>
 
     <LinearLayout
         android:layout_width="match_parent"

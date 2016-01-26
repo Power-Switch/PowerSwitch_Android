@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package eu.power_switch.playstore;
+package eu.power_switch.google_play_services.playstore;
 
 import android.text.TextUtils;
 import android.util.Log;

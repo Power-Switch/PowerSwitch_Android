@@ -99,9 +99,6 @@ public class RoomsFragment extends RecyclerViewFragment {
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                AddReceiverDialog addReceiverDialog = new AddReceiverDialog();
-//                addReceiverDialog.show(getFragmentManager(), null);
-
                 if (AnimationHandler.checkTargetApi()) {
 //                    Intent intent = new Intent();
 //

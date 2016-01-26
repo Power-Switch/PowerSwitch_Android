@@ -116,6 +116,7 @@ public abstract class NetworkHandler {
         if (isWifiAvailable()) {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             WifiInfo info = wifiManager.getConnectionInfo();
+            Log.d("connected SSID: " + info.getSSID());
             return info.getSSID();
         } else {
             return null;

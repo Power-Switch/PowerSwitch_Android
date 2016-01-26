@@ -36,13 +36,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.google_play_services.playstore.Base64;
+import eu.power_switch.google_play_services.playstore.IabHelper;
+import eu.power_switch.google_play_services.playstore.IabResult;
+import eu.power_switch.google_play_services.playstore.Inventory;
+import eu.power_switch.google_play_services.playstore.Purchase;
+import eu.power_switch.google_play_services.playstore.SkuDetails;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.playstore.Base64;
-import eu.power_switch.playstore.IabHelper;
-import eu.power_switch.playstore.IabResult;
-import eu.power_switch.playstore.Inventory;
-import eu.power_switch.playstore.Purchase;
-import eu.power_switch.playstore.SkuDetails;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 

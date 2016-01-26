@@ -125,4 +125,13 @@ public class IconicsHelper {
 
         return iconicsDrawable;
     }
+
+    public static IconicsDrawable getSearchIcon(Context context, @ColorRes int colorResourceId) {
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_search)
+                .color(ContextCompat.getColor(context, colorResourceId))
+                .sizeDp(24);
+
+        return iconicsDrawable;
+    }
+
 }

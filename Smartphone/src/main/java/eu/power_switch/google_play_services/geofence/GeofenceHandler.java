@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.location;
+package eu.power_switch.google_play_services.geofence;
 
 import android.Manifest;
 import android.app.Activity;
@@ -34,6 +34,7 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
+import eu.power_switch.google_play_services.location.LocationHandler;
 import eu.power_switch.shared.log.Log;
 
 /**

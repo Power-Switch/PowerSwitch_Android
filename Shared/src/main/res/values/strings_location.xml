@@ -22,4 +22,9 @@
     <string name="location">Location</string>
     <string name="radius">Radius</string>
 
+    <string name="geofence_radius">Geofence radius</string>
+
+    <string name="search_address">Search Address</string>
+    <string name="address_not_found">Address not found</string>
+
 </resources>

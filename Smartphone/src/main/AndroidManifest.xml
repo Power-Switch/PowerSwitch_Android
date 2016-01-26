@@ -169,7 +169,7 @@
 
         <!-- Sevices -->
         <service
-            android:name=".location.GeofenceIntentService">
+            android:name=".google_play_services.geofence.GeofenceIntentService">
         </service>
         <service
             android:name=".wear.service.ListenerService">

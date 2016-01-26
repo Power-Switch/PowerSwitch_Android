@@ -27,6 +27,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -36,11 +37,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -49,6 +52,9 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.exception.location.AddressNotFoundException;
+import eu.power_switch.google_play_services.location.LocationHandler;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
@@ -56,7 +62,6 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.map.Geofence;
 import eu.power_switch.gui.map.MapViewHandler;
 import eu.power_switch.gui.map.OnMapReadyListener;
-import eu.power_switch.location.LocationHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -81,6 +86,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     private SeekBar geofenceRadiusSeekbar;
     private EditText geofenceRadiusEditText;
     private BroadcastReceiver broadcastReceiver;
+    private EditText searchAddressEditText;
+    private TextInputLayout searchAddressTextInputLayout;
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -100,10 +107,42 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
 
         locationHandler = new LocationHandler(getActivity());
 
-        MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
-        mapViewHandler = new MapViewHandler(getActivity(), mapView, savedInstanceState);
+        final MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
+        mapViewHandler = new MapViewHandler(getContext(), this, mapView, savedInstanceState);
         mapViewHandler.addOnMapReadyListener(this);
         mapViewHandler.initMapAsync();
+
+        searchAddressTextInputLayout = (TextInputLayout) rootView.findViewById(R.id
+                .searchAddressTextInputLayout);
+        searchAddressEditText = (EditText) rootView.findViewById(R.id.searchAddressEditText);
+
+        ImageButton searchAddressButton = (ImageButton) rootView.findViewById(R.id.searchAddressImageButton);
+        searchAddressButton.setImageDrawable(IconicsHelper.getSearchIcon(getActivity(), android.R.color.white));
+        searchAddressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    LatLng location = mapViewHandler.findAddress(searchAddressEditText.getText().toString());
+
+                    if (geofence == null) {
+                        geofence = mapViewHandler.addGeofence(location, currentGeofenceRadius);
+                    } else {
+                        geofence.setCenter(location);
+                        geofence.setRadius(currentGeofenceRadius);
+                    }
+                    mapViewHandler.moveCamera(location, true);
+
+                    searchAddressTextInputLayout.setError(null);
+                    searchAddressTextInputLayout.setErrorEnabled(false);
+                } catch (AddressNotFoundException e) {
+                    searchAddressTextInputLayout.setErrorEnabled(true);
+                    searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
+                } catch (Exception e) {
+                    searchAddressTextInputLayout.setErrorEnabled(true);
+                    searchAddressTextInputLayout.setError(getString(R.string.unknown_error));
+                }
+            }
+        });
 
         geofenceRadiusEditText = (EditText) rootView.findViewById(R.id.geofenceRadiusEditText);
         geofenceRadiusEditText.setText(String.valueOf((int) currentGeofenceRadius));
@@ -249,6 +288,12 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         } else {
             googleMap.setMyLocationEnabled(true);
         }
+
+        UiSettings uiSettings = googleMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+        uiSettings.setCompassEnabled(true);
+        uiSettings.setMapToolbarEnabled(false);
+
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {

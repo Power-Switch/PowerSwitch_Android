@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package eu.power_switch.playstore;
+package eu.power_switch.google_play_services.playstore;
 
 /**
  * Exception thrown when encountering an invalid Base64 input character.

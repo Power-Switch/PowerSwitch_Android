@@ -18,11 +18,15 @@
 
 package eu.power_switch.gui.map;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,12 +36,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import eu.power_switch.R;
+import eu.power_switch.exception.location.AddressNotFoundException;
+import eu.power_switch.shared.log.Log;
 
 /**
  * This class is responsible for initializing and managing access to a MapView Object
@@ -46,7 +55,7 @@ import eu.power_switch.R;
  */
 public class MapViewHandler implements OnMapReadyCallback {
 
-    private Activity activity;
+    private Context context;
 
     /**
      * MapView this Handler is responsible for
@@ -87,13 +96,17 @@ public class MapViewHandler implements OnMapReadyCallback {
     /**
      * Constructor
      *
-     * @param activity
+     * @param context            any suitable context
+     * @param onMapReadyListener
      * @param mapView
      * @param savedInstanceState
      */
-    public MapViewHandler(Activity activity, MapView mapView, Bundle savedInstanceState) {
-        this.activity = activity;
+    public MapViewHandler(Context context, OnMapReadyListener onMapReadyListener, MapView mapView, Bundle
+            savedInstanceState) {
+        this.context = context;
         this.mapView = mapView;
+
+        addOnMapReadyListener(onMapReadyListener);
 
         mapView.onCreate(savedInstanceState);
     }
@@ -143,13 +156,13 @@ public class MapViewHandler implements OnMapReadyCallback {
     public Geofence addGeofence(LatLng latLng, double radius) {
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .title(activity.getString(R.string.location))
+                .title(context.getString(R.string.location))
                 .draggable(true);
         Marker marker = googleMap.addMarker(markerOptions);
 
         CircleOptions circleOptions = new CircleOptions().center(latLng)
                 .radius(radius)
-                .fillColor(ContextCompat.getColor(activity, R.color.geofenceFillColor))
+                .fillColor(ContextCompat.getColor(context, R.color.geofenceFillColor))
                 .strokeColor(Color.BLUE)
                 .strokeWidth(2);
         Circle circle = googleMap.addCircle(circleOptions);
@@ -219,5 +232,43 @@ public class MapViewHandler implements OnMapReadyCallback {
         Marker marker = markers.get(id);
         marker.remove();
         markers.remove(id);
+    }
+
+    public LatLng findAddress(String address) throws AddressNotFoundException {
+        /* get latitude and longitude from the address */
+        Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geoCoder.getFromLocationName(address, 5);
+            if (addresses.size() > 0) {
+                Double lat = (addresses.get(0).getLatitude());
+                Double lon = (addresses.get(0).getLongitude());
+
+                Log.d("lat-long", lat + "......." + lon);
+                final LatLng location = new LatLng(lat, lon);
+                return location;
+            } else {
+                throw new AddressNotFoundException(address);
+            }
+        } catch (IOException e) {
+            Log.e(e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Move the map camera to a specific location
+     *
+     * @param location new location of camera
+     * @param animated true if movement should be animated, false otherwise
+     */
+    public void moveCamera(LatLng location, boolean animated) {
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(location);
+
+        if (animated) {
+            googleMap.animateCamera(cameraUpdate);
+        } else {
+            googleMap.moveCamera(cameraUpdate);
+        }
     }
 }

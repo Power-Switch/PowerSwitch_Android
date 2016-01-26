@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package eu.power_switch.playstore;
+package eu.power_switch.google_play_services.playstore;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -958,7 +958,7 @@ public class IabHelper {
          *
          * @param result The result of the setup process.
          */
-        public void onIabSetupFinished(IabResult result);
+        void onIabSetupFinished(IabResult result);
     }
 
     /**
@@ -974,7 +974,7 @@ public class IabHelper {
          * @param result The result of the purchase.
          * @param info   The purchase information (null if purchase failed)
          */
-        public void onIabPurchaseFinished(IabResult result, Purchase info);
+        void onIabPurchaseFinished(IabResult result, Purchase info);
     }
 
     /**
@@ -987,7 +987,7 @@ public class IabHelper {
          * @param result The result of the operation.
          * @param inv    The inventory.
          */
-        public void onQueryInventoryFinished(IabResult result, Inventory inv);
+        void onQueryInventoryFinished(IabResult result, Inventory inv);
     }
 
     /**
@@ -1000,7 +1000,7 @@ public class IabHelper {
          * @param purchase The purchase that was (or was to be) consumed.
          * @param result   The result of the consumption operation.
          */
-        public void onConsumeFinished(Purchase purchase, IabResult result);
+        void onConsumeFinished(Purchase purchase, IabResult result);
     }
 
     /**
@@ -1014,6 +1014,6 @@ public class IabHelper {
          * @param results   The results of each consumption operation, corresponding to each
          *                  sku.
          */
-        public void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results);
+        void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results);
     }
 }

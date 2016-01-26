@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.location;
+package eu.power_switch.google_play_services.location;
 
 import android.Manifest;
 import android.app.Activity;
