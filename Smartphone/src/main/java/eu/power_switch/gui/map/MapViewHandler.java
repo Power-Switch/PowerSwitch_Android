@@ -234,6 +234,34 @@ public class MapViewHandler implements OnMapReadyCallback {
         markers.remove(id);
     }
 
+    /**
+     * @param latLng
+     * @return
+     * @throws AddressNotFoundException
+     */
+    public String findAddress(LatLng latLng) throws AddressNotFoundException {
+        /* get latitude and longitude from the address */
+        Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 5);
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+
+
+                String addressAsString = address.getAddressLine(0);
+
+                Log.d("Address; ", addressAsString);
+                return addressAsString;
+            } else {
+                throw new AddressNotFoundException("latitude: " + latLng.latitude + ", longitude: " + latLng.longitude);
+            }
+        } catch (IOException e) {
+            Log.e(e);
+        }
+
+        return null;
+    }
+
     public LatLng findAddress(String address) throws AddressNotFoundException {
         /* get latitude and longitude from the address */
         Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
