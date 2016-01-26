@@ -79,6 +79,15 @@ public class Geofence {
     }
 
     /**
+     * Set the active state of this Geofence
+     *
+     * @param active true if active, false otherwise
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
      * Get name of this Geofence
      *
      * @return name

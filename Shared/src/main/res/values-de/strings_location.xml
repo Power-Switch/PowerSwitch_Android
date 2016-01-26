@@ -19,6 +19,8 @@
 
 <resources>
 
+    <string name="menu_geofences">Geofences</string>
+
     <string name="location">Position</string>
     <string name="radius">Radius</string>
 

@@ -129,6 +129,24 @@ abstract class GeofenceHandler {
     /**
      * Gets all Geofences from Database
      *
+     * @return List of Geofences
+     */
+    protected static List<Geofence> getAll() {
+        List<Geofence> geofences = new ArrayList<>();
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            geofences.add(dbToGeofence(cursor));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return geofences;
+    }
+
+    /**
+     * Gets all Geofences from Database
+     *
      * @param isActive true if Geofence is enabled
      * @return List of enabled/disabled Geofences
      */

@@ -71,6 +71,7 @@ import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.BackupFragment;
+import eu.power_switch.gui.fragment.GeofencesFragment;
 import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.main.MainTabFragment;
@@ -96,11 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int IDENTIFIER_ROOMS_SCENES = 10;
     public static final int IDENTIFIER_APARTMENTS = 11;
-    public static final int IDENTIFIER_SLEEP_AS_ANDROID = 12;
-    public static final int IDENTIFIER_TIMERS = 13;
-    public static final int IDENTIFIER_BACKUP_RESTORE = 14;
-    public static final int IDENTIFIER_SETTINGS = 15;
-    public static final int IDENTIFIER_ABOUT = 16;
+    public static final int IDENTIFIER_GEOFENCES = 12;
+    public static final int IDENTIFIER_SLEEP_AS_ANDROID = 13;
+    public static final int IDENTIFIER_TIMERS = 14;
+    public static final int IDENTIFIER_BACKUP_RESTORE = 15;
+    public static final int IDENTIFIER_SETTINGS = 16;
+    public static final int IDENTIFIER_ABOUT = 17;
 
     public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
@@ -375,6 +377,26 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        final PrimaryDrawerItem itemGeofences = new PrimaryDrawerItem().withName(R.string.menu_geofences)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_gps_dot)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_GEOFENCES)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(IDENTIFIER_GEOFENCES, getString(R.string.menu_geofences),
+                                    GeofencesFragment.class.newInstance());
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
+                    }
+                });
         final PrimaryDrawerItem itemSleepAsAndroid = new PrimaryDrawerItem().withName(R.string.menu_sleep_as_android)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_alarm)
                         .color(tintColor)
@@ -594,6 +616,7 @@ public class MainActivity extends AppCompatActivity {
                         itemApartments,
                         itemRoomsScenes,
                         new DividerDrawerItem(),
+                        itemGeofences,
                         itemSleepAsAndroid,
                         itemTimer,
                         new DividerDrawerItem(),

@@ -31,6 +31,7 @@ import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
+import eu.power_switch.database.table.geofence.GeofenceTable;
 import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.database.table.receiver.AutoPairTable;
 import eu.power_switch.database.table.receiver.DipTable;
@@ -83,6 +84,8 @@ public class Database extends SQLiteOpenHelper {
         RoomWidgetTable.onCreate(db);
         SceneWidgetTable.onCreate(db);
 
+        GeofenceTable.onCreate(db);
+
         TimerTable.onCreate(db);
         TimerWeekdayTable.onCreate(db);
         TimerActionTable.onCreate(db);
@@ -133,6 +136,8 @@ public class Database extends SQLiteOpenHelper {
             ReceiverWidgetTable.onUpgrade(db, oldVersion, newVersion);
             RoomWidgetTable.onUpgrade(db, oldVersion, newVersion);
             SceneWidgetTable.onUpgrade(db, oldVersion, newVersion);
+
+            GeofenceTable.onUpgrade(db, oldVersion, newVersion);
 
             TimerTable.onUpgrade(db, oldVersion, newVersion);
             TimerWeekdayTable.onUpgrade(db, oldVersion, newVersion);
