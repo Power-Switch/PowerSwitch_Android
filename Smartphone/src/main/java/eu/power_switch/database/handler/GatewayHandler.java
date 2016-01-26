@@ -183,15 +183,12 @@ abstract class GatewayHandler {
     private static Gateway dbToGateway(Cursor c) {
         Gateway gateway;
         Long id = c.getLong(0);
-        int rawActive = c.getInt(1);
-        boolean active;
+        boolean active = c.getInt(1) > 0;
         String name = c.getString(2);
         String rawModel = c.getString(3);
         String firmware = c.getString(4);
         String address = c.getString(5);
         int port = c.getInt(6);
-
-        active = rawActive > 0;
 
         switch (rawModel) {
             case BrematicGWY433.MODEL:
@@ -210,7 +207,7 @@ abstract class GatewayHandler {
                 gateway = new RaspyRFM(id, active, name, firmware, address, port);
                 break;
             default:
-                throw new GatewayUnknownException();
+                throw new GatewayUnknownException(rawModel);
         }
 
         return gateway;

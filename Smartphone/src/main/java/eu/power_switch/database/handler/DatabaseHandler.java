@@ -32,6 +32,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
 import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -1331,4 +1332,69 @@ public final class DatabaseHandler {
         }
         return apartment;
     }
+
+    /**
+     * ////////////////////////
+     * // Geofence functions //
+     * ////////////////////////
+     */
+
+    /**
+     * Get Gateway from Database
+     *
+     * @param id ID of Gateway
+     * @return Gateway
+     */
+    public static Geofence getGeofence(Long id) throws Exception {
+        openReadable();
+        Geofence geofence = null;
+        try {
+            geofence = GeofenceHandler.get(id);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return geofence;
+    }
+
+    /**
+     * Get a list of all active/inactive Geofences
+     *
+     * @param isActive true if active, false otherwise
+     * @return list of active/inactive Geofences
+     */
+    public static List<Geofence> getAllGeofences(boolean isActive) throws Exception {
+        openReadable();
+        List<Geofence> geofences = null;
+        try {
+            geofences = GeofenceHandler.getAll(isActive);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return geofences;
+    }
+
+    /**
+     * Add Geofence to Database
+     *
+     * @param geofence new Geofence
+     * @return ID of saved Database entry
+     */
+    public static long addGeofence(Geofence geofence) {
+        openWritable();
+        long id;
+        try {
+            id = GeofenceHandler.add(geofence);
+            database.setTransactionSuccessful();
+            close();
+        } catch (Exception e) {
+            close();
+            throw e;
+        }
+        return id;
+    }
+
 }
