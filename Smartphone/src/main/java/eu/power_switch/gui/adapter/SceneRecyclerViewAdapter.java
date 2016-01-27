@@ -84,7 +84,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     }
 
     @Override
-    public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, int position) {
         final Scene scene = scenes.get(position);
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
@@ -105,7 +105,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public boolean onLongClick(View v) {
                 if (onItemLongClickListener != null) {
-                    onItemLongClickListener.onItemLongClick(v, position);
+                    onItemLongClickListener.onItemLongClick(v, holder.getAdapterPosition());
                 }
                 return true;
             }

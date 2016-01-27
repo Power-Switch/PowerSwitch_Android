@@ -75,7 +75,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     }
 
     @Override
-    public void onBindViewHolder(BackupRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final BackupRecyclerViewAdapter.ViewHolder holder, int position) {
         final Backup backup = backups.get(position);
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
@@ -91,8 +91,8 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                             BackupHandler backupHandler = new BackupHandler(context);
                             backupHandler.removeBackup(backup.getName());
 
-                            backups.remove(position);
-                            notifyItemRemoved(position);
+                            backups.remove(holder.getAdapterPosition());
+                            notifyItemRemoved(holder.getAdapterPosition());
                             StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_removed, Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
                             Log.e(e);

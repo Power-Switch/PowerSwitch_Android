@@ -70,9 +70,8 @@ abstract class GeofenceHandler {
     }
 
     protected static Geofence get(Long id) {
-
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, GeofenceTable.COLUMN_ID + "=" + id, null, null,
-                null, null);
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
+                GeofenceTable.COLUMN_ID + "=" + id, null, null, null, null);
         cursor.moveToFirst();
         Geofence geofence = dbToGeofence(cursor);
         cursor.close();
@@ -133,6 +132,65 @@ abstract class GeofenceHandler {
     }
 
     /**
+     * Get all custom Geofences
+     *
+     * @return List of custom Geofences
+     */
+    public static List<Geofence> getCustom() {
+        List<Geofence> geofences = new ArrayList<>();
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long geofenceId = cursor.getLong(0);
+            Cursor cursor1 = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME, null,
+                    ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID + "=" + geofenceId, null, null, null, null);
+
+            // only add geofences that are NOT related to an Apartment
+            if (!cursor1.moveToFirst()) {
+                geofences.add(dbToGeofence(cursor));
+            }
+            cursor1.close();
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return geofences;
+    }
+
+    /**
+     * Get all custom Geofences
+     *
+     * @param isActive true if active, false if inactive
+     * @return List of custom Geofences
+     */
+    public static List<Geofence> getCustom(boolean isActive) {
+        List<Geofence> geofences = new ArrayList<>();
+        int isActiveInt = isActive ? 1 : 0;
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
+                GeofenceTable.COLUMN_ACTIVE + "=" + isActiveInt, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long geofenceId = cursor.getLong(0);
+            Cursor cursor1 = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME, null,
+                    ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID + "=" + geofenceId, null, null, null, null);
+
+            // only add geofences that are NOT related to an Apartment
+            if (cursor1.moveToFirst()) {
+                geofences.add(dbToGeofence(cursor));
+            }
+            cursor1.close();
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return geofences;
+    }
+
+    /**
      * Gets all Geofences from Database
      *
      * @param isActive true if Geofence is enabled
@@ -141,8 +199,8 @@ abstract class GeofenceHandler {
     protected static List<Geofence> getAll(boolean isActive) {
         List<Geofence> geofences = new ArrayList<>();
         int isActiveInt = isActive ? 1 : 0;
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, GeofenceTable.COLUMN_ACTIVE + "=" + isActiveInt,
-                null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
+                GeofenceTable.COLUMN_ACTIVE + "=" + isActiveInt, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {

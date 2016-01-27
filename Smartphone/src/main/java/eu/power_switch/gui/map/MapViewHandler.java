@@ -89,24 +89,24 @@ public class MapViewHandler implements OnMapReadyCallback {
     private Map<String, Geofence> geofences = new HashMap<>();
 
     /**
-     * Set of onMapReadyListeners
+     * Set of onMapReadyCallback listeners
      */
-    private Set<OnMapReadyListener> onMapReadyListeners = new HashSet<>();
+    private Set<OnMapReadyCallback> onMapReadyListeners = new HashSet<>();
 
     /**
      * Constructor
      *
      * @param context            any suitable context
-     * @param onMapReadyListener
+     * @param onMapReadyCallback
      * @param mapView
      * @param savedInstanceState
      */
-    public MapViewHandler(Context context, OnMapReadyListener onMapReadyListener, MapView mapView, Bundle
+    public MapViewHandler(Context context, OnMapReadyCallback onMapReadyCallback, MapView mapView, Bundle
             savedInstanceState) {
         this.context = context;
         this.mapView = mapView;
 
-        addOnMapReadyListener(onMapReadyListener);
+        addOnMapReadyListener(onMapReadyCallback);
 
         mapView.onCreate(savedInstanceState);
     }
@@ -123,10 +123,10 @@ public class MapViewHandler implements OnMapReadyCallback {
     /**
      * Add an OnMapReadyListener to get notified when the GoogleMap has initialized
      *
-     * @param onMapReadyListener Listener
+     * @param onMapReadyCallbackListener Listener
      */
-    public void addOnMapReadyListener(OnMapReadyListener onMapReadyListener) {
-        onMapReadyListeners.add(onMapReadyListener);
+    public void addOnMapReadyListener(OnMapReadyCallback onMapReadyCallbackListener) {
+        onMapReadyListeners.add(onMapReadyCallbackListener);
     }
 
     /**
@@ -141,7 +141,7 @@ public class MapViewHandler implements OnMapReadyCallback {
         this.googleMap = googleMap;
 
         // trigger listeners
-        for (OnMapReadyListener onMapReadyListener : onMapReadyListeners) {
+        for (OnMapReadyCallback onMapReadyListener : onMapReadyListeners) {
             onMapReadyListener.onMapReady(this.googleMap);
         }
     }
@@ -325,4 +325,8 @@ public class MapViewHandler implements OnMapReadyCallback {
             googleMap.moveCamera(cameraUpdate);
         }
     }
+
+//    public void takeSnapshot() {
+//        googleMap.snapshot();
+//    }
 }

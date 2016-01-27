@@ -73,7 +73,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
     }
 
     @Override
-    public void onBindViewHolder(TimerRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final TimerRecyclerViewAdapter.ViewHolder holder, int position) {
         final Timer timer = timers.get(position);
 
         final LinearLayout linearLayoutDescription = holder.linearLayoutTimerDescription;
@@ -92,7 +92,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
             @Override
             public boolean onLongClick(View v) {
                 if (onItemLongClickListener != null) {
-                    onItemLongClickListener.onItemLongClick(v, position);
+                    onItemLongClickListener.onItemLongClick(v, holder.getAdapterPosition());
                 }
                 return true;
             }

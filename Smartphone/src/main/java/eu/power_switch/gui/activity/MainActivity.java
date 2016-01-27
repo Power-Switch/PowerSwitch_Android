@@ -71,9 +71,9 @@ import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.gui.fragment.GeofencesFragment;
 import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
+import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
 import eu.power_switch.gui.fragment.main.MainTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
                             startFragmentTransaction(IDENTIFIER_GEOFENCES, getString(R.string.menu_geofences),
-                                    GeofencesFragment.class.newInstance());
+                                    GeofencesTabFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {

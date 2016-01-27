@@ -69,6 +69,13 @@
         on your watch while changing settings. Then close and reopen the wearable app and the changes should apply.
     </string>
 
+    <string name="tutorial__geofences_apartment_explanation">
+        GEOFENCES!!!
+    </string>
+    <string name="tutorial__geofences_custom_explanation">
+        GEOFENCES!!!
+    </string>
+
     <string name="tutorial__add_new_roms_and_devices_here">Add new Rooms and Receivers using the + button</string>
 
     <string name="tutorial__first_add_room">At first create a room to add your devices to</string>

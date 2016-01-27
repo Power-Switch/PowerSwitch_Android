@@ -16,17 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.configure_apartment;
+package eu.power_switch.gui.fragment.configure_geofence;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -47,65 +44,52 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.location.AddressNotFoundException;
-import eu.power_switch.google_play_services.location.LocationApiHandler;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
-import eu.power_switch.gui.fragment.ApartmentFragment;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.map.Geofence;
+import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.map.MapViewHandler;
-import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
- * "Location" Fragment used in Configure Apartment Dialog
+ * "Location" Fragment used in Configure Geofence Dialog
  * <p/>
- * Created by Markus on 16.08.2015.
+ * Created by Markus on 27.01.2016.
  */
-public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyCallback {
+public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment implements OnMapReadyCallback {
 
-    private long apartmentId = -1;
+    private long geofenceId = -1;
 
     private View rootView;
-    private String currentName;
-    private List<Gateway> currentCheckedGateways;
-    private double currentGeofenceRadius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
-    private LocationApiHandler locationApiHandler;
     private MapViewHandler mapViewHandler;
-    private Geofence geofence;
+    private eu.power_switch.gui.map.Geofence geofenceView;
     private SeekBar geofenceRadiusSeekbar;
     private EditText geofenceRadiusEditText;
-    private BroadcastReceiver broadcastReceiver;
-    private EditText searchAddressEditText;
+    private ImageButton searchAddressButton;
     private TextInputLayout searchAddressTextInputLayout;
+    private EditText searchAddressEditText;
+
+    private double currentGeofenceRadius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
 
     /**
      * Used to notify parent Dialog that configuration has changed
      *
      * @param context any suitable context
      */
-    public static void sendSetupApartmentChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
+    public static void sendSetupGeofenceChangedBroadcast(Context context) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_GEOFENCE_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_apartment_page_2, container, false);
-
-//        locationApiHandler = new LocationApiHandler(getActivity());
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_1, container, false);
 
         MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
         mapViewHandler = new MapViewHandler(getContext(), this, mapView, savedInstanceState);
@@ -116,7 +100,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 .searchAddressTextInputLayout);
         searchAddressEditText = (EditText) rootView.findViewById(R.id.searchAddressEditText);
 
-        ImageButton searchAddressButton = (ImageButton) rootView.findViewById(R.id.searchAddressImageButton);
+        searchAddressButton = (ImageButton) rootView.findViewById(R.id.searchAddressImageButton);
         searchAddressButton.setImageDrawable(IconicsHelper.getSearchIcon(getActivity(), android.R.color.white));
         searchAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,18 +108,18 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 try {
                     LatLng location = mapViewHandler.findCoordinates(searchAddressEditText.getText().toString());
 
-                    if (geofence == null) {
-                        geofence = mapViewHandler.addGeofence(location, currentGeofenceRadius);
+                    if (geofenceView == null) {
+                        geofenceView = mapViewHandler.addGeofence(location, currentGeofenceRadius);
                     } else {
-                        geofence.setCenter(location);
-                        geofence.setRadius(currentGeofenceRadius);
+                        geofenceView.setCenter(location);
+                        geofenceView.setRadius(currentGeofenceRadius);
                     }
                     mapViewHandler.moveCamera(location, 14, true);
 
                     searchAddressTextInputLayout.setError(null);
                     searchAddressTextInputLayout.setErrorEnabled(false);
 
-                    sendSetupApartmentChangedBroadcast(getContext());
+                    sendSetupGeofenceChangedBroadcast(getContext());
                 } catch (AddressNotFoundException e) {
                     searchAddressTextInputLayout.setErrorEnabled(true);
                     searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
@@ -168,7 +152,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                             geofenceRadiusSeekbar.setProgress(radius);
                         }
                     }
-                    sendSetupApartmentChangedBroadcast(getContext());
+                    sendSetupGeofenceChangedBroadcast(getContext());
                 }
             }
         });
@@ -203,101 +187,46 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                     geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
                 }
 
-                sendSetupApartmentChangedBroadcast(getContext());
+                sendSetupGeofenceChangedBroadcast(getContext());
             }
         });
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                currentName = intent.getStringExtra("name");
-                currentCheckedGateways = (ArrayList<Gateway>) intent.getSerializableExtra("checkedGateways");
-            }
-        };
-
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureApartmentDialog.APARTMENT_ID_KEY)) {
-            apartmentId = args.getLong(ConfigureApartmentDialog.APARTMENT_ID_KEY);
-            initializeApartmentData(apartmentId);
+        if (args != null && args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
+            geofenceId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
         }
 
-        checkValidity();
+        initializeData();
 
         return rootView;
     }
 
-    private void updateGeofenceRadius(double radius) {
-        currentGeofenceRadius = radius;
-
-        if (geofence != null) {
-            geofence.setRadius(radius);
-        }
-    }
-
-    private void initializeApartmentData(long apartmentId) {
+    private void initializeData() {
         try {
-            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-            currentName = apartment.getName();
-            currentCheckedGateways = apartment.getAssociatedGateways();
+            if (geofenceId != -1) {
+                Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
 
-            if (apartment.getGeofence().getCenterLocation() != null) {
-                double radius = apartment.getGeofence().getRadius();
-                geofenceRadiusSeekbar.setProgress((int) radius);
-                geofenceRadiusEditText.setText(String.valueOf((int) radius));
+                if (geofence.getCenterLocation() != null) {
+                    double radius = geofence.getRadius();
+                    geofenceRadiusSeekbar.setProgress((int) radius);
+                    geofenceRadiusEditText.setText(String.valueOf((int) radius));
 
-                updateGeofenceRadius(radius);
-            } else {
-                updateGeofenceRadius(GeofenceConstants.DEFAULT_GEOFENCE_RADIUS);
-            }
-
-
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-        }
-    }
-
-    public void saveCurrentConfigurationToDatabase() {
-        try {
-            if (apartmentId == -1) {
-                String apartmentName = currentName;
-
-                Apartment newApartment = new Apartment((long) -1, apartmentName, currentCheckedGateways,
-                        new eu.power_switch.google_play_services.geofence.Geofence(
-                                (long) -1, true, currentName, geofence.getMarker().getPosition(), currentGeofenceRadius)
-                );
-
-                try {
-                    DatabaseHandler.addApartment(newApartment);
-                } catch (Exception e) {
-                    StatusMessageHandler.showStatusMessage(rootView.getContext(),
-                            R.string.unknown_error, Snackbar.LENGTH_LONG);
+                    updateGeofenceRadius(radius);
+                } else {
+                    updateGeofenceRadius(GeofenceConstants.DEFAULT_GEOFENCE_RADIUS);
                 }
-            } else {
-                DatabaseHandler.updateApartment(apartmentId, currentName, currentCheckedGateways, geofence.getMarker()
-                        .getPosition(), currentGeofenceRadius);
             }
-
-            ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.apartment_saved,
-                    Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             Log.e(e);
-            StatusMessageHandler.showStatusMessage(rootView.getContext(), R.string.unknown_error, Snackbar.LENGTH_LONG);
         }
-
-    }
-
-    public boolean checkValidity() {
-        return true;
     }
 
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
-                .PERMISSION_GRANTED && ActivityCompat
-                .checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    public void onMapReady(GoogleMap googleMap) {
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         } else {
             googleMap.setMyLocationEnabled(true);
         }
@@ -312,11 +241,11 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             public void onMapClick(LatLng latLng) {
                 Log.d(latLng.toString());
 
-                if (geofence == null) {
-                    geofence = mapViewHandler.addGeofence(latLng, currentGeofenceRadius);
+                if (geofenceView == null) {
+                    geofenceView = mapViewHandler.addGeofence(latLng, currentGeofenceRadius);
                 } else {
-                    geofence.setCenter(latLng);
-                    geofence.setRadius(currentGeofenceRadius);
+                    geofenceView.setCenter(latLng);
+                    geofenceView.setRadius(currentGeofenceRadius);
                 }
 
                 try {
@@ -328,28 +257,28 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                     Log.e(e);
                 }
 
-                sendSetupApartmentChangedBroadcast(getContext());
+                sendSetupGeofenceChangedBroadcast(getContext());
             }
         });
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
-                if (geofence.getMarker().getId().equals(marker.getId())) {
-                    geofence.setCenter(marker.getPosition());
+                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                    geofenceView.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDrag(Marker marker) {
-                if (geofence.getMarker().getId().equals(marker.getId())) {
-                    geofence.setCenter(marker.getPosition());
+                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                    geofenceView.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if (geofence.getMarker().getId().equals(marker.getId())) {
-                    geofence.setCenter(marker.getPosition());
+                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                    geofenceView.setCenter(marker.getPosition());
 
                     try {
                         String address = mapViewHandler.findAddress(marker.getPosition());
@@ -360,21 +289,20 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                         Log.e(e);
                     }
 
-                    sendSetupApartmentChangedBroadcast(getContext());
+                    sendSetupGeofenceChangedBroadcast(getContext());
                 }
             }
         });
 
-        if (apartmentId != -1) {
+        if (geofenceId != -1) {
             try {
-                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                if (geofence != null) {
-                    geofence.remove();
+                Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
+                if (geofenceView != null) {
+                    geofenceView.remove();
                 }
-                if (apartment.getGeofence().getCenterLocation() != null) {
-                    geofence = mapViewHandler.addGeofence(apartment.getGeofence().getCenterLocation(), apartment
-                            .getGeofence().getRadius());
-                    mapViewHandler.moveCamera(apartment.getGeofence().getCenterLocation(), 14, false);
+                if (geofence.getCenterLocation() != null) {
+                    geofenceView = mapViewHandler.addGeofence(geofence.getCenterLocation(), geofence.getRadius());
+                    mapViewHandler.moveCamera(geofence.getCenterLocation(), 14, false);
                 }
             } catch (Exception e) {
                 Log.e(e);
@@ -382,14 +310,12 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-//        locationApiHandler.connect();
+    private void updateGeofenceRadius(double radius) {
+        currentGeofenceRadius = radius;
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        if (geofenceView != null) {
+            geofenceView.setRadius(radius);
+        }
     }
 
     @Override
@@ -412,8 +338,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
 
     @Override
     public void onStop() {
-//        locationApiHandler.disconnect();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

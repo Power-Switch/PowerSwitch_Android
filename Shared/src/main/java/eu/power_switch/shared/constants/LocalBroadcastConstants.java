@@ -39,6 +39,12 @@ public class LocalBroadcastConstants {
 
     public static final String INTENT_SETUP_APARTMENT_CHANGED = "eu.power_switch.setup_apartment_changed";
 
+    public static final String INTENT_SETUP_GEOFENCE_CHANGED = "eu.power_switch.setup_geofence_changed";
+    public static final String INTENT_GEOFENCE_ENTER_ACTION_ADDED = "eu.power_switch.geofence_enter_action_added";
+    public static final String INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED = "eu.power_switch.geofence_enter_actions_changed";
+    public static final String INTENT_GEOFENCE_EXIT_ACTION_ADDED = "eu.power_switch.geofence_exit_action_added";
+    public static final String INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED = "eu.power_switch.geofence_exit_actions_changed";
+
     public static final String INTENT_BRAND_MODEL_CHANGED = "eu.power_switch.brand_model_changed";
     public static final String INTENT_NAME_ROOM_CHANGED = "eu.power_switch.name_room_changed";
     public static final String INTENT_CHANNEL_DETAILS_CHANGED = "eu.power_switch.channel_details_changed";
@@ -49,10 +55,10 @@ public class LocalBroadcastConstants {
     public static final String INTENT_NAME_SCENE_CHANGED = "eu.power_switch.name_scene_changed";
 
     public static final String INTENT_SETUP_SCENE_CHANGED = "eu.power_switch.setup_scene_changed";
-    public static final String INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED = "eu.power_switch" +
-            ".timer_name_execution_time_changed";
-    public static final String INTENT_TIMER_EXECUTION_INTERVAL_CHANGED = "eu.power_switch" +
-            ".timer_execution_interval_changed";
+    public static final String INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED =
+            "eu.power_switch.timer_name_execution_time_changed";
+    public static final String INTENT_TIMER_EXECUTION_INTERVAL_CHANGED =
+            "eu.power_switch.timer_execution_interval_changed";
     public static final String INTENT_TIMER_ACTIONS_CHANGED = "eu.power_switch.timer_actions_changed";
     public static final String INTENT_TIMER_SUMMARY_CHANGED = "eu.power_switch.timer_summary_changed";
 

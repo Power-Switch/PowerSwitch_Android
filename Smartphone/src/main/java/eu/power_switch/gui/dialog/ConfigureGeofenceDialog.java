@@ -35,33 +35,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.fragment.TimersFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4SummaryFragment;
-import eu.power_switch.gui.fragment.main.RoomsFragment;
-import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1LocationFragment;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActionsFragment;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActionsFragment;
+import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
  * Dialog to create or modify a Receiver
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
+public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
 
     /**
-     * ID of existing Receiver to Edit
+     * ID of existing Geofence to Edit
      */
-    public static final String RECEIVER_ID_KEY = "ReceiverId";
+    public static final String GEOFENCE_ID_KEY = "GeofenceId";
 
-    private long receiverId = -1;
+    private long geofenceId = -1;
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -80,7 +74,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
+        ConfigureGeofenceDialogPage3ExitActionsFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
 
         return summaryFragment.checkSetupValidity();
@@ -88,11 +82,11 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void initExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(RECEIVER_ID_KEY)) {
-            // init dialog using existing receiver
-            receiverId = arguments.getLong(RECEIVER_ID_KEY);
+        if (arguments != null && arguments.containsKey(GEOFENCE_ID_KEY)) {
+            // init dialog using existing geofence
+            geofenceId = arguments.getLong(GEOFENCE_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), receiverId));
+                    (RecyclerViewFragment) getTargetFragment(), geofenceId));
             imageButtonDelete.setVisibility(View.VISIBLE);
             setSaveButtonState(true);
         } else {
@@ -107,13 +101,13 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected int getDialogTitle() {
-        return R.string.configure_receiver;
+        return R.string.configure_geofence;
     }
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
+        ConfigureGeofenceDialogPage3ExitActionsFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
         if (summaryFragment.checkSetupValidity()) {
             try {
@@ -127,28 +121,21 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .receiver_will_be_gone_forever)
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).
+                setMessage(R.string.geofence_will_be_gone_forever)
                 .setPositiveButton
                         (android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    DatabaseHandler.deleteReceiver(receiverId);
+                                    // TODO: delete Geofence
+//                                    DatabaseHandler.deleteGeofence(geofenceId);
 
-                                    // notify rooms fragment
-                                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-
-                                    // scenes could change too if receiver was used in a scene
-                                    ScenesFragment.sendScenesChangedBroadcast(getActivity());
                                     // same for timers
-                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
-
-                                    // update receiver widgets
-                                    ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+                                    CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getActivity());
 
                                     StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                                            R.string.receiver_deleted, Snackbar.LENGTH_LONG);
+                                            R.string.geofence_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     Log.e(e);
                                     StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
@@ -164,7 +151,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_SUMMARY_CHANGED);
+//        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_SUMMARY_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -177,25 +164,25 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     private static class CustomTabAdapter extends FragmentPagerAdapter {
 
         private Context context;
-        private long receiverId;
-        private ConfigureReceiverDialogPage4SummaryFragment summaryFragment;
+        private long geofenceId;
+        private ConfigureGeofenceDialogPage3ExitActionsFragment summaryFragment;
         private RecyclerViewFragment recyclerViewFragment;
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
             super(fm);
             this.context = context;
-            this.receiverId = -1;
+            this.geofenceId = -1;
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
             super(fm);
             this.context = context;
-            this.receiverId = id;
+            this.geofenceId = id;
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public ConfigureReceiverDialogPage4SummaryFragment getSummaryFragment() {
+        public ConfigureGeofenceDialogPage3ExitActionsFragment getSummaryFragment() {
             return summaryFragment;
         }
 
@@ -204,13 +191,11 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.name);
+                    return context.getString(R.string.geofence);
                 case 1:
-                    return context.getString(R.string.type);
+                    return context.getString(R.string.enter);
                 case 2:
-                    return context.getString(R.string.setup);
-                case 3:
-                    return context.getString(R.string.summary);
+                    return context.getString(R.string.exit);
             }
 
             return "" + (position + 1);
@@ -222,27 +207,24 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureReceiverDialogPage1NameFragment();
+                    fragment = new ConfigureGeofenceDialogPage1LocationFragment();
                     break;
                 case 1:
-                    fragment = new ConfigureReceiverDialogPage2TypeFragment();
+                    fragment = new ConfigureGeofenceDialogPage2EnterActionsFragment();
                     break;
                 case 2:
-                    fragment = new ConfigureReceiverDialogPage3SetupFragment();
-                    break;
-                case 3:
-                    fragment = new ConfigureReceiverDialogPage4SummaryFragment();
+                    fragment = new ConfigureGeofenceDialogPage3ExitActionsFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
-                    summaryFragment = (ConfigureReceiverDialogPage4SummaryFragment) fragment;
+                    summaryFragment = (ConfigureGeofenceDialogPage3ExitActionsFragment) fragment;
                     break;
                 default:
                     break;
             }
 
-            if (fragment != null && receiverId != -1) {
+            if (fragment != null && geofenceId != -1) {
                 Bundle bundle = new Bundle();
-                bundle.putLong(RECEIVER_ID_KEY, receiverId);
+                bundle.putLong(GEOFENCE_ID_KEY, geofenceId);
                 fragment.setArguments(bundle);
             }
 
@@ -254,7 +236,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
          */
         @Override
         public int getCount() {
-            return 4;
+            return 3;
         }
     }
 

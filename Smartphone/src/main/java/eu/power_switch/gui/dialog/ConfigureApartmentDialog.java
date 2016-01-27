@@ -65,6 +65,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("Opening " + getClass().getSimpleName() + "...");
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -171,6 +172,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }

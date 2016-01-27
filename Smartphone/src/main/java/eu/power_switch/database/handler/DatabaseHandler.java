@@ -1377,16 +1377,34 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Get a list of all custom Geofences
+     *
+     * @return list of custom Geofences
+     */
+    public static List<Geofence> getCustomGeofences() throws Exception {
+        openReadable();
+        List<Geofence> geofences = null;
+        try {
+            geofences = GeofenceHandler.getCustom();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return geofences;
+    }
+
+    /**
      * Get a list of all active/inactive Geofences
      *
      * @param isActive true if active, false otherwise
      * @return list of active/inactive Geofences
      */
-    public static List<Geofence> getAllGeofences(boolean isActive) throws Exception {
+    public static List<Geofence> getCustomGeofences(boolean isActive) throws Exception {
         openReadable();
         List<Geofence> geofences = null;
         try {
-            geofences = GeofenceHandler.getAll(isActive);
+            geofences = GeofenceHandler.getCustom(isActive);
         } catch (Exception e) {
             Log.e(e);
         } finally {

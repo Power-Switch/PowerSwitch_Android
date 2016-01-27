@@ -64,6 +64,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("Opening " + getClass().getSimpleName() + "...");
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

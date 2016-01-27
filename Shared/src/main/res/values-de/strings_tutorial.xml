@@ -75,6 +75,12 @@
         Smartphone änderst. Beende die Wearable App danach kurz, um die neuen Einstellungen auf
         der Smartwatch zu laden.
     </string>
+    <string name="tutorial__geofences_apartment_explanation">
+        GEOFENCES!!!
+    </string>
+    <string name="tutorial__geofences_custom_explanation">
+        GEOFENCES!!!
+    </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>
 

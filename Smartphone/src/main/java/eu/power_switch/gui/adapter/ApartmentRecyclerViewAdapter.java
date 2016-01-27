@@ -66,7 +66,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
     }
 
     @Override
-    public void onBindViewHolder(ApartmentRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ApartmentRecyclerViewAdapter.ViewHolder holder, int position) {
         final Apartment apartment = apartments.get(position);
 
         holder.active.setChecked(apartment.isActive());

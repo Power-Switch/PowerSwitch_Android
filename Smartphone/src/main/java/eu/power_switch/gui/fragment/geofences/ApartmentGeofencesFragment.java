@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment;
+package eu.power_switch.gui.fragment.geofences;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,62 +24,42 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.UiThread;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.ConfigureSceneDialog;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.wear.service.UtilityService;
 
 /**
- * Fragment containing a List of all Geofences
+ * Fragment containing a List of all Apartment related Geofences
  */
-public class GeofencesFragment extends RecyclerViewFragment {
+public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
     private ArrayList<Geofence> geofences;
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
     private RecyclerView recyclerViewGeofences;
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
-    private FloatingActionButton fab;
-
-    /**
-     * Used to notify Scene Fragment (this) that Scenes have changed
-     *
-     * @param context
-     */
-    public static void sendScenesChangedBroadcast(Context context) {
-        Log.d("ScenesFragment", "sendScenesChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        UtilityService.forceWearDataUpdate(context);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.fragment_geofences, container, false);
-        setHasOptionsMenu(true);
+        rootView = inflater.inflate(R.layout.fragment_apartment_geofences, container, false);
 
         geofences = new ArrayList<>();
 
@@ -96,29 +76,16 @@ public class GeofencesFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, int position) {
                 final Geofence geofence = geofences.get(position);
 
-                // TODO:
-
-//                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-//                Bundle sceneData = new Bundle();
-//                sceneData.putLong(ConfigureSceneDialog.SCENE_ID_KEY, scene.getId());
-//                configureSceneDialog.setArguments(sceneData);
-//                configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
-//                configureSceneDialog.show(getFragmentManager(), null);
+                ConfigureGeofenceDialog configureGeofenceDialog = new ConfigureGeofenceDialog();
+                Bundle geofenceData = new Bundle();
+                geofenceData.putLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY, geofence.getId());
+                configureGeofenceDialog.setArguments(geofenceData);
+                configureGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
+                configureGeofenceDialog.show(getFragmentManager(), null);
             }
         });
 
         refreshGeofences();
-
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_geofence_fab);
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureSceneDialog.show(getFragmentManager(), null);
-            }
-        });
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -139,7 +106,7 @@ public class GeofencesFragment extends RecyclerViewFragment {
 
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-//            geofences.addAll(playStoreModeDataModel.getScenes());
+//            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
 //        } else {
         fillListWithGeofences();
 //        }
@@ -149,54 +116,14 @@ public class GeofencesFragment extends RecyclerViewFragment {
 
     private void fillListWithGeofences() {
         try {
-            geofences.addAll(DatabaseHandler.getAllGeofences());
+            List<Apartment> apartments = DatabaseHandler.getAllApartments();
+            for (Apartment apartment :
+                    apartments) {
+                geofences.add(apartment.getGeofence());
+            }
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (super.onOptionsItemSelected(menuItem)) {
-            return true;
-        }
-
-        switch (menuItem.getItemId()) {
-//            case R.id.create_geofence:
-            // TODO:
-
-//                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-//                configureSceneDialog.setTargetFragment(this, 0);
-//                configureSceneDialog.show(getFragmentManager(), null);
-            default:
-                break;
-
-        }
-
-        return super.onOptionsItemSelected(menuItem);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.scene_fragment_menu, menu);
-
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            menu.findItem(R.id.create_scene).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-        } else {
-            menu.findItem(R.id.create_scene).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-        }
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            fab.setVisibility(View.GONE);
-        } else {
-            fab.setVisibility(View.VISIBLE);
         }
     }
 

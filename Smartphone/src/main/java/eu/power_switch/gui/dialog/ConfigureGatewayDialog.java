@@ -82,6 +82,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
 
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d("Opening " + getClass().getSimpleName() + "...");
         rootView = inflater.inflate(R.layout.dialog_configure_gateway_content, null);
 
         try {

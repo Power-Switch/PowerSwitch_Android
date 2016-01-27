@@ -16,15 +16,27 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.map;
-
-import com.google.android.gms.maps.GoogleMap;
+package eu.power_switch.shared.constants;
 
 /**
- * Created by Markus on 20.01.2016.
+ * Class holding constants related to Settings for both Smartphone and Wearable Module
+ * <p/>
+ * Created by Markus on 11.11.2015.
  */
-public interface OnMapReadyListener {
+public class GeofenceConstants {
 
-    void onMapReady(GoogleMap googleMap);
+    // Tabs
+    public static final int APARTMENTS_TAB_INDEX = 0;
+    public static final int CUSTOM_TAB_INDEX = 1;
 
+    /**
+     * Default Geofence radius
+     */
+    public static final int DEFAULT_GEOFENCE_RADIUS = 500;
+
+    /**
+     * Private Constructor
+     */
+    private GeofenceConstants() {
+    }
 }

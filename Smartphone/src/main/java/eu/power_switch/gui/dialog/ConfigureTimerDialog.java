@@ -64,7 +64,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening ConfigureTimerDialog...");
+        Log.d("Opening " + getClass().getSimpleName() + "...");
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override

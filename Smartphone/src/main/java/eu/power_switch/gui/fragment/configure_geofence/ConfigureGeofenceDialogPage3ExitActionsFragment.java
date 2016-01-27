@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.configure_timer;
+package eu.power_switch.gui.fragment.configure_geofence;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,20 +39,21 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.AddTimerActionDialog;
-import eu.power_switch.gui.dialog.ConfigureTimerDialog;
+import eu.power_switch.gui.dialog.AddGeofenceExitActionDialog;
+import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
+public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Fragment {
 
-    private static ArrayList<Action> currentActions;
-    private static TimerActionRecyclerViewAdapter timerActionRecyclerViewAdapter;
+    private static ArrayList<Action> currentExitActions;
+    private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
 
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
@@ -60,75 +61,74 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      */
-    public static void sendTimerActionChangedBroadcast(Context context, ArrayList<Action> actions) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
+    public static void sendActionsChangedBroadcast(Context context, ArrayList<Action> actions) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED);
         intent.putExtra("actions", actions);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     /**
-     * Used to add TimerActions from "Add TimerAction" Dialog
+     * Used to add Actions from AddActionDialog
      *
-     * @param action TimerAction
+     * @param action Action
      */
-    public static void addTimerAction(Action action) {
-        currentActions.add(action);
-        timerActionRecyclerViewAdapter.notifyDataSetChanged();
+    public static void addAction(Action action) {
+        currentExitActions.add(action);
+        actionRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_3, container, false);
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_3, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                sendTimerActionChangedBroadcast(getContext(), currentActions);
+                sendActionsChangedBroadcast(getContext(), currentExitActions);
             }
         };
 
         final Fragment fragment = this;
-        FloatingActionButton addTimerActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_timer_action);
-        addTimerActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-        addTimerActionFAB.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action);
+        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddTimerActionDialog addTimerActionDialog = new AddTimerActionDialog();
-                addTimerActionDialog.setTargetFragment(fragment, 0);
-                addTimerActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                AddGeofenceExitActionDialog addGeofenceExitActionDialog = new AddGeofenceExitActionDialog();
+                addGeofenceExitActionDialog.setTargetFragment(fragment, 0);
+                addGeofenceExitActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
 
-        currentActions = new ArrayList<>();
-        timerActionRecyclerViewAdapter = new TimerActionRecyclerViewAdapter
-                (getActivity(), currentActions);
-        RecyclerView recyclerViewTimerActions = (RecyclerView) rootView.findViewById(R.id
-                .recyclerview_list_of_actions);
-        recyclerViewTimerActions.setAdapter(timerActionRecyclerViewAdapter);
+        currentExitActions = new ArrayList<>();
+        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter
+                (getActivity(), currentExitActions);
+        RecyclerView recyclerViewTimerActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_actions);
+        recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
-            long timerId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
-            initializeTimerData(timerId);
+        if (args != null && args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
+            long geofenceId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
+            initializeData(geofenceId);
         }
 
-        sendTimerActionChangedBroadcast(getContext(), getCurrentTimerActions());
+        sendActionsChangedBroadcast(getContext(), getCurrentTimerActions());
 
         return rootView;
     }
 
-    private void initializeTimerData(long timerId) {
+    private void initializeData(long geofenceId) {
         try {
-            currentActions.clear();
-            currentActions.addAll(DatabaseHandler.getTimer(timerId).getActions());
+            currentExitActions.clear();
+            currentExitActions.addAll(DatabaseHandler.getGeofence(geofenceId).getActions(Geofence.EventType.EXIT));
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
@@ -146,7 +146,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_ACTION_ADDED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTION_ADDED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -156,32 +156,40 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
         super.onStop();
     }
 
-    public class TimerActionRecyclerViewAdapter extends RecyclerView.Adapter<TimerActionRecyclerViewAdapter.ViewHolder> {
+    public boolean checkSetupValidity() {
+        return false;
+    }
+
+    public void saveCurrentConfigurationToDatabase() {
+
+    }
+
+    public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecyclerViewAdapter.ViewHolder> {
         private ArrayList<Action> actions;
         private Context context;
 
-        public TimerActionRecyclerViewAdapter(Context context, ArrayList<Action> actions) {
+        public ActionRecyclerViewAdapter(Context context, ArrayList<Action> actions) {
             this.actions = actions;
             this.context = context;
         }
 
         @Override
-        public TimerActionRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ActionRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_action, parent, false);
-            return new TimerActionRecyclerViewAdapter.ViewHolder(itemView);
+            return new ActionRecyclerViewAdapter.ViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(TimerActionRecyclerViewAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
             final Action action = actions.get(position);
             holder.action.setText(action.toString());
 
-            holder.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
+            holder.deleteActionFAB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    actions.remove(position);
+                    actions.remove(holder.getAdapterPosition());
                     notifyDataSetChanged();
-                    sendTimerActionChangedBroadcast(getContext(), actions);
+                    sendActionsChangedBroadcast(getContext(), actions);
                 }
             });
         }
@@ -193,13 +201,13 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView action;
-            public FloatingActionButton deleteTimerActionFAB;
+            public FloatingActionButton deleteActionFAB;
 
             public ViewHolder(final View itemView) {
                 super(itemView);
                 action = (TextView) itemView.findViewById(R.id.txt_action_description);
-                deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_action_fab);
-                deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), android.R.color.white));
+                deleteActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_action_fab);
+                deleteActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), android.R.color.white));
             }
         }
     }

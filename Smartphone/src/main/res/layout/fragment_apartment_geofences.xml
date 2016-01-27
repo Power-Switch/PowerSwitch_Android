@@ -17,28 +17,18 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <string name="menu_geofences">Geofences</string>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_list_of_geofences"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadeScrollbars="true"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <string name="apartments">Wohnungen</string>
-    <string name="custom">Eigene</string>
-
-    <string name="create_geofence">Geofence erstellen</string>
-    <string name="configure_geofence">Geofence einrichten</string>
-
-    <string name="enter">Eintritt</string>
-    <string name="exit">Austritt</string>
-
-    <string name="geofence_will_be_gone_forever">Der Geofence wird für immer verloren sein!</string>
-    <string name="geofence_deleted">Geofence gelöscht</string>
-
-    <string name="location">Position</string>
-    <string name="radius">Radius</string>
-
-    <string name="geofence_radius">Geofence Radius</string>
-
-    <string name="search_address">Addresse suchen</string>
-    <string name="address_not_found">Adresse nicht gefunden</string>
-
-</resources>
+</android.support.design.widget.CoordinatorLayout>

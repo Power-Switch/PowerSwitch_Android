@@ -17,28 +17,27 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <string name="menu_geofences">Geofences</string>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:scrollbars="horizontal"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:tabGravity="fill"/>
 
-    <string name="apartments">Wohnungen</string>
-    <string name="custom">Eigene</string>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tabHost"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-    <string name="create_geofence">Geofence erstellen</string>
-    <string name="configure_geofence">Geofence einrichten</string>
-
-    <string name="enter">Eintritt</string>
-    <string name="exit">Austritt</string>
-
-    <string name="geofence_will_be_gone_forever">Der Geofence wird für immer verloren sein!</string>
-    <string name="geofence_deleted">Geofence gelöscht</string>
-
-    <string name="location">Position</string>
-    <string name="radius">Radius</string>
-
-    <string name="geofence_radius">Geofence Radius</string>
-
-    <string name="search_address">Addresse suchen</string>
-    <string name="address_not_found">Adresse nicht gefunden</string>
-
-</resources>
+</LinearLayout>

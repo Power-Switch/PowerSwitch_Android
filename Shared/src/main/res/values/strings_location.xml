@@ -20,6 +20,19 @@
 <resources>
 
     <string name="menu_geofences">Geofences</string>
+    <string name="geofence">Geofence</string>
+
+    <string name="apartments">Apartments</string>
+    <string name="custom">Custom</string>
+
+    <string name="create_geofence">Create Geofence</string>
+    <string name="configure_geofence">Configure Geofence</string>
+
+    <string name="enter">Enter</string>
+    <string name="exit">Exit</string>
+
+    <string name="geofence_will_be_gone_forever">Geofence will be gone forever!</string>
+    <string name="geofence_deleted">Geofence deleted</string>
 
     <string name="location">Location</string>
     <string name="radius">Radius</string>

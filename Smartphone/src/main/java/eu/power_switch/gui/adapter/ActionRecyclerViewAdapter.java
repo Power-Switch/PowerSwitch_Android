@@ -59,7 +59,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
         final Action action = actions.get(position);
         holder.description.setText(action.toString());
     }
@@ -81,7 +81,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
         public ViewHolder(View itemView) {
             super(itemView);
             this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
-            this.deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_timer_action_fab);
+            this.deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_action_fab);
             deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(context, android.R.color.white));
 
             this.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
