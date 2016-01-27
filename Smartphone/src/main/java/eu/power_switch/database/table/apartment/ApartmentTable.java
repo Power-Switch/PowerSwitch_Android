@@ -54,8 +54,8 @@ public class ApartmentTable {
         values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, true);
         values.put(GeofenceTable.COLUMN_NAME, apartmentName);
-        values.put(GeofenceTable.COLUMN_LATITUDE, 0);
-        values.put(GeofenceTable.COLUMN_LONGITUDE, 0);
+        values.put(GeofenceTable.COLUMN_LATITUDE, Integer.MAX_VALUE);
+        values.put(GeofenceTable.COLUMN_LONGITUDE, Integer.MAX_VALUE);
         values.put(GeofenceTable.COLUMN_RADIUS, -1);
         long geofenceId = db.insert(GeofenceTable.TABLE_NAME, null, values);
 

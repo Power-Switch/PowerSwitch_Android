@@ -33,6 +33,9 @@ import eu.power_switch.action.Action;
  */
 public class Geofence {
 
+    public static final double INVALID_LAT = Integer.MAX_VALUE;
+    public static final double INVALID_LON = Integer.MAX_VALUE;
+
     /**
      * ID of this Geofence
      */

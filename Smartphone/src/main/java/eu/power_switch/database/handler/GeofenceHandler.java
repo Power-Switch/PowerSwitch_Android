@@ -189,7 +189,14 @@ abstract class GeofenceHandler {
             double longitude = c.getDouble(4);
             double radius = c.getDouble(5);
 
-            geofence = new Geofence(id, active, name, new LatLng(latitude, longitude), radius);
+            LatLng location;
+            if (latitude == Integer.MAX_VALUE || longitude == Integer.MAX_VALUE) {
+                location = null;
+            } else {
+                location = new LatLng(latitude, longitude);
+            }
+
+            geofence = new Geofence(id, active, name, location, radius);
             return geofence;
         } catch (Exception e) {
             Log.e(e);

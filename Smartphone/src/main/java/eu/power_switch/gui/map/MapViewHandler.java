@@ -235,8 +235,10 @@ public class MapViewHandler implements OnMapReadyCallback {
     }
 
     /**
-     * @param latLng
-     * @return
+     * Find a address description for a given coordinate
+     *
+     * @param latLng coordinate
+     * @return address description
      * @throws AddressNotFoundException
      */
     public String findAddress(LatLng latLng) throws AddressNotFoundException {
@@ -262,7 +264,14 @@ public class MapViewHandler implements OnMapReadyCallback {
         return null;
     }
 
-    public LatLng findAddress(String address) throws AddressNotFoundException {
+    /**
+     * Find Coordinates for a given address
+     *
+     * @param address address as text
+     * @return coordinate near the given address
+     * @throws AddressNotFoundException
+     */
+    public LatLng findCoordinates(String address) throws AddressNotFoundException {
         /* get latitude and longitude from the address */
         Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
         try {
@@ -271,7 +280,7 @@ public class MapViewHandler implements OnMapReadyCallback {
                 Double lat = (addresses.get(0).getLatitude());
                 Double lon = (addresses.get(0).getLongitude());
 
-                Log.d("lat-long", lat + "......." + lon);
+                Log.d("lat-lon", lat + "......." + lon);
                 final LatLng location = new LatLng(lat, lon);
                 return location;
             } else {

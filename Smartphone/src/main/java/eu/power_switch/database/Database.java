@@ -264,7 +264,8 @@ public class Database extends SQLiteOpenHelper {
                 case 10:
                 case 11:
                 case 12:
-                    cursor = db.query(ApartmentTable.TABLE_NAME, new String[]{ApartmentTable.COLUMN_ID, ApartmentTable.COLUMN_NAME}, null, null, null, null, null);
+                    cursor = db.query(ApartmentTable.TABLE_NAME, new String[]{ApartmentTable.COLUMN_ID,
+                            ApartmentTable.COLUMN_NAME}, null, null, null, null, null);
                     cursor.moveToFirst();
                     while (!cursor.isAfterLast()) {
                         Long apartmentId = cursor.getLong(0);
@@ -273,8 +274,8 @@ public class Database extends SQLiteOpenHelper {
                         ContentValues values = new ContentValues();
                         values.put(GeofenceTable.COLUMN_ACTIVE, true);
                         values.put(GeofenceTable.COLUMN_NAME, apartmentName);
-                        values.put(GeofenceTable.COLUMN_LATITUDE, 0);
-                        values.put(GeofenceTable.COLUMN_LONGITUDE, 0);
+                        values.put(GeofenceTable.COLUMN_LATITUDE, Integer.MAX_VALUE);
+                        values.put(GeofenceTable.COLUMN_LONGITUDE, Integer.MAX_VALUE);
                         values.put(GeofenceTable.COLUMN_RADIUS, -1);
                         long geofenceId = db.insert(GeofenceTable.TABLE_NAME, null, values);
 
