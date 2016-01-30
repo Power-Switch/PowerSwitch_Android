@@ -81,7 +81,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
 
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_edit_room_content, null);
+        rootView = inflater.inflate(R.layout.dialog_edit_room_content, container);
 
         // restore name
         floatingName = (TextInputLayout) rootView.findViewById(R.id.room_name_text_input_layout);

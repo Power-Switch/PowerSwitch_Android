@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.fragment.configure_receiver;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -247,6 +248,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
         if (currentDips != null) {
             linearLayoutDips.removeAllViews();
             for (DipSwitch dipSwitch : currentDips) {
+                @SuppressLint("InflateParams")
                 SwitchCompat switchCompat = (SwitchCompat) inflater.inflate(R.layout.default_switch_compat, null, false);
                 switchCompat.setText(dipSwitch.getName());
                 switchCompat.setChecked(dipSwitch.isChecked());

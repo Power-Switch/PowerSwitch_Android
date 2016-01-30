@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.fragment.configure_apartment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -228,6 +229,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
         try {
             List<Gateway> gateways = DatabaseHandler.getAllGateways();
             for (Gateway gateway : gateways) {
+                @SuppressLint("InflateParams")
                 LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
                 // every inflated layout has to be added manually, attaching while inflating will only generate every
                 // child one, but not for every gateway

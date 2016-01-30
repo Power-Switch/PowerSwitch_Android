@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.fragment.configure_scene;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -304,6 +305,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
                 }
                 final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
                 for (Button button : receiver.getButtons()) {
+                    @SuppressLint("InflateParams")
                     android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, null, false);
                     buttonList.add(buttonView);
 

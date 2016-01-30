@@ -63,7 +63,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_configuration_tabbed, null);
+        rootView = inflater.inflate(R.layout.dialog_configuration_tabbed, container);
 
         tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
         tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

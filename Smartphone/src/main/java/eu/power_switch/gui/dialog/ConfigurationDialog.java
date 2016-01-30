@@ -63,7 +63,6 @@ public abstract class ConfigurationDialog extends DialogFragment {
         FrameLayout contentViewContainer = (FrameLayout) rootView.findViewById(R.id.contentView);
 
         contentView = initContentView(inflater, contentViewContainer, savedInstanceState);
-        contentViewContainer.addView(contentView);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
