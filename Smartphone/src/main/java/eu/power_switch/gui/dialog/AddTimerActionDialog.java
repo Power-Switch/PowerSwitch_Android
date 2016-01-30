@@ -35,7 +35,7 @@ public class AddTimerActionDialog extends AddActionDialog {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendTimerActionAddedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTION_ADDED);

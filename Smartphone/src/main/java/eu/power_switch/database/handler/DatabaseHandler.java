@@ -569,7 +569,6 @@ public final class DatabaseHandler {
      *
      * @param receiverId ID of Receiver
      * @param buttonId   ID of Button
-     * @return ID of last activated Button, -1 if not set
      */
     public static void setLastActivatedButtonId(Long receiverId, Long buttonId) throws Exception {
         openWritable();

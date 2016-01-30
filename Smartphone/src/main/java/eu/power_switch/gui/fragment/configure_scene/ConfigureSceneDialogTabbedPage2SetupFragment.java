@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -312,7 +313,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
                     buttonList.add(buttonView);
 
                     if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId() == button.getId()) {
-                        buttonView.setTextColor(getResources().getColor(R.color.color_light_blue_a700));
+                        buttonView.setTextColor(ContextCompat.getColor(getContext(), R.color.color_light_blue_a700));
                     }
                     buttonView.setText(button.getName());
                     buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
@@ -322,7 +323,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
                             sendSetupSceneChangedBroadcast(context);
                             for (android.widget.Button button : buttonList) {
                                 if (button == v) {
-                                    button.setTextColor(getResources().getColor(R.color.color_light_blue_a700));
+                                    button.setTextColor(ContextCompat.getColor(getContext(), R.color.color_light_blue_a700));
 
                                     for (Button receiverButton : receiver.getButtons()) {
                                         if (receiverButton.getName().equals(button.getText())) {

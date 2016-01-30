@@ -52,7 +52,7 @@ public class AddAlarmEventActionDialog extends AddActionDialog {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendAlarmEventActionAddedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED);

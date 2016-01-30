@@ -35,7 +35,7 @@ public class AddGeofenceEnterActionDialog extends AddActionDialog {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendGeofenceEnterActionAddedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTION_ADDED);

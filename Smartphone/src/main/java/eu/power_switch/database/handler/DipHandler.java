@@ -82,6 +82,7 @@ abstract class DipHandler {
             dipCursor.moveToNext();
         }
 
+        dipCursor.close();
         return dips;
     }
 }

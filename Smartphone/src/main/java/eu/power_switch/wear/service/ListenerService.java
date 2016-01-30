@@ -70,7 +70,6 @@ public class ListenerService extends WearableListenerService {
      * Parse message string
      *
      * @param messageData
-     * @return
      */
     private void parseMessage(String messageData) {
         try {

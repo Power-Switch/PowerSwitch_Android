@@ -73,7 +73,7 @@ public class HolidaySpecialHandler {
     /**
      * Calculate date of easter
      *
-     * @param year
+     * @param year year to calculate date of easter
      * @return Easter date
      */
     private static Calendar getEasterDate(int year) {

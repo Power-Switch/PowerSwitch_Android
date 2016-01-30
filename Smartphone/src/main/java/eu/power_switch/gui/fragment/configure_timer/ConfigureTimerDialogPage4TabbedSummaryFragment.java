@@ -73,7 +73,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
     /**
      * Used to notify parent Dialog that configuration has changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendSummaryChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_SUMMARY_CHANGED);

@@ -58,8 +58,8 @@ public class ActionHandler {
      * Execute Receiver Action
      *
      * @param context  any suitable context
-     * @param receiver
-     * @param button
+     * @param receiver receiver to execute on
+     * @param button   button to activate
      */
     public static void execute(Context context, Receiver receiver, Button button) {
         try {
@@ -116,8 +116,8 @@ public class ActionHandler {
      * Execute Room Action
      *
      * @param context    any suitable context
-     * @param room
-     * @param buttonName
+     * @param room       room to execute on
+     * @param buttonName button name to execute on each receiver
      */
     public static void execute(Context context, Room room, String buttonName) {
         try {
@@ -183,7 +183,7 @@ public class ActionHandler {
      * Execute Scene Action
      *
      * @param context any suitable context
-     * @param scene
+     * @param scene   scene to execute
      */
     public static void execute(Context context, Scene scene) {
         try {
@@ -232,7 +232,7 @@ public class ActionHandler {
      * Execute Timer actions
      *
      * @param context any suitable context
-     * @param timer
+     * @param timer   timer to execute
      */
     public static void execute(Context context, Timer timer) {
         try {
@@ -252,7 +252,7 @@ public class ActionHandler {
      * Execute Sleep As Android actions
      *
      * @param context any suitable context
-     * @param event
+     * @param event   event type
      */
     public static void execute(Context context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
         try {

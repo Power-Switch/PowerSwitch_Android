@@ -73,7 +73,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         holder.gatewayName.setText(gateway.getName());
         holder.gatewayModel.setText(gateway.getModelAsString());
         holder.gatewayAddress.setText(gateway.getHost());
-        holder.gatewayPort.setText(String.format("%d", gateway.getPort()));
+        holder.gatewayPort.setText(String.valueOf(gateway.getPort()));
         holder.gatewaySwitchStatus.setChecked(gateway.isActive());
         holder.gatewaySwitchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -67,7 +67,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     /**
      * Used to notify Scene Fragment (this) that Scenes have changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendScenesChangedBroadcast(Context context) {
         Log.d("ScenesFragment", "sendScenesChangedBroadcast");

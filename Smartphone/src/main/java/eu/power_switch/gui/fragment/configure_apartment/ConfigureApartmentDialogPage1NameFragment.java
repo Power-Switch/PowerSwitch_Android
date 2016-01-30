@@ -75,7 +75,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
     /**
      * Used to notify the location page that some info has changed
      *
-     * @param context
+     * @param context          any suitable context
      * @param name             Current Name of Scene
      * @param selectedGateways Currently selected Gateways to associate in Apartment
      */
@@ -180,7 +180,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
     /**
      * Checks if current name is valid
      *
-     * @param name
+     * @param name current name value
      * @return true if valid
      */
     private boolean checkNameValidity(String name) {

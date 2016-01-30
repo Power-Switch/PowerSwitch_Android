@@ -97,7 +97,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
     /**
      * Used to notify the summary page that some info has changed
      *
-     * @param context
+     * @param context          any suitable context
      * @param channelMaster    Current selected Master Channel
      * @param channelSlave     Current selected Slave Channel
      * @param dips             Current Dip configuration

@@ -234,7 +234,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     /**
      * Checks if current name is valid
      *
-     * @param name
+     * @param name current name value
      * @return true if valid
      */
     private boolean checkNameValidity(String name) {
@@ -252,7 +252,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     /**
      * Checks if current host address is valid
      *
-     * @param address
+     * @param address current address value
      * @return true if valid
      */
     private boolean checkAddressValidity(String address) {
@@ -280,7 +280,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     /**
      * Checks if current Port is valid
      *
-     * @param portText
+     * @param portText current port value
      * @return true if valid
      */
     private boolean checkPortValidity(String portText) {

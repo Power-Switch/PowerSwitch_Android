@@ -64,7 +64,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     /**
      * Used to notify the summary page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      * @param brand   Current selected Brand name
      * @param model   Current selected Model name
      */

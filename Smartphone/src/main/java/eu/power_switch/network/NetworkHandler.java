@@ -126,7 +126,7 @@ public abstract class NetworkHandler {
     /**
      * sends a list of NetworkPackages
      *
-     * @param networkPackages
+     * @param networkPackages list of network packages
      */
     public static synchronized void send(List<NetworkPackage> networkPackages) {
         if (networkPackages == null) {
@@ -146,7 +146,7 @@ public abstract class NetworkHandler {
     /**
      * sends an array of NetworkPackages
      *
-     * @param networkPackages
+     * @param networkPackages array of network packages
      */
     public static synchronized void send(NetworkPackage... networkPackages) {
         send(Arrays.asList(networkPackages));

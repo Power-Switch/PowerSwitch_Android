@@ -68,7 +68,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     /**
      * Used to notify Room Fragment (this) that Rooms have changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendReceiverChangedBroadcast(Context context) {
         Log.d("RoomsFragment", "sendReceiverChangedBroadcast");

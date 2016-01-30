@@ -60,7 +60,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendTimerActionChangedBroadcast(Context context, ArrayList<Action> actions) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
@@ -165,14 +165,14 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(TimerActionRecyclerViewAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final TimerActionRecyclerViewAdapter.ViewHolder holder, int position) {
             final Action action = actions.get(position);
             holder.action.setText(action.toString());
 
             holder.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    actions.remove(position);
+                    actions.remove(holder.getAdapterPosition());
                     notifyDataSetChanged();
                     sendTimerActionChangedBroadcast(getContext(), actions);
                 }

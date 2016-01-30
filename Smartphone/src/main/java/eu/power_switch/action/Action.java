@@ -60,7 +60,7 @@ public abstract class Action {
     /**
      * Executes this Action
      *
-     * @param context
+     * @param context any suitable context
      */
     public abstract void execute(Context context);
 }

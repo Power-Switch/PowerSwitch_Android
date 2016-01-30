@@ -21,7 +21,6 @@ package eu.power_switch.obj.receiver;
 import android.content.Context;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -186,9 +185,7 @@ public abstract class Receiver {
     public static String getModelName(String javaPath) {
         Set<Map.Entry<String, String>> entrySet = receiverMap.entrySet();
 
-        Iterator<Map.Entry<String, String>> itr = entrySet.iterator();
-        while (itr.hasNext()) {
-            Map.Entry<String, String> entry = itr.next();
+        for (Map.Entry<String, String> entry : entrySet) {
             String value = entry.getValue();
             if (value.equals(javaPath)) {
                 return entry.getKey();

@@ -62,7 +62,7 @@ public abstract class Gateway {
     /**
      * Constructor
      *
-     * @param id
+     * @param id       ID of this Gateway
      * @param active   true if this gateway is used to send network signals
      * @param name     name of this gateway
      * @param model    model of this gateway
@@ -90,7 +90,7 @@ public abstract class Gateway {
     /**
      * Get ID of this Gateway
      *
-     * @return
+     * @return ID of this Gateway
      */
     public Long getId() {
         return id;
@@ -100,7 +100,7 @@ public abstract class Gateway {
      * Returns whether this Gateway is active or not
      * (if it will be used by the App to send packets)
      *
-     * @return
+     * @return true if active, false otherwise
      */
     public boolean isActive() {
         return active;
@@ -118,7 +118,7 @@ public abstract class Gateway {
     /**
      * Get Host address of this Gateway
      *
-     * @return
+     * @return Host address of this Gateway
      */
     public String getHost() {
         return host;
@@ -127,7 +127,7 @@ public abstract class Gateway {
     /**
      * Get name of this Gateway
      *
-     * @return
+     * @return Name of this Gateway
      */
     public String getName() {
         return name;
@@ -136,7 +136,7 @@ public abstract class Gateway {
     /**
      * Get model name of this Gateway
      *
-     * @return
+     * @return Model of this Gateway
      */
     public String getModel() {
         return model;
@@ -145,7 +145,7 @@ public abstract class Gateway {
     /**
      * Get firmware version of this Gateway
      *
-     * @return
+     * @return Firmware of this Gateway
      */
     public String getFirmware() {
         return firmware;
@@ -154,7 +154,7 @@ public abstract class Gateway {
     /**
      * Get port over which data can be exchanged with this Gateway
      *
-     * @return
+     * @return Port of this Gateway
      */
     public int getPort() {
         return port;
@@ -163,7 +163,7 @@ public abstract class Gateway {
     /**
      * Returns a set of {@link Capability} this gateway has
      *
-     * @return
+     * @return Set of Capabilities
      */
     public Set<Capability> getCapabilities() {
         return capabilities;
@@ -180,8 +180,8 @@ public abstract class Gateway {
     /**
      * Compare host address and port to another Gateway
      *
-     * @param gateway
-     * @return
+     * @param gateway Gateway to compare with this Gateway
+     * @return true if address & port match
      */
     public boolean hasSameAddress(Gateway gateway) {
         return (gateway.getHost().equals(this.host) && gateway.getPort() == this.port);

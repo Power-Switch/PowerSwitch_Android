@@ -243,7 +243,7 @@ public class GeneralSettingsFragment extends Fragment {
         hideAddFAB.setChecked(SmartphonePreferencesHandler.getHideAddFAB());
         highlightLastActivatedButton.setChecked(SmartphonePreferencesHandler.getHighlightLastActivatedButton());
         vibrateOnButtonPress.setChecked(SmartphonePreferencesHandler.getVibrateOnButtonPress());
-        vibrationDuration.setText(String.format("%d", SmartphonePreferencesHandler.getVibrationDuration()));
+        vibrationDuration.setText(String.valueOf(SmartphonePreferencesHandler.getVibrationDuration()));
         if (!SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {

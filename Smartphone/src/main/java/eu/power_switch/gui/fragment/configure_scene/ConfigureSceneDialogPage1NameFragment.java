@@ -73,7 +73,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      * @param name              Current Name of Scene
      * @param selectedReceivers Currently selected Receivers to include in Scene
      */

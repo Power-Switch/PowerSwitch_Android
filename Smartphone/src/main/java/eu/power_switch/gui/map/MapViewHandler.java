@@ -97,11 +97,10 @@ public class MapViewHandler implements OnMapReadyCallback {
      * Constructor
      *
      * @param context            any suitable context
-     * @param mapView
-     * @param savedInstanceState
+     * @param mapView            MapView
+     * @param savedInstanceState savedInstanceState used for MapView
      */
-    public MapViewHandler(Context context, MapView mapView, Bundle
-            savedInstanceState) {
+    public MapViewHandler(Context context, MapView mapView, Bundle savedInstanceState) {
         this.context = context;
         this.mapView = mapView;
 

@@ -50,7 +50,7 @@ abstract class ActionHandler {
     /**
      * Inserts Actions into database
      *
-     * @param actions
+     * @param actions list of actions
      * @return List of IDs of inserted Actions
      */
     protected static ArrayList<Long> add(List<Action> actions) {

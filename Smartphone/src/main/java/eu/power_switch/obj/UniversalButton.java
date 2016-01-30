@@ -76,7 +76,7 @@ public class UniversalButton {
     /**
      * Gets Receiver ID that this UniversalButton is associated with
      *
-     * @return
+     * @return ID of parent Receiver
      */
     public Long getReceiverId() {
         return receiverId;

@@ -100,7 +100,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
     /**
      * Used to notify parent Dialog that configuration has changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendSummaryChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_SUMMARY_CHANGED);
@@ -238,8 +238,8 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
             brand.setText(currentBrand.toString());
         }
         model.setText(currentModel);
-        channelMaster.setText("" + currentMaster);
-        channelSlave.setText("" + currentSlave);
+        channelMaster.setText(String.valueOf(currentMaster));
+        channelSlave.setText(String.valueOf(currentSlave));
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
@@ -257,7 +257,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
             }
         }
 
-        seed.setText(currentSeed + "");
+        seed.setText(String.valueOf(currentSeed));
 
         if (currentUniversalButtons != null) {
             linearLayoutUniversalButtons.removeAllViews();

@@ -79,9 +79,9 @@ public class BackupHandler {
     /**
      * Creates a new Backup
      *
-     * @param useExternalStorage
-     * @param name
-     * @param force
+     * @param useExternalStorage use external storage path instead of internal?
+     * @param name               name of backup
+     * @param force              overwrite existing folders?
      * @throws CreateBackupException
      * @throws BackupAlreadyExistsException
      */
@@ -138,7 +138,7 @@ public class BackupHandler {
     /**
      * Remove a Backup
      *
-     * @param name
+     * @param name name of backup
      * @throws BackupNotFoundException
      * @throws RemoveBackupException
      */
@@ -159,8 +159,8 @@ public class BackupHandler {
     /**
      * Rename existing Backup
      *
-     * @param oldName
-     * @param newName
+     * @param oldName old backup name
+     * @param newName new backup name
      * @throws BackupNotFoundException
      * @throws BackupAlreadyExistsException
      */
@@ -182,7 +182,7 @@ public class BackupHandler {
     /**
      * Restore Backup
      *
-     * @param name
+     * @param name name of backup
      * @throws BackupNotFoundException
      * @throws RestoreBackupException
      */
@@ -241,8 +241,8 @@ public class BackupHandler {
             }
 
             String[] children = sourceLocation.list();
-            for (int i = 0; i < children.length; i++) {
-                copyDirectory(new File(sourceLocation, children[i]), new File(targetLocation, children[i]));
+            for (String child : children) {
+                copyDirectory(new File(sourceLocation, child), new File(targetLocation, child));
             }
         } else {
             copyFile(sourceLocation, targetLocation);

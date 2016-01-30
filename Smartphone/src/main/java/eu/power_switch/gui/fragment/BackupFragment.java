@@ -53,7 +53,6 @@ import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.exception.backup.BackupNotFoundException;
-import eu.power_switch.exception.backup.RestoreBackupException;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
@@ -83,7 +82,7 @@ public class BackupFragment extends RecyclerViewFragment {
     /**
      * Used to notify Backup Fragment (this) that Backups have changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendBackupsChangedBroadcast(Context context) {
         Log.d("AddReceiverDialog", "sendReceiverChangedBroadcast");
@@ -132,9 +131,6 @@ public class BackupFragment extends RecyclerViewFragment {
                             Log.e(e);
                             StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_not_found, Snackbar
                                     .LENGTH_LONG);
-                        } catch (RestoreBackupException e) {
-                            Log.e(e);
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             Log.e(e);
                             StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, Snackbar.LENGTH_LONG);

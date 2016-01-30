@@ -57,7 +57,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context
+     * @param context any suitable context
      * @param calendar The calendar when this timer activates
      */
     public static void sendTimerNameExecutionTimeChangedBroadcast(Context context, String name, Calendar calendar) {

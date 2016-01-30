@@ -21,7 +21,6 @@ package eu.power_switch.network;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import java.io.InterruptedIOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -106,8 +105,6 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
 
         } catch (SocketTimeoutException e) {
             Log.d(this, "AutoDetect Timeout Reached");
-        } catch (InterruptedIOException e) {
-            Log.e("AutoGatewayDiscover", e);
         } catch (Exception e) {
             Log.e("AutoGatewayDiscover", e);
         } finally {

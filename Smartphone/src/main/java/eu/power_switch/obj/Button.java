@@ -51,8 +51,8 @@ public class Button {
     /**
      * Constructor
      *
-     * @param id
-     * @param name
+     * @param id         ID of Button
+     * @param name       name of Button
      * @param receiverId ID of Receiver that this Button is associated with
      */
     public Button(Long id, String name, Long receiverId) {

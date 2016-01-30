@@ -136,7 +136,7 @@ abstract class TimerHandler {
     /**
      * Gets a Timer from Database
      *
-     * @param timerId
+     * @param timerId ID of Timer
      * @return Timer
      */
     protected static Timer get(Long timerId) throws Exception {

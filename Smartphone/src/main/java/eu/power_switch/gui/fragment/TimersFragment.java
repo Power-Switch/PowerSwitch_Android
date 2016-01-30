@@ -68,7 +68,7 @@ public class TimersFragment extends RecyclerViewFragment {
     /**
      * Used to notify Timer Fragment (this) that Timers have changed
      *
-     * @param context
+     * @param context any suitable context
      */
     public static void sendTimersChangedBroadcast(Context context) {
         Log.d("TimersFragment", "sendTimersChangedBroadcast");

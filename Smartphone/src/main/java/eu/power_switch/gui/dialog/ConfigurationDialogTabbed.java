@@ -180,7 +180,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
     /**
      * Set FragmentPagerAdapter of this configuration dialog
      *
-     * @param fragmentPagerAdapter
+     * @param fragmentPagerAdapter FragmentPagerAdapter
      */
     protected void setTabAdapter(FragmentPagerAdapter fragmentPagerAdapter) {
         customTabAdapter = fragmentPagerAdapter;

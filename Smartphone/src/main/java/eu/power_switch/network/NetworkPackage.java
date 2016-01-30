@@ -102,7 +102,7 @@ public class NetworkPackage {
      * This is used to avoid conflicts between signals if multiple signals are to be sent in a short amount of time.
      * Different values are used for different Gateways.
      *
-     * @return
+     * @return timeout of this NetworkPackage
      * @see eu.power_switch.obj.gateway.Gateway#getTimeout()
      */
     public int getTimeout() {

@@ -79,7 +79,7 @@ public class Room {
     /**
      * Add Receiver to the contained receivers of this Room
      *
-     * @param receiver
+     * @param receiver Receiver
      */
     public void addReceiver(Receiver receiver) {
         receivers.add(receiver);
@@ -88,7 +88,7 @@ public class Room {
     /**
      * Add a List of Receivers to the contained receivers of this Room
      *
-     * @param receivers
+     * @param receivers list of Receivers
      */
     public void addReceivers(List<Receiver> receivers) {
         this.receivers.addAll(receivers);
@@ -133,7 +133,7 @@ public class Room {
     /**
      * Set collapsed state of this Room
      *
-     * @param collapsed
+     * @param collapsed true if collapsed, false otherwise
      */
     public void setCollapsed(boolean collapsed) {
         this.collapsed = collapsed;
