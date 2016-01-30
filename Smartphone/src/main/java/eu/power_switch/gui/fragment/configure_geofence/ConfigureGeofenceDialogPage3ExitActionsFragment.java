@@ -149,14 +149,6 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Fragment {
         super.onStop();
     }
 
-    public boolean checkSetupValidity() {
-        return false;
-    }
-
-    public void saveCurrentConfigurationToDatabase() {
-
-    }
-
     public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecyclerViewAdapter.ViewHolder> {
         private ArrayList<Action> actions;
         private Context context;

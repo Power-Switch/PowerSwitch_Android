@@ -310,6 +310,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
         }
     }
 
+    @Override
     public boolean checkSetupValidity() {
         if (currentName == null || currentName.trim().equals("")) {
             return false;

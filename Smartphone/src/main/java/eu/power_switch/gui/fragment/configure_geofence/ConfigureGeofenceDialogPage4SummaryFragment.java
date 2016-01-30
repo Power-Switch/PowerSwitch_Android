@@ -189,19 +189,29 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
-    }
+    public boolean checkSetupValidity() {
+        if (currentName == null || currentName.length() <= 0) {
+            return false;
+        }
 
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
-        super.onStop();
+        if (currentGeofenceRadius == -1) {
+            return false;
+        }
+
+        if (currentLocation == null) {
+            return false;
+        }
+
+        if (currentSnapshot == null) {
+            return false;
+        }
+
+        if (currentEnterActions == null || currentExitActions == null) {
+            return false;
+        }
+
+        return !(currentEnterActions.size() == 0 && currentExitActions.size() == 0);
+
     }
 
     @Override
@@ -232,28 +242,18 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
     }
 
     @Override
-    public boolean checkSetupValidity() {
-        if (currentName == null || currentName.length() <= 0) {
-            return false;
-        }
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
 
-        if (currentGeofenceRadius == -1) {
-            return false;
-        }
-
-        if (currentLocation == null) {
-            return false;
-        }
-
-        if (currentSnapshot == null) {
-            return false;
-        }
-
-        if (currentEnterActions == null || currentExitActions == null) {
-            return false;
-        }
-
-        return !(currentEnterActions.size() == 0 && currentExitActions.size() == 0);
-
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
     }
 }

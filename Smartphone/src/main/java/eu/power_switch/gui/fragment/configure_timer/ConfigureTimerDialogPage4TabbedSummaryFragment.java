@@ -120,7 +120,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
             initializeTimerData(currentId);
         }
 
-        checkValidity();
+        checkSetupValidity();
         updateUi();
 
         return rootView;
@@ -153,7 +153,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
 
     private void updateUi() {
         updateUiValues();
-        updateUiVisibility();
+//        updateUiVisibility();
     }
 
     private void updateUiValues() {
@@ -204,35 +204,6 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
         textViewAction.setText(actionText);
     }
 
-    private void updateUiVisibility() {
-
-    }
-
-    public boolean checkValidity() {
-        if (currentName == null || currentName.length() <= 0) {
-            return false;
-        }
-
-        if (currentExecutionTime == null) {
-            return false;
-        }
-
-        if (currentExecutionType == null) {
-            return false;
-        } else if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-            if (currentExecutionInterval == -1) {
-                return false;
-            }
-        } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-            if (currentExecutionDays == null || currentExecutionDays.isEmpty()) {
-                return false;
-            }
-        }
-
-        return !(currentActions == null || currentActions.isEmpty());
-
-    }
-
     @Override
     public void saveCurrentConfigurationToDatabase() {
         try {
@@ -269,7 +240,27 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
 
     @Override
     public boolean checkSetupValidity() {
-        return checkValidity();
+        if (currentName == null || currentName.length() <= 0) {
+            return false;
+        }
+
+        if (currentExecutionTime == null) {
+            return false;
+        }
+
+        if (currentExecutionType == null) {
+            return false;
+        } else if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
+            if (currentExecutionInterval == -1) {
+                return false;
+            }
+        } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
+            if (currentExecutionDays == null || currentExecutionDays.isEmpty()) {
+                return false;
+            }
+        }
+
+        return !(currentActions == null || currentActions.isEmpty());
     }
 
     @Override

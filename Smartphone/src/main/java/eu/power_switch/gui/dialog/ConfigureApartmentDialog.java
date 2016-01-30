@@ -101,8 +101,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
-
-        setModified(false);
     }
 
     @Override

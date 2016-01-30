@@ -158,9 +158,8 @@ public abstract class ConfigurationDialog extends DialogFragment {
             }
         };
         dialog.setTitle(getDialogTitle());
-        dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager
-                .LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.setCanceledOnTouchOutside(isCancelableOnTouchOutside());
+        dialog.getWindow().setSoftInputMode(getSoftInputMode());
         dialog.show();
         return dialog;
     }
@@ -185,6 +184,30 @@ public abstract class ConfigurationDialog extends DialogFragment {
      */
     protected void setModified(boolean modified) {
         this.modified = modified;
+    }
+
+    /**
+     * Defines if the Dialog is cancelable on touch outside of the dialog
+     * <p/>
+     * Default: False
+     *
+     * @return true if cancelable on touch outside of the dialog view, false otherwise
+     */
+    protected boolean isCancelableOnTouchOutside() {
+        return false;
+    }
+
+    /**
+     * Defines Soft Input Mode
+     * <p/>
+     * Default:
+     * WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
+     *
+     * @return integer representing the mode
+     */
+    protected int getSoftInputMode() {
+        return WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN |
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
     }
 
     /**

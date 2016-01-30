@@ -75,7 +75,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyCallback, ConfigurationDialogTabbedSummaryFragment, GoogleMap.OnMapLoadedCallback {
+public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment, OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     private long apartmentId = -1;
 
@@ -127,6 +127,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             public void onClick(View v) {
                 try {
                     LatLng location = mapViewHandler.findCoordinates(searchAddressEditText.getText().toString());
+                    hideSoftwareKeyboard(getView());
 
                     if (geofenceView == null) {
                         geofenceView = mapViewHandler.addGeofence(location, currentGeofenceRadius);
@@ -134,12 +135,12 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                         geofenceView.setCenter(location);
                         geofenceView.setRadius(currentGeofenceRadius);
                     }
+
+                    cameraChangedBySystem = true;
                     mapViewHandler.moveCamera(location, 14, true);
 
                     searchAddressTextInputLayout.setError(null);
                     searchAddressTextInputLayout.setErrorEnabled(false);
-
-                    sendSetupApartmentChangedBroadcast(getContext());
                 } catch (AddressNotFoundException e) {
                     searchAddressTextInputLayout.setErrorEnabled(true);
                     searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
@@ -172,7 +173,9 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                             geofenceRadiusSeekbar.setProgress(radius);
                         }
                     }
-                    sendSetupApartmentChangedBroadcast(getContext());
+
+                    cameraChangedBySystem = true;
+                    mapViewHandler.moveCamera(getCurrentLocation(), false);
                 }
             }
         });
@@ -207,7 +210,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                     geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
                 }
 
-                sendSetupApartmentChangedBroadcast(getContext());
+                cameraChangedBySystem = true;
+                mapViewHandler.moveCamera(getCurrentLocation(), false);
             }
         });
 
@@ -226,7 +230,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             initializeApartmentData(apartmentId);
         }
 
-        checkValidity();
+        checkSetupValidity();
 
         return rootView;
     }
@@ -254,8 +258,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         }
     }
 
-    private void hideSoftwareKeyboard() {
-        View view = getView();
+    private void hideSoftwareKeyboard(View view) {
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -276,24 +279,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         if (geofenceView != null) {
             geofenceView.setRadius(radius);
         }
-    }
-
-    @Override
-    public boolean checkSetupValidity() {
-        return checkValidity();
-    }
-
-    public boolean checkValidity() {
-        if (currentName == null || currentName.length() <= 0) {
-            return false;
-        }
-
-        if (currentCheckedGateways == null) {
-            return false;
-        }
-
-        return currentSnapshot != null;
-
     }
 
     @Override
@@ -427,11 +412,25 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     }
 
     @Override
+    public boolean checkSetupValidity() {
+        if (currentName == null || currentName.length() <= 0) {
+            return false;
+        }
+
+        if (currentCheckedGateways == null) {
+            return false;
+        }
+
+        return currentSnapshot != null;
+
+    }
+
+    @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
         if (apartmentId == -1) {
             Apartment newApartment = new Apartment((long) -1, currentName, currentCheckedGateways,
                     new eu.power_switch.google_play_services.geofence.Geofence(
-                            (long) -1, false, currentName, geofenceView.getMarker().getPosition(),
+                            (long) -1, false, currentName, getCurrentLocation(),
                             currentGeofenceRadius)
             );
 
@@ -440,7 +439,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
             eu.power_switch.google_play_services.geofence.Geofence updatedGeofence = apartment.getGeofence();
             updatedGeofence.setName(currentName);
-            updatedGeofence.setCenterLocation(geofenceView.getMarker().getPosition());
+            updatedGeofence.setCenterLocation(getCurrentLocation());
             updatedGeofence.setRadius(currentGeofenceRadius);
             updatedGeofence.setSnapshot(currentSnapshot);
 

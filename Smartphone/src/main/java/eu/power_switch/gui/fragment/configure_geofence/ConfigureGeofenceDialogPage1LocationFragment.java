@@ -120,9 +120,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
             @Override
             public void onClick(View v) {
                 try {
-                    hideSoftwareKeyboard();
-
                     LatLng location = mapViewHandler.findCoordinates(searchAddressEditText.getText().toString());
+                    hideSoftwareKeyboard(getView());
 
                     if (geofenceView == null) {
                         geofenceView = mapViewHandler.addGeofence(location, currentGeofenceRadius);
@@ -133,6 +132,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
 
                     cameraChangedBySystem = true;
                     mapViewHandler.moveCamera(location, 14, true);
+
+                    // name = searchAddressEditText.getText().toString();
 
                     searchAddressTextInputLayout.setError(null);
                     searchAddressTextInputLayout.setErrorEnabled(false);
@@ -220,22 +221,6 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
         return rootView;
     }
 
-    private void hideSoftwareKeyboard() {
-        View view = getView();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    private LatLng getCurrentLocation() {
-        try {
-            return geofenceView.getMarker().getPosition();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     private void initializeData() {
         try {
             if (geofenceId != -1) {
@@ -255,6 +240,29 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
             }
         } catch (Exception e) {
             Log.e(e);
+        }
+    }
+
+    private void hideSoftwareKeyboard(View view) {
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private LatLng getCurrentLocation() {
+        try {
+            return geofenceView.getMarker().getPosition();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void updateGeofenceRadius(double radius) {
+        currentGeofenceRadius = radius;
+
+        if (geofenceView != null) {
+            geofenceView.setRadius(radius);
         }
     }
 
@@ -386,14 +394,6 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                 }
             }
         });
-    }
-
-    private void updateGeofenceRadius(double radius) {
-        currentGeofenceRadius = radius;
-
-        if (geofenceView != null) {
-            geofenceView.setRadius(radius);
-        }
     }
 
     @Override

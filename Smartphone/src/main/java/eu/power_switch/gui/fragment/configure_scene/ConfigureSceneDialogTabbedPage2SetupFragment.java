@@ -119,7 +119,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
             currentId = args.getLong(ConfigureSceneDialog.SCENE_ID_KEY);
             initializeSceneData(currentId);
         }
-        checkValidity();
+        checkSetupValidity();
 
         return rootView;
     }
@@ -162,26 +162,6 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
         }
     }
 
-    public boolean checkValidity() {
-        if (currentName == null || currentName.trim().length() <= 0) {
-            return false;
-        }
-
-        if (currentId == -1) {
-            try {
-                if (DatabaseHandler.getScene(currentName) != null) {
-                    return false;
-                }
-            } catch (Exception e) {
-                Log.e(e);
-                return false;
-            }
-        }
-
-        return !rooms.isEmpty();
-
-    }
-
     private void updateSceneItemList() {
         customRecyclerViewAdapter.notifyDataSetChanged();
     }
@@ -213,7 +193,22 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
 
     @Override
     public boolean checkSetupValidity() {
-        return checkValidity();
+        if (currentName == null || currentName.trim().length() <= 0) {
+            return false;
+        }
+
+        if (currentId == -1) {
+            try {
+                if (DatabaseHandler.getScene(currentName) != null) {
+                    return false;
+                }
+            } catch (Exception e) {
+                Log.e(e);
+                return false;
+            }
+        }
+
+        return !rooms.isEmpty();
     }
 
     @Override

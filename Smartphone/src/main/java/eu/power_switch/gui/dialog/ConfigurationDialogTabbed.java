@@ -144,6 +144,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         init(inflater, container, savedInstanceState);
 
         initExistingData(getArguments());
+        setModified(false);
 
         return rootView;
     }
@@ -190,11 +191,17 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
 
         tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
+
+        if (getTabAdapter().getCount() == 1) {
+            tabLayout.setVisibility(View.GONE);
+            updateBottomBarButtons();
+        }
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        // ask to really close
         Dialog dialog = new Dialog(getActivity()) {
             @Override
             public void onBackPressed() {
@@ -216,9 +223,8 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
             }
         };
         dialog.setTitle(getDialogTitle());
-        dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager
-                .LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.setCanceledOnTouchOutside(isCancelableOnTouchOutside());
+        dialog.getWindow().setSoftInputMode(getSoftInputMode());
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialog.getWindow().getAttributes());
@@ -255,6 +261,30 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      * @return true if the current configuration is valid, false otherwise
      */
     protected abstract boolean isValid() throws Exception;
+
+    /**
+     * Defines if the Dialog is cancelable on touch outside of the dialog
+     * <p/>
+     * Default: False
+     *
+     * @return true if cancelable on touch outside of the dialog view, false otherwise
+     */
+    protected boolean isCancelableOnTouchOutside() {
+        return false;
+    }
+
+    /**
+     * Defines Soft Input Mode
+     * <p/>
+     * Default:
+     * WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
+     *
+     * @return integer representing the mode
+     */
+    protected int getSoftInputMode() {
+        return WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN |
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
+    }
 
     /**
      * Call this method when the configuration of the dialog has changed and UI has to be updated
