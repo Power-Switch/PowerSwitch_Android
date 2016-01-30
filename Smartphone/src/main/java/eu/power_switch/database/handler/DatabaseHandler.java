@@ -21,8 +21,6 @@ package eu.power_switch.database.handler;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -189,17 +187,12 @@ public final class DatabaseHandler {
     /**
      * Updates an Apartment in Database
      *
-     * @param id             ID of Apartment
-     * @param newName        new Name of Apartment
-     * @param gateways       Associated Gateways
-     * @param location       Location
-     * @param geofenceRadius Geofence radius (in meter)
+     * @param apartment updated Apartment
      */
-    public static void updateApartment(Long id, String newName, List<Gateway> gateways, LatLng location, double
-            geofenceRadius) throws Exception {
+    public static void updateApartment(Apartment apartment) throws Exception {
         openWritable();
         try {
-            ApartmentHandler.update(id, newName, gateways, location, geofenceRadius);
+            ApartmentHandler.update(apartment);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
@@ -1359,15 +1352,16 @@ public final class DatabaseHandler {
     }
 
     /**
-     * Get a list of all Geofences
+     * Get a list of all active/inactive Geofences
      *
+     * @param isActive true if active, false otherwise
      * @return list of Geofences
      */
-    public static List<Geofence> getAllGeofences() throws Exception {
+    public static List<Geofence> getAllGeofences(boolean isActive) throws Exception {
         openReadable();
         List<Geofence> geofences = null;
         try {
-            geofences = GeofenceHandler.getAll();
+            geofences = GeofenceHandler.getAll(isActive);
         } catch (Exception e) {
             Log.e(e);
         } finally {
@@ -1395,25 +1389,6 @@ public final class DatabaseHandler {
     }
 
     /**
-     * Get a list of all active/inactive Geofences
-     *
-     * @param isActive true if active, false otherwise
-     * @return list of active/inactive Geofences
-     */
-    public static List<Geofence> getCustomGeofences(boolean isActive) throws Exception {
-        openReadable();
-        List<Geofence> geofences = null;
-        try {
-            geofences = GeofenceHandler.getCustom(isActive);
-        } catch (Exception e) {
-            Log.e(e);
-        } finally {
-            close();
-        }
-        return geofences;
-    }
-
-    /**
      * Add Geofence to Database
      *
      * @param geofence new Geofence
@@ -1431,6 +1406,57 @@ public final class DatabaseHandler {
             throw e;
         }
         return id;
+    }
+
+    /**
+     * Update existing Geofence in Database
+     *
+     * @param geofence updated Geofence
+     */
+    public static void updateGeofence(Geofence geofence) {
+        openWritable();
+        try {
+            GeofenceHandler.update(geofence);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+    }
+
+    /**
+     * Enable existing Geofence
+     *
+     * @param id ID of Geofence
+     */
+    public static void enableGeofence(Long id) throws Exception {
+        openWritable();
+        try {
+            GeofenceHandler.enable(id);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+    }
+
+    /**
+     * Disable existing Geofence
+     *
+     * @param id ID of Geofence
+     */
+    public static void disableGeofence(Long id) throws Exception {
+        openWritable();
+        try {
+            GeofenceHandler.disable(id);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
     }
 
 }

@@ -46,6 +46,7 @@ import java.util.HashMap;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
@@ -64,7 +65,7 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
+public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
@@ -184,6 +185,7 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
         customRecyclerViewAdapter.notifyDataSetChanged();
     }
 
+    @Override
     public void saveCurrentConfigurationToDatabase() {
         Scene newScene = new Scene(currentId, SmartphonePreferencesHandler.getCurrentApartmentId(), currentName);
         newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
@@ -206,6 +208,11 @@ public class ConfigureSceneDialogPage2SetupFragment extends Fragment {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
+    }
+
+    @Override
+    public boolean checkSetupValidity() {
+        return checkValidity();
     }
 
     @Override

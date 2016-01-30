@@ -16,21 +16,22 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha8'
-//        classpath 'com.google.gms:google-services:2.0.0-alpha5'
-    }
-}
+package eu.power_switch.gui.dialog;
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
+/**
+ * Created by Markus on 29.01.2016.
+ */
+public interface ConfigurationDialogTabbedSummaryFragment {
+
+    /**
+     * This method is called when the current configuration of a ConfigurationDialog shall be saved to database
+     */
+    void saveCurrentConfigurationToDatabase() throws Exception;
+
+    /**
+     * Checks the Setup page for validity
+     *
+     * @return true if valid, false otherwise
+     */
+    boolean checkSetupValidity();
 }

@@ -83,8 +83,8 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
         recyclerViewGeofences = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_geofences);
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences);
         recyclerViewGeofences.setAdapter(geofenceRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.scene_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager
+                .VERTICAL);
         recyclerViewGeofences.setLayoutManager(layoutManager);
 
         final RecyclerViewFragment recyclerViewFragment = this;

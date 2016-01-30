@@ -44,6 +44,7 @@ import java.util.Locale;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
@@ -55,7 +56,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage1NameFragment extends Fragment {
+public class ConfigureApartmentDialogPage1NameFragment extends Fragment implements ConfigurationDialogFragment {
 
     private View rootView;
 
@@ -289,4 +290,8 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment {
         return checkedGateways;
     }
 
+    @Override
+    public boolean isValid() {
+        return checkValidity();
+    }
 }

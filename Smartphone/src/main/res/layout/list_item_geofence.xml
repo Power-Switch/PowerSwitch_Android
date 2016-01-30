@@ -70,6 +70,37 @@
                     android:layout_marginTop="@dimen/title_margin_top"
                     android:text="Location"/>
 
+                <ImageView
+                    android:id="@+id/imageView_locationSnapshot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/enter_actions"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_enterActions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:orientation="vertical"/>
+
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/exit_actions"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_exitActions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:orientation="vertical"/>
+
             </LinearLayout>
 
         </LinearLayout>

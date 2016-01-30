@@ -21,8 +21,6 @@ package eu.power_switch.database.handler;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,24 +68,20 @@ abstract class ApartmentHandler {
     /**
      * Updates a Apartment in Database
      *
-     * @param id             ID of Apartment
-     * @param newName        new Apartment name
-     * @param gateways
-     * @param location
-     * @param geofenceRadius
+     * @param apartment updated Apartment
      */
-    protected static void update(Long id, String newName, List<Gateway> gateways, LatLng location, double
-            geofenceRadius) {
+    protected static void update(Apartment apartment) throws Exception {
         ContentValues values = new ContentValues();
-        values.put(ApartmentTable.COLUMN_NAME, newName);
-        DatabaseHandler.database.update(ApartmentTable.TABLE_NAME, values, ApartmentTable.COLUMN_ID + "==" + id, null);
+        values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
+        DatabaseHandler.database.update(ApartmentTable.TABLE_NAME, values,
+                ApartmentTable.COLUMN_ID + "==" + apartment.getId(), null);
 
         // update associated geofence
-        GeofenceHandler.update(getAssociatedGeofenceId(id), true, newName, location, geofenceRadius);
+        GeofenceHandler.update(apartment.getGeofence());
 
         // update associated gateways
-        removeAssociatedGateways(id);
-        addAssociatedGateways(id, gateways);
+        removeAssociatedGateways(apartment.getId());
+        addAssociatedGateways(apartment.getId(), apartment.getAssociatedGateways());
     }
 
     /**

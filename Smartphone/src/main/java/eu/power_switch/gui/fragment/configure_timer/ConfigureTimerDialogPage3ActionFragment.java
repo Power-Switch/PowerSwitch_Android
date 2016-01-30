@@ -120,7 +120,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
             initializeTimerData(timerId);
         }
 
-        sendTimerActionChangedBroadcast(getContext(), getCurrentTimerActions());
+        sendTimerActionChangedBroadcast(getContext(), currentActions);
 
         return rootView;
     }
@@ -133,13 +133,6 @@ public class ConfigureTimerDialogPage3ActionFragment extends Fragment {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
-    }
-
-    private ArrayList<Action> getCurrentTimerActions() {
-        ArrayList<Action> actions = new ArrayList<>();
-
-
-        return actions;
     }
 
     @Override

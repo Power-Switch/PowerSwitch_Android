@@ -39,6 +39,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
@@ -51,7 +52,7 @@ import eu.power_switch.timer.WeekdayTimer;
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
+public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private long currentId = -1;
     private boolean currentIsActive;
@@ -228,13 +229,11 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
             }
         }
 
-        if (currentActions == null || currentActions.isEmpty()) {
-            return false;
-        }
+        return !(currentActions == null || currentActions.isEmpty());
 
-        return true;
     }
 
+    @Override
     public void saveCurrentConfigurationToDatabase() {
         try {
             if (currentId == -1) {
@@ -266,6 +265,11 @@ public class ConfigureTimerDialogPage4SummaryFragment extends Fragment {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
+    }
+
+    @Override
+    public boolean checkSetupValidity() {
+        return checkValidity();
     }
 
     @Override

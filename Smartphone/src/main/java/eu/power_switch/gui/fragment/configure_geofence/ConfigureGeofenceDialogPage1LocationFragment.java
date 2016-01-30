@@ -22,6 +22,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -33,6 +34,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -41,6 +43,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -60,10 +63,11 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.01.2016.
  */
-public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment implements OnMapReadyCallback {
+public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     private long geofenceId = -1;
 
+    private String name = "NAME";
     private View rootView;
     private MapViewHandler mapViewHandler;
     private eu.power_switch.gui.map.Geofence geofenceView;
@@ -74,14 +78,24 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
     private EditText searchAddressEditText;
 
     private double currentGeofenceRadius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
+    private Bitmap currentSnapshot;
+
+    private boolean cameraChangedBySystem = true;
 
     /**
      * Used to notify parent Dialog that configuration has changed
      *
      * @param context any suitable context
      */
-    public static void sendSetupGeofenceChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_GEOFENCE_CHANGED);
+    public static void sendSetupGeofenceChangedBroadcast(Context context, String name, LatLng location, double
+            geofenceRadius, Bitmap snapShot) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
+        intent.putExtra("name", name);
+        intent.putExtra("latitude", location.latitude);
+        intent.putExtra("longitude", location.longitude);
+        intent.putExtra("geofenceRadius", geofenceRadius);
+        intent.putExtra("snapshot", snapShot);
+
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -92,7 +106,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_1, container, false);
 
         MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
-        mapViewHandler = new MapViewHandler(getContext(), this, mapView, savedInstanceState);
+        mapViewHandler = new MapViewHandler(getContext(), mapView, savedInstanceState);
         mapViewHandler.addOnMapReadyListener(this);
         mapViewHandler.initMapAsync();
 
@@ -106,6 +120,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
             @Override
             public void onClick(View v) {
                 try {
+                    hideSoftwareKeyboard();
+
                     LatLng location = mapViewHandler.findCoordinates(searchAddressEditText.getText().toString());
 
                     if (geofenceView == null) {
@@ -114,12 +130,12 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                         geofenceView.setCenter(location);
                         geofenceView.setRadius(currentGeofenceRadius);
                     }
+
+                    cameraChangedBySystem = true;
                     mapViewHandler.moveCamera(location, 14, true);
 
                     searchAddressTextInputLayout.setError(null);
                     searchAddressTextInputLayout.setErrorEnabled(false);
-
-                    sendSetupGeofenceChangedBroadcast(getContext());
                 } catch (AddressNotFoundException e) {
                     searchAddressTextInputLayout.setErrorEnabled(true);
                     searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
@@ -152,7 +168,9 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                             geofenceRadiusSeekbar.setProgress(radius);
                         }
                     }
-                    sendSetupGeofenceChangedBroadcast(getContext());
+
+                    cameraChangedBySystem = true;
+                    mapViewHandler.moveCamera(getCurrentLocation(), false);
                 }
             }
         });
@@ -187,7 +205,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                     geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
                 }
 
-                sendSetupGeofenceChangedBroadcast(getContext());
+                cameraChangedBySystem = true;
+                mapViewHandler.moveCamera(getCurrentLocation(), false);
             }
         });
 
@@ -201,10 +220,28 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
         return rootView;
     }
 
+    private void hideSoftwareKeyboard() {
+        View view = getView();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private LatLng getCurrentLocation() {
+        try {
+            return geofenceView.getMarker().getPosition();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private void initializeData() {
         try {
             if (geofenceId != -1) {
                 Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
+
+                name = geofence.getName();
 
                 if (geofence.getCenterLocation() != null) {
                     double radius = geofence.getRadius();
@@ -222,7 +259,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         if (ActivityCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getActivity(),
@@ -236,9 +273,20 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
         uiSettings.setCompassEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
 
+        mapViewHandler.setOnMapLoadedListener(this);
+        final GoogleMap.OnMapLoadedCallback listener = this;
+        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                if (cameraChangedBySystem) {
+                    mapViewHandler.setOnMapLoadedListener(listener);
+                    cameraChangedBySystem = false;
+                }
+            }
+        });
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapClick(LatLng latLng) {
+            public void onMapClick(final LatLng latLng) {
                 Log.d(latLng.toString());
 
                 if (geofenceView == null) {
@@ -257,7 +305,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                     Log.e(e);
                 }
 
-                sendSetupGeofenceChangedBroadcast(getContext());
+                cameraChangedBySystem = true;
+                mapViewHandler.moveCamera(latLng, true);
             }
         });
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -289,8 +338,17 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                         Log.e(e);
                     }
 
-                    sendSetupGeofenceChangedBroadcast(getContext());
+                    cameraChangedBySystem = true;
+                    mapViewHandler.moveCamera(marker.getPosition(), true);
                 }
+            }
+        });
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                cameraChangedBySystem = true;
+                mapViewHandler.moveCamera(geofenceView.getMarker().getPosition(), true);
+                return true;
             }
         });
 
@@ -302,12 +360,32 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                 }
                 if (geofence.getCenterLocation() != null) {
                     geofenceView = mapViewHandler.addGeofence(geofence.getCenterLocation(), geofence.getRadius());
-                    mapViewHandler.moveCamera(geofence.getCenterLocation(), 14, false);
+
+                    cameraChangedBySystem = true;
+                    mapViewHandler.moveCamera(getCurrentLocation(), 14, false);
                 }
             } catch (Exception e) {
                 Log.e(e);
             }
         }
+    }
+
+    @Override
+    public void onMapLoaded() {
+        Log.d("Map fully loaded");
+        mapViewHandler.takeSnapshot(new GoogleMap.SnapshotReadyCallback() {
+            @Override
+            public void onSnapshotReady(Bitmap bitmap) {
+                Log.d("Snapshot Ready");
+                currentSnapshot = bitmap;
+
+                try {
+                    sendSetupGeofenceChangedBroadcast(getContext(), name, getCurrentLocation(), currentGeofenceRadius, currentSnapshot);
+                } catch (Exception e) {
+                    Log.e(e);
+                }
+            }
+        });
     }
 
     private void updateGeofenceRadius(double radius) {

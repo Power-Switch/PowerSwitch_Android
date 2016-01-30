@@ -42,7 +42,7 @@ import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4SummaryFragment;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4TabbedSummaryFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -80,7 +80,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
+        ConfigurationDialogTabbedSummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
 
         return summaryFragment.checkSetupValidity();
@@ -113,7 +113,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureReceiverDialogPage4SummaryFragment summaryFragment =
+        ConfigurationDialogTabbedSummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
         if (summaryFragment.checkSetupValidity()) {
             try {
@@ -178,7 +178,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
         private Context context;
         private long receiverId;
-        private ConfigureReceiverDialogPage4SummaryFragment summaryFragment;
+        private ConfigurationDialogTabbedSummaryFragment summaryFragment;
         private RecyclerViewFragment recyclerViewFragment;
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
@@ -195,7 +195,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public ConfigureReceiverDialogPage4SummaryFragment getSummaryFragment() {
+        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
             return summaryFragment;
         }
 
@@ -231,10 +231,10 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                     fragment = new ConfigureReceiverDialogPage3SetupFragment();
                     break;
                 case 3:
-                    fragment = new ConfigureReceiverDialogPage4SummaryFragment();
+                    fragment = new ConfigureReceiverDialogPage4TabbedSummaryFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
-                    summaryFragment = (ConfigureReceiverDialogPage4SummaryFragment) fragment;
+                    summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;
                 default:
                     break;

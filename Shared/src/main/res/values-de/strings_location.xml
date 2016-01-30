@@ -30,8 +30,15 @@
     <string name="enter">Eintritt</string>
     <string name="exit">Austritt</string>
 
+    <string name="enter_actions">Aktionen beim Eintreten</string>
+    <string name="exit_actions">Aktionen beim Verlassen</string>
+
+    <string name="geofence_saved">Geofence gespeichert</string>
+
     <string name="geofence_will_be_gone_forever">Der Geofence wird für immer verloren sein!</string>
     <string name="geofence_deleted">Geofence gelöscht</string>
+
+    <string name="error_enabling_geofence">Fehler beim aktivieren des Geofence</string>
 
     <string name="location">Position</string>
     <string name="radius">Radius</string>

@@ -44,6 +44,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
@@ -65,7 +66,7 @@ import eu.power_switch.widget.provider.ReceiverWidgetProvider;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
+public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private View rootView;
     private long currentId = -1;
@@ -353,6 +354,7 @@ public class ConfigureReceiverDialogPage4SummaryFragment extends Fragment {
         return false;
     }
 
+    @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
         Room room = DatabaseHandler.getRoom(currentRoomName);
         String receiverName = currentName;

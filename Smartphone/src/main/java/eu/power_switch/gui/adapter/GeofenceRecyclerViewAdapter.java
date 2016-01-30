@@ -19,17 +19,20 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -79,18 +82,36 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            DatabaseHandler.enableGateway(geofence.getId());
+                            DatabaseHandler.enableGeofence(geofence.getId());
                         } else {
-                            DatabaseHandler.disableGateway(geofence.getId());
+                            DatabaseHandler.disableGeofence(geofence.getId());
                         }
                         geofence.setActive(isChecked);
                     } catch (Exception e) {
                         Log.e(e);
-                        StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_gateway, 5000);
+                        StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_geofence, 5000);
                     }
                 }
             }
         });
+
+        holder.geofenceSnapshot.setImageBitmap(geofence.getSnapshot());
+
+        holder.linearLayoutEnterActions.removeAllViews();
+        for (Action action : geofence.getActions(Geofence.EventType.ENTER)) {
+            AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
+            textViewActionDescription.setText(action.toString());
+            textViewActionDescription.setPadding(0, 0, 0, 4);
+            holder.linearLayoutEnterActions.addView(textViewActionDescription);
+        }
+
+        holder.linearLayoutExitActions.removeAllViews();
+        for (Action action : geofence.getActions(Geofence.EventType.EXIT)) {
+            AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
+            textViewActionDescription.setText(action.toString());
+            textViewActionDescription.setPadding(0, 0, 0, 4);
+            holder.linearLayoutExitActions.addView(textViewActionDescription);
+        }
 
         if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
@@ -115,12 +136,19 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView geofenceName;
         public android.support.v7.widget.SwitchCompat geofenceSwitchStatus;
+        public ImageView geofenceSnapshot;
+        public LinearLayout linearLayoutEnterActions;
+        public LinearLayout linearLayoutExitActions;
+
         public LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             this.geofenceName = (TextView) itemView.findViewById(R.id.txt_geofence_name);
             this.geofenceSwitchStatus = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_geofence_status);
+            this.geofenceSnapshot = (ImageView) itemView.findViewById(R.id.imageView_locationSnapshot);
+            this.linearLayoutEnterActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_enterActions);
+            this.linearLayoutExitActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_exitActions);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {

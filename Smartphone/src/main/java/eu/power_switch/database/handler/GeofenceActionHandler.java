@@ -116,11 +116,12 @@ abstract class GeofenceActionHandler {
     protected static ArrayList<Action> get(long geofenceId, Geofence.EventType eventType) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
-        String[] columns = {GeofenceActionTable.COLUMN_GEOFENCE_ID, GeofenceActionTable.COLUMN_ACTION_ID};
+        String[] columns = {GeofenceActionTable.COLUMN_GEOFENCE_ID, GeofenceActionTable.COLUMN_ACTION_ID,
+                GeofenceActionTable.COLUMN_EVENT_TYPE};
         Cursor cursor = DatabaseHandler.database.query(GeofenceActionTable.TABLE_NAME, columns,
                 GeofenceActionTable.COLUMN_GEOFENCE_ID + "=" + geofenceId
-                        + " and " +
-                        GeofenceActionTable.COLUMN_EVENT_TYPE + "=" + eventType.name(), null, null, null, null);
+                        + " AND " +
+                        GeofenceActionTable.COLUMN_EVENT_TYPE + "=" + "\"" + eventType.name() + "\"", null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {

@@ -120,7 +120,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Fragment {
             initializeData(geofenceId);
         }
 
-        sendActionsChangedBroadcast(getContext(), getCurrentTimerActions());
+        sendActionsChangedBroadcast(getContext(), currentExitActions);
 
         return rootView;
     }
@@ -133,13 +133,6 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Fragment {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
         }
-    }
-
-    private ArrayList<Action> getCurrentTimerActions() {
-        ArrayList<Action> actions = new ArrayList<>();
-
-
-        return actions;
     }
 
     @Override

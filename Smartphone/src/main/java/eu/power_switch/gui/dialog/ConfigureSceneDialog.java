@@ -40,7 +40,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1NameFragment;
-import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage2SetupFragment;
+import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2SetupFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -98,18 +98,24 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureSceneDialogPage2SetupFragment setupFragment =
+        ConfigurationDialogTabbedSummaryFragment setupFragment =
                 customTabAdapter.getSetupFragment();
-        return setupFragment.checkValidity();
+        return setupFragment.checkSetupValidity();
     }
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         Log.d("Saving scene");
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureSceneDialogPage2SetupFragment setupFragment =
+        ConfigurationDialogTabbedSummaryFragment setupFragment =
                 customTabAdapter.getSetupFragment();
-        setupFragment.saveCurrentConfigurationToDatabase();
+        try {
+            setupFragment.saveCurrentConfigurationToDatabase();
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
+
         getDialog().dismiss();
     }
 
@@ -163,7 +169,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
         private Context context;
         private long sceneId;
-        private ConfigureSceneDialogPage2SetupFragment setupFragment;
+        private ConfigurationDialogTabbedSummaryFragment setupFragment;
         private RecyclerViewFragment recyclerViewFragment;
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
@@ -180,7 +186,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public ConfigureSceneDialogPage2SetupFragment getSetupFragment() {
+        public ConfigurationDialogTabbedSummaryFragment getSetupFragment() {
             return setupFragment;
         }
 
@@ -208,10 +214,10 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                     fragment = new ConfigureSceneDialogPage1NameFragment();
                     break;
                 case 1:
-                    fragment = new ConfigureSceneDialogPage2SetupFragment();
+                    fragment = new ConfigureSceneDialogTabbedPage2SetupFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
-                    setupFragment = (ConfigureSceneDialogPage2SetupFragment) fragment;
+                    setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }
 
             if (fragment != null && sceneId != -1) {

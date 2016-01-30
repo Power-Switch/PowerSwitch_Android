@@ -32,6 +32,7 @@ public class GeofenceTable {
     public static final String COLUMN_LATITUDE = "latitude";
     public static final String COLUMN_LONGITUDE = "longitude";
     public static final String COLUMN_RADIUS = "radius";
+    public static final String COLUMN_SNAPSHOT = "snapshot";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
@@ -40,7 +41,9 @@ public class GeofenceTable {
             COLUMN_NAME + " text not null, " +
             COLUMN_LATITUDE + " real not null, " +
             COLUMN_LONGITUDE + " real not null, " +
-            COLUMN_RADIUS + " real not null " + ");";
+            COLUMN_RADIUS + " real not null, " +
+            COLUMN_SNAPSHOT + " blob" +
+            ");";
     //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {

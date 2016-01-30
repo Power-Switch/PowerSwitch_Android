@@ -97,16 +97,13 @@ public class MapViewHandler implements OnMapReadyCallback {
      * Constructor
      *
      * @param context            any suitable context
-     * @param onMapReadyCallback
      * @param mapView
      * @param savedInstanceState
      */
-    public MapViewHandler(Context context, OnMapReadyCallback onMapReadyCallback, MapView mapView, Bundle
+    public MapViewHandler(Context context, MapView mapView, Bundle
             savedInstanceState) {
         this.context = context;
         this.mapView = mapView;
-
-        addOnMapReadyListener(onMapReadyCallback);
 
         mapView.onCreate(savedInstanceState);
     }
@@ -121,12 +118,23 @@ public class MapViewHandler implements OnMapReadyCallback {
     }
 
     /**
-     * Add an OnMapReadyListener to get notified when the GoogleMap has initialized
+     * Add an OnMapReadyCallbackListener to get notified when the GoogleMap has initialized
      *
      * @param onMapReadyCallbackListener Listener
      */
     public void addOnMapReadyListener(OnMapReadyCallback onMapReadyCallbackListener) {
         onMapReadyListeners.add(onMapReadyCallbackListener);
+    }
+
+    /**
+     * Add an onMapLoadedCallbackListener to get notified when map has fully loaded and rendered
+     * <p/>
+     * Note: This method can only be called after successful googleMap initialization
+     *
+     * @param onMapLoadedCallbackListener Listener
+     */
+    public void setOnMapLoadedListener(GoogleMap.OnMapLoadedCallback onMapLoadedCallbackListener) {
+        googleMap.setOnMapLoadedCallback(onMapLoadedCallbackListener);
     }
 
     /**
@@ -156,7 +164,6 @@ public class MapViewHandler implements OnMapReadyCallback {
     public Geofence addGeofence(LatLng latLng, double radius) {
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .title(context.getString(R.string.location))
                 .draggable(true);
         Marker marker = googleMap.addMarker(markerOptions);
 
@@ -300,6 +307,11 @@ public class MapViewHandler implements OnMapReadyCallback {
      * @param animated true if movement should be animated, false otherwise
      */
     public void moveCamera(LatLng location, boolean animated) {
+        if (location == null) {
+            Log.w("location is null!");
+            return;
+        }
+
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(location);
 
         if (animated) {
@@ -317,6 +329,11 @@ public class MapViewHandler implements OnMapReadyCallback {
      * @param animated true if movement should be animated, false otherwise
      */
     public void moveCamera(LatLng location, float zoom, boolean animated) {
+        if (location == null) {
+            Log.w("location is null!");
+            return;
+        }
+
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, zoom);
 
         if (animated) {
@@ -326,7 +343,10 @@ public class MapViewHandler implements OnMapReadyCallback {
         }
     }
 
-//    public void takeSnapshot() {
-//        googleMap.snapshot();
-//    }
+    public void takeSnapshot(GoogleMap.SnapshotReadyCallback callback) {
+        mapView.invalidate();
+        googleMap.snapshot(callback);
+    }
+
+
 }

@@ -65,7 +65,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening " + getClass().getSimpleName() + "...");
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -114,9 +113,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureApartmentDialogPage2LocationFragment setupFragment =
+        ConfigurationDialogTabbedSummaryFragment setupFragment =
                 customTabAdapter.getSetupFragment();
-        return setupFragment.checkValidity();
+        return setupFragment.checkSetupValidity();
     }
 
     /**
@@ -125,11 +124,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
      */
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        Log.d("Saving scene");
+        Log.d("Saving apartment");
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureApartmentDialogPage2LocationFragment setupFragment =
-                customTabAdapter.getSetupFragment();
-        setupFragment.saveCurrentConfigurationToDatabase();
+        ConfigurationDialogTabbedSummaryFragment setupFragment = customTabAdapter.getSetupFragment();
+        try {
+            setupFragment.saveCurrentConfigurationToDatabase();
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+        }
         getDialog().dismiss();
     }
 
@@ -172,7 +175,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -187,7 +189,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
         private Context context;
         private long apartmentId;
-        private ConfigureApartmentDialogPage2LocationFragment setupFragment;
+        private ConfigurationDialogTabbedSummaryFragment setupFragment;
         private RecyclerViewFragment recyclerViewFragment;
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
@@ -204,7 +206,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public ConfigureApartmentDialogPage2LocationFragment getSetupFragment() {
+        public ConfigurationDialogTabbedSummaryFragment getSetupFragment() {
             return setupFragment;
         }
 
@@ -233,7 +235,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                     fragment = new ConfigureApartmentDialogPage2LocationFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
-                    setupFragment = (ConfigureApartmentDialogPage2LocationFragment) fragment;
+                    setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }
 
             if (fragment != null && apartmentId != -1) {

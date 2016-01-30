@@ -42,7 +42,7 @@ import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1TimeFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2DaysFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
-import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4SummaryFragment;
+import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4TabbedSummaryFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -101,23 +101,28 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureTimerDialogPage4SummaryFragment summaryFragment =
-                customTabAdapter.getSummaryFragment();
+        ConfigurationDialogTabbedSummaryFragment summaryFragment = customTabAdapter.getSummaryFragment();
 
-        return summaryFragment.checkValidity();
+        return summaryFragment.checkSetupValidity();
     }
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         Log.d("Saving timer");
         CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigureTimerDialogPage4SummaryFragment summaryFragment =
+        ConfigurationDialogTabbedSummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
 
-        if (summaryFragment.checkValidity()) {
-            summaryFragment.saveCurrentConfigurationToDatabase();
-            getDialog().dismiss();
+        if (isValid()) {
+            try {
+                summaryFragment.saveCurrentConfigurationToDatabase();
+            } catch (Exception e) {
+                Log.e(e);
+                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            }
         }
+
+        getDialog().dismiss();
     }
 
     @Override
@@ -165,7 +170,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
         private Context context;
         private long timerId;
-        private ConfigureTimerDialogPage4SummaryFragment summaryFragment;
+        private ConfigurationDialogTabbedSummaryFragment summaryFragment;
         private RecyclerViewFragment recyclerViewFragment;
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
@@ -183,7 +188,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public ConfigureTimerDialogPage4SummaryFragment getSummaryFragment() {
+        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
             return summaryFragment;
         }
 
@@ -219,9 +224,9 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                     fragment = new ConfigureTimerDialogPage3ActionFragment();
                     break;
                 case 3:
-                    fragment = new ConfigureTimerDialogPage4SummaryFragment();
+                    fragment = new ConfigureTimerDialogPage4TabbedSummaryFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
-                    summaryFragment = (ConfigureTimerDialogPage4SummaryFragment) fragment;
+                    summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }
 
             if (fragment != null && timerId != -1) {

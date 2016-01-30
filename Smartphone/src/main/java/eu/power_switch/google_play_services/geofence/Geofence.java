@@ -18,6 +18,8 @@
 
 package eu.power_switch.google_play_services.geofence;
 
+import android.graphics.Bitmap;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -56,7 +58,16 @@ public class Geofence {
      * Radius of this Geofence
      */
     private double radius;
+
+    /**
+     * Map of Actions per EventType
+     */
     private HashMap<EventType, List<Action>> actionsMap;
+
+    /**
+     * Snapshot of this Geofence
+     */
+    private Bitmap snapshot;
 
     public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius) {
         this.id = id;
@@ -64,11 +75,21 @@ public class Geofence {
         this.name = name;
         this.centerLocation = centerLocation;
         this.radius = radius;
-        actionsMap = new HashMap<>();
+        this.actionsMap = new HashMap<>();
 
         for (EventType eventType : EventType.values()) {
-            actionsMap.put(eventType, new ArrayList<Action>());
+            this.actionsMap.put(eventType, new ArrayList<Action>());
         }
+    }
+
+    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, HashMap<EventType, List<Action>> actionsMap) {
+        this.id = id;
+        this.active = active;
+        this.name = name;
+        this.centerLocation = centerLocation;
+        this.radius = radius;
+        this.snapshot = snapshot;
+        this.actionsMap = actionsMap;
     }
 
     /**
@@ -108,12 +129,30 @@ public class Geofence {
     }
 
     /**
+     * Set name of this Geofence
+     *
+     * @param name Name of this Geofence
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * Get the center location of this Geofence
      *
      * @return center location
      */
     public LatLng getCenterLocation() {
         return centerLocation;
+    }
+
+    /**
+     * Set the center location of this Geofence
+     *
+     * @param centerLocation center location
+     */
+    public void setCenterLocation(LatLng centerLocation) {
+        this.centerLocation = centerLocation;
     }
 
     /**
@@ -125,8 +164,41 @@ public class Geofence {
         return radius;
     }
 
+    /**
+     * Set radius of this Geofence
+     *
+     * @param radius radius
+     */
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    /**
+     * Get actions of a specific EventType of this Geofence
+     *
+     * @param eventType EventType
+     * @return List of Actions
+     */
     public List<Action> getActions(EventType eventType) {
         return actionsMap.get(eventType);
+    }
+
+    /**
+     * Get snapshot of this Geofence
+     *
+     * @return snapshot
+     */
+    public Bitmap getSnapshot() {
+        return snapshot;
+    }
+
+    /**
+     * Set snapshot of this Geofence
+     *
+     * @param snapshot snapshot
+     */
+    public void setSnapshot(Bitmap snapshot) {
+        this.snapshot = snapshot;
     }
 
     /**

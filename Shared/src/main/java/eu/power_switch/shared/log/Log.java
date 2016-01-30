@@ -150,4 +150,13 @@ public class Log {
             log.error(message);
         }
     }
+
+    /**
+     * Log Warn
+     *
+     * @param message any text message
+     */
+    public static void w(String message) {
+        log.warn(message);
+    }
 }

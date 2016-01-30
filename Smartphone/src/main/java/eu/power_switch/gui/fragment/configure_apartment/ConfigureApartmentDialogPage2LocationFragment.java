@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -36,6 +37,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -44,6 +46,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -53,9 +56,9 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.location.AddressNotFoundException;
-import eu.power_switch.google_play_services.location.LocationApiHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -72,7 +75,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyCallback {
+public class ConfigureApartmentDialogPage2LocationFragment extends Fragment implements OnMapReadyCallback, ConfigurationDialogTabbedSummaryFragment, GoogleMap.OnMapLoadedCallback {
 
     private long apartmentId = -1;
 
@@ -80,14 +83,17 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     private String currentName;
     private List<Gateway> currentCheckedGateways;
     private double currentGeofenceRadius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
-    private LocationApiHandler locationApiHandler;
+    private Bitmap currentSnapshot;
+
     private MapViewHandler mapViewHandler;
-    private Geofence geofence;
+    private Geofence geofenceView;
     private SeekBar geofenceRadiusSeekbar;
     private EditText geofenceRadiusEditText;
     private BroadcastReceiver broadcastReceiver;
     private EditText searchAddressEditText;
     private TextInputLayout searchAddressTextInputLayout;
+    private boolean cameraChangedBySystem = true;
+
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -105,10 +111,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_apartment_page_2, container, false);
 
-//        locationApiHandler = new LocationApiHandler(getActivity());
-
         MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
-        mapViewHandler = new MapViewHandler(getContext(), this, mapView, savedInstanceState);
+        mapViewHandler = new MapViewHandler(getContext(), mapView, savedInstanceState);
         mapViewHandler.addOnMapReadyListener(this);
         mapViewHandler.initMapAsync();
 
@@ -124,11 +128,11 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 try {
                     LatLng location = mapViewHandler.findCoordinates(searchAddressEditText.getText().toString());
 
-                    if (geofence == null) {
-                        geofence = mapViewHandler.addGeofence(location, currentGeofenceRadius);
+                    if (geofenceView == null) {
+                        geofenceView = mapViewHandler.addGeofence(location, currentGeofenceRadius);
                     } else {
-                        geofence.setCenter(location);
-                        geofence.setRadius(currentGeofenceRadius);
+                        geofenceView.setCenter(location);
+                        geofenceView.setRadius(currentGeofenceRadius);
                     }
                     mapViewHandler.moveCamera(location, 14, true);
 
@@ -227,14 +231,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         return rootView;
     }
 
-    private void updateGeofenceRadius(double radius) {
-        currentGeofenceRadius = radius;
-
-        if (geofence != null) {
-            geofence.setRadius(radius);
-        }
-    }
-
     private void initializeApartmentData(long apartmentId) {
         try {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
@@ -258,39 +254,46 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         }
     }
 
-    public void saveCurrentConfigurationToDatabase() {
-        try {
-            if (apartmentId == -1) {
-                String apartmentName = currentName;
-
-                Apartment newApartment = new Apartment((long) -1, apartmentName, currentCheckedGateways,
-                        new eu.power_switch.google_play_services.geofence.Geofence(
-                                (long) -1, true, currentName, geofence.getMarker().getPosition(), currentGeofenceRadius)
-                );
-
-                try {
-                    DatabaseHandler.addApartment(newApartment);
-                } catch (Exception e) {
-                    StatusMessageHandler.showStatusMessage(rootView.getContext(),
-                            R.string.unknown_error, Snackbar.LENGTH_LONG);
-                }
-            } else {
-                DatabaseHandler.updateApartment(apartmentId, currentName, currentCheckedGateways, geofence.getMarker()
-                        .getPosition(), currentGeofenceRadius);
-            }
-
-            ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.apartment_saved,
-                    Snackbar.LENGTH_LONG);
-        } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(rootView.getContext(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+    private void hideSoftwareKeyboard() {
+        View view = getView();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
 
+    private LatLng getCurrentLocation() {
+        try {
+            return geofenceView.getMarker().getPosition();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void updateGeofenceRadius(double radius) {
+        currentGeofenceRadius = radius;
+
+        if (geofenceView != null) {
+            geofenceView.setRadius(radius);
+        }
+    }
+
+    @Override
+    public boolean checkSetupValidity() {
+        return checkValidity();
     }
 
     public boolean checkValidity() {
-        return true;
+        if (currentName == null || currentName.length() <= 0) {
+            return false;
+        }
+
+        if (currentCheckedGateways == null) {
+            return false;
+        }
+
+        return currentSnapshot != null;
+
     }
 
     @Override
@@ -307,16 +310,27 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         uiSettings.setCompassEnabled(true);
         uiSettings.setMapToolbarEnabled(false);
 
+        mapViewHandler.setOnMapLoadedListener(this);
+        final GoogleMap.OnMapLoadedCallback listener = this;
+        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                if (cameraChangedBySystem) {
+                    mapViewHandler.setOnMapLoadedListener(listener);
+                    cameraChangedBySystem = false;
+                }
+            }
+        });
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 Log.d(latLng.toString());
 
-                if (geofence == null) {
-                    geofence = mapViewHandler.addGeofence(latLng, currentGeofenceRadius);
+                if (geofenceView == null) {
+                    geofenceView = mapViewHandler.addGeofence(latLng, currentGeofenceRadius);
                 } else {
-                    geofence.setCenter(latLng);
-                    geofence.setRadius(currentGeofenceRadius);
+                    geofenceView.setCenter(latLng);
+                    geofenceView.setRadius(currentGeofenceRadius);
                 }
 
                 try {
@@ -328,28 +342,29 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                     Log.e(e);
                 }
 
-                sendSetupApartmentChangedBroadcast(getContext());
+                cameraChangedBySystem = true;
+                mapViewHandler.moveCamera(latLng, true);
             }
         });
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
-                if (geofence.getMarker().getId().equals(marker.getId())) {
-                    geofence.setCenter(marker.getPosition());
+                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                    geofenceView.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDrag(Marker marker) {
-                if (geofence.getMarker().getId().equals(marker.getId())) {
-                    geofence.setCenter(marker.getPosition());
+                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                    geofenceView.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if (geofence.getMarker().getId().equals(marker.getId())) {
-                    geofence.setCenter(marker.getPosition());
+                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                    geofenceView.setCenter(marker.getPosition());
 
                     try {
                         String address = mapViewHandler.findAddress(marker.getPosition());
@@ -360,20 +375,31 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                         Log.e(e);
                     }
 
-                    sendSetupApartmentChangedBroadcast(getContext());
+                    cameraChangedBySystem = true;
+                    mapViewHandler.moveCamera(marker.getPosition(), true);
                 }
+            }
+        });
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                cameraChangedBySystem = true;
+                mapViewHandler.moveCamera(geofenceView.getMarker().getPosition(), true);
+                return true;
             }
         });
 
         if (apartmentId != -1) {
             try {
                 Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                if (geofence != null) {
-                    geofence.remove();
+                if (geofenceView != null) {
+                    geofenceView.remove();
                 }
                 if (apartment.getGeofence().getCenterLocation() != null) {
-                    geofence = mapViewHandler.addGeofence(apartment.getGeofence().getCenterLocation(), apartment
+                    geofenceView = mapViewHandler.addGeofence(apartment.getGeofence().getCenterLocation(), apartment
                             .getGeofence().getRadius());
+
+                    cameraChangedBySystem = true;
                     mapViewHandler.moveCamera(apartment.getGeofence().getCenterLocation(), 14, false);
                 }
             } catch (Exception e) {
@@ -383,10 +409,54 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
     }
 
     @Override
+    public void onMapLoaded() {
+        Log.d("Map fully loaded");
+        mapViewHandler.takeSnapshot(new GoogleMap.SnapshotReadyCallback() {
+            @Override
+            public void onSnapshotReady(Bitmap bitmap) {
+                Log.d("Snapshot Ready");
+                currentSnapshot = bitmap;
+
+                try {
+                    sendSetupApartmentChangedBroadcast(getContext());
+                } catch (Exception e) {
+                    Log.e(e);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void saveCurrentConfigurationToDatabase() throws Exception {
+        if (apartmentId == -1) {
+            Apartment newApartment = new Apartment((long) -1, currentName, currentCheckedGateways,
+                    new eu.power_switch.google_play_services.geofence.Geofence(
+                            (long) -1, false, currentName, geofenceView.getMarker().getPosition(),
+                            currentGeofenceRadius)
+            );
+
+            DatabaseHandler.addApartment(newApartment);
+        } else {
+            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+            eu.power_switch.google_play_services.geofence.Geofence updatedGeofence = apartment.getGeofence();
+            updatedGeofence.setName(currentName);
+            updatedGeofence.setCenterLocation(geofenceView.getMarker().getPosition());
+            updatedGeofence.setRadius(currentGeofenceRadius);
+            updatedGeofence.setSnapshot(currentSnapshot);
+
+            Apartment updatedApartment = new Apartment(apartmentId, currentName, currentCheckedGateways, updatedGeofence);
+
+            DatabaseHandler.updateApartment(updatedApartment);
+        }
+
+        ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
+        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.apartment_saved,
+                Snackbar.LENGTH_LONG);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
-//        locationApiHandler.connect();
-
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
@@ -412,7 +482,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
 
     @Override
     public void onStop() {
-//        locationApiHandler.disconnect();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
