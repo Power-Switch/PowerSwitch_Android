@@ -36,6 +36,8 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+
 import eu.power_switch.google_play_services.location.LocationApiHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.log.Log;
@@ -127,6 +129,11 @@ public class GeofenceApiHandler {
         return builder.build();
     }
 
+    /**
+     * Add Geofence to GeofenceAPI
+     *
+     * @param geofence Geofence
+     */
     public void addGeofence(eu.power_switch.google_play_services.geofence.Geofence geofence) {
         addGeofence(activity,
                 getGeofencingRequest(
@@ -167,7 +174,31 @@ public class GeofenceApiHandler {
         });
     }
 
-    public void removeGeofences(GoogleApiClient googleApiClient, PendingIntent geofencePendingIntent) {
+    /**
+     * Remove Geofence from GeofenceAPI
+     *
+     * @param geofenceId ID of Geofence
+     */
+    public void removeGeofence(long geofenceId) {
+        removeGeofence(googleApiClient, String.valueOf(geofenceId));
+    }
+
+    private void removeGeofence(GoogleApiClient googleApiClient, final String geofenceId) {
+        ArrayList<String> geofenceIds = new ArrayList<>();
+        geofenceIds.add(geofenceId);
+
+        LocationServices.GeofencingApi.removeGeofences(
+                googleApiClient,
+                geofenceIds
+        ).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                Log.d(status.getStatusMessage());
+            }
+        }); // Result processed in onResult().
+    }
+
+    private void removeGeofences(GoogleApiClient googleApiClient, PendingIntent geofencePendingIntent) {
         LocationServices.GeofencingApi.removeGeofences(
                 googleApiClient,
                 // This is the same pending intent that was used in addGeofence().

@@ -1458,4 +1458,20 @@ public final class DatabaseHandler {
         }
     }
 
+    /**
+     * Delete Geofence from Database
+     *
+     * @param id ID of Geofence
+     */
+    public static void deleteGeofence(Long id) throws Exception {
+        openWritable();
+        try {
+            GeofenceHandler.delete(id);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+    }
 }

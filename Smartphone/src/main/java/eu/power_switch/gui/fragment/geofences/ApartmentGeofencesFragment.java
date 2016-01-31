@@ -39,6 +39,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
+import eu.power_switch.gui.dialog.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
@@ -76,12 +77,12 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, int position) {
                 final Geofence geofence = geofences.get(position);
 
-                ConfigureGeofenceDialog configureGeofenceDialog = new ConfigureGeofenceDialog();
+                ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog = new ConfigureApartmentGeofenceDialog();
                 Bundle geofenceData = new Bundle();
                 geofenceData.putLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY, geofence.getId());
-                configureGeofenceDialog.setArguments(geofenceData);
-                configureGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureGeofenceDialog.show(getFragmentManager(), null);
+                configureApartmentGeofenceDialog.setArguments(geofenceData);
+                configureApartmentGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
+                configureApartmentGeofenceDialog.show(getFragmentManager(), null);
             }
         });
 

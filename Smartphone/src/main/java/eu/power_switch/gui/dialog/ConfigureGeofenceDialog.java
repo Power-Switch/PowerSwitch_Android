@@ -35,6 +35,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
+import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1LocationFragment;
@@ -46,7 +48,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
- * Dialog to create or modify a Receiver
+ * Dialog to create or modify a Geofence
  * <p/>
  * Created by Markus on 28.06.2015.
  */
@@ -57,9 +59,10 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
      */
     public static final String GEOFENCE_ID_KEY = "GeofenceId";
 
-    private long geofenceId = -1;
+    protected long geofenceId = -1;
 
     private BroadcastReceiver broadcastReceiver;
+    private GeofenceApiHandler geofenceApiHandler;
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,6 +74,8 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
                 notifyConfigurationChanged();
             }
         };
+
+        geofenceApiHandler = new GeofenceApiHandler(getActivity());
     }
 
     @Override
@@ -130,8 +135,8 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    // TODO: delete Geofence
-//                                    DatabaseHandler.deleteGeofence(geofenceId);
+                                    DatabaseHandler.deleteGeofence(geofenceId);
+                                    geofenceApiHandler.removeGeofence(geofenceId);
 
                                     // same for timers
                                     CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getActivity());
@@ -155,15 +160,17 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SETUP_GEOFENCE_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        geofenceApiHandler.onStart();
     }
 
     @Override
     public void onStop() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        geofenceApiHandler.onStop();
         super.onStop();
     }
 
-    private static class CustomTabAdapter extends FragmentPagerAdapter {
+    protected static class CustomTabAdapter extends FragmentPagerAdapter {
 
         private Context context;
         private long geofenceId;

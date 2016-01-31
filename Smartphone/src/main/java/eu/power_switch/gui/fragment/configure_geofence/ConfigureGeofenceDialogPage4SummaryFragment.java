@@ -238,7 +238,10 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                         currentGeofenceRadius, currentSnapshot, actionsMap);
                 DatabaseHandler.updateGeofence(updatedGeofence);
 
-                geofenceApiHandler.addGeofence(updatedGeofence);
+                geofenceApiHandler.removeGeofence(geofence.getId());
+                if (geofence.isActive()) {
+                    geofenceApiHandler.addGeofence(updatedGeofence);
+                }
             }
 
             CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getContext());

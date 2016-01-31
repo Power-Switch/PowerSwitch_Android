@@ -81,10 +81,9 @@ public class GeofenceIntentService extends IntentService {
             for (Geofence geofence : triggeringGeofences) {
                 triggeringGeofencesIdsList.add(geofence.getRequestId());
             }
+            Log.d(this, getTransitionString(geofenceTransition) + ": " + TextUtils.join(", ", triggeringGeofencesIdsList));
 
             executeGeofences(triggeringGeofences, geofenceTransition);
-
-            Log.d(this, getTransitionString(geofenceTransition) + ": " + TextUtils.join(", ", triggeringGeofencesIdsList));
         } else {
             // Log the error.
             Log.e(this, "Unknown Geofence transition: " + geofenceTransition);
@@ -112,7 +111,9 @@ public class GeofenceIntentService extends IntentService {
             try {
                 eu.power_switch.google_play_services.geofence.Geofence geofence =
                         DatabaseHandler.getGeofence(Long.valueOf(googleGeofence.getRequestId()));
-                ActionHandler.execute(getApplicationContext(), geofence, eventType);
+                if (geofence.isActive()) {
+                    ActionHandler.execute(getApplicationContext(), geofence, eventType);
+                }
             } catch (Exception e) {
                 Log.e(e);
             }
