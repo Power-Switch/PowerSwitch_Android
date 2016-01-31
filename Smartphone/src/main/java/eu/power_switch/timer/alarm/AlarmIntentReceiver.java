@@ -67,23 +67,22 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                 }
             }
             log += " }";
-            Log.d("AlarmIntentReceiver", log);
+            Log.d(this, log);
         } catch (Exception e) {
             Log.e(e);
         }
 
         try {
             if (intent.getAction().equals(TimerConstants.TIMER_ACTIVATION_INTENT)) {
-                Log.d("AlarmIntentReceiver", "parsing timer activation intent...");
+                Log.d(this, "parsing timer activation intent...");
                 parseActionIntent(context, intent);
             } else if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 // restart all active alarms because device rebooted
-                Log.d("AlarmIntentReceiver", "restarting all active alarms because device rebooted...");
+                Log.d(this, "restarting all active alarms because device rebooted...");
                 reinitializeAlarms(context);
             } else {
-                Log.d("AlarmIntentReceiver", "Received unknown intent: " + intent.getAction());
+                Log.d(this, "Received unknown intent: " + intent.getAction());
             }
-
         } catch (Exception e) {
             Log.e(e);
         }
@@ -99,7 +98,7 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                 int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
                 int executionHour = timer.getExecutionTime().get(Calendar.HOUR_OF_DAY);
                 if (currentHour != executionHour) {
-                    Log.d("AlarmIntentReceiver", "Timer hour doesnt match: " + currentHour + " != " + timer
+                    Log.d(this, "Timer hour doesnt match: " + currentHour + " != " + timer
                             .getExecutionTime().get(Calendar.HOUR_OF_DAY));
                     return;
                 }
@@ -107,13 +106,13 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                 int currentMinute = currentTime.get(Calendar.MINUTE);
                 int executionMinute = timer.getExecutionTime().get(Calendar.MINUTE);
                 if (!(currentMinute >= executionMinute && currentMinute <= executionMinute + 3)) {
-                    Log.d("AlarmIntentReceiver", "Timer minute not in valid range: currentMinute: " + currentMinute + " ; executionMinute: " +
+                    Log.d(this, "Timer minute not in valid range: currentMinute: " + currentMinute + " ; executionMinute: " +
                             executionMinute);
                     return;
                 }
             }
 
-            Log.d("AlarmIntentReceiver", "executing timer...");
+            Log.d(this, "executing timer...");
             switch (timer.getExecutionType()) {
                 case Timer.EXECUTION_TYPE_WEEKDAY:
                     WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
@@ -121,14 +120,14 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                     if (weekdayTimer.containsExecutionDay(currentTime.get(Calendar.DAY_OF_WEEK))) {
                         ActionHandler.execute(context, timer);
                     } else {
-                        Log.d("AlarmIntentReceiver", "timer executionDays doesn't contain current day, not executing timer");
+                        Log.d(this, "timer executionDays doesn't contain current day, not executing timer");
                     }
                     break;
                 case Timer.EXECUTION_TYPE_INTERVAL:
                     ActionHandler.execute(context, timer);
                     break;
                 default:
-                    Log.e("AlarmIntentReceiver", "Unknown Timer executionType: " + timer.getExecutionType());
+                    Log.e(this, "Unknown Timer executionType: " + timer.getExecutionType());
                     break;
             }
 

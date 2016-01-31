@@ -68,7 +68,7 @@
                 <TextView
                     style="@style/sub_header"
                     android:layout_marginTop="@dimen/title_margin_top"
-                    android:text="Location"/>
+                    android:text="@string/location"/>
 
                 <ImageView
                     android:id="@+id/imageView_locationSnapshot"

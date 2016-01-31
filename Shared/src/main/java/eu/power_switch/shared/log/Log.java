@@ -110,7 +110,7 @@ public class Log {
     /**
      * Log Error
      *
-     * @param source  a source object throwable
+     * @param source  source of log message
      * @param message any text message
      */
     public static void e(Object source, String message) {
@@ -134,6 +134,34 @@ public class Log {
 
         logMessage.append(message);
         log.error(logMessage);
+    }
+
+    /**
+     * Log Error
+     *
+     * @param source source of log message
+     * @param e      any throwable
+     */
+    public static void e(Object source, Throwable e) {
+        StringBuilder logMessage = new StringBuilder();
+
+        if (source != null) {
+            logMessage.append("{");
+            if (source.getClass().equals(String.class)) {
+                logMessage.append(source);
+            } else if (source instanceof Class) {
+                logMessage.append(((Class) source).getCanonicalName());
+            } else {
+                try {
+                    logMessage.append(source.getClass());
+                } catch (Exception e1) {
+                    // do nothing
+                }
+            }
+            logMessage.append("} ");
+        }
+
+        log.error(logMessage, e);
     }
 
     /**

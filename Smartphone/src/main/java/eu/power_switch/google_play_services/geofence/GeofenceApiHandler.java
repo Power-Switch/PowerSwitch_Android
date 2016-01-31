@@ -19,8 +19,8 @@
 package eu.power_switch.google_play_services.geofence;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -41,7 +41,6 @@ import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.google_play_services.location.LocationApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.log.Log;
@@ -54,14 +53,14 @@ import eu.power_switch.shared.log.Log;
  */
 public class GeofenceApiHandler {
 
-    private Activity activity;
+    private Context context;
     private GoogleApiClient googleApiClient;
 
-    public GeofenceApiHandler(Activity activity) {
-        this.activity = activity;
+    public GeofenceApiHandler(Context context) {
+        this.context = context;
 
         // Create an instance of GoogleAPIClient.
-        googleApiClient = new GoogleApiClient.Builder(activity)
+        googleApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(@Nullable Bundle bundle) {
@@ -132,6 +131,10 @@ public class GeofenceApiHandler {
         return builder.build();
     }
 
+    public void blockingConnect() {
+        googleApiClient.blockingConnect();
+    }
+
     /**
      * Add Geofence to GeofenceAPI
      *
@@ -149,18 +152,8 @@ public class GeofenceApiHandler {
 
     private void addGeofence(GeofencingRequest geofencingRequest,
                              PendingIntent geofencePendingIntent) {
-
-        if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
                 .PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            LocationApiHandler.requestLocationPermission(activity);
-
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
 
@@ -173,7 +166,7 @@ public class GeofenceApiHandler {
             public void onResult(@NonNull Status status) {
                 switch (status.getStatusCode()) {
                     case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showStatusMessage(activity, R.string.geofence_enabled, Snackbar.LENGTH_SHORT);
+                        StatusMessageHandler.showStatusMessage(context, R.string.geofence_enabled, Snackbar.LENGTH_SHORT);
                 }
 
                 Log.d(GeofenceApiHandler.class, status.toString());
@@ -202,7 +195,7 @@ public class GeofenceApiHandler {
             public void onResult(@NonNull Status status) {
                 switch (status.getStatusCode()) {
                     case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showStatusMessage(activity, R.string.geofence_disabled, Snackbar.LENGTH_SHORT);
+                        StatusMessageHandler.showStatusMessage(context, R.string.geofence_disabled, Snackbar.LENGTH_SHORT);
                 }
 
                 Log.d(GeofenceApiHandler.class, status.toString());
@@ -220,7 +213,7 @@ public class GeofenceApiHandler {
             public void onResult(@NonNull Status status) {
                 switch (status.getStatusCode()) {
                     case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showStatusMessage(activity, R.string.geofences_disabled, Snackbar
+                        StatusMessageHandler.showStatusMessage(context, R.string.geofences_disabled, Snackbar
                                 .LENGTH_LONG);
                 }
 
@@ -230,10 +223,10 @@ public class GeofenceApiHandler {
     }
 
     private PendingIntent getGeofencePendingIntent() {
-        Intent intent = new Intent(activity, GeofenceIntentService.class);
+        Intent intent = new Intent(context, GeofenceIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofence() and removeAllGeofences().
-        return PendingIntent.getService(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void onStart() {

@@ -166,6 +166,13 @@
                 <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".google_play_services.geofence.GeofenceIntentReceiver">
+            <!-- Geofences -->
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
 
         <!-- Services -->
         <service
