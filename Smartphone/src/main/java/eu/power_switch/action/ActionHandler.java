@@ -29,6 +29,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.history.HistoryItem;
@@ -285,6 +286,27 @@ public class ActionHandler {
                     executeScene(context, sceneAction.getScene());
                     break;
             }
+        }
+    }
+
+    /**
+     * Execute Geofence actions
+     *
+     * @param context   any suitable context
+     * @param geofence  geofence
+     * @param eventType event type
+     */
+    public static void execute(Context context, Geofence geofence, Geofence.EventType eventType) {
+        try {
+            executeActions(context, geofence.getActions(eventType));
+
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                    .geofence_action_history_text, geofence.getName()));
+            DatabaseHandler.addHistoryItem(historyItem);
+            MainActivity.sendHistoryChangedBroadcast(context);
+        } catch (Exception e) {
+            Log.e(e);
+            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
         }
     }
 }

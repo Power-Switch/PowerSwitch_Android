@@ -21,12 +21,14 @@ package eu.power_switch.google_play_services.geofence;
 import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -35,6 +37,7 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
 import eu.power_switch.google_play_services.location.LocationApiHandler;
+import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -42,8 +45,37 @@ import eu.power_switch.shared.log.Log;
  */
 public class GeofenceApiHandler {
 
-    public static PendingIntent getGeofencePendingIntent(Geofence geofence) {
-        return null;
+    private Activity activity;
+    private boolean isGoogleApiConnected;
+    private GoogleApiClient googleApiClient;
+
+    public GeofenceApiHandler(Activity activity) {
+        this.activity = activity;
+
+        // Create an instance of GoogleAPIClient.
+        googleApiClient = new GoogleApiClient.Builder(activity)
+                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(@Nullable Bundle bundle) {
+                        Log.d("GoogleApiClient connected");
+                        isGoogleApiConnected = true;
+                    }
+
+                    @Override
+                    public void onConnectionSuspended(int i) {
+                        Log.d("GoogleApiClient connection suspended");
+                        isGoogleApiConnected = false;
+                    }
+                })
+                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.e("GoogleApiClient connection failed");
+                        isGoogleApiConnected = false;
+                    }
+                })
+                .addApi(LocationServices.API)
+                .build();
     }
 
     /**
@@ -63,38 +95,50 @@ public class GeofenceApiHandler {
                 // geofence.
                 .setRequestId(id)
 
+                // Set the circular region of this geofence.
                 .setCircularRegion(
                         latitude,
                         longitude,
                         radius
                 )
+
+                // Set the expiration duration of the geofence. This geofence gets automatically
+                // removed after this period of time.
                 .setExpirationDuration(expirationDuration)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
+
+                // Delay to wait before DWELL transition happens
+                .setLoiteringDelay(GeofenceConstants.DEFAULT_LOITERING_DELAY)
+
+                // Set the transition types of interest. Alerts are only generated for these
+                // transition. We track entry and exit transitions in this sample.
+                .setTransitionTypes(
+                        Geofence.GEOFENCE_TRANSITION_ENTER |
+                                Geofence.GEOFENCE_TRANSITION_EXIT |
+                                Geofence.GEOFENCE_TRANSITION_DWELL)
                 .build();
 
         return geofence;
     }
 
-//    /**
-//     * @return
-//     */
-//    private static GeofencingRequest getGeofencingRequest() {
-//        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
-//        builder.addGeofences(mGeofenceList);
-//        return builder.build();
-//    }
-
-    private PendingIntent getGeofencePendingIntent(Context context) {
-        Intent intent = new Intent(context, GeofenceIntentService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
-        return PendingIntent.getService(context, 0, intent, PendingIntent.
-                FLAG_UPDATE_CURRENT);
+    private static GeofencingRequest getGeofencingRequest(Geofence geofence) {
+        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.addGeofence(geofence);
+        return builder.build();
     }
 
-    public void addGeofences(Activity activity, GoogleApiClient googleApiClient, GeofencingRequest geofencingRequest,
+    public void addGeofence(eu.power_switch.google_play_services.geofence.Geofence geofence) {
+        addGeofence(activity,
+                getGeofencingRequest(
+                        createGeofence(
+                                String.valueOf(geofence.getId()),
+                                geofence.getCenterLocation().latitude,
+                                geofence.getCenterLocation().longitude,
+                                (int) geofence.getRadius(),
+                                -1)), getGeofencePendingIntent());
+    }
+
+    private void addGeofence(Activity activity, GeofencingRequest geofencingRequest,
                              PendingIntent geofencePendingIntent) {
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
@@ -123,14 +167,10 @@ public class GeofenceApiHandler {
         });
     }
 
-    private PendingIntent getGeofencePendingIntent() {
-        return null;
-    }
-
     public void removeGeofences(GoogleApiClient googleApiClient, PendingIntent geofencePendingIntent) {
         LocationServices.GeofencingApi.removeGeofences(
                 googleApiClient,
-                // This is the same pending intent that was used in addGeofences().
+                // This is the same pending intent that was used in addGeofence().
                 getGeofencePendingIntent()
         ).setResultCallback(new ResultCallback<Status>() {
             @Override
@@ -140,4 +180,22 @@ public class GeofenceApiHandler {
         }); // Result processed in onResult().
     }
 
+    private PendingIntent getGeofencePendingIntent() {
+        Intent intent = new Intent(activity, GeofenceIntentService.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // calling addGeofence() and removeGeofences().
+        return PendingIntent.getService(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public boolean isConnected() {
+        return isGoogleApiConnected;
+    }
+
+    public void onStart() {
+        googleApiClient.connect();
+    }
+
+    public void onStop() {
+        googleApiClient.disconnect();
+    }
 }

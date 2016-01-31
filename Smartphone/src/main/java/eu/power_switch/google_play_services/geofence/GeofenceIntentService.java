@@ -20,12 +20,17 @@ package eu.power_switch.google_play_services.geofence;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import eu.power_switch.R;
+import eu.power_switch.action.ActionHandler;
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -37,11 +42,19 @@ public class GeofenceIntentService extends IntentService {
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
+     * This constructor is required, and calls the super IntentService(String)
+     * constructor with the name for a worker thread.
      */
     public GeofenceIntentService() {
         super("GeofenceIntentService");
     }
 
+    /**
+     * Handles incoming intents.
+     *
+     * @param intent sent by Location Services. This Intent is provided to Location
+     *               Services (inside a PendingIntent) when addGeofences() is called.
+     */
     @Override
     protected void onHandleIntent(Intent intent) {
         // TODO: handle geofence events
@@ -61,22 +74,65 @@ public class GeofenceIntentService extends IntentService {
 
             // Get the geofences that were triggered. A single event can trigger
             // multiple geofences.
-            List triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
-            // Get the transition details as a String.
-//            String geofenceTransitionDetails = getGeofenceTransitionDetails(
-//                    this,
-//                    geofenceTransition,
-//                    triggeringGeofences
-//            );
+            // Get the Ids of each geofence that was triggered.
+            ArrayList<String> triggeringGeofencesIdsList = new ArrayList<>();
+            for (Geofence geofence : triggeringGeofences) {
+                triggeringGeofencesIdsList.add(geofence.getRequestId());
+            }
 
-            // Send notification and log the transition details.
-//            sendNotification(geofenceTransitionDetails);
-//            Log.d(this, geofenceTransitionDetails);
+            executeGeofences(triggeringGeofences, geofenceTransition);
+
+            Log.d(this, getTransitionString(geofenceTransition) + ": " + TextUtils.join(", ", triggeringGeofencesIdsList));
         } else {
             // Log the error.
-            Log.e(this, "Error getString(R.string.geofence_transition_invalid_type,geofenceTransition");
+            Log.e(this, "Unknown Geofence transition: " + geofenceTransition);
+        }
+    }
+
+    /**
+     * Execute Geofence actions
+     *
+     * @param triggeringGeofences list of triggered Geofences
+     * @param geofenceTransition  type of transition
+     */
+    private void executeGeofences(List<Geofence> triggeringGeofences, int geofenceTransition) {
+        eu.power_switch.google_play_services.geofence.Geofence.EventType eventType = null;
+        switch (geofenceTransition) {
+            case Geofence.GEOFENCE_TRANSITION_ENTER:
+                eventType = eu.power_switch.google_play_services.geofence.Geofence.EventType.ENTER;
+                break;
+            case Geofence.GEOFENCE_TRANSITION_EXIT:
+                eventType = eu.power_switch.google_play_services.geofence.Geofence.EventType.EXIT;
+                break;
         }
 
+        for (Geofence googleGeofence : triggeringGeofences) {
+            try {
+                eu.power_switch.google_play_services.geofence.Geofence geofence =
+                        DatabaseHandler.getGeofence(Long.valueOf(googleGeofence.getRequestId()));
+                ActionHandler.execute(getApplicationContext(), geofence, eventType);
+            } catch (Exception e) {
+                Log.e(e);
+            }
+        }
+    }
+
+    /**
+     * Maps geofence transition types to their human-readable equivalents.
+     *
+     * @param transitionType A transition type constant defined in Geofence
+     * @return A String indicating the type of transition
+     */
+    private String getTransitionString(int transitionType) {
+        switch (transitionType) {
+            case Geofence.GEOFENCE_TRANSITION_ENTER:
+                return getString(R.string.enter);
+            case Geofence.GEOFENCE_TRANSITION_EXIT:
+                return getString(R.string.exit);
+            default:
+                return "Unknown Transition";
+        }
     }
 }
