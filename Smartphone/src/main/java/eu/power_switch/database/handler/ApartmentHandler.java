@@ -57,7 +57,7 @@ abstract class ApartmentHandler {
     }
 
     private static void addGeofence(long apartmentId, Apartment apartment) {
-        Long geofenceId = GeofenceHandler.add(apartment);
+        Long geofenceId = GeofenceHandler.add(apartment.getGeofence());
 
         ContentValues values = new ContentValues();
         values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, apartmentId);

@@ -32,7 +32,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
@@ -74,20 +73,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected void initExistingData(Bundle args) {
+    protected boolean initializeFromExistingData(Bundle args) {
         if (args != null && args.containsKey(APARTMENT_ID_KEY)) {
             apartmentId = args.getLong(APARTMENT_ID_KEY);
 
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment(), apartmentId));
-            imageButtonDelete.setVisibility(View.VISIBLE);
-            setSaveButtonState(true);
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment()));
-            // hide if new apartment
-            imageButtonDelete.setVisibility(View.GONE);
-            setSaveButtonState(false);
         }
 
         try {
@@ -95,11 +89,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             if (DatabaseHandler.getAllApartments().size() <= 1) {
                 imageButtonDelete.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
                 imageButtonDelete.setClickable(false);
+                return true;
+            } else {
+                return args != null && args.containsKey(APARTMENT_ID_KEY);
             }
         } catch (Exception e) {
             dismiss();
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            return false;
         }
     }
 

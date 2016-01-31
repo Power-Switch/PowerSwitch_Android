@@ -32,6 +32,7 @@ import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
+import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
 import eu.power_switch.obj.Button;
@@ -119,6 +120,96 @@ abstract class ActionHandler {
         return action;
     }
 
+    /**
+     * Deletes all Actions using a specific Receiver
+     *
+     * @param receiverId ID of Receiver
+     */
+    protected static void deleteByReceiverId(Long receiverId) {
+        Log.d(TimerActionHandler.class, "Delete TimerActions by ReceiverId: " + receiverId);
+        String[] columns = {ReceiverActionTable.COLUMN_ID, ReceiverActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(ReceiverActionTable.TABLE_NAME, columns,
+                ReceiverActionTable.COLUMN_RECEIVER_ID + "=" + receiverId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            long actionId = cursor.getLong(1);
+            delete(actionId);
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+    }
+
+    /**
+     * Deletes all Actions using a specific Room
+     *
+     * @param roomId ID of Room
+     */
+    protected static void deleteByRoomId(Long roomId) {
+        String[] columns = {RoomActionTable.COLUMN_ID, RoomActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(RoomActionTable.TABLE_NAME, columns,
+                RoomActionTable.COLUMN_ROOM_ID + "=" + roomId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            long actionId = cursor.getLong(1);
+            delete(actionId);
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+    }
+
+    /**
+     * Deletes all Actions using a specific Scene
+     *
+     * @param sceneId ID of Scene
+     */
+    protected static void deleteBySceneId(Long sceneId) {
+        String[] columns = {SceneActionTable.COLUMN_ID, SceneActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(SceneActionTable.TABLE_NAME, columns,
+                SceneActionTable.COLUMN_SCENE_ID + "=" + sceneId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            long actionId = cursor.getLong(1);
+            delete(actionId);
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+    }
+
+    /**
+     * Deletes Action by ID
+     *
+     * @param actionId ID od Action
+     */
+    public static void delete(long actionId) {
+        DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
+                "=" + actionId, null);
+
+        // delete specific information
+        DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
+                "=" + actionId, null);
+        DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
+                "=" + actionId, null);
+        DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ID +
+                "=" + actionId, null);
+
+        // delete from every relational table too
+        DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
+                "=" + actionId, null);
+        DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ACTION_ID +
+                "=" + actionId, null);
+        DatabaseHandler.database.delete(GeofenceActionTable.TABLE_NAME, GeofenceActionTable.COLUMN_ACTION_ID +
+                "=" + actionId, null);
+    }
+
     private static Action dbToAction(Cursor cursor) throws Exception {
         long actionId = cursor.getLong(0);
         String actionType = cursor.getString(1);
@@ -175,96 +266,5 @@ abstract class ActionHandler {
             Log.e("Unknown ActionType!");
             throw new RuntimeException();
         }
-    }
-
-    /**
-     * Deletes all Actions using a specific Receiver
-     *
-     * @param receiverId ID of Receiver
-     */
-    protected static void deleteByReceiverId(Long receiverId) {
-        Log.d(TimerActionHandler.class, "Delete TimerActions by ReceiverId: " + receiverId);
-        String[] columns = {ReceiverActionTable.COLUMN_ID, ReceiverActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(ReceiverActionTable.TABLE_NAME, columns,
-                ReceiverActionTable.COLUMN_RECEIVER_ID + "=" + receiverId, null, null, null, null);
-        cursor.moveToFirst();
-
-        while (!cursor.isAfterLast()) {
-            long receiverActionId = cursor.getLong(0);
-            long actionId = cursor.getLong(1);
-
-            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
-                    "=" + actionId, null);
-            DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ID +
-                    "=" + receiverActionId, null);
-            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
-                    "=" + actionId, null);
-            DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ACTION_ID +
-                    "=" + actionId, null);
-
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-    }
-
-    /**
-     * Deletes all Actions using a specific Room
-     *
-     * @param roomId ID of Room
-     */
-    protected static void deleteByRoomId(Long roomId) {
-        String[] columns = {RoomActionTable.COLUMN_ID, RoomActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(RoomActionTable.TABLE_NAME, columns,
-                RoomActionTable.COLUMN_ROOM_ID + "=" + roomId, null, null, null, null);
-        cursor.moveToFirst();
-
-        while (!cursor.isAfterLast()) {
-            long roomActionId = cursor.getLong(0);
-            long actionId = cursor.getLong(1);
-
-            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
-                    "=" + actionId, null);
-            DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ID +
-                    "=" + roomActionId, null);
-            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
-                    "=" + actionId, null);
-            DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ACTION_ID +
-                    "=" + actionId, null);
-
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-    }
-
-    /**
-     * Deletes all Timer Actions using a specific Scene
-     *
-     * @param sceneId ID of Scene
-     */
-    protected static void deleteBySceneId(Long sceneId) {
-        String[] columns = {SceneActionTable.COLUMN_ID, SceneActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(SceneActionTable.TABLE_NAME, columns,
-                SceneActionTable.COLUMN_SCENE_ID + "=" + sceneId, null, null, null, null);
-        cursor.moveToFirst();
-
-        while (!cursor.isAfterLast()) {
-            long sceneActionId = cursor.getLong(0);
-            long actionId = cursor.getLong(1);
-
-            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
-                    "=" + actionId, null);
-            DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ID +
-                    "=" + sceneActionId, null);
-            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
-                    "=" + actionId, null);
-            DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ACTION_ID +
-                    "=" + actionId, null);
-
-            cursor.moveToNext();
-        }
-
-        cursor.close();
     }
 }

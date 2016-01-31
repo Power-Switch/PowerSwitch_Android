@@ -22,9 +22,8 @@ import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import eu.power_switch.action.Action;
 
@@ -62,27 +61,27 @@ public class Geofence {
     /**
      * Map of Actions per EventType
      */
-    private HashMap<EventType, List<Action>> actionsMap;
+    private Map<EventType, List<Action>> actionsMap;
 
     /**
      * Snapshot of this Geofence
      */
     private Bitmap snapshot;
 
-    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius) {
-        this.id = id;
-        this.active = active;
-        this.name = name;
-        this.centerLocation = centerLocation;
-        this.radius = radius;
-        this.actionsMap = new HashMap<>();
+//    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius) {
+//        this.id = id;
+//        this.active = active;
+//        this.name = name;
+//        this.centerLocation = centerLocation;
+//        this.radius = radius;
+//        this.actionsMap = new HashMap<>();
+//
+//        for (EventType eventType : EventType.values()) {
+//            this.actionsMap.put(eventType, new ArrayList<Action>());
+//        }
+//    }
 
-        for (EventType eventType : EventType.values()) {
-            this.actionsMap.put(eventType, new ArrayList<Action>());
-        }
-    }
-
-    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, HashMap<EventType, List<Action>> actionsMap) {
+    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, Map<EventType, List<Action>> actionsMap) {
         this.id = id;
         this.active = active;
         this.name = name;

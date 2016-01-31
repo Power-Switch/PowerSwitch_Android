@@ -52,7 +52,7 @@ public class ApartmentTable {
         db.insert(TABLE_NAME, null, values);
 
         values = new ContentValues();
-        values.put(GeofenceTable.COLUMN_ACTIVE, 0);
+        values.put(GeofenceTable.COLUMN_ACTIVE, false);
         values.put(GeofenceTable.COLUMN_NAME, apartmentName);
         values.put(GeofenceTable.COLUMN_LATITUDE, Integer.MAX_VALUE);
         values.put(GeofenceTable.COLUMN_LONGITUDE, Integer.MAX_VALUE);

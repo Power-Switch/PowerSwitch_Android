@@ -169,12 +169,6 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
         boolean nameIsValid;
         nameIsValid = checkNameValidity(getCurrentName());
 
-        if (nameIsValid) {
-            sendNameApartmentChangedBroadcast(getContext(), getCurrentName(), getCheckedGateways());
-        } else {
-            sendNameApartmentChangedBroadcast(getContext(), null, getCheckedGateways());
-        }
-
         return nameIsValid;
     }
 
@@ -216,7 +210,11 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
      * @return Name of Apartment
      */
     public String getCurrentName() {
-        return this.name.getText().toString().trim();
+        try {
+            return this.name.getText().toString().trim();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

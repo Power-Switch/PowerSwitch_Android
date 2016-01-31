@@ -167,7 +167,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- Sevices -->
+        <!-- Services -->
         <service
             android:name=".google_play_services.geofence.GeofenceIntentService">
         </service>

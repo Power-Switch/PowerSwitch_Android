@@ -34,7 +34,6 @@ import eu.power_switch.action.Action;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.geofence.GeofenceTable;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -52,7 +51,7 @@ abstract class GeofenceHandler {
      */
     protected static Long add(Geofence geofence) {
         ContentValues values = new ContentValues();
-        values.put(GeofenceTable.COLUMN_ACTIVE, true);
+        values.put(GeofenceTable.COLUMN_ACTIVE, geofence.isActive());
         values.put(GeofenceTable.COLUMN_NAME, geofence.getName());
         values.put(GeofenceTable.COLUMN_LATITUDE, geofence.getCenterLocation().latitude);
         values.put(GeofenceTable.COLUMN_LONGITUDE, geofence.getCenterLocation().longitude);
@@ -65,18 +64,6 @@ abstract class GeofenceHandler {
             GeofenceActionHandler.add(geofence.getActions(eventType), newId, eventType);
         }
 
-        return newId;
-    }
-
-    public static Long add(Apartment apartment) {
-        ContentValues values = new ContentValues();
-        values.put(GeofenceTable.COLUMN_ACTIVE, true);
-        values.put(GeofenceTable.COLUMN_NAME, apartment.getName());
-        values.put(GeofenceTable.COLUMN_LATITUDE, apartment.getGeofence().getCenterLocation().latitude);
-        values.put(GeofenceTable.COLUMN_LONGITUDE, apartment.getGeofence().getCenterLocation().longitude);
-        values.put(GeofenceTable.COLUMN_RADIUS, apartment.getGeofence().getRadius());
-
-        long newId = DatabaseHandler.database.insert(GeofenceTable.TABLE_NAME, null, values);
         return newId;
     }
 
@@ -96,7 +83,7 @@ abstract class GeofenceHandler {
      */
     protected static void enable(Long id) {
         ContentValues values = new ContentValues();
-        values.put(GeofenceTable.COLUMN_ACTIVE, 1);
+        values.put(GeofenceTable.COLUMN_ACTIVE, true);
         DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -107,7 +94,7 @@ abstract class GeofenceHandler {
      */
     protected static void disable(Long id) {
         ContentValues values = new ContentValues();
-        values.put(GeofenceTable.COLUMN_ACTIVE, 0);
+        values.put(GeofenceTable.COLUMN_ACTIVE, false);
         DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 

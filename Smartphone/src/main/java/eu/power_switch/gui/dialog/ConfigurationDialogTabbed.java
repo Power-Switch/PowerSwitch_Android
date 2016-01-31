@@ -143,7 +143,15 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
 
         init(inflater, container, savedInstanceState);
 
-        initExistingData(getArguments());
+        // hide/show delete button if existing data is initialized
+        boolean isInitializedFromExistingData = initializeFromExistingData(getArguments());
+        if (isInitializedFromExistingData) {
+            imageButtonDelete.setVisibility(View.VISIBLE);
+        } else {
+            imageButtonDelete.setVisibility(View.GONE);
+        }
+        setSaveButtonState(isInitializedFromExistingData);
+
         setModified(false);
 
         return rootView;
@@ -162,8 +170,10 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      * Initialize your dialog in here using passed in arguments
      *
      * @param arguments arguments passed in via setArguments()
+     * @return true if an existing object was initialized (which can be deleted), false if the dialog was not
+     * initialized with existing data.
      */
-    protected abstract void initExistingData(Bundle arguments);
+    protected abstract boolean initializeFromExistingData(Bundle arguments);
 
     protected abstract
     @StringRes
@@ -338,4 +348,5 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      * the dialog. Delete the existing configuration of your object from the database in this method.
      */
     protected abstract void deleteExistingConfigurationFromDatabase();
+
 }

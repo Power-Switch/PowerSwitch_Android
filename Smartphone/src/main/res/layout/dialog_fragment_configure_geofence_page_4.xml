@@ -33,6 +33,18 @@
         android:paddingRight="@dimen/dialog_horizontal_margin">
 
         <TextView
+            android:id="@+id/textView_geofence_map_title"
+            style="@style/sub_header"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/map"/>
+
+        <ImageView
+            android:id="@+id/imageView_locationSnapshot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/ui_element_margin_double"/>
+
+        <TextView
             android:id="@+id/textView_name_title"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
@@ -62,18 +74,10 @@
             android:id="@+id/textView_geofence_radius_title"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/geofence_radius"/>
+            android:text="@string/radius"/>
 
         <TextView
             android:id="@+id/textView_geofence_radius"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
-
-
-        <ImageView
-            android:id="@+id/imageView_locationSnapshot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/ui_element_margin_double"

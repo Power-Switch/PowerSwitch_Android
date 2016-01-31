@@ -347,5 +347,7 @@ public class MapViewHandler implements OnMapReadyCallback {
         googleMap.snapshot(callback);
     }
 
-
+    public float getCurrentZoomLevel() {
+        return googleMap.getCameraPosition().zoom;
+    }
 }

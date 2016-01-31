@@ -24,6 +24,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
@@ -92,7 +94,8 @@ public class PlayStoreModeDataModel {
         initScenes();
 
         apartment = new Apartment((long) 0, "Heimat", getRooms(), getScenes(), getGateways(),
-                new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100));
+                new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
+                        null, new HashMap<Geofence.EventType, List<Action>>()));
     }
 
     /**

@@ -31,7 +31,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
@@ -74,19 +73,17 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected void initExistingData(Bundle arguments) {
+    protected boolean initializeFromExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(SCENE_ID_KEY)) {
             // init dialog using existing scene
             sceneId = arguments.getLong(SCENE_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment(), sceneId));
-            imageButtonDelete.setVisibility(View.VISIBLE);
-            setSaveButtonState(true);
+            return true;
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment()));
-            imageButtonDelete.setVisibility(View.GONE);
-            setSaveButtonState(false);
+            return false;
         }
     }
 

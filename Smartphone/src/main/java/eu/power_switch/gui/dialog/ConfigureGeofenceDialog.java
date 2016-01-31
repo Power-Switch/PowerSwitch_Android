@@ -83,21 +83,21 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected void initExistingData(Bundle arguments) {
+    protected boolean initializeFromExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(GEOFENCE_ID_KEY)) {
             // init dialog using existing geofence
             geofenceId = arguments.getLong(GEOFENCE_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment(), geofenceId));
             imageButtonDelete.setVisibility(View.VISIBLE);
-            setSaveButtonState(true);
+            return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment()));
             imageButtonDelete.setVisibility(View.GONE);
-            setSaveButtonState(false);
+            return false;
         }
     }
 

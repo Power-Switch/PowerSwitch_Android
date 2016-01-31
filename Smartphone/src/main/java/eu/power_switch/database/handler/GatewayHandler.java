@@ -73,7 +73,7 @@ abstract class GatewayHandler {
      */
     protected static void enable(Long id) {
         ContentValues values = new ContentValues();
-        values.put(GatewayTable.COLUMN_ACTIVE, 1);
+        values.put(GatewayTable.COLUMN_ACTIVE, true);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -84,7 +84,7 @@ abstract class GatewayHandler {
      */
     protected static void disable(Long id) {
         ContentValues values = new ContentValues();
-        values.put(GatewayTable.COLUMN_ACTIVE, 0);
+        values.put(GatewayTable.COLUMN_ACTIVE, false);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
     }
 

@@ -314,7 +314,11 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                 }
 
                 cameraChangedBySystem = true;
-                mapViewHandler.moveCamera(latLng, true);
+                if (mapViewHandler.getCurrentZoomLevel() < 13) {
+                    mapViewHandler.moveCamera(latLng, 14, true);
+                } else {
+                    mapViewHandler.moveCamera(latLng, true);
+                }
             }
         });
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {

@@ -272,7 +272,7 @@ public class Database extends SQLiteOpenHelper {
                         String apartmentName = cursor.getString(1);
 
                         ContentValues values = new ContentValues();
-                        values.put(GeofenceTable.COLUMN_ACTIVE, true);
+                        values.put(GeofenceTable.COLUMN_ACTIVE, false);
                         values.put(GeofenceTable.COLUMN_NAME, apartmentName);
                         values.put(GeofenceTable.COLUMN_LATITUDE, Integer.MAX_VALUE);
                         values.put(GeofenceTable.COLUMN_LONGITUDE, Integer.MAX_VALUE);

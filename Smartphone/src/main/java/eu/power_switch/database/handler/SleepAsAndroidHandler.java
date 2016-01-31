@@ -25,10 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.database.table.action.ActionTable;
-import eu.power_switch.database.table.action.ReceiverActionTable;
-import eu.power_switch.database.table.action.RoomActionTable;
-import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 
@@ -78,18 +74,7 @@ abstract class SleepAsAndroidHandler {
 
     private static void deleteAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         for (Action action : getAlarmActions(event)) {
-            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID + "=" + action.getId(), null);
-            // delete alarmXXXactions
-            DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-            DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-            DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-
-            // then delete AlarmTriggered relation
-            DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID +
-                    "=" + event.getId(), null);
+            ActionHandler.delete(action.getId());
         }
     }
 }

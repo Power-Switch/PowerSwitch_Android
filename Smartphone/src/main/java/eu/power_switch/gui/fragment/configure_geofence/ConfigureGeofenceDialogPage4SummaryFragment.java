@@ -168,7 +168,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
         }
 
         if (currentGeofenceRadius != -1) {
-            textViewGeofenceRadius.setText(String.valueOf((int) currentGeofenceRadius));
+            textViewGeofenceRadius.setText(String.valueOf((int) currentGeofenceRadius) + " m");
         }
 
         String enterActionText = "";

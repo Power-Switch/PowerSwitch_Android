@@ -51,9 +51,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.exception.location.AddressNotFoundException;
 import eu.power_switch.gui.IconicsHelper;
@@ -221,6 +223,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             public void onReceive(Context context, Intent intent) {
                 currentName = intent.getStringExtra("name");
                 currentCheckedGateways = (ArrayList<Gateway>) intent.getSerializableExtra("checkedGateways");
+
+                sendSetupApartmentChangedBroadcast(getContext());
             }
         };
 
@@ -250,8 +254,6 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             } else {
                 updateGeofenceRadius(GeofenceConstants.DEFAULT_GEOFENCE_RADIUS);
             }
-
-
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
@@ -328,7 +330,11 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 }
 
                 cameraChangedBySystem = true;
-                mapViewHandler.moveCamera(latLng, true);
+                if (mapViewHandler.getCurrentZoomLevel() < 13) {
+                    mapViewHandler.moveCamera(latLng, 14, true);
+                } else {
+                    mapViewHandler.moveCamera(latLng, true);
+                }
             }
         });
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -389,6 +395,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 }
             } catch (Exception e) {
                 Log.e(e);
+                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
             }
         }
     }
@@ -402,11 +409,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 Log.d("Snapshot Ready");
                 currentSnapshot = bitmap;
 
-                try {
-                    sendSetupApartmentChangedBroadcast(getContext());
-                } catch (Exception e) {
-                    Log.e(e);
-                }
+                sendSetupApartmentChangedBroadcast(getContext());
             }
         });
     }
@@ -421,6 +424,14 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             return false;
         }
 
+        if (getCurrentLocation() == null) {
+            return false;
+        }
+
+        if (currentGeofenceRadius == -1) {
+            return false;
+        }
+
         return currentSnapshot != null;
 
     }
@@ -431,7 +442,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
             Apartment newApartment = new Apartment((long) -1, currentName, currentCheckedGateways,
                     new eu.power_switch.google_play_services.geofence.Geofence(
                             (long) -1, false, currentName, getCurrentLocation(),
-                            currentGeofenceRadius)
+                            currentGeofenceRadius, currentSnapshot,
+                            new HashMap<eu.power_switch.google_play_services.geofence.Geofence.EventType, List<Action>>())
             );
 
             DatabaseHandler.addApartment(newApartment);

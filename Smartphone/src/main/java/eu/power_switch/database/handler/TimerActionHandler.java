@@ -24,10 +24,6 @@ import android.database.Cursor;
 import java.util.ArrayList;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.database.table.action.ActionTable;
-import eu.power_switch.database.table.action.ReceiverActionTable;
-import eu.power_switch.database.table.action.RoomActionTable;
-import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
 import eu.power_switch.timer.Timer;
 
@@ -65,18 +61,7 @@ abstract class TimerActionHandler {
         ArrayList<Action> actions = getByTimerId(timerId);
 
         for (Action action : actions) {
-            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID + "=" + action.getId(), null);
-            // delete timerXXXactions
-            DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-            DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-            DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-
-            // then delete Timer relation
-            DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_TIMER_ID +
-                    "=" + timerId, null);
+            ActionHandler.delete(action.getId());
         }
     }
 

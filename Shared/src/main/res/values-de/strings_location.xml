@@ -42,6 +42,7 @@
 
     <string name="location">Position</string>
     <string name="radius">Radius</string>
+    <string name="map">Karte</string>
 
     <string name="geofence_radius">Geofence Radius</string>
 

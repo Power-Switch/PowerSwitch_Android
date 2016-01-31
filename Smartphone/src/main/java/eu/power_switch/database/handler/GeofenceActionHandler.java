@@ -25,12 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.database.table.action.ActionTable;
-import eu.power_switch.database.table.action.ReceiverActionTable;
-import eu.power_switch.database.table.action.RoomActionTable;
-import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.google_play_services.geofence.Geofence;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Geofence Actions
@@ -45,10 +42,15 @@ abstract class GeofenceActionHandler {
      * @param eventType  {@link Geofence.EventType}
      */
     protected static void add(List<Action> actions, Long geofenceId, Geofence.EventType eventType) {
+        if (actions == null) {
+            Log.w("actions was null! nothing added to database");
+            return;
+        }
+
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 
-        // add timer <-> action relation
+        // add geofence <-> action relation
         for (Long actionId : actionIds) {
             ContentValues values = new ContentValues();
             values.put(GeofenceActionTable.COLUMN_GEOFENCE_ID, geofenceId);
@@ -68,18 +70,7 @@ abstract class GeofenceActionHandler {
         ArrayList<Action> actions = get(geofenceId);
 
         for (Action action : actions) {
-            DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID + "=" + action.getId(), null);
-            // delete timerXXXactions
-            DatabaseHandler.database.delete(ReceiverActionTable.TABLE_NAME, ReceiverActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-            DatabaseHandler.database.delete(RoomActionTable.TABLE_NAME, RoomActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-            DatabaseHandler.database.delete(SceneActionTable.TABLE_NAME, SceneActionTable.COLUMN_ACTION_ID +
-                    "=" + action.getId(), null);
-
-            // then delete Geofence relation
-            DatabaseHandler.database.delete(GeofenceActionTable.TABLE_NAME, GeofenceActionTable.COLUMN_GEOFENCE_ID +
-                    "=" + geofenceId, null);
+            ActionHandler.delete(action.getId());
         }
     }
 
