@@ -300,8 +300,18 @@ public class ActionHandler {
         try {
             executeActions(context, geofence.getActions(eventType));
 
-            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                    .geofence_action_history_text, geofence.getName()));
+            HistoryItem historyItem;
+            if (Geofence.EventType.ENTER.equals(eventType)) {
+                historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                        .geofence_enter_action_history_text, geofence.getName()));
+            } else if (Geofence.EventType.EXIT.equals(eventType)) {
+                historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                        .geofence_exit_action_history_text, geofence.getName()));
+            } else {
+                historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                        .geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
+            }
+
             DatabaseHandler.addHistoryItem(historyItem);
             MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {

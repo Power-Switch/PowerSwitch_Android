@@ -30,6 +30,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import eu.power_switch.R;
+import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -39,12 +40,15 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 public class DeveloperOptionsDialog extends DialogFragment {
 
     private View rootView;
+    private GeofenceApiHandler geofenceApiHandler;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         rootView = inflater.inflate(R.layout.dialog_developer_options, null);
+
+        geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
         CheckBox checkBox_playStoreMode = (CheckBox) rootView.findViewById(R.id.checkBox_playStoreMode);
         checkBox_playStoreMode.setChecked(SmartphonePreferencesHandler.getPlayStoreMode());
@@ -63,6 +67,14 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
+        Button removeAllGeofences = (Button) rootView.findViewById(R.id.button_removeAllGeofences);
+        removeAllGeofences.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                geofenceApiHandler.removeAllGeofences();
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView);
         builder.setTitle("Developer Options");
@@ -73,5 +85,17 @@ public class DeveloperOptionsDialog extends DialogFragment {
         dialog.show();
 
         return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        geofenceApiHandler.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        geofenceApiHandler.onStop();
+        super.onStop();
     }
 }

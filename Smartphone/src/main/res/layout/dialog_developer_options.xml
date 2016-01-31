@@ -40,6 +40,13 @@
             android:layout_height="wrap_content"
             android:text="Reset Showcases (Tutorial)"/>
 
+
+        <Button
+            android:id="@+id/button_removeAllGeofences"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove all Geofences"/>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

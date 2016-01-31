@@ -35,6 +35,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
+import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.log.Log;
 
@@ -44,15 +45,17 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 27.07.2015.
  */
 public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRecyclerViewAdapter.ViewHolder> {
+    private GeofenceApiHandler geofenceApiHandler;
     private ArrayList<Geofence> geofences;
     private Context context;
 
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public GeofenceRecyclerViewAdapter(Context context, ArrayList<Geofence> geofences) {
+    public GeofenceRecyclerViewAdapter(Context context, ArrayList<Geofence> geofences, GeofenceApiHandler geofenceApiHandler) {
         this.geofences = geofences;
         this.context = context;
+        this.geofenceApiHandler = geofenceApiHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -83,8 +86,10 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                     try {
                         if (isChecked) {
                             DatabaseHandler.enableGeofence(geofence.getId());
+                            geofenceApiHandler.addGeofence(geofence);
                         } else {
                             DatabaseHandler.disableGeofence(geofence.getId());
+                            geofenceApiHandler.removeGeofence(geofence.getId());
                         }
                         geofence.setActive(isChecked);
                     } catch (Exception e) {

@@ -35,6 +35,9 @@
     <string name="exit_actions">Exit actions</string>
 
     <string name="geofence_saved">Geofence saved</string>
+    <string name="geofence_enabled">Geofence enabled</string>
+    <string name="geofence_disabled">Geofence disabled</string>
+    <string name="geofences_disabled">Geofences disabled</string>
 
     <string name="geofence_will_be_gone_forever">Geofence will be gone forever!</string>
     <string name="geofence_deleted">Geofence deleted</string>

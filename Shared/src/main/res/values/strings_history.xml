@@ -23,7 +23,10 @@
     <string name="room_action_history_text">Room: %1$s Action: %2$s</string>
     <string name="scene_action_history_text">Scene: %1$s activated</string>
     <string name="timer_action_history_text">Timer: %1$s activated</string>
-    <string name="geofence_action_history_text">Geofence: %1$s activated</string>
+    <string name="geofence_enter_action_history_text">Geofence: %1$s entered</string>
+    <string name="geofence_exit_action_history_text">Geofence: %1$s exited</string>
+    <string name="geofence_event_type_action_history_text">Geofence: %1$s Event: %2$s activated</string>
+
     <string name="sleep_as_android_action_history_text">Sleep As Android %1$s event activated</string>
 
     <string name="history">History</string>

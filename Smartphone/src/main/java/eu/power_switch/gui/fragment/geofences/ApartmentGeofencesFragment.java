@@ -37,6 +37,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
+import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureApartmentGeofenceDialog;
@@ -56,16 +57,19 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     private RecyclerView recyclerViewGeofences;
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
+    private GeofenceApiHandler geofenceApiHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_apartment_geofences, container, false);
 
+        geofenceApiHandler = new GeofenceApiHandler(getActivity());
+
         geofences = new ArrayList<>();
 
         recyclerViewGeofences = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_geofences);
-        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences);
+        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
         recyclerViewGeofences.setAdapter(geofenceRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager
                 .VERTICAL);
@@ -134,11 +138,13 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        geofenceApiHandler.onStart();
     }
 
     @Override
     public void onStop() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        geofenceApiHandler.onStop();
         super.onStop();
     }
 

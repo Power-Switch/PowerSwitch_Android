@@ -34,11 +34,14 @@
     <string name="exit_actions">Aktionen beim Verlassen</string>
 
     <string name="geofence_saved">Geofence gespeichert</string>
+    <string name="geofence_enabled">Geofence aktiviert</string>
+    <string name="geofence_disabled">Geofence deaktiviert</string>
+    <string name="geofences_disabled">Geofences deaktiviert</string>
 
     <string name="geofence_will_be_gone_forever">Der Geofence wird für immer verloren sein!</string>
     <string name="geofence_deleted">Geofence gelöscht</string>
 
-    <string name="error_enabling_geofence">Fehler beim aktivieren des Geofence</string>
+    <string name="error_enabling_geofence">Fehler beim Aktivieren des Geofence</string>
 
     <string name="location">Position</string>
     <string name="radius">Radius</string>
