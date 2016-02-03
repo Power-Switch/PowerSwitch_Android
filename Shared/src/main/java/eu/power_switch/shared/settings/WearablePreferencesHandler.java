@@ -57,8 +57,8 @@ public class WearablePreferencesHandler {
         if (sharedPreferences != null) {
             forceRefresh();
         } else {
-            sharedPreferences = context.getSharedPreferences(WearableSettingsConstants.WEARABLE_SHARED_PREFS_NAME,
-                    Context.MODE_PRIVATE);
+            sharedPreferences = context.getSharedPreferences(
+                    WearableSettingsConstants.WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
             initCache();
         }
     }

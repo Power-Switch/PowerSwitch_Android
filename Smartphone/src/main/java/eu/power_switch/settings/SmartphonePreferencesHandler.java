@@ -39,7 +39,6 @@ public class SmartphonePreferencesHandler {
     private static boolean autoDiscoverCache;
     private static String backupPathCache;
     private static boolean showRoomAllOnOffCache;
-    private static boolean playStoreModeCache;
     private static int startupDefaultTabCache;
     private static boolean hideAddFABCache;
     private static boolean autoCollapseRoomsCache;
@@ -77,7 +76,6 @@ public class SmartphonePreferencesHandler {
                 Environment.getExternalStorageDirectory()
                         .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
         showRoomAllOnOffCache = sharedPreferences.getBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
-        playStoreModeCache = sharedPreferences.getBoolean(SettingsConstants.PLAY_STORE_MODE_KEY, false);
         startupDefaultTabCache = sharedPreferences.getInt(SettingsConstants.STARTUP_DEFAULT_TAB_KEY, SettingsConstants.ROOMS_TAB_INDEX);
         hideAddFABCache = sharedPreferences.getBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, false);
         autoCollapseRoomsCache = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
@@ -168,30 +166,6 @@ public class SmartphonePreferencesHandler {
         editor.apply();
 
         showRoomAllOnOffCache = bool;
-    }
-
-    /**
-     * Retrieves setting for hidden Play Store Mode (used to take Screenshots)
-     *
-     * @return true if enabled
-     */
-    public static boolean getPlayStoreMode() {
-        Log.d(SmartphonePreferencesHandler.class, "getPlayStoreMode: " + playStoreModeCache);
-        return playStoreModeCache;
-    }
-
-    /**
-     * Sets setting for hidden Play Store Mode (used to take Screenshots)
-     *
-     * @param bool true if enabled
-     */
-    public static void setPlayStoreMode(boolean bool) {
-        Log.d(SmartphonePreferencesHandler.class, "setPlayStoreMode: " + bool);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.PLAY_STORE_MODE_KEY, bool);
-        editor.apply();
-
-        playStoreModeCache = bool;
     }
 
     /**

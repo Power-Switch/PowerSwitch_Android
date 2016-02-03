@@ -40,6 +40,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
@@ -227,7 +228,7 @@ public class UtilityService extends IntentService {
         if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
             Log.d("Getting Data from Database to send to Wearable...");
 
-            if (SmartphonePreferencesHandler.getPlayStoreMode()) {
+            if (DeveloperPreferencesHandler.getPlayStoreMode()) {
                 PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
 
                 List<Room> rooms = playStoreModeDataModel.getRooms();

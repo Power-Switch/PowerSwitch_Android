@@ -50,6 +50,7 @@ import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -213,7 +214,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
         gateways.clear();
 
-        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             gateways.addAll(PlayStoreModeDataModel.getGateways());
         } else {
             try {

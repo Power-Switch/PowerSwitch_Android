@@ -30,7 +30,7 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 
 /**
- * Geofence IntentReceiver used to reinitialize Goefences after device reboot
+ * Geofence IntentReceiver used to reinitialize Geofences after device reboot
  * <p/>
  * Created by Markus on 31.01.2016.
  */

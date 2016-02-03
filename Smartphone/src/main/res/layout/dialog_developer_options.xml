@@ -25,7 +25,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="4dp">
 
         <CheckBox
             android:id="@+id/checkBox_playStoreMode"
@@ -46,6 +47,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Remove all Geofences"/>
+
+        <CheckBox
+            android:id="@+id/checkBox_forceLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:text="Force Language"/>
+
+        <Spinner
+            android:id="@+id/spinner_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

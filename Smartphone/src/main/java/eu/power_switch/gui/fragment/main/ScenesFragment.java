@@ -46,6 +46,7 @@ import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -137,7 +138,7 @@ public class ScenesFragment extends RecyclerViewFragment {
         Log.d("ScenesFragment", "refreshScenes");
         scenes.clear();
 
-        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             scenes.addAll(playStoreModeDataModel.getScenes());
         } else {

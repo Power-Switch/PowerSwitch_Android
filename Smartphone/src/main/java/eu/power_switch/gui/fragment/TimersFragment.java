@@ -43,6 +43,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -153,7 +154,7 @@ public class TimersFragment extends RecyclerViewFragment {
         Log.d("TimersFragment", "refreshTimers");
         timers.clear();
 
-        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             timers.addAll(playStoreModeDataModel.getTimers());
         } else {

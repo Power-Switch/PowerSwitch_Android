@@ -42,6 +42,7 @@ public class SettingsConstants {
     public static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
     public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
     public static final String CURRENT_APARTMENT_ID_KEY = "currentApartmentId";
+
     public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 75;
 
     // Main Tabs
@@ -74,10 +75,6 @@ public class SettingsConstants {
             "0K0RzZDlHS3EvbjYyLzMySFFydkJXcVVQK1FrOE1FNDUvYWM2UTh2YmNtdmlCV0h1T3hUSVB2d1RucU5mdzNpMjJXd1VTZVV0WHRReURLVVpZODJYVjJwY0ZoSGkydnpmWW";
 
     public static final int GOOGLE_API_CLIENT_TIMEOUT = 10;
-
-    // developer settings
-    public static final String PLAY_STORE_MODE_KEY = "playStoreMode";
-
 
     /**
      * Private Constructor
