@@ -120,7 +120,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
             try {
                 summaryFragment.saveCurrentConfigurationToDatabase();
             } catch (Exception e) {
-                StatusMessageHandler.showStatusMessage(getActivity(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+                StatusMessageHandler.showErrorMessage(getActivity(), e);
             }
             getDialog().dismiss();
         }

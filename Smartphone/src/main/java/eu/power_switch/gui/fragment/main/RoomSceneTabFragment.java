@@ -49,11 +49,11 @@ import eu.power_switch.tutorial.TutorialHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
- * Fragment holding the room, scene and timer Fragments in a TabLayout
+ * Fragment holding the room and scene Fragments in a TabLayout
  * <p/>
  * Created by Markus on 25.06.2015.
  */
-public class MainTabFragment extends Fragment {
+public class RoomSceneTabFragment extends Fragment {
 
     public static final String TAB_INDEX_KEY = "tabIndex";
 
@@ -141,8 +141,13 @@ public class MainTabFragment extends Fragment {
 
     private void updateCurrentApartmentInfo() {
         try {
-            Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
-            textView_currentApartmentInfo.setText(apartment.getName());
+            long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
+            if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
+                textView_currentApartmentInfo.setText(" - ");
+            } else {
+                Apartment apartment = DatabaseHandler.getApartment(currentApartmentId);
+                textView_currentApartmentInfo.setText(apartment.getName());
+            }
         } catch (Exception e) {
             Log.e(e);
             textView_currentApartmentInfo.setText(R.string.unknown_error);

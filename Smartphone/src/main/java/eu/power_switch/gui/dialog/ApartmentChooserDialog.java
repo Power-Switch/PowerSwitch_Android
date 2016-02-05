@@ -21,7 +21,6 @@ package eu.power_switch.gui.dialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -38,7 +37,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog used to quickly select and activate an Apartment
@@ -63,8 +61,7 @@ public class ApartmentChooserDialog extends DialogFragment {
                 apartmentNames.add(apartment.getName());
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getActivity(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
         ArrayAdapter apartmentNamesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, apartmentNames);
@@ -80,9 +77,8 @@ public class ApartmentChooserDialog extends DialogFragment {
 
                     dismiss();
                 } catch (Exception e) {
-                    Log.e(e);
                     dismiss();
-                    StatusMessageHandler.showStatusMessage(getActivity(), R.string.unknown_error, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
             }
         });

@@ -132,8 +132,7 @@ public class BackupFragment extends RecyclerViewFragment {
                             StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_not_found, Snackbar
                                     .LENGTH_LONG);
                         } catch (Exception e) {
-                            Log.e(e);
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                         }
                     }
                 }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)

@@ -119,8 +119,7 @@ public class CreateBackupDialog extends DialogFragment {
                                 }
                             }).setNegativeButton(android.R.string.no, null).create().show();
                 } catch (Exception e) {
-                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
-                            R.string.unknown_error, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showErrorMessage((RecyclerViewFragment) getTargetFragment(), e);
                 }
             }
         });

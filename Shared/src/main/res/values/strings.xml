@@ -70,6 +70,7 @@
     <string name="missing_wifi_connection">No WLAN connection!</string>
     <string name="missing_network_connection">No Network connection!</string>
     <string name="missing_location_permission">Missing location permission</string>
+    <string name="details">Details</string>
 
 
     <string-array name="main_tab_names">

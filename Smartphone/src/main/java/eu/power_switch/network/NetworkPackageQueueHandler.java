@@ -141,7 +141,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                 } catch (Exception e) {
                     removeQueueHead();
 
-                    StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showErrorMessage(context, e);
                     Log.e("UDP Sender: Unknown error while sending message in background:", e);
                     try {
                         Thread.sleep(2000);

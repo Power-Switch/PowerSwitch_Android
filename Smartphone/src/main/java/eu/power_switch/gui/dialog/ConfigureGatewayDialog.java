@@ -396,9 +396,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
             GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(rootView.getContext(),
-                    R.string.unknown_error, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showErrorMessage(getContext(), e);
         }
     }
 

@@ -76,7 +76,7 @@ import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
-import eu.power_switch.gui.fragment.main.MainTabFragment;
+import eu.power_switch.gui.fragment.main.RoomSceneTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
@@ -218,25 +218,26 @@ public class MainActivity extends AppCompatActivity {
 
         // Load first Fragment
         try {
-            Fragment tabLayoutFragment = MainTabFragment.class.newInstance();
-            Bundle arguments = new Bundle();
-            arguments.putInt(MainTabFragment.TAB_INDEX_KEY, SmartphonePreferencesHandler.getStartupDefaultTab());
-            tabLayoutFragment.setArguments(arguments);
-            lastFragmentClasses.push(tabLayoutFragment.getClass());
+            Fragment fragment;
+            if (SmartphonePreferencesHandler.getCurrentApartmentId() == SettingsConstants.INVALID_APARTMENT_ID) {
+                fragment = ApartmentFragment.class.newInstance();
+            } else {
+                fragment = RoomSceneTabFragment.class.newInstance();
+                Bundle arguments = new Bundle();
+                arguments.putInt(RoomSceneTabFragment.TAB_INDEX_KEY, SmartphonePreferencesHandler.getStartupDefaultTab());
+                fragment.setArguments(arguments);
+            }
+            lastFragmentClasses.push(fragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
             drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.mainContentFrameLayout, tabLayoutFragment)
+                    .replace(R.id.mainContentFrameLayout, fragment)
                     .commit();
         } catch (Exception e) {
             Log.e(e);
-            e.printStackTrace();
         }
 
-
-        boolean autoDiscoverStatus = SmartphonePreferencesHandler.getAutoDiscover();
-
-        if (autoDiscoverStatus && NetworkHandler.isWifiAvailable()) {
+        if (SmartphonePreferencesHandler.getAutoDiscover() && NetworkHandler.isWifiAvailable()) {
             new AsyncTask<Context, Void, Void>() {
 
                 @Override
@@ -267,14 +268,12 @@ public class MainActivity extends AppCompatActivity {
                                             StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_gateway, Snackbar.LENGTH_LONG);
                                         }
                                     } catch (Exception e) {
-                                        Log.e(e);
-                                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                                        StatusMessageHandler.showErrorMessage(context, e);
                                     }
                                 }
                             }
                         } catch (Exception e) {
-                            Log.e(e);
-                            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showErrorMessage(context, e);
                         }
                     }
                     return null;
@@ -364,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES, getString(R.string.menu_rooms_scenes),
-                                    MainTabFragment.class.newInstance());
+                                    RoomSceneTabFragment.class.newInstance());
                             navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
@@ -693,9 +692,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             historyItems.clear();
             historyItems.addAll(DatabaseHandler.getHistory());
+
+            throw new Exception("hallo");
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(this, R.string.unknown_error, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showErrorMessage(this, e);
         }
 
         historyItemArrayAdapter.notifyDataSetChanged();

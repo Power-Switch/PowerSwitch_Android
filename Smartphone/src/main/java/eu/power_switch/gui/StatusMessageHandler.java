@@ -19,12 +19,14 @@
 package eu.power_switch.gui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 
@@ -165,6 +167,45 @@ public class StatusMessageHandler {
     }
 
     /**
+     * Shows an error message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground.
+     * The Snackbar will have a "Details" Button by default, which opens up a dialog showing more infos about the exception.
+     * The exception will also be logged, so you dont have to do this in your catch{} blocks yourself.
+     *
+     * @param recyclerViewFragment recyclerViewFragment this snackbar is shown on (used for
+     *                             the Snackbar and as a context)
+     * @param e                    throwable
+     */
+    public static void showErrorMessage(final RecyclerViewFragment recyclerViewFragment, final Throwable e) {
+        Context context = recyclerViewFragment.getContext();
+
+        if (MainActivity.isInForeground()) {
+            showErrorSnackbar(recyclerViewFragment.getRecyclerView(), e);
+        } else {
+            showErrorToast(context, e);
+        }
+
+
+    }
+
+    /**
+     * Shows an error message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground.
+     * The Snackbar will have a "Details" Button by default, which opens up a dialog showing more infos about the exception.
+     * The exception will also be logged, so you dont have to do this in your catch{} blocks yourself.
+     *
+     * @param context any suitable context
+     * @param e       throwable
+     */
+    public static void showErrorMessage(Context context, Throwable e) {
+        if (MainActivity.isInForeground()) {
+            showErrorSnackbar(MainActivity.getMainAppView(), e);
+        } else {
+            showErrorToast(context, e);
+        }
+    }
+
+    /**
      * Show Snackbar with default "Dismiss" action button
      *
      * @param parent   parent view
@@ -178,6 +219,48 @@ public class StatusMessageHandler {
         snackbar.setAction(parent.getContext().getString(R.string.dismiss), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                snackbar.dismiss();
+            }
+        });
+
+        snackbar.show();
+        lastSnackbar = snackbar;
+    }
+
+    /**
+     * Show Snackbar with default "Details" action button, which opens a dialog
+     * containing the full Exception message
+     *
+     * @param parent parent view
+     * @param e      throwable
+     */
+    private static void showErrorSnackbar(final View parent, final Throwable e) {
+        Log.d("Error Snackbar: " + e.getMessage());
+        Log.e(e);
+
+        final Snackbar snackbar = Snackbar.make(parent, R.string.unknown_error, Snackbar.LENGTH_LONG);
+
+        snackbar.setAction(parent.getContext().getString(R.string.details), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(e.getClass()).append(": ").append(e.getMessage())
+                        .append("\n\n");
+                for (StackTraceElement element : e.getStackTrace()) {
+                    stringBuilder.append("at ").append(element.toString()).append("\n");
+                }
+
+                new AlertDialog.Builder(parent.getContext())
+                        .setTitle(R.string.unknown_error)
+                        .setMessage(stringBuilder.toString())
+                        .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+
                 snackbar.dismiss();
             }
         });
@@ -216,7 +299,7 @@ public class StatusMessageHandler {
     }
 
     /**
-     * Show Toast above all other views
+     * Show Status Toast above all other views
      *
      * @param context  any suitable context
      * @param message  toast message
@@ -236,6 +319,35 @@ public class StatusMessageHandler {
 
                 // create and show new toast
                 Toast toast = Toast.makeText(context.getApplicationContext(), message, duration);
+                toast.show();
+
+                // save toast reference
+                lastToast = toast;
+            }
+        });
+    }
+
+    /**
+     * Show Error Toast above all other views
+     *
+     * @param context any suitable context
+     * @param e       throwable
+     */
+    private static void showErrorToast(final Context context, final Throwable e) {
+        Log.d("Error Toast: " + e.getMessage());
+        Log.e(e);
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                // cancel last toast
+                if (lastToast != null) {
+                    lastToast.cancel();
+                }
+
+                // create and show new toast
+                Toast toast = Toast.makeText(context.getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
                 toast.show();
 
                 // save toast reference

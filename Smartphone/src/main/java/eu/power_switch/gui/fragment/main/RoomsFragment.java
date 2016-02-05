@@ -146,8 +146,11 @@ public class RoomsFragment extends RecyclerViewFragment {
 
     private void fillListWithRooms() {
         try {
-            // Get Rooms and Receivers
-            rooms.addAll(DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId()));
+            long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
+            if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
+                // Get Rooms and Receivers
+                rooms.addAll(DatabaseHandler.getRooms(currentApartmentId));
+            }
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
