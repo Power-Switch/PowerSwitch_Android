@@ -157,7 +157,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                     if (onItemLongClickListener != null) {
                         onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
                     }
-                    return false;
+                    return true;
                 }
             });
         }

@@ -221,7 +221,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                     if (onItemLongClickListener != null) {
                         onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
                     }
-                    return false;
+                    return true;
                 }
             });
         }

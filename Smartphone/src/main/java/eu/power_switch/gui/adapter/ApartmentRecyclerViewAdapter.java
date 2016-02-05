@@ -146,7 +146,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
                     if (onItemLongClickListener != null) {
                         onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
                     }
-                    return false;
+                    return true;
                 }
             });
         }

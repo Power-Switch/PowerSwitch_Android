@@ -146,7 +146,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                     if (onItemLongClickListener != null) {
                         onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
                     }
-                    return false;
+                    return true;
                 }
             });
         }

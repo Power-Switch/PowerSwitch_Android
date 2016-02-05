@@ -106,7 +106,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 EditRoomDialog editRoomDialog = EditRoomDialog.newInstance(room.getId());
                 editRoomDialog.setTargetFragment(recyclerViewFragment, 0);
                 editRoomDialog.show(fragmentActivity.getSupportFragmentManager(), null);
-                return false;
+                return true;
             }
         });
 
@@ -277,7 +277,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     ConfigureReceiverDialog configureReceiverDialog = ConfigureReceiverDialog.newInstance(receiver.getId());
                     configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureReceiverDialog.show(fragmentActivity.getSupportFragmentManager(), null);
-                    return false;
+                    return true;
                 }
             });
         }

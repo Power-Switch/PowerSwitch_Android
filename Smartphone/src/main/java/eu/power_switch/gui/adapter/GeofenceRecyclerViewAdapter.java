@@ -170,7 +170,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                     if (onItemLongClickListener != null) {
                         onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
                     }
-                    return false;
+                    return true;
                 }
             });
         }

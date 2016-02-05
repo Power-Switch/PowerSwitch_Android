@@ -239,7 +239,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     if (onItemLongClickListener != null) {
                         onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
                     }
-                    return false;
+                    return true;
                 }
             });
         }
