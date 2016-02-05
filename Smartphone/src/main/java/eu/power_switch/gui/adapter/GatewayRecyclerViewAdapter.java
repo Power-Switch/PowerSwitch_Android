@@ -89,7 +89,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                         gateway.setActive(isChecked);
                     } catch (Exception e) {
                         Log.e(e);
-                        StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_gateway, 5000);
+                        StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, 5000);
                     }
                 }
             }

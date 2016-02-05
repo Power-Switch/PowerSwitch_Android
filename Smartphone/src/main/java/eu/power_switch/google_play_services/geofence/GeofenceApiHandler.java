@@ -166,7 +166,7 @@ public class GeofenceApiHandler {
             public void onResult(@NonNull Status status) {
                 switch (status.getStatusCode()) {
                     case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showStatusMessage(context, R.string.geofence_enabled, Snackbar.LENGTH_SHORT);
+                        StatusMessageHandler.showInfoMessage(context, R.string.geofence_enabled, Snackbar.LENGTH_SHORT);
                 }
 
                 Log.d(GeofenceApiHandler.class, status.toString());
@@ -195,7 +195,7 @@ public class GeofenceApiHandler {
             public void onResult(@NonNull Status status) {
                 switch (status.getStatusCode()) {
                     case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showStatusMessage(context, R.string.geofence_disabled, Snackbar.LENGTH_SHORT);
+                        StatusMessageHandler.showInfoMessage(context, R.string.geofence_disabled, Snackbar.LENGTH_SHORT);
                 }
 
                 Log.d(GeofenceApiHandler.class, status.toString());
@@ -213,7 +213,7 @@ public class GeofenceApiHandler {
             public void onResult(@NonNull Status status) {
                 switch (status.getStatusCode()) {
                     case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showStatusMessage(context, R.string.geofences_disabled, Snackbar
+                        StatusMessageHandler.showInfoMessage(context, R.string.geofences_disabled, Snackbar
                                 .LENGTH_LONG);
                 }
 

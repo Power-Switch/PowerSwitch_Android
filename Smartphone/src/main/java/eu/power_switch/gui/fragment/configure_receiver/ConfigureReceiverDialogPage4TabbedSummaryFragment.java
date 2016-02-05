@@ -402,7 +402,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
         // update receiver widgets
         ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
 
-        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

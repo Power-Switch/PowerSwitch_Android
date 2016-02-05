@@ -185,7 +185,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
 
             RoomsFragment.sendReceiverChangedBroadcast(getActivity());
 
-            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
             getDialog().dismiss();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -216,7 +216,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
                             // update scene widgets
                             SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
-                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                            StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                                     R.string.room_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);

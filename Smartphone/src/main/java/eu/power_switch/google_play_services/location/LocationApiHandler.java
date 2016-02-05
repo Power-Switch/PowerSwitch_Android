@@ -91,7 +91,7 @@ public class LocationApiHandler {
             // For example if the user has previously denied the permission.
             Log.d("Displaying location permission rationale to provide additional context.");
 
-            StatusMessageHandler.showStatusMessage(activity, R.string.missing_location_permission, android.R.string.ok, new Runnable() {
+            StatusMessageHandler.showInfoMessage(activity, R.string.missing_location_permission, android.R.string.ok, new Runnable() {
                 @Override
                 public void run() {
                     ActivityCompat.requestPermissions(activity, new String[]{

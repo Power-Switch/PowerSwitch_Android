@@ -55,19 +55,19 @@ public class HolidaySpecialHandler {
     }
 
     private static void showChristmasMessage(Context context) {
-        StatusMessageHandler.showStatusMessage(context, R.string.merry_christmas, 5000);
+        StatusMessageHandler.showInfoMessage(context, R.string.merry_christmas, 5000);
     }
 
     private static void showHalloweenMessage(Context context) {
-        StatusMessageHandler.showStatusMessage(context, R.string.happy_halloween, 5000);
+        StatusMessageHandler.showInfoMessage(context, R.string.happy_halloween, 5000);
     }
 
     private static void showEasterMessage(Context context) {
-        StatusMessageHandler.showStatusMessage(context, R.string.happy_easter, 5000);
+        StatusMessageHandler.showInfoMessage(context, R.string.happy_easter, 5000);
     }
 
     private static void showNewYearMessage(Context context) {
-        StatusMessageHandler.showStatusMessage(context, R.string.happy_new_year, 5000);
+        StatusMessageHandler.showInfoMessage(context, R.string.happy_new_year, 5000);
     }
 
     /**

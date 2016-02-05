@@ -148,7 +148,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                                     // update scene widgets
                                     SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
-                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                    StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.scene_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);

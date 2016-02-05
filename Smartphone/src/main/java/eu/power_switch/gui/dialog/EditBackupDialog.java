@@ -107,13 +107,13 @@ public class EditBackupDialog extends DialogFragment {
                         BackupHandler backupHandler = new BackupHandler(getActivity());
                         backupHandler.renameBackup(backupName, name.getText().toString().trim());
                         BackupFragment.sendBackupsChangedBroadcast(getActivity());
-                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
                     } catch (BackupAlreadyExistsException e) {
                         Log.e(e);
-                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
                     } catch (BackupNotFoundException e) {
                         Log.e(e);
-                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
                     }
                 }
             }

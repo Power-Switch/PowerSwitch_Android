@@ -117,7 +117,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                                     actions.remove(position);
                                     DatabaseHandler.setAlarmActions(SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType
                                             .getSelectedItemPosition()), actions);
-                                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
+                                    StatusMessageHandler.showInfoMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                                 }

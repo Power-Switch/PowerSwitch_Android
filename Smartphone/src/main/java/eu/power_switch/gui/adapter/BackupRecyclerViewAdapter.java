@@ -93,10 +93,10 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
                             backups.remove(holder.getAdapterPosition());
                             notifyItemRemoved(holder.getAdapterPosition());
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_removed, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showInfoMessage(recyclerViewFragment, R.string.backup_removed, Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
                             Log.e(e);
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showInfoMessage(recyclerViewFragment, R.string.backup_not_found, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                         }

@@ -98,7 +98,7 @@ public class CreateBackupDialog extends DialogFragment {
                     backupHandler.createBackup(false, name.getText().toString().trim(), false);
                     BackupFragment.sendBackupsChangedBroadcast(getActivity());
 
-                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_successful, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_successful, Snackbar.LENGTH_LONG);
                 } catch (BackupAlreadyExistsException e) {
                     Log.e(e);
                     new AlertDialog.Builder(getActivity())
@@ -111,7 +111,7 @@ public class CreateBackupDialog extends DialogFragment {
                                         backupHandler.createBackup(false, name.getText().toString().trim(), true);
                                         BackupFragment.sendBackupsChangedBroadcast(getActivity());
 
-                                        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                                                 R.string.backup_successful, Snackbar.LENGTH_LONG);
                                     } catch (Exception e1) {
                                         Log.e(e1);

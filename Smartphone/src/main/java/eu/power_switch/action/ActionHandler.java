@@ -73,11 +73,11 @@ public class ActionHandler {
             MainActivity.sendHistoryChangedBroadcast(context);
         } catch (ActionNotSupportedException e) {
             Log.e("Action not supported by Receiver!", e);
-            StatusMessageHandler.showStatusMessage(context,
+            StatusMessageHandler.showInfoMessage(context,
                     context.getString(R.string.action_not_supported_by_receiver), 5000);
         } catch (GatewayNotSupportedException e) {
             Log.e("Gateway not supported by Receiver!", e);
-            StatusMessageHandler.showStatusMessage(context,
+            StatusMessageHandler.showInfoMessage(context,
                     context.getString(R.string.gateway_not_supported_by_receiver), 5000);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
@@ -91,7 +91,7 @@ public class ActionHandler {
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
 
         if (apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showStatusMessage(context, R.string.apartment_has_no_associated_gateways,
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
         }
@@ -140,7 +140,7 @@ public class ActionHandler {
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
         if (apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showStatusMessage(context, R.string.apartment_has_no_associated_gateways,
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
         }
@@ -156,11 +156,11 @@ public class ActionHandler {
                             networkPackages.add(networkPackage);
                         } catch (ActionNotSupportedException e) {
                             Log.e("Action not supported by Receiver!", e);
-                            StatusMessageHandler.showStatusMessage(context,
+                            StatusMessageHandler.showInfoMessage(context,
                                     context.getString(R.string.action_not_supported_by_receiver), 5000);
                         } catch (GatewayNotSupportedException e) {
                             Log.e("Gateway not supported by Receiver!", e);
-                            StatusMessageHandler.showStatusMessage(context,
+                            StatusMessageHandler.showInfoMessage(context,
                                     context.getString(R.string.gateway_not_supported_by_receiver), 5000);
                         }
                     }
@@ -172,7 +172,7 @@ public class ActionHandler {
 
         if (networkPackages.size() <= 0) {
             Log.d(context.getString(R.string.no_receiver_supports_this_action));
-            StatusMessageHandler.showStatusMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
+            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
                     .LENGTH_LONG);
         } else {
             NetworkHandler.send(networkPackages);
@@ -212,7 +212,7 @@ public class ActionHandler {
 
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
         if (apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showStatusMessage(context, R.string.apartment_has_no_associated_gateways,
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
         }

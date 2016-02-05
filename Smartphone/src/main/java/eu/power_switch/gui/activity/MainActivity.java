@@ -113,11 +113,10 @@ public class MainActivity extends AppCompatActivity {
     private static Stack<Integer> drawerPositionStack = new Stack<>();
 
     private static AppBarLayout appBarLayout;
-
+    private static MainActivity activity;
     private LinkedList<HistoryItem> historyItems = new LinkedList<>();
     private RecyclerView recyclerViewHistory;
     private HistoryItemRecyclerViewAdapter historyItemArrayAdapter;
-
     private BroadcastReceiver broadcastReceiver;
     private Toolbar toolbar;
     private Drawer navigationDrawer;
@@ -143,6 +142,16 @@ public class MainActivity extends AppCompatActivity {
      */
     public static boolean isInForeground() {
         return appIsInForeground;
+    }
+
+    /**
+     * Get this activity.
+     * Used for always accessible fragmentManager in {@link StatusMessageHandler}
+     *
+     * @return this
+     */
+    public static AppCompatActivity getActivity() {
+        return activity;
     }
 
     /**
@@ -197,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
         // apply forced locale (if set in developer options)
         applyLocale();
 
+        activity = this;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -246,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                     if (foundGateways != null) {
                         try {
                             if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways().isEmpty()) {
-                                StatusMessageHandler.showStatusMessage(context, R.string.no_gateway_found, Snackbar
+                                StatusMessageHandler.showInfoMessage(context, R.string.no_gateway_found, Snackbar
                                         .LENGTH_LONG);
                             } else {
                                 for (Gateway gateway : foundGateways) {
@@ -255,14 +266,14 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     try {
                                         DatabaseHandler.addGateway(gateway);
-                                        StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                        StatusMessageHandler.showInfoMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
                                     } catch (GatewayAlreadyExistsException e) {
                                         try {
                                             DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
-                                            StatusMessageHandler.showStatusMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                            StatusMessageHandler.showInfoMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
                                             Log.e(e1);
-                                            StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_gateway, Snackbar.LENGTH_LONG);
+                                            StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, Snackbar.LENGTH_LONG);
                                         }
                                     } catch (Exception e) {
                                         StatusMessageHandler.showErrorMessage(context, e);
@@ -706,7 +717,7 @@ public class MainActivity extends AppCompatActivity {
                     BackupFragment.sendBackupsChangedBroadcast(this);
                 } else {
                     // Permission Denied
-                    StatusMessageHandler.showStatusMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
                 }
                 break;
             case PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION:
@@ -715,7 +726,7 @@ public class MainActivity extends AppCompatActivity {
                     // TODO: update geofences?
                 } else {
                     // Permission Denied
-                    StatusMessageHandler.showStatusMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
                 }
                 break;
             default:
@@ -749,6 +760,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         appIsInForeground = true;
+
+        StatusMessageHandler.showErrorMessage(this, new Exception("HALLO"));
 
         updateHistory();
         HolidaySpecialHandler.showHolidaySpecial(this);

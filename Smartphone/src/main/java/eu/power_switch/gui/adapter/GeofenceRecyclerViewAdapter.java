@@ -94,7 +94,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                         geofence.setActive(isChecked);
                     } catch (Exception e) {
                         Log.e(e);
-                        StatusMessageHandler.showStatusMessage(context, R.string.error_enabling_geofence, 5000);
+                        StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_geofence, 5000);
                     }
                 }
             }

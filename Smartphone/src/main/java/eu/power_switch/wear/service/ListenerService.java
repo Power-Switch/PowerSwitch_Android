@@ -115,7 +115,7 @@ public class ListenerService extends WearableListenerService {
             }
         } catch (Exception e) {
             Log.e("parseMessage", e);
-            StatusMessageHandler.showStatusMessage(getApplicationContext(), R.string.error_executing_wear_action,
+            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.error_executing_wear_action,
                     Snackbar.LENGTH_LONG);
         }
     }

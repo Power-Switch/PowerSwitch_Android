@@ -459,7 +459,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         }
 
         ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-        StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.apartment_saved,
+        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.apartment_saved,
                 Snackbar.LENGTH_LONG);
     }
 

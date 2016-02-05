@@ -158,7 +158,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                                     // update receiver widgets
                                     ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
 
-                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                    StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.receiver_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);

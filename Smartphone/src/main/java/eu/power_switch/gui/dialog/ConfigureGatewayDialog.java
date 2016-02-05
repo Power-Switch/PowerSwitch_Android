@@ -388,7 +388,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
                 try {
                     DatabaseHandler.addGateway(newGateway);
                 } catch (GatewayAlreadyExistsException e) {
-                    StatusMessageHandler.showStatusMessage(rootView.getContext(),
+                    StatusMessageHandler.showInfoMessage(rootView.getContext(),
                             R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
                 }
             } else {
@@ -401,7 +401,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
             }
 
             GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContext(), e);
         }
@@ -418,7 +418,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
                                 try {
                                     DatabaseHandler.deleteGateway(gatewayId);
                                     GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                    StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.gateway_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);

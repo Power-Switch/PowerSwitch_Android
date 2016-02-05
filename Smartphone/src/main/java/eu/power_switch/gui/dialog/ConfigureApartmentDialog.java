@@ -159,7 +159,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                             }
 
                             ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-                            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                            StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                                     R.string.apartment_removed, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);

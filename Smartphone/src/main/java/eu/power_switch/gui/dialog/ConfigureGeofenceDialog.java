@@ -155,7 +155,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
                                     // same for timers
                                     CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getActivity());
 
-                                    StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+                                    StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.geofence_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);

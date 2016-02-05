@@ -244,7 +244,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
 
             CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getContext());
 
-            StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
+            StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
                     R.string.geofence_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

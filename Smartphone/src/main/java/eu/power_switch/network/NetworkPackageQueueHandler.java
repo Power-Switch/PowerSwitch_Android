@@ -96,7 +96,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
     private void processQueue() {
         if (NetworkHandler.isWifiAvailable() || NetworkHandler.isGprsAvailable()) {
 
-            StatusMessageHandler.showStatusMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
+            StatusMessageHandler.showInfoMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
             NetworkPackage currentNetworkPackage;
             while (NetworkHandler.networkPackagesQueue.size() > 0) {
@@ -130,7 +130,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                 } catch (UnknownHostException e) {
                     removeQueueHead();
 
-                    StatusMessageHandler.showStatusMessage(context, R.string.unknown_host, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(context, R.string.unknown_host, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender", e);
                     try {
                         Thread.sleep(2000);
@@ -158,11 +158,11 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
             }
 
             // queue worked off
-            StatusMessageHandler.showStatusMessage(context, R.string.sent, Snackbar.LENGTH_SHORT);
+            StatusMessageHandler.showInfoMessage(context, R.string.sent, Snackbar.LENGTH_SHORT);
         } else {
             clearQueue();
 
-            StatusMessageHandler.showStatusMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
         }
     }
 

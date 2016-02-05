@@ -40,10 +40,9 @@ public class UnknownErrorDialog extends DialogFragment {
 
     private static final String EXCEPTION_KEY = "exception";
 
-    View rootView;
-    Dialog dialog;
+    private View rootView;
+    private Dialog dialog;
     private Throwable e;
-    private int errorDescription;
 
     /**
      * Create a new instance of this Dialog while providing an argument.
@@ -82,8 +81,6 @@ public class UnknownErrorDialog extends DialogFragment {
                 dismiss();
             }
         });
-
-        builder.setPositiveButton(android.R.string.cancel, null);
 
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
