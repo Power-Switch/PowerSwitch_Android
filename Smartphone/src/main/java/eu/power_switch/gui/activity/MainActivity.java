@@ -761,7 +761,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         appIsInForeground = true;
 
-        StatusMessageHandler.showErrorMessage(this, new Exception("HALLO"));
+//        StatusMessageHandler.showErrorMessage(this, new Exception("HALLO"));
 
         updateHistory();
         HolidaySpecialHandler.showHolidaySpecial(this);
