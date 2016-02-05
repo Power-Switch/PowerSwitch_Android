@@ -35,6 +35,8 @@
     <string name="create_apartment">Create Apartment</string>
 
     <string name="apartment_already_exists">Apartment already exists</string>
+    <string name="apartment_has_no_associated_gateways">Apartment is not associated
+        with any Gateway!</string>
 
     <string name="select_apartment">Select Apartment</string>
 

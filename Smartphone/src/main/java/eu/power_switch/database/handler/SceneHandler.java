@@ -42,6 +42,7 @@ abstract class SceneHandler {
      */
     protected static void add(Scene scene) {
         ContentValues values = new ContentValues();
+        values.put(SceneTable.COLUMN_APARTMENT_ID, scene.getApartmentId());
         values.put(SceneTable.COLUMN_NAME, scene.getName());
         long sceneId = DatabaseHandler.database.insert(SceneTable.TABLE_NAME, null, values);
         if (sceneId == -1) {

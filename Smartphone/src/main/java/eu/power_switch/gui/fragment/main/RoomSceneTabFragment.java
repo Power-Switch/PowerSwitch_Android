@@ -39,7 +39,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.dialog.ApartmentChooserDialog;
+import eu.power_switch.gui.dialog.SelectApartmentDialog;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -92,8 +92,8 @@ public class RoomSceneTabFragment extends Fragment {
         linearLayout_currentApartmentInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApartmentChooserDialog apartmentChooserDialog = new ApartmentChooserDialog();
-                apartmentChooserDialog.show(getFragmentManager(), null);
+                SelectApartmentDialog selectApartmentDialog = new SelectApartmentDialog();
+                selectApartmentDialog.show(getFragmentManager(), null);
             }
         });
 

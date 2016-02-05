@@ -19,6 +19,7 @@
 package eu.power_switch.action;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -91,7 +92,9 @@ public class ActionHandler {
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
 
         if (apartment.getAssociatedGateways().isEmpty()) {
-
+            StatusMessageHandler.showStatusMessage(context, R.string.apartment_has_no_associated_gateways,
+                    Snackbar.LENGTH_LONG);
+            return;
         }
 
         for (Gateway gateway : apartment.getAssociatedGateways()) {
@@ -138,6 +141,11 @@ public class ActionHandler {
         NetworkHandler.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
+        if (apartment.getAssociatedGateways().isEmpty()) {
+            StatusMessageHandler.showStatusMessage(context, R.string.apartment_has_no_associated_gateways,
+                    Snackbar.LENGTH_LONG);
+            return;
+        }
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
@@ -206,6 +214,12 @@ public class ActionHandler {
         List<NetworkPackage> packages = new ArrayList<>();
 
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
+        if (apartment.getAssociatedGateways().isEmpty()) {
+            StatusMessageHandler.showStatusMessage(context, R.string.apartment_has_no_associated_gateways,
+                    Snackbar.LENGTH_LONG);
+            return;
+        }
+
         for (Gateway gateway : apartment.getAssociatedGateways()) {
             if (gateway.isActive()) {
                 for (SceneItem sceneItem : scene.getSceneItems()) {
@@ -270,25 +284,6 @@ public class ActionHandler {
         }
     }
 
-    private static void executeActions(Context context, List<Action> actions) throws Exception {
-        for (Action action : actions) {
-            switch (action.getActionType()) {
-                case Action.ACTION_TYPE_RECEIVER:
-                    ReceiverAction receiverAction = (ReceiverAction) action;
-                    executeReceiverAction(context, receiverAction.getReceiver(), receiverAction.getButton());
-                    break;
-                case Action.ACTION_TYPE_ROOM:
-                    RoomAction roomAction = (RoomAction) action;
-                    executeRoomAction(context, roomAction.getRoom(), roomAction.getButtonName());
-                    break;
-                case Action.ACTION_TYPE_SCENE:
-                    SceneAction sceneAction = (SceneAction) action;
-                    executeScene(context, sceneAction.getScene());
-                    break;
-            }
-        }
-    }
-
     /**
      * Execute Geofence actions
      *
@@ -317,6 +312,25 @@ public class ActionHandler {
         } catch (Exception e) {
             Log.e(e);
             StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+        }
+    }
+
+    private static void executeActions(Context context, List<Action> actions) throws Exception {
+        for (Action action : actions) {
+            switch (action.getActionType()) {
+                case Action.ACTION_TYPE_RECEIVER:
+                    ReceiverAction receiverAction = (ReceiverAction) action;
+                    executeReceiverAction(context, receiverAction.getReceiver(), receiverAction.getButton());
+                    break;
+                case Action.ACTION_TYPE_ROOM:
+                    RoomAction roomAction = (RoomAction) action;
+                    executeRoomAction(context, roomAction.getRoom(), roomAction.getButtonName());
+                    break;
+                case Action.ACTION_TYPE_SCENE:
+                    SceneAction sceneAction = (SceneAction) action;
+                    executeScene(context, sceneAction.getScene());
+                    break;
+            }
         }
     }
 }

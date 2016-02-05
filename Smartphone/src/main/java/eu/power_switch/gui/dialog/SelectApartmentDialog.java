@@ -43,7 +43,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  * <p/>
  * Created by Markus on 08.01.2016.
  */
-public class ApartmentChooserDialog extends DialogFragment {
+public class SelectApartmentDialog extends DialogFragment {
 
     private ArrayList<String> apartmentNames = new ArrayList<>();
     private View rootView;

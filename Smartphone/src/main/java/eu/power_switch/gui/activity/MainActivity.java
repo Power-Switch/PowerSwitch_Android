@@ -689,8 +689,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             historyItems.clear();
             historyItems.addAll(DatabaseHandler.getHistory());
-
-            throw new Exception("EXCEPTION!!!");
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(this, e);
         }
