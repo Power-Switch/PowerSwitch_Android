@@ -147,10 +147,7 @@ public class BackupFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, int position) {
                 final Backup backup = backups.get(position);
 
-                EditBackupDialog editBackupDialog = new EditBackupDialog();
-                Bundle backupData = new Bundle();
-                backupData.putString(EditBackupDialog.NAME_KEY, backup.getName());
-                editBackupDialog.setArguments(backupData);
+                EditBackupDialog editBackupDialog = EditBackupDialog.newInstance(backup.getName());
                 editBackupDialog.setTargetFragment(recyclerViewFragment, 0);
                 editBackupDialog.show(getActivity().getSupportFragmentManager(), null);
             }

@@ -79,6 +79,15 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
     private ReceiverNameRecyclerViewAdapter receiverNameRecyclerViewAdapter;
     private RecyclerView listOfReceivers;
 
+    public static EditRoomDialog newInstance(long roomId) {
+        Bundle args = new Bundle();
+        args.putLong(ROOM_ID_KEY, roomId);
+
+        EditRoomDialog fragment = new EditRoomDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_edit_room_content, container);

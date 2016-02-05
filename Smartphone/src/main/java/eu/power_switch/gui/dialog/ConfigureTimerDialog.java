@@ -61,6 +61,15 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
     private long timerId = -1;
 
+    public static ConfigureTimerDialog newInstance(long timerId) {
+        Bundle args = new Bundle();
+        args.putLong(TIMER_ID_KEY, timerId);
+
+        ConfigureTimerDialog fragment = new ConfigureTimerDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening " + getClass().getSimpleName() + "...");

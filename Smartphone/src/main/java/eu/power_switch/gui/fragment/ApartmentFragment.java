@@ -118,11 +118,8 @@ public class ApartmentFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, final int position) {
                 Apartment apartment = apartments.get(position);
 
-                ConfigureApartmentDialog configureApartmentDialog = new ConfigureApartmentDialog();
+                ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment.getId());
                 configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
-                Bundle arguments = new Bundle();
-                arguments.putLong(ConfigureApartmentDialog.APARTMENT_ID_KEY, apartment.getId());
-                configureApartmentDialog.setArguments(arguments);
                 configureApartmentDialog.show(getFragmentManager(), null);
             }
         });

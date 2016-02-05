@@ -64,6 +64,15 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     private BroadcastReceiver broadcastReceiver;
 
+    public static ConfigureReceiverDialog newInstance(long receiverId) {
+        Bundle args = new Bundle();
+        args.putLong(RECEIVER_ID_KEY, receiverId);
+
+        ConfigureReceiverDialog fragment = new ConfigureReceiverDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening " + getClass().getSimpleName() + "...");

@@ -20,7 +20,6 @@ package eu.power_switch.gui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.StringRes;
@@ -184,8 +183,6 @@ public class StatusMessageHandler {
         } else {
             showErrorToast(context, e);
         }
-
-
     }
 
     /**
@@ -235,38 +232,31 @@ public class StatusMessageHandler {
      * @param e      throwable
      */
     private static void showErrorSnackbar(final View parent, final Throwable e) {
-        Log.d("Error Snackbar: " + e.getMessage());
-        Log.e(e);
+        Log.e("Error Snackbar", e);
 
-        final Snackbar snackbar = Snackbar.make(parent, R.string.unknown_error, Snackbar.LENGTH_LONG);
+        Context context = parent.getContext();
+        showSnackbar(parent, context.getString(R.string.unknown_error), context.getString(R.string.details),
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(e.getClass()).append(": ").append(e.getMessage())
+                                .append("\n\n");
+                        for (StackTraceElement element : e.getStackTrace()) {
+                            stringBuilder.append("at ").append(element.toString()).append("\n");
+                        }
 
-        snackbar.setAction(parent.getContext().getString(R.string.details), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(e.getClass()).append(": ").append(e.getMessage())
-                        .append("\n\n");
-                for (StackTraceElement element : e.getStackTrace()) {
-                    stringBuilder.append("at ").append(element.toString()).append("\n");
-                }
-
-                new AlertDialog.Builder(parent.getContext())
-                        .setTitle(R.string.unknown_error)
-                        .setMessage(stringBuilder.toString())
-                        .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-
-                snackbar.dismiss();
-            }
-        });
-
-        snackbar.show();
-        lastSnackbar = snackbar;
+                        new AlertDialog.Builder(parent.getContext())
+                                .setTitle(R.string.unknown_error)
+                                .setMessage(stringBuilder.toString())
+                                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                    }
+                }, 15000);
     }
 
     /**
@@ -280,17 +270,18 @@ public class StatusMessageHandler {
      */
     private static void showSnackbar(View parent, String message, String actionButtonMessage,
                                      final Runnable runnable, int duration) {
-        Log.d("Status Snackbar: [" + message + "] with action: [" + actionButtonMessage + "]");
+        Log.d("Snackbar: [" + message + "] with action: [" + actionButtonMessage + "]");
 
         if (parent == null) {
             parent = MainActivity.getMainAppView();
         }
 
-        Snackbar snackbar = Snackbar.make(parent, message, duration);
+        final Snackbar snackbar = Snackbar.make(parent, message, duration);
         snackbar.setAction(actionButtonMessage, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 runnable.run();
+                snackbar.dismiss();
             }
         });
 
@@ -334,8 +325,7 @@ public class StatusMessageHandler {
      * @param e       throwable
      */
     private static void showErrorToast(final Context context, final Throwable e) {
-        Log.d("Error Toast: " + e.getMessage());
-        Log.e(e);
+        Log.e("Error Toast: ", e);
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -367,10 +357,8 @@ public class StatusMessageHandler {
             public void run() {
                 MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class,
                         recyclerViewFragment.getActivity().getString(R.string.menu_settings));
-                SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
-                Bundle arguments = new Bundle();
-                arguments.putInt(SettingsTabFragment.TAB_INDEX_KEY, SettingsConstants.GATEWAYS_TAB_INDEX);
-                settingsTabFragment.setArguments(arguments);
+
+                SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
                 recyclerViewFragment.getActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim
@@ -393,10 +381,7 @@ public class StatusMessageHandler {
             public void run() {
                 MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class, fragmentActivity
                         .getString(R.string.menu_settings));
-                SettingsTabFragment settingsTabFragment = new SettingsTabFragment();
-                Bundle arguments = new Bundle();
-                arguments.putInt(SettingsTabFragment.TAB_INDEX_KEY, SettingsConstants.GATEWAYS_TAB_INDEX);
-                settingsTabFragment.setArguments(arguments);
+                SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
                 fragmentActivity.getSupportFragmentManager()
                         .beginTransaction()
                         .setCustomAnimations(R.anim

@@ -64,6 +64,15 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     private BroadcastReceiver broadcastReceiver;
     private GeofenceApiHandler geofenceApiHandler;
 
+    public static ConfigureGeofenceDialog newInstance(long geofenceId) {
+        Bundle args = new Bundle();
+        args.putLong(GEOFENCE_ID_KEY, geofenceId);
+
+        ConfigureGeofenceDialog fragment = new ConfigureGeofenceDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening " + getClass().getSimpleName() + "...");

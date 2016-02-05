@@ -65,6 +65,15 @@ public class RoomSceneTabFragment extends Fragment {
     private TextView textView_currentApartmentInfo;
     private BroadcastReceiver broadcastReceiver;
 
+    public static RoomSceneTabFragment newInstance(int tabIndex) {
+        Bundle args = new Bundle();
+        args.putInt(TAB_INDEX_KEY, tabIndex);
+
+        RoomSceneTabFragment fragment = new RoomSceneTabFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_tabs, container, false);

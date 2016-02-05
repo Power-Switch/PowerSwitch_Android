@@ -30,6 +30,15 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
  */
 public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
+    public static ConfigureApartmentGeofenceDialog newInstance(long geofenceId) {
+        Bundle args = new Bundle();
+        args.putLong(GEOFENCE_ID_KEY, geofenceId);
+
+        ConfigureApartmentGeofenceDialog fragment = new ConfigureApartmentGeofenceDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(GEOFENCE_ID_KEY)) {

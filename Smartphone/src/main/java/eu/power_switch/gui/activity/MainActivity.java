@@ -222,10 +222,7 @@ public class MainActivity extends AppCompatActivity {
             if (SmartphonePreferencesHandler.getCurrentApartmentId() == SettingsConstants.INVALID_APARTMENT_ID) {
                 fragment = ApartmentFragment.class.newInstance();
             } else {
-                fragment = RoomSceneTabFragment.class.newInstance();
-                Bundle arguments = new Bundle();
-                arguments.putInt(RoomSceneTabFragment.TAB_INDEX_KEY, SmartphonePreferencesHandler.getStartupDefaultTab());
-                fragment.setArguments(arguments);
+                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.getStartupDefaultTab());
             }
             lastFragmentClasses.push(fragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
@@ -693,7 +690,7 @@ public class MainActivity extends AppCompatActivity {
             historyItems.clear();
             historyItems.addAll(DatabaseHandler.getHistory());
 
-            throw new Exception("hallo");
+            throw new Exception("EXCEPTION!!!");
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(this, e);
         }

@@ -20,7 +20,6 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -105,10 +104,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.roomName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                EditRoomDialog editRoomDialog = new EditRoomDialog();
-                Bundle roomData = new Bundle();
-                roomData.putLong(EditRoomDialog.ROOM_ID_KEY, room.getId());
-                editRoomDialog.setArguments(roomData);
+                EditRoomDialog editRoomDialog = EditRoomDialog.newInstance(room.getId());
                 editRoomDialog.setTargetFragment(recyclerViewFragment, 0);
                 editRoomDialog.show(fragmentActivity.getSupportFragmentManager(), null);
                 return false;
@@ -281,10 +277,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 @Override
                 public boolean onLongClick(View v) {
-                    ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(ConfigureReceiverDialog.RECEIVER_ID_KEY, receiver.getId());
-                    configureReceiverDialog.setArguments(bundle);
+                    ConfigureReceiverDialog configureReceiverDialog = ConfigureReceiverDialog.newInstance(receiver.getId());
                     configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureReceiverDialog.show(fragmentActivity.getSupportFragmentManager(), null);
                     return false;

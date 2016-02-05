@@ -49,6 +49,15 @@ public class AddAlarmEventActionDialog extends AddActionDialog {
     ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT currentEventType =
             ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
 
+    public static AddAlarmEventActionDialog newInstance(int eventId) {
+        Bundle args = new Bundle();
+        args.putInt(EVENT_ID_KEY, eventId);
+
+        AddAlarmEventActionDialog fragment = new AddAlarmEventActionDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     /**
      * Used to notify the setup page that some info has changed
      *

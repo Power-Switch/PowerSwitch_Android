@@ -57,6 +57,15 @@ public class EditBackupDialog extends DialogFragment {
     private View rootView;
     private EditText name;
 
+    public static EditBackupDialog newInstance(String backupName) {
+        Bundle args = new Bundle();
+        args.putString(NAME_KEY, backupName);
+
+        EditBackupDialog fragment = new EditBackupDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

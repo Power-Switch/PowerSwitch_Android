@@ -121,10 +121,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, int position) {
                 Gateway gateway = gateways.get(position);
 
-                ConfigureGatewayDialog configureGatewayDialog = new ConfigureGatewayDialog();
-                Bundle gatewayData = new Bundle();
-                gatewayData.putLong(ConfigureGatewayDialog.GATEWAY_ID_KEY, gateway.getId());
-                configureGatewayDialog.setArguments(gatewayData);
+                ConfigureGatewayDialog configureGatewayDialog = ConfigureGatewayDialog.newInstance(gateway.getId());
                 configureGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureGatewayDialog.show(getFragmentManager(), null);
             }
@@ -266,10 +263,12 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
         if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
             menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-            menu.findItem(R.id.search_gateways).setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.white));
+            menu.findItem(R.id.search_gateways)
+                    .setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.white));
         } else {
             menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-            menu.findItem(R.id.search_gateways).setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.black));
+            menu.findItem(R.id.search_gateways)
+                    .setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.black));
         }
 
 

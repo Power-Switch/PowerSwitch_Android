@@ -61,6 +61,15 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     private long sceneId = -1;
 
+    public static ConfigureSceneDialog newInstance(long sceneId) {
+        Bundle args = new Bundle();
+        args.putLong(SCENE_ID_KEY, sceneId);
+
+        ConfigureSceneDialog fragment = new ConfigureSceneDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening " + getClass().getSimpleName() + "...");

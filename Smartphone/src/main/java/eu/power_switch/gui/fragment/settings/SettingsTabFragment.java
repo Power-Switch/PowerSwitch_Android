@@ -52,6 +52,15 @@ public class SettingsTabFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager tabViewPager;
 
+    public static SettingsTabFragment newInstance(int tabIndex) {
+        Bundle args = new Bundle();
+        args.putInt(TAB_INDEX_KEY, tabIndex);
+
+        SettingsTabFragment fragment = new SettingsTabFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);

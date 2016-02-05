@@ -80,6 +80,15 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     private String originalAddress;
     private int originalPort;
 
+    public static ConfigureGatewayDialog newInstance(long gatewayId) {
+        Bundle args = new Bundle();
+        args.putLong(GATEWAY_ID_KEY, gatewayId);
+
+        ConfigureGatewayDialog fragment = new ConfigureGatewayDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening " + getClass().getSimpleName() + "...");

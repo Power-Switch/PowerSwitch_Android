@@ -62,6 +62,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     private long apartmentId = -1;
 
+    public static ConfigureApartmentDialog newInstance(long apartmentId) {
+        Bundle args = new Bundle();
+        args.putLong(APARTMENT_ID_KEY, apartmentId);
+
+        ConfigureApartmentDialog fragment = new ConfigureApartmentDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         broadcastReceiver = new BroadcastReceiver() {

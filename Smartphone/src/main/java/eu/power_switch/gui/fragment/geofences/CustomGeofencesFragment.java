@@ -97,10 +97,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, int position) {
                 final Geofence geofence = geofences.get(position);
 
-                ConfigureGeofenceDialog configureGeofenceDialog = new ConfigureGeofenceDialog();
-                Bundle geofenceData = new Bundle();
-                geofenceData.putLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY, geofence.getId());
-                configureGeofenceDialog.setArguments(geofenceData);
+                ConfigureGeofenceDialog configureGeofenceDialog = ConfigureGeofenceDialog.newInstance(geofence.getId());
                 configureGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureGeofenceDialog.show(getFragmentManager(), null);
             }

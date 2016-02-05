@@ -140,10 +140,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAlarmEventActionDialog addAlarmEventActionDialog = new AddAlarmEventActionDialog();
-                Bundle args = new Bundle();
-                args.putInt(AddAlarmEventActionDialog.EVENT_ID_KEY, spinnerEventType.getSelectedItemPosition());
-                addAlarmEventActionDialog.setArguments(args);
+                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(spinnerEventType
+                        .getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
@@ -217,10 +215,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.add_action:
-                AddAlarmEventActionDialog addAlarmEventActionDialog = new AddAlarmEventActionDialog();
-                Bundle args = new Bundle();
-                args.putInt(AddAlarmEventActionDialog.EVENT_ID_KEY, spinnerEventType.getSelectedItemPosition());
-                addAlarmEventActionDialog.setArguments(args);
+                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(spinnerEventType
+                        .getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(this, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             default:

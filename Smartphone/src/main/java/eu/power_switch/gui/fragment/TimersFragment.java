@@ -99,10 +99,7 @@ public class TimersFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, int position) {
                 final Timer timer = timers.get(position);
 
-                ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
-                Bundle sceneData = new Bundle();
-                sceneData.putLong(ConfigureTimerDialog.TIMER_ID_KEY, timer.getId());
-                configureTimerDialog.setArguments(sceneData);
+                ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer.getId());
                 configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureTimerDialog.show(getFragmentManager(), null);
             }
