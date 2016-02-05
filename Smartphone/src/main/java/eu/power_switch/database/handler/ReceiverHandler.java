@@ -26,9 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import eu.power_switch.R;
 import eu.power_switch.database.table.receiver.ReceiverTable;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
@@ -60,7 +58,7 @@ class ReceiverHandler {
         if (dbInsertReturnValue > -1) {
             insertDetails(receiver, dbInsertReturnValue);
         } else {
-            StatusMessageHandler.showStatusMessage(DatabaseHandler.context, R.string.unknown_error, 5000);
+            throw new Exception("invalid database.insert() return value: " + dbInsertReturnValue);
         }
     }
 

@@ -158,8 +158,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
 
             customRecyclerViewAdapter.setReceiverSceneItemHashMap(map);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -187,8 +186,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
 
             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

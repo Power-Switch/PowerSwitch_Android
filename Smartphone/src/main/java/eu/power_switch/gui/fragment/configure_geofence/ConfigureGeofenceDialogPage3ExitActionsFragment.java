@@ -45,7 +45,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AddGeofenceExitActionDialog;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 12.09.2015.
@@ -130,8 +129,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Fragment {
             currentExitActions.clear();
             currentExitActions.addAll(DatabaseHandler.getGeofence(geofenceId).getActions(Geofence.EventType.EXIT));
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

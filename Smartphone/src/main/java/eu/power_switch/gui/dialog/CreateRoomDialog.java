@@ -46,7 +46,6 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to create a new Room
@@ -76,8 +75,7 @@ public class CreateRoomDialog extends DialogFragment {
                 roomNames.add(room.getName());
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -116,8 +114,7 @@ public class CreateRoomDialog extends DialogFragment {
                     Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)
                             .show();
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
             }
         });

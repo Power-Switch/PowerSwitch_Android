@@ -87,11 +87,16 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean isValid() {
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment summaryFragment =
-                customTabAdapter.getSummaryFragment();
+        try {
+            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabbedSummaryFragment summaryFragment =
+                    customTabAdapter.getSummaryFragment();
 
-        return summaryFragment.checkSetupValidity();
+            return summaryFragment.checkSetupValidity();
+        } catch (Exception e) {
+            Log.e(e);
+            return false;
+        }
     }
 
     @Override
@@ -156,8 +161,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                                     StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.receiver_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }
 
                                 // close dialog

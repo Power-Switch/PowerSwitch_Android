@@ -75,8 +75,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         try {
             roomsList = DatabaseHandler.getAllRooms();
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(this, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(this, e);
         }
         roomNamesList = new ArrayList<>();
         for (Room room : roomsList) {
@@ -107,8 +106,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                     adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerReceiver.setAdapter(adapterReceiver);
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(arg1.getContext(), R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(arg1.getContext(), e);
                 }
             }
 

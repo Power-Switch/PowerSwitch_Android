@@ -45,7 +45,7 @@ public class SettingsConstants {
 
     public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 75;
 
-    public static final int INVALID_APARTMENT_ID = -1;
+    public static final long INVALID_APARTMENT_ID = -1;
 
     // Main Tabs
     public static final int ROOMS_TAB_INDEX = 0;

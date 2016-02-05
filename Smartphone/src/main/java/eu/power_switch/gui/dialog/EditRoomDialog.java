@@ -50,7 +50,6 @@ import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
@@ -143,8 +142,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
                 roomNames.add(room.getName());
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -190,8 +188,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
             getDialog().dismiss();
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -222,8 +219,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
                             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                     R.string.room_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            Log.e(e);
-                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

@@ -49,7 +49,6 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 
 /**
  * "Name" Fragment used in Configure Scene Dialog
@@ -112,8 +111,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
         try {
             existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId());
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         linearLayout_selectableReceivers = (LinearLayout) rootView.findViewById(R.id.linearLayout_selectableReceivers);
@@ -174,8 +172,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -202,8 +199,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
                 }
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

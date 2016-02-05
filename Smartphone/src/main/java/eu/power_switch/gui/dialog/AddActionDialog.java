@@ -163,8 +163,7 @@ public abstract class AddActionDialog extends DialogFragment {
                 sceneNames.add(scene.getName());
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         spinner_apartment = (Spinner) rootView.findViewById(R.id.spinner_apartment);
@@ -481,8 +480,7 @@ public abstract class AddActionDialog extends DialogFragment {
             }
 
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         return action;

@@ -35,7 +35,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to select a timer action configuration
@@ -88,8 +87,7 @@ public class AddAlarmEventActionDialog extends AddActionDialog {
             DatabaseHandler.setAlarmActions(currentEventType, actions);
             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(), R.string.action_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

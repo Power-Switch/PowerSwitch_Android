@@ -147,8 +147,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
         try {
             geofences.addAll(DatabaseHandler.getCustomGeofences());
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

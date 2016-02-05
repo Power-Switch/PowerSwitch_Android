@@ -97,8 +97,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
         try {
             existingGateways = DatabaseHandler.getAllGateways();
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         TextWatcher textWatcher = new TextWatcher() {
@@ -189,8 +188,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
 
             setModified(false);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -423,8 +421,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
                                     StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.gateway_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }
 
                                 // close dialog

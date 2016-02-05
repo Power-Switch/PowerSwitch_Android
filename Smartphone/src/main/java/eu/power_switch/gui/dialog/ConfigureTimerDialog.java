@@ -106,10 +106,15 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean isValid() {
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment summaryFragment = customTabAdapter.getSummaryFragment();
+        try {
+            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabbedSummaryFragment summaryFragment = customTabAdapter.getSummaryFragment();
 
-        return summaryFragment.checkSetupValidity();
+            return summaryFragment.checkSetupValidity();
+        } catch (Exception e) {
+            Log.e(e);
+            return false;
+        }
     }
 
     @Override
@@ -123,8 +128,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
             try {
                 summaryFragment.saveCurrentConfigurationToDatabase();
             } catch (Exception e) {
-                Log.e(e);
-                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                StatusMessageHandler.showErrorMessage(getActivity(), e);
             }
         }
 
@@ -148,8 +152,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                                     StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.timer_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }
 
                                 // close dialog

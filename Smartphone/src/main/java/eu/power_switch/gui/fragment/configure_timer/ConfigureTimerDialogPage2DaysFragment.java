@@ -37,7 +37,6 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 
@@ -150,8 +149,7 @@ public class ConfigureTimerDialogPage2DaysFragment extends Fragment {
 
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

@@ -255,8 +255,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                 updateGeofenceRadius(GeofenceConstants.DEFAULT_GEOFENCE_RADIUS);
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -394,8 +393,7 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                     mapViewHandler.moveCamera(apartment.getGeofence().getCenterLocation(), 14, false);
                 }
             } catch (Exception e) {
-                Log.e(e);
-                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                StatusMessageHandler.showErrorMessage(getActivity(), e);
             }
         }
     }

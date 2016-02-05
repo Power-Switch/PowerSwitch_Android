@@ -103,10 +103,15 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean isValid() {
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment setupFragment =
-                customTabAdapter.getSetupFragment();
-        return setupFragment.checkSetupValidity();
+        try {
+            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabbedSummaryFragment setupFragment =
+                    customTabAdapter.getSetupFragment();
+            return setupFragment.checkSetupValidity();
+        } catch (Exception e) {
+            Log.e(e);
+            return false;
+        }
     }
 
     @Override
@@ -118,8 +123,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
         try {
             setupFragment.saveCurrentConfigurationToDatabase();
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         getDialog().dismiss();
@@ -147,8 +151,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                                     StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                             R.string.scene_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }
 
                                 // close dialog

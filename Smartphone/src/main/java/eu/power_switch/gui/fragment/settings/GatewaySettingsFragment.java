@@ -188,9 +188,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                             existingGatewaysCount++;
                             DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
                         } catch (Exception e) {
-                            Log.e(e);
-                            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error,
-                                    Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                         }
                     }
 
@@ -217,8 +215,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
             try {
                 gateways.addAll(DatabaseHandler.getAllGateways());
             } catch (Exception e) {
-                Log.e(e);
-                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                StatusMessageHandler.showErrorMessage(getActivity(), e);
             }
         }
     }

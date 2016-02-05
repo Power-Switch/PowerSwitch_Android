@@ -47,7 +47,6 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
-import eu.power_switch.shared.log.Log;
 
 /**
  * * Adapter to visualize Scene items in RecyclerView
@@ -125,8 +124,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                         return;
                     }
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                 }
 
                 ActionHandler.execute(fragmentActivity, scene);

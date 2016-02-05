@@ -36,7 +36,6 @@ import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import eu.power_switch.timer.alarm.AlarmHandler;
@@ -146,8 +145,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                         }
                         timer.setActive(isChecked);
                     } catch (Exception e) {
-                        Log.e(e);
-                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+                        StatusMessageHandler.showErrorMessage(context, e);
                     }
                 }
             }

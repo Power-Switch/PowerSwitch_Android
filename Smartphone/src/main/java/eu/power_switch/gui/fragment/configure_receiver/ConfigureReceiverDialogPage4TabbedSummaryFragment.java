@@ -59,7 +59,6 @@ import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
@@ -129,8 +128,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
                         Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(currentModel));
                         currentType = receiver.getType();
                     } catch (Exception e) {
-                        Log.e(e);
-                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+                        StatusMessageHandler.showErrorMessage(getActivity(), e);
                     }
                 } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED)) {
                     String name = intent.getStringExtra("name");
@@ -218,8 +216,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Fragment 
             }
 
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         updateUi();

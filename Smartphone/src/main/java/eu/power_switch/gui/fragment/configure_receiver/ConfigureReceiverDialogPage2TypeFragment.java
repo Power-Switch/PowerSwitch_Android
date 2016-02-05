@@ -40,7 +40,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 
 import static eu.power_switch.obj.receiver.Receiver.Brand;
 
@@ -270,8 +269,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 modelListView.smoothScrollToPosition(modelPosition);
 
             } catch (Exception e) {
-                Log.e(e);
-                StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                StatusMessageHandler.showErrorMessage(getActivity(), e);
             }
         }
     }

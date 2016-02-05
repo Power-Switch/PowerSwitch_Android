@@ -101,8 +101,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
             actions = new ArrayList<>(DatabaseHandler.getAlarmActions(
                     SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED));
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
         }
 
         recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_alarm_event_actions);
@@ -120,8 +119,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                                             .getSelectedItemPosition()), actions);
                                     StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.action_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                                 }
 
                                 recyclerViewAdapter.notifyDataSetChanged();
@@ -184,8 +182,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
             actions.addAll(DatabaseHandler.getAlarmActions(
                     SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())));
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         recyclerViewAdapter.notifyDataSetChanged();

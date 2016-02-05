@@ -270,7 +270,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      *
      * @return true if the current configuration is valid, false otherwise
      */
-    protected abstract boolean isValid() throws Exception;
+    protected abstract boolean isValid();
 
     /**
      * Defines if the Dialog is cancelable on touch outside of the dialog
@@ -302,11 +302,11 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      */
     protected void notifyConfigurationChanged() {
         setModified(true);
+
         try {
             setSaveButtonState(isValid());
         } catch (Exception e) {
             Log.e(e);
-            setSaveButtonState(false);
         }
     }
 

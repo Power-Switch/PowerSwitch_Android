@@ -149,8 +149,7 @@ public class ScenesFragment extends RecyclerViewFragment {
         try {
             scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

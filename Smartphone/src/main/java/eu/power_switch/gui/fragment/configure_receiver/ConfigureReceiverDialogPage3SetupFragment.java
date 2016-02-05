@@ -136,8 +136,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                         sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
                                 dipSwitchArrayList, getCurrentSeed(), getCurrentUniversalButtons());
                     } catch (Exception e) {
-                        Log.e(e);
-                        StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+                        StatusMessageHandler.showErrorMessage(getActivity(), e);
                     }
                 }
             }
@@ -240,8 +239,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                     NetworkHandler.send(networkPackages);
 
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
             }
         });
@@ -270,8 +268,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                     NetworkHandler.init(getContext());
                     NetworkHandler.send(networkPackages);
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
             }
         });
@@ -300,8 +297,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
                     NetworkHandler.init(getContext());
                     NetworkHandler.send(networkPackages);
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
             }
         });
@@ -346,8 +342,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
             initType(receiver);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

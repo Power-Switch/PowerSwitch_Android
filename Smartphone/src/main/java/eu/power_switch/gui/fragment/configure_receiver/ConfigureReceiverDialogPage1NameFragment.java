@@ -196,8 +196,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
             name.setText(receiver.getName());
             roomsListView.setItemChecked(roomNamesAdapter.getPosition(room.getName()), true);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -210,8 +209,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
                 roomList.add(room.getName());
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
         roomNamesAdapter.notifyDataSetChanged();
     }

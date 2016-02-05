@@ -73,8 +73,7 @@ public class MessageApiHandler {
                                     if (!sendMessageResult.getStatus().isSuccess()) {
                                         // Failed to send message
                                         Log.e("", "Failed to send Message");
-                                        ActionResponse.showFailureAnimation(context, R.string
-                                                .unknown_error);
+                                        ActionResponse.showFailureAnimation(context, R.string.unknown_error);
                                     } else {
                                         Log.i("", "Message sent");
                                         ActionResponse.showSuccessAnimation(context);
@@ -123,9 +122,10 @@ public class MessageApiHandler {
 
 
     private void setupReachableReceiverActionTrigger() {
-        CapabilityApi.GetCapabilityResult result = Wearable.CapabilityApi.getCapability(googleApiClient, context
-                .getResources()
-                .getString(eu.power_switch.shared.R.string.RECEIVER_ACTION_TRIGGER_CAPABILITY_NAME), CapabilityApi.FILTER_REACHABLE)
+        CapabilityApi.GetCapabilityResult result = Wearable.CapabilityApi.getCapability(
+                googleApiClient, context
+                        .getResources()
+                        .getString(eu.power_switch.shared.R.string.RECEIVER_ACTION_TRIGGER_CAPABILITY_NAME), CapabilityApi.FILTER_REACHABLE)
                 .await();
         updateReceiverActionTriggerCapability(result.getCapability());
 

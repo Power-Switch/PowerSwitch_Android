@@ -44,7 +44,6 @@ import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -144,8 +143,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
             }
 
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         updateUi();
@@ -233,8 +231,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                     R.string.timer_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

@@ -85,8 +85,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
         try {
             apartments = new ArrayList<>(DatabaseHandler.getAllApartments());
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
         }
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_apartments);
         apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
@@ -134,8 +133,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                     configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                 }
             }
         });
@@ -150,8 +148,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                     apartments.addAll(DatabaseHandler.getAllApartments());
                     apartmentArrayAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(recyclerViewFragment, R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
                 }
             }
         };
@@ -198,8 +195,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                     configureApartmentDialog.setTargetFragment(this, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    Log.e(e);
-                    StatusMessageHandler.showStatusMessage(this, R.string.unknown_error, 5000);
+                    StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
             default:
                 break;

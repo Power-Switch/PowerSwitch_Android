@@ -50,7 +50,6 @@ import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog
@@ -98,8 +97,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
         try {
             existingApartments = DatabaseHandler.getAllApartments();
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         TextWatcher textWatcher = new TextWatcher() {
@@ -160,8 +158,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
             }
 
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -267,8 +264,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
                 }
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

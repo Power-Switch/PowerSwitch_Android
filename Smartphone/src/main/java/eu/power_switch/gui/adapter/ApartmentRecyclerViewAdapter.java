@@ -94,6 +94,9 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         contentSummary += context.getString(R.string.scenes) + ": " + apartment.getScenes().size() + "\n";
         contentSummary += context.getString(R.string.associated_gateways) + ": " + apartment.getAssociatedGateways()
                 .size();
+        if (apartment.getAssociatedGateways().isEmpty()) {
+            contentSummary += " (!)";
+        }
         holder.contentSummary.setText(contentSummary);
 
         if (position == getItemCount() - 1) {

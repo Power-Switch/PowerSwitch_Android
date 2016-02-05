@@ -28,11 +28,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -44,6 +45,7 @@ import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialog
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -88,24 +90,10 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment(), apartmentId));
+            return true;
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment()));
-        }
-
-        try {
-            // Disable delete Button if only one apartment is left
-            if (DatabaseHandler.getAllApartments().size() <= 1) {
-                imageButtonDelete.setColorFilter(ContextCompat.getColor(getActivity(), R.color.inactive_gray));
-                imageButtonDelete.setClickable(false);
-                return true;
-            } else {
-                return args != null && args.containsKey(APARTMENT_ID_KEY);
-            }
-        } catch (Exception e) {
-            dismiss();
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
             return false;
         }
     }
@@ -117,10 +105,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean isValid() {
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment setupFragment =
-                customTabAdapter.getSetupFragment();
-        return setupFragment.checkSetupValidity();
+        try {
+            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabbedSummaryFragment setupFragment =
+                    customTabAdapter.getSetupFragment();
+            return setupFragment.checkSetupValidity();
+        } catch (Exception e) {
+            Log.e(e);
+            return false;
+        }
     }
 
     /**
@@ -135,8 +128,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
         try {
             setupFragment.saveCurrentConfigurationToDatabase();
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
         getDialog().dismiss();
     }
@@ -154,20 +146,23 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                             if (SmartphonePreferencesHandler.getCurrentApartmentId()
                                     .equals(apartment.getId())) {
                                 DatabaseHandler.deleteApartment(apartmentId);
+
                                 // update current Apartment selection
-                                Apartment firstApartment = DatabaseHandler.getAllApartments().get(0);
-                                SmartphonePreferencesHandler.setCurrentApartmentId(firstApartment.getId());
+                                List<Apartment> apartments = DatabaseHandler.getAllApartments();
+                                if (apartments.isEmpty()) {
+                                    SmartphonePreferencesHandler.setCurrentApartmentId(SettingsConstants.INVALID_APARTMENT_ID);
+                                } else {
+                                    SmartphonePreferencesHandler.setCurrentApartmentId(apartments.get(0).getId());
+                                }
                             } else {
                                 DatabaseHandler.deleteApartment(apartmentId);
                             }
-
 
                             ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
                             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                                     R.string.apartment_removed, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            Log.e(e);
-                            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

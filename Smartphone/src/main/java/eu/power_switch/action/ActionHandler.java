@@ -80,8 +80,7 @@ public class ActionHandler {
             StatusMessageHandler.showStatusMessage(context,
                     context.getString(R.string.gateway_not_supported_by_receiver), 5000);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 
@@ -132,8 +131,7 @@ public class ActionHandler {
             DatabaseHandler.addHistoryItem(historyItem);
             MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 
@@ -203,8 +201,7 @@ public class ActionHandler {
             DatabaseHandler.addHistoryItem(historyItem);
             MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 
@@ -258,8 +255,7 @@ public class ActionHandler {
             DatabaseHandler.addHistoryItem(historyItem);
             MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 
@@ -279,8 +275,7 @@ public class ActionHandler {
             DatabaseHandler.addHistoryItem(historyItem);
             MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 
@@ -310,8 +305,7 @@ public class ActionHandler {
             DatabaseHandler.addHistoryItem(historyItem);
             MainActivity.sendHistoryChangedBroadcast(context);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 

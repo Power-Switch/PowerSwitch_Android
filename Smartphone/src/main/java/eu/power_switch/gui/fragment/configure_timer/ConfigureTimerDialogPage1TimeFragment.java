@@ -129,8 +129,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
             timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
             timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

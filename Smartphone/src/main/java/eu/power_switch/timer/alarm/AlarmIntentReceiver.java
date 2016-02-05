@@ -26,7 +26,6 @@ import android.os.Bundle;
 
 import java.util.Calendar;
 
-import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -132,8 +131,7 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
             }
 
         } catch (Exception e) {
-            Log.e("Unknown Alarm Error: ", e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
 
         reinitializeAlarms(context);
@@ -146,8 +144,7 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                 AlarmHandler.createAlarm(context, timer);
             }
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(context, R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 }

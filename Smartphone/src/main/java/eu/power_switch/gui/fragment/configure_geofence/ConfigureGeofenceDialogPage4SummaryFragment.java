@@ -51,7 +51,6 @@ import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 29.01.2016.
@@ -153,8 +152,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
             // geofences can be invalid
             sendGeofenceSetupChangedBroadcast(getContext());
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
@@ -249,8 +247,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
             StatusMessageHandler.showStatusMessage((RecyclerViewFragment) getTargetFragment(),
                     R.string.geofence_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            Log.e(e);
-            StatusMessageHandler.showStatusMessage(getContext(), R.string.unknown_error, 5000);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 
