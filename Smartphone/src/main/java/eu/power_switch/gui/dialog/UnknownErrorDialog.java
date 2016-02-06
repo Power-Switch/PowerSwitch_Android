@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -27,7 +28,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import eu.power_switch.R;
 
@@ -38,18 +43,24 @@ import eu.power_switch.R;
  */
 public class UnknownErrorDialog extends DialogFragment {
 
-    private static final String EXCEPTION_KEY = "exception";
+    private static final String THROWABLE_KEY = "throwable";
+    private static final String TIME_KEY = "time";
 
     private View rootView;
     private Dialog dialog;
-    private Throwable e;
+    private Throwable throwable;
+    private Date timeRaised;
 
     /**
      * Create a new instance of this Dialog while providing an argument.
+     *
+     * @param t                        any throwable
+     * @param timeRaisedInMilliseconds time when the throwable was raised
      */
-    public static UnknownErrorDialog newInstance(Throwable t) {
+    public static UnknownErrorDialog newInstance(Throwable t, long timeRaisedInMilliseconds) {
         Bundle args = new Bundle();
-        args.putSerializable(EXCEPTION_KEY, t);
+        args.putSerializable(THROWABLE_KEY, t);
+        args.putLong(TIME_KEY, timeRaisedInMilliseconds);
 
         UnknownErrorDialog fragment = new UnknownErrorDialog();
         fragment.setArguments(args);
@@ -67,9 +78,26 @@ public class UnknownErrorDialog extends DialogFragment {
 
 
         Bundle args = getArguments();
-        if (args.containsKey(EXCEPTION_KEY)) {
-            e = (Throwable) args.getSerializable(EXCEPTION_KEY);
+        if (args.containsKey(THROWABLE_KEY)) {
+            throwable = (Throwable) args.getSerializable(THROWABLE_KEY);
         }
+        if (args.containsKey(TIME_KEY)) {
+            timeRaised = new Date(args.getLong(TIME_KEY));
+        }
+
+        Button buttonShare = (Button) rootView.findViewById(R.id.button_share);
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
+                sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error: " + throwable.getClass().getSimpleName());
+                sendIntent.setType("text/plain");
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.send_to)));
+            }
+        });
 
         TextView textViewErrorDescription = (TextView) rootView.findViewById(R.id.editText_error_description);
         textViewErrorDescription.setText(getErrorDescription());
@@ -90,14 +118,20 @@ public class UnknownErrorDialog extends DialogFragment {
         return dialog;
     }
 
-    public String getErrorDescription() {
-        StringBuilder errorDescriptionBuilder = new StringBuilder();
-        errorDescriptionBuilder.append(e.getClass()).append(": ").append(e.getMessage())
-                .append("\n\n");
-        for (StackTraceElement element : e.getStackTrace()) {
-            errorDescriptionBuilder.append("at ").append(element.toString()).append("\n");
-        }
+    private String getShareText() {
+        String shareText = "";
+        shareText += "An Exception was raised during the execution of PowerSwitch.\n";
+        shareText += "\n\n";
+        shareText += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
+        shareText += "\n";
+        shareText += "Stacktrace:\n";
+        shareText += "\n";
+        shareText += getErrorDescription();
 
-        return errorDescriptionBuilder.toString();
+        return shareText;
+    }
+
+    public String getErrorDescription() {
+        return android.util.Log.getStackTraceString(throwable);
     }
 }

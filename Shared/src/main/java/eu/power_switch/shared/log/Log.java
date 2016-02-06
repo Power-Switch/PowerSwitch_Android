@@ -98,12 +98,11 @@ public class Log {
     /**
      * Log Error
      *
-     * @param e any throwable
+     * @param throwable any throwable
      */
-    public static void e(Throwable e) {
-        if (e != null) {
-            log.error("Error", e);
-            e.printStackTrace();
+    public static void e(Throwable throwable) {
+        if (throwable != null) {
+            log.error("Error", throwable);
         }
     }
 
@@ -139,10 +138,10 @@ public class Log {
     /**
      * Log Error
      *
-     * @param source source of log message
-     * @param e      any throwable
+     * @param source    source of log message
+     * @param throwable any throwable
      */
-    public static void e(Object source, Throwable e) {
+    public static void e(Object source, Throwable throwable) {
         StringBuilder logMessage = new StringBuilder();
 
         if (source != null) {
@@ -161,19 +160,18 @@ public class Log {
             logMessage.append("} ");
         }
 
-        log.error(logMessage, e);
+        log.error(logMessage, throwable);
     }
 
     /**
      * Log Error
      *
-     * @param message any text message
-     * @param e       any throwable
+     * @param message   any text message
+     * @param throwable any throwable
      */
-    public static void e(String message, Throwable e) {
-        if (e != null) {
-            log.error(message, e);
-            e.printStackTrace();
+    public static void e(String message, Throwable throwable) {
+        if (throwable != null) {
+            log.error(message, throwable);
         } else {
             log.error(message);
         }

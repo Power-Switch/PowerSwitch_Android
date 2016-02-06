@@ -27,6 +27,8 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Date;
+
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
@@ -234,29 +236,14 @@ public class StatusMessageHandler {
     private static void showErrorSnackbar(final FragmentActivity activity, View parent, final Throwable e) {
         Log.e("Error Snackbar", e);
 
+        // remember the time when the exception was raised
+        final Date timeRaised = new Date();
         showSnackbar(parent, activity.getString(R.string.unknown_error), activity.getString(R.string.details),
                 new Runnable() {
                     @Override
                     public void run() {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        stringBuilder.append(e.getClass()).append(": ").append(e.getMessage())
-                                .append("\n\n");
-                        for (StackTraceElement element : e.getStackTrace()) {
-                            stringBuilder.append("at ").append(element.toString()).append("\n");
-                        }
-
-                        UnknownErrorDialog unknownErrorDialog = UnknownErrorDialog.newInstance(e);
+                        UnknownErrorDialog unknownErrorDialog = UnknownErrorDialog.newInstance(e, timeRaised.getTime());
                         unknownErrorDialog.show(activity.getSupportFragmentManager(), null);
-
-//                        new AlertDialog.Builder(parent.getContext())
-//                                .setTitle(R.string.unknown_error)
-//                                .setMessage(stringBuilder.toString())
-//                                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.dismiss();
-//                                    }
-//                                }).show();
                     }
                 }, 15000);
     }

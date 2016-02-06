@@ -72,6 +72,11 @@
     <string name="missing_location_permission">Missing location permission</string>
     <string name="details">Details</string>
 
+    <string name="share">Share</string>
+    <string name="send_to">Send to</string>
+    <string name="unknown_error_info">An Exception was raised during the operation of PowerSwitch. Share the text
+        below with the developer to help improve the App.</string>
+
 
     <string-array name="main_tab_names">
         <item>@string/rooms</item>

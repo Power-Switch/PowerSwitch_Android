@@ -61,4 +61,9 @@
     <string name="missing_wifi_connection">Keine WLAN Verbindung!</string>
     <string name="missing_network_connection">Keine Netzwerkverbindung!</string>
 
+    <string name="share">Teilen</string>
+    <string name="send_to">Senden an</string>
+    <string name="unknown_error_info">Ein unerwarteter Fehler ist bei der Verwendung von PowerSwitch aufgetreten.
+        Teile den unteren Text mit dem Enwitckler, um die App zu verbessern.</string>
+
 </resources>

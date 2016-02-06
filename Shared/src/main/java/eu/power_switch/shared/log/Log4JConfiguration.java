@@ -23,7 +23,8 @@ import android.os.Environment;
 import org.apache.log4j.Level;
 
 import java.io.File;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.mindpipe.android.logging.log4j.LogConfigurator;
 
@@ -79,37 +80,8 @@ public class Log4JConfiguration {
     }
 
     private static String getHumanReadableDate() {
-        String dateString = "";
-
-        Calendar calendar = Calendar.getInstance();
-        dateString += calendar.get(Calendar.YEAR);
-        dateString += "-";
-        if (calendar.get(Calendar.MONTH) + 1 < 10) {
-            dateString += "0";
-        }
-        dateString += calendar.get(Calendar.MONTH) + 1;
-        dateString += "-";
-        if (calendar.get(Calendar.DAY_OF_MONTH) < 10) {
-            dateString += "0";
-        }
-        dateString += calendar.get(Calendar.DAY_OF_MONTH);
-        dateString += "_";
-        if (calendar.get(Calendar.HOUR_OF_DAY) < 10) {
-            dateString += "0";
-        }
-        dateString += calendar.get(Calendar.HOUR_OF_DAY);
-        dateString += "-";
-        if (calendar.get(Calendar.MINUTE) < 10) {
-            dateString += "0";
-        }
-        dateString += calendar.get(Calendar.MINUTE);
-        dateString += "-";
-        if (calendar.get(Calendar.SECOND) < 10) {
-            dateString += "0";
-        }
-        dateString += calendar.get(Calendar.SECOND);
-
-        return dateString;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        return simpleDateFormat.format(new Date());
     }
 
 
