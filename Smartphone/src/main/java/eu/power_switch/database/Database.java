@@ -168,125 +168,129 @@ public class Database extends SQLiteOpenHelper {
                 case 6:
                 case 7:
                 case 8:
-                    // insert data from old timer_action table into ActionTable and TimerActionTable
-                    Cursor cursor = db.query("timer_action", new String[]{"_id", "timer_id", "action_type"},
-                            null, null, null, null, null);
-                    cursor.moveToFirst();
+                    try {
+                        // insert data from old timer_action table into ActionTable and TimerActionTable
+                        Cursor cursor = db.query("timer_action", new String[]{"_id", "timer_id", "action_type"},
+                                null, null, null, null, null);
+                        cursor.moveToFirst();
 
-                    while (!cursor.isAfterLast()) {
-                        Long actionId = cursor.getLong(0);
-                        Long timerId = cursor.getLong(1);
-                        String actionType = cursor.getString(2);
+                        while (!cursor.isAfterLast()) {
+                            Long actionId = cursor.getLong(0);
+                            Long timerId = cursor.getLong(1);
+                            String actionType = cursor.getString(2);
 
-                        ContentValues values;
-                        // add values to TimerActionTable Relation
-                        values = new ContentValues();
-                        values.put(TimerActionTable.COLUMN_TIMER_ID, timerId);
-                        values.put(TimerActionTable.COLUMN_ACTION_ID, actionId);
-                        db.insert(TimerActionTable.TABLE_NAME, null, values);
-
-                        // add values to ActionTable
-                        values = new ContentValues();
-                        values.put(ActionTable.COLUMN_ID, actionId);
-                        values.put(ActionTable.COLUMN_ACTION_TYPE, actionType);
-                        db.insert(ActionTable.TABLE_NAME, null, values);
-
-                        // RECEIVER ACTION
-                        Cursor cursor1 = db.query("timer_receiver_action", new String[]{"_id", "timer_action_id",
-                                ReceiverActionTable.COLUMN_ROOM_ID, ReceiverActionTable.COLUMN_RECEIVER_ID,
-                                ReceiverActionTable.COLUMN_BUTTON_ID
-                        }, "timer_action_id" + "=" + actionId, null, null, null, null);
-                        cursor1.moveToFirst();
-                        while (!cursor1.isAfterLast()) {
-                            Long roomId = cursor1.getLong(2);
-                            Long receiverId = cursor1.getLong(3);
-                            Long buttonId = cursor1.getLong(4);
-
+                            ContentValues values;
+                            // add values to TimerActionTable Relation
                             values = new ContentValues();
-                            values.put(ReceiverActionTable.COLUMN_ACTION_ID, actionId);
-                            values.put(ReceiverActionTable.COLUMN_ROOM_ID, roomId);
-                            values.put(ReceiverActionTable.COLUMN_RECEIVER_ID, receiverId);
-                            values.put(ReceiverActionTable.COLUMN_BUTTON_ID, buttonId);
-                            db.insert(ReceiverActionTable.TABLE_NAME, null, values);
+                            values.put(TimerActionTable.COLUMN_TIMER_ID, timerId);
+                            values.put(TimerActionTable.COLUMN_ACTION_ID, actionId);
+                            db.insert(TimerActionTable.TABLE_NAME, null, values);
 
-                            cursor1.moveToNext();
-                        }
-                        cursor1.close();
-
-                        // ROOM ACTION
-                        cursor1 = db.query("timer_room_action", new String[]{"_id", "timer_action_id",
-                                        RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME},
-                                "timer_action_id" + "=" + actionId, null, null, null, null);
-                        cursor1.moveToFirst();
-                        while (!cursor1.isAfterLast()) {
-                            Long roomId = cursor1.getLong(2);
-                            String buttonName = cursor1.getString(3);
-
+                            // add values to ActionTable
                             values = new ContentValues();
-                            values.put(RoomActionTable.COLUMN_ACTION_ID, actionId);
-                            values.put(RoomActionTable.COLUMN_ROOM_ID, roomId);
-                            values.put(RoomActionTable.COLUMN_BUTTON_NAME, buttonName);
-                            db.insert(RoomActionTable.TABLE_NAME, null, values);
+                            values.put(ActionTable.COLUMN_ID, actionId);
+                            values.put(ActionTable.COLUMN_ACTION_TYPE, actionType);
+                            db.insert(ActionTable.TABLE_NAME, null, values);
 
-                            cursor1.moveToNext();
+                            // RECEIVER ACTION
+                            Cursor cursor1 = db.query("timer_receiver_action", new String[]{"_id", "timer_action_id",
+                                    ReceiverActionTable.COLUMN_ROOM_ID, ReceiverActionTable.COLUMN_RECEIVER_ID,
+                                    ReceiverActionTable.COLUMN_BUTTON_ID
+                            }, "timer_action_id" + "=" + actionId, null, null, null, null);
+                            cursor1.moveToFirst();
+                            while (!cursor1.isAfterLast()) {
+                                Long roomId = cursor1.getLong(2);
+                                Long receiverId = cursor1.getLong(3);
+                                Long buttonId = cursor1.getLong(4);
+
+                                values = new ContentValues();
+                                values.put(ReceiverActionTable.COLUMN_ACTION_ID, actionId);
+                                values.put(ReceiverActionTable.COLUMN_ROOM_ID, roomId);
+                                values.put(ReceiverActionTable.COLUMN_RECEIVER_ID, receiverId);
+                                values.put(ReceiverActionTable.COLUMN_BUTTON_ID, buttonId);
+                                db.insert(ReceiverActionTable.TABLE_NAME, null, values);
+
+                                cursor1.moveToNext();
+                            }
+                            cursor1.close();
+
+                            // ROOM ACTION
+                            cursor1 = db.query("timer_room_action", new String[]{"_id", "timer_action_id",
+                                            RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME},
+                                    "timer_action_id" + "=" + actionId, null, null, null, null);
+                            cursor1.moveToFirst();
+                            while (!cursor1.isAfterLast()) {
+                                Long roomId = cursor1.getLong(2);
+                                String buttonName = cursor1.getString(3);
+
+                                values = new ContentValues();
+                                values.put(RoomActionTable.COLUMN_ACTION_ID, actionId);
+                                values.put(RoomActionTable.COLUMN_ROOM_ID, roomId);
+                                values.put(RoomActionTable.COLUMN_BUTTON_NAME, buttonName);
+                                db.insert(RoomActionTable.TABLE_NAME, null, values);
+
+                                cursor1.moveToNext();
+                            }
+                            cursor1.close();
+
+                            // SCENE ACTION
+                            cursor1 = db.query("timer_scene_action", new String[]{"_id", "timer_action_id",
+                                            SceneActionTable.COLUMN_SCENE_ID},
+                                    "timer_action_id" + "=" + actionId, null, null, null, null);
+                            cursor1.moveToFirst();
+                            while (!cursor1.isAfterLast()) {
+                                Long sceneId = cursor1.getLong(2);
+
+                                values = new ContentValues();
+                                values.put(SceneActionTable.COLUMN_ACTION_ID, actionId);
+                                values.put(SceneActionTable.COLUMN_SCENE_ID, sceneId);
+                                db.insert(SceneActionTable.TABLE_NAME, null, values);
+
+                                cursor1.moveToNext();
+                            }
+                            cursor1.close();
+
+                            cursor.moveToNext();
                         }
-                        cursor1.close();
 
-                        // SCENE ACTION
-                        cursor1 = db.query("timer_scene_action", new String[]{"_id", "timer_action_id",
-                                        SceneActionTable.COLUMN_SCENE_ID},
-                                "timer_action_id" + "=" + actionId, null, null, null, null);
-                        cursor1.moveToFirst();
-                        while (!cursor1.isAfterLast()) {
-                            Long sceneId = cursor1.getLong(2);
+                        cursor.close();
 
-                            values = new ContentValues();
-                            values.put(SceneActionTable.COLUMN_ACTION_ID, actionId);
-                            values.put(SceneActionTable.COLUMN_SCENE_ID, sceneId);
-                            db.insert(SceneActionTable.TABLE_NAME, null, values);
+                        db.execSQL("DROP TABLE IF EXISTS " + "timer_receiver_action");
+                        db.execSQL("DROP TABLE IF EXISTS " + "timer_room_action");
+                        db.execSQL("DROP TABLE IF EXISTS " + "timer_scene_action");
 
-                            cursor1.moveToNext();
-                        }
-                        cursor1.close();
-
-                        cursor.moveToNext();
+                        // drop old table
+                        db.execSQL("DROP TABLE IF EXISTS timer_action");
+                    } catch (Exception e) {
+                        Log.e(e);
                     }
-
-                    cursor.close();
-
-                    db.execSQL("DROP TABLE IF EXISTS " + "timer_receiver_action");
-                    db.execSQL("DROP TABLE IF EXISTS " + "timer_room_action");
-                    db.execSQL("DROP TABLE IF EXISTS " + "timer_scene_action");
-
-                    // drop old table
-                    db.execSQL("DROP TABLE IF EXISTS timer_action");
                 case 9:
                 case 10:
                 case 11:
                 case 12:
-                    cursor = db.query(ApartmentTable.TABLE_NAME, new String[]{ApartmentTable.COLUMN_ID,
-                            ApartmentTable.COLUMN_NAME}, null, null, null, null, null);
-                    cursor.moveToFirst();
-                    while (!cursor.isAfterLast()) {
-                        Long apartmentId = cursor.getLong(0);
-                        String apartmentName = cursor.getString(1);
-
-                        ContentValues values = new ContentValues();
-                        values.put(GeofenceTable.COLUMN_ACTIVE, false);
-                        values.put(GeofenceTable.COLUMN_NAME, apartmentName);
-                        values.put(GeofenceTable.COLUMN_LATITUDE, Integer.MAX_VALUE);
-                        values.put(GeofenceTable.COLUMN_LONGITUDE, Integer.MAX_VALUE);
-                        values.put(GeofenceTable.COLUMN_RADIUS, -1);
-                        long geofenceId = db.insert(GeofenceTable.TABLE_NAME, null, values);
-
-                        values = new ContentValues();
-                        values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, apartmentId);
-                        values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
-                        db.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
-
-                        cursor.moveToNext();
-                    }
-                    cursor.close();
+//                    Cursor cursor = db.query(ApartmentTable.TABLE_NAME, new String[]{ApartmentTable.COLUMN_ID,
+//                            ApartmentTable.COLUMN_NAME}, null, null, null, null, null);
+//                    cursor.moveToFirst();
+//                    while (!cursor.isAfterLast()) {
+//                        Long apartmentId = cursor.getLong(0);
+//                        String apartmentName = cursor.getString(1);
+//
+//                        ContentValues values = new ContentValues();
+//                        values.put(GeofenceTable.COLUMN_ACTIVE, false);
+//                        values.put(GeofenceTable.COLUMN_NAME, apartmentName);
+//                        values.put(GeofenceTable.COLUMN_LATITUDE, Integer.MAX_VALUE);
+//                        values.put(GeofenceTable.COLUMN_LONGITUDE, Integer.MAX_VALUE);
+//                        values.put(GeofenceTable.COLUMN_RADIUS, -1);
+//                        long geofenceId = db.insert(GeofenceTable.TABLE_NAME, null, values);
+//
+//                        values = new ContentValues();
+//                        values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, apartmentId);
+//                        values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
+//                        db.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
+//
+//                        cursor.moveToNext();
+//                    }
+//                    cursor.close();
                     break;
             }
 

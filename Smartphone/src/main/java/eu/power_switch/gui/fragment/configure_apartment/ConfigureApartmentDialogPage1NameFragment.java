@@ -112,6 +112,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
 
             @Override
             public void afterTextChanged(Editable s) {
+                checkValidity();
                 sendNameApartmentChangedBroadcast(getContext(), getCurrentName(), getCheckedGateways());
             }
         };

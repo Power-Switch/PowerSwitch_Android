@@ -98,7 +98,8 @@ public class CreateBackupDialog extends DialogFragment {
                     backupHandler.createBackup(false, name.getText().toString().trim(), false);
                     BackupFragment.sendBackupsChangedBroadcast(getActivity());
 
-                    StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.backup_successful, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                            , R.string.backup_successful, Snackbar.LENGTH_LONG);
                 } catch (BackupAlreadyExistsException e) {
                     Log.e(e);
                     new AlertDialog.Builder(getActivity())
@@ -111,7 +112,8 @@ public class CreateBackupDialog extends DialogFragment {
                                         backupHandler.createBackup(false, name.getText().toString().trim(), true);
                                         BackupFragment.sendBackupsChangedBroadcast(getActivity());
 
-                                        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
+                                        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment())
+                                                        .getRecyclerView(),
                                                 R.string.backup_successful, Snackbar.LENGTH_LONG);
                                     } catch (Exception e1) {
                                         Log.e(e1);
@@ -119,7 +121,8 @@ public class CreateBackupDialog extends DialogFragment {
                                 }
                             }).setNegativeButton(android.R.string.no, null).create().show();
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage((RecyclerViewFragment) getTargetFragment(), e);
+                    StatusMessageHandler.showErrorMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                            , e);
                 }
             }
         });

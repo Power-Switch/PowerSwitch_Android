@@ -21,6 +21,7 @@ package eu.power_switch.gui.dialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -85,17 +86,29 @@ public class UnknownErrorDialog extends DialogFragment {
             timeRaised = new Date(args.getLong(TIME_KEY));
         }
 
-        Button buttonShare = (Button) rootView.findViewById(R.id.button_share);
-        buttonShare.setOnClickListener(new View.OnClickListener() {
+        Button buttonShareEmail = (Button) rootView.findViewById(R.id.button_share_via_mail);
+        buttonShareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
-                sendIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error: " + throwable.getClass().getSimpleName());
-                sendIntent.setType("text/plain");
-                startActivity(Intent.createChooser(sendIntent, getString(R.string.send_to)));
+                Intent emailIntent = new Intent();
+                emailIntent.setAction(Intent.ACTION_SENDTO);
+                emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error: " + throwable.getClass().getSimpleName());
+                emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
+            }
+        });
+
+        Button buttonShareText = (Button) rootView.findViewById(R.id.button_share_plain_text);
+        buttonShareText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TEXT, getErrorDescription());
+                intent.setType("text/plain");
+                startActivity(Intent.createChooser(intent, getString(R.string.send_to)));
             }
         });
 
@@ -103,7 +116,7 @@ public class UnknownErrorDialog extends DialogFragment {
         textViewErrorDescription.setText(getErrorDescription());
 
         builder.setTitle(R.string.unknown_error);
-        builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dismiss();
@@ -118,7 +131,7 @@ public class UnknownErrorDialog extends DialogFragment {
         return dialog;
     }
 
-    private String getShareText() {
+    private String getEmailContentText() {
         String shareText = "";
         shareText += "An Exception was raised during the execution of PowerSwitch.\n";
         shareText += "\n\n";

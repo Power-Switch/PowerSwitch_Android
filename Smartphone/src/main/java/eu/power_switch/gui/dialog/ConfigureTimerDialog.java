@@ -149,7 +149,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                                     // notify scenes fragment
                                     TimersFragment.sendTimersChangedBroadcast(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
+                                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
                                             R.string.timer_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);

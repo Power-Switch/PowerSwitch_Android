@@ -124,7 +124,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                         return;
                     }
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                 }
 
                 ActionHandler.execute(fragmentActivity, scene);

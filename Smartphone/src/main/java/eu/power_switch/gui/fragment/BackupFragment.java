@@ -129,10 +129,11 @@ public class BackupFragment extends RecyclerViewFragment {
                             android.os.Process.killProcess(android.os.Process.myPid());
                         } catch (BackupNotFoundException e) {
                             Log.e(e);
-                            StatusMessageHandler.showInfoMessage(recyclerViewFragment, R.string.backup_not_found, Snackbar
+                            StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView()
+                                    , R.string.backup_not_found, Snackbar
                                     .LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+                            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
                     }
                 }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
@@ -236,7 +237,7 @@ public class BackupFragment extends RecyclerViewFragment {
             // For example if the user has previously denied the permission.
             Log.d("Displaying storage permission rationale to provide additional context.");
 
-            StatusMessageHandler.showInfoMessage(this, R.string.missing_external_storage_permission,
+            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_external_storage_permission,
                     android.R.string.ok, new Runnable() {
                         @Override
                         public void run() {

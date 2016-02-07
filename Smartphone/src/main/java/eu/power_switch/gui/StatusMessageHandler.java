@@ -24,6 +24,7 @@ import android.os.Looper;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
@@ -53,23 +54,30 @@ public class StatusMessageHandler {
      * You can pass an actionMessage and a Runnable that will be represented as a button on the Snackbar. The Toast
      * however will not have a button, be mindful about that.
      *
-     * @param recyclerViewFragment          recyclerViewFragment this snackbar is shown on (used for
+     * @param view                          parent view this snackbar is shown on (used for
      *                                      the Snackbar and as a context)
      * @param messageResourceId             status message resource id
      * @param actionButtonMessageResourceId message resource id of action button
      * @param runnable                      code that should be executed when activating the action button
      * @param duration                      duration
      */
-    public static void showInfoMessage(RecyclerViewFragment recyclerViewFragment, @StringRes int messageResourceId,
-                                       @StringRes int actionButtonMessageResourceId, Runnable runnable, int
-                                               duration) {
-        Context context = recyclerViewFragment.getContext();
+    public static void showInfoMessage(View view, @StringRes int messageResourceId,
+                                       @StringRes int actionButtonMessageResourceId, Runnable runnable, int duration) {
+        Context context = view.getContext();
 
         if (MainActivity.isInForeground()) {
-            showSnackbar(recyclerViewFragment.getRecyclerView(),
-                    context.getString(messageResourceId),
-                    context.getString(actionButtonMessageResourceId), runnable,
-                    duration);
+            if (view instanceof RecyclerView) {
+                RecyclerView recyclerView = (RecyclerView) view;
+                showSnackbar(recyclerView,
+                        context.getString(messageResourceId),
+                        context.getString(actionButtonMessageResourceId), runnable,
+                        duration);
+            } else {
+                showSnackbar(view,
+                        context.getString(messageResourceId),
+                        context.getString(actionButtonMessageResourceId), runnable,
+                        duration);
+            }
         } else {
             showInfoToast(context, context.getString(messageResourceId), duration);
         }
@@ -105,35 +113,14 @@ public class StatusMessageHandler {
      * it is running in the foreground.
      * The Snackbar will have a "Dismiss" Button by default.
      *
-     * @param recyclerViewFragment recyclerViewFragment this snackbar is shown on (used for
-     *                             the Snackbar and as a context)
-     * @param message              status message
-     * @param duration             duration
+     * @param view              view this snackbar is shown on (used for
+     *                          the Snackbar and as a context)
+     * @param messageResourceId status message resource id
+     * @param duration          duration
      */
-    public static void showInfoMessage(RecyclerViewFragment recyclerViewFragment, String message, int duration) {
-        Context context = recyclerViewFragment.getContext();
-
-        if (MainActivity.isInForeground()) {
-            showInfoSnackbar(recyclerViewFragment.getRecyclerView(), message, duration);
-        } else {
-            showInfoToast(context, message, duration);
-        }
-    }
-
-    /**
-     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
-     * it is running in the foreground.
-     * The Snackbar will have a "Dismiss" Button by default.
-     *
-     * @param recyclerViewFragment recyclerViewFragment this snackbar is shown on (used for
-     *                             the Snackbar and as a context)
-     * @param messageResourceId    status message resource id
-     * @param duration             duration
-     */
-    public static void showInfoMessage(RecyclerViewFragment recyclerViewFragment, @StringRes int messageResourceId, int
-            duration) {
-        Context context = recyclerViewFragment.getContext();
-        showInfoMessage(recyclerViewFragment, context.getString(messageResourceId), duration);
+    public static void showInfoMessage(View view, @StringRes int messageResourceId, int duration) {
+        Context context = view.getContext();
+        showInfoMessage(view, context.getString(messageResourceId), duration);
     }
 
     /**
@@ -147,6 +134,31 @@ public class StatusMessageHandler {
      */
     public static void showInfoMessage(Context context, @StringRes int messageResourceId, int duration) {
         showInfoMessage(context, context.getString(messageResourceId), duration);
+    }
+
+    /**
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground.
+     * The Snackbar will have a "Dismiss" Button by default.
+     *
+     * @param view     view this snackbar is shown on (used for
+     *                 the Snackbar and as a context)
+     * @param message  status message
+     * @param duration duration
+     */
+    public static void showInfoMessage(View view, String message, int duration) {
+        Context context = view.getContext();
+
+        if (MainActivity.isInForeground()) {
+            if (view instanceof RecyclerView) {
+                RecyclerView recyclerView = (RecyclerView) view;
+                showInfoSnackbar(recyclerView, message, duration);
+            } else {
+                showInfoSnackbar(view, message, duration);
+            }
+        } else {
+            showInfoToast(context, message, duration);
+        }
     }
 
     /**
@@ -172,15 +184,20 @@ public class StatusMessageHandler {
      * The Snackbar will have a "Details" Button by default, which opens up a dialog showing more infos about the exception.
      * The exception will also be logged, so you dont have to do this in your catch{} blocks yourself.
      *
-     * @param recyclerViewFragment recyclerViewFragment this snackbar is shown on (used for
-     *                             the Snackbar and as a context)
-     * @param e                    throwable
+     * @param view view this snackbar is shown on (used for
+     *             the Snackbar and as a context)
+     * @param e    throwable
      */
-    public static void showErrorMessage(final RecyclerViewFragment recyclerViewFragment, final Throwable e) {
-        Context context = recyclerViewFragment.getContext();
+    public static void showErrorMessage(final View view, final Throwable e) {
+        Context context = view.getContext();
 
         if (MainActivity.isInForeground()) {
-            showErrorSnackbar(MainActivity.getActivity(), recyclerViewFragment.getRecyclerView(), e);
+            if (view instanceof RecyclerView) {
+                RecyclerView recyclerView = (RecyclerView) view;
+                showErrorSnackbar(MainActivity.getActivity(), recyclerView, e);
+            } else {
+                showErrorSnackbar(MainActivity.getActivity(), view, e);
+            }
         } else {
             showErrorToast(context, e);
         }
@@ -342,7 +359,7 @@ public class StatusMessageHandler {
      * @param recyclerViewFragment
      */
     public static void showNoActiveGatewayMessage(final RecyclerViewFragment recyclerViewFragment) {
-        showInfoMessage(recyclerViewFragment, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
+        showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_active_gateway, R.string.open_settings, new Runnable() {
             @Override
             public void run() {
                 MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class,

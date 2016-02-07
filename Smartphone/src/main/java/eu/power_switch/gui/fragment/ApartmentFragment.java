@@ -85,7 +85,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
         try {
             apartments = new ArrayList<>(DatabaseHandler.getAllApartments());
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
         }
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_apartments);
         apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
@@ -133,7 +133,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                     configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                 }
             }
         });
@@ -148,7 +148,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                     apartments.addAll(DatabaseHandler.getAllApartments());
                     apartmentArrayAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                 }
             }
         };

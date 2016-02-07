@@ -184,7 +184,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
             // update scene widgets
             SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
-            StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.scene_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

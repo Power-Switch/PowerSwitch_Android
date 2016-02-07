@@ -228,7 +228,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
             }
 
             TimersFragment.sendTimersChangedBroadcast(getContext());
-            StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(),
+            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
                     R.string.timer_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

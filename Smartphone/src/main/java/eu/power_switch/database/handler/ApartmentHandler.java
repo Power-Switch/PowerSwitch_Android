@@ -45,8 +45,9 @@ abstract class ApartmentHandler {
      * Adds a Apartment to Database
      *
      * @param apartment Apartment
+     * @return ID of inserted Apartment
      */
-    protected static void add(Apartment apartment) {
+    protected static long add(Apartment apartment) {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
         long apartmentId = DatabaseHandler.database.insert(ApartmentTable.TABLE_NAME, null, values);
@@ -54,6 +55,8 @@ abstract class ApartmentHandler {
         // apartment.getId() because it was just inserted into database
         addAssociatedGateways(apartmentId, apartment.getAssociatedGateways());
         addGeofence(apartmentId, apartment);
+
+        return apartmentId;
     }
 
     private static void addGeofence(long apartmentId, Apartment apartment) {

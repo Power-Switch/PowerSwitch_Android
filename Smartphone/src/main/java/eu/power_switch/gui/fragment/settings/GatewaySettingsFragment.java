@@ -144,7 +144,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
     private void startAutoDiscovery() {
         if (!NetworkHandler.isWifiAvailable()) {
-            StatusMessageHandler.showInfoMessage(this, R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -166,7 +166,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                     });
 
                     if (foundGateways == null || foundGateways.isEmpty()) {
-                        StatusMessageHandler.showInfoMessage(recyclerViewFragment, R.string.no_gateway_found,
+                        StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_gateway_found,
                                 Snackbar.LENGTH_LONG);
                         return;
                     }
@@ -188,11 +188,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                             existingGatewaysCount++;
                             DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+                            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
                     }
 
-                    StatusMessageHandler.showInfoMessage(recyclerViewFragment,
+                    StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                             getString(R.string.autodiscover_response_message, newGatewaysCount, existingGatewaysCount,
                                     unknownGatewaysCount), Snackbar.LENGTH_LONG);
 

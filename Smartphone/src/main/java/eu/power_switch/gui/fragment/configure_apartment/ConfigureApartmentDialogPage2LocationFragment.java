@@ -68,6 +68,7 @@ import eu.power_switch.gui.map.Geofence;
 import eu.power_switch.gui.map.MapViewHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -444,7 +445,12 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
                             new HashMap<eu.power_switch.google_play_services.geofence.Geofence.EventType, List<Action>>())
             );
 
-            DatabaseHandler.addApartment(newApartment);
+            long newId = DatabaseHandler.addApartment(newApartment);
+
+            // set new apartment as active if it is the first and only one
+            if (DatabaseHandler.getAllApartments().size() == 1) {
+                SmartphonePreferencesHandler.setCurrentApartmentId(newId);
+            }
         } else {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
             eu.power_switch.google_play_services.geofence.Geofence updatedGeofence = apartment.getGeofence();
@@ -459,8 +465,8 @@ public class ConfigureApartmentDialogPage2LocationFragment extends Fragment impl
         }
 
         ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-        StatusMessageHandler.showInfoMessage((RecyclerViewFragment) getTargetFragment(), R.string.apartment_saved,
-                Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                , R.string.apartment_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

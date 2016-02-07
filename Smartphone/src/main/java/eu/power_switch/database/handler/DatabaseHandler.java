@@ -152,10 +152,11 @@ public final class DatabaseHandler {
      * /////////////////////////
      */
 
-    public static void addApartment(Apartment apartment) throws Exception {
+    public static long addApartment(Apartment apartment) throws Exception {
         openWritable();
+        long id = -1;
         try {
-            ApartmentHandler.add(apartment);
+            id = ApartmentHandler.add(apartment);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
@@ -164,6 +165,8 @@ public final class DatabaseHandler {
         } finally {
             close();
         }
+
+        return id;
     }
 
     /**

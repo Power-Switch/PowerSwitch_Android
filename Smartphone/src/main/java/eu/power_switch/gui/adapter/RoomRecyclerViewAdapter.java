@@ -142,7 +142,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     updateReceiverViews(holder, room);
 
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                 }
             }
         };
@@ -234,7 +234,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                 return;
                             }
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(recyclerViewFragment, e);
+                            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                             return;
                         }
 

@@ -57,7 +57,7 @@ public class TimerActionTable {
             case 4:
             case 5:
             case 6:
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+                db.execSQL("DROP TABLE IF EXISTS " + "timer_action");
                 onCreate(db);
             case 7:
             case 8:
