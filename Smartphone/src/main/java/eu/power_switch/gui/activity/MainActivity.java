@@ -232,12 +232,13 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             if (SmartphonePreferencesHandler.getCurrentApartmentId() == SettingsConstants.INVALID_APARTMENT_ID) {
                 fragment = ApartmentFragment.class.newInstance();
+                drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
                 fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.getStartupDefaultTab());
+                drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
             lastFragmentClasses.push(fragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
-            drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.mainContentFrameLayout, fragment)
                     .commit();

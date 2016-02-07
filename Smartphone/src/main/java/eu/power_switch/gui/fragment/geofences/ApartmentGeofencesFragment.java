@@ -119,9 +119,11 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     private void fillListWithGeofences() {
         try {
             List<Apartment> apartments = DatabaseHandler.getAllApartments();
-            for (Apartment apartment :
-                    apartments) {
-                geofences.add(apartment.getGeofence());
+            for (Apartment apartment : apartments) {
+                // apartment can have no associated Geofence, so we just ignore it
+                if (apartment.getGeofence() != null) {
+                    geofences.add(apartment.getGeofence());
+                }
             }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

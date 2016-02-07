@@ -68,6 +68,10 @@ abstract class GeofenceHandler {
     }
 
     protected static Geofence get(Long id) {
+        if (id == null) {
+            return null;
+        }
+
         Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
                 GeofenceTable.COLUMN_ID + "=" + id, null, null, null, null);
         cursor.moveToFirst();

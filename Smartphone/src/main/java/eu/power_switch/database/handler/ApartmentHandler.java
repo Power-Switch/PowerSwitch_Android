@@ -60,6 +60,9 @@ abstract class ApartmentHandler {
     }
 
     private static void addGeofence(long apartmentId, Apartment apartment) {
+        if (apartment.getGeofence() == null) {
+            return;
+        }
         Long geofenceId = GeofenceHandler.add(apartment.getGeofence());
 
         ContentValues values = new ContentValues();
@@ -80,7 +83,9 @@ abstract class ApartmentHandler {
                 ApartmentTable.COLUMN_ID + "==" + apartment.getId(), null);
 
         // update associated geofence
-        GeofenceHandler.update(apartment.getGeofence());
+        if (apartment.getGeofence() != null) {
+            GeofenceHandler.update(apartment.getGeofence());
+        }
 
         // update associated gateways
         removeAssociatedGateways(apartment.getId());
@@ -216,7 +221,9 @@ abstract class ApartmentHandler {
         Cursor cursor = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME,
                 columns, ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID + "=" + apartmentId,
                 null, null, null, null);
-        cursor.moveToFirst();
+        if (!cursor.moveToFirst()) {
+            return null;
+        }
 
         Long geofenceId = cursor.getLong(1);
         cursor.close();

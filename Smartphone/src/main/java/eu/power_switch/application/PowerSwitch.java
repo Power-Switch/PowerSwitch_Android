@@ -47,10 +47,11 @@ public class PowerSwitch extends MultiDexApplication {
         // Set up our own UncaughtExceptionHandler to log errors we couldn't even think of
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
-            public void uncaughtException(Thread thread, Throwable ex) {
-                Log.e("Fatal Exception", new Exception(ex));
+            public void uncaughtException(Thread thread, Throwable throwable) {
+                Log.e("Fatal Exception", throwable);
+
                 // pass on exception to android system
-                originalUncaughtExceptionHandler.uncaughtException(thread, ex);
+                originalUncaughtExceptionHandler.uncaughtException(thread, throwable);
             }
         });
     }

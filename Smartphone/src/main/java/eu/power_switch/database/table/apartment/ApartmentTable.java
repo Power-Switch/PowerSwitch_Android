@@ -18,7 +18,10 @@
 
 package eu.power_switch.database.table.apartment;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Apartment table description
@@ -40,14 +43,22 @@ public class ApartmentTable {
 
     public static void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
+    }
 
-//        String apartmentName = "Home";
-//        ContentValues values = new ContentValues();
-//        values.put(COLUMN_ID, 0);
-//        values.put(COLUMN_NAME, apartmentName);
-//        values.put(COLUMN_POSITION, 0);
-//        db.insert(TABLE_NAME, null, values);
-//
+    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion <= 10) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(db);
+
+            String apartmentName = "Home";
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_ID, 0);
+            values.put(COLUMN_NAME, apartmentName);
+            values.put(COLUMN_POSITION, 0);
+            db.insert(TABLE_NAME, null, values);
+
+            SmartphonePreferencesHandler.setCurrentApartmentId((long) 0);
+
 //        values = new ContentValues();
 //        values.put(GeofenceTable.COLUMN_ACTIVE, false);
 //        values.put(GeofenceTable.COLUMN_NAME, apartmentName);
@@ -60,12 +71,6 @@ public class ApartmentTable {
 //        values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, 0);
 //        values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
 //        db.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
-    }
-
-    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion <= 10) {
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(db);
         }
     }
 }
