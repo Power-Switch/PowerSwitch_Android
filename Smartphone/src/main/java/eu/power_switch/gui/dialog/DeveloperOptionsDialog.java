@@ -32,6 +32,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 
+import java.util.Date;
 import java.util.Locale;
 
 import eu.power_switch.R;
@@ -77,6 +78,16 @@ public class DeveloperOptionsDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 geofenceApiHandler.removeAllGeofences();
+            }
+        });
+
+        Button forceUnknownExceptionDialog = (Button) rootView.findViewById(R.id.button_forceUnknownExceptionDialog);
+        forceUnknownExceptionDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UnknownErrorDialog unknownErrorDialog = UnknownErrorDialog.newInstance(
+                        new Exception("Unknown error during runtime!"), new Date().getTime());
+                unknownErrorDialog.show(getFragmentManager(), null);
             }
         });
 

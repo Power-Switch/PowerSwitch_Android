@@ -762,8 +762,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         appIsInForeground = true;
 
-//        StatusMessageHandler.showErrorMessage(this, new Exception("Unbekannter Fehler während der Laufzeit"));
-
         updateHistory();
         HolidaySpecialHandler.showHolidaySpecial(this);
     }

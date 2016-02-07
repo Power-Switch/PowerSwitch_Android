@@ -32,13 +32,27 @@
             android:id="@+id/checkBox_playStoreMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
+            android:layout_margin="@dimen/padding_double"
             android:text="Play Store Mode"/>
+
+        <CheckBox
+            android:id="@+id/checkBox_forceLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/padding_double"
+            android:text="Force Language"/>
+
+        <Spinner
+            android:id="@+id/spinner_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"/>
 
         <Button
             android:id="@+id/button_resetShowcases"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_double"
             android:text="Reset Showcases (Tutorial)"/>
 
 
@@ -46,19 +60,15 @@
             android:id="@+id/button_removeAllGeofences"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_double"
             android:text="Remove all Geofences"/>
 
-        <CheckBox
-            android:id="@+id/checkBox_forceLanguage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
-            android:text="Force Language"/>
-
-        <Spinner
-            android:id="@+id/spinner_language"
+        <Button
+            android:id="@+id/button_forceUnknownExceptionDialog"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_double"
+            android:text="Force &quot;Unknown Error&quot; Dialog"/>
 
     </LinearLayout>
 
