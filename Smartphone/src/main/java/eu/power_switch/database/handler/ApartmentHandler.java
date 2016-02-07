@@ -109,6 +109,8 @@ abstract class ApartmentHandler {
         }
 
         removeAssociatedGateways(id);
+        // TODO: disable and remove associated geofence
+
         DatabaseHandler.database.delete(ApartmentTable.TABLE_NAME, ApartmentTable.COLUMN_ID + "=" + id, null);
     }
 
