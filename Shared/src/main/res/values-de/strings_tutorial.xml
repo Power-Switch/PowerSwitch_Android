@@ -76,10 +76,20 @@
         der Smartwatch zu laden.
     </string>
     <string name="tutorial__geofences_apartment_explanation">
-        GEOFENCES!!!
+        In diesem Tab kannst du Geofences passend zu deinen Wohnungen konfigurieren.\n
+        \nMit Geofences kannst du ortsabhängig Aktionen auslösen. Aktionen können getrennt für das Ein- und Austreten
+        in den festgelegten Bereich festgelegt werden. Geofences in diesem Tab sind immer auch einer Wohnung
+        zugeordnet. D.h. die Position des Geofence einer Wohnung wird auch bei anderen Funktionen von PowerSwitch
+        verwendet (z.B. automatisches Umschalten zwischen Wohnungen).\n
+        \nBeispiel: Beim Verlassen der Wohnung das Licht in allen Zimemrn aus- und beim nach
+        Hause kommen im Flur und dem Wohnzimmer automatisch einschalten lassen.
     </string>
     <string name="tutorial__geofences_custom_explanation">
-        GEOFENCES!!!
+        In diesem Tab kannst du eigene Geofences konfigurieren.\n
+        \nMit Geofences kannst du ortsabhängig Aktionen auslösen. Aktionen können getrennt für das Ein- und Austreten
+        in den festgelegten Bereich festgelegt werden.\n
+        \nZum Beispiel kannst du beim Verlassen der Wohnung das Licht in allen Zimemrn aus- und beim nach Hause
+        kommen im Flur und dem Wohnzimmer automatisch einschalten lassen.
     </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>

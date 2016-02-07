@@ -70,10 +70,19 @@
     </string>
 
     <string name="tutorial__geofences_apartment_explanation">
-        GEOFENCES!!!
+        In this tab you can add and configure geofences for specific apartments.\n
+        \nGeofences allow you to make actions based on your location. Actions can be specified for enter and exit
+        events. Geofences in this tab are always connected with an apartment, so the location of the geofence is
+        also used for other features of PowerSwitch (like auto switching between apartments).\n
+        \nExample: Turn off all your lights when leaving your apartment and turn them on when you come home
+        again.
     </string>
     <string name="tutorial__geofences_custom_explanation">
-        GEOFENCES!!!
+        In this tab you can add and configure geofences.\n
+        \nGeofences allow you to make actions based on your location. Actions can be specified for enter and exit
+        events.\n
+        \nExample: Turn off all your lights when leaving your apartment and turn them on when you come home
+        again.
     </string>
 
     <string name="tutorial__add_new_roms_and_devices_here">Add new Rooms and Receivers using the + button</string>
