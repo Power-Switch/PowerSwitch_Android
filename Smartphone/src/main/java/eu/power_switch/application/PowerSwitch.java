@@ -19,6 +19,8 @@
 package eu.power_switch.application;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
@@ -56,6 +58,22 @@ public class PowerSwitch extends MultiDexApplication {
         });
     }
 
+    /**
+     * Get a text representation of application version name and build number
+     *
+     * @param context any suitable context
+     * @return app version as text
+     */
+    public static String getAppVersionDescription(Context context) {
+        try {
+            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            return pInfo.versionName + " (" + pInfo.versionCode + ")";
+        } catch (Exception e) {
+            Log.e(e);
+            return "unknown (error while retrieving)";
+        }
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -70,6 +88,10 @@ public class PowerSwitch extends MultiDexApplication {
         LogHandler.configureLogger();
 
         Log.d("Application init...");
+        Log.d("App version: " + getAppVersionDescription(this));
+        Log.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
+        Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
+        Log.d("Device brand/model: " + LogHandler.getDeviceName());
 
         // One time initialization of handlers for static access
         DatabaseHandler.init(this);

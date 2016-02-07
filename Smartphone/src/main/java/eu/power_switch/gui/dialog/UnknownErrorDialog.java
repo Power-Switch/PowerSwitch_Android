@@ -22,6 +22,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -36,6 +37,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import eu.power_switch.R;
+import eu.power_switch.application.PowerSwitch;
+import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Shows a Dialog with details about an unknown Exception/Error that occurred during runtime
@@ -92,10 +96,17 @@ public class UnknownErrorDialog extends DialogFragment {
             public void onClick(View v) {
                 Intent emailIntent = new Intent();
                 emailIntent.setAction(Intent.ACTION_SENDTO);
+                emailIntent.setType("*/*");
                 emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error: " + throwable.getClass().getSimpleName());
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
+                        ": " + throwable.getMessage());
                 emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
+                try {
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
+                } catch (Exception e) {
+                    Log.e("Error adding zip to e-mail intent", e);
+                }
                 startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
             }
         });
@@ -134,17 +145,39 @@ public class UnknownErrorDialog extends DialogFragment {
     private String getEmailContentText() {
         String shareText = "";
         shareText += "An Exception was raised during the execution of PowerSwitch.\n";
-        shareText += "\n\n";
+        shareText += "\n";
+        shareText += "If you can please provide more info about when and how the error occurred on your device " +
+                "here:\n" +
+                "\n" +
+                "YOUR TEXT\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "\n" +
+                "\n";
+
+        shareText += "A zip file containing all log files on this device has been added as an " +
+                "attachment to this email." + "\n" + "\n" + "\n";
+
+        shareText += "<<<<<<<<<< DEVELOPER INFOS >>>>>>>>>>\n";
         shareText += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
         shareText += "\n";
-        shareText += "Stacktrace:\n";
+        shareText += "PowerSwitch Application Version: " + PowerSwitch.getAppVersionDescription(getContext()) + "\n";
+        shareText += "Device API Level: " + android.os.Build.VERSION.SDK_INT + "\n";
+        shareText += "Device OS Version name: " + Build.VERSION.RELEASE + "\n";
+        shareText += "Device brand/model: " + LogHandler.getDeviceName() + "\n";
         shareText += "\n";
-        shareText += getErrorDescription();
+        shareText += "Exception stacktrace:\n";
+        shareText += "\n";
+        shareText += getErrorDescription() + "\n";
+
 
         return shareText;
     }
 
-    public String getErrorDescription() {
+    private String getErrorDescription() {
         return android.util.Log.getStackTraceString(throwable);
     }
+
 }
