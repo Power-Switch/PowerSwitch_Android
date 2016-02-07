@@ -179,9 +179,7 @@ public class LogHandler {
         emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "PowerSwitch Logs");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "A zip file containing all log files on this device has been added as" +
-                " an attachment to this email.\n" +
-                "Thanks for your Feedback!");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.send_logs_template));
         try {
             emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
         } catch (Exception e) {

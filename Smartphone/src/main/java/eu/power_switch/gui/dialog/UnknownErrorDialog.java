@@ -144,22 +144,8 @@ public class UnknownErrorDialog extends DialogFragment {
 
     private String getEmailContentText() {
         String shareText = "";
-        shareText += "An Exception was raised during the execution of PowerSwitch.\n";
-        shareText += "\n";
-        shareText += "If you can please provide more info about when and how the error occurred on your device " +
-                "here:\n" +
-                "\n" +
-                "YOUR TEXT\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "\n" +
-                "\n";
-
-        shareText += "A zip file containing all log files on this device has been added as an " +
-                "attachment to this email." + "\n" + "\n" + "\n";
-
+        shareText += getString(R.string.send_unknown_error_log_template);
+        shareText += "\n\n\n";
         shareText += "<<<<<<<<<< DEVELOPER INFOS >>>>>>>>>>\n";
         shareText += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
         shareText += "\n";
@@ -171,7 +157,6 @@ public class UnknownErrorDialog extends DialogFragment {
         shareText += "Exception stacktrace:\n";
         shareText += "\n";
         shareText += getErrorDescription() + "\n";
-
 
         return shareText;
     }

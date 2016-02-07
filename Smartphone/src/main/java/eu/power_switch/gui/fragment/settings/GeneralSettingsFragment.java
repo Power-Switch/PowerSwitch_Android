@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -43,6 +44,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
@@ -230,6 +232,14 @@ public class GeneralSettingsFragment extends Fragment {
 
         radioButtonLightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_lightBlue);
         radioButtonLightBlue.setOnClickListener(onClickListener);
+
+        Button sendLogs = (Button) rootView.findViewById(R.id.button_sendLogs);
+        sendLogs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogHandler.sendLogsAsMail(getContext());
+            }
+        });
 
         return rootView;
     }
