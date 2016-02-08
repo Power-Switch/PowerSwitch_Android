@@ -16,20 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.location;
+package eu.power_switch.shared.exception.backup;
 
 /**
- * Created by Markus on 25.01.2016.
+ * Created by Markus on 16.07.2015.
  */
-public class AddressNotFoundException extends Exception {
+public class BackupNotFoundException extends Exception {
 
-    String address;
-
-    public AddressNotFoundException(String address) {
-        super("No Coordinates could be found for the given address: " + address);
-    }
-
-    public String getAddress() {
-        return address;
+    public BackupNotFoundException() {
+        super("Backup not found!");
     }
 }

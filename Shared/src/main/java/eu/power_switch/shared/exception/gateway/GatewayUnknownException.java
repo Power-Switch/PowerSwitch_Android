@@ -16,14 +16,16 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.backup;
+package eu.power_switch.shared.exception.gateway;
 
-/**
- * Created by Markus on 16.07.2015.
- */
-public class CreateBackupException extends Exception {
+public class GatewayUnknownException extends RuntimeException {
+    private static final long serialVersionUID = 5040868827100944073L;
 
-    public CreateBackupException(Exception e) {
-        super("Error creating Backup!", e);
+    public GatewayUnknownException() {
+        super();
+    }
+
+    public GatewayUnknownException(String s) {
+        super(s);
     }
 }

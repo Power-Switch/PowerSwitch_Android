@@ -29,7 +29,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
-import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.obj.Apartment;
@@ -39,6 +38,7 @@ import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ExternalAppConstants;
+import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.widget.ReceiverWidget;

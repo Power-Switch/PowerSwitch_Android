@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Set;
 
 import eu.power_switch.R;
-import eu.power_switch.exception.location.AddressNotFoundException;
+import eu.power_switch.shared.exception.location.AddressNotFoundException;
 import eu.power_switch.shared.log.Log;
 
 /**

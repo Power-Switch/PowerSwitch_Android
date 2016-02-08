@@ -43,7 +43,6 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.exception.receiver.ReceiverAlreadyExistsException;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
@@ -52,6 +51,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.exception.receiver.ReceiverAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 
 /**

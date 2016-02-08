@@ -29,12 +29,12 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import eu.power_switch.exception.backup.BackupAlreadyExistsException;
-import eu.power_switch.exception.backup.BackupNotFoundException;
-import eu.power_switch.exception.backup.CreateBackupException;
-import eu.power_switch.exception.backup.RemoveBackupException;
-import eu.power_switch.exception.backup.RestoreBackupException;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
+import eu.power_switch.shared.exception.backup.BackupNotFoundException;
+import eu.power_switch.shared.exception.backup.CreateBackupException;
+import eu.power_switch.shared.exception.backup.RemoveBackupException;
+import eu.power_switch.shared.exception.backup.RestoreBackupException;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -257,5 +257,4 @@ public class BackupHandler {
         }
         fileOrDirectory.delete();
     }
-
 }

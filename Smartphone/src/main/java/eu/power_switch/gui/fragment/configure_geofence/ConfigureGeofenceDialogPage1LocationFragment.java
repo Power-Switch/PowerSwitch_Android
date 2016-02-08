@@ -49,13 +49,13 @@ import com.google.android.gms.maps.model.Marker;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.exception.location.AddressNotFoundException;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.map.MapViewHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.exception.location.AddressNotFoundException;
 import eu.power_switch.shared.log.Log;
 
 /**

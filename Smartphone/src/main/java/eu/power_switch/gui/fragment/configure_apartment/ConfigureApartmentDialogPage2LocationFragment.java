@@ -57,7 +57,6 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.exception.location.AddressNotFoundException;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
@@ -71,6 +70,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.exception.location.AddressNotFoundException;
 import eu.power_switch.shared.log.Log;
 
 /**

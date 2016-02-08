@@ -16,14 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.backup;
+package eu.power_switch.shared.exception.backup;
 
 /**
  * Created by Markus on 16.07.2015.
  */
-public class BackupAlreadyExistsException extends Exception {
+public class RestoreBackupException extends Exception {
 
-    public BackupAlreadyExistsException() {
-        super("Backup already exists!");
+    public RestoreBackupException(Exception e) {
+        super("Error restoring Backup!", e);
     }
 }

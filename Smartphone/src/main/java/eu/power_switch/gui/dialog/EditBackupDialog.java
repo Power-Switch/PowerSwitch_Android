@@ -36,11 +36,11 @@ import android.widget.EditText;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
-import eu.power_switch.exception.backup.BackupAlreadyExistsException;
-import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
+import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
 
 /**

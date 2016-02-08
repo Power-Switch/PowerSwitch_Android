@@ -16,14 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.backup;
+package eu.power_switch.shared.exception.backup;
 
 /**
  * Created by Markus on 16.07.2015.
  */
-public class RemoveBackupException extends Exception {
+public class CreateBackupException extends Exception {
 
-    public RemoveBackupException(Exception e) {
-        super("Error removing Backup!", e);
+    public CreateBackupException(Exception e) {
+        super("Error creating Backup!", e);
     }
 }

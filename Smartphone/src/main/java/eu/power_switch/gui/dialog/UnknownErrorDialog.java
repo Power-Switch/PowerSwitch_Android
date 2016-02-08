@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -38,7 +39,8 @@ import java.util.Date;
 
 import eu.power_switch.R;
 import eu.power_switch.application.PowerSwitch;
-import eu.power_switch.shared.log.Log;
+import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.LogHandler;
 
 /**
@@ -94,20 +96,24 @@ public class UnknownErrorDialog extends DialogFragment {
         buttonShareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent emailIntent = new Intent();
-                emailIntent.setAction(Intent.ACTION_SENDTO);
-                emailIntent.setType("*/*");
-                emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
-                        ": " + throwable.getMessage());
-                emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
                 try {
-                    emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
+                    Intent emailIntent = new Intent();
+                    emailIntent.setAction(Intent.ACTION_SENDTO);
+                    emailIntent.setType("*/*");
+                    emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
+                            ": " + throwable.getMessage());
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(getContext())));
+
+                    startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
+                } catch (MissingPermissionException e) {
+                    StatusMessageHandler.showInfoMessage(getContext(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
-                    Log.e("Error adding zip to e-mail intent", e);
+                    dismiss();
+                    StatusMessageHandler.showErrorMessage(getContext(), e);
                 }
-                startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
             }
         });
 

@@ -16,14 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.gateway;
+package eu.power_switch.shared.exception.permission;
 
 /**
- * Created by Markus on 16.07.2015.
+ * Created by Markus on 25.01.2016.
  */
-public class GatewayNotSupportedException extends Exception {
+public class MissingPermissionException extends Exception {
 
-    public GatewayNotSupportedException() {
-        super("Gateway found but not supported!");
+    String permission;
+
+    public MissingPermissionException(String permission) {
+        super("Missing permission: " + permission);
+        this.permission = permission;
+    }
+
+    public String getPermission() {
+        return permission;
     }
 }

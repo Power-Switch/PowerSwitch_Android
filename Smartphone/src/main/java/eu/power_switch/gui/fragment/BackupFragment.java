@@ -26,13 +26,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -52,7 +49,6 @@ import java.util.Comparator;
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
-import eu.power_switch.exception.backup.BackupNotFoundException;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
@@ -64,7 +60,9 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
+import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.LogHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -131,7 +129,7 @@ public class BackupFragment extends RecyclerViewFragment {
                             Log.e(e);
                             StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView()
                                     , R.string.backup_not_found, Snackbar
-                                    .LENGTH_LONG);
+                                            .LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
@@ -200,7 +198,7 @@ public class BackupFragment extends RecyclerViewFragment {
     private void refreshBackups() {
         backups.clear();
 
-        if (!checkWriteExternalStoragePermission()) {
+        if (!LogHandler.checkWriteExternalStoragePermission(getContext())) {
             requestExternalStoragePermission();
         } else {
             BackupHandler backupHandler = new BackupHandler(getActivity());
@@ -217,17 +215,6 @@ public class BackupFragment extends RecyclerViewFragment {
         }
 
         backupArrayAdapter.notifyDataSetChanged();
-    }
-
-    private boolean checkWriteExternalStoragePermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            // Marshmallow+
-            int hasWriteExternalStoragePermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            return hasWriteExternalStoragePermission == PackageManager.PERMISSION_GRANTED;
-        } else {
-            // Pre-Marshmallow
-            return true;
-        }
     }
 
     private void requestExternalStoragePermission() {
@@ -285,7 +272,6 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        checkWriteExternalStoragePermission();
         if (SmartphonePreferencesHandler.getHideAddFAB()) {
             fab.setVisibility(View.GONE);
         } else {

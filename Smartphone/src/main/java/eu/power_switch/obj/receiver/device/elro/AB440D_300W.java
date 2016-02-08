@@ -24,8 +24,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.exception.gateway.GatewayNotSupportedException;
-import eu.power_switch.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -34,6 +32,8 @@ import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class AB440D_300W extends Receiver implements DipReceiver {
     // dips are 12345 ABCDE

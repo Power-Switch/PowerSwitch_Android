@@ -16,21 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.gateway;
+package eu.power_switch.shared.exception.gateway;
 
 /**
  * Created by Markus on 16.07.2015.
  */
-public class GatewayAlreadyExistsException extends Exception {
+public class GatewayNotSupportedException extends Exception {
 
-    public long idOfExistingGateway;
-
-    public GatewayAlreadyExistsException(long idOfExistingGateway) {
-        super("Gateway already exists!");
-        this.idOfExistingGateway = idOfExistingGateway;
-    }
-
-    public long getIdOfExistingGateway() {
-        return idOfExistingGateway;
+    public GatewayNotSupportedException() {
+        super("Gateway found but not supported!");
     }
 }

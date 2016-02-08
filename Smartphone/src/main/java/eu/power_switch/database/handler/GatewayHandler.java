@@ -26,14 +26,14 @@ import java.util.List;
 
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
-import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.exception.gateway.GatewayUnknownException;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
+import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 
 /**
  * Provides database methods for managing Gateways

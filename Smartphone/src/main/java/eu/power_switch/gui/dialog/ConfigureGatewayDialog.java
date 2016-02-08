@@ -37,8 +37,6 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.exception.gateway.GatewayUnknownException;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
@@ -48,6 +46,8 @@ import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
+import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 import eu.power_switch.shared.log.Log;
 
 /**

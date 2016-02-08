@@ -25,11 +25,11 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import eu.power_switch.exception.gateway.GatewayNotSupportedException;
-import eu.power_switch.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 /**
  * Represents any kind of device that can receive network signals

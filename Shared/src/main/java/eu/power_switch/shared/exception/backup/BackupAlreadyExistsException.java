@@ -16,16 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.gateway;
+package eu.power_switch.shared.exception.backup;
 
-public class GatewayUnknownException extends RuntimeException {
-    private static final long serialVersionUID = 5040868827100944073L;
+/**
+ * Created by Markus on 16.07.2015.
+ */
+public class BackupAlreadyExistsException extends Exception {
 
-    public GatewayUnknownException() {
-        super();
-    }
-
-    public GatewayUnknownException(String s) {
-        super(s);
+    public BackupAlreadyExistsException() {
+        super("Backup already exists!");
     }
 }

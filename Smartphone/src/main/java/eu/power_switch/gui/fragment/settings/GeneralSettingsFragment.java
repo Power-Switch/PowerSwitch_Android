@@ -20,6 +20,7 @@ package eu.power_switch.gui.fragment.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,10 +41,12 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
@@ -237,7 +240,13 @@ public class GeneralSettingsFragment extends Fragment {
         sendLogs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogHandler.sendLogsAsMail(getContext());
+                try {
+                    LogHandler.sendLogsAsMail(getContext());
+                } catch (MissingPermissionException e) {
+                    StatusMessageHandler.showInfoMessage(getContext(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getContext(), e);
+                }
             }
         });
 

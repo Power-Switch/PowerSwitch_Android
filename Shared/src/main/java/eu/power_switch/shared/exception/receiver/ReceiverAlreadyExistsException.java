@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.receiver;
+package eu.power_switch.shared.exception.receiver;
 
 /**
  * Created by Markus on 16.07.2015.

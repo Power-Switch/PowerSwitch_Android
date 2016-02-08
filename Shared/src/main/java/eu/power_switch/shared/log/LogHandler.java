@@ -18,11 +18,14 @@
 
 package eu.power_switch.shared.log;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
@@ -40,6 +43,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import eu.power_switch.shared.R;
+import eu.power_switch.shared.exception.permission.MissingPermissionException;
 
 /**
  * This class handles all Log file/folder related stuff
@@ -83,7 +87,11 @@ public class LogHandler {
      *
      * @return Zip file containing log files
      */
-    public static File getLogsAsZip() {
+    public static File getLogsAsZip(Context context) throws MissingPermissionException {
+        if (!checkWriteExternalStoragePermission(context)) {
+            throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
         String tempZipFileName = "logs.zip";
         int bufferSize = 1024;
 
@@ -172,7 +180,31 @@ public class LogHandler {
         return true;
     }
 
-    public static void sendLogsAsMail(Context context) {
+    /**
+     * Get a list of all log files
+     *
+     * @return list of log files
+     */
+    private static List<File> getLogFiles() {
+        File logFolder = new File(Environment.getExternalStorageDirectory()
+                .getPath() + File.separator + LOG_FOLDER);
+        File[] logFiles = logFolder.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                return dir.getPath()
+                        .equals(Environment.getExternalStorageDirectory().getPath() + File.separator + LOG_FOLDER) &&
+                        filename.endsWith(".log");
+            }
+        });
+
+        return Arrays.asList(logFiles);
+    }
+
+    public static void sendLogsAsMail(Context context) throws Exception {
+        if (!checkWriteExternalStoragePermission(context)) {
+            throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
         Intent emailIntent = new Intent();
         emailIntent.setAction(Intent.ACTION_SENDTO);
         emailIntent.setType("*/*");
@@ -180,12 +212,26 @@ public class LogHandler {
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "PowerSwitch Logs");
         emailIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.send_logs_template));
-        try {
-            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
-        } catch (Exception e) {
-            Log.e("Error adding zip to e-mail intent", e);
-        }
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(context)));
+
         context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.send_to)));
+    }
+
+    /**
+     * Check if ExternalStorage write permission is available
+     *
+     * @param context any suitable context
+     * @return true if write permission is available, false otherwise
+     */
+    public static boolean checkWriteExternalStoragePermission(Context context) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            // Marshmallow+
+            int hasWriteExternalStoragePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            return hasWriteExternalStoragePermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            // Pre-Marshmallow
+            return true;
+        }
     }
 
     /**
@@ -218,25 +264,5 @@ public class LogHandler {
             phrase += c;
         }
         return phrase;
-    }
-
-    /**
-     * Get a list of all log files
-     *
-     * @return list of log files
-     */
-    private static List<File> getLogFiles() {
-        File logFolder = new File(Environment.getExternalStorageDirectory()
-                .getPath() + File.separator + LOG_FOLDER);
-        File[] logFiles = logFolder.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String filename) {
-                return dir.getPath()
-                        .equals(Environment.getExternalStorageDirectory().getPath() + File.separator + LOG_FOLDER) &&
-                        filename.endsWith(".log");
-            }
-        });
-
-        return Arrays.asList(logFiles);
     }
 }

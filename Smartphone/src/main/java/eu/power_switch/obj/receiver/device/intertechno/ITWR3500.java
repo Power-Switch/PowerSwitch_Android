@@ -23,8 +23,6 @@ import android.content.Context;
 import java.util.Random;
 
 import eu.power_switch.R;
-import eu.power_switch.exception.gateway.GatewayNotSupportedException;
-import eu.power_switch.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -32,6 +30,8 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class ITWR3500 extends Receiver implements AutoPairReceiver {
 

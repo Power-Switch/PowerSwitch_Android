@@ -16,15 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.exception.receiver;
+package eu.power_switch.shared.exception.gateway;
 
 /**
- * Created by Markus on 11.09.2015.
+ * Created by Markus on 16.07.2015.
  */
-public class ActionNotSupportedException extends Exception {
+public class GatewayAlreadyExistsException extends Exception {
 
-    public ActionNotSupportedException() {
-        super("Action not supported by receiver!");
+    public long idOfExistingGateway;
+
+    public GatewayAlreadyExistsException(long idOfExistingGateway) {
+        super("Gateway already exists!");
+        this.idOfExistingGateway = idOfExistingGateway;
     }
 
+    public long getIdOfExistingGateway() {
+        return idOfExistingGateway;
+    }
 }
