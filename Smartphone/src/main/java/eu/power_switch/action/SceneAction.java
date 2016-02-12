@@ -19,6 +19,7 @@
 package eu.power_switch.action;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import eu.power_switch.obj.Scene;
 
@@ -31,27 +32,33 @@ public class SceneAction extends Action {
 
     private Scene scene;
 
-    public SceneAction(long id, Scene scene) {
+    public SceneAction(long id, @NonNull Scene scene) {
         this.id = id;
         this.scene = scene;
     }
 
-    public Scene getScene() {
+    public
+    @NonNull
+    Scene getScene() {
         return scene;
     }
 
     @Override
-    public String getActionType() {
+    public
+    @NonNull
+    String getActionType() {
         return ACTION_TYPE_SCENE;
     }
 
     @Override
-    public String toString() {
+    public
+    @NonNull
+    String toString() {
         return scene.getName();
     }
 
     @Override
-    public void execute(Context context) {
+    public void execute(@NonNull Context context) {
         ActionHandler.execute(context, scene);
     }
 

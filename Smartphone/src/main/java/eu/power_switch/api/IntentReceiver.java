@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class IntentReceiver extends BroadcastReceiver {
      * @param context any suitable Context
      * @param intent  action intent
      */
-    private void parseActionIntent(Context context, Intent intent) {
+    private void parseActionIntent(@NonNull Context context, @NonNull Intent intent) {
         try {
             Bundle extras = intent.getExtras();
 //            if (extras != null && extras.containsKey(ApiConstants.KEY_APARTMENT)) {

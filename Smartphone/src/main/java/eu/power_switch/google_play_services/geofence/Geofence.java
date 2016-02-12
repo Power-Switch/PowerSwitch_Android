@@ -68,19 +68,6 @@ public class Geofence {
      */
     private Bitmap snapshot;
 
-//    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius) {
-//        this.id = id;
-//        this.active = active;
-//        this.name = name;
-//        this.centerLocation = centerLocation;
-//        this.radius = radius;
-//        this.actionsMap = new HashMap<>();
-//
-//        for (EventType eventType : EventType.values()) {
-//            this.actionsMap.put(eventType, new ArrayList<Action>());
-//        }
-//    }
-
     public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, Map<EventType, List<Action>> actionsMap) {
         this.id = id;
         this.active = active;

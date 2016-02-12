@@ -40,7 +40,7 @@ abstract class SceneHandler {
      *
      * @param scene Scene
      */
-    protected static void add(Scene scene) {
+    protected static void add(Scene scene) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneTable.COLUMN_APARTMENT_ID, scene.getApartmentId());
         values.put(SceneTable.COLUMN_NAME, scene.getName());
@@ -56,7 +56,7 @@ abstract class SceneHandler {
      *
      * @param scene Scene
      */
-    protected static void update(Scene scene) {
+    protected static void update(Scene scene) throws Exception {
         updateName(scene.getId(), scene.getName());
         SceneItemHandler.update(scene);
     }
@@ -67,7 +67,7 @@ abstract class SceneHandler {
      * @param id      ID of Scene
      * @param newName new Scene name
      */
-    private static void updateName(Long id, String newName) {
+    private static void updateName(Long id, String newName) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneTable.COLUMN_NAME, newName);
         DatabaseHandler.database.update(SceneTable.TABLE_NAME, values, SceneTable.COLUMN_ID + "==" + id, null);
@@ -78,7 +78,7 @@ abstract class SceneHandler {
      *
      * @param id ID of Scene
      */
-    protected static void delete(Long id) {
+    protected static void delete(Long id) throws Exception {
         ActionHandler.deleteBySceneId(id);
 
         SceneItemHandler.deleteSceneItems(id);

@@ -20,6 +20,7 @@ package eu.power_switch.shared.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
@@ -53,7 +54,7 @@ public class WearablePreferencesHandler {
      *
      * @param context any suitable context
      */
-    public static void init(Context context) {
+    public static void init(@NonNull Context context) {
         if (sharedPreferences != null) {
             forceRefresh();
         } else {

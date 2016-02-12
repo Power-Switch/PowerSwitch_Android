@@ -45,7 +45,7 @@ abstract class SceneItemHandler {
      * @param sceneId ID of Scene the SceneItems will be associated with
      * @param items   list of SceneItems
      */
-    protected static void add(Long sceneId, ArrayList<SceneItem> items) {
+    protected static void add(Long sceneId, ArrayList<SceneItem> items) throws Exception {
         for (SceneItem item : items) {
             add(sceneId, item);
         }
@@ -57,7 +57,7 @@ abstract class SceneItemHandler {
      * @param sceneId ID of Scene the SceneItems will be associated with
      * @param item    SceneItem
      */
-    private static void add(Long sceneId, SceneItem item) {
+    private static void add(Long sceneId, SceneItem item) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneItemTable.COLUMN_SCENE_ID, sceneId);
         values.put(SceneItemTable.COLUMN_RECEIVER_ID, item.getReceiver().getId());
@@ -70,7 +70,7 @@ abstract class SceneItemHandler {
      *
      * @param receiver Receiver used in Scene(s)
      */
-    protected static void update(Receiver receiver) {
+    protected static void update(Receiver receiver) throws Exception {
         // TODO:
     }
 
@@ -79,7 +79,7 @@ abstract class SceneItemHandler {
      *
      * @param scene Scene
      */
-    protected static void update(Scene scene) {
+    protected static void update(Scene scene) throws Exception {
         deleteSceneItems(scene.getId());
         add(scene.getId(), scene.getSceneItems());
     }
@@ -110,7 +110,7 @@ abstract class SceneItemHandler {
      *
      * @param receiverId ID of Receiver
      */
-    protected static void deleteByReceiverId(Long receiverId) {
+    protected static void deleteByReceiverId(Long receiverId) throws Exception {
         Log.d(SceneItemHandler.class, "Delete SceneItem by ReceiverId: " + receiverId);
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
@@ -120,7 +120,7 @@ abstract class SceneItemHandler {
      *
      * @param sceneId ID of Scene
      */
-    protected static void deleteSceneItems(Long sceneId) {
+    protected static void deleteSceneItems(Long sceneId) throws Exception {
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null);
     }
 
@@ -155,7 +155,7 @@ abstract class SceneItemHandler {
      * @param buttonId ID of Button
      * @return Name of active Button
      */
-    private static String getActiveButtonName(Long buttonId) {
+    private static String getActiveButtonName(Long buttonId) throws Exception {
         if (buttonId == Button.BUTTON_ON_ID) {
             return DatabaseHandler.context.getString(R.string.on);
         } else if (buttonId == Button.BUTTON_OFF_ID) {

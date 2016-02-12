@@ -19,6 +19,7 @@
 package eu.power_switch.action;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
@@ -35,37 +36,47 @@ public class ReceiverAction extends Action {
     private Receiver receiver;
     private Button button;
 
-    public ReceiverAction(long id, Room room, Receiver receiver, Button button) {
+    public ReceiverAction(long id, @NonNull Room room, @NonNull Receiver receiver, @NonNull Button button) {
         this.id = id;
         this.room = room;
         this.receiver = receiver;
         this.button = button;
     }
 
-    public Room getRoom() {
+    public
+    @NonNull
+    Room getRoom() {
         return room;
     }
 
-    public Receiver getReceiver() {
+    public
+    @NonNull
+    Receiver getReceiver() {
         return receiver;
     }
 
-    public Button getButton() {
+    public
+    @NonNull
+    Button getButton() {
         return button;
     }
 
     @Override
-    public String getActionType() {
+    public
+    @NonNull
+    String getActionType() {
         return ACTION_TYPE_RECEIVER;
     }
 
     @Override
-    public String toString() {
+    public
+    @NonNull
+    String toString() {
         return room.getName() + ": " + receiver.getName() + ": " + button.getName();
     }
 
     @Override
-    public void execute(Context context) {
+    public void execute(@NonNull Context context) {
         ActionHandler.execute(context, receiver, button);
     }
 }

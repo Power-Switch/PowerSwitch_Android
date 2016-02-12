@@ -40,7 +40,7 @@ abstract class RoomHandler {
      *
      * @param room Room
      */
-    protected static void add(Room room) {
+    protected static void add(Room room) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, room.getName());
         values.put(RoomTable.COLUMN_APARTMENT_ID, room.getApartmentId());
@@ -53,7 +53,7 @@ abstract class RoomHandler {
      * @param id      ID of Room
      * @param newName new Room name
      */
-    protected static void update(Long id, String newName) {
+    protected static void update(Long id, String newName) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, newName);
         DatabaseHandler.database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);

@@ -83,7 +83,7 @@ public class GeofenceIntentReceiver extends BroadcastReceiver {
                 GeofenceApiHandler geofenceApiHandler = new GeofenceApiHandler(context);
                 geofenceApiHandler.blockingConnect();
 
-                geofenceApiHandler.removeAllGeofences();
+//                geofenceApiHandler.removeAllGeofences();
                 try {
                     List<Geofence> geofences = DatabaseHandler.getAllGeofences(true);
                     for (Geofence geofence : geofences) {

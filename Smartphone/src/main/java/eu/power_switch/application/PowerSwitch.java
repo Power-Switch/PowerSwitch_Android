@@ -19,11 +19,15 @@
 package eu.power_switch.application;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.support.v7.app.AlertDialog;
 
+import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -50,7 +54,27 @@ public class PowerSwitch extends MultiDexApplication {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
-                Log.e("Fatal Exception", throwable);
+                Log.e("FATAL EXCEPTION", throwable);
+
+                try {
+                    new AlertDialog.Builder(getApplicationContext())
+                            .setTitle(R.string.unknown_error)
+                            .setMessage(Log.getStackTraceText(throwable))
+                            .setPositiveButton(R.string.report, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        LogHandler.sendLogsAsMail(getApplicationContext());
+                                    } catch (Exception e) {
+                                        Log.e(e);
+                                    }
+                                }
+                            })
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                } catch (Exception e) {
+                    Log.e("Error showing \"Unknown Error\" AlertDialog", e);
+                }
 
                 // pass on exception to android system
                 originalUncaughtExceptionHandler.uncaughtException(thread, throwable);
@@ -62,9 +86,11 @@ public class PowerSwitch extends MultiDexApplication {
      * Get a text representation of application version name and build number
      *
      * @param context any suitable context
-     * @return app version as text
+     * @return app version as text (or "unknown" if failed to retrieve), never null
      */
-    public static String getAppVersionDescription(Context context) {
+    public static
+    @NonNull
+    String getAppVersionDescription(@NonNull Context context) {
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             return pInfo.versionName + " (" + pInfo.versionCode + ")";
@@ -93,7 +119,7 @@ public class PowerSwitch extends MultiDexApplication {
         Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
         Log.d("Device brand/model: " + LogHandler.getDeviceName());
 
-        // One time initialization of handlers for static access
+        // Onetime initialization of handlers for static access
         DatabaseHandler.init(this);
         NetworkHandler.init(this);
         SmartphonePreferencesHandler.init(this);

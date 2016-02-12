@@ -41,7 +41,7 @@ class HistoryHandler {
      *
      * @return List of History Items
      */
-    public static LinkedList<HistoryItem> getHistory() {
+    public static LinkedList<HistoryItem> getHistory() throws Exception {
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
 
         String[] columns = {HistoryTable.COLUMN_ID, HistoryTable.COLUMN_DESCRIPTION, HistoryTable.COLUMN_TIME};
@@ -73,14 +73,14 @@ class HistoryHandler {
      *
      * @return List of History Items
      */
-    public static Long add(HistoryItem historyItem) {
+    public static Long add(HistoryItem historyItem) throws Exception {
         ContentValues values = new ContentValues();
         values.put(HistoryTable.COLUMN_DESCRIPTION, historyItem.getDescription());
         values.put(HistoryTable.COLUMN_TIME, historyItem.getTime().getTimeInMillis());
         return DatabaseHandler.database.insert(HistoryTable.TABLE_NAME, null, values);
     }
 
-    private static HistoryItem dbToHistoryItem(Cursor cursor) {
+    private static HistoryItem dbToHistoryItem(Cursor cursor) throws Exception {
         Long id = cursor.getLong(0);
         String description = cursor.getString(1);
         Long time = cursor.getLong(2);

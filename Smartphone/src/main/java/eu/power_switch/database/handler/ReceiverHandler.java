@@ -68,7 +68,7 @@ class ReceiverHandler {
      * @param receiver   the new Receiver
      * @param receiverId ID of the new Receiver in database
      */
-    private static void insertDetails(Receiver receiver, Long receiverId) {
+    private static void insertDetails(Receiver receiver, Long receiverId) throws Exception {
         Receiver.Type type = receiver.getType();
         switch (type) {
             case MASTER_SLAVE:
@@ -96,7 +96,7 @@ class ReceiverHandler {
      *
      * @param receiver Receiver
      */
-    protected static void update(Receiver receiver) {
+    protected static void update(Receiver receiver) throws Exception {
         updateDetails(receiver);
 
         ContentValues values = new ContentValues();
@@ -117,7 +117,7 @@ class ReceiverHandler {
      *
      * @param receiver the edited Receiver
      */
-    private static void updateDetails(Receiver receiver) {
+    private static void updateDetails(Receiver receiver) throws Exception {
         long receiverId = receiver.getId();
 
         deleteDetails(receiverId);
@@ -216,7 +216,7 @@ class ReceiverHandler {
      *
      * @param id ID of Receiver
      */
-    protected static void delete(Long id) {
+    protected static void delete(Long id) throws Exception {
         Log.d(ReceiverHandler.class, "Delete Receiver: " + id);
         // CAREFUL ABOUT DELETE ORDER, SOME THINGS DEPEND ON EXISTING DATA
         // delete depending things first!
@@ -235,7 +235,7 @@ class ReceiverHandler {
      *
      * @param id ID of Receiver
      */
-    private static void deleteDetails(Long id) {
+    private static void deleteDetails(Long id) throws Exception {
         switch (getType(id)) {
             case DIPS:
                 DipHandler.delete(id);
@@ -258,7 +258,7 @@ class ReceiverHandler {
      * @param id ID of Receiver
      * @return Type of Receiver
      */
-    protected static Receiver.Type getType(Long id) {
+    protected static Receiver.Type getType(Long id) throws Exception {
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_TYPE};
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID +
                 "=" + id, null, null, null, null);
@@ -295,7 +295,7 @@ class ReceiverHandler {
      * @param receiverId ID of Receiver
      * @param buttonId   ID of Button
      */
-    protected static void setLastActivatedButtonId(Long receiverId, Long buttonId) {
+    protected static void setLastActivatedButtonId(Long receiverId, Long buttonId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID, buttonId);
 
@@ -330,7 +330,7 @@ class ReceiverHandler {
      * @param receiverId     ID of Receiver
      * @param positionInRoom Position in Room
      */
-    protected static void setPositionInRoom(Long receiverId, Long positionInRoom) {
+    protected static void setPositionInRoom(Long receiverId, Long positionInRoom) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, positionInRoom);
 

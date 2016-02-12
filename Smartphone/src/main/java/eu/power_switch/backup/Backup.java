@@ -18,6 +18,8 @@
 
 package eu.power_switch.backup;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
@@ -51,7 +53,7 @@ public class Backup {
      * @param path            path where Backup is stored
      * @param externalStorage true if Backup is stored on external storage (sdcard)
      */
-    public Backup(String name, Date date, String path, boolean externalStorage) {
+    public Backup(@NonNull String name, @NonNull Date date, @NonNull String path, boolean externalStorage) {
         this.name = name;
         this.date = date;
         this.path = path;
@@ -63,7 +65,9 @@ public class Backup {
      *
      * @return Backup name
      */
-    public String getName() {
+    public
+    @NonNull
+    String getName() {
         return name;
     }
 
@@ -72,7 +76,9 @@ public class Backup {
      *
      * @return Backup creation date
      */
-    public Date getDate() {
+    public
+    @NonNull
+    Date getDate() {
         return date;
     }
 
@@ -81,7 +87,9 @@ public class Backup {
      *
      * @return Backup store path
      */
-    public String getPath() {
+    public
+    @NonNull
+    String getPath() {
         return path;
     }
 
@@ -100,7 +108,7 @@ public class Backup {
      * @param backup another Backup
      * @return
      */
-    public int compareDate(Backup backup) {
+    public int compareDate(@NonNull Backup backup) {
         return date.compareTo(backup.getDate());
     }
 }

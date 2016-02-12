@@ -70,7 +70,7 @@ abstract class TimerHandler {
         return timerId;
     }
 
-    private static void insertWeekdayDetails(WeekdayTimer weekdayTimer, Long timerId) {
+    private static void insertWeekdayDetails(WeekdayTimer weekdayTimer, Long timerId) throws Exception {
         for (WeekdayTimer.Day day : weekdayTimer.getExecutionDays()) {
             ContentValues values = new ContentValues();
             values.put(TimerWeekdayTable.COLUMN_EXECUTION_DAY, day.positionInWeek);
@@ -96,7 +96,7 @@ abstract class TimerHandler {
                 "=" + timerId, null);
     }
 
-    private static void deleteWeekdayDetails(Long timerId) {
+    private static void deleteWeekdayDetails(Long timerId) throws Exception {
         DatabaseHandler.database.delete(TimerWeekdayTable.TABLE_NAME, TimerWeekdayTable.COLUMN_TIMER_ID +
                 "=" + timerId, null);
     }
@@ -201,7 +201,7 @@ abstract class TimerHandler {
      *
      * @param id ID of Timer
      */
-    protected static void enable(Long id) {
+    protected static void enable(Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, 1);
         DatabaseHandler.database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
@@ -212,7 +212,7 @@ abstract class TimerHandler {
      *
      * @param id ID of Timer
      */
-    protected static void disable(Long id) {
+    protected static void disable(Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, 0);
         DatabaseHandler.database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
@@ -254,11 +254,11 @@ abstract class TimerHandler {
         return null;
     }
 
-    private static ArrayList<WeekdayTimer.Day> getWeekdayDetails(Long timerId) {
+    private static ArrayList<WeekdayTimer.Day> getWeekdayDetails(Long timerId) throws Exception {
         return getExecutionDays(timerId);
     }
 
-    private static ArrayList<WeekdayTimer.Day> getExecutionDays(Long timerId) {
+    private static ArrayList<WeekdayTimer.Day> getExecutionDays(Long timerId) throws Exception {
         ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
 
         String[] columns = {TimerWeekdayTable.COLUMN_EXECUTION_DAY};

@@ -20,6 +20,7 @@ package eu.power_switch.shared.haptic_feedback;
 
 import android.content.Context;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 
 /**
  * Class to handle everything related to the vibration motor
@@ -32,7 +33,7 @@ public class VibrationHandler {
      * @param context      any suitable context
      * @param milliseconds time in milliseconds to vibrate
      */
-    public static void vibrate(Context context, long milliseconds) {
+    public static void vibrate(@NonNull Context context, long milliseconds) {
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null) {
             vibrator.vibrate(milliseconds);
@@ -44,7 +45,7 @@ public class VibrationHandler {
      * @param pattern an array of longs of times for which to turn the vibrator on or off
      * @param repeat  the index into pattern at which to repeat, or -1 if you don't want to repeat
      */
-    public static void vibrate(Context context, long[] pattern, int repeat) {
+    public static void vibrate(@NonNull Context context, long[] pattern, int repeat) {
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null) {
             vibrator.vibrate(pattern, repeat);
@@ -56,7 +57,7 @@ public class VibrationHandler {
      *
      * @param context any suitable context
      */
-    public static void cancel(Context context) {
+    public static void cancel(@NonNull Context context) {
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vibrator != null) {
             vibrator.cancel();

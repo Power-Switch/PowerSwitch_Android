@@ -47,7 +47,7 @@ abstract class ApartmentHandler {
      * @param apartment Apartment
      * @return ID of inserted Apartment
      */
-    protected static long add(Apartment apartment) {
+    protected static long add(Apartment apartment) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
         long apartmentId = DatabaseHandler.database.insert(ApartmentTable.TABLE_NAME, null, values);
@@ -59,7 +59,7 @@ abstract class ApartmentHandler {
         return apartmentId;
     }
 
-    private static void addGeofence(long apartmentId, Apartment apartment) {
+    private static void addGeofence(long apartmentId, Apartment apartment) throws Exception {
         if (apartment.getGeofence() == null) {
             return;
         }
@@ -217,7 +217,7 @@ abstract class ApartmentHandler {
         return apartment;
     }
 
-    private static Long getAssociatedGeofenceId(Long apartmentId) {
+    private static Long getAssociatedGeofenceId(Long apartmentId) throws Exception {
         String[] columns = {ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID,
                 ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID};
         Cursor cursor = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME,
@@ -238,7 +238,7 @@ abstract class ApartmentHandler {
      * @param apartmentId ID of Apartment
      * @return List of Gateways
      */
-    private static LinkedList<Gateway> getAssociatedGateways(Long apartmentId) {
+    private static LinkedList<Gateway> getAssociatedGateways(Long apartmentId) throws Exception {
         LinkedList<Gateway> associatedGateways = new LinkedList<>();
 
         String[] columns = {
@@ -266,7 +266,7 @@ abstract class ApartmentHandler {
      * @param apartmentId        ID of Apartment
      * @param associatedGateways List of Gateways
      */
-    private static void addAssociatedGateways(Long apartmentId, List<Gateway> associatedGateways) {
+    private static void addAssociatedGateways(Long apartmentId, List<Gateway> associatedGateways) throws Exception {
         // add current
         for (Gateway gateway : associatedGateways) {
             ContentValues gatewayRelationValues = new ContentValues();
@@ -281,7 +281,7 @@ abstract class ApartmentHandler {
      *
      * @param apartmentId ID of Apartment
      */
-    private static void removeAssociatedGateways(Long apartmentId) {
+    private static void removeAssociatedGateways(Long apartmentId) throws Exception {
         // delete old associated gateways
         DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME,
                 ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId, null);

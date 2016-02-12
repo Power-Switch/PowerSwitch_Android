@@ -19,6 +19,9 @@
 package eu.power_switch.shared.log;
 
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -36,7 +39,7 @@ public class Log {
      *
      * @param message any text message
      */
-    public static void d(String message) {
+    public static void d(@Nullable String message) {
         log.debug(message);
     }
 
@@ -45,9 +48,11 @@ public class Log {
      *
      * @param source any object
      */
-    public static void d(Object source) {
+    public static void d(@Nullable Object source) {
         StringBuilder logMessage = new StringBuilder();
-        if (String.class.equals(source.getClass())) {
+        if (source == null) {
+            logMessage.append("null");
+        } else if (String.class.equals(source.getClass())) {
             logMessage.append(source).append(" : ");
         } else if (source instanceof Class) {
             logMessage.append("{").append(((Class) source).getCanonicalName()).append("}");
@@ -63,7 +68,7 @@ public class Log {
      * @param source  a source object
      * @param message any text message
      */
-    public static void d(Object source, String message) {
+    public static void d(@Nullable Object source, @Nullable String message) {
         StringBuilder logMessage = new StringBuilder();
         if (source != null) {
             logMessage.append("{");
@@ -91,7 +96,7 @@ public class Log {
      *
      * @param message any text message
      */
-    public static void e(String message) {
+    public static void e(@Nullable String message) {
         log.error(message);
     }
 
@@ -100,7 +105,7 @@ public class Log {
      *
      * @param throwable any throwable
      */
-    public static void e(Throwable throwable) {
+    public static void e(@Nullable Throwable throwable) {
         if (throwable != null) {
             log.error("Error", throwable);
         }
@@ -112,7 +117,7 @@ public class Log {
      * @param source  source of log message
      * @param message any text message
      */
-    public static void e(Object source, String message) {
+    public static void e(@Nullable Object source, @Nullable String message) {
         StringBuilder logMessage = new StringBuilder();
 
         if (source != null) {
@@ -141,7 +146,7 @@ public class Log {
      * @param source    source of log message
      * @param throwable any throwable
      */
-    public static void e(Object source, Throwable throwable) {
+    public static void e(@Nullable Object source, @Nullable Throwable throwable) {
         StringBuilder logMessage = new StringBuilder();
 
         if (source != null) {
@@ -169,7 +174,7 @@ public class Log {
      * @param message   any text message
      * @param throwable any throwable
      */
-    public static void e(String message, Throwable throwable) {
+    public static void e(@Nullable String message, @Nullable Throwable throwable) {
         if (throwable != null) {
             log.error(message, throwable);
         } else {
@@ -182,7 +187,19 @@ public class Log {
      *
      * @param message any text message
      */
-    public static void w(String message) {
+    public static void w(@Nullable String message) {
         log.warn(message);
+    }
+
+    /**
+     * Returns a human readable String containing the stacktrace of a throwable
+     *
+     * @param throwable throwable
+     * @return StackTrace string
+     */
+    public static
+    @NonNull
+    String getStackTraceText(@Nullable Throwable throwable) {
+        return android.util.Log.getStackTraceString(throwable);
     }
 }

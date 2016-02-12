@@ -41,7 +41,7 @@ abstract class GeofenceActionHandler {
      * @param geofenceId ID of Geofence
      * @param eventType  {@link Geofence.EventType}
      */
-    protected static void add(List<Action> actions, Long geofenceId, Geofence.EventType eventType) {
+    protected static void add(List<Action> actions, Long geofenceId, Geofence.EventType eventType) throws Exception {
         if (actions == null) {
             Log.w("actions was null! nothing added to database");
             return;

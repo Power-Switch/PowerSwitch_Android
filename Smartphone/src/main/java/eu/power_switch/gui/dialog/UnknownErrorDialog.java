@@ -41,6 +41,7 @@ import eu.power_switch.R;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 
 /**
@@ -49,6 +50,8 @@ import eu.power_switch.shared.log.LogHandler;
  * Created by Markus on 05.02.2016.
  */
 public class UnknownErrorDialog extends DialogFragment {
+
+    private static final String[] DEFAULT_EMAILS = new String[]{"contact@power-switch.eu"};
 
     private static final String THROWABLE_KEY = "throwable";
     private static final String TIME_KEY = "time";
@@ -97,17 +100,7 @@ public class UnknownErrorDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent emailIntent = new Intent();
-                    emailIntent.setAction(Intent.ACTION_SENDTO);
-                    emailIntent.setType("*/*");
-                    emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
-                            ": " + throwable.getMessage());
-                    emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
-                    emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(getContext())));
-
-                    startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
+                    reportExceptionViaMail();
                 } catch (MissingPermissionException e) {
                     StatusMessageHandler.showInfoMessage(getContext(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
@@ -123,14 +116,14 @@ public class UnknownErrorDialog extends DialogFragment {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, getErrorDescription());
+                intent.putExtra(Intent.EXTRA_TEXT, Log.getStackTraceText(throwable));
                 intent.setType("text/plain");
                 startActivity(Intent.createChooser(intent, getString(R.string.send_to)));
             }
         });
 
         TextView textViewErrorDescription = (TextView) rootView.findViewById(R.id.editText_error_description);
-        textViewErrorDescription.setText(getErrorDescription());
+        textViewErrorDescription.setText(Log.getStackTraceText(throwable));
 
         builder.setTitle(R.string.unknown_error);
         builder.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
@@ -148,6 +141,20 @@ public class UnknownErrorDialog extends DialogFragment {
         return dialog;
     }
 
+    private void reportExceptionViaMail() throws Exception {
+        Intent emailIntent = new Intent();
+        emailIntent.setAction(Intent.ACTION_SENDTO);
+        emailIntent.setType("*/*");
+        emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, DEFAULT_EMAILS);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
+                ": " + throwable.getMessage());
+        emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(getContext())));
+
+        startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
+    }
+
     private String getEmailContentText() {
         String shareText = "";
         shareText += getString(R.string.send_unknown_error_log_template);
@@ -162,13 +169,8 @@ public class UnknownErrorDialog extends DialogFragment {
         shareText += "\n";
         shareText += "Exception stacktrace:\n";
         shareText += "\n";
-        shareText += getErrorDescription() + "\n";
+        shareText += Log.getStackTraceText(throwable) + "\n";
 
         return shareText;
     }
-
-    private String getErrorDescription() {
-        return android.util.Log.getStackTraceString(throwable);
-    }
-
 }

@@ -25,6 +25,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
@@ -87,7 +89,9 @@ public class LogHandler {
      *
      * @return Zip file containing log files
      */
-    public static File getLogsAsZip(Context context) throws MissingPermissionException {
+    public static
+    @Nullable
+    File getLogsAsZip(@NonNull Context context) throws MissingPermissionException {
         if (!checkWriteExternalStoragePermission(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -185,7 +189,9 @@ public class LogHandler {
      *
      * @return list of log files
      */
-    private static List<File> getLogFiles() {
+    private static
+    @NonNull
+    List<File> getLogFiles() {
         File logFolder = new File(Environment.getExternalStorageDirectory()
                 .getPath() + File.separator + LOG_FOLDER);
         File[] logFiles = logFolder.listFiles(new FilenameFilter() {
@@ -200,7 +206,7 @@ public class LogHandler {
         return Arrays.asList(logFiles);
     }
 
-    public static void sendLogsAsMail(Context context) throws Exception {
+    public static void sendLogsAsMail(@NonNull Context context) throws Exception {
         if (!checkWriteExternalStoragePermission(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -223,7 +229,7 @@ public class LogHandler {
      * @param context any suitable context
      * @return true if write permission is available, false otherwise
      */
-    public static boolean checkWriteExternalStoragePermission(Context context) {
+    public static boolean checkWriteExternalStoragePermission(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             // Marshmallow+
             int hasWriteExternalStoragePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);

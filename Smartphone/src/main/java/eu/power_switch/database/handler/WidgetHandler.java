@@ -38,7 +38,7 @@ abstract class WidgetHandler {
      *
      * @param receiverWidget ReceiverWidget
      */
-    protected static void addReceiverWidget(ReceiverWidget receiverWidget) {
+    protected static void addReceiverWidget(ReceiverWidget receiverWidget) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverWidgetTable.COLUMN_WIDGET_APP_ID, receiverWidget.getWidgetId());
         values.put(ReceiverWidgetTable.COLUMN_ROOM_ID, receiverWidget.getRoomId());
@@ -51,7 +51,7 @@ abstract class WidgetHandler {
      *
      * @param roomWidget RoomWidget
      */
-    protected static void addRoomWidget(RoomWidget roomWidget) {
+    protected static void addRoomWidget(RoomWidget roomWidget) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomWidgetTable.COLUMN_WIDGET_APP_ID, roomWidget.getWidgetId());
         values.put(RoomWidgetTable.COLUMN_ROOM_ID, roomWidget.getRoomId());
@@ -63,7 +63,7 @@ abstract class WidgetHandler {
      *
      * @param sceneWidget SceneWidget
      */
-    protected static void addSceneWidget(SceneWidget sceneWidget) {
+    protected static void addSceneWidget(SceneWidget sceneWidget) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneWidgetTable.COLUMN_WIDGET_APP_ID, sceneWidget.getWidgetId());
         values.put(SceneWidgetTable.COLUMN_SCENE_ID, sceneWidget.getSceneId());
@@ -75,7 +75,7 @@ abstract class WidgetHandler {
      *
      * @param widgetId ID of ReceiverWidget
      */
-    protected static void deleteReceiverWidget(int widgetId) {
+    protected static void deleteReceiverWidget(int widgetId) throws Exception {
         DatabaseHandler.database.delete(ReceiverWidgetTable.TABLE_NAME, ReceiverWidgetTable.COLUMN_WIDGET_APP_ID +
                 "=" + widgetId, null);
     }
@@ -85,7 +85,7 @@ abstract class WidgetHandler {
      *
      * @param widgetId ID of RoomWidget
      */
-    protected static void deleteRoomWidget(int widgetId) {
+    protected static void deleteRoomWidget(int widgetId) throws Exception {
         DatabaseHandler.database.delete(RoomWidgetTable.TABLE_NAME, RoomWidgetTable.COLUMN_WIDGET_APP_ID +
                 "=" + widgetId, null);
     }
@@ -95,7 +95,7 @@ abstract class WidgetHandler {
      *
      * @param widgetId ID of SceneWidget
      */
-    protected static void deleteSceneWidget(int widgetId) {
+    protected static void deleteSceneWidget(int widgetId) throws Exception {
         DatabaseHandler.database.delete(SceneWidgetTable.TABLE_NAME, SceneWidgetTable.COLUMN_WIDGET_APP_ID +
                 "=" + widgetId, null);
     }
@@ -106,7 +106,7 @@ abstract class WidgetHandler {
      * @param widgetId
      * @return
      */
-    protected static ReceiverWidget getReceiverWidget(int widgetId) {
+    protected static ReceiverWidget getReceiverWidget(int widgetId) throws Exception {
         String[] widgetColumns = {ReceiverWidgetTable.COLUMN_WIDGET_APP_ID, ReceiverWidgetTable.COLUMN_ROOM_ID,
                 ReceiverWidgetTable.COLUMN_RECEIVER_ID};
         Cursor cursor = DatabaseHandler.database.query(ReceiverWidgetTable.TABLE_NAME, widgetColumns,
@@ -129,7 +129,7 @@ abstract class WidgetHandler {
      * @param widgetId
      * @return
      */
-    protected static RoomWidget getRoomWidget(int widgetId) {
+    protected static RoomWidget getRoomWidget(int widgetId) throws Exception {
         String[] widgetColumns = {RoomWidgetTable.COLUMN_WIDGET_APP_ID, RoomWidgetTable.COLUMN_ROOM_ID};
         Cursor cursor = DatabaseHandler.database.query(RoomWidgetTable.TABLE_NAME, widgetColumns,
                 RoomWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null, null, null, null);
@@ -151,7 +151,7 @@ abstract class WidgetHandler {
      * @param widgetId
      * @return
      */
-    protected static SceneWidget getSceneWidget(int widgetId) {
+    protected static SceneWidget getSceneWidget(int widgetId) throws Exception {
         String[] widgetColumns = {SceneWidgetTable.COLUMN_WIDGET_APP_ID, SceneWidgetTable.COLUMN_SCENE_ID};
         Cursor cursor = DatabaseHandler.database.query(SceneWidgetTable.TABLE_NAME, widgetColumns,
                 SceneWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null, null, null, null);
@@ -173,7 +173,7 @@ abstract class WidgetHandler {
      * @param c cursor pointing to a ReceiverWidget database entry
      * @return ReceiverWidget
      */
-    private static ReceiverWidget dbToReceiverWidgetInfo(Cursor c) {
+    private static ReceiverWidget dbToReceiverWidgetInfo(Cursor c) throws Exception {
         int widgetId = c.getInt(0);
         long roomId = c.getLong(1);
         long receiverId = c.getLong(2);
@@ -187,7 +187,7 @@ abstract class WidgetHandler {
      * @param c cursor pointing to a RoomWidget database entry
      * @return RoomWidget
      */
-    private static RoomWidget dbToRoomWidgetInfo(Cursor c) {
+    private static RoomWidget dbToRoomWidgetInfo(Cursor c) throws Exception {
         int widgetId = c.getInt(0);
         long roomId = c.getLong(1);
 
@@ -200,7 +200,7 @@ abstract class WidgetHandler {
      * @param c cursor pointing to a SceneWidget database entry
      * @return SceneWidget
      */
-    private static SceneWidget dbToSceneWidgetInfo(Cursor c) {
+    private static SceneWidget dbToSceneWidgetInfo(Cursor c) throws Exception {
         int widgetId = c.getInt(0);
         long sceneId = c.getLong(1);
 

@@ -20,6 +20,7 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ abstract class ActionHandler {
      * @param actions list of actions
      * @return List of IDs of inserted Actions
      */
-    protected static ArrayList<Long> add(List<Action> actions) {
+    protected static ArrayList<Long> add(@NonNull List<Action> actions) throws Exception {
         ArrayList<Long> ids = new ArrayList<>();
         for (Action action : actions) {
             ContentValues values = new ContentValues();
@@ -74,7 +75,7 @@ abstract class ActionHandler {
         return ids;
     }
 
-    private static void insertActionDetails(ReceiverAction receiverAction, Long actionId) {
+    private static void insertActionDetails(@NonNull ReceiverAction receiverAction, @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverActionTable.COLUMN_ACTION_ID, actionId);
         values.put(ReceiverActionTable.COLUMN_ROOM_ID, receiverAction.getRoom().getId());
@@ -83,7 +84,7 @@ abstract class ActionHandler {
         DatabaseHandler.database.insert(ReceiverActionTable.TABLE_NAME, null, values);
     }
 
-    private static void insertActionDetails(RoomAction roomAction, Long actionId) {
+    private static void insertActionDetails(@NonNull RoomAction roomAction, @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomActionTable.COLUMN_ACTION_ID, actionId);
         values.put(RoomActionTable.COLUMN_ROOM_ID, roomAction.getRoom().getId());
@@ -91,7 +92,7 @@ abstract class ActionHandler {
         DatabaseHandler.database.insert(RoomActionTable.TABLE_NAME, null, values);
     }
 
-    private static void insertActionDetails(SceneAction sceneAction, Long actionId) {
+    private static void insertActionDetails(@NonNull SceneAction sceneAction, @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneActionTable.COLUMN_ACTION_ID, actionId);
         values.put(SceneActionTable.COLUMN_SCENE_ID, sceneAction.getScene().getId());
@@ -125,7 +126,7 @@ abstract class ActionHandler {
      *
      * @param receiverId ID of Receiver
      */
-    protected static void deleteByReceiverId(Long receiverId) {
+    protected static void deleteByReceiverId(@NonNull Long receiverId) throws Exception {
         Log.d(TimerActionHandler.class, "Delete TimerActions by ReceiverId: " + receiverId);
         String[] columns = {ReceiverActionTable.COLUMN_ID, ReceiverActionTable.COLUMN_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(ReceiverActionTable.TABLE_NAME, columns,
@@ -147,7 +148,7 @@ abstract class ActionHandler {
      *
      * @param roomId ID of Room
      */
-    protected static void deleteByRoomId(Long roomId) {
+    protected static void deleteByRoomId(@NonNull Long roomId) throws Exception {
         String[] columns = {RoomActionTable.COLUMN_ID, RoomActionTable.COLUMN_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(RoomActionTable.TABLE_NAME, columns,
                 RoomActionTable.COLUMN_ROOM_ID + "=" + roomId, null, null, null, null);
@@ -168,7 +169,7 @@ abstract class ActionHandler {
      *
      * @param sceneId ID of Scene
      */
-    protected static void deleteBySceneId(Long sceneId) {
+    protected static void deleteBySceneId(@NonNull Long sceneId) throws Exception {
         String[] columns = {SceneActionTable.COLUMN_ID, SceneActionTable.COLUMN_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(SceneActionTable.TABLE_NAME, columns,
                 SceneActionTable.COLUMN_SCENE_ID + "=" + sceneId, null, null, null, null);
@@ -189,7 +190,7 @@ abstract class ActionHandler {
      *
      * @param actionId ID od Action
      */
-    public static void delete(long actionId) {
+    public static void delete(long actionId) throws Exception {
         DatabaseHandler.database.delete(ActionTable.TABLE_NAME, ActionTable.COLUMN_ID +
                 "=" + actionId, null);
 
@@ -210,7 +211,7 @@ abstract class ActionHandler {
                 "=" + actionId, null);
     }
 
-    private static Action dbToAction(Cursor cursor) throws Exception {
+    private static Action dbToAction(@NonNull Cursor cursor) throws Exception {
         long actionId = cursor.getLong(0);
         String actionType = cursor.getString(1);
 

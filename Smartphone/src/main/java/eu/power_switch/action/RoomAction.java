@@ -19,6 +19,7 @@
 package eu.power_switch.action;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import eu.power_switch.obj.Room;
 
@@ -32,32 +33,40 @@ public class RoomAction extends Action {
     private Room room;
     private String buttonName;
 
-    public RoomAction(long id, Room room, String buttonName) {
+    public RoomAction(long id, @NonNull Room room, @NonNull String buttonName) {
         this.id = id;
         this.room = room;
         this.buttonName = buttonName;
     }
 
-    public Room getRoom() {
+    public
+    @NonNull
+    Room getRoom() {
         return room;
     }
 
-    public String getButtonName() {
+    public
+    @NonNull
+    String getButtonName() {
         return buttonName;
     }
 
     @Override
-    public String getActionType() {
+    public
+    @NonNull
+    String getActionType() {
         return ACTION_TYPE_ROOM;
     }
 
     @Override
-    public String toString() {
+    public
+    @NonNull
+    String toString() {
         return room.getName() + ": " + buttonName;
     }
 
     @Override
-    public void execute(Context context) {
+    public void execute(@NonNull Context context) {
         ActionHandler.execute(context, room, buttonName);
     }
 }

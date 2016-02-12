@@ -19,6 +19,7 @@
 package eu.power_switch.action;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
@@ -63,7 +64,7 @@ public class ActionHandler {
      * @param receiver receiver to execute on
      * @param button   button to activate
      */
-    public static void execute(Context context, Receiver receiver, Button button) {
+    public static void execute(@NonNull Context context, @NonNull Receiver receiver, @NonNull Button button) {
         try {
             executeReceiverAction(context, receiver, button);
 
@@ -84,7 +85,7 @@ public class ActionHandler {
         }
     }
 
-    private static void executeReceiverAction(Context context, Receiver receiver, Button button) throws Exception {
+    private static void executeReceiverAction(@NonNull Context context, @NonNull Receiver receiver, @NonNull Button button) throws Exception {
         NetworkHandler.init(context);
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
@@ -122,7 +123,7 @@ public class ActionHandler {
      * @param room       room to execute on
      * @param buttonName button name to execute on each receiver
      */
-    public static void execute(Context context, Room room, String buttonName) {
+    public static void execute(@NonNull Context context, @NonNull Room room, @NonNull String buttonName) {
         try {
             executeRoomAction(context, room, buttonName);
 
@@ -135,7 +136,7 @@ public class ActionHandler {
         }
     }
 
-    private static void executeRoomAction(Context context, Room room, String buttonName) throws Exception {
+    private static void executeRoomAction(@NonNull Context context, @NonNull Room room, @NonNull String buttonName) throws Exception {
         NetworkHandler.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
@@ -192,7 +193,7 @@ public class ActionHandler {
      * @param context any suitable context
      * @param scene   scene to execute
      */
-    public static void execute(Context context, Scene scene) {
+    public static void execute(@NonNull Context context, @NonNull Scene scene) {
         try {
             executeScene(context, scene);
 
@@ -205,7 +206,7 @@ public class ActionHandler {
         }
     }
 
-    private static void executeScene(Context context, Scene scene) throws Exception {
+    private static void executeScene(@NonNull Context context, @NonNull Scene scene) throws Exception {
         NetworkHandler.init(context);
 
         List<NetworkPackage> packages = new ArrayList<>();
@@ -246,7 +247,7 @@ public class ActionHandler {
      * @param context any suitable context
      * @param timer   timer to execute
      */
-    public static void execute(Context context, Timer timer) {
+    public static void execute(@NonNull Context context, @NonNull Timer timer) {
         try {
             executeActions(context, timer.getActions());
 
@@ -265,7 +266,7 @@ public class ActionHandler {
      * @param context any suitable context
      * @param event   event type
      */
-    public static void execute(Context context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+    public static void execute(@NonNull Context context, @NonNull ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
         try {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(context, actions);
@@ -286,7 +287,7 @@ public class ActionHandler {
      * @param geofence  geofence
      * @param eventType event type
      */
-    public static void execute(Context context, Geofence geofence, Geofence.EventType eventType) {
+    public static void execute(@NonNull Context context, @NonNull Geofence geofence, @NonNull Geofence.EventType eventType) {
         try {
             executeActions(context, geofence.getActions(eventType));
 
@@ -309,7 +310,7 @@ public class ActionHandler {
         }
     }
 
-    private static void executeActions(Context context, List<Action> actions) throws Exception {
+    private static void executeActions(@NonNull Context context, @NonNull List<Action> actions) throws Exception {
         for (Action action : actions) {
             switch (action.getActionType()) {
                 case Action.ACTION_TYPE_RECEIVER:

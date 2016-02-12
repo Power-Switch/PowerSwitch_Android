@@ -19,6 +19,7 @@
 package eu.power_switch.backup;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,7 +53,7 @@ public class BackupHandler {
      */
     private Context context;
 
-    public BackupHandler(Context context) {
+    public BackupHandler(@NonNull Context context) {
         this.context = context;
     }
 
@@ -61,7 +62,9 @@ public class BackupHandler {
      *
      * @return List of Backups
      */
-    public ArrayList<Backup> getBackups() {
+    public
+    @NonNull
+    ArrayList<Backup> getBackups() {
         ArrayList<Backup> backups = new ArrayList<>();
         File backupDir = new File(SmartphonePreferencesHandler.getBackupPath());
         if (backupDir.exists()) {
@@ -85,7 +88,7 @@ public class BackupHandler {
      * @throws CreateBackupException
      * @throws BackupAlreadyExistsException
      */
-    public void createBackup(boolean useExternalStorage, String name, boolean force) throws
+    public void createBackup(boolean useExternalStorage, @NonNull String name, boolean force) throws
             CreateBackupException, BackupAlreadyExistsException {
         if (useExternalStorage) {
             // TODO: kp wie man internen und externen speicher unterscheidet
@@ -142,7 +145,7 @@ public class BackupHandler {
      * @throws BackupNotFoundException
      * @throws RemoveBackupException
      */
-    public void removeBackup(String name) throws BackupNotFoundException, RemoveBackupException {
+    public void removeBackup(@NonNull String name) throws BackupNotFoundException, RemoveBackupException {
         try {
             File backupFolder = new File(SmartphonePreferencesHandler.getBackupPath()
                     + File.separator + name);
@@ -164,7 +167,7 @@ public class BackupHandler {
      * @throws BackupNotFoundException
      * @throws BackupAlreadyExistsException
      */
-    public void renameBackup(String oldName, String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
+    public void renameBackup(@NonNull String oldName, @NonNull String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
         File oldFolder = new File(SmartphonePreferencesHandler.getBackupPath()
                 + File.separator + oldName);
         File newFolder = new File(SmartphonePreferencesHandler.getBackupPath()
@@ -186,7 +189,7 @@ public class BackupHandler {
      * @throws BackupNotFoundException
      * @throws RestoreBackupException
      */
-    public void restoreBackup(String name) throws BackupNotFoundException, RestoreBackupException {
+    public void restoreBackup(@NonNull String name) throws BackupNotFoundException, RestoreBackupException {
         // create source path object
         File src = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator + name);
         if (src.exists()) {
@@ -214,7 +217,7 @@ public class BackupHandler {
         }
     }
 
-    private void copyFile(File src, File dst) throws IOException {
+    private void copyFile(@NonNull File src, @NonNull File dst) throws IOException {
         if (src.exists()) {
             InputStream in = new FileInputStream(src);
             if (dst.exists()) {
@@ -234,7 +237,7 @@ public class BackupHandler {
     }
 
     // If targetLocation does not exist, it will be created.
-    private void copyDirectory(File sourceLocation, File targetLocation) throws Exception {
+    private void copyDirectory(@NonNull File sourceLocation, @NonNull File targetLocation) throws Exception {
         if (sourceLocation.isDirectory()) {
             if (!targetLocation.exists()) {
                 targetLocation.mkdirs();
@@ -249,7 +252,7 @@ public class BackupHandler {
         }
     }
 
-    private void deleteRecursive(File fileOrDirectory) throws Exception {
+    private void deleteRecursive(@NonNull File fileOrDirectory) throws Exception {
         if (fileOrDirectory.isDirectory()) {
             for (File child : fileOrDirectory.listFiles()) {
                 deleteRecursive(child);

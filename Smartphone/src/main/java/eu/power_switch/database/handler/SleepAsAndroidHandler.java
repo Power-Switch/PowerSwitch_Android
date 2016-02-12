@@ -59,7 +59,7 @@ abstract class SleepAsAndroidHandler {
         addAlarmActions(event, actions);
     }
 
-    private static void addAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) {
+    private static void addAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 

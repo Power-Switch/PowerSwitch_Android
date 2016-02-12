@@ -203,6 +203,9 @@ public class GeofenceApiHandler {
         }); // Result processed in onResult().
     }
 
+    /**
+     * Remove all Geofences from Google Location Api
+     */
     public void removeAllGeofences() {
         LocationServices.GeofencingApi.removeGeofences(
                 googleApiClient,
@@ -229,10 +232,16 @@ public class GeofenceApiHandler {
         return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    /**
+     * Connect (async) GoogleApiClient
+     */
     public void onStart() {
         googleApiClient.connect();
     }
 
+    /**
+     * Disconnect (async) GoogleApiClient
+     */
     public void onStop() {
         googleApiClient.disconnect();
     }

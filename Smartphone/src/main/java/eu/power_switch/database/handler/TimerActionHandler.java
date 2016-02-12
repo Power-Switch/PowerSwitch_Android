@@ -38,7 +38,7 @@ abstract class TimerActionHandler {
      * @param actions Actions to be added to the Timer
      * @param timerId ID of Timer
      */
-    protected static void add(ArrayList<Action> actions, Long timerId) {
+    protected static void add(ArrayList<Action> actions, Long timerId) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 

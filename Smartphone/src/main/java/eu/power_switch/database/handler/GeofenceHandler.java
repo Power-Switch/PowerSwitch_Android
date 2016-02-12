@@ -49,7 +49,7 @@ abstract class GeofenceHandler {
      * @param geofence new geofence to insert
      * @return ID of inserted Geofence
      */
-    protected static Long add(Geofence geofence) {
+    protected static Long add(Geofence geofence) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, geofence.isActive());
         values.put(GeofenceTable.COLUMN_NAME, geofence.getName());
@@ -67,7 +67,7 @@ abstract class GeofenceHandler {
         return newId;
     }
 
-    protected static Geofence get(Long id) {
+    protected static Geofence get(Long id) throws Exception {
         if (id == null) {
             return null;
         }
@@ -85,7 +85,7 @@ abstract class GeofenceHandler {
      *
      * @param id ID of Geofence
      */
-    protected static void enable(Long id) {
+    protected static void enable(Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, true);
         DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
@@ -96,7 +96,7 @@ abstract class GeofenceHandler {
      *
      * @param id ID of Geofence
      */
-    protected static void disable(Long id) {
+    protected static void disable(Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, false);
         DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
@@ -122,7 +122,7 @@ abstract class GeofenceHandler {
      *
      * @return List of Geofences
      */
-    protected static List<Geofence> getAll() {
+    protected static List<Geofence> getAll() throws Exception {
         List<Geofence> geofences = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
@@ -140,7 +140,7 @@ abstract class GeofenceHandler {
      *
      * @return List of custom Geofences
      */
-    public static List<Geofence> getCustom() {
+    public static List<Geofence> getCustom() throws Exception {
         List<Geofence> geofences = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
@@ -169,7 +169,7 @@ abstract class GeofenceHandler {
      * @param isActive true if Geofence is enabled
      * @return List of enabled/disabled Geofences
      */
-    protected static List<Geofence> getAll(boolean isActive) {
+    protected static List<Geofence> getAll(boolean isActive) throws Exception {
         List<Geofence> geofences = new ArrayList<>();
         int isActiveInt = isActive ? 1 : 0;
         Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
@@ -216,7 +216,7 @@ abstract class GeofenceHandler {
      * @param c cursor pointing to a geofence database entry
      * @return Geofence, can be null
      */
-    private static Geofence dbToGeofence(Cursor c) {
+    private static Geofence dbToGeofence(Cursor c) throws Exception {
         try {
             Geofence geofence;
             Long id = c.getLong(0);
@@ -253,14 +253,14 @@ abstract class GeofenceHandler {
 
 
     // convert from bitmap to byte array
-    public static byte[] getBytes(Bitmap bitmap) {
+    public static byte[] getBytes(Bitmap bitmap) throws Exception {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
     }
 
     // convert from byte array to bitmap
-    public static Bitmap getImage(byte[] image) {
+    public static Bitmap getImage(byte[] image) throws Exception {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }

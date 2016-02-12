@@ -20,6 +20,7 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ abstract class GatewayHandler {
      * @return ID of new Database entry
      * @throws GatewayAlreadyExistsException
      */
-    protected static long add(Gateway gateway) throws GatewayAlreadyExistsException {
+    protected static long add(Gateway gateway) throws Exception {
         for (Gateway existingGateway : getAll()) {
             if (existingGateway.hasSameAddress(gateway)) {
                 throw new GatewayAlreadyExistsException(existingGateway.getId());
@@ -71,7 +72,7 @@ abstract class GatewayHandler {
      *
      * @param id ID of Gateway
      */
-    protected static void enable(Long id) {
+    protected static void enable(Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_ACTIVE, true);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
@@ -82,7 +83,7 @@ abstract class GatewayHandler {
      *
      * @param id ID of Gateway
      */
-    protected static void disable(Long id) {
+    protected static void disable(Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_ACTIVE, false);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
@@ -97,7 +98,7 @@ abstract class GatewayHandler {
      * @param address new Address (Host)
      * @param port    new Port
      */
-    protected static void update(Long id, String name, String model, String address, Integer port) {
+    protected static void update(Long id, String name, String model, String address, Integer port) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_NAME, name);
         values.put(GatewayTable.COLUMN_MODEL, model);
@@ -111,7 +112,7 @@ abstract class GatewayHandler {
      *
      * @param id ID of Gateway
      */
-    protected static void delete(Long id) {
+    protected static void delete(Long id) throws Exception {
         // delete from associations with apartments
         DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME, ApartmentGatewayRelationTable
                 .COLUMN_GATEWAY_ID + "=" + id, null);
@@ -125,7 +126,7 @@ abstract class GatewayHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    protected static Gateway get(Long id) {
+    protected static Gateway get(Long id) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, GatewayTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
         cursor.moveToFirst();
@@ -139,7 +140,7 @@ abstract class GatewayHandler {
      *
      * @return List of Gateways
      */
-    protected static List<Gateway> getAll() {
+    protected static List<Gateway> getAll() throws Exception {
         List<Gateway> gateways = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, null, null, null, null, null);
         cursor.moveToFirst();
@@ -158,7 +159,7 @@ abstract class GatewayHandler {
      * @param isActive true if Gateway is enabled
      * @return List of enabled/disabled Gateways
      */
-    protected static List<Gateway> getAll(boolean isActive) {
+    protected static List<Gateway> getAll(boolean isActive) throws Exception {
         List<Gateway> gateways = new ArrayList<>();
         int isActiveInt = isActive ? 1 : 0;
         Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, GatewayTable.COLUMN_ACTIVE + "=" + isActiveInt,
@@ -180,7 +181,7 @@ abstract class GatewayHandler {
      * @param c cursor pointing to a gateway database entry
      * @return Gateway, can be null
      */
-    private static Gateway dbToGateway(Cursor c) {
+    private static Gateway dbToGateway(@NonNull Cursor c) throws Exception {
         Gateway gateway;
         Long id = c.getLong(0);
         boolean active = c.getInt(1) > 0;

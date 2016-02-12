@@ -19,6 +19,7 @@
 package eu.power_switch.action;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 /**
  * Action Base Class
@@ -48,19 +49,23 @@ public abstract class Action {
      *
      * @return ActionType
      */
-    public abstract String getActionType();
+    public abstract
+    @NonNull
+    String getActionType();
 
     /**
      * Returns a human readable representation of a Action
      *
      * @return Text
      */
-    public abstract String toString();
+    public abstract
+    @NonNull
+    String toString();
 
     /**
      * Executes this Action
      *
      * @param context any suitable context
      */
-    public abstract void execute(Context context);
+    public abstract void execute(@NonNull Context context);
 }
