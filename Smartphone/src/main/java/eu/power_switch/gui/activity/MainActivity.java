@@ -321,6 +321,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void applyTheme() {
+        switch (SmartphonePreferencesHandler.getTheme()) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
+                setTheme(R.style.PowerSwitchTheme_Dark_Red);
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Blue);
+                setTheme(R.style.PowerSwitchTheme_Light_Blue);
+                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
+                setTheme(R.style.PowerSwitchTheme_Light_Red);
+                break;
+            default:
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
+                break;
+        }
+    }
+
     private void initNavigationDrawer() {
         // Set the menu icon instead of the launcher icon.
         final ActionBar ab = getSupportActionBar();
@@ -670,31 +695,6 @@ public class MainActivity extends AppCompatActivity {
                 .withHeaderPadding(true)
                 .withDrawerGravity(Gravity.END)
                 .append(navigationDrawer);
-    }
-
-    private void applyTheme() {
-        switch (SmartphonePreferencesHandler.getTheme()) {
-            case SettingsConstants.THEME_DARK_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                break;
-            case SettingsConstants.THEME_DARK_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
-                setTheme(R.style.PowerSwitchTheme_Dark_Red);
-                break;
-            case SettingsConstants.THEME_LIGHT_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Blue);
-                setTheme(R.style.PowerSwitchTheme_Light_Blue);
-                break;
-            case SettingsConstants.THEME_LIGHT_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
-                setTheme(R.style.PowerSwitchTheme_Light_Red);
-                break;
-            default:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                break;
-        }
     }
 
     private void updateHistory() {

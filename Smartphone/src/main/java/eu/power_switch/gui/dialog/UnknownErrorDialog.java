@@ -18,19 +18,15 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -40,6 +36,7 @@ import java.util.Date;
 import eu.power_switch.R;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -49,15 +46,12 @@ import eu.power_switch.shared.log.LogHandler;
  * <p/>
  * Created by Markus on 05.02.2016.
  */
-public class UnknownErrorDialog extends DialogFragment {
+public class UnknownErrorDialog extends AppCompatActivity {
 
     private static final String[] DEFAULT_EMAILS = new String[]{"contact@power-switch.eu"};
-
     private static final String THROWABLE_KEY = "throwable";
     private static final String TIME_KEY = "time";
 
-    private View rootView;
-    private Dialog dialog;
     private Throwable throwable;
     private Date timeRaised;
 
@@ -67,50 +61,51 @@ public class UnknownErrorDialog extends DialogFragment {
      * @param t                        any throwable
      * @param timeRaisedInMilliseconds time when the throwable was raised
      */
-    public static UnknownErrorDialog newInstance(Throwable t, long timeRaisedInMilliseconds) {
-        Bundle args = new Bundle();
-        args.putSerializable(THROWABLE_KEY, t);
-        args.putLong(TIME_KEY, timeRaisedInMilliseconds);
-
-        UnknownErrorDialog fragment = new UnknownErrorDialog();
-        fragment.setArguments(args);
-        return fragment;
+    public static Intent getNewInstanceIntent(Throwable t, long timeRaisedInMilliseconds) {
+        Intent intent = new Intent();
+        intent.setAction("eu.power_switch.unknown_error_activity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(THROWABLE_KEY, t);
+        intent.putExtra(TIME_KEY, timeRaisedInMilliseconds);
+        return intent;
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+    protected void onCreate(Bundle savedInstanceState) {
+        // set Theme before anything else in onCreate();
+//        applyTheme(); // not yet ready, missing theme definitions for dialogs
+        // apply forced locale (if set in developer options)
+        applyLocale();
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_unknown_error, null);
-        builder.setView(rootView);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dialog_unknown_error);
+        setFinishOnTouchOutside(false); // prevent close dialog on touch outside window
 
-
-        Bundle args = getArguments();
-        if (args.containsKey(THROWABLE_KEY)) {
-            throwable = (Throwable) args.getSerializable(THROWABLE_KEY);
+        Intent intent = getIntent();
+        if (intent.hasExtra(THROWABLE_KEY)) {
+            throwable = (Throwable) intent.getSerializableExtra(THROWABLE_KEY);
         }
-        if (args.containsKey(TIME_KEY)) {
-            timeRaised = new Date(args.getLong(TIME_KEY));
+        if (intent.hasExtra(TIME_KEY)) {
+            timeRaised = new Date(intent.getLongExtra(TIME_KEY, 0));
         }
 
-        Button buttonShareEmail = (Button) rootView.findViewById(R.id.button_share_via_mail);
+        Button buttonShareEmail = (Button) findViewById(R.id.button_share_via_mail);
         buttonShareEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     reportExceptionViaMail();
                 } catch (MissingPermissionException e) {
-                    StatusMessageHandler.showInfoMessage(getContext(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.missing_external_storage_permission, Snackbar
+                            .LENGTH_LONG);
                 } catch (Exception e) {
-                    dismiss();
-                    StatusMessageHandler.showErrorMessage(getContext(), e);
+                    finish();
+                    StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
                 }
             }
         });
 
-        Button buttonShareText = (Button) rootView.findViewById(R.id.button_share_plain_text);
+        Button buttonShareText = (Button) findViewById(R.id.button_share_plain_text);
         buttonShareText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,23 +117,19 @@ public class UnknownErrorDialog extends DialogFragment {
             }
         });
 
-        TextView textViewErrorDescription = (TextView) rootView.findViewById(R.id.editText_error_description);
+        TextView textViewErrorDescription = (TextView) findViewById(R.id.editText_error_description);
         textViewErrorDescription.setText(Log.getStackTraceText(throwable));
+    }
 
-        builder.setTitle(R.string.unknown_error);
-        builder.setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-            }
-        });
-
-        dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        dialog.show();
-
-        return dialog;
+    private void applyLocale() {
+        if (DeveloperPreferencesHandler.getForceLanguage()) {
+            Resources res = getResources();
+            // Change locale settings in the app.
+            DisplayMetrics dm = res.getDisplayMetrics();
+            android.content.res.Configuration conf = res.getConfiguration();
+            conf.locale = DeveloperPreferencesHandler.getLocale();
+            res.updateConfiguration(conf, dm);
+        }
     }
 
     private void reportExceptionViaMail() throws Exception {
@@ -150,7 +141,7 @@ public class UnknownErrorDialog extends DialogFragment {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
                 ": " + throwable.getMessage());
         emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(getContext())));
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(this)));
 
         startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
     }
@@ -162,7 +153,7 @@ public class UnknownErrorDialog extends DialogFragment {
         shareText += "<<<<<<<<<< DEVELOPER INFOS >>>>>>>>>>\n";
         shareText += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
         shareText += "\n";
-        shareText += "PowerSwitch Application Version: " + PowerSwitch.getAppVersionDescription(getContext()) + "\n";
+        shareText += "PowerSwitch Application Version: " + PowerSwitch.getAppVersionDescription(this) + "\n";
         shareText += "Device API Level: " + android.os.Build.VERSION.SDK_INT + "\n";
         shareText += "Device OS Version name: " + Build.VERSION.RELEASE + "\n";
         shareText += "Device brand/model: " + LogHandler.getDeviceName() + "\n";

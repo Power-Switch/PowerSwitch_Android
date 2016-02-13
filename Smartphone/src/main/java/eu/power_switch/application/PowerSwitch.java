@@ -19,16 +19,18 @@
 package eu.power_switch.application;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
-import android.support.v7.app.AlertDialog;
 
-import eu.power_switch.R;
+import java.util.Date;
+
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -53,31 +55,36 @@ public class PowerSwitch extends MultiDexApplication {
         // Set up our own UncaughtExceptionHandler to log errors we couldn't even think of
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
-            public void uncaughtException(Thread thread, Throwable throwable) {
+            public void uncaughtException(Thread thread, final Throwable throwable) {
                 Log.e("FATAL EXCEPTION", throwable);
-
                 try {
-                    new AlertDialog.Builder(getApplicationContext())
-                            .setTitle(R.string.unknown_error)
-                            .setMessage(Log.getStackTraceText(throwable))
-                            .setPositiveButton(R.string.report, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        LogHandler.sendLogsAsMail(getApplicationContext());
-                                    } catch (Exception e) {
-                                        Log.e(e);
-                                    }
-                                }
-                            })
-                            .setNeutralButton(R.string.close, null)
-                            .show();
+                    if (isUIThread()) {
+                        startActivity(UnknownErrorDialog.getNewInstanceIntent(
+                                throwable,
+                                new Date().getTime()
+                        ));
+                    } else {  //handle non UI thread throw uncaught exception
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(UnknownErrorDialog.getNewInstanceIntent(
+                                        throwable,
+                                        new Date().getTime()
+                                ));
+                            }
+                        });
+                    }
                 } catch (Exception e) {
                     Log.e("Error showing \"Unknown Error\" AlertDialog", e);
                 }
 
-                // pass on exception to android system
-                originalUncaughtExceptionHandler.uncaughtException(thread, throwable);
+                // not possible without killing all app processes, including the UnkownErrorDialog!?
+//                if (originalUncaughtExceptionHandler != null) {
+//                    //Delegates to Android's error handling
+//                    originalUncaughtExceptionHandler.uncaughtException(
+//                            thread, ((NestedException) throwable).getThrowable());
+//                }
+                System.exit(2); //Prevents the service/app from freezing
             }
         });
     }
@@ -98,6 +105,10 @@ public class PowerSwitch extends MultiDexApplication {
             Log.e(e);
             return "unknown (error while retrieving)";
         }
+    }
+
+    public boolean isUIThread() {
+        return Looper.getMainLooper().getThread() == Thread.currentThread();
     }
 
     @Override

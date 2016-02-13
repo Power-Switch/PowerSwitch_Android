@@ -205,6 +205,7 @@ public class RoomsFragment extends RecyclerViewFragment {
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        // throw new RuntimeException("FSAMPFSA");
     }
 
     @Override

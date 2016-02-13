@@ -85,9 +85,9 @@ public class DeveloperOptionsDialog extends DialogFragment {
         forceUnknownExceptionDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UnknownErrorDialog unknownErrorDialog = UnknownErrorDialog.newInstance(
-                        new Exception("Unknown error during runtime!"), new Date().getTime());
-                unknownErrorDialog.show(getFragmentManager(), null);
+                startActivity(
+                        UnknownErrorDialog.getNewInstanceIntent(new Exception("Unknown error during runtime!"),
+                                new Date().getTime()));
             }
         });
 

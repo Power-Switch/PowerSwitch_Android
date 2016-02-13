@@ -259,8 +259,8 @@ public class StatusMessageHandler {
                 new Runnable() {
                     @Override
                     public void run() {
-                        UnknownErrorDialog unknownErrorDialog = UnknownErrorDialog.newInstance(e, timeRaised.getTime());
-                        unknownErrorDialog.show(activity.getSupportFragmentManager(), null);
+                        activity.startActivity(
+                                UnknownErrorDialog.getNewInstanceIntent(e, timeRaised.getTime()));
                     }
                 }, 15000);
     }

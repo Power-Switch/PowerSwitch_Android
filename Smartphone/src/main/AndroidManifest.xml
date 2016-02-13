@@ -15,14 +15,13 @@
   ~
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+-->
 
 <manifest
     package="eu.power_switch"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionCode="70"
     android:versionName="@string/app_version">
-
 
     <!-- Smartphone ONLY Permissions -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -43,7 +42,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
-        android:name="eu.power_switch.application.PowerSwitch"
+        android:name=".application.PowerSwitch"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@drawable/ic_launcher"
@@ -61,6 +60,18 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".gui.dialog.UnknownErrorDialog"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/unknown_error"
+            android:process=":UnknownErrorDialog"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="eu.power_switch.unknown_error_activity"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
@@ -135,7 +146,6 @@
                 <action android:name="eu.power_switch.widget_action"/>
             </intent-filter>
         </receiver>
-
         <receiver android:name=".api.IntentReceiver">
             <!-- Tasker/LLama interface -->
             <intent-filter>
@@ -173,29 +183,24 @@
             </intent-filter>
         </receiver>
 
-
         <!-- Services -->
-        <service
-            android:name=".google_play_services.geofence.GeofenceIntentService">
-        </service>
-        <service
-            android:name=".wear.service.ListenerService">
+        <service android:name=".google_play_services.geofence.GeofenceIntentService"/>
+        <service android:name=".wear.service.ListenerService">
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
             </intent-filter>
         </service>
-        <service
-            android:name=".wear.service.UtilityService">
-            <!--<intent-filter>-->
-            <!--<action android:name="eu.power_switch.wear.UPDATE_DATA"/>-->
-            <!--</intent-filter>-->
+        <service android:name=".wear.service.UtilityService">
+            <!-- <intent-filter> -->
+            <!-- <action android:name="eu.power_switch.wear.UPDATE_DATA"/> -->
+            <!-- </intent-filter> -->
         </service>
 
         <!-- Google Play Services Version Number -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
-        <!-- Google Maps API Key-->
+        <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB4bVF6jhwXE35xvNLP7LOdpsM5uleCoEs"/>
@@ -203,6 +208,7 @@
         <meta-data
             android:name="com.lge.support.SPLIT_WINDOW"
             android:value="true"/>
+
     </application>
 
 </manifest>

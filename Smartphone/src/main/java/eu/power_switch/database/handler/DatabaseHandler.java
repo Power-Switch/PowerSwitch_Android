@@ -20,6 +20,7 @@ package eu.power_switch.database.handler;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -90,7 +91,7 @@ public final class DatabaseHandler {
      *
      * @param context Any suitable context
      */
-    synchronized public static void init(Context context) {
+    synchronized public static void init(@NonNull Context context) {
         if (DatabaseHandler.context != null) {
             // dont init again
             return;
@@ -733,7 +734,7 @@ public final class DatabaseHandler {
      * @return ID of saved Database entry
      * @throws GatewayAlreadyExistsException
      */
-    public static long addGateway(Gateway gateway) throws GatewayAlreadyExistsException {
+    public static long addGateway(Gateway gateway) throws Exception {
         openWritable();
         long id;
         try {
@@ -1396,7 +1397,7 @@ public final class DatabaseHandler {
      * @param geofence new Geofence
      * @return ID of saved Database entry
      */
-    public static long addGeofence(Geofence geofence) {
+    public static long addGeofence(Geofence geofence) throws Exception {
         openWritable();
         long id;
         try {
