@@ -67,6 +67,7 @@
             android:name=".gui.dialog.UnknownErrorDialog"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/unknown_error"
+            android:noHistory="true"
             android:process=":UnknownErrorDialog"
             android:theme="@style/Theme.AppCompat.Dialog"
             android:windowSoftInputMode="adjustPan">
