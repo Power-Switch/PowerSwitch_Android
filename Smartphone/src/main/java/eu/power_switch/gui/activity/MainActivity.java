@@ -246,7 +246,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(e);
         }
 
-        if (SmartphonePreferencesHandler.getAutoDiscover() && NetworkHandler.isWifiAvailable()) {
+        if (SmartphonePreferencesHandler.getAutoDiscover() && (NetworkHandler.isWifiAvailable() || NetworkHandler
+                .isEthernetAvailable())) {
             new AsyncTask<Context, Void, Void>() {
 
                 @Override

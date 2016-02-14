@@ -93,6 +93,21 @@ public abstract class NetworkHandler {
     }
 
     /**
+     * checks if Ethernet is available
+     *
+     * @return false if Ethernet is not available
+     */
+    public static boolean isEthernetAvailable() {
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        boolean isWifiAvailable = (networkInfo != null &&
+                ConnectivityManager.TYPE_ETHERNET == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
+        Log.d("isEthernetAvailable: " + isWifiAvailable);
+        return isWifiAvailable;
+    }
+
+    /**
      * checks if GPRS is available
      *
      * @return false if GPRS is not available
@@ -105,6 +120,20 @@ public abstract class NetworkHandler {
                 ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
         Log.d("isGprsAvailable: " + isGprsAvailable);
         return isGprsAvailable;
+    }
+
+    /**
+     * checks if any kind of network connection is available
+     *
+     * @return true if a network connection is available, false otherwise
+     */
+    public static boolean isNetworkAvailable() {
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        boolean isAvailable = (networkInfo != null && networkInfo.isConnectedOrConnecting());
+        Log.d("isNetworkAvailable: " + isAvailable);
+        return isAvailable;
     }
 
     /**
