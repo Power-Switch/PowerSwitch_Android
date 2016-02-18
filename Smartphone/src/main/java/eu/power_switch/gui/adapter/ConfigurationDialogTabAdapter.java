@@ -16,20 +16,22 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-beta5'
-    }
-}
+package eu.power_switch.gui.adapter;
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
+
+/**
+ * Created by Markus on 17.02.2016.
+ */
+public abstract class ConfigurationDialogTabAdapter extends FragmentPagerAdapter {
+
+    public ConfigurationDialogTabAdapter(FragmentManager fm) {
+        super(fm);
     }
+
+    public abstract ConfigurationDialogTabbedSummaryFragment getSummaryFragment();
+
 }

@@ -20,6 +20,12 @@ package eu.power_switch.action;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import eu.power_switch.obj.Apartment;
 
 /**
  * Action Base Class
@@ -32,8 +38,8 @@ public abstract class Action {
     public static final String ACTION_TYPE_RECEIVER = "action_type_receiver";
     public static final String ACTION_TYPE_ROOM = "action_type_room";
     public static final String ACTION_TYPE_SCENE = "action_type_scene";
-
     protected long id;
+    protected Apartment apartment;
 
     /**
      * Get ID of this Action
@@ -49,18 +55,21 @@ public abstract class Action {
      *
      * @return ActionType
      */
-    public abstract
+    @ActionType
     @NonNull
-    String getActionType();
+    public abstract String getActionType();
+
+    public Apartment getApartment() {
+        return apartment;
+    }
 
     /**
      * Returns a human readable representation of a Action
      *
      * @return Text
      */
-    public abstract
     @NonNull
-    String toString();
+    public abstract String toString();
 
     /**
      * Executes this Action
@@ -68,4 +77,9 @@ public abstract class Action {
      * @param context any suitable context
      */
     public abstract void execute(@NonNull Context context);
+
+    @StringDef({ACTION_TYPE_RECEIVER, ACTION_TYPE_ROOM, ACTION_TYPE_SCENE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ActionType {
+    }
 }

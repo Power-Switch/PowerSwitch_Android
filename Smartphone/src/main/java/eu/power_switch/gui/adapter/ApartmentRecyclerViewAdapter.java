@@ -27,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 import eu.power_switch.R;
@@ -92,10 +94,17 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         String contentSummary = "";
         contentSummary += context.getString(R.string.rooms) + ": " + apartment.getRooms().size() + "\n";
         contentSummary += context.getString(R.string.scenes) + ": " + apartment.getScenes().size() + "\n";
-        contentSummary += context.getString(R.string.associated_gateways) + ": " + apartment.getAssociatedGateways()
-                .size();
+        contentSummary += context.getString(R.string.associated_gateways) + ": " + apartment.getAssociatedGateways().size()
+                + "\n";
         if (apartment.getAssociatedGateways().isEmpty()) {
-            contentSummary += " (!)";
+            contentSummary += " (!)\n";
+        }
+        contentSummary += context.getString(R.string.location) + ": ";
+        if (apartment.getGeofence() != null) {
+            LatLng location = apartment.getGeofence().getCenterLocation();
+            contentSummary += location.latitude + ", " + location.longitude;
+        } else {
+            contentSummary += context.getString(R.string.none);
         }
         holder.contentSummary.setText(contentSummary);
 

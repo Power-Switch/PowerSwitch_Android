@@ -82,10 +82,9 @@ abstract class ApartmentHandler {
         DatabaseHandler.database.update(ApartmentTable.TABLE_NAME, values,
                 ApartmentTable.COLUMN_ID + "==" + apartment.getId(), null);
 
-        // update associated geofence
-        if (apartment.getGeofence() != null) {
-            GeofenceHandler.update(apartment.getGeofence());
-        }
+        // update associated geofence (delete old, add new)
+        GeofenceHandler.deleteByApartmentId(apartment.getId());
+        addGeofence(apartment.getId(), apartment);
 
         // update associated gateways
         removeAssociatedGateways(apartment.getId());
@@ -95,23 +94,24 @@ abstract class ApartmentHandler {
     /**
      * Deletes Apartment from Database
      *
-     * @param id ID of Apartment
+     * @param apartmentId ID of Apartment
      */
-    protected static void delete(Long id) throws Exception {
-        LinkedList<Room> rooms = RoomHandler.getByApartment(id);
+    protected static void delete(Long apartmentId) throws Exception {
+        LinkedList<Room> rooms = RoomHandler.getByApartment(apartmentId);
         for (Room room : rooms) {
             RoomHandler.delete(room.getId());
         }
 
-        LinkedList<Scene> scenes = SceneHandler.getByApartment(id);
+        LinkedList<Scene> scenes = SceneHandler.getByApartment(apartmentId);
         for (Scene scene : scenes) {
             SceneHandler.delete(scene.getId());
         }
 
-        removeAssociatedGateways(id);
-        // TODO: disable and remove associated geofence
+        removeAssociatedGateways(apartmentId);
 
-        DatabaseHandler.database.delete(ApartmentTable.TABLE_NAME, ApartmentTable.COLUMN_ID + "=" + id, null);
+        GeofenceHandler.deleteByApartmentId(apartmentId);
+
+        DatabaseHandler.database.delete(ApartmentTable.TABLE_NAME, ApartmentTable.COLUMN_ID + "=" + apartmentId, null);
     }
 
     /**

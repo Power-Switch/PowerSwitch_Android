@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -244,8 +245,8 @@ public class UtilityService extends IntentService {
                 sendDataToWearable(rooms, receivers, buttons, scenes);
                 return;
             }
-            try {
 
+            try {
                 List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
 
                 List<Receiver> receivers = new ArrayList<>();
@@ -261,10 +262,14 @@ public class UtilityService extends IntentService {
 
                 sendDataToWearable(rooms, receivers, buttons, scenes);
             } catch (Exception e) {
-                Log.e(e);
+                StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
             }
         } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
-            sendSettingsToWearable();
+            try {
+                sendSettingsToWearable();
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
+            }
         }
     }
 

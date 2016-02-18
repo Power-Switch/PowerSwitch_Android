@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -38,10 +37,10 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1NameFragment;
-import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage2LocationFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -106,9 +105,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         try {
-            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
             ConfigurationDialogTabbedSummaryFragment setupFragment =
-                    customTabAdapter.getSetupFragment();
+                    customTabAdapter.getSummaryFragment();
             return setupFragment.checkSetupValidity();
         } catch (Exception e) {
             Log.e(e);
@@ -123,8 +122,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         Log.d("Saving apartment");
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment setupFragment = customTabAdapter.getSetupFragment();
+        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
+        ConfigurationDialogTabbedSummaryFragment setupFragment = customTabAdapter.getSummaryFragment();
         try {
             setupFragment.saveCurrentConfigurationToDatabase();
         } catch (Exception e) {
@@ -185,7 +184,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
         super.onStop();
     }
 
-    private static class CustomTabAdapter extends FragmentPagerAdapter {
+    private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private Context context;
         private long apartmentId;
@@ -206,7 +205,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public ConfigurationDialogTabbedSummaryFragment getSetupFragment() {
+        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
             return setupFragment;
         }
 
@@ -230,12 +229,10 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             switch (i) {
                 case 0:
                     fragment = new ConfigureApartmentDialogPage1NameFragment();
-                    break;
-                case 1:
-                    fragment = new ConfigureApartmentDialogPage2LocationFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
+                    break;
             }
 
             if (fragment != null && apartmentId != -1) {
@@ -252,7 +249,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
          */
         @Override
         public int getCount() {
-            return 2;
+            return 1;
         }
     }
 }

@@ -52,9 +52,9 @@ public class RoomAction extends Action {
     }
 
     @Override
-    public
+    @ActionType
     @NonNull
-    String getActionType() {
+    public String getActionType() {
         return ACTION_TYPE_ROOM;
     }
 

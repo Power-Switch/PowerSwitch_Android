@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -38,6 +37,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1LocationFragment;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActionsFragment;
@@ -60,9 +60,9 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     public static final String GEOFENCE_ID_KEY = "GeofenceId";
 
     protected long geofenceId = -1;
+    protected GeofenceApiHandler geofenceApiHandler;
 
     private BroadcastReceiver broadcastReceiver;
-    private GeofenceApiHandler geofenceApiHandler;
 
     public static ConfigureGeofenceDialog newInstance(long geofenceId) {
         Bundle args = new Bundle();
@@ -90,7 +90,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         try {
-            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
             ConfigurationDialogTabbedSummaryFragment summaryFragment =
                     customTabAdapter.getSummaryFragment();
 
@@ -127,7 +127,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
         ConfigurationDialogTabbedSummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
         if (summaryFragment.checkSetupValidity()) {
@@ -183,7 +183,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
         super.onStop();
     }
 
-    protected static class CustomTabAdapter extends FragmentPagerAdapter {
+    protected static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private Context context;
         private long geofenceId;

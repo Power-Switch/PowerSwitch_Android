@@ -47,9 +47,12 @@ import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -60,6 +63,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
 
+    private long apartmentId = -1;
     private long currentId = -1;
     private String currentName = "";
     private List<Action> currentEnterActions = new ArrayList<>();
@@ -127,9 +131,15 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
         textViewExitActions = (TextView) rootView.findViewById(R.id.textView_exit_actions);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
-            currentId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
-            initializeGeofenceData(currentId);
+        if (args != null) {
+            if (args.containsKey(ConfigureApartmentGeofenceDialog.APARTMENT_ID_KEY)) {
+                apartmentId = args.getLong(ConfigureApartmentGeofenceDialog.APARTMENT_ID_KEY);
+            }
+
+            if (args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
+                currentId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
+                initializeGeofenceData(currentId);
+            }
         }
 
         updateUi();
@@ -223,25 +233,53 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
             actionsMap.put(Geofence.EventType.ENTER, currentEnterActions);
             actionsMap.put(Geofence.EventType.EXIT, currentExitActions);
 
-            if (currentId == -1) {
-                Geofence geofence = new Geofence(currentId, true, currentName, currentLocation,
-                        currentGeofenceRadius, currentSnapshot, actionsMap);
-                DatabaseHandler.addGeofence(geofence);
+            if (apartmentId == -1) {
+                if (currentId == -1) {
+                    Geofence geofence = new Geofence(currentId, true, currentName, currentLocation,
+                            currentGeofenceRadius, currentSnapshot, actionsMap);
+                    DatabaseHandler.addGeofence(geofence);
 
-                geofenceApiHandler.addGeofence(geofence);
-            } else {
-                Geofence geofence = DatabaseHandler.getGeofence(currentId);
+                    geofenceApiHandler.addGeofence(geofence);
+                } else {
+                    Geofence geofence = DatabaseHandler.getGeofence(currentId);
 
-                Geofence updatedGeofence = new Geofence(currentId, geofence.isActive(), currentName, currentLocation,
-                        currentGeofenceRadius, currentSnapshot, actionsMap);
-                DatabaseHandler.updateGeofence(updatedGeofence);
+                    Geofence updatedGeofence = new Geofence(currentId, geofence.isActive(), currentName, currentLocation,
+                            currentGeofenceRadius, currentSnapshot, actionsMap);
+                    DatabaseHandler.updateGeofence(updatedGeofence);
 
-                geofenceApiHandler.removeGeofence(geofence.getId());
-                if (geofence.isActive()) {
-                    geofenceApiHandler.addGeofence(updatedGeofence);
+                    geofenceApiHandler.removeGeofence(geofence.getId());
+                    if (geofence.isActive()) {
+                        geofenceApiHandler.addGeofence(updatedGeofence);
+                    }
                 }
+            } else {
+                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                Apartment updatedApartment;
+
+                if (apartment.getGeofence() == null) {
+                    updatedApartment = new Apartment(apartment.getId(),
+                            apartment.getName(), apartment.getAssociatedGateways(),
+                            new Geofence((long) -1, true, apartment.getName(), currentLocation, currentGeofenceRadius,
+                                    currentSnapshot, currentEnterActions, currentExitActions));
+                } else {
+                    Geofence geofence = apartment.getGeofence();
+                    Geofence updatedGeofence = new Geofence(geofence.getId(), geofence.isActive(),
+                            apartment.getName(), currentLocation, currentGeofenceRadius, currentSnapshot,
+                            currentEnterActions, currentExitActions);
+
+                    updatedApartment = new Apartment(apartment.getId(),
+                            apartment.getName(), apartment.getAssociatedGateways(), updatedGeofence);
+
+                    geofenceApiHandler.removeGeofence(geofence.getId());
+                    if (geofence.isActive()) {
+                        geofenceApiHandler.addGeofence(updatedGeofence);
+                    }
+                }
+
+                DatabaseHandler.updateApartment(updatedApartment);
             }
 
+            ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(getContext());
             CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getContext());
 
             StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -45,10 +46,13 @@ import java.util.Locale;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
+import eu.power_switch.gui.fragment.ApartmentFragment;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -56,7 +60,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage1NameFragment extends Fragment implements ConfigurationDialogFragment {
+public class ConfigureApartmentDialogPage1NameFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private View rootView;
 
@@ -69,24 +73,34 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
 
     private Collection<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
-    private long apartmentId;
+    private long apartmentId = -1;
 
 
     /**
-     * Used to notify the location page that some info has changed
+     * Used to notify parent Dialog that configuration has changed
      *
-     * @param context          any suitable context
-     * @param name             Current Name of Scene
-     * @param selectedGateways Currently selected Gateways to associate in Apartment
+     * @param context any suitable context
      */
-    public static void sendNameApartmentChangedBroadcast(Context context, String name, ArrayList<Gateway>
-            selectedGateways) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
-        intent.putExtra("name", name);
-        intent.putExtra("checkedGateways", selectedGateways);
-
+    public static void sendSetupApartmentChangedBroadcast(Context context) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
+
+//    /**
+//     * Used to notify the location page that some info has changed
+//     *
+//     * @param context          any suitable context
+//     * @param name             Current Name of Scene
+//     * @param selectedGateways Currently selected Gateways to associate in Apartment
+//     */
+//    public static void sendNameApartmentChangedBroadcast(Context context, String name, ArrayList<Gateway>
+//            selectedGateways) {
+//        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
+//        intent.putExtra("name", name);
+//        intent.putExtra("checkedGateways", selectedGateways);
+//
+//        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+//    }
 
     @Nullable
     @Override
@@ -113,7 +127,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
             @Override
             public void afterTextChanged(Editable s) {
                 checkValidity();
-                sendNameApartmentChangedBroadcast(getContext(), getCurrentName(), getCheckedGateways());
+                sendSetupApartmentChangedBroadcast(getContext());
             }
         };
         floatingName = (TextInputLayout) rootView.findViewById(R.id.apartment_name_text_input_layout);
@@ -236,7 +250,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        sendNameApartmentChangedBroadcast(getContext(), getCurrentName(), getCheckedGateways());
+                        sendSetupApartmentChangedBroadcast(getContext());
                     }
                 });
                 gatewayCheckboxList.add(checkBox);
@@ -288,7 +302,31 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
     }
 
     @Override
-    public boolean isValid() {
+    public void saveCurrentConfigurationToDatabase() throws Exception {
+        if (apartmentId == -1) {
+            Apartment newApartment = new Apartment((long) -1, getCurrentName(),
+                    getCheckedGateways(), null);
+
+            long newId = DatabaseHandler.addApartment(newApartment);
+
+            // set new apartment as active if it is the first and only one
+            if (DatabaseHandler.getAllApartments().size() == 1) {
+                SmartphonePreferencesHandler.setCurrentApartmentId(newId);
+            }
+        } else {
+            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+            Apartment updatedApartment = new Apartment(apartmentId, getCurrentName(), getCheckedGateways(), apartment.getGeofence());
+
+            DatabaseHandler.updateApartment(updatedApartment);
+        }
+
+        ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
+        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                , R.string.apartment_saved, Snackbar.LENGTH_LONG);
+    }
+
+    @Override
+    public boolean checkSetupValidity() {
         return checkValidity();
     }
 }

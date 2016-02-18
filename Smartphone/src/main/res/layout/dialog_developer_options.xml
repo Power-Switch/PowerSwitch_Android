@@ -70,6 +70,13 @@
             android:layout_margin="@dimen/padding_double"
             android:text="Force &quot;Unknown Error&quot; Dialog"/>
 
+        <Button
+            android:id="@+id/button_forceUnhandledException"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_double"
+            android:text="Force Unhandled Exception"/>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

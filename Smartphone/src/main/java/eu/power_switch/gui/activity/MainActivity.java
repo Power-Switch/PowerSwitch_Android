@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.getStartupDefaultTab());
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
+            navigationDrawer.setSelection(drawerPositionStack.peek());
             lastFragmentClasses.push(fragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
             getSupportFragmentManager().beginTransaction()
@@ -677,8 +678,6 @@ public class MainActivity extends AppCompatActivity {
                         itemDonate,
                         itemAbout)
                 .build();
-
-        navigationDrawer.setSelection(IDENTIFIER_ROOMS_SCENES);
     }
 
     private void initHistoryDrawer() {

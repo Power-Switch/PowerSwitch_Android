@@ -56,13 +56,8 @@ public class SelectApartmentDialog extends DialogFragment {
 
         ListView listViewApartments = (ListView) rootView.findViewById(R.id.recyclerview_apartments);
 
-        try {
-            for (Apartment apartment : DatabaseHandler.getAllApartments()) {
-                apartmentNames.add(apartment.getName());
-            }
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
+        apartmentNames.addAll(getApartmentNames());
+
         ArrayAdapter apartmentNamesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, apartmentNames);
         listViewApartments.setAdapter(apartmentNamesAdapter);
@@ -71,11 +66,7 @@ public class SelectApartmentDialog extends DialogFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     Apartment selectedApartment = DatabaseHandler.getApartment(apartmentNames.get(position));
-                    SmartphonePreferencesHandler.setCurrentApartmentId(selectedApartment.getId());
-
-                    ApartmentFragment.sendApartmentChangedBroadcast(getContext());
-
-                    dismiss();
+                    onApartmentClicked(selectedApartment);
                 } catch (Exception e) {
                     dismiss();
                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -92,5 +83,35 @@ public class SelectApartmentDialog extends DialogFragment {
         dialog.show();
 
         return dialog;
+    }
+
+    /**
+     * Used to get Apartment names that can be selected
+     *
+     * @return list of apartment names
+     */
+    protected ArrayList<String> getApartmentNames() {
+        ArrayList<String> apartmentNames = new ArrayList<>();
+
+        try {
+            for (Apartment apartment : DatabaseHandler.getAllApartments()) {
+                apartmentNames.add(apartment.getName());
+            }
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
+        }
+
+        return apartmentNames;
+    }
+
+    /**
+     * This Method is called when an Apartment has been selected from the list
+     *
+     * @param apartment the selected Apartment
+     */
+    protected void onApartmentClicked(Apartment apartment) {
+        SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
+        ApartmentFragment.sendApartmentChangedBroadcast(getContext());
+        dismiss();
     }
 }

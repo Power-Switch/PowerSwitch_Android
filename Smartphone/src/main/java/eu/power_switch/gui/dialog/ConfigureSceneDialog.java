@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -36,6 +35,7 @@ import android.view.ViewGroup;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1NameFragment;
@@ -104,9 +104,9 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         try {
-            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
             ConfigurationDialogTabbedSummaryFragment setupFragment =
-                    customTabAdapter.getSetupFragment();
+                    customTabAdapter.getSummaryFragment();
             return setupFragment.checkSetupValidity();
         } catch (Exception e) {
             Log.e(e);
@@ -117,9 +117,9 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         Log.d("Saving scene");
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
         ConfigurationDialogTabbedSummaryFragment setupFragment =
-                customTabAdapter.getSetupFragment();
+                customTabAdapter.getSummaryFragment();
         try {
             setupFragment.saveCurrentConfigurationToDatabase();
         } catch (Exception e) {
@@ -174,7 +174,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
         super.onStop();
     }
 
-    private static class CustomTabAdapter extends FragmentPagerAdapter {
+    private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private Context context;
         private long sceneId;
@@ -195,7 +195,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public ConfigurationDialogTabbedSummaryFragment getSetupFragment() {
+        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
             return setupFragment;
         }
 

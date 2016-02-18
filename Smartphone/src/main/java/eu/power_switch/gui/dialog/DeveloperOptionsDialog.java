@@ -91,6 +91,14 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
+        Button forceUnhandledException = (Button) rootView.findViewById(R.id.button_forceUnhandledException);
+        forceUnhandledException.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                throw new RuntimeException("Unhandled Exception");
+            }
+        });
+
         final Spinner spinnerLanguage = (Spinner) rootView.findViewById(R.id.spinner_language);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.locales, android.R.layout.simple_spinner_item);

@@ -33,7 +33,8 @@ public class LocalBroadcastConstants {
     public static final String INTENT_ROOM_ADDED = "eu.power_switch.room_added";
     public static final String INTENT_SCENE_CHANGED = "eu.power_switch.scene_changed";
     public static final String INTENT_TIMER_CHANGED = "eu.power_switch.timer_changed";
-    public static final String INTENT_GEOFENCE_CHANGED = "eu.power_switch.geofence_changed";
+    public static final String INTENT_APARTMENT_GEOFENCE_CHANGED = "eu.power_switch.apartment_geofence_changed";
+    public static final String INTENT_CUSTOM_GEOFENCE_CHANGED = "eu.power_switch.custom_geofence_changed";
     public static final String INTENT_BACKUP_CHANGED = "eu.power_switch.backup_changed";
     public static final String INTENT_HISTORY_CHANGED = "eu.power_switch.history_changed";
 

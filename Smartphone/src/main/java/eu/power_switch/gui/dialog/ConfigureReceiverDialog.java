@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -36,6 +35,7 @@ import android.view.ViewGroup;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
@@ -88,7 +88,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     @Override
     protected boolean isValid() {
         try {
-            CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
             ConfigurationDialogTabbedSummaryFragment summaryFragment =
                     customTabAdapter.getSummaryFragment();
 
@@ -123,7 +123,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        CustomTabAdapter customTabAdapter = (CustomTabAdapter) getTabAdapter();
+        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
         ConfigurationDialogTabbedSummaryFragment summaryFragment =
                 customTabAdapter.getSummaryFragment();
         if (summaryFragment.checkSetupValidity()) {
@@ -184,7 +184,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
         super.onStop();
     }
 
-    private static class CustomTabAdapter extends FragmentPagerAdapter {
+    private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private Context context;
         private long receiverId;

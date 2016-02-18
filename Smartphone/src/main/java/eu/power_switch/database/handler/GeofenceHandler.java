@@ -117,6 +117,20 @@ abstract class GeofenceHandler {
         DatabaseHandler.database.delete(GeofenceTable.TABLE_NAME, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 
+    public static void deleteByApartmentId(Long apartmentId) throws Exception {
+        Cursor cursor = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME, null, ApartmentGeofenceRelationTable
+                .COLUMN_APARTMENT_ID + "=" + apartmentId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            long geofenceId = cursor.getLong(1);
+
+            delete(geofenceId);
+            cursor.moveToNext();
+        }
+        cursor.close();
+    }
+
     /**
      * Gets all Geofences from Database
      *
@@ -210,6 +224,7 @@ abstract class GeofenceHandler {
                 GeofenceTable.COLUMN_ID + "=" + geofence.getId(), null);
     }
 
+
     /**
      * Creates a Geofence Object out of Database information
      *
@@ -250,7 +265,6 @@ abstract class GeofenceHandler {
 
         return null;
     }
-
 
     // convert from bitmap to byte array
     public static byte[] getBytes(Bitmap bitmap) throws Exception {

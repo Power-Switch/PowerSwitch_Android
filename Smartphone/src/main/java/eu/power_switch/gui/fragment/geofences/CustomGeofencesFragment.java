@@ -70,7 +70,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
      * @param context any suitable context
      */
     public static void sendCustomGeofencesChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CUSTOM_GEOFENCE_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -196,7 +196,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CUSTOM_GEOFENCE_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
         geofenceApiHandler.onStart();
     }

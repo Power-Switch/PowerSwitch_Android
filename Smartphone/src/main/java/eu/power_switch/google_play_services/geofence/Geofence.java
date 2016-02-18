@@ -22,6 +22,7 @@ import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,18 @@ public class Geofence {
      * Snapshot of this Geofence
      */
     private Bitmap snapshot;
+
+    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, List<Action> enterActions, List<Action> exitActions) {
+        this.id = id;
+        this.active = active;
+        this.name = name;
+        this.centerLocation = centerLocation;
+        this.radius = radius;
+        this.snapshot = snapshot;
+        this.actionsMap = new HashMap<>();
+        actionsMap.put(EventType.ENTER, enterActions);
+        actionsMap.put(EventType.EXIT, exitActions);
+    }
 
     public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, Map<EventType, List<Action>> actionsMap) {
         this.id = id;

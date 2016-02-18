@@ -119,6 +119,14 @@ public class UnknownErrorDialog extends AppCompatActivity {
 
         TextView textViewErrorDescription = (TextView) findViewById(R.id.editText_error_description);
         textViewErrorDescription.setText(Log.getStackTraceText(throwable));
+
+        Button buttonClose = (Button) findViewById(R.id.button_close);
+        buttonClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void applyLocale() {
