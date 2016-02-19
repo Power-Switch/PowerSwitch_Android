@@ -19,6 +19,7 @@
 package eu.power_switch.application;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Handler;
@@ -27,7 +28,10 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
@@ -95,15 +99,36 @@ public class PowerSwitch extends MultiDexApplication {
      * @param context any suitable context
      * @return app version as text (or "unknown" if failed to retrieve), never null
      */
-    public static
     @NonNull
-    String getAppVersionDescription(@NonNull Context context) {
+    public static String getAppVersionDescription(@NonNull Context context) {
         try {
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             return pInfo.versionName + " (" + pInfo.versionCode + ")";
         } catch (Exception e) {
             Log.e(e);
             return "unknown (error while retrieving)";
+        }
+    }
+
+    /**
+     * Get the build time of the current version of this application
+     *
+     * @param context any suitable context
+     * @return build time as string (or "unknown" if error while retrieving), never null
+     */
+    @NonNull
+    public static String getAppBuildTime(@NonNull Context context) {
+        try {
+            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
+            ZipFile zf = new ZipFile(ai.sourceDir);
+            ZipEntry ze = zf.getEntry("classes.dex");
+            long time = ze.getTime();
+            String s = SimpleDateFormat.getInstance().format(new java.util.Date(time));
+            zf.close();
+
+            return s;
+        } catch (Exception e) {
+            return "unknown";
         }
     }
 
@@ -126,6 +151,7 @@ public class PowerSwitch extends MultiDexApplication {
 
         Log.d("Application init...");
         Log.d("App version: " + getAppVersionDescription(this));
+        Log.d("App build time: " + getAppBuildTime(this));
         Log.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
         Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
         Log.d("Device brand/model: " + LogHandler.getDeviceName());

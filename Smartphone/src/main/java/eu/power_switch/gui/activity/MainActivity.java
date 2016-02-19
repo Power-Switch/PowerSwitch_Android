@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.Stack;
 
 import eu.power_switch.R;
+import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -570,6 +571,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         Fragment fragment = new LibsBuilder()
                                 //get the fragment
+                                .withAboutAppName(getString(R.string.powerswitch_app_name) + "\n(" + PowerSwitch.getAppBuildTime(getActivity()) + ")")
                                 .withAboutIconShown(true)
                                 .withAboutVersionShown(true)
                                 .withLicenseShown(true)
