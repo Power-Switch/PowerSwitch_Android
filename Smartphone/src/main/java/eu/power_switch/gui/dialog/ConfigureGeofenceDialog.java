@@ -30,7 +30,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
@@ -108,14 +107,12 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
             geofenceId = arguments.getLong(GEOFENCE_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment(), geofenceId));
-            imageButtonDelete.setVisibility(View.VISIBLE);
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment()));
-            imageButtonDelete.setVisibility(View.GONE);
             return false;
         }
     }

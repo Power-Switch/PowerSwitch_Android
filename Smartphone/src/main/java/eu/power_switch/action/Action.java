@@ -25,8 +25,6 @@ import android.support.annotation.StringDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import eu.power_switch.obj.Apartment;
-
 /**
  * Action Base Class
  * A Timer can contains a list of Actions
@@ -38,8 +36,9 @@ public abstract class Action {
     public static final String ACTION_TYPE_RECEIVER = "action_type_receiver";
     public static final String ACTION_TYPE_ROOM = "action_type_room";
     public static final String ACTION_TYPE_SCENE = "action_type_scene";
+    public static final String ACTION_TYPE_PAUSE = "action_type_pause";
+
     protected long id;
-    protected Apartment apartment;
 
     /**
      * Get ID of this Action
@@ -59,10 +58,6 @@ public abstract class Action {
     @NonNull
     public abstract String getActionType();
 
-    public Apartment getApartment() {
-        return apartment;
-    }
-
     /**
      * Returns a human readable representation of a Action
      *
@@ -78,7 +73,7 @@ public abstract class Action {
      */
     public abstract void execute(@NonNull Context context);
 
-    @StringDef({ACTION_TYPE_RECEIVER, ACTION_TYPE_ROOM, ACTION_TYPE_SCENE})
+    @StringDef({ACTION_TYPE_RECEIVER, ACTION_TYPE_ROOM, ACTION_TYPE_SCENE, ACTION_TYPE_PAUSE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface ActionType {
     }

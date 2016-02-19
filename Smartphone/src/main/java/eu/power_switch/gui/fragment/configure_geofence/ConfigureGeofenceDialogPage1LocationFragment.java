@@ -81,6 +81,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
     private Bitmap currentSnapshot;
 
     private boolean cameraChangedBySystem = true;
+    private boolean isFirstTimeMapInit = true;
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -392,7 +393,11 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                 currentSnapshot = bitmap;
 
                 try {
-                    sendSetupGeofenceChangedBroadcast(getContext(), name, getCurrentLocation(), currentGeofenceRadius, currentSnapshot);
+                    if (isFirstTimeMapInit) {
+                        isFirstTimeMapInit = false;
+                    } else {
+                        sendSetupGeofenceChangedBroadcast(getContext(), name, getCurrentLocation(), currentGeofenceRadius, currentSnapshot);
+                    }
                 } catch (Exception e) {
                     Log.e(e);
                 }

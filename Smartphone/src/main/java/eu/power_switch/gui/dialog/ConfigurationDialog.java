@@ -112,6 +112,8 @@ public abstract class ConfigurationDialog extends DialogFragment {
 
         initExistingData(getArguments());
 
+        setModified(false);
+
         return rootView;
     }
 
@@ -163,9 +165,8 @@ public abstract class ConfigurationDialog extends DialogFragment {
         return dialog;
     }
 
-    protected abstract
     @StringRes
-    int getDialogTitle();
+    protected abstract int getDialogTitle();
 
     /**
      * Get modification state of this Dialog

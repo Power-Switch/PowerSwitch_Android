@@ -144,6 +144,12 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
+        addActionFAB.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showTutorial();
+            }
+        }, 500);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -159,8 +165,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
             }
         };
 
-        showTutorial();
-
         return rootView;
     }
 
@@ -173,6 +177,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                 .setDismissText(getString(R.string.tutorial__got_it))
                 .setContentText(getString(R.string.tutorial__sleep_as_android_explanation))
                 .singleUse(TutorialConstants.SLEEP_AS_ANDROID_KEY)
+                .setDelay(500)
                 .show();
     }
 

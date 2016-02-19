@@ -175,9 +175,8 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      */
     protected abstract boolean initializeFromExistingData(Bundle arguments);
 
-    protected abstract
     @StringRes
-    int getDialogTitle();
+    protected abstract int getDialogTitle();
 
     /**
      * Get pager adapter of this configuration dialog

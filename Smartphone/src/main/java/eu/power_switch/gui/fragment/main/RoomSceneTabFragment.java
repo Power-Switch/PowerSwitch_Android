@@ -143,7 +143,12 @@ public class RoomSceneTabFragment extends Fragment {
 
         skipTutorial = false;
 
-        showTutorial(tabViewPager.getCurrentItem());
+        tabLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showTutorial(tabViewPager.getCurrentItem());
+            }
+        }, 500);
 
         return rootView;
     }
@@ -197,12 +202,8 @@ public class RoomSceneTabFragment extends Fragment {
                 .setDismissText(getString(R.string.tutorial__got_it))
                 .setContentText(contentText)
                 .singleUse(showcaseKey)
+                .setDelay(500)
                 .show();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

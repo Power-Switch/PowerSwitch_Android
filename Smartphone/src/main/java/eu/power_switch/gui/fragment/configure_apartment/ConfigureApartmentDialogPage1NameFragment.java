@@ -74,6 +74,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
     private Collection<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
     private long apartmentId = -1;
+    private boolean isInitialized;
 
 
     /**
@@ -126,8 +127,10 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
 
             @Override
             public void afterTextChanged(Editable s) {
-                checkValidity();
-                sendSetupApartmentChangedBroadcast(getContext());
+                if (isInitialized) {
+                    checkValidity();
+                    sendSetupApartmentChangedBroadcast(getContext());
+                }
             }
         };
         floatingName = (TextInputLayout) rootView.findViewById(R.id.apartment_name_text_input_layout);
@@ -148,6 +151,8 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
             }
         }
         checkValidity();
+
+        isInitialized = true;
 
         return rootView;
     }
@@ -250,7 +255,9 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        sendSetupApartmentChangedBroadcast(getContext());
+                        if (buttonView.isPressed()) {
+                            sendSetupApartmentChangedBroadcast(getContext());
+                        }
                     }
                 });
                 gatewayCheckboxList.add(checkBox);

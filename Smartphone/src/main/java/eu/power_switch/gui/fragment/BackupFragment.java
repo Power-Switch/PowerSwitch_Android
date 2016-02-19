@@ -166,6 +166,12 @@ public class BackupFragment extends RecyclerViewFragment {
                 createBackupDialog.show(getFragmentManager(), null);
             }
         });
+        fab.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showTutorial();
+            }
+        }, 500);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -177,8 +183,6 @@ public class BackupFragment extends RecyclerViewFragment {
         };
 
         refreshBackups();
-
-        showTutorial();
 
         return rootView;
     }
@@ -192,6 +196,7 @@ public class BackupFragment extends RecyclerViewFragment {
                 .setDismissText(getString(R.string.tutorial__got_it))
                 .setContentText(getString(R.string.tutorial__backup_explanation))
                 .singleUse(TutorialConstants.BACKUP_KEY)
+                .setDelay(500)
                 .show();
     }
 

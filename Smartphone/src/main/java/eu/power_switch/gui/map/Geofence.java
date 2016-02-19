@@ -18,6 +18,8 @@
 
 package eu.power_switch.gui.map;
 
+import android.support.annotation.ColorInt;
+
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -58,11 +60,11 @@ public class Geofence {
         circle.setVisible(visible);
     }
 
-    public void setFillColor(int fillColor) {
+    public void setFillColor(@ColorInt int fillColor) {
         circle.setFillColor(fillColor);
     }
 
-    public void setStrokeColor(int strokeColor) {
+    public void setStrokeColor(@ColorInt int strokeColor) {
         circle.setStrokeColor(strokeColor);
     }
 

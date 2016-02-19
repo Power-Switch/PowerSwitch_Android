@@ -77,7 +77,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
         setHasOptionsMenu(true);
 
@@ -137,6 +136,12 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 }
             }
         });
+        fab.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showTutorial();
+            }
+        }, 500);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -152,7 +157,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 }
             }
         };
-        showTutorial();
 
         return rootView;
     }
@@ -166,7 +170,20 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 .setDismissText(getString(R.string.tutorial__got_it))
                 .setContentText(getString(R.string.tutorial__apartment_explanation))
                 .singleUse(TutorialConstants.APARTMENT_KEY)
+                .setDelay(500)
                 .show();
+
+        if (apartments.size() == 0) {
+            new MaterialShowcaseView.Builder(getActivity())
+                    .setTarget(fab)
+                    .setUseAutoRadius(false)
+                    .setRadius(64 * 3)
+                    .setDismissOnTouch(true)
+                    .setDismissText(getString(R.string.tutorial__got_it))
+                    .setContentText("Der erste Schritt zur Nutzung von PowerSwitch ist das Erstellen eines Apartments.")
+                    .setDelay(500)
+                    .show();
+        }
     }
 
     @Override

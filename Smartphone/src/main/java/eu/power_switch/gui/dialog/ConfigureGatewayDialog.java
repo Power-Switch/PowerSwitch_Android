@@ -38,6 +38,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.SpinnerInteractionListener;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.gateway.BrematicGWY433;
@@ -123,16 +124,18 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         model.setAdapter(adapter);
-        model.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 notifyConfigurationChanged();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
-        });
+        };
+        model.setOnTouchListener(spinnerInteractionListener);
+        model.setOnItemSelectedListener(spinnerInteractionListener);
 
         floatingAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_address_text_input_layout);
         address = (EditText) rootView.findViewById(R.id.txt_edit_gateway_address);
@@ -182,11 +185,10 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
             // restore spinner position
             for (int i = 0; i < model.getCount(); i++) {
                 if (model.getItemAtPosition(i).equals(gateway.getModel())) {
-                    model.setSelection(i);
+                    model.setSelection(i, false);
                 }
             }
 
-            setModified(false);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

@@ -157,10 +157,6 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
             currentSnapshot = geofence.getSnapshot();
             currentEnterActions = geofence.getActions(Geofence.EventType.ENTER);
             currentExitActions = geofence.getActions(Geofence.EventType.EXIT);
-
-            // necessary, because geofences created by default are not yet initialized correctly, so even saved
-            // geofences can be invalid
-            sendGeofenceSetupChangedBroadcast(getContext());
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
