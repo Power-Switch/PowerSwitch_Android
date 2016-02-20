@@ -16,20 +16,19 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.sleep_as_android;
+package eu.power_switch.alarm_clock.sleep_as_android;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 20.02.2016.
  */
 public class SleepAsAndroidHelper {
-
-    public static final String PACKAGE_NAME = "com.urbandroid.sleep";
 
     /**
      * Check if Sleep As Android app is installed on this device
@@ -40,7 +39,7 @@ public class SleepAsAndroidHelper {
     public static boolean isInstalled(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
-            PackageInfo info = packageManager.getPackageInfo(PACKAGE_NAME, 0);
+            PackageInfo info = packageManager.getPackageInfo(SleepAsAndroidConstants.PACKAGE_NAME, 0);
             return info != null;
         } catch (PackageManager.NameNotFoundException e) {
             return false;

@@ -38,7 +38,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.constants.ExternalAppConstants;
+import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
@@ -1237,7 +1237,7 @@ public final class DatabaseHandler {
      * @param event alarm event
      * @return List of Actions
      */
-    public static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    public static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         openReadable();
         List<Action> actions = new ArrayList<>();
         try {
@@ -1256,7 +1256,7 @@ public final class DatabaseHandler {
      * @param event   alarm event
      * @param actions List of Actions
      */
-    public static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    public static void setAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
         openWritable();
         try {
             SleepAsAndroidHandler.setAlarmActions(event, actions);

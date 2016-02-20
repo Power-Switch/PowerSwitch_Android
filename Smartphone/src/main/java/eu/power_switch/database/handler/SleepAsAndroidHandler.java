@@ -26,7 +26,7 @@ import java.util.List;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
-import eu.power_switch.shared.constants.ExternalAppConstants;
+import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 
 /**
  * Provides database methods for managing Sleep As Android related Actions
@@ -35,7 +35,7 @@ import eu.power_switch.shared.constants.ExternalAppConstants;
  */
 abstract class SleepAsAndroidHandler {
 
-    protected static List<Action> getAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    protected static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
@@ -54,12 +54,12 @@ abstract class SleepAsAndroidHandler {
         return actions;
     }
 
-    protected static void setAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    protected static void setAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
         deleteAlarmActions(event);
         addAlarmActions(event, actions);
     }
 
-    private static void addAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    private static void addAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 
@@ -72,7 +72,7 @@ abstract class SleepAsAndroidHandler {
         }
     }
 
-    private static void deleteAlarmActions(ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    private static void deleteAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         for (Action action : getAlarmActions(event)) {
             ActionHandler.delete(action.getId());
         }

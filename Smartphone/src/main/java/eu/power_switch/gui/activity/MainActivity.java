@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.Stack;
 
 import eu.power_switch.R;
+import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
@@ -88,7 +89,6 @@ import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;

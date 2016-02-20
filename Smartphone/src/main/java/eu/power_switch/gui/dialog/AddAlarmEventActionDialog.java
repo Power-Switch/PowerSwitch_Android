@@ -33,8 +33,8 @@ import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.shared.constants.ExternalAppConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 
 /**
  * Dialog to select a timer action configuration
@@ -45,8 +45,8 @@ public class AddAlarmEventActionDialog extends AddActionDialog {
 
     public static final String EVENT_ID_KEY = "eventId";
 
-    ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT currentEventType =
-            ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
+    SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT currentEventType =
+            SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
 
     public static AddAlarmEventActionDialog newInstance(int eventId) {
         Bundle args = new Bundle();
@@ -73,7 +73,7 @@ public class AddAlarmEventActionDialog extends AddActionDialog {
         Bundle args = getArguments();
         if (args != null && args.containsKey(EVENT_ID_KEY)) {
             int eventId = args.getInt(EVENT_ID_KEY);
-            currentEventType = ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.getById(eventId);
+            currentEventType = SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.getById(eventId);
         }
 
         return super.onCreateDialog(savedInstanceState);

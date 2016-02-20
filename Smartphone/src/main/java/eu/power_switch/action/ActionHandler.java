@@ -43,7 +43,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.ExternalAppConstants;
+import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.shared.log.Log;
@@ -266,7 +266,7 @@ public class ActionHandler {
      * @param context any suitable context
      * @param event   event type
      */
-    public static void execute(@NonNull Context context, @NonNull ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+    public static void execute(@NonNull Context context, @NonNull SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
         try {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(context, actions);

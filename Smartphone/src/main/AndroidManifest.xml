@@ -15,7 +15,7 @@
   ~
   ~     You should have received a copy of the GNU General Public License
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
+  -->
 
 <manifest
     package="eu.power_switch"
@@ -169,7 +169,34 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".sleep_as_android.IntentReceiver">
+        <receiver android:name=".alarm_clock.stock.IntentReceiver">
+            <!-- Other Clock Apps -->
+            <intent-filter>
+                <!-- Stock App -->
+                <action android:name="com.android.deskclock.ALARM_ALERT"/>
+                <action android:name="com.android.deskclock.ALARM_DISMISS"/>
+                <action android:name="com.android.deskclock.ALARM_SNOOZE"/>
+
+                <!-- Samsung -->
+                <action android:name="com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT"/>
+
+                <!-- HTC -->
+                <action android:name="com.htc.android.worldclock.ALARM_ALERT"/>
+
+                <!-- SONY -->
+                <action android:name="com.sonyericsson.alarm.ALARM_ALERT"/>
+
+                <!-- ZTE -->
+                <action android:name="zte.com.cn.alarmclock.ALARM_ALERT"/>
+
+                <!-- Motorola -->
+                <action android:name="com.motorola.blur.alarmclock.ALARM_ALERT"/>
+
+                <!-- LG -->
+                <action android:name="com.lge.alarm.alarmclocknew.ALARM_ALERT"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".alarm_clock.sleep_as_android.IntentReceiver">
             <!-- Sleep As Android -->
             <intent-filter>
                 <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_START"/>

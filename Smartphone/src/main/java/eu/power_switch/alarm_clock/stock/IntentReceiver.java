@@ -16,15 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.sleep_as_android;
+package eu.power_switch.alarm_clock.stock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import eu.power_switch.action.ActionHandler;
-import eu.power_switch.shared.constants.ExternalAppConstants;
+import eu.power_switch.shared.constants.ClockAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 
@@ -63,21 +62,12 @@ public class IntentReceiver extends BroadcastReceiver {
         }
 
         try {
-            if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction()
-                    .equals(intent.getAction())) {
+            if (ClockAppConstants.ALARM_TRIGGERED_INTENTS.contains(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm triggered!");
-                ActionHandler.execute(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED);
-
-            } else if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED.getIntentAction()
-                    .equals(intent.getAction())) {
+            } else if (ClockAppConstants.ALARM_SNOOZED_INTENTS.contains(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm snoozed...");
-                ActionHandler.execute(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED);
-
-            } else if (ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED.getIntentAction()
-                    .equals(intent.getAction())) {
+            } else if (ClockAppConstants.ALARM_DISMISSED_INTENTS.contains(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm dismissed...");
-                ActionHandler.execute(context, ExternalAppConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED);
-
             } else {
                 Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());
             }
