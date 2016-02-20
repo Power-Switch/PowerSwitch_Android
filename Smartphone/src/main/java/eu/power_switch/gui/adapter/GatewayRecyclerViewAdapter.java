@@ -35,7 +35,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.log.Log;
 
@@ -74,23 +73,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
     public void onBindViewHolder(GatewayRecyclerViewAdapter.ViewHolder holder, final int position) {
         final Gateway gateway = gateways.get(position);
 
-        boolean isAssociatedWithApartment = false;
-        try {
-            for (Apartment apartment : DatabaseHandler.getAllApartments()) {
-                for (Gateway currentGateway : apartment.getAssociatedGateways()) {
-                    if (currentGateway.getId().equals(gateway.getId())) {
-                        isAssociatedWithApartment = true;
-                        break;
-                    }
-                }
-
-                if (isAssociatedWithApartment) {
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            Log.e(e);
-        }
+        boolean isAssociatedWithApartment = DatabaseHandler.isAssociatedWithAnyApartment(gateway);
 
         holder.attention.setImageDrawable(IconicsHelper.getAttentionIcon(context));
         holder.attention.setOnClickListener(new View.OnClickListener() {

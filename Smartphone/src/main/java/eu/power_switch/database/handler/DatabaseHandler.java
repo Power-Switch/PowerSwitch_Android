@@ -877,6 +877,25 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Checks if the gateway is associated with any apartment
+     *
+     * @param gateway gateway to check for associations
+     * @return true if associated with at least one apartment, false otherwise
+     */
+    public static boolean isAssociatedWithAnyApartment(Gateway gateway) {
+        openReadable();
+        boolean isAssociatedWithApartment = false;
+        try {
+            isAssociatedWithApartment = GatewayHandler.isAssociatedWithAnyApartment(gateway.getId());
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return isAssociatedWithApartment;
+    }
+
+    /**
      *
      * //////////////////////
      * // Widget functions //

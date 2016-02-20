@@ -176,6 +176,19 @@ abstract class GatewayHandler {
     }
 
     /**
+     * Checks if a gateway is associated with at least one apartment
+     *
+     * @param id ID of Gateway
+     * @return true if the gateway is associated with at least one apartment, false otherwise
+     */
+    public static boolean isAssociatedWithAnyApartment(Long id) {
+        Cursor cursor = DatabaseHandler.database.query(ApartmentGatewayRelationTable.TABLE_NAME,
+                null, ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
+
+        return cursor.moveToFirst();
+    }
+
+    /**
      * Creates a Gateway Object out of Database information
      *
      * @param c cursor pointing to a gateway database entry
