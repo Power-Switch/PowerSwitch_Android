@@ -43,7 +43,7 @@ public class SettingsConstants {
     public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
     public static final String CURRENT_APARTMENT_ID_KEY = "currentApartmentId";
 
-    public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 75;
+    public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 40;
 
     public static final long INVALID_APARTMENT_ID = -1;
 

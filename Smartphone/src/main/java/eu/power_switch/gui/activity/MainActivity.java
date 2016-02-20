@@ -88,6 +88,7 @@ import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
@@ -455,6 +456,7 @@ public class MainActivity extends AppCompatActivity {
                         .sizeDp(24))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_SLEEP_AS_ANDROID)
+                .withEnabled(SleepAsAndroidHelper.isInstalled(this))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
