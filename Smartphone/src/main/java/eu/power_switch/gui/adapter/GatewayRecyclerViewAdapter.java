@@ -19,11 +19,13 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -31,7 +33,9 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.log.Log;
 
@@ -69,6 +73,41 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
     @Override
     public void onBindViewHolder(GatewayRecyclerViewAdapter.ViewHolder holder, final int position) {
         final Gateway gateway = gateways.get(position);
+
+        boolean isAssociatedWithApartment = false;
+        try {
+            for (Apartment apartment : DatabaseHandler.getAllApartments()) {
+                for (Gateway currentGateway : apartment.getAssociatedGateways()) {
+                    if (currentGateway.getId().equals(gateway.getId())) {
+                        isAssociatedWithApartment = true;
+                        break;
+                    }
+                }
+
+                if (isAssociatedWithApartment) {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Log.e(e);
+        }
+
+        holder.attention.setImageDrawable(IconicsHelper.getAttentionIcon(context));
+        holder.attention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setTitle(R.string.attention)
+                        .setMessage(R.string.gateway_not_associated_with_any_apartment)
+                        .setNeutralButton(R.string.close, null)
+                        .show();
+            }
+        });
+        if (!isAssociatedWithApartment) {
+            holder.attention.setVisibility(View.VISIBLE);
+        } else {
+            holder.attention.setVisibility(View.GONE);
+        }
 
         holder.gatewayName.setText(gateway.getName());
         holder.gatewayModel.setText(gateway.getModelAsString());
@@ -116,6 +155,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView attention;
         public TextView gatewayName;
         public TextView gatewayModel;
         public TextView gatewayAddress;
@@ -125,6 +165,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
 
         public ViewHolder(final View itemView) {
             super(itemView);
+            this.attention = (ImageView) itemView.findViewById(R.id.imageView_attention);
             this.gatewayName = (TextView) itemView.findViewById(R.id.txt_gateway_name);
             this.gatewayModel = (TextView) itemView.findViewById(R.id.txt_gateway_model);
             this.gatewayAddress = (TextView) itemView.findViewById(R.id.txt_gateway_address);

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
@@ -134,4 +135,11 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    public static IconicsDrawable getAttentionIcon(Context context) {
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_report_problem)
+                .color(ContextCompat.getColor(context, R.color.color_red_a700))
+                .sizeDp(24);
+
+        return iconicsDrawable;
+    }
 }

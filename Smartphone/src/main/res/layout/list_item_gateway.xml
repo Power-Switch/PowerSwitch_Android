@@ -41,6 +41,13 @@
                 android:orientation="horizontal"
                 android:padding="4dp">
 
+                <ImageView
+                    android:id="@+id/imageView_attention"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"/>
+
                 <TextView
                     android:id="@+id/txt_gateway_name"
                     style="@style/text_list_item_header"

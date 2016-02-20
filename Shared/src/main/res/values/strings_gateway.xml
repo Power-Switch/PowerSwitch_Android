@@ -19,6 +19,8 @@
 
 <resources>
 
+    <string name="attention">Attention</string>
+
     <string name="configure_gateway">Configure Gateway</string>
 
     <!-- configure gateway -->
@@ -45,6 +47,8 @@
     <string name="gateway_will_be_gone_forever">It will be lost forever!</string>
     <string name="gateway_created">Gateway created</string>
     <string name="gateway_removed">Gateway removed</string>
+
+    <string name="gateway_not_associated_with_any_apartment">This Gateway is not associated with any apartment. It will not be used even if enabled! Go to apartment overview and add it to one or more apartments first.</string>
 
     <string name="disabled">Disabled</string>
 

@@ -30,7 +30,6 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
 public class PowerSwitchWear extends Application {
 
     public PowerSwitchWear() {
-
     }
 
     @Override

@@ -19,6 +19,8 @@
 
 <resources>
 
+    <string name="attention">Achtung</string>
+
     <string name="configure_gateway">Gateway einrichten</string>
 
     <!-- configure gateway -->
@@ -43,6 +45,8 @@
     <string name="gateway_will_be_gone_forever">Das Gateway wird für immer verloren sein!</string>
     <string name="gateway_created">Gateway erstellt</string>
     <string name="gateway_removed">Gateway entfernt</string>
+
+    <string name="gateway_not_associated_with_any_apartment">Dieses Gateway ist mit keiner Wohnung verknüpft. Selbst im aktivierten Zustand wird es nicht verwendet! Gehe zur Wohnungsübersicht und verknüpfe es mit einer oder mehreren Wohnungen.</string>
 
     <string name="disabled">Deaktiviert</string>
 

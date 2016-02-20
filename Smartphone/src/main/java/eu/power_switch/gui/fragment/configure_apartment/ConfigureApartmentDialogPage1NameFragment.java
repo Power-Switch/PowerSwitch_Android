@@ -46,6 +46,7 @@ import java.util.Locale;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.CheckBoxInteractionListener;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
@@ -86,22 +87,6 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
-
-//    /**
-//     * Used to notify the location page that some info has changed
-//     *
-//     * @param context          any suitable context
-//     * @param name             Current Name of Scene
-//     * @param selectedGateways Currently selected Gateways to associate in Apartment
-//     */
-//    public static void sendNameApartmentChangedBroadcast(Context context, String name, ArrayList<Gateway>
-//            selectedGateways) {
-//        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_APARTMENT_CHANGED);
-//        intent.putExtra("name", name);
-//        intent.putExtra("checkedGateways", selectedGateways);
-//
-//        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-//    }
 
     @Nullable
     @Override
@@ -252,20 +237,21 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
 
                 final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
                 checkBox.setTag(R.string.gateways, gateway);
-                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (buttonView.isPressed()) {
-                            sendSetupApartmentChangedBroadcast(getContext());
-                        }
+                    public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
+                        sendSetupApartmentChangedBroadcast(getContext());
                     }
-                });
+                };
+                checkBox.setOnTouchListener(checkBoxInteractionListener);
+                checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
                 gatewayCheckboxList.add(checkBox);
 
                 gatewayLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         checkBox.setChecked(!checkBox.isChecked());
+                        sendSetupApartmentChangedBroadcast(getContext());
                     }
                 });
 

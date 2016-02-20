@@ -29,8 +29,8 @@
     </string>
 
     <string name="send_unknown_error_log_template">
-        Während der Ausführung von PoowerSwitch ist eine Exception aufgetreten.\n
-        \nWenn möglich beschreibe detailliert, wann, wo und in welchem Zusammenhang der Fehler in der App auftrat:\n
+        Während der Ausführung von PowerSwitch ist eine Exception aufgetreten.\n
+        \nWenn möglich beschreibe bitte detailliert in welchem Zusammenhang der Fehler in der App auftrat:\n
         \nDEIN TEXT\n
         \n
         \n

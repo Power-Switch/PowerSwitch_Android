@@ -21,14 +21,14 @@ package eu.power_switch.gui.adapter;
 import android.support.annotation.CallSuper;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.CompoundButton;
 
 /**
  * SpinnerInteractionListener used to react <b>only to user selections</b>
  * <p/>
  * Created by Markus on 19.02.2016.
  */
-public abstract class SpinnerInteractionListener implements AdapterView.OnItemSelectedListener, View.OnTouchListener {
+public abstract class CheckBoxInteractionListener implements CompoundButton.OnCheckedChangeListener, View.OnTouchListener {
 
     boolean userSelect = false;
 
@@ -41,22 +41,20 @@ public abstract class SpinnerInteractionListener implements AdapterView.OnItemSe
 
     @Override
     @CallSuper
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (userSelect) {
-            onItemSelectedByUser(parent, view, pos, id);
+            onCheckedChangedByUser(buttonView, isChecked);
 
             userSelect = false;
         }
     }
 
     /**
-     * This Method is only called, if the spinner selection was made by a user (and not in code)
+     * This Method is only called, if the selection was made by a user (and not in code)
      *
-     * @param parent parent adapter view
-     * @param view   view
-     * @param pos    position
-     * @param id     id
+     * @param buttonView
+     * @param isChecked
      */
-    public abstract void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id);
+    public abstract void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked);
 
 }

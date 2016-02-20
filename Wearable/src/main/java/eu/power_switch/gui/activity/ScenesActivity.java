@@ -28,7 +28,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -41,6 +40,7 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -130,7 +130,7 @@ public class ScenesActivity extends WearableActivity {
             ArrayList<Scene> newScenes = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.SCENE_DATA);
             replaceSceneList(newScenes);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(e);
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,

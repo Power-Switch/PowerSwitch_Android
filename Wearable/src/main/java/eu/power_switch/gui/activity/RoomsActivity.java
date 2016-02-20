@@ -28,7 +28,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -41,6 +40,7 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -129,7 +129,7 @@ public class RoomsActivity extends WearableActivity {
             ArrayList<Room> newRooms = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.ROOM_DATA);
             replaceRoomList(newRooms);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(e);
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,

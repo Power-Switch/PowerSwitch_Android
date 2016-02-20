@@ -58,19 +58,6 @@ public class ApartmentTable {
             db.insert(TABLE_NAME, null, values);
 
             SmartphonePreferencesHandler.setCurrentApartmentId((long) 0);
-
-//        values = new ContentValues();
-//        values.put(GeofenceTable.COLUMN_ACTIVE, false);
-//        values.put(GeofenceTable.COLUMN_NAME, apartmentName);
-//        values.put(GeofenceTable.COLUMN_LATITUDE, Integer.MAX_VALUE);
-//        values.put(GeofenceTable.COLUMN_LONGITUDE, Integer.MAX_VALUE);
-//        values.put(GeofenceTable.COLUMN_RADIUS, -1);
-//        long geofenceId = db.insert(GeofenceTable.TABLE_NAME, null, values);
-//
-//        values = new ContentValues();
-//        values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, 0);
-//        values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
-//        db.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
         }
     }
 }

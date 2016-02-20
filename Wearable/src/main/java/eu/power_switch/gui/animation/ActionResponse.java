@@ -21,6 +21,7 @@ package eu.power_switch.gui.animation;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.StringRes;
 
 /**
  * Class to have easy access to default Android Wear response animations
@@ -52,7 +53,7 @@ public abstract class ActionResponse {
      * @param context    any suitable context
      * @param resourceId String Resource ID
      */
-    public static void showSuccessAnimation(Context context, int resourceId) {
+    public static void showSuccessAnimation(Context context, @StringRes int resourceId) {
         showSuccessAnimation(context, context.getString(resourceId));
     }
 
@@ -94,7 +95,7 @@ public abstract class ActionResponse {
      * @param context    any suitable context
      * @param resourceId String Resource ID
      */
-    public static void showFailureAnimation(Context context, int resourceId) {
+    public static void showFailureAnimation(Context context, @StringRes int resourceId) {
         showFailureAnimation(context, context.getString(resourceId));
     }
 

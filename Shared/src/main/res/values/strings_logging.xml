@@ -21,7 +21,7 @@
 
     <string name="send_logs_template">
         A zip file containing all log files on this device has been added as an attachment to this E-Mail.
-        \nPlease elaborate on why you are sending your logs, so that I will know what to look for when I check the files.\n
+        \nPlease elaborate on why you are sending your logs, so I know what to look for when I check the files.\n
         \nWhy did you send those logs?\n
         \nYOUR TEXT HERE\n
         \n
@@ -30,7 +30,7 @@
 
     <string name="send_unknown_error_log_template">
         An Exception was raised during the execution of PowerSwitch.\n
-        \nIf you can please provide more info about when and how the error occurred on your device here:\n
+        \nIf you can please provide more info about the context in which the error occurred on your device here:\n
         \nYOUR TEXT\n
         \n
         \n

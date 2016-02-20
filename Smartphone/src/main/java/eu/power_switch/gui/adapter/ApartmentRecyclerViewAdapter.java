@@ -94,11 +94,11 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         String contentSummary = "";
         contentSummary += context.getString(R.string.rooms) + ": " + apartment.getRooms().size() + "\n";
         contentSummary += context.getString(R.string.scenes) + ": " + apartment.getScenes().size() + "\n";
-        contentSummary += context.getString(R.string.associated_gateways) + ": " + apartment.getAssociatedGateways().size()
-                + "\n";
+        contentSummary += context.getString(R.string.associated_gateways) + ": " + apartment.getAssociatedGateways().size();
         if (apartment.getAssociatedGateways().isEmpty()) {
-            contentSummary += " (!)\n";
+            contentSummary += " (!)";
         }
+        contentSummary += "\n";
         contentSummary += context.getString(R.string.location) + ": ";
         if (apartment.getGeofence() != null) {
             LatLng location = apartment.getGeofence().getCenterLocation();
