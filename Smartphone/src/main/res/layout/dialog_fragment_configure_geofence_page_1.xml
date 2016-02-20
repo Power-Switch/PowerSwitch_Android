@@ -39,6 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
         <android.support.design.widget.TextInputLayout
@@ -73,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
         <EditText

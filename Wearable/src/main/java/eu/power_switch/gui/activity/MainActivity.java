@@ -18,13 +18,17 @@
 
 package eu.power_switch.gui.activity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
@@ -49,6 +53,7 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class MainActivity extends WearableActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
     private ArrayList<Room> roomList = new ArrayList<>();
     private ArrayList<Scene> sceneList = new ArrayList<>();
 
@@ -157,10 +162,52 @@ public class MainActivity extends WearableActivity {
                     }
                 });
 
-                // Get Room/Receiver/Button configuration from Smartphone App
+                // Get Room/Receiver/Button/Scene configuration from Smartphone App
                 new FetchDataAsyncTask().execute();
             }
         });
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+//                // Show an expanation to the user *asynchronously* -- don't block
+//                // this thread waiting for the user's response! After the user
+//                // sees the explanation, try again to request the permission.
+//
+//            } else {
+//                // No explanation needed, we can request the permission.
+
+            Log.d("Write external storage permission is missing, asking for it...");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+//            }
+        } else {
+            Log.d("Write external storage permission already granted");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Log.d("Write external storage permission GRANTED");
+                } else {
+                    Log.d("Write external storage permission DENIED");
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
 //    // Capture long presses
