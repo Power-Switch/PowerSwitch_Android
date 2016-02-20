@@ -75,6 +75,7 @@ public class SettingsTabFragment extends Fragment {
         // for when the user swipes between sections.
         tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
+        tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
 
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
