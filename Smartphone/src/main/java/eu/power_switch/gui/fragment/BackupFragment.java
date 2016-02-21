@@ -184,7 +184,7 @@ public class BackupFragment extends RecyclerViewFragment {
             }
         }, 500);
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
+        // BroadcastReceiver to get notifications from background service if data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

@@ -30,7 +30,9 @@
     <string name="auto_collapse_rooms">Automatisch alle Räume zusammenklappen</string>
     <string name="auto_collapse_timers">Automatisch alle Timer zusammenklappen</string>
     <string name="show_room_all_on_off_buttons">An/Aus Buttons für Räume anzeigen</string>
+    <string name="change_backup_path">Pfad ändern</string>
 
+    <!-- Themes -->
     <string name="theme">Theme</string>
     <string name="theme_dark_blue">Dunkel Blau</string>
     <string name="theme_dark_red">Dunkel Rot</string>

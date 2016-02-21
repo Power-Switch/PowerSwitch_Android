@@ -144,6 +144,35 @@
             </LinearLayout>
 
             <TextView
+                style="@style/header_settings"
+                android:text="@string/backup"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/activity_margin_horizontal"
+                    android:text="@string/path"
+                    android:textColor="?attr/colorAccent"/>
+
+                <TextView
+                    android:id="@+id/textView_backupPath"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button_changeBackupPath"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change_backup_path"/>
+
+            <TextView
                 android:id="@+id/TextView_theme"
                 style="@style/header_settings"
                 android:text="@string/theme"/>

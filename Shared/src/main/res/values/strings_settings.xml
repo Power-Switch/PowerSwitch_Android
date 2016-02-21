@@ -32,6 +32,9 @@
     <string name="auto_collapse_timers">Automatically collapse Timers</string>
     <string name="show_room_all_on_off_buttons">Show On/Off buttons for Room</string>
 
+    <!-- Backups -->
+    <string name="change_backup_path">Change Path</string>
+
     <!-- Themes -->
     <string name="theme">Theme</string>
     <string name="theme_dark_blue">Dark Blue</string>

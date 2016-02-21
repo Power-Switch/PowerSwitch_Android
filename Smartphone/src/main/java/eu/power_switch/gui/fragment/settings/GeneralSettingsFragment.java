@@ -18,10 +18,14 @@
 
 package eu.power_switch.gui.fragment.settings;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -44,9 +48,12 @@ import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
+import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
@@ -76,12 +83,16 @@ public class GeneralSettingsFragment extends Fragment {
     private int devMenuClickCounter = 0;
     private Calendar devMenuFirstClickTime;
     private Spinner startupDefaultTab;
+    private BroadcastReceiver broadcastReceiver;
+    private TextView textView_backupPath;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_general_settings, container, false);
+
+        final Fragment fragment = this;
 
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -207,6 +218,17 @@ public class GeneralSettingsFragment extends Fragment {
             }
         });
 
+        textView_backupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
+
+        Button button_changeBackupPath = (Button) rootView.findViewById(R.id.button_changeBackupPath);
+        button_changeBackupPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
+                pathChooserDialog.setTargetFragment(fragment, 0);
+                pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
+            }
+        });
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -250,6 +272,14 @@ public class GeneralSettingsFragment extends Fragment {
             }
         });
 
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d(this, "received intent: " + intent.getAction());
+                updateUI();
+            }
+        };
+
         return rootView;
     }
 
@@ -268,6 +298,8 @@ public class GeneralSettingsFragment extends Fragment {
         } else {
             vibrationDurationLayout.setVisibility(View.VISIBLE);
         }
+
+        textView_backupPath.setText(SmartphonePreferencesHandler.getBackupPath());
 
         switch (SmartphonePreferencesHandler.getTheme()) {
             case SettingsConstants.THEME_DARK_BLUE:
@@ -289,5 +321,19 @@ public class GeneralSettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
     }
 }
