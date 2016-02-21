@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -68,6 +67,7 @@ import eu.power_switch.R;
 import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHelper;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
@@ -540,8 +540,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://power-switch.eu/faq/"));
-                        startActivity(browserIntent);
+                        String url = "http://power-switch.eu/faq/";
+                        startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
 
                         navigationDrawer.closeDrawer();
                         return true;
@@ -589,8 +589,8 @@ public class MainActivity extends AppCompatActivity {
                                 .withListener(new LibsConfiguration.LibsListener() {
                                     @Override
                                     public void onIconClicked(View v) {
-                                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/"));
-                                        startActivity(browserIntent);
+                                        String url = "https://power-switch.eu/";
+                                        startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                     }
 
                                     @Override
@@ -611,12 +611,12 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public boolean onExtraClicked(View v, Libs.SpecialButton specialButton) {
                                         if (specialButton == Libs.SpecialButton.SPECIAL1) {
-                                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://power-switch.eu/download/"));
-                                            startActivity(browserIntent);
+                                            String url = "https://power-switch.eu/download/";
+                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL2) {
-                                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Power-Switch/PowerSwitch_Android"));
-                                            startActivity(browserIntent);
+                                            String url = "https://github.com/Power-Switch/PowerSwitch_Android";
+                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
                                             return false;
