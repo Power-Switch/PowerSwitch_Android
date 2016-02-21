@@ -93,7 +93,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         }
 
         holder.gatewayName.setText(gateway.getName());
-        holder.gatewayModel.setText(gateway.getModelAsString());
+        holder.gatewayModel.setText(gateway.getModel());
         holder.gatewayAddress.setText(gateway.getHost());
         holder.gatewayPort.setText(String.valueOf(gateway.getPort()));
         holder.gatewaySwitchStatus.setChecked(gateway.isActive());

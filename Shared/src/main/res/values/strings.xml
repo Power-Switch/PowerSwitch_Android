@@ -95,7 +95,7 @@
     <string-array name="gateway_array">
         <item>Brematic GWY433</item>
         <item>ConnAir</item>
-        <item>EZcontrol XS1</item>
+        <!--<item>EZcontrol XS1</item>-->
         <item>ITGW-433</item>
         <item>RaspyRFM</item>
     </string-array>
@@ -189,7 +189,7 @@
     </string-array>
     <string-array name="model_universal_array">
         <item>Custom Buttons</item>
-        <item>HX2262 Compat.</item>
+        <!--<item>HX2262 Compat.</item>-->
     </string-array>
     <string-array name="model_vivanco_array">
         <item>FSS 31000W</item>

@@ -30,11 +30,7 @@ public class RaspyRFM extends ConnAir {
 
     public RaspyRFM(Long id, boolean active, String name, String firmware, String address, int port) {
         super(id, active, name, firmware, address, port);
-    }
-
-    @Override
-    public String getModelAsString() {
-        return MODEL;
+        model = MODEL;
     }
 
 }

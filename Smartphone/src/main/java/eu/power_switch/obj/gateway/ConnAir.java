@@ -41,11 +41,6 @@ public class ConnAir extends Gateway {
     }
 
     @Override
-    public String getModelAsString() {
-        return MODEL;
-    }
-
-    @Override
     public NetworkPackage.CommunicationType getCommunicationType() {
         return NetworkPackage.CommunicationType.UDP;
     }

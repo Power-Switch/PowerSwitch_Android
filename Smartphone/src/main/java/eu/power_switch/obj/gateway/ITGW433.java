@@ -41,11 +41,6 @@ public class ITGW433 extends Gateway {
     }
 
     @Override
-    public String getModelAsString() {
-        return MODEL;
-    }
-
-    @Override
     public NetworkPackage.CommunicationType getCommunicationType() {
         return NetworkPackage.CommunicationType.UDP;
     }

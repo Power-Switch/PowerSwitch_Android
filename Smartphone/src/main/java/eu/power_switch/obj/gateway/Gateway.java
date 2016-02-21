@@ -187,8 +187,6 @@ public abstract class Gateway {
         return (gateway.getHost().equals(this.host) && gateway.getPort() == this.port);
     }
 
-    public abstract String getModelAsString();
-
     public abstract NetworkPackage.CommunicationType getCommunicationType();
 
     public enum Capability {

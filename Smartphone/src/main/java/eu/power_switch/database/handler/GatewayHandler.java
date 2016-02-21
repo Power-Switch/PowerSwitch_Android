@@ -58,7 +58,7 @@ abstract class GatewayHandler {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_ACTIVE, gateway.isActive());
         values.put(GatewayTable.COLUMN_NAME, gateway.getName());
-        values.put(GatewayTable.COLUMN_MODEL, gateway.getModelAsString());
+        values.put(GatewayTable.COLUMN_MODEL, gateway.getModel());
         values.put(GatewayTable.COLUMN_FIRMWARE, gateway.getFirmware());
         values.put(GatewayTable.COLUMN_ADDRESS, gateway.getHost());
         values.put(GatewayTable.COLUMN_PORT, gateway.getPort());

@@ -69,11 +69,6 @@ public class EZControl_XS1 extends Gateway {
     }
 
     @Override
-    public String getModelAsString() {
-        return MODEL;
-    }
-
-    @Override
     public NetworkPackage.CommunicationType getCommunicationType() {
         return NetworkPackage.CommunicationType.HTTP;
     }
