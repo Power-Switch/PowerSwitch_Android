@@ -125,7 +125,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
     }
 
     @Override
-    protected void initExistingData(Bundle arguments) {
+    protected boolean initExistingData(Bundle arguments) {
         roomId = arguments.getLong(ROOM_ID_KEY);
 
         try {
@@ -144,6 +144,8 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
+
+        return true;
     }
 
     @Override

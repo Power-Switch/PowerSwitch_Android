@@ -22,13 +22,16 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
@@ -67,13 +70,24 @@ public class BackupHandler {
     ArrayList<Backup> getBackups() {
         ArrayList<Backup> backups = new ArrayList<>();
         File backupDir = new File(SmartphonePreferencesHandler.getBackupPath());
-        if (backupDir.exists()) {
 
-            for (File file : backupDir.listFiles()) {
-                if (file.isDirectory()) {
-                    backups.add(new Backup(file.getName(), new Date(file.lastModified()), backupDir + File.separator
-                            + file.getName(), false));
+        FileFilter backupFileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.list() == null) {
+                    return false;
                 }
+
+                List<String> subfolders = Arrays.asList(pathname.list());
+                return pathname.isDirectory() && subfolders.contains("shared_prefs") &&
+                        subfolders.contains("databases");
+            }
+        };
+
+        if (backupDir.exists()) {
+            for (File file : backupDir.listFiles(backupFileFilter)) {
+                backups.add(new Backup(file.getName(), new Date(file.lastModified()),
+                        backupDir + File.separator + file.getName(), false));
             }
         }
         return backups;

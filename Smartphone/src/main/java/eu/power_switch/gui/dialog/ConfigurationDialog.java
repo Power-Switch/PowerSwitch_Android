@@ -110,7 +110,19 @@ public abstract class ConfigurationDialog extends DialogFragment {
             }
         });
 
-        initExistingData(getArguments());
+        boolean isInitializedFromExistingData = initExistingData(getArguments());
+        if (isInitializedFromExistingData) {
+            imageButtonDelete.setVisibility(View.VISIBLE);
+        } else {
+            imageButtonDelete.setVisibility(View.GONE);
+        }
+
+        try {
+            setSaveButtonState(isValid());
+        } catch (Exception e) {
+            Log.e(e);
+            setSaveButtonState(false);
+        }
 
         setModified(false);
 
@@ -132,8 +144,9 @@ public abstract class ConfigurationDialog extends DialogFragment {
      * Initialize your dialog in here using passed in arguments
      *
      * @param arguments arguments passed in via setArguments()
+     * @return true if existing data was initialized, false otherwise
      */
-    protected abstract void initExistingData(Bundle arguments);
+    protected abstract boolean initExistingData(Bundle arguments);
 
     @NonNull
     @Override
@@ -163,6 +176,10 @@ public abstract class ConfigurationDialog extends DialogFragment {
         dialog.getWindow().setSoftInputMode(getSoftInputMode());
         dialog.show();
         return dialog;
+    }
+
+    public View getContentView() {
+        return contentView;
     }
 
     @StringRes

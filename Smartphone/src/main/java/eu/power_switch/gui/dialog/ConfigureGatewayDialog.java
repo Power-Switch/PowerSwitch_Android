@@ -149,15 +149,15 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     }
 
     @Override
-    protected void initExistingData(Bundle arguments) {
+    protected boolean initExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(GATEWAY_ID_KEY)) {
             gatewayId = arguments.getLong(GATEWAY_ID_KEY);
             initializeGatewayData(gatewayId);
+            return true;
         } else {
             // hide if new gateway
             imageButtonDelete.setVisibility(View.GONE);
-
-            setSaveButtonState(false);
+            return false;
         }
     }
 

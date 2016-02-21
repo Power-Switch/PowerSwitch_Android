@@ -55,6 +55,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
+import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
@@ -76,6 +77,7 @@ public class BackupFragment extends RecyclerViewFragment {
     private BackupRecyclerViewAdapter backupArrayAdapter;
     private BroadcastReceiver broadcastReceiver;
     private FloatingActionButton fab;
+    private TextView textViewBackupPath;
 
     /**
      * Used to notify Backup Fragment (this) that Backups have changed
@@ -95,13 +97,22 @@ public class BackupFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);
 
-        TextView textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
+        final RecyclerViewFragment recyclerViewFragment = this;
+
+        textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
         textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
+        textViewBackupPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
+                pathChooserDialog.setTargetFragment(recyclerViewFragment, 0);
+                pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
+            }
+        });
 
         backups = new ArrayList<>();
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_backups);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
-        final RecyclerViewFragment recyclerViewFragment = this;
         backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -178,7 +189,7 @@ public class BackupFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d("BackupFragment", "received intent: " + intent.getAction());
-                refreshBackups();
+                updateUI();
             }
         };
 
@@ -198,6 +209,11 @@ public class BackupFragment extends RecyclerViewFragment {
                 .singleUse(TutorialConstants.BACKUP_KEY)
                 .setDelay(500)
                 .show();
+    }
+
+    private void updateUI() {
+        textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
+        refreshBackups();
     }
 
     private void refreshBackups() {

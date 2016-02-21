@@ -19,6 +19,7 @@
 package eu.power_switch.gui;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 
@@ -139,6 +140,19 @@ public class IconicsHelper {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_report_problem)
                 .color(ContextCompat.getColor(context, R.color.color_red_a700))
                 .sizeDp(24);
+
+        return iconicsDrawable;
+    }
+
+    public static Drawable getUpIcon(Context context) {
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_arrow_upward)
+                .sizeDp(24);
+
+        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
+        } else {
+            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
+        }
 
         return iconicsDrawable;
     }
