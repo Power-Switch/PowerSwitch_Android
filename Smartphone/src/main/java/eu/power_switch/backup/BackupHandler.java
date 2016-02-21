@@ -65,9 +65,8 @@ public class BackupHandler {
      *
      * @return List of Backups
      */
-    public
     @NonNull
-    ArrayList<Backup> getBackups() {
+    public ArrayList<Backup> getBackups() {
         ArrayList<Backup> backups = new ArrayList<>();
         File backupDir = new File(SmartphonePreferencesHandler.getBackupPath());
 
@@ -78,9 +77,9 @@ public class BackupHandler {
                     return false;
                 }
 
-                List<String> subfolders = Arrays.asList(pathname.list());
-                return pathname.isDirectory() && subfolders.contains("shared_prefs") &&
-                        subfolders.contains("databases");
+                List<String> subFolders = Arrays.asList(pathname.list());
+                return pathname.isDirectory() && subFolders.contains("shared_prefs") &&
+                        subFolders.contains("databases");
             }
         };
 
