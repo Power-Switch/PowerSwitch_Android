@@ -124,13 +124,13 @@ public class Ritter extends Receiver implements DipReceiver {
             }
         }
 
-        if (gateway.getClass() == ConnAir.class) {
+        if (gateway instanceof ConnAir) {
             String ON = headConnAir + seq + on + tailConnAir;
             return ON;
-        } else if (gateway.getClass() == BrematicGWY433.class) {
+        } else if (gateway instanceof BrematicGWY433) {
             String ON = headConnAir + seq + on + tailConnAir;
             return ON;
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             String ON = headITGW + seq + on + tailITGW;
             return ON;
         } else {

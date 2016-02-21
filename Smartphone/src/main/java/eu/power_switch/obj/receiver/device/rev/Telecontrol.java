@@ -138,7 +138,7 @@ public class Telecontrol extends Receiver implements MasterSlaveReceiver {
                 break;
         }
 
-        if (gateway.getClass() == ConnAir.class) {
+        if (gateway instanceof ConnAir) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headConnAir + master + slave + additional + on + tailConnAir;
                 return ON;
@@ -146,7 +146,7 @@ public class Telecontrol extends Receiver implements MasterSlaveReceiver {
                 String OFF = headConnAir + master + slave + additional + off + tailConnAir;
                 return OFF;
             }
-        } else if (gateway.getClass() == BrematicGWY433.class) {
+        } else if (gateway instanceof BrematicGWY433) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headConnAir + master + slave + additional + on + tailConnAir;
                 return ON;
@@ -154,7 +154,7 @@ public class Telecontrol extends Receiver implements MasterSlaveReceiver {
                 String OFF = headConnAir + master + slave + additional + off + tailConnAir;
                 return OFF;
             }
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headITGW + master + slave + additional + on + tailITGW;
                 return ON;

@@ -18,12 +18,10 @@
 
 package eu.power_switch.obj.gateway;
 
-import eu.power_switch.network.NetworkPackage;
-
 /**
- * ConnAir represents a ConnAir Gateway from Simple-Solutions
+ * RaspyRFM represents a RasperyPi ConnAir emulator Gateway
  */
-public class RaspyRFM extends Gateway {
+public class RaspyRFM extends ConnAir {
 
     /**
      * Model constant
@@ -31,13 +29,7 @@ public class RaspyRFM extends Gateway {
     public static final String MODEL = "RaspyRFM";
 
     public RaspyRFM(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
-        capabilities.add(Capability.SEND);
-    }
-
-    @Override
-    public int getTimeout() {
-        return 0;
+        super(id, active, name, firmware, address, port);
     }
 
     @Override
@@ -45,8 +37,4 @@ public class RaspyRFM extends Gateway {
         return MODEL;
     }
 
-    @Override
-    public NetworkPackage.CommunicationType getCommunicationType() {
-        return NetworkPackage.CommunicationType.UDP;
-    }
 }

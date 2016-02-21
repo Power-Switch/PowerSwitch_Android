@@ -80,9 +80,9 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
         if (action.equals(context.getString(R.string.pair))) {
             String signal = "";
 
-            if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+            if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
                 signal += "TXP:0,0,3,10920,91,42,57,18,";
-            } else if (gateway.getClass() == ITGW433.class) {
+            } else if (gateway instanceof ITGW433) {
                 signal += "TXP:0,0,3,10920,91,42,0,57,18,";
             } else {
                 throw new GatewayNotSupportedException();
@@ -98,9 +98,9 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
 
             signal += h + h + l + l + h + h + l;
 
-            if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+            if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
                 signal += tailAutoPairConnAir;
-            } else if (gateway.getClass() == ITGW433.class) {
+            } else if (gateway instanceof ITGW433) {
                 signal += "4,120,0";
             }
 
@@ -108,9 +108,9 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
         }
 
         String signal = "";
-        if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+        if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
             signal += headAutoPairConnAir;
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             signal += headAutoPairITGW;
         } else {
             throw new GatewayNotSupportedException();
@@ -130,9 +130,9 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
             throw new ActionNotSupportedException();
         }
 
-        if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+        if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
             signal += tailAutoPairConnAir;
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             signal += tailAutoPairITGW;
         }
 

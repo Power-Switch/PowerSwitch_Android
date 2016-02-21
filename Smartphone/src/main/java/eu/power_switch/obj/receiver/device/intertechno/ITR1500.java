@@ -259,7 +259,7 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
                 break;
         }
 
-        if (gateway.getClass() == ConnAir.class) {
+        if (gateway instanceof ConnAir) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headConnAir + master + slave + additional + on + tailConnAir;
                 return ON;
@@ -267,7 +267,7 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
                 String OFF = headConnAir + master + slave + additional + off + tailConnAir;
                 return OFF;
             }
-        } else if (gateway.getClass() == BrematicGWY433.class) {
+        } else if (gateway instanceof BrematicGWY433) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headConnAir + master + slave + additional + on + tailConnAir;
                 return ON;
@@ -275,7 +275,7 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
                 String OFF = headConnAir + master + slave + additional + off + tailConnAir;
                 return OFF;
             }
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headITGW + master + slave + additional + on + tailITGW;
                 return ON;
@@ -303,9 +303,9 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
         Random ran = new Random(seed);
 
         String signal = "";
-        if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+        if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
             signal += headAutoPairConnAir;
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             signal += headAutoPairITGW;
         } else {
             throw new GatewayNotSupportedException();
@@ -373,9 +373,9 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
             throw new ActionNotSupportedException();
         }
 
-        if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+        if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
             signal += tailAutoPairConnAir;
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             signal += tailAutoPairITGW;
         }
 

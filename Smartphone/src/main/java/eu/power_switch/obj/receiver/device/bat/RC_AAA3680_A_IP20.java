@@ -90,9 +90,9 @@ public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
         Random ran = new Random(seed);
 
         String signal = "";
-        if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+        if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
             signal += headAutoPairConnAir;
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             signal += headAutoPairITGW;
         } else {
             throw new GatewayNotSupportedException();
@@ -108,9 +108,9 @@ public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
             throw new ActionNotSupportedException();
         }
 
-        if (gateway.getClass() == ConnAir.class || gateway.getClass() == BrematicGWY433.class) {
+        if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
             signal += tailAutoPairConnAir;
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             signal += tailAutoPairITGW;
         } else {
             throw new GatewayNotSupportedException();

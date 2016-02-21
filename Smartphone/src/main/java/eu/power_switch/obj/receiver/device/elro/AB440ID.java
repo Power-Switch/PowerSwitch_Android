@@ -134,7 +134,7 @@ public class AB440ID extends Receiver implements DipReceiver {
             }
         }
 
-        if (gateway.getClass() == ConnAir.class) {
+        if (gateway instanceof ConnAir) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headConnAir + seq + on + tailConnAir;
                 return ON;
@@ -142,7 +142,7 @@ public class AB440ID extends Receiver implements DipReceiver {
                 String OFF = headConnAir + seq + off + tailConnAir;
                 return OFF;
             }
-        } else if (gateway.getClass() == BrematicGWY433.class) {
+        } else if (gateway instanceof BrematicGWY433) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headConnAir + seq + on + tailConnAir;
                 return ON;
@@ -150,7 +150,7 @@ public class AB440ID extends Receiver implements DipReceiver {
                 String OFF = headConnAir + seq + off + tailConnAir;
                 return OFF;
             }
-        } else if (gateway.getClass() == ITGW433.class) {
+        } else if (gateway instanceof ITGW433) {
             if (action.equals(context.getString(R.string.on))) {
                 String ON = headITGW + seq + on + tailITGW;
                 return ON;
