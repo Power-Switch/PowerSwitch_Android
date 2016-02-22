@@ -49,21 +49,7 @@ public class IntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogHandler.configureLogger();
 
-        try {
-            String log = "onReceive: Action: ";
-            log += intent.getAction();
-            Bundle extras = intent.getExtras();
-            log += "{ ";
-            if (extras != null) {
-                for (String extra : extras.keySet()) {
-                    log += extra + "[" + extras.get(extra) + "], ";
-                }
-            }
-            log += " }";
-            Log.d(this, log);
-        } catch (Exception e) {
-            Log.e(e);
-        }
+        Log.d(this, intent);
 
         try {
 
@@ -85,8 +71,7 @@ public class IntentReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Method for extracting information from action intents received either internally (Button click, Timer, etc.) or
-     * externally (via API)
+     * Method for extracting information from action intents received externally (via API)
      *
      * @param context any suitable Context
      * @param intent  action intent
