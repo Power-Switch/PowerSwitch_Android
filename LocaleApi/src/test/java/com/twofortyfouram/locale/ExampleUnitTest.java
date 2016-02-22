@@ -16,6 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':library'
-project(':library').projectDir = new File(settingsDir, '../MaterialShowcaseView/library')
-include ':Shared', ':LocaleApi', ':Wearable', ':Smartphone'
+package com.twofortyfouram.locale;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+/**
+ * To work on unit tests, switch the Test Artifact in the Build Variants view.
+ */
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
+    }
+}

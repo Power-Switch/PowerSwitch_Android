@@ -16,6 +16,16 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':library'
-project(':library').projectDir = new File(settingsDir, '../MaterialShowcaseView/library')
-include ':Shared', ':LocaleApi', ':Wearable', ':Smartphone'
+package com.twofortyfouram.locale;
+
+import android.app.Application;
+import android.test.ApplicationTestCase;
+
+/**
+ * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
+ */
+public class ApplicationTest extends ApplicationTestCase<Application> {
+    public ApplicationTest() {
+        super(Application.class);
+    }
+}

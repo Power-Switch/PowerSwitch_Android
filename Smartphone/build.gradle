@@ -96,6 +96,7 @@ dependencies {
 
     // PowerSwitch Modules
     compile project(':Shared')
+    compile project(':LocaleApi')
     wearApp project(':Wearable')
 
     // Tests
