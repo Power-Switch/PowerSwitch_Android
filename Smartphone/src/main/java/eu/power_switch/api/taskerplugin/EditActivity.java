@@ -81,6 +81,7 @@ public class EditActivity extends AbstractPluginActivity {
     private ArrayAdapter sceneSpinnerArrayAdapter;
     private Apartment currentApartment;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
+    private android.widget.Button buttonSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class EditActivity extends AbstractPluginActivity {
                 }
 
                 // TODO: when is the plugin edit page valid?
-//                setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
 
@@ -164,13 +165,13 @@ public class EditActivity extends AbstractPluginActivity {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateLists();
                 // TODO: when is the plugin edit page valid?
-//                setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_apartment.setOnTouchListener(spinnerInteractionListener);
@@ -188,13 +189,13 @@ public class EditActivity extends AbstractPluginActivity {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverList();
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_receiver_action_room.setOnTouchListener(spinnerInteractionListener);
@@ -209,13 +210,13 @@ public class EditActivity extends AbstractPluginActivity {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverButtonList();
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_receiver_action_receiver.setOnTouchListener(spinnerInteractionListener);
@@ -230,13 +231,13 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_receiver_action_button.setOnTouchListener(spinnerInteractionListener);
@@ -254,13 +255,13 @@ public class EditActivity extends AbstractPluginActivity {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateRoomButtonsList();
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_room_action_room.setOnTouchListener(spinnerInteractionListener);
@@ -274,13 +275,13 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_room_action_button.setOnTouchListener(spinnerInteractionListener);
@@ -297,19 +298,19 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
-                // setPositiveButtonVisibility(checkValidity());
+                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_scene_action_scene.setOnTouchListener(spinnerInteractionListener);
         spinner_scene_action_scene.setOnItemSelectedListener(spinnerInteractionListener);
 
-        android.widget.Button buttonSave = (android.widget.Button) findViewById(R.id.button_save);
+        buttonSave = (android.widget.Button) findViewById(R.id.button_save);
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -529,6 +530,10 @@ public class EditActivity extends AbstractPluginActivity {
         }
 
         return true;
+    }
+
+    private void setPositiveButtonVisibility(boolean isValid) {
+        buttonSave.setEnabled(isValid);
     }
 
     @Override
