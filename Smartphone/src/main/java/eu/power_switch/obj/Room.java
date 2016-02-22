@@ -153,4 +153,19 @@ public class Room {
         }
         return null;
     }
+
+    /**
+     * Gets a specific Receiver in this Room
+     *
+     * @param id ID of Receiver
+     * @return Receiver
+     */
+    public Receiver getReceiver(Long id) {
+        for (Receiver receiver : receivers) {
+            if (receiver.getId().equals(id)) {
+                return receiver;
+            }
+        }
+        return null;
+    }
 }

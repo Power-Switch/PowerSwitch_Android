@@ -18,7 +18,6 @@
 
 package eu.power_switch.api.taskerplugin;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +45,7 @@ import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -80,23 +80,6 @@ public class EditActivity extends AbstractPluginActivity {
     private ArrayAdapter sceneSpinnerArrayAdapter;
     private Apartment currentApartment;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
-
-    /**
-     * @param context Application context.
-     * @param message The toast message to be displayed by the plug-in. Cannot be null.
-     * @return A blurb for the plug-in.
-     */
-    /* package */
-    static String generateBlurb(final Context context, final String message) {
-        final int maxBlurbLength =
-                context.getResources().getInteger(R.integer.twofortyfouram_locale_maximum_blurb_length);
-
-        if (message.length() > maxBlurbLength) {
-            return message.substring(0, maxBlurbLength);
-        }
-
-        return message;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,6 +292,14 @@ public class EditActivity extends AbstractPluginActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 // TODO: when is the plugin edit page valid?
                 // setPositiveButtonVisibility(checkValidity());
+            }
+        });
+
+        android.widget.Button buttonSave = (android.widget.Button) findViewById(R.id.button_save);
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -526,38 +517,52 @@ public class EditActivity extends AbstractPluginActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void finish() {
         if (!isCanceled()) {
-            final String message = ((EditText) findViewById(android.R.id.text1)).getText().toString();
+            Action action = getCurrentSelection();
 
-            if (message.length() > 0) {
-                final Intent resultIntent = new Intent();
+            final Intent resultIntent = new Intent();
 
-                /*
-                 * This extra is the data to ourselves: either for the Activity or the BroadcastReceiver. Note
-                 * that anything placed in this Bundle must be available to Locale's class loader. So storing
-                 * String, int, and other standard objects will work just fine. Parcelable objects are not
-                 * acceptable, unless they also implement Serializable. Serializable objects must be standard
-                 * Android platform objects (A Serializable class private to this plug-in's APK cannot be
-                 * stored in the Bundle, as Locale's classloader will not recognize it).
-                 */
-                final Bundle resultBundle =
-                        PluginBundleManager.generateBundle(getApplicationContext(), message);
-                resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
+            /*
+             * This extra is the data to ourselves: either for the Activity or the BroadcastReceiver. Note
+             * that anything placed in this Bundle must be available to Locale's class loader. So storing
+             * String, int, and other standard objects will work just fine. Parcelable objects are not
+             * acceptable, unless they also implement Serializable. Serializable objects must be standard
+             * Android platform objects (A Serializable class private to this plug-in's APK cannot be
+             * stored in the Bundle, as Locale's classloader will not recognize it).
+             */
+            final Bundle resultBundle = new Bundle();
+            if (action instanceof ReceiverAction) {
+                resultBundle.putLong(ApiConstants.KEY_APARTMENT, currentApartment.getId());
+                resultBundle.putLong(ApiConstants.KEY_ROOM, ((ReceiverAction) action).getRoom().getId());
+                resultBundle.putLong(ApiConstants.KEY_RECEIVER, ((ReceiverAction) action).getReceiver().getId());
+                resultBundle.putLong(ApiConstants.KEY_BUTTON, ((ReceiverAction) action).getButton().getId());
+            } else if (action instanceof RoomAction) {
+                resultBundle.putLong(ApiConstants.KEY_APARTMENT, currentApartment.getId());
+                resultBundle.putLong(ApiConstants.KEY_ROOM, ((RoomAction) action).getRoom().getId());
+                resultBundle.putString(ApiConstants.KEY_BUTTON, ((RoomAction) action).getButtonName());
+            } else if (action instanceof SceneAction) {
+                resultBundle.putLong(ApiConstants.KEY_APARTMENT, currentApartment.getId());
+                resultBundle.putLong(ApiConstants.KEY_SCENE, ((SceneAction) action).getScene().getId());
+            }
 
-                /*
-                 * The blurb is concise status text to be displayed in the host's UI.
-                 */
-                final String blurb = generateBlurb(getApplicationContext(), message);
-                resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB, blurb);
+            resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
 
+            /*
+             * The blurb is concise status text to be displayed in the host's UI.
+             */
+            final String blurb = currentApartment.getName() + ": " + action.toString();
+            resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB, blurb);
+
+            if (checkValidity()) {
                 setResult(RESULT_OK, resultIntent);
             }
+
+//          final String message = ((EditText) findViewById(android.R.id.text1)).getText().toString();
+
+//          final Bundle resultBundle =
+//              PluginBundleManager.generateBundle(getApplicationContext(), message);
+
         }
 
         super.finish();

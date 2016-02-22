@@ -255,6 +255,15 @@ public abstract class Receiver {
         return null;
     }
 
+    public Button getButton(Long id) {
+        for (Button button : buttons) {
+            if (button.getId().equals(id)) {
+                return button;
+            }
+        }
+        return null;
+    }
+
     /**
      * Type constants
      */

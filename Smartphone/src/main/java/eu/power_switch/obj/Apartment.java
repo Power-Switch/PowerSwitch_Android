@@ -140,9 +140,27 @@ public class Apartment {
         return null;
     }
 
+    public Room getRoom(Long id) {
+        for (Room room : rooms) {
+            if (room.getId().equals(id)) {
+                return room;
+            }
+        }
+        return null;
+    }
+
     public Scene getScene(String name) {
         for (Scene scene : scenes) {
             if (scene.getName().equals(name)) {
+                return scene;
+            }
+        }
+        return null;
+    }
+
+    public Scene getScene(Long id) {
+        for (Scene scene : scenes) {
+            if (scene.getId().equals(id)) {
                 return scene;
             }
         }

@@ -58,6 +58,8 @@ public class Log {
             logMessage.append(source).append(" : ");
         } else if (source instanceof Class) {
             logMessage.append("{").append(((Class) source).getCanonicalName()).append("}");
+        } else if (source instanceof Intent) {
+            logMessage.append(getIntentDescription((Intent) source));
         } else {
             logMessage.append(source.getClass());
         }
