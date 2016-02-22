@@ -117,6 +117,8 @@ public abstract class AddActionDialog extends DialogFragment {
                     radioButtonRoomAction.setChecked(false);
                     updateActionType(Action.ACTION_TYPE_SCENE);
                 }
+
+                updateLists();
                 setPositiveButtonVisibility(checkValidity());
             }
         };

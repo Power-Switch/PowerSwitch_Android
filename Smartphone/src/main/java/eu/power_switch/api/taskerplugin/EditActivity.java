@@ -105,7 +105,7 @@ public class EditActivity extends AbstractPluginActivity {
                     updateActionType(Action.ACTION_TYPE_SCENE);
                 }
 
-                // TODO: when is the plugin edit page valid?
+                updateLists();
                 setPositiveButtonVisibility(checkValidity());
             }
         };
@@ -164,13 +164,11 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateLists();
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
         };
@@ -188,13 +186,11 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverList();
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
         };
@@ -209,13 +205,11 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverButtonList();
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
         };
@@ -230,13 +224,11 @@ public class EditActivity extends AbstractPluginActivity {
         spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
         };
@@ -254,13 +246,11 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateRoomButtonsList();
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
         };
@@ -274,13 +264,11 @@ public class EditActivity extends AbstractPluginActivity {
         spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
         };
@@ -297,13 +285,11 @@ public class EditActivity extends AbstractPluginActivity {
         spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO: when is the plugin edit page valid?
                 setPositiveButtonVisibility(checkValidity());
             }
         };
