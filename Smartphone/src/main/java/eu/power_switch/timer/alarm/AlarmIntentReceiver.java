@@ -22,7 +22,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 
 import java.util.Calendar;
 
@@ -48,28 +47,7 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogHandler.configureLogger();
 
-        try {
-            String log = "onReceive: Action: ";
-            log += intent.getAction();
-            log += "( ";
-            if (intent.getData() != null) {
-                log += intent.getData().getScheme();
-                log += "://";
-                log += intent.getData().getHost();
-            }
-            log += " ) ";
-            Bundle extras = intent.getExtras();
-            log += "{ ";
-            if (extras != null) {
-                for (String extra : extras.keySet()) {
-                    log += extra + "[" + extras.get(extra) + "], ";
-                }
-            }
-            log += " }";
-            Log.d(this, log);
-        } catch (Exception e) {
-            Log.e(e);
-        }
+        Log.d(this, intent);
 
         try {
             if (intent.getAction().equals(TimerConstants.TIMER_ACTIVATION_INTENT)) {

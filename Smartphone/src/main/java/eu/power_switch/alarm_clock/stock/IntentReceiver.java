@@ -21,14 +21,13 @@ package eu.power_switch.alarm_clock.stock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import eu.power_switch.shared.constants.ClockAppConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 
 /**
- * IntentReceiver to handle any Sleep As Android related Intents
+ * IntentReceiver to handle any alarm clock related Intents
  * <p/>
  * Created by Markus on 08.10.2015.
  */
@@ -38,28 +37,7 @@ public class IntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogHandler.configureLogger();
 
-        try {
-            String log = "onReceive: Action: ";
-            log += intent.getAction();
-            log += "( ";
-            if (intent.getData() != null) {
-                log += intent.getData().getScheme();
-                log += "://";
-                log += intent.getData().getHost();
-            }
-            log += " ) ";
-            Bundle extras = intent.getExtras();
-            log += "{ ";
-            if (extras != null) {
-                for (String extra : extras.keySet()) {
-                    log += extra + "[" + extras.get(extra) + "], ";
-                }
-            }
-            log += " }";
-            Log.d(this, log);
-        } catch (Exception e) {
-            Log.e(e);
-        }
+        Log.d(this, intent);
 
         try {
             if (ClockAppConstants.ALARM_TRIGGERED_INTENTS.contains(intent.getAction())) {

@@ -127,21 +127,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogHandler.configureLogger();
 
-        try {
-            String log = "onReceive: Action: ";
-            log += intent.getAction();
-            Bundle extras = intent.getExtras();
-            log += "{ ";
-            if (extras != null) {
-                for (String extra : extras.keySet()) {
-                    log += extra + "[" + extras.get(extra) + "], ";
-                }
-            }
-            log += " }";
-            Log.d(this, log);
-        } catch (Exception e) {
-            Log.e(e);
-        }
+        Log.d(this, intent);
 
         try {
             if (intent.getAction().equals(WidgetConstants.WIDGET_ACTION_INTENT)) {

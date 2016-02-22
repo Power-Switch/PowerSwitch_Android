@@ -21,7 +21,6 @@ package eu.power_switch.alarm_clock.sleep_as_android;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
@@ -39,28 +38,7 @@ public class IntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogHandler.configureLogger();
 
-        try {
-            String log = "onReceive: Action: ";
-            log += intent.getAction();
-            log += "( ";
-            if (intent.getData() != null) {
-                log += intent.getData().getScheme();
-                log += "://";
-                log += intent.getData().getHost();
-            }
-            log += " ) ";
-            Bundle extras = intent.getExtras();
-            log += "{ ";
-            if (extras != null) {
-                for (String extra : extras.keySet()) {
-                    log += extra + "[" + extras.get(extra) + "], ";
-                }
-            }
-            log += " }";
-            Log.d(this, log);
-        } catch (Exception e) {
-            Log.e(e);
-        }
+        Log.d(this, intent);
 
         try {
             if (SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction()

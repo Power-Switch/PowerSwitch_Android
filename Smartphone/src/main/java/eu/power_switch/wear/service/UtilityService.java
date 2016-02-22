@@ -225,6 +225,8 @@ public class UtilityService extends IntentService {
      */
     @Override
     synchronized protected void onHandleIntent(Intent intent) {
+        Log.d(this, intent);
+
         // Get Room/Receiver/Scene Data from Database and send to wearable
         if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
             Log.d("Getting Data from Database to send to Wearable...");

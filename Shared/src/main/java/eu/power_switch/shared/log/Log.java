@@ -19,6 +19,8 @@
 package eu.power_switch.shared.log;
 
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -52,7 +54,7 @@ public class Log {
         StringBuilder logMessage = new StringBuilder();
         if (source == null) {
             logMessage.append("null");
-        } else if (String.class.equals(source.getClass())) {
+        } else if (source instanceof String) {
             logMessage.append(source).append(" : ");
         } else if (source instanceof Class) {
             logMessage.append("{").append(((Class) source).getCanonicalName()).append("}");
@@ -66,13 +68,14 @@ public class Log {
      * Log Debug
      *
      * @param source  a source object
-     * @param message any text message
+     * @param message any object used as description
      */
-    public static void d(@Nullable Object source, @Nullable String message) {
+    public static void d(@Nullable Object source, @Nullable Object message) {
         StringBuilder logMessage = new StringBuilder();
+
         if (source != null) {
             logMessage.append("{");
-            if (String.class.equals(source.getClass())) {
+            if (source instanceof String) {
                 logMessage.append(source);
             } else if (source instanceof Class) {
                 logMessage.append(((Class) source).getCanonicalName());
@@ -87,8 +90,37 @@ public class Log {
             logMessage.append("} ");
         }
 
-        logMessage.append(message);
+        if (message instanceof String) {
+            logMessage.append(message);
+        } else if (message instanceof Intent) {
+            logMessage.append(getIntentDescription((Intent) message));
+        } else {
+            logMessage.append(String.valueOf(message));
+        }
+
         log.debug(logMessage);
+    }
+
+    private static String getIntentDescription(Intent intent) {
+        String log = "Action: ";
+        log += intent.getAction();
+        log += "( ";
+        if (intent.getData() != null) {
+            log += intent.getData().getScheme();
+            log += "://";
+            log += intent.getData().getHost();
+        }
+        log += " ) ";
+        Bundle extras = intent.getExtras();
+        log += "{ ";
+        if (extras != null) {
+            for (String extra : extras.keySet()) {
+                log += extra + "[" + extras.get(extra) + "], ";
+            }
+        }
+        log += " }";
+
+        return log;
     }
 
     /**
@@ -122,7 +154,7 @@ public class Log {
 
         if (source != null) {
             logMessage.append("{");
-            if (source.getClass().equals(String.class)) {
+            if (source instanceof String) {
                 logMessage.append(source);
             } else if (source instanceof Class) {
                 logMessage.append(((Class) source).getCanonicalName());
@@ -151,7 +183,7 @@ public class Log {
 
         if (source != null) {
             logMessage.append("{");
-            if (source.getClass().equals(String.class)) {
+            if (source instanceof String) {
                 logMessage.append(source);
             } else if (source instanceof Class) {
                 logMessage.append(((Class) source).getCanonicalName());
