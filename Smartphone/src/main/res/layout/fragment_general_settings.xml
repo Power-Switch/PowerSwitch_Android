@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
-                android:text="@string/hide_FABs"/>
+                android:text="@string/use_menu_instead_of_FABs"/>
 
             <CheckBox
                 android:id="@+id/checkBox_highlightLastActivatedButton"

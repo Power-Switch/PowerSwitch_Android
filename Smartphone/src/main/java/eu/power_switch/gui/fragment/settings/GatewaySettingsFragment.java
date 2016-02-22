@@ -256,18 +256,20 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.gateway_fragment_menu, menu);
-
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-            menu.findItem(R.id.search_gateways)
-                    .setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.white));
-        } else {
-            menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-            menu.findItem(R.id.search_gateways)
-                    .setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.black));
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            inflater.inflate(R.menu.gateway_fragment_menu, menu);
+            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+                menu.findItem(R.id.create_gateway)
+                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+                menu.findItem(R.id.search_gateways)
+                        .setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.white));
+            } else {
+                menu.findItem(R.id.create_gateway)
+                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+                menu.findItem(R.id.search_gateways)
+                        .setIcon(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.black));
+            }
         }
-
 
         super.onCreateOptionsMenu(menu, inflater);
     }

@@ -281,11 +281,15 @@ public class BackupFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.backup_fragment_menu, menu);
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-        } else {
-            menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            inflater.inflate(R.menu.backup_fragment_menu, menu);
+            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+                menu.findItem(R.id.create_backup)
+                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+            } else {
+                menu.findItem(R.id.create_backup)
+                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+            }
         }
         super.onCreateOptionsMenu(menu, inflater);
     }

@@ -231,11 +231,13 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.sleep_as_android_fragment_menu, menu);
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-        } else {
-            menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            inflater.inflate(R.menu.sleep_as_android_fragment_menu, menu);
+            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+                menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+            } else {
+                menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+            }
         }
         super.onCreateOptionsMenu(menu, inflater);
     }

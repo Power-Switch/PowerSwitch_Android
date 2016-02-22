@@ -42,7 +42,7 @@
     <string name="create_gateway">Gateway erstellen</string>
     <string name="search_gateway">Gateway suchen</string>
     <string name="draw_room_buttons">Zeige Raum An/Aus Buttons</string>
-    <string name="hide_FABs">Verstecke Floating Action Buttons</string>
+    <string name="use_menu_instead_of_FABs">Nutze Optionsmenü anstelle von Floating Action Buttons</string>
     <string name="vibrate_on_button_press">Vibration bei Tastendruck</string>
     <string name="duration_title">Dauer:</string>
     <string name="highlight_last_activated_button">Zuletzt aktivierten Button hervorheben</string>

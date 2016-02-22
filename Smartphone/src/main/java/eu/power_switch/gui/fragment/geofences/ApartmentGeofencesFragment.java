@@ -104,7 +104,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                 final Geofence geofence = geofences.get(position);
 
                 ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog =
-                        ConfigureApartmentGeofenceDialog.newInstance(geofenceIdApartmentMap.get(geofence.getId()).getId());
+                        ConfigureApartmentGeofenceDialog.newInstance(geofenceIdApartmentMap.get(geofence.getId())
+                                .getId());
                 configureApartmentGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureApartmentGeofenceDialog.show(getFragmentManager(), null);
             }
@@ -208,12 +209,15 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.apartment_geofences_fragment_menu, menu);
-
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-        } else {
-            menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            inflater.inflate(R.menu.apartment_geofences_fragment_menu, menu);
+            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+                menu.findItem(R.id.create_geofence)
+                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+            } else {
+                menu.findItem(R.id.create_geofence)
+                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
+            }
         }
 
         super.onCreateOptionsMenu(menu, inflater);
