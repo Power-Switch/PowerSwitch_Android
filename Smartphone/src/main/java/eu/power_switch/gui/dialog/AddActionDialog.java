@@ -45,6 +45,7 @@ import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
@@ -170,9 +171,9 @@ public abstract class AddActionDialog extends DialogFragment {
         ArrayAdapter<String> apartmentSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, apartmentNames);
         apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_apartment.setAdapter(apartmentSpinnerArrayAdapter);
-        spinner_apartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateLists();
                 setPositiveButtonVisibility(checkValidity());
             }
@@ -181,7 +182,9 @@ public abstract class AddActionDialog extends DialogFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 setPositiveButtonVisibility(checkValidity());
             }
-        });
+        };
+        spinner_apartment.setOnTouchListener(spinnerInteractionListener);
+        spinner_apartment.setOnItemSelectedListener(spinnerInteractionListener);
 
         // Receiver Action
         linearLayoutReceiverAction = (LinearLayout) rootView.findViewById(R.id.linearLayout_receiver_action);
@@ -190,9 +193,9 @@ public abstract class AddActionDialog extends DialogFragment {
         roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_room.setAdapter(roomSpinnerArrayAdapter);
-        spinner_receiver_action_room.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener2 = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverList();
                 setPositiveButtonVisibility(checkValidity());
             }
@@ -201,15 +204,17 @@ public abstract class AddActionDialog extends DialogFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 setPositiveButtonVisibility(checkValidity());
             }
-        });
+        };
+        spinner_receiver_action_room.setOnTouchListener(spinnerInteractionListener2);
+        spinner_receiver_action_room.setOnItemSelectedListener(spinnerInteractionListener2);
 
         spinner_receiver_action_receiver = (Spinner) rootView.findViewById(R.id.spinner_receiver_action_receiver);
         receiverSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, receiverNames);
         receiverSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_receiver.setAdapter(receiverSpinnerArrayAdapter);
-        spinner_receiver_action_receiver.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener3 = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverButtonList();
                 setPositiveButtonVisibility(checkValidity());
             }
@@ -218,16 +223,17 @@ public abstract class AddActionDialog extends DialogFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 setPositiveButtonVisibility(checkValidity());
             }
-        });
-
+        };
+        spinner_receiver_action_receiver.setOnTouchListener(spinnerInteractionListener3);
+        spinner_receiver_action_receiver.setOnItemSelectedListener(spinnerInteractionListener3);
 
         spinner_receiver_action_button = (Spinner) rootView.findViewById(R.id.spinner_receiver_action_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNamesReceiver);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver_action_button.setAdapter(buttonSpinnerArrayAdapter);
-        spinner_receiver_action_button.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener4 = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 setPositiveButtonVisibility(checkValidity());
             }
 
@@ -235,8 +241,9 @@ public abstract class AddActionDialog extends DialogFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 setPositiveButtonVisibility(checkValidity());
             }
-        });
-
+        };
+        spinner_receiver_action_button.setOnTouchListener(spinnerInteractionListener4);
+        spinner_receiver_action_button.setOnItemSelectedListener(spinnerInteractionListener4);
 
         updateReceiverButtonList();
 
@@ -245,9 +252,9 @@ public abstract class AddActionDialog extends DialogFragment {
 
         spinner_room_action_room = (Spinner) rootView.findViewById(R.id.spinner_room_action_room);
         spinner_room_action_room.setAdapter(roomSpinnerArrayAdapter);
-        spinner_room_action_room.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener5 = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateRoomButtonsList();
                 setPositiveButtonVisibility(checkValidity());
             }
@@ -256,15 +263,17 @@ public abstract class AddActionDialog extends DialogFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 setPositiveButtonVisibility(checkValidity());
             }
-        });
+        };
+        spinner_room_action_room.setOnTouchListener(spinnerInteractionListener5);
+        spinner_room_action_room.setOnItemSelectedListener(spinnerInteractionListener5);
 
         spinner_room_action_button = (Spinner) rootView.findViewById(R.id.spinner_room_action_button);
         buttonAllSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNamesAll);
         buttonAllSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room_action_button.setAdapter(buttonAllSpinnerArrayAdapter);
-        spinner_room_action_button.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener6 = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 setPositiveButtonVisibility(checkValidity());
             }
 
@@ -272,7 +281,9 @@ public abstract class AddActionDialog extends DialogFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 setPositiveButtonVisibility(checkValidity());
             }
-        });
+        };
+        spinner_room_action_button.setOnTouchListener(spinnerInteractionListener6);
+        spinner_room_action_button.setOnItemSelectedListener(spinnerInteractionListener6);
 
         // Scene Action
         linearLayoutSceneAction = (LinearLayout) rootView.findViewById(R.id.linearLayout_scene_action);
@@ -281,9 +292,9 @@ public abstract class AddActionDialog extends DialogFragment {
         sceneSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sceneNames);
         sceneSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_scene_action_scene.setAdapter(sceneSpinnerArrayAdapter);
-        spinner_scene_action_scene.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener7 = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 setPositiveButtonVisibility(checkValidity());
             }
 
@@ -291,7 +302,11 @@ public abstract class AddActionDialog extends DialogFragment {
             public void onNothingSelected(AdapterView<?> parent) {
                 setPositiveButtonVisibility(checkValidity());
             }
-        });
+        };
+        spinner_scene_action_scene.setOnTouchListener(spinnerInteractionListener7);
+        spinner_scene_action_scene.setOnItemSelectedListener(spinnerInteractionListener7);
+
+        updateLists();
 
         builder.setTitle(R.string.add_action);
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {

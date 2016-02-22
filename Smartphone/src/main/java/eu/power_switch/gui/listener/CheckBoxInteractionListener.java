@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.adapter;
+package eu.power_switch.gui.listener;
 
 import android.support.annotation.CallSuper;
 import android.view.MotionEvent;

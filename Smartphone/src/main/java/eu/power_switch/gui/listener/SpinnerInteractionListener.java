@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.adapter;
+package eu.power_switch.gui.listener;
 
 import android.support.annotation.CallSuper;
 import android.view.MotionEvent;
@@ -25,6 +25,20 @@ import android.widget.AdapterView;
 
 /**
  * SpinnerInteractionListener used to react <b>only to user selections</b>
+ * <p/>
+ * Usage:
+ * <p/>
+ * SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
+ *
+ * @Override public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
+ * notifyConfigurationChanged();
+ * }
+ * @Override public void onNothingSelected(AdapterView<?> parent) {
+ * }
+ * };
+ * model.setOnTouchListener(spinnerInteractionListener);
+ * model.setOnItemSelectedListener(spinnerInteractionListener);
+ * <p/>
  * <p/>
  * Created by Markus on 19.02.2016.
  */
