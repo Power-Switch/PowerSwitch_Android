@@ -45,57 +45,57 @@ public class FireReceiver extends BroadcastReceiver {
         Log.d(intent);
 
         if (com.twofortyfouram.locale.Intent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
-            parseIntent(context, intent);
+            parseActionIntent(context, intent);
         }
     }
 
-    private void parseIntent(Context context, Intent intent) {
+    private void parseActionIntent(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
 //            if (extras != null && extras.containsKey(ApiConstants.KEY_APARTMENT)) {
 //                // NOTE: Every action needs the Apartment:<ApartmentName> Extra (and some other)
 
-            if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras
-                    .containsKey(ApiConstants.KEY_RECEIVER) && extras
-                    .containsKey(ApiConstants.KEY_BUTTON)) {
+            if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
+                    extras.containsKey(ApiConstants.KEY_ROOM) &&
+                    extras.containsKey(ApiConstants.KEY_RECEIVER) &&
+                    extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
                 try {
-                    Room room = DatabaseHandler.getRoom(extras.getLong(ApiConstants.KEY_ROOM));
-                    Receiver receiver = room.getReceiver(extras.getLong(ApiConstants.KEY_RECEIVER));
-                    Button button = receiver.getButton(extras.getLong(ApiConstants.KEY_BUTTON));
+                    Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM));
+                    Receiver receiver = room.getReceiver(extras.getString(ApiConstants.KEY_RECEIVER));
+                    Button button = receiver.getButton(extras.getString(ApiConstants.KEY_BUTTON));
 
                     ActionHandler.execute(context, receiver, button);
                 } catch (Exception e) {
                     Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
                 }
 
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) &&
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
+                    extras.containsKey(ApiConstants.KEY_ROOM) &&
                     extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
                 try {
-                    Apartment apartment = DatabaseHandler.getApartment(extras.getLong(ApiConstants.KEY_APARTMENT));
-                    Room room = apartment.getRoom(extras.getLong(ApiConstants.KEY_ROOM));
+                    Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT));
+                    Room room = apartment.getRoom(extras.getString(ApiConstants.KEY_ROOM));
                     String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
 
                     ActionHandler.execute(context, room, buttonName);
                 } catch (Exception e) {
                     Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
                 }
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
+                    extras.containsKey(ApiConstants.KEY_SCENE)) {
 
                 try {
-                    Apartment apartment = DatabaseHandler.getApartment(extras.getLong(ApiConstants.KEY_APARTMENT));
-                    Scene scene = apartment.getScene(extras.getLong(ApiConstants.KEY_SCENE));
+                    Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT));
+                    Scene scene = apartment.getScene(extras.getString(ApiConstants.KEY_SCENE));
 
                     ActionHandler.execute(context, scene);
                 } catch (Exception e) {
                     Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
                 }
 //                }
             } else {

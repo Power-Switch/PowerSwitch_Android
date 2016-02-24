@@ -33,6 +33,7 @@ import eu.power_switch.database.Database;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.UniversalButton;
@@ -536,9 +537,9 @@ public final class DatabaseHandler {
      * @param id ID of Button
      * @return Button
      */
-    public static UniversalButton getButton(Long id) throws Exception {
+    public static Button getButton(Long id) throws Exception {
         openReadable();
-        UniversalButton button = null;
+        Button button = null;
         try {
             button = UniversalButtonHandler.getUniversalButton(id);
         } catch (Exception e) {

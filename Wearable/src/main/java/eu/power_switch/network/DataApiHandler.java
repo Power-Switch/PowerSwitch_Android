@@ -34,6 +34,8 @@ import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.gui.animation.ActionResponse;
 import eu.power_switch.network.service.ListenerService;
+import eu.power_switch.obj.Button;
+import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -55,16 +57,19 @@ public class DataApiHandler {
         initPlayServices();
     }
 
-    public static String buildReceiverActionString(String roomName, String receiverName, String buttonName) {
-        return "RoomName:" + roomName + "ReceiverName:" + receiverName + "ButtonName:" + buttonName + ";;";
+    public static String buildReceiverActionString(Room room, Receiver receiver, Button button) {
+        return WearableConstants.ROOM_ID_KEY + room.getId() +
+                WearableConstants.RECEIVER_ID_KEY + receiver.getId() +
+                WearableConstants.BUTTON_ID_KEY + button.getId() + ";;";
     }
 
-    public static String buildRoomActionString(String roomName, String buttonName) {
-        return "RoomName:" + roomName + "ButtonName:" + buttonName + ";;";
+    public static String buildRoomActionString(Room room, Button button) {
+        return WearableConstants.ROOM_ID_KEY + room.getId() +
+                WearableConstants.BUTTON_ID_KEY + button.getId() + ";;";
     }
 
-    public static String buildSceneActionString(String sceneName) {
-        return "SceneName:" + sceneName + ";;";
+    public static String buildSceneActionString(Scene scene) {
+        return WearableConstants.SCENE_ID_KEY + scene.getId() + ";;";
     }
 
     private void initPlayServices() {

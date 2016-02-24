@@ -86,6 +86,8 @@ abstract class UniversalButtonHandler {
      * @return Button
      */
     protected static UniversalButton getUniversalButton(Long id) throws Exception {
+
+
         Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, null, UniversalButtonTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
         cursor.moveToFirst();

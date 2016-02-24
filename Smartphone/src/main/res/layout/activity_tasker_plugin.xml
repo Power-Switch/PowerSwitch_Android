@@ -32,7 +32,6 @@
         android:paddingTop="@dimen/dialog_margin_top">
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
@@ -69,17 +68,36 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/apartment"
-            android:textColor="@color/color_light_blue_a700"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:layout_weight="1"
+                android:text="@string/apartment"
+                android:textColor="@color/color_light_blue_a700"/>
+
+            <ImageButton
+                android:id="@+id/imageButton_switchApartment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
         <Spinner
             android:id="@+id/spinner_apartment"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/timer_action_spinner_height"/>
+
+        <EditText
+            android:id="@+id/editText_apartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/linearLayout_receiver_action"

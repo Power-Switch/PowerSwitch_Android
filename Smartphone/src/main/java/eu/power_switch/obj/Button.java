@@ -18,6 +18,12 @@
 
 package eu.power_switch.obj;
 
+import android.content.Context;
+
+import eu.power_switch.R;
+import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.shared.log.Log;
+
 /**
  * Represents a button that can be pressed on a receiver remote.
  * It is always associated with a receiverID.
@@ -61,27 +67,32 @@ public class Button {
         this.receiverId = receiverId;
     }
 
-//    /**
-//     * Get the Name of a Button by ID
-//     *
-//     * @param buttonId ID of Button
-//     * @return Name of Button
-//     */
-//    public String getName(Long buttonId) {
-//        if (buttonId == BUTTON_ON_ID) {
-//            return context.getString(R.string.on);
-//        } else if (buttonId == BUTTON_OFF_ID) {
-//            return context.getString(R.string.off);
-//        } else if (buttonId == BUTTON_UP_ID) {
-//            return context.getString(R.string.up);
-//        } else if (buttonId == BUTTON_STOP_ID) {
-//            return context.getString(R.string.stop);
-//        } else if (buttonId == BUTTON_DOWN_ID) {
-//            return context.getString(R.string.down);
-//        } else {
-//            return DatabaseHandler.getButton(buttonId).getName();
-//        }
-//    }
+    /**
+     * Get the Name of a Button by ID
+     *
+     * @param buttonId ID of Button
+     * @return Name of Button
+     */
+    public static String getName(Context context, Long buttonId) {
+        try {
+            if (buttonId == BUTTON_ON_ID) {
+                return context.getString(R.string.on);
+            } else if (buttonId == BUTTON_OFF_ID) {
+                return context.getString(R.string.off);
+            } else if (buttonId == BUTTON_UP_ID) {
+                return context.getString(R.string.up);
+            } else if (buttonId == BUTTON_STOP_ID) {
+                return context.getString(R.string.stop);
+            } else if (buttonId == BUTTON_DOWN_ID) {
+                return context.getString(R.string.down);
+            } else {
+                return DatabaseHandler.getButton(buttonId).getName();
+            }
+        } catch (Exception e) {
+            Log.e(e);
+            return null;
+        }
+    }
 
     /**
      * Get ID of this Button

@@ -136,6 +136,26 @@ public class ActionHandler {
         }
     }
 
+    /**
+     * Execute Room Action
+     *
+     * @param context  any suitable context
+     * @param room     room to execute on
+     * @param buttonId button ID to execute on each receiver
+     */
+    public static void execute(@NonNull Context context, @NonNull Room room, @NonNull long buttonId) {
+        try {
+            executeRoomAction(context, room, buttonId);
+
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
+                    .room_action_history_text, room.getName(), Button.getName(context, buttonId)));
+            DatabaseHandler.addHistoryItem(historyItem);
+            MainActivity.sendHistoryChangedBroadcast(context);
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(context, e);
+        }
+    }
+
     private static void executeRoomAction(@NonNull Context context, @NonNull Room room, @NonNull String buttonName) throws Exception {
         NetworkHandler.init(context);
 
@@ -149,6 +169,57 @@ public class ActionHandler {
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
             Button button = receiver.getButton(buttonName);
+            if (button != null) {
+                for (Gateway gateway : apartment.getAssociatedGateways()) {
+                    if (gateway.isActive()) {
+                        try {
+                            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
+                            networkPackages.add(networkPackage);
+                        } catch (ActionNotSupportedException e) {
+                            Log.e("Action not supported by Receiver!", e);
+                            StatusMessageHandler.showInfoMessage(context,
+                                    context.getString(R.string.action_not_supported_by_receiver), 5000);
+                        } catch (GatewayNotSupportedException e) {
+                            Log.e("Gateway not supported by Receiver!", e);
+                            StatusMessageHandler.showInfoMessage(context,
+                                    context.getString(R.string.gateway_not_supported_by_receiver), 5000);
+                        }
+                    }
+                }
+
+                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+            }
+        }
+
+        if (networkPackages.size() <= 0) {
+            Log.d(context.getString(R.string.no_receiver_supports_this_action));
+            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
+                    .LENGTH_LONG);
+        } else {
+            NetworkHandler.send(networkPackages);
+        }
+
+        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+            ReceiverWidgetProvider.forceWidgetUpdate(context);
+        }
+        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+            UtilityService.forceWearDataUpdate(context);
+        }
+    }
+
+    private static void executeRoomAction(@NonNull Context context, @NonNull Room room, @NonNull long buttonId) throws Exception {
+        NetworkHandler.init(context);
+
+        Apartment apartment = DatabaseHandler.getContainingApartment(room);
+        if (apartment.getAssociatedGateways().isEmpty()) {
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
+                    Snackbar.LENGTH_LONG);
+            return;
+        }
+
+        List<NetworkPackage> networkPackages = new ArrayList<>();
+        for (Receiver receiver : room.getReceivers()) {
+            Button button = receiver.getButton(buttonId);
             if (button != null) {
                 for (Gateway gateway : apartment.getAssociatedGateways()) {
                     if (gateway.isActive()) {

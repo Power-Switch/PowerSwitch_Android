@@ -20,13 +20,18 @@ package eu.power_switch.api.taskerplugin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -82,6 +87,7 @@ public class EditActivity extends AbstractPluginActivity {
     private Apartment currentApartment;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
     private android.widget.Button buttonSave;
+    private EditText editText_apartment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +162,23 @@ public class EditActivity extends AbstractPluginActivity {
             StatusMessageHandler.showErrorMessage(this, e);
         }
 
+        ImageButton imageButtonSwitchApartment = (ImageButton) findViewById(R.id.imageButton_switchApartment);
+        imageButtonSwitchApartment.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonSwitchApartment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (View.VISIBLE == spinner_apartment.getVisibility()) {
+                    spinner_apartment.setVisibility(View.GONE);
+                    editText_apartment.setVisibility(View.VISIBLE);
+                } else {
+                    spinner_apartment.setVisibility(View.VISIBLE);
+                    editText_apartment.setVisibility(View.GONE);
+                }
+            }
+        });
+
         spinner_apartment = (Spinner) findViewById(R.id.spinner_apartment);
         ArrayAdapter<String> apartmentSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, apartmentNames);
         apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -174,6 +197,8 @@ public class EditActivity extends AbstractPluginActivity {
         };
         spinner_apartment.setOnTouchListener(spinnerInteractionListener);
         spinner_apartment.setOnItemSelectedListener(spinnerInteractionListener);
+
+        editText_apartment = (EditText) findViewById(R.id.editText_apartment);
 
         // Receiver Action
         linearLayoutReceiverAction = (LinearLayout) findViewById(R.id.linearLayout_receiver_action);
@@ -458,8 +483,9 @@ public class EditActivity extends AbstractPluginActivity {
                 Log.d(spinner_receiver_action_button.getSelectedItem().toString());
 
                 Room selectedRoom = getSelectedRoom();
-                Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver_action_receiver.getSelectedItem()
-                        .toString());
+                Receiver selectedReceiver =
+                        selectedRoom.getReceiver(
+                                spinner_receiver_action_receiver.getSelectedItem().toString());
                 Button selectedButton = null;
                 for (Button button : selectedReceiver.getButtons()) {
                     if (button.getName().equals(spinner_receiver_action_button.getSelectedItem().toString())) {
@@ -524,51 +550,49 @@ public class EditActivity extends AbstractPluginActivity {
 
     @Override
     public void finish() {
-        if (!isCanceled()) {
+        if (!isCanceled() && checkValidity()) {
             Action action = getCurrentSelection();
 
             final Intent resultIntent = new Intent();
 
-            /*
-             * This extra is the data to ourselves: either for the Activity or the BroadcastReceiver. Note
-             * that anything placed in this Bundle must be available to Locale's class loader. So storing
-             * String, int, and other standard objects will work just fine. Parcelable objects are not
-             * acceptable, unless they also implement Serializable. Serializable objects must be standard
-             * Android platform objects (A Serializable class private to this plug-in's APK cannot be
-             * stored in the Bundle, as Locale's classloader will not recognize it).
-             */
+//          This extra is the data to ourselves: either for the Activity or the BroadcastReceiver. Note
+//          that anything placed in this Bundle must be available to Locale's class loader. So storing
+//          String, int, and other standard objects will work just fine. Parcelable objects are not
+//          acceptable, unless they also implement Serializable. Serializable objects must be standard
+//          Android platform objects (A Serializable class private to this plug-in's APK cannot be
+//          stored in the Bundle, as Locale's classloader will not recognize it).
             final Bundle resultBundle = new Bundle();
             if (action instanceof ReceiverAction) {
-                resultBundle.putLong(ApiConstants.KEY_APARTMENT, currentApartment.getId());
-                resultBundle.putLong(ApiConstants.KEY_ROOM, ((ReceiverAction) action).getRoom().getId());
-                resultBundle.putLong(ApiConstants.KEY_RECEIVER, ((ReceiverAction) action).getReceiver().getId());
-                resultBundle.putLong(ApiConstants.KEY_BUTTON, ((ReceiverAction) action).getButton().getId());
+                resultBundle.putString(ApiConstants.KEY_APARTMENT, currentApartment.getName());
+                resultBundle.putString(ApiConstants.KEY_ROOM, ((ReceiverAction) action).getRoom().getName());
+                resultBundle.putString(ApiConstants.KEY_RECEIVER, ((ReceiverAction) action).getReceiver().getName());
+                resultBundle.putString(ApiConstants.KEY_BUTTON, ((ReceiverAction) action).getButton().getName());
             } else if (action instanceof RoomAction) {
-                resultBundle.putLong(ApiConstants.KEY_APARTMENT, currentApartment.getId());
-                resultBundle.putLong(ApiConstants.KEY_ROOM, ((RoomAction) action).getRoom().getId());
+                resultBundle.putString(ApiConstants.KEY_APARTMENT, currentApartment.getName());
+                resultBundle.putString(ApiConstants.KEY_ROOM, ((RoomAction) action).getRoom().getName());
                 resultBundle.putString(ApiConstants.KEY_BUTTON, ((RoomAction) action).getButtonName());
             } else if (action instanceof SceneAction) {
-                resultBundle.putLong(ApiConstants.KEY_APARTMENT, currentApartment.getId());
-                resultBundle.putLong(ApiConstants.KEY_SCENE, ((SceneAction) action).getScene().getId());
+                resultBundle.putString(ApiConstants.KEY_APARTMENT, currentApartment.getName());
+                resultBundle.putString(ApiConstants.KEY_SCENE, ((SceneAction) action).getScene().getName());
+            }
+
+            if (TaskerPlugin.Setting.hostSupportsOnFireVariableReplacement(this)) {
+                TaskerPlugin.Setting.setVariableReplaceKeys(resultBundle,
+                        new String[]{
+                                ApiConstants.KEY_APARTMENT,
+                                ApiConstants.KEY_ROOM,
+                                ApiConstants.KEY_RECEIVER,
+                                ApiConstants.KEY_BUTTON,
+                                ApiConstants.KEY_SCENE});
             }
 
             resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
 
-            /*
-             * The blurb is concise status text to be displayed in the host's UI.
-             */
+            // The blurb is concise status text to be displayed in the host's UI.
             final String blurb = currentApartment.getName() + ": " + action.toString();
             resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB, blurb);
 
-            if (checkValidity()) {
-                setResult(RESULT_OK, resultIntent);
-            }
-
-//          final String message = ((EditText) findViewById(android.R.id.text1)).getText().toString();
-
-//          final Bundle resultBundle =
-//              PluginBundleManager.generateBundle(getApplicationContext(), message);
-
+            setResult(RESULT_OK, resultIntent);
         }
 
         super.finish();

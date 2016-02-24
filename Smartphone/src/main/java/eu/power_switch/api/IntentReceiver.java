@@ -82,8 +82,9 @@ public class IntentReceiver extends BroadcastReceiver {
 //            if (extras != null && extras.containsKey(ApiConstants.KEY_APARTMENT)) {
 //                // NOTE: Every action needs the Apartment:<ApartmentName> Extra (and some other)
 
-            if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras
-                    .containsKey(ApiConstants.KEY_BUTTON)) {
+            if (extras.containsKey(ApiConstants.KEY_ROOM) &&
+                    extras.containsKey(ApiConstants.KEY_RECEIVER) &&
+                    extras.containsKey(ApiConstants.KEY_BUTTON)) {
                 // Expects the following Extras:
                 // Room:<RoomName>
                 // Receiver:<ReceiverName>
@@ -97,11 +98,12 @@ public class IntentReceiver extends BroadcastReceiver {
                     ActionHandler.execute(context, receiver, button);
                 } catch (Exception e) {
                     Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
                 }
 
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
+                    extras.containsKey(ApiConstants.KEY_ROOM) &&
+                    extras.containsKey(ApiConstants.KEY_BUTTON)) {
                 // Expects the following Extras:
                 // Room:<RoomName>
                 // Button:<ButtonName>
@@ -117,10 +119,10 @@ public class IntentReceiver extends BroadcastReceiver {
                     ActionHandler.execute(context, room, buttonName);
                 } catch (Exception e) {
                     Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
                 }
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
+                    extras.containsKey(ApiConstants.KEY_SCENE)) {
                 // Expects the following Extras:
                 // Scene:<SceneName>
 
@@ -131,8 +133,7 @@ public class IntentReceiver extends BroadcastReceiver {
                     ActionHandler.execute(context, scene);
                 } catch (Exception e) {
                     Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
                 }
 //                }
             } else {

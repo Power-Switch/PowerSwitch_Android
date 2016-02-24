@@ -21,20 +21,8 @@ package eu.power_switch.obj;
 /**
  * Created by Markus on 28.08.2015.
  */
-public class UniversalButton {
+public class UniversalButton extends Button {
 
-    /**
-     * ID of this UniversalButton
-     */
-    private Long id;
-    /**
-     * ID of Receiver this UniversalButton is associated with
-     */
-    private Long receiverId;
-    /**
-     * Name
-     */
-    private String name;
     /**
      * Network signal
      */
@@ -49,37 +37,8 @@ public class UniversalButton {
      * @param signal     Network signal that will be sent on button press
      */
     public UniversalButton(Long id, String name, Long receiverId, String signal) {
-        this.id = id;
-        this.name = name;
-        this.receiverId = receiverId;
+        super(id, name, receiverId);
         this.signal = signal;
-    }
-
-    /**
-     * Gets ID of this UniversalButton
-     *
-     * @return ID
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Gets Name of this UniversalButton
-     *
-     * @return Name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets Receiver ID that this UniversalButton is associated with
-     *
-     * @return ID of parent Receiver
-     */
-    public Long getReceiverId() {
-        return receiverId;
     }
 
     /**

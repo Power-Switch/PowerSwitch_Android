@@ -53,6 +53,13 @@ public class WearableConstants {
     public static final String SCENE_ID_DATAMAP_KEY = "SCENE_ID_DATAMAP_KEY";
     public static final String SCENE_NAME_DATAMAP_KEY = "SCENE_NAME_DATAMAP_KEY";
 
+    // Action Intent Constants
+    public static final String APARTMENT_ID_KEY = "[ApartmentId]";
+    public static final String ROOM_ID_KEY = "[RoomId]";
+    public static final String RECEIVER_ID_KEY = "[ReceiverId]";
+    public static final String BUTTON_ID_KEY = "[ButtonId]";
+    public static final String SCENE_ID_KEY = "[SceneId]";
+
     /**
      * Private Constructor
      */
