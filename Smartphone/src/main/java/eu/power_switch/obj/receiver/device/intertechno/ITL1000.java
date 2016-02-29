@@ -23,13 +23,14 @@ import android.content.Context;
 import java.util.Random;
 
 import eu.power_switch.R;
-import eu.power_switch.obj.Button;
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
@@ -48,8 +49,8 @@ public class ITL1000 extends Receiver implements AutoPairReceiver {
 
     public ITL1000(Context context, Long id, String name, long seed, Long roomId) {
         super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
-        buttons.add(new Button(Button.BUTTON_UP_ID, context.getString(R.string.up), id));
-        buttons.add(new Button(Button.BUTTON_DOWN_ID, context.getString(R.string.down), id));
+        buttons.add(new Button(DatabaseConstants.BUTTON_UP_ID, context.getString(R.string.up), id));
+        buttons.add(new Button(DatabaseConstants.BUTTON_DOWN_ID, context.getString(R.string.down), id));
         if (seed == -1) {
             // init seed for this receiver instance, to always generate the same codes from now on
             Random ran = new Random();

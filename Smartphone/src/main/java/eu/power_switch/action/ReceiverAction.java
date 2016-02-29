@@ -21,8 +21,8 @@ package eu.power_switch.action;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 
 /**

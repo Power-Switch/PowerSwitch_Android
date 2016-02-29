@@ -24,7 +24,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.obj.Button;
+import eu.power_switch.obj.button.Button;
+import eu.power_switch.obj.button.OffButton;
+import eu.power_switch.obj.button.OnButton;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
@@ -77,8 +79,8 @@ public class AB440ID extends Receiver implements DipReceiver {
             dipList.add(new DipSwitch("8", false));
         }
 
-        buttons.add(new Button(Button.BUTTON_ON_ID, context.getString(R.string.on), id));
-        buttons.add(new Button(Button.BUTTON_OFF_ID, context.getString(R.string.off), id));
+        buttons.add(new OnButton(context, id));
+        buttons.add(new OffButton(context, id));
     }
 
     public List<String> getDipNames() {

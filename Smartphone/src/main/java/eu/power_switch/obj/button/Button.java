@@ -16,12 +16,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj;
+package eu.power_switch.obj.button;
 
 import android.content.Context;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -29,15 +30,6 @@ import eu.power_switch.shared.log.Log;
  * It is always associated with a receiverID.
  */
 public class Button {
-
-    /**
-     * ID Constants used to identify static Buttons (not used for Universal Buttons)
-     */
-    public static final long BUTTON_ON_ID = -10; // negative values to prevent database conflicts
-    public static final long BUTTON_OFF_ID = BUTTON_ON_ID - 1;
-    public static final long BUTTON_UP_ID = BUTTON_ON_ID - 2;
-    public static final long BUTTON_STOP_ID = BUTTON_ON_ID - 3;
-    public static final long BUTTON_DOWN_ID = BUTTON_ON_ID - 4;
 
     /**
      * ID of this Button
@@ -75,15 +67,15 @@ public class Button {
      */
     public static String getName(Context context, Long buttonId) {
         try {
-            if (buttonId == BUTTON_ON_ID) {
+            if (buttonId == DatabaseConstants.BUTTON_ON_ID) {
                 return context.getString(R.string.on);
-            } else if (buttonId == BUTTON_OFF_ID) {
+            } else if (buttonId == DatabaseConstants.BUTTON_OFF_ID) {
                 return context.getString(R.string.off);
-            } else if (buttonId == BUTTON_UP_ID) {
+            } else if (buttonId == DatabaseConstants.BUTTON_UP_ID) {
                 return context.getString(R.string.up);
-            } else if (buttonId == BUTTON_STOP_ID) {
+            } else if (buttonId == DatabaseConstants.BUTTON_STOP_ID) {
                 return context.getString(R.string.stop);
-            } else if (buttonId == BUTTON_DOWN_ID) {
+            } else if (buttonId == DatabaseConstants.BUTTON_DOWN_ID) {
                 return context.getString(R.string.down);
             } else {
                 return DatabaseHandler.getButton(buttonId).getName();

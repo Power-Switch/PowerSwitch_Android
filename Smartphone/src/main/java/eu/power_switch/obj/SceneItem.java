@@ -18,6 +18,7 @@
 
 package eu.power_switch.obj;
 
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 
 /**

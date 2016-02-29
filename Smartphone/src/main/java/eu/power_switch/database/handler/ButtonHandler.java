@@ -19,7 +19,8 @@
 package eu.power_switch.database.handler;
 
 import eu.power_switch.R;
-import eu.power_switch.obj.Button;
+import eu.power_switch.obj.button.Button;
+import eu.power_switch.shared.constants.DatabaseConstants;
 
 /**
  * Provides database methods for managing Buttons
@@ -34,16 +35,16 @@ abstract class ButtonHandler {
      * @return Button
      */
     protected static Button getButton(Long id, Long receiverId) throws Exception {
-        if (id == Button.BUTTON_ON_ID) {
-            return new Button(Button.BUTTON_ON_ID, DatabaseHandler.context.getString(R.string.on), receiverId);
-        } else if (id == Button.BUTTON_OFF_ID) {
-            return new Button(Button.BUTTON_OFF_ID, DatabaseHandler.context.getString(R.string.off), receiverId);
-        } else if (id == Button.BUTTON_UP_ID) {
-            return new Button(Button.BUTTON_UP_ID, DatabaseHandler.context.getString(R.string.up), receiverId);
-        } else if (id == Button.BUTTON_STOP_ID) {
-            return new Button(Button.BUTTON_STOP_ID, DatabaseHandler.context.getString(R.string.stop), receiverId);
-        } else if (id == Button.BUTTON_DOWN_ID) {
-            return new Button(Button.BUTTON_DOWN_ID, DatabaseHandler.context.getString(R.string.down), receiverId);
+        if (id == DatabaseConstants.BUTTON_ON_ID) {
+            return new Button(DatabaseConstants.BUTTON_ON_ID, DatabaseHandler.context.getString(R.string.on), receiverId);
+        } else if (id == DatabaseConstants.BUTTON_OFF_ID) {
+            return new Button(DatabaseConstants.BUTTON_OFF_ID, DatabaseHandler.context.getString(R.string.off), receiverId);
+        } else if (id == DatabaseConstants.BUTTON_UP_ID) {
+            return new Button(DatabaseConstants.BUTTON_UP_ID, DatabaseHandler.context.getString(R.string.up), receiverId);
+        } else if (id == DatabaseConstants.BUTTON_STOP_ID) {
+            return new Button(DatabaseConstants.BUTTON_STOP_ID, DatabaseHandler.context.getString(R.string.stop), receiverId);
+        } else if (id == DatabaseConstants.BUTTON_DOWN_ID) {
+            return new Button(DatabaseConstants.BUTTON_DOWN_ID, DatabaseHandler.context.getString(R.string.down), receiverId);
         } else {
             return UniversalButtonHandler.getUniversalButton(id);
         }

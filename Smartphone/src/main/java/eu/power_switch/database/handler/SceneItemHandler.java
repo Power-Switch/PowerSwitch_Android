@@ -27,11 +27,12 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.table.scene.SceneItemTable;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -156,15 +157,15 @@ abstract class SceneItemHandler {
      * @return Name of active Button
      */
     private static String getActiveButtonName(Long buttonId) throws Exception {
-        if (buttonId == Button.BUTTON_ON_ID) {
+        if (buttonId == DatabaseConstants.BUTTON_ON_ID) {
             return DatabaseHandler.context.getString(R.string.on);
-        } else if (buttonId == Button.BUTTON_OFF_ID) {
+        } else if (buttonId == DatabaseConstants.BUTTON_OFF_ID) {
             return DatabaseHandler.context.getString(R.string.off);
-        } else if (buttonId == Button.BUTTON_UP_ID) {
+        } else if (buttonId == DatabaseConstants.BUTTON_UP_ID) {
             return DatabaseHandler.context.getString(R.string.up);
-        } else if (buttonId == Button.BUTTON_STOP_ID) {
+        } else if (buttonId == DatabaseConstants.BUTTON_STOP_ID) {
             return DatabaseHandler.context.getString(R.string.stop);
-        } else if (buttonId == Button.BUTTON_DOWN_ID) {
+        } else if (buttonId == DatabaseConstants.BUTTON_DOWN_ID) {
             return DatabaseHandler.context.getString(R.string.down);
         } else {
             UniversalButton button = UniversalButtonHandler.getUniversalButton(buttonId);

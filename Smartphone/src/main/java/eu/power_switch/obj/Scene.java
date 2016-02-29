@@ -20,6 +20,7 @@ package eu.power_switch.obj;
 
 import java.util.ArrayList;
 
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 
 /**

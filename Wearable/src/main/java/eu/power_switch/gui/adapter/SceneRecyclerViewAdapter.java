@@ -80,7 +80,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     VibrationHandler.vibrate(context, WearablePreferencesHandler.getVibrationDuration());
                 }
 
-                String actionString = DataApiHandler.buildSceneActionString(scene.getName());
+                String actionString = DataApiHandler.buildSceneActionString(scene);
                 dataApiHandler.sendSceneActionTrigger(actionString);
             }
         });

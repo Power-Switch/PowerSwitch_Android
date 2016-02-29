@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.log.Log;
 

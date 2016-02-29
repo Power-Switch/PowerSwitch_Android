@@ -36,9 +36,9 @@ import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
-import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 

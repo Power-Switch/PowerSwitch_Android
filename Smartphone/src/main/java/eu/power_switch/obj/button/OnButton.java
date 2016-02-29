@@ -16,39 +16,25 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj;
+package eu.power_switch.obj.button;
 
-import eu.power_switch.obj.button.Button;
+import android.content.Context;
+
+import eu.power_switch.R;
+import eu.power_switch.shared.constants.DatabaseConstants;
 
 /**
- * Created by Markus on 28.08.2015.
+ * Created by Markus on 29.02.2016.
  */
-public class UniversalButton extends Button {
+public class OnButton extends Button {
 
     /**
-     * Network signal
-     */
-    private String signal;
-
-    /**
-     * Default Constructor
+     * Constructor
      *
-     * @param id         ID of this UniversalButton
-     * @param name       Name
-     * @param receiverId ID of Receiver this UniversalButton is associated with
-     * @param signal     Network signal that will be sent on button press
+     * @param context    any suitable context
+     * @param receiverId ID of Receiver that this Button is associated with
      */
-    public UniversalButton(Long id, String name, Long receiverId, String signal) {
-        super(id, name, receiverId);
-        this.signal = signal;
-    }
-
-    /**
-     * Gets network signal of this UniversalButton
-     *
-     * @return network signal
-     */
-    public String getSignal() {
-        return signal;
+    public OnButton(Context context, Long receiverId) {
+        super(DatabaseConstants.BUTTON_ON_ID, context.getString(R.string.on), receiverId);
     }
 }

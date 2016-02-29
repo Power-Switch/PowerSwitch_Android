@@ -69,38 +69,46 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout_apartment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:layout_weight="1"
-                android:text="@string/apartment"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/imageButton_switchApartment"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:layout_weight="1"
+                    android:text="@string/apartment"
+                    android:textColor="@color/color_light_blue_a700"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_switchApartment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/spinner_apartment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="@dimen/timer_action_spinner_height"/>
+
+            <EditText
+                android:id="@+id/editText_apartment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinner_apartment"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/timer_action_spinner_height"/>
-
-        <EditText
-            android:id="@+id/editText_apartment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"/>
-
         <LinearLayout
-            android:id="@+id/linearLayout_receiver_action"
+            android:id="@+id/linearLayout_room"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -113,9 +121,23 @@
                 android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
-                android:id="@+id/spinner_receiver_action_room"
+                android:id="@+id/spinner_room"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/timer_action_spinner_height"/>
+
+            <EditText
+                android:id="@+id/editText_room"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_receiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -125,9 +147,23 @@
                 android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
-                android:id="@+id/spinner_receiver_action_receiver"
+                android:id="@+id/spinner_receiver"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/timer_action_spinner_height"/>
+
+            <EditText
+                android:id="@+id/editText_receiver"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -137,51 +173,23 @@
                 android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
-                android:id="@+id/spinner_receiver_action_button"
+                android:id="@+id/spinner_button"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/timer_action_spinner_height"/>
+
+            <EditText
+                android:id="@+id/editText_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_room_action"
+            android:id="@+id/linearLayout_scene"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/room"
-                android:textColor="@color/color_light_blue_a700"/>
-
-            <Spinner
-                android:id="@+id/spinner_room_action_room"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/button"
-                android:textColor="@color/color_light_blue_a700"/>
-
-            <Spinner
-                android:id="@+id/spinner_room_action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout_scene_action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -191,9 +199,15 @@
                 android:textColor="@color/color_light_blue_a700"/>
 
             <Spinner
-                android:id="@+id/spinner_scene_action_scene"
+                android:id="@+id/spinner_scene"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/timer_action_spinner_height"/>
+
+            <EditText
+                android:id="@+id/editText_scene"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

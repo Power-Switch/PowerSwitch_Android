@@ -63,9 +63,9 @@ public class DataApiHandler {
                 WearableConstants.BUTTON_ID_KEY + button.getId() + ";;";
     }
 
-    public static String buildRoomActionString(Room room, Button button) {
+    public static String buildRoomActionString(Room room, Long buttonId) {
         return WearableConstants.ROOM_ID_KEY + room.getId() +
-                WearableConstants.BUTTON_ID_KEY + button.getId() + ";;";
+                WearableConstants.BUTTON_ID_KEY + buttonId + ";;";
     }
 
     public static String buildSceneActionString(Scene scene) {

@@ -20,8 +20,8 @@ package eu.power_switch.obj.receiver.device.brennenstuhl;
 
 import android.content.Context;
 
-import eu.power_switch.R;
-import eu.power_switch.obj.Button;
+import eu.power_switch.obj.button.OffButton;
+import eu.power_switch.obj.button.OnButton;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
@@ -35,8 +35,8 @@ public class RC3600 extends Receiver implements AutoPairReceiver {
 
     public RC3600(Context context, Long id, String name, long seed, Long roomId) {
         super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
-        buttons.add(new Button(Button.BUTTON_ON_ID, context.getString(R.string.on), id));
-        buttons.add(new Button(Button.BUTTON_OFF_ID, context.getString(R.string.off), id));
+        buttons.add(new OnButton(context, id));
+        buttons.add(new OffButton(context, id));
         this.seed = seed;
     }
 

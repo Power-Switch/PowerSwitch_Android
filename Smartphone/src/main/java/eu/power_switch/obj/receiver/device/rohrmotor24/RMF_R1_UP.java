@@ -23,7 +23,7 @@ import android.content.Context;
 import java.util.Random;
 
 import eu.power_switch.R;
-import eu.power_switch.obj.Button;
+import eu.power_switch.obj.button.UpButton;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
@@ -51,7 +51,7 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
 
     public RMF_R1_UP(Context context, Long id, String name, long seed, Long roomId) {
         super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
-        buttons.add(new Button(Button.BUTTON_UP_ID, context.getString(R.string.up), id));
+        buttons.add(new UpButton(context, id));
         if (seed == -1) {
             // init seed for this receiver instance, to always generate the same codes from now on
             Random ran = new Random();

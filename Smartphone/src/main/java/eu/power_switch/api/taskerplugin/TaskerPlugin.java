@@ -204,10 +204,6 @@ public class TaskerPlugin {
 // added Setting.getHintTimeoutMS()
 // added Host.addHintTimeoutMS()
 
-    public final static String VARIABLE_PREFIX = "%";
-    public final static String VARIABLE_NAME_MATCH_EXPRESSION =
-            VARIABLE_PREFIX + "+" +
-                    VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION;
     /**
      * @see Setting#hostSupportsVariableReturn(Bundle)
      */
@@ -222,6 +218,9 @@ public class TaskerPlugin {
     public final static int EXTRA_HOST_CAPABILITY_SETTING_FIRE_VARIABLE_REPLACEMENT = 8;
     public final static int EXTRA_HOST_CAPABILITY_SETTING_SYNCHRONOUS_EXECUTION = 32;
     public final static int EXTRA_HOST_CAPABILITY_REQUEST_QUERY_DATA_PASS_THROUGH = 64;
+    public final static String VARIABLE_PREFIX = "%";
+    public final static String VARIABLE_NAME_MATCH_EXPRESSION =
+            VARIABLE_PREFIX + "+" + VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION;
     private final static String TAG = "TaskerPlugin";
     private final static String BASE_KEY = "net.dinglisch.android.tasker";
     /**

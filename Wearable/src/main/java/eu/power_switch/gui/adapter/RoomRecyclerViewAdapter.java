@@ -39,6 +39,7 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
+import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
@@ -117,7 +118,17 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 }
 
                 android.widget.Button button = (android.widget.Button) v;
-                String actionString = DataApiHandler.buildRoomActionString(room.getName(), button.getText().toString());
+
+                long buttonId;
+                if (button.getId() == R.id.button_AllOn) {
+                    buttonId = DatabaseConstants.BUTTON_ON_ID;
+                } else if (button.getId() == R.id.button_AllOff) {
+                    buttonId = DatabaseConstants.BUTTON_OFF_ID;
+                } else {
+                    buttonId = -1;
+                }
+
+                String actionString = DataApiHandler.buildRoomActionString(room, buttonId);
                 dataApiHandler.sendRoomActionTrigger(actionString);
 
                 for (Receiver receiver : room.getReceivers()) {
@@ -180,8 +191,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         }
 
                         // Send Action to Smartphone app
-                        String actionString = DataApiHandler.buildReceiverActionString(room.getName(),
-                                receiver.getName(), button.getName());
+                        String actionString = DataApiHandler.buildReceiverActionString(room,
+                                receiver, button);
                         dataApiHandler.sendReceiverActionTrigger(actionString);
 
                         receiver.setLastActivatedButtonId(button.getId());
