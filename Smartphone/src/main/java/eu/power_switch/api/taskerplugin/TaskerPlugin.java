@@ -219,16 +219,6 @@ public class TaskerPlugin {
     public final static int EXTRA_HOST_CAPABILITY_SETTING_SYNCHRONOUS_EXECUTION = 32;
     public final static int EXTRA_HOST_CAPABILITY_REQUEST_QUERY_DATA_PASS_THROUGH = 64;
     public final static String VARIABLE_PREFIX = "%";
-    public final static String VARIABLE_NAME_MATCH_EXPRESSION =
-            VARIABLE_PREFIX + "+" + VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION;
-    private final static String TAG = "TaskerPlugin";
-    private final static String BASE_KEY = "net.dinglisch.android.tasker";
-    /**
-     * Action that the EditActivity for an event plugin should be launched by
-     */
-    public final static String ACTION_EDIT_EVENT = BASE_KEY + ".ACTION_EDIT_EVENT";
-    private final static String EXTRAS_PREFIX = BASE_KEY + ".extras.";
-    private final static int FIRST_ON_FIRE_VARIABLES_TASKER_VERSION = 80;
     // when generating non-repeating integers, look this far back for repeats
     // see getPositiveNonRepeatingRandomInteger()
     private final static int RANDOM_HISTORY_SIZE = 100;
@@ -237,6 +227,16 @@ public class TaskerPlugin {
     private final static String VARIABLE_NAME_END_EXPRESSION = "[\\w0-9&&[^_]]";
     public final static String VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION =
             VARIABLE_NAME_START_EXPRESSION + VARIABLE_NAME_MID_EXPRESSION + VARIABLE_NAME_END_EXPRESSION;
+    public final static String VARIABLE_NAME_MATCH_EXPRESSION = VARIABLE_PREFIX + "+" +
+            VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION;
+    private final static String TAG = "TaskerPlugin";
+    private final static String BASE_KEY = "net.dinglisch.android.tasker";
+    /**
+     * Action that the EditActivity for an event plugin should be launched by
+     */
+    public final static String ACTION_EDIT_EVENT = BASE_KEY + ".ACTION_EDIT_EVENT";
+    private final static String EXTRAS_PREFIX = BASE_KEY + ".extras.";
+    private final static int FIRST_ON_FIRE_VARIABLES_TASKER_VERSION = 80;
     /**
      * @see #addVariableBundle(Bundle, Bundle)
      * @see Host#getVariablesBundle(Bundle)
@@ -307,20 +307,23 @@ public class TaskerPlugin {
 
         boolean validFlag = false;
 
-        if (varName == null)
+        if (varName == null) {
             Log.d(TAG, "variableNameValid: null name");
-        else {
-            if (VARIABLE_NAME_MATCH_PATTERN == null)
+        } else {
+            if (VARIABLE_NAME_MATCH_PATTERN == null) {
                 VARIABLE_NAME_MATCH_PATTERN = Pattern.compile(VARIABLE_NAME_MATCH_EXPRESSION, 0);
+            }
 
             if (VARIABLE_NAME_MATCH_PATTERN.matcher(varName).matches()) {
 
-                if (variableNameIsLocal(varName))
+                if (variableNameIsLocal(varName)) {
                     validFlag = true;
-                else
+                } else {
                     Log.d(TAG, "variableNameValid: name not local: " + varName);
-            } else
+                }
+            } else {
                 Log.d(TAG, "variableNameValid: invalid name: " + varName);
+            }
         }
 
         return validFlag;
@@ -340,8 +343,9 @@ public class TaskerPlugin {
 
         String[] relevantVars = (String[]) getBundleValueSafe(fromHostIntentExtras, BUNDLE_KEY_RELEVANT_VARIABLES, String[].class, "getRelevantVariableList");
 
-        if (relevantVars == null)
+        if (relevantVars == null) {
             relevantVars = new String[0];
+        }
 
         return relevantVars;
     }
@@ -373,12 +377,14 @@ public class TaskerPlugin {
         if (b != null) {
             if (b.containsKey(key)) {
                 Object obj = b.get(key);
-                if (obj == null)
+                if (obj == null) {
                     Log.w(TAG, funcName + ": " + key + ": null value");
-                else if (obj.getClass() != expectedClass)
-                    Log.w(TAG, funcName + ": " + key + ": expected " + expectedClass.getClass().getName() + ", got " + obj.getClass().getName());
-                else
+                } else if (obj.getClass() != expectedClass) {
+                    Log.w(TAG, funcName + ": " + key + ": expected " + expectedClass.getClass()
+                            .getName() + ", got " + obj.getClass().getName());
+                } else {
                     value = obj;
+                }
             }
         }
         return value;
@@ -407,8 +413,9 @@ public class TaskerPlugin {
         if (pm != null) {
             try {
                 PackageInfo pi = pm.getPackageInfo(packageName, 0);
-                if (pi != null)
+                if (pi != null) {
                     code = pi.versionCode;
+                }
             } catch (Exception e) {
                 Log.e(TAG, "getPackageVersionCode: exception getting package info");
             }
@@ -425,16 +432,15 @@ public class TaskerPlugin {
         for (int x = 0; x < length; x++) {
             char ch = varName.charAt(x);
 
-            if (Character.isUpperCase(ch))
+            if (Character.isUpperCase(ch)) {
                 return false;
-            else if (Character.isDigit(ch))
+            } else if (Character.isDigit(ch)) {
                 digitCount++;
+            }
         }
 
-        if (digitCount == (varName.length() - 1))
-            return false;
+        return digitCount != (varName.length() - 1);
 
-        return true;
     }
 
     /**
@@ -450,8 +456,9 @@ public class TaskerPlugin {
             sr = new SecureRandom();
             lastRandomsSeen = new int[RANDOM_HISTORY_SIZE];
 
-            for (int x = 0; x < lastRandomsSeen.length; x++)
+            for (int x = 0; x < lastRandomsSeen.length; x++) {
                 lastRandomsSeen[x] = -1;
+            }
         }
 
         int toReturn;
@@ -604,9 +611,9 @@ public class TaskerPlugin {
          * @param timeoutMS
          */
         public static void requestTimeoutMS(Intent intentToHost, int timeoutMS) {
-            if (timeoutMS < 0)
+            if (timeoutMS < 0) {
                 Log.w(TAG, "requestTimeoutMS: ignoring negative timeout (" + timeoutMS + ")");
-            else {
+            } else {
                 if (
                         (timeoutMS > REQUESTED_TIMEOUT_MS_MAX) &&
                                 (timeoutMS != REQUESTED_TIMEOUT_MS_NEVER)
@@ -635,17 +642,19 @@ public class TaskerPlugin {
 
                 for (String keyName : listOfKeyNames) {
 
-                    if (keyName.contains(" "))
+                    if (keyName.contains(" ")) {
                         Log.w(TAG, "setVariableReplaceKeys: ignoring bad keyName containing space: " + keyName);
-                    else {
-                        if (builder.length() > 0)
+                    } else {
+                        if (builder.length() > 0) {
                             builder.append(' ');
+                        }
 
                         builder.append(keyName);
                     }
 
-                    if (builder.length() > 0)
+                    if (builder.length() > 0) {
                         resultBundleToHost.putString(BUNDLE_KEY_VARIABLE_REPLACE_STRINGS, builder.toString());
+                    }
                 }
             }
         }
@@ -699,8 +708,9 @@ public class TaskerPlugin {
 
                         completionIntent.putExtra(EXTRA_RESULT_CODE, resultCode);
 
-                        if (vars != null)
+                        if (vars != null) {
                             completionIntent.putExtra(EXTRA_VARIABLES_BUNDLE, vars);
+                        }
 
                         context.sendBroadcast(completionIntent);
 
@@ -733,8 +743,9 @@ public class TaskerPlugin {
 
                 Integer val = (Integer) getBundleValueSafe(hintsBundle, BUNDLE_KEY_HINT_TIMEOUT_MS, Integer.class, "getHintTimeoutMS");
 
-                if (val != null)
+                if (val != null) {
                     timeoutMS = val;
+                }
             }
 
             return timeoutMS;
@@ -872,8 +883,9 @@ public class TaskerPlugin {
                         "retrievePassThroughMessageID"
                 );
 
-                if (id != null)
+                if (id != null) {
                     toReturn = id;
+                }
             }
 
             return toReturn;
@@ -884,9 +896,9 @@ public class TaskerPlugin {
 
             Bundle passThroughBundle;
 
-            if (requestQueryIntent.hasExtra(EXTRA_REQUEST_QUERY_PASS_THROUGH_DATA))
+            if (requestQueryIntent.hasExtra(EXTRA_REQUEST_QUERY_PASS_THROUGH_DATA)) {
                 passThroughBundle = requestQueryIntent.getBundleExtra(EXTRA_REQUEST_QUERY_PASS_THROUGH_DATA);
-            else {
+            } else {
                 passThroughBundle = new Bundle();
                 requestQueryIntent.putExtra(EXTRA_REQUEST_QUERY_PASS_THROUGH_DATA, passThroughBundle);
             }
@@ -995,8 +1007,9 @@ public class TaskerPlugin {
 
             String[] replaceKeys = null;
 
-            if (spec != null)
+            if (spec != null) {
                 replaceKeys = spec.split(" ");
+            }
 
             return replaceKeys;
         }
