@@ -204,6 +204,8 @@ public class TaskerPlugin {
 // added Setting.getHintTimeoutMS()
 // added Host.addHintTimeoutMS()
 
+    //@formatter:off
+
     /**
      * @see Setting#hostSupportsVariableReturn(Bundle)
      */
@@ -225,7 +227,7 @@ public class TaskerPlugin {
     private final static String VARIABLE_NAME_START_EXPRESSION = "[\\w&&[^_]]";
     private final static String VARIABLE_NAME_MID_EXPRESSION = "[\\w0-9]+";
     private final static String VARIABLE_NAME_END_EXPRESSION = "[\\w0-9&&[^_]]";
-    public final static String VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION =
+    private final static String VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION =
             VARIABLE_NAME_START_EXPRESSION + VARIABLE_NAME_MID_EXPRESSION + VARIABLE_NAME_END_EXPRESSION;
     public final static String VARIABLE_NAME_MATCH_EXPRESSION = VARIABLE_PREFIX + "+" +
             VARIABLE_NAME_MAIN_PART_MATCH_EXPRESSION;
@@ -277,6 +279,8 @@ public class TaskerPlugin {
     private static int[] lastRandomsSeen = null;
     private static int randomInsertPointer = 0;
     private static SecureRandom sr = null;
+
+    //@formatter:on
 
     public static boolean hostSupportsRelevantVariables(Bundle extrasFromHost) {
         return hostSupports(extrasFromHost, EXTRA_HOST_CAPABILITY_RELEVANT_VARIABLES);
@@ -971,7 +975,7 @@ public class TaskerPlugin {
          * @param toPlugin  the intent we're sending
          * @param timeoutMS the hosts timeout setting for the action. Note that this may differ from
          *                  that which the plugin requests.
-         * @see #REQUESTED_TIMEOUT_MS_NONE, REQUESTED_TIMEOUT_MS_MAX, REQUESTED_TIMEOUT_MS_NEVER
+         * @see \REQUESTED_TIMEOUT_MS_NONE, REQUESTED_TIMEOUT_MS_MAX, REQUESTED_TIMEOUT_MS_NEVER
          */
         public static void addHintTimeoutMS(Intent toPlugin, int timeoutMS) {
             getHintsBundle(toPlugin, "addHintTimeoutMS").putInt(BUNDLE_KEY_HINT_TIMEOUT_MS, timeoutMS);

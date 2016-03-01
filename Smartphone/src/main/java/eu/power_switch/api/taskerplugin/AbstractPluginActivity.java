@@ -45,6 +45,7 @@ public abstract class AbstractPluginActivity extends Activity {
      * There is no need to save/restore this field's state.
      */
     private boolean mIsCancelled = false;
+    private Menu optionsMenu;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -56,6 +57,43 @@ public abstract class AbstractPluginActivity extends Activity {
             setTitle(BreadCrumber.generateBreadcrumb(getApplicationContext(), getIntent(),
                     getString(R.string.powerswitch_plugin_name)));
         }
+    }
+
+    @Override
+    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
+        final int id = item.getItemId();
+
+        if (android.R.id.home == id) {
+            finish();
+            return true;
+        } else if (R.id.twofortyfouram_locale_menu_dontsave == id) {
+            mIsCancelled = true;
+            finish();
+            return true;
+        } else if (R.id.twofortyfouram_locale_menu_save == id) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        optionsMenu = menu;
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.twofortyfouram_locale_help_save_dontsave, menu);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            setupActionBarApi11();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            setupActionBarApi14();
+        }
+
+        return true;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -71,23 +109,6 @@ public abstract class AbstractPluginActivity extends Activity {
         if (null != callingApplicationLabel) {
             setTitle(callingApplicationLabel);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        getMenuInflater().inflate(R.menu.twofortyfouram_locale_help_save_dontsave, menu);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            setupActionBarApi11();
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            setupActionBarApi14();
-        }
-
-        return true;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -115,25 +136,6 @@ public abstract class AbstractPluginActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
-        final int id = item.getItemId();
-
-        if (android.R.id.home == id) {
-            finish();
-            return true;
-        } else if (R.id.twofortyfouram_locale_menu_dontsave == id) {
-            mIsCancelled = true;
-            finish();
-            return true;
-        } else if (R.id.twofortyfouram_locale_menu_save == id) {
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * During {@link #finish()}, subclasses can call this method to determine whether the Activity was
      * canceled.
@@ -142,5 +144,9 @@ public abstract class AbstractPluginActivity extends Activity {
      */
     protected boolean isCanceled() {
         return mIsCancelled;
+    }
+
+    protected Menu getOptionsMenu() {
+        return optionsMenu;
     }
 }

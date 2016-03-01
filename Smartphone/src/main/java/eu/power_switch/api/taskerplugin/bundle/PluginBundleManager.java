@@ -21,8 +21,11 @@ package eu.power_switch.api.taskerplugin.bundle;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 
+import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -66,7 +69,7 @@ public final class PluginBundleManager {
      * @param bundle bundle to verify. May be null, which will always return false.
      * @return true if the Bundle is valid, false if the bundle is invalid.
      */
-    public static boolean isBundleValid(final Bundle bundle) {
+    public static boolean isBundleValid(Context context, final Bundle bundle) {
         if (null == bundle) {
             return false;
         }
@@ -74,37 +77,79 @@ public final class PluginBundleManager {
         /*
          * Make sure the expected extras exist
          */
-        if (!bundle.containsKey(BUNDLE_EXTRA_STRING_MESSAGE)) {
-            Log.e(String.format("bundle must contain extra %s", BUNDLE_EXTRA_STRING_MESSAGE)); //$NON-NLS-1$
+        if (!bundle.containsKey(ApiConstants.KEY_APARTMENT)) {
+            Log.e(String.format("bundle must contain extra %s", ApiConstants.KEY_APARTMENT)); //$NON-NLS-1$
             return false;
-        }
-        if (!bundle.containsKey(BUNDLE_EXTRA_INT_VERSION_CODE)) {
-            Log.e(String.format("bundle must contain extra %s", BUNDLE_EXTRA_INT_VERSION_CODE)); //$NON-NLS-1$
-            return false;
-        }
-
-        /*
-         * Make sure the correct number of extras exist. Run this test after checking for specific Bundle
-         * extras above so that the error message is more useful. (E.g. the caller will see what extras are
-         * missing, rather than just a message that there is the wrong number).
-         */
-        if (2 != bundle.keySet().size()) {
-            Log.e(String.format("bundle must contain 2 keys, but currently contains %d keys: %s", bundle.keySet().size(), bundle.keySet())); //$NON-NLS-1$
+        } else if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_APARTMENT))) {
+            StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_APARTMENT), Snackbar.LENGTH_LONG);
+//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_APARTMENT)); //$NON-NLS-1$
             return false;
         }
 
-        if (TextUtils.isEmpty(bundle.getString(BUNDLE_EXTRA_STRING_MESSAGE))) {
-            Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", BUNDLE_EXTRA_STRING_MESSAGE)); //$NON-NLS-1$
-            return false;
+//        if (!bundle.containsKey(BUNDLE_EXTRA_INT_VERSION_CODE)) {
+//            Log.e(String.format("bundle must contain extra %s", BUNDLE_EXTRA_INT_VERSION_CODE)); //$NON-NLS-1$
+//            return false;
+//        }
+
+        // Receiver Action
+        if (bundle.keySet().size() == 3 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_ROOM) && bundle.containsKey(ApiConstants.KEY_RECEIVER) && bundle.containsKey(ApiConstants.KEY_BUTTON)) {
+            if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_ROOM))) {
+                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM), Snackbar.LENGTH_LONG);
+//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM)); //$NON-NLS-1$
+                return false;
+            }
+
+            if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_RECEIVER))) {
+                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_RECEIVER), Snackbar.LENGTH_LONG);
+//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_RECEIVER)); //$NON-NLS-1$
+                return false;
+            }
+
+            if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_BUTTON))) {
+                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON), Snackbar.LENGTH_LONG);
+//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON)); //$NON-NLS-1$
+                return false;
+            }
+
+            return true;
         }
 
-        if (bundle.getInt(BUNDLE_EXTRA_INT_VERSION_CODE, 0) != bundle.getInt(BUNDLE_EXTRA_INT_VERSION_CODE, 1)) {
-            Log.e(String.format("bundle extra %s appears to be the wrong type.  It must be an int", BUNDLE_EXTRA_INT_VERSION_CODE)); //$NON-NLS-1$
+        // Room Action
+        if (bundle.keySet().size() == 2 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_ROOM) && bundle.containsKey(ApiConstants.KEY_BUTTON)) {
+            if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_ROOM))) {
+                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM), Snackbar.LENGTH_LONG);
+//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM)); //$NON-NLS-1$
+                return false;
+            }
 
-            return false;
+            if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_BUTTON))) {
+                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON), Snackbar.LENGTH_LONG);
+//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON)); //$NON-NLS-1$
+                return false;
+            }
+
+            return true;
         }
 
-        return true;
+        // Scene Action
+        if (bundle.keySet().size() == 1 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_SCENE)) {
+            if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_SCENE))) {
+                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_SCENE), Snackbar.LENGTH_LONG);
+//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON)); //$NON-NLS-1$
+                return false;
+            }
+
+            return true;
+        }
+
+
+//        if (bundle.getInt(BUNDLE_EXTRA_INT_VERSION_CODE, 0) != bundle.getInt(BUNDLE_EXTRA_INT_VERSION_CODE, 1)) {
+//            Log.e(String.format("bundle extra %s appears to be the wrong type.  It must be an int", BUNDLE_EXTRA_INT_VERSION_CODE)); //$NON-NLS-1$
+//
+//            return false;
+//        }
+
+        return false;
     }
 
     /**

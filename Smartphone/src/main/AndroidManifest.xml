@@ -18,9 +18,9 @@
   -->
 
 <manifest
-    package="eu.power_switch"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    package="eu.power_switch"
     android:versionCode="70"
     android:versionName="@string/app_version">
 
@@ -118,7 +118,7 @@
             android:exported="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/powerswitch_plugin_name"
-            android:theme="@style/Theme.AppCompat"
+            android:theme="@style/PowerSwitchTheme.Tasker.Dark.Blue"
             android:uiOptions="splitActionBarWhenNarrow"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="ExportedActivity">

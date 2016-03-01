@@ -47,20 +47,29 @@
         <item name="about_libraries_card">@color/cardview_background</item>
         <item name="about_libraries_title_openSource">@color/textColorPrimary</item>
         <item name="about_libraries_text_openSource">@color/textColorSecondary</item>
-        <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
-        <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
-        <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
+        <item name="about_libraries_special_button_openSource">
+            @color/about_libraries_special_button_openSource
+        </item>
+        <item name="about_libraries_dividerDark_openSource">
+            @color/about_libraries_dividerDark_openSource
+        </item>
+        <item name="about_libraries_dividerLight_openSource">
+            @color/about_libraries_dividerLight_openSource
+        </item>
 
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/material_drawer_dark_background</item>
         <item name="material_drawer_primary_text">@color/material_drawer_dark_primary_text</item>
         <item name="material_drawer_primary_icon">@color/material_drawer_dark_primary_icon</item>
-        <item name="material_drawer_secondary_text">@color/material_drawer_dark_secondary_text</item>
+        <item name="material_drawer_secondary_text">@color/material_drawer_dark_secondary_text
+        </item>
         <item name="material_drawer_hint_text">@color/material_drawer_dark_hint_text</item>
         <item name="material_drawer_divider">@color/material_drawer_dark_divider</item>
         <item name="material_drawer_selected">@color/material_drawer_dark_selected</item>
         <item name="material_drawer_selected_text">@color/material_drawer_dark_selected_text</item>
-        <item name="material_drawer_header_selection_text">@color/material_drawer_dark_header_selection_text</item>
+        <item name="material_drawer_header_selection_text">
+            @color/material_drawer_dark_header_selection_text
+        </item>
 
     </style>
 
@@ -91,9 +100,15 @@
         <item name="about_libraries_card">@color/cardview_backgroundInverse</item>
         <item name="about_libraries_title_openSource">@color/textColorPrimaryInverse</item>
         <item name="about_libraries_text_openSource">@color/textColorSecondaryInverse</item>
-        <item name="about_libraries_special_button_openSource">@color/about_libraries_special_button_openSource</item>
-        <item name="about_libraries_dividerDark_openSource">@color/about_libraries_dividerDark_openSource</item>
-        <item name="about_libraries_dividerLight_openSource">@color/about_libraries_dividerLight_openSource</item>
+        <item name="about_libraries_special_button_openSource">
+            @color/about_libraries_special_button_openSource
+        </item>
+        <item name="about_libraries_dividerDark_openSource">
+            @color/about_libraries_dividerDark_openSource
+        </item>
+        <item name="about_libraries_dividerLight_openSource">
+            @color/about_libraries_dividerLight_openSource
+        </item>
 
         <!-- MaterialDrawer specific values -->
         <item name="material_drawer_background">@color/material_drawer_background</item>
@@ -104,7 +119,9 @@
         <item name="material_drawer_divider">@color/material_drawer_divider</item>
         <item name="material_drawer_selected">@color/material_drawer_selected</item>
         <item name="material_drawer_selected_text">@color/material_drawer_selected_text</item>
-        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
+        <item name="material_drawer_header_selection_text">
+            @color/material_drawer_header_selection_text
+        </item>
     </style>
 
     <!-- Base Dark Blue -->
@@ -145,5 +162,28 @@
     <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue"/>
 
     <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red"/>
+
+    <style name="PowerSwitchTheme.Tasker.Dark" parent="Theme.Locale.Dark">
+        <!-- material design -->
+        <!-- MaterialDrawer -->
+        <!-- ...and here we setting appcompat’s color theming attrs -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryLight">@color/primaryColor_light</item>
+        <item name="colorPrimaryDark">@color/primaryColor_dark</item>
+        <item name="colorAccent">#FF999999</item>
+        <!--<item name="android:windowBackground">@color/windowBackgroundColor</item>-->
+        <!--<item name="android:colorBackground">@color/windowBackgroundColor</item>-->
+
+        <!-- text color -->
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+
+    </style>
+
+    <style name="PowerSwitchTheme.Tasker.Dark.Blue" parent="PowerSwitchTheme.Tasker.Dark">
+        <item name="colorAccent">@color/color_light_blue_a700</item>
+    </style>
 
 </resources>

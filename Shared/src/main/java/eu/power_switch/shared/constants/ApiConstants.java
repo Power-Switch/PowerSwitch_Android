@@ -59,6 +59,14 @@ public class ApiConstants {
     public static final String KEY_APARTMENT = "Apartment";
 
 
+    // Tasker Plugin
+    public static final String KEY_REPLACE_VARIABLES_APARTMENT = "KEY_REPLACE_VARIABLES_APARTMENT";
+    public static final String KEY_REPLACE_VARIABLES_ROOM = "KEY_REPLACE_VARIABLES_ROOM";
+    public static final String KEY_REPLACE_VARIABLES_RECEIVER = "KEY_REPLACE_VARIABLES_RECEIVER";
+    public static final String KEY_REPLACE_VARIABLES_BUTTON = "KEY_REPLACE_VARIABLES_BUTTON";
+    public static final String KEY_REPLACE_VARIABLES_SCENE = "KEY_REPLACE_VARIABLES_SCENE";
+
+
     /**
      * Private Constructor
      */

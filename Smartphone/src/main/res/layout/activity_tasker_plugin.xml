@@ -80,7 +80,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/title_margin_top"
                     android:layout_weight="1"
@@ -113,12 +113,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/room"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:layout_weight="1"
+                    android:text="@string/room"
+                    android:textColor="@color/color_light_blue_a700"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_switchRoom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/spinner_room"
@@ -139,12 +152,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/receiver"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:layout_weight="1"
+                    android:text="@string/receiver"
+                    android:textColor="@color/color_light_blue_a700"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_switchReceiver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/spinner_receiver"
@@ -165,12 +191,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/button"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:layout_weight="1"
+                    android:text="@string/button"
+                    android:textColor="@color/color_light_blue_a700"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_switchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/spinner_button"
@@ -191,12 +230,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/scene"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:layout_weight="1"
+                    android:text="@string/scene"
+                    android:textColor="@color/color_light_blue_a700"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_switchScene"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
             <Spinner
                 android:id="@+id/spinner_scene"
@@ -210,12 +262,6 @@
                 android:visibility="gone"/>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save"/>
 
     </LinearLayout>
 

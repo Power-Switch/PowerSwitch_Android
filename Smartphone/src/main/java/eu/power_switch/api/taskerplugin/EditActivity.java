@@ -21,6 +21,8 @@ package eu.power_switch.api.taskerplugin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,9 +40,6 @@ import java.util.HashSet;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.action.ReceiverAction;
-import eu.power_switch.action.RoomAction;
-import eu.power_switch.action.SceneAction;
 import eu.power_switch.api.taskerplugin.bundle.BundleScrubber;
 import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -99,7 +98,11 @@ public class EditActivity extends AbstractPluginActivity {
     private Apartment currentApartment;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
 
-    private android.widget.Button buttonSave;
+    private boolean useManualApartmentInput = false;
+    private boolean useManualRoomInput = false;
+    private boolean useManualReceiverInput = false;
+    private boolean useManualButtonInput = false;
+    private boolean useManualSceneInput = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,16 +113,10 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.radioButton_receiver_action) {
-                    radioButtonRoomAction.setChecked(false);
-                    radioButtonSceneAction.setChecked(false);
                     updateActionType(Action.ACTION_TYPE_RECEIVER);
                 } else if (v.getId() == R.id.radioButton_room_action) {
-                    radioButtonReceiverAction.setChecked(false);
-                    radioButtonSceneAction.setChecked(false);
                     updateActionType(Action.ACTION_TYPE_ROOM);
                 } else if (v.getId() == R.id.radioButton_scene_action) {
-                    radioButtonReceiverAction.setChecked(false);
-                    radioButtonRoomAction.setChecked(false);
                     updateActionType(Action.ACTION_TYPE_SCENE);
                 }
 
@@ -181,12 +178,10 @@ public class EditActivity extends AbstractPluginActivity {
         imageButtonSwitchApartment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (View.VISIBLE == spinner_apartment.getVisibility()) {
-                    spinner_apartment.setVisibility(View.GONE);
-                    editText_apartment.setVisibility(View.VISIBLE);
+                if (useManualApartmentInput) {
+                    setApartmentInputType(InputType.LIST);
                 } else {
-                    spinner_apartment.setVisibility(View.VISIBLE);
-                    editText_apartment.setVisibility(View.GONE);
+                    setApartmentInputType(InputType.MANUAL);
                 }
             }
         });
@@ -217,6 +212,21 @@ public class EditActivity extends AbstractPluginActivity {
         linearLayoutButton = (LinearLayout) findViewById(R.id.linearLayout_button);
         linearLayoutScene = (LinearLayout) findViewById(R.id.linearLayout_scene);
 
+        ImageButton imageButtonSwitchRoom = (ImageButton) findViewById(R.id.imageButton_switchRoom);
+        imageButtonSwitchRoom.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonSwitchRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (useManualRoomInput) {
+                    setRoomInputType(InputType.LIST);
+                } else {
+                    setRoomInputType(InputType.MANUAL);
+                }
+            }
+        });
+
         spinner_room = (Spinner) findViewById(R.id.spinner_room);
         roomSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -235,6 +245,23 @@ public class EditActivity extends AbstractPluginActivity {
         };
         spinner_room.setOnTouchListener(spinnerInteractionListener);
         spinner_room.setOnItemSelectedListener(spinnerInteractionListener);
+
+        editText_room = (EditText) findViewById(R.id.editText_room);
+
+        ImageButton imageButtonSwitchReceiver = (ImageButton) findViewById(R.id.imageButton_switchReceiver);
+        imageButtonSwitchReceiver.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonSwitchReceiver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (useManualReceiverInput) {
+                    setReceiverInputType(InputType.LIST);
+                } else {
+                    setReceiverInputType(InputType.MANUAL);
+                }
+            }
+        });
 
         spinner_receiver = (Spinner) findViewById(R.id.spinner_receiver);
         receiverSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, receiverNames);
@@ -255,6 +282,22 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_receiver.setOnTouchListener(spinnerInteractionListener);
         spinner_receiver.setOnItemSelectedListener(spinnerInteractionListener);
 
+        editText_receiver = (EditText) findViewById(R.id.editText_receiver);
+
+        ImageButton imageButtonSwitchButton = (ImageButton) findViewById(R.id.imageButton_switchButton);
+        imageButtonSwitchButton.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonSwitchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (useManualButtonInput) {
+                    setButtonInputType(InputType.LIST);
+                } else {
+                    setButtonInputType(InputType.MANUAL);
+                }
+            }
+        });
 
         spinner_button = (Spinner) findViewById(R.id.spinner_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, buttonNamesReceiver);
@@ -274,7 +317,22 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_button.setOnTouchListener(spinnerInteractionListener);
         spinner_button.setOnItemSelectedListener(spinnerInteractionListener);
 
-        updateReceiverButtonList();
+        editText_button = (EditText) findViewById(R.id.editText_button);
+
+        ImageButton imageButtonSwitchScene = (ImageButton) findViewById(R.id.imageButton_switchScene);
+        imageButtonSwitchScene.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonSwitchScene.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (useManualSceneInput) {
+                    setSceneInputType(InputType.LIST);
+                } else {
+                    setSceneInputType(InputType.MANUAL);
+                }
+            }
+        });
 
         spinner_scene = (Spinner) findViewById(R.id.spinner_scene);
         sceneSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sceneNames);
@@ -294,14 +352,8 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_scene.setOnTouchListener(spinnerInteractionListener);
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener);
 
+        editText_scene = (EditText) findViewById(R.id.editText_scene);
 
-        buttonSave = (android.widget.Button) findViewById(R.id.button_save);
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         updateLists();
 
@@ -309,14 +361,130 @@ public class EditActivity extends AbstractPluginActivity {
         final Bundle localeBundle = getIntent().getBundleExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE);
         BundleScrubber.scrub(localeBundle);
 
-        if (null == savedInstanceState) {
-            if (PluginBundleManager.isBundleValid(localeBundle)) {
-                final String message =
-                        localeBundle.getString(PluginBundleManager.BUNDLE_EXTRA_STRING_MESSAGE);
-                ((EditText) findViewById(android.R.id.text1)).setText(message);
+        if (null == savedInstanceState && PluginBundleManager.isBundleValid(this, localeBundle)) {
+            initData(localeBundle);
+        } else {
+            updateActionType(Action.ACTION_TYPE_RECEIVER);
+        }
+    }
+
+    private void initData(Bundle localeBundle) {
+        if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_APARTMENT)) {
+            setApartmentInputType(InputType.MANUAL);
+            editText_apartment.setText(localeBundle.getString(ApiConstants.KEY_APARTMENT));
+        } else {
+            spinner_apartment.setSelection(apartmentNames.indexOf(localeBundle.getString(ApiConstants.KEY_APARTMENT)));
+        }
+
+        if (localeBundle.containsKey(ApiConstants.KEY_ROOM) && localeBundle.containsKey(ApiConstants.KEY_RECEIVER) && localeBundle.containsKey(ApiConstants.KEY_BUTTON)) {
+            updateActionType(Action.ACTION_TYPE_RECEIVER);
+
+            if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_ROOM)) {
+                setRoomInputType(InputType.MANUAL);
+                editText_room.setText(localeBundle.getString(ApiConstants.KEY_ROOM));
+            } else {
+                spinner_room.setSelection(roomNames.indexOf(localeBundle.getString(ApiConstants.KEY_ROOM)));
+            }
+
+            if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_RECEIVER)) {
+                setReceiverInputType(InputType.MANUAL);
+                editText_receiver.setText(localeBundle.getString(ApiConstants.KEY_RECEIVER));
+            } else {
+                spinner_receiver.setSelection(receiverNames.indexOf(localeBundle.getString(ApiConstants.KEY_RECEIVER)));
+            }
+
+            if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_BUTTON)) {
+                setButtonInputType(InputType.MANUAL);
+                editText_button.setText(localeBundle.getString(ApiConstants.KEY_BUTTON));
+            } else {
+                spinner_button.setSelection(buttonNamesReceiver.indexOf(localeBundle.getString(ApiConstants.KEY_BUTTON)));
+            }
+        } else if (localeBundle.containsKey(ApiConstants.KEY_ROOM) && localeBundle.containsKey(ApiConstants.KEY_BUTTON)) {
+            updateActionType(Action.ACTION_TYPE_ROOM);
+
+            if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_ROOM)) {
+                setRoomInputType(InputType.MANUAL);
+                editText_room.setText(localeBundle.getString(ApiConstants.KEY_ROOM));
+            } else {
+                spinner_room.setSelection(roomNames.indexOf(localeBundle.getString(ApiConstants.KEY_ROOM)));
+            }
+
+            if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_BUTTON)) {
+                setButtonInputType(InputType.MANUAL);
+                editText_button.setText(localeBundle.getString(ApiConstants.KEY_BUTTON));
+            } else {
+                spinner_button.setSelection(buttonNamesReceiver.indexOf(localeBundle.getString(ApiConstants.KEY_BUTTON)));
+            }
+        } else if (localeBundle.containsKey(ApiConstants.KEY_SCENE)) {
+            updateActionType(Action.ACTION_TYPE_SCENE);
+            if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_SCENE)) {
+                setSceneInputType(InputType.MANUAL);
+                editText_scene.setText(localeBundle.getString(ApiConstants.KEY_SCENE));
+            } else {
+                spinner_scene.setSelection(sceneNames.indexOf(localeBundle.getString(ApiConstants.KEY_SCENE)));
             }
         }
 
+    }
+
+    private void setApartmentInputType(InputType inputType) {
+        useManualApartmentInput = InputType.MANUAL.equals(inputType);
+
+        if (useManualApartmentInput) {
+            spinner_apartment.setVisibility(View.GONE);
+            editText_apartment.setVisibility(View.VISIBLE);
+        } else {
+            spinner_apartment.setVisibility(View.VISIBLE);
+            editText_apartment.setVisibility(View.GONE);
+        }
+    }
+
+    private void setRoomInputType(InputType inputType) {
+        useManualRoomInput = InputType.MANUAL.equals(inputType);
+
+        if (useManualRoomInput) {
+            spinner_room.setVisibility(View.GONE);
+            editText_room.setVisibility(View.VISIBLE);
+        } else {
+            spinner_room.setVisibility(View.VISIBLE);
+            editText_room.setVisibility(View.GONE);
+        }
+    }
+
+    private void setReceiverInputType(InputType inputType) {
+        useManualReceiverInput = InputType.MANUAL.equals(inputType);
+
+        if (useManualReceiverInput) {
+            spinner_receiver.setVisibility(View.GONE);
+            editText_receiver.setVisibility(View.VISIBLE);
+        } else {
+            spinner_receiver.setVisibility(View.VISIBLE);
+            editText_receiver.setVisibility(View.GONE);
+        }
+    }
+
+    private void setButtonInputType(InputType inputType) {
+        useManualButtonInput = InputType.MANUAL.equals(inputType);
+
+        if (useManualButtonInput) {
+            spinner_button.setVisibility(View.GONE);
+            editText_button.setVisibility(View.VISIBLE);
+        } else {
+            spinner_button.setVisibility(View.VISIBLE);
+            editText_button.setVisibility(View.GONE);
+        }
+    }
+
+    private void setSceneInputType(InputType inputType) {
+        useManualSceneInput = InputType.MANUAL.equals(inputType);
+
+        if (useManualSceneInput) {
+            spinner_scene.setVisibility(View.GONE);
+            editText_scene.setVisibility(View.VISIBLE);
+        } else {
+            spinner_scene.setVisibility(View.VISIBLE);
+            editText_scene.setVisibility(View.GONE);
+        }
     }
 
     protected void updateLists() {
@@ -392,6 +560,7 @@ public class EditActivity extends AbstractPluginActivity {
             spinner_button.setSelection(0);
         } catch (Exception e) {
             Log.e(e);
+            buttonNamesReceiver.clear();
         }
 
         buttonSpinnerArrayAdapter.notifyDataSetChanged();
@@ -431,17 +600,30 @@ public class EditActivity extends AbstractPluginActivity {
 
     private void updateActionType(String timerActionType) {
         currentActionType = timerActionType;
+
         if (Action.ACTION_TYPE_RECEIVER.equals(timerActionType)) {
+            radioButtonReceiverAction.setChecked(true);
+            radioButtonRoomAction.setChecked(false);
+            radioButtonSceneAction.setChecked(false);
+
             linearLayoutRoom.setVisibility(View.VISIBLE);
             linearLayoutReceiver.setVisibility(View.VISIBLE);
             linearLayoutButton.setVisibility(View.VISIBLE);
             linearLayoutScene.setVisibility(View.GONE);
         } else if (Action.ACTION_TYPE_ROOM.equals(timerActionType)) {
+            radioButtonReceiverAction.setChecked(false);
+            radioButtonRoomAction.setChecked(true);
+            radioButtonSceneAction.setChecked(false);
+
             linearLayoutRoom.setVisibility(View.VISIBLE);
             linearLayoutReceiver.setVisibility(View.GONE);
             linearLayoutButton.setVisibility(View.VISIBLE);
             linearLayoutScene.setVisibility(View.GONE);
         } else if (Action.ACTION_TYPE_SCENE.equals(timerActionType)) {
+            radioButtonReceiverAction.setChecked(false);
+            radioButtonRoomAction.setChecked(false);
+            radioButtonSceneAction.setChecked(true);
+
             linearLayoutRoom.setVisibility(View.GONE);
             linearLayoutReceiver.setVisibility(View.GONE);
             linearLayoutButton.setVisibility(View.GONE);
@@ -449,86 +631,146 @@ public class EditActivity extends AbstractPluginActivity {
         }
     }
 
-    protected Action getCurrentSelection() {
-        Action action = null;
-
-        try {
-            if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem().toString());
-                Log.d(spinner_receiver.getSelectedItem().toString());
-                Log.d(spinner_button.getSelectedItem().toString());
-
-                Room selectedRoom = getSelectedRoom();
-                Receiver selectedReceiver =
-                        selectedRoom.getReceiver(
-                                spinner_receiver.getSelectedItem().toString());
-                Button selectedButton = null;
-                for (Button button : selectedReceiver.getButtons()) {
-                    if (button.getName().equals(spinner_button.getSelectedItem().toString())) {
-                        selectedButton = button;
-                    }
-                }
-
-                action = new ReceiverAction(-1, selectedRoom, selectedReceiver, selectedButton);
-            } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem().toString());
-                Log.d(spinner_button.getSelectedItem().toString());
-
-                Room selectedRoom = getSelectedRoom();
-
-                action = new RoomAction(-1, selectedRoom, spinner_button.getSelectedItem()
-                        .toString());
-            } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-                Log.d(spinner_scene.getSelectedItem().toString());
-
-                Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem().toString());
-
-                action = new SceneAction(-1, selectedScene);
-            }
-
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
-        }
-
-        return action;
-    }
-
     private boolean checkValidity() {
         if (currentActionType == null) {
             return false;
         }
 
+        // check other values based on action type
         if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            if (spinner_room.getSelectedItem() == null
-                    || spinner_receiver.getSelectedItem() == null
-                    || spinner_button.getSelectedItem() == null) {
-                return false;
-            }
+            return checkApartmentValidity() && checkRoomValidity() && checkReceiverValidity() && checkButtonValidity();
         } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            if (spinner_room.getSelectedItem() == null
-                    || spinner_button.getSelectedItem() == null) {
-                return false;
-            }
+            return checkApartmentValidity() && checkRoomValidity() && checkButtonValidity();
         } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-            if (spinner_scene.getSelectedItem() == null) {
+            return checkApartmentValidity() && checkSceneValidity();
+        } else {
+            return false;
+        }
+    }
+
+    private boolean checkApartmentValidity() {
+        if (useManualApartmentInput) {
+            if (TextUtils.isEmpty(editText_apartment.getText())) {
                 return false;
             }
         } else {
-            return false;
+            if (spinner_apartment.getSelectedItem() == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkRoomValidity() {
+        if (useManualRoomInput) {
+            if (TextUtils.isEmpty(editText_room.getText())) {
+                return false;
+            }
+        } else {
+            if (spinner_room.getSelectedItem() == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkReceiverValidity() {
+        if (useManualReceiverInput) {
+            if (TextUtils.isEmpty(editText_receiver.getText())) {
+                return false;
+            }
+        } else {
+            if (spinner_receiver.getSelectedItem() == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkButtonValidity() {
+        if (useManualButtonInput) {
+            if (TextUtils.isEmpty(editText_button.getText())) {
+                return false;
+            }
+        } else {
+            if (spinner_button.getSelectedItem() == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean checkSceneValidity() {
+        if (useManualSceneInput) {
+            if (TextUtils.isEmpty(editText_scene.getText())) {
+                return false;
+            }
+        } else {
+            if (spinner_scene.getSelectedItem() == null) {
+                return false;
+            }
         }
 
         return true;
     }
 
     private void setPositiveButtonVisibility(boolean isValid) {
-        buttonSave.setEnabled(isValid);
+        if (getOptionsMenu() != null) {
+            MenuItem saveButton = getOptionsMenu().findItem(R.id.twofortyfouram_locale_menu_save);
+            saveButton.setEnabled(isValid);
+            saveButton.setVisible(isValid);
+
+            onPrepareOptionsMenu(getOptionsMenu());
+        }
+    }
+
+    private String getApartmentName() {
+        if (useManualApartmentInput) {
+            return editText_apartment.getText().toString();
+        } else {
+            return currentApartment.getName();
+        }
+    }
+
+    private String getRoomName() {
+        if (useManualRoomInput) {
+            return editText_room.getText().toString();
+        } else {
+            return spinner_room.getSelectedItem().toString();
+        }
+    }
+
+    private String getReceiverName() {
+        if (useManualReceiverInput) {
+            return editText_receiver.getText().toString();
+        } else {
+            return spinner_receiver.getSelectedItem().toString();
+        }
+    }
+
+    private String getButtonName() {
+        if (useManualButtonInput) {
+            return editText_button.getText().toString();
+        } else {
+            return spinner_button.getSelectedItem().toString();
+        }
+    }
+
+    private String getSceneName() {
+        if (useManualSceneInput) {
+            return editText_scene.getText().toString();
+        } else {
+            return spinner_scene.getSelectedItem().toString();
+        }
     }
 
     @Override
     public void finish() {
         if (!isCanceled() && checkValidity()) {
-            Action action = getCurrentSelection();
-
             final Intent resultIntent = new Intent();
 
 //          This extra is the data to ourselves: either for the Activity or the BroadcastReceiver. Note
@@ -538,18 +780,43 @@ public class EditActivity extends AbstractPluginActivity {
 //          Android platform objects (A Serializable class private to this plug-in's APK cannot be
 //          stored in the Bundle, as Locale's classloader will not recognize it).
             final Bundle resultBundle = new Bundle();
-            if (action instanceof ReceiverAction) {
-                resultBundle.putString(ApiConstants.KEY_APARTMENT, currentApartment.getName());
-                resultBundle.putString(ApiConstants.KEY_ROOM, ((ReceiverAction) action).getRoom().getName());
-                resultBundle.putString(ApiConstants.KEY_RECEIVER, ((ReceiverAction) action).getReceiver().getName());
-                resultBundle.putString(ApiConstants.KEY_BUTTON, ((ReceiverAction) action).getButton().getName());
-            } else if (action instanceof RoomAction) {
-                resultBundle.putString(ApiConstants.KEY_APARTMENT, currentApartment.getName());
-                resultBundle.putString(ApiConstants.KEY_ROOM, ((RoomAction) action).getRoom().getName());
-                resultBundle.putString(ApiConstants.KEY_BUTTON, ((RoomAction) action).getButtonName());
-            } else if (action instanceof SceneAction) {
-                resultBundle.putString(ApiConstants.KEY_APARTMENT, currentApartment.getName());
-                resultBundle.putString(ApiConstants.KEY_SCENE, ((SceneAction) action).getScene().getName());
+
+            // The blurb is concise status text to be displayed in the host's UI.
+            String blurb = getApartmentName() + ": ";
+
+            if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_APARTMENT, useManualApartmentInput);
+                resultBundle.putString(ApiConstants.KEY_APARTMENT, getApartmentName());
+
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_ROOM, useManualRoomInput);
+                resultBundle.putString(ApiConstants.KEY_ROOM, getRoomName());
+                blurb += getRoomName() + ": ";
+
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_RECEIVER, useManualReceiverInput);
+                resultBundle.putString(ApiConstants.KEY_RECEIVER, getReceiverName());
+                blurb += getReceiverName() + ": ";
+
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_BUTTON, useManualButtonInput);
+                resultBundle.putString(ApiConstants.KEY_BUTTON, getButtonName());
+                blurb += getButtonName();
+            } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_APARTMENT, useManualApartmentInput);
+                resultBundle.putString(ApiConstants.KEY_APARTMENT, getApartmentName());
+
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_ROOM, useManualRoomInput);
+                resultBundle.putString(ApiConstants.KEY_ROOM, getRoomName());
+                blurb += getRoomName() + ": ";
+
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_BUTTON, useManualButtonInput);
+                resultBundle.putString(ApiConstants.KEY_BUTTON, getButtonName());
+                blurb += getButtonName();
+            } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_APARTMENT, useManualApartmentInput);
+                resultBundle.putString(ApiConstants.KEY_APARTMENT, getApartmentName());
+
+                resultBundle.putBoolean(ApiConstants.KEY_REPLACE_VARIABLES_SCENE, useManualSceneInput);
+                resultBundle.putString(ApiConstants.KEY_SCENE, getSceneName());
+                blurb += getSceneName();
             }
 
             if (TaskerPlugin.Setting.hostSupportsOnFireVariableReplacement(this)) {
@@ -563,14 +830,16 @@ public class EditActivity extends AbstractPluginActivity {
             }
 
             resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
-
-            // The blurb is concise status text to be displayed in the host's UI.
-            final String blurb = currentApartment.getName() + ": " + action.toString();
             resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB, blurb);
 
             setResult(RESULT_OK, resultIntent);
         }
 
         super.finish();
+    }
+
+    private enum InputType {
+        LIST,
+        MANUAL
     }
 }
