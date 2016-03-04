@@ -1,6 +1,8 @@
 # PowerSwitch
 PowerSwitch - Funksteckdosen auf dem Smartphone
 
+https://power-switch.eu
+
 # Wieso? Weshalb? Warum?
 
 Schon seit langem gibt es in jedem Baumarkt preiswerte Funksteckdosen, die sich über eine Fernbedienung ein- und ausschalten lassen. Dazu wird eine Fernbedienung mitgeliefert, mit der sich meist ca. 3-4 Steckdosen schalten lassen. Die sieht nicht nur doof aus, sondern man vergisst auch schnell mal wo sie ist und wenn man mehr Steckdosen steuern will, braucht man mehrere Fernbedienungen.
@@ -11,6 +13,20 @@ Und wie schickt man die Signale zum Gateway? Eine Möglichkeit ist natürlich da
 
 
 Um die Entwicklung der App voran zu treiben und interessierten einen Blick hinter die Kulissen zu gewähren ist der Sourcecode der Android App hier verfügbar.
+
+# Contributing
+
+Github is for social coding: if you want to write code, I encourage contributions through pull requests from forks of this repository. Create Github tickets for bugs and new features and comment on the ones that you are interested in.
+
+# Dependencies
+* com.mikepenz:materialdrawer
+* com.mikepenz:aboutlibraries
+* com.mikepenz:iconics-core
+    * com.mikepenz:google-material-typeface
+    * com.mikepenz:material-design-iconic-typeface
+* various com.android.support.* packages (see /smartphone/build.gradle for more info)
+* Google Play Services
+
 
 # Lizenz
     PowerSwitch by Max Rosin & Markus Ressel
