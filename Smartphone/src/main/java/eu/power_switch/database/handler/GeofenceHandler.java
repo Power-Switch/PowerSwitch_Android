@@ -103,6 +103,15 @@ abstract class GeofenceHandler {
     }
 
     /**
+     * Disables all existing Gateways
+     */
+    protected static void disableAll() throws Exception {
+        ContentValues values = new ContentValues();
+        values.put(GeofenceTable.COLUMN_ACTIVE, false);
+        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, null, null);
+    }
+
+    /**
      * Deletes Geofence information from Database
      *
      * @param id ID of Geofence

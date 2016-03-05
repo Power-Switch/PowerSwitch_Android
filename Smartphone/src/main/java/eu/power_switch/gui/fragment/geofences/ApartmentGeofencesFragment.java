@@ -160,6 +160,9 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
                             if (result[0] == PackageManager.PERMISSION_GRANTED) {
                                 StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+
+                                sendApartmentGeofencesChangedBroadcast(context);
+                                CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_location_permission,
                                         R.string.grant, new Runnable() {

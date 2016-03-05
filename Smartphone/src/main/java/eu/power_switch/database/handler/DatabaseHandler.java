@@ -784,6 +784,22 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Disable all existing Geofences
+     *
+     */
+    public static void disableGeofences() throws Exception {
+        openWritable();
+        try {
+            GeofenceHandler.disableAll();
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+    }
+
+    /**
      * Update existing Gateway
      *
      * @param id      ID of Gateway

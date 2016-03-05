@@ -298,6 +298,15 @@ public class MainActivity extends AppCompatActivity {
             protected Void doInBackground(Context... contexts) {
                 Context context = contexts[0];
 
+                if (!PermissionHelper.checkLocationPermission(context)) {
+                    try {
+                        DatabaseHandler.disableGeofences();
+                        Log.d("Disabled all Geofences because of missing location permission");
+                    } catch (Exception e) {
+                        Log.e(e);
+                    }
+                }
+
                 // update wear data
                 UtilityService.forceWearDataUpdate(context);
                 UtilityService.forceWearSettingsUpdate(context);

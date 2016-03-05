@@ -38,6 +38,7 @@ import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * * Adapter to visualize Geofence items in RecyclerView
@@ -99,6 +100,11 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                 }
             }
         });
+        if (!PermissionHelper.checkLocationPermission(context)) {
+            holder.geofenceSwitchStatus.setEnabled(false);
+        } else {
+            holder.geofenceSwitchStatus.setEnabled(true);
+        }
 
         holder.geofenceSnapshot.setImageBitmap(geofence.getSnapshot());
 
