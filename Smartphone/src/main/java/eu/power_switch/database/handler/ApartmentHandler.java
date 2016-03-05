@@ -42,6 +42,15 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 abstract class ApartmentHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private ApartmentHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds a Apartment to Database
      *
      * @param apartment Apartment

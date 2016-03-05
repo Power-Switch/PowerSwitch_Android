@@ -80,7 +80,10 @@ public class SettingsConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private SettingsConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 }

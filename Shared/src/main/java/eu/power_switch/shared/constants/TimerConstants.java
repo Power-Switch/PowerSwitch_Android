@@ -31,7 +31,10 @@ public class TimerConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private TimerConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 }

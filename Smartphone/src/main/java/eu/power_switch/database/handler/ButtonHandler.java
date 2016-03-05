@@ -28,6 +28,15 @@ import eu.power_switch.shared.constants.DatabaseConstants;
 abstract class ButtonHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private ButtonHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Gets Button from Database
      *
      * @param id         ID of Button

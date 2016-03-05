@@ -37,6 +37,15 @@ public class Log {
     private static final Logger log = Logger.getLogger("Log");
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private Log() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Log Debug
      *
      * @param message any text message

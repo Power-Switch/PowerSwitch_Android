@@ -35,6 +35,15 @@ import eu.power_switch.shared.constants.SleepAsAndroidConstants;
  */
 abstract class SleepAsAndroidHandler {
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private SleepAsAndroidHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
     protected static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 

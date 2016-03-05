@@ -31,6 +31,15 @@ import eu.power_switch.shared.log.Log;
 public class SleepAsAndroidHelper {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private SleepAsAndroidHelper() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Check if Sleep As Android app is installed on this device
      *
      * @param context any suitable context

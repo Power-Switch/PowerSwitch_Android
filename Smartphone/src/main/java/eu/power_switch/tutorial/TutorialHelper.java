@@ -25,6 +25,15 @@ import eu.power_switch.shared.constants.TutorialConstants;
  */
 public class TutorialHelper {
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private TutorialHelper() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
     public static String getMainTabKey(String pageTitle) {
         return TutorialConstants.MAIN_TABS_KEY_PREFIX + pageTitle;
     }

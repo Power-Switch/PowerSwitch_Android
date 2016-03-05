@@ -35,7 +35,10 @@ public class DeveloperSettingsConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private DeveloperSettingsConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 }

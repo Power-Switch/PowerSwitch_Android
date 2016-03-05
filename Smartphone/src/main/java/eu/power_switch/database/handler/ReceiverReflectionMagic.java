@@ -38,6 +38,15 @@ import eu.power_switch.obj.receiver.UniversalReceiver;
 public abstract class ReceiverReflectionMagic {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private ReceiverReflectionMagic() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Creates a Receiver based on a database cursor.
      *
      * @param cursor  A database cursor with one element.

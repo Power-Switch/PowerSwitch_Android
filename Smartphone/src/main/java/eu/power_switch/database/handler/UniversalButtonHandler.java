@@ -33,6 +33,15 @@ import eu.power_switch.obj.UniversalButton;
 abstract class UniversalButtonHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private UniversalButtonHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds UniversalButton to Database
      *
      * @param receiverId ID of Receiver

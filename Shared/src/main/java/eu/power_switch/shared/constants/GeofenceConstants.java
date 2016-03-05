@@ -38,7 +38,10 @@ public class GeofenceConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private GeofenceConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 }

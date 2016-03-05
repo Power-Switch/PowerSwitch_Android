@@ -31,6 +31,15 @@ import java.util.TreeSet;
 public class Sets {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private Sets() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Creates an empty {@code HashSet} instance.
      * <p/>
      * <p><b>Note:</b> if {@code E} is an {@link Enum} type, use {@link

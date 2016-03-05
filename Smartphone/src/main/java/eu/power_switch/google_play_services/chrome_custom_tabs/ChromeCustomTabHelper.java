@@ -47,6 +47,15 @@ public class ChromeCustomTabHelper {
 
     public static final String EXTRA_CUSTOM_TABS_MENU_ITEMS = "android.support.customtabs.extra.MENU_ITEMS";
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private ChromeCustomTabHelper() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
     public static Intent getBrowserIntent(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         

@@ -32,7 +32,13 @@ import eu.power_switch.R;
  */
 public class AnimationHandler {
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
     private AnimationHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
     public static Animation getRotationClockwiseAnimation(Context context) {
@@ -105,11 +111,7 @@ public class AnimationHandler {
 //    }
 
     public static boolean checkTargetApi() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return true;
-        } else {
-            return false;
-        }
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
 //
 //    @TargetApi(21)

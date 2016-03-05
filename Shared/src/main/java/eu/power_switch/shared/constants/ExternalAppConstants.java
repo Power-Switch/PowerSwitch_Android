@@ -27,8 +27,11 @@ public class ExternalAppConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private ExternalAppConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
 }

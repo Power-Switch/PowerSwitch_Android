@@ -54,7 +54,13 @@ public abstract class NetworkHandler {
     protected static NetworkPackageQueueHandler networkPackageQueueHandler;
     protected static Context context;
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
     private NetworkHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
     }
 
     public static void init(Context context) {

@@ -50,7 +50,13 @@ public class SmartphonePreferencesHandler {
     private static boolean useCompactDrawerCache;
     private static long currentApartmentIdCache;
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
     private SmartphonePreferencesHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
     }
 
     public static void init(Context context) {

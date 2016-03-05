@@ -34,6 +34,15 @@ import eu.power_switch.gui.StatusMessageHandler;
 public class HolidaySpecialHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private HolidaySpecialHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Shows a Snackbar/Toast if current date is a holiday
      *
      * @param context any suitable context

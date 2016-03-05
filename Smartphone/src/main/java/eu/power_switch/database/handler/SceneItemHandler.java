@@ -41,6 +41,15 @@ import eu.power_switch.shared.log.Log;
 abstract class SceneItemHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private SceneItemHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds a List of SceneItems to database
      *
      * @param sceneId ID of Scene the SceneItems will be associated with

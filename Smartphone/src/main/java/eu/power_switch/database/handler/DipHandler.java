@@ -33,6 +33,15 @@ import eu.power_switch.obj.receiver.DipSwitch;
 abstract class DipHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private DipHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds Dips from a DipReceiver to Database
      *
      * @param receiverID The ID of the receiver in database (can differ from the one in the newly created object)

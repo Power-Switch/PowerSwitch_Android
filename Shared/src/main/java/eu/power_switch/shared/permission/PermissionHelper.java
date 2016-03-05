@@ -38,6 +38,15 @@ import eu.power_switch.shared.constants.PermissionConstants;
 public class PermissionHelper {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private PermissionHelper() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Send local broadcast to inform listeners about changed permissions
      *
      * @param context      any suitable context

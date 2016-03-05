@@ -35,6 +35,15 @@ import eu.power_switch.shared.log.Log;
 abstract class GeofenceActionHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private GeofenceActionHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds Actions to a specific Geofence and EventType
      *
      * @param actions    Actions to be added to the Geofence

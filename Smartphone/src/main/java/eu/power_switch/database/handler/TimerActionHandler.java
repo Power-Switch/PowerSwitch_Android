@@ -33,6 +33,15 @@ import eu.power_switch.timer.Timer;
 abstract class TimerActionHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private TimerActionHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds Actions to a specific Timer
      *
      * @param actions Actions to be added to the Timer

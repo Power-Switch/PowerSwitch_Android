@@ -31,6 +31,15 @@ import eu.power_switch.database.table.receiver.AutoPairTable;
 abstract class AutoPairHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private AutoPairHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds the AutoPairReceiver details of a new receiver.
      *
      * @param receiverID The ID of the receiver.

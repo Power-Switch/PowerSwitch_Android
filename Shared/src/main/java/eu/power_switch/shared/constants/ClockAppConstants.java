@@ -49,9 +49,11 @@ public class ClockAppConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private ClockAppConstants() {
-
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
 }

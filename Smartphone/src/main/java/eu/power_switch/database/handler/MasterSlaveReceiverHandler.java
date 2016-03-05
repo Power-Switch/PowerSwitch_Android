@@ -29,6 +29,15 @@ import eu.power_switch.database.table.receiver.MasterSlaveTable;
 abstract class MasterSlaveReceiverHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private MasterSlaveReceiverHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds the MasterSlaveReceiver details of a new receiver.
      *
      * @param receiverID The ID of the receiver.

@@ -50,6 +50,15 @@ import eu.power_switch.shared.log.Log;
 abstract class ActionHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private ActionHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Inserts Actions into database
      *
      * @param actions list of actions

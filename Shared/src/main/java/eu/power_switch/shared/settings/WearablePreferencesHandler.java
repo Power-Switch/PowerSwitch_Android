@@ -46,7 +46,13 @@ public class WearablePreferencesHandler {
     private static int vibrationDurationCache;
     private static boolean highlightLastActivatedButtonCache;
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
     private WearablePreferencesHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization vie init() method instead.");
     }
 
     /**

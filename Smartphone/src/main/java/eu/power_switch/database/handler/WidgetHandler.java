@@ -34,6 +34,15 @@ import eu.power_switch.widget.SceneWidget;
 abstract class WidgetHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private WidgetHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds Receiver Widget to Database
      *
      * @param receiverWidget ReceiverWidget

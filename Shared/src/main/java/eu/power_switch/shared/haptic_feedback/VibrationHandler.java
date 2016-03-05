@@ -30,6 +30,15 @@ import android.support.annotation.NonNull;
 public class VibrationHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private VibrationHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * @param context      any suitable context
      * @param milliseconds time in milliseconds to vibrate
      */

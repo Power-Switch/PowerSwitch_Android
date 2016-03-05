@@ -69,7 +69,10 @@ public class ApiConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private ApiConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 }

@@ -36,6 +36,15 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 abstract class RoomHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private RoomHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds a Room to Database
      *
      * @param room Room

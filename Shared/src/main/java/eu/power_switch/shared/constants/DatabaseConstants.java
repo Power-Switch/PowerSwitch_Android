@@ -32,4 +32,13 @@ public class DatabaseConstants {
     public static final long BUTTON_STOP_ID = BUTTON_ON_ID - 3;
     public static final long BUTTON_DOWN_ID = BUTTON_ON_ID - 4;
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private DatabaseConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
 }

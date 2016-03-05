@@ -36,6 +36,15 @@ import eu.power_switch.shared.log.Log;
 abstract class SceneHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private SceneHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds a Scene to Database
      *
      * @param scene Scene

@@ -81,7 +81,13 @@ public final class DatabaseHandler {
      */
     private static Lock lock;
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
     private DatabaseHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
     }
 
     /**

@@ -32,8 +32,11 @@ public class TutorialConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private TutorialConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
 }

@@ -41,6 +41,15 @@ import eu.power_switch.timer.WeekdayTimer;
 public abstract class AlarmHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private AlarmHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Creates an Intent that will be sent when a Timer alarm goes off
      *
      * @param timer Timer this intent will activate

@@ -58,7 +58,13 @@ public class LogHandler {
      */
     public static final String LOG_FOLDER = "PowerSwitch_Logs";
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
     private LogHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
     public static void configureLogger() {

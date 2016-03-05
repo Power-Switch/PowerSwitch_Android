@@ -73,7 +73,10 @@ public class LocalBroadcastConstants {
 
     /**
      * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private LocalBroadcastConstants() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
     }
 }

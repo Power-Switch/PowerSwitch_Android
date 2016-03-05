@@ -40,6 +40,15 @@ import eu.power_switch.shared.log.Log;
 class ReceiverHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private ReceiverHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds Receiver to Database
      *
      * @param receiver Receiver

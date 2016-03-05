@@ -42,6 +42,15 @@ import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 abstract class GatewayHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private GatewayHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds Gateway information to Database
      *
      * @param gateway the new Gateway

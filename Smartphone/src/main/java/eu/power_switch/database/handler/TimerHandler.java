@@ -40,6 +40,15 @@ import eu.power_switch.timer.alarm.AlarmHandler;
 abstract class TimerHandler {
 
     /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private TimerHandler() {
+        throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    /**
      * Adds Timer to Database
      *
      * @param timer Timer
@@ -228,11 +237,7 @@ abstract class TimerHandler {
         Long timerId = c.getLong(0);
         int rawActive = c.getInt(1);
         boolean active;
-        if (rawActive > 0) {
-            active = true;
-        } else {
-            active = false;
-        }
+        active = rawActive > 0;
         String name = c.getString(2);
         long executionTimeRAW = c.getLong(3);
         Calendar executionTime = Calendar.getInstance();

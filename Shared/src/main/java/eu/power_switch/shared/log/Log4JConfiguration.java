@@ -35,7 +35,13 @@ public class Log4JConfiguration {
 
     private static LogConfigurator logConfigurator;
 
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
     private Log4JConfiguration() {
+        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time init via configure() method instead");
     }
 
     public static void configure() {
