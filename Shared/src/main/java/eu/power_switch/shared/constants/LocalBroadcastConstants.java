@@ -41,7 +41,7 @@ public class LocalBroadcastConstants {
     public static final String INTENT_SETUP_APARTMENT_CHANGED = "eu.power_switch.setup_apartment_changed";
 
     public static final String INTENT_SETUP_GEOFENCE_CHANGED = "eu.power_switch.setup_geofence_changed";
-    public static final String INTENT_GEOFENCE_LOCATION_CHANGED= "eu.power_switch.geofence_location_changed";
+    public static final String INTENT_GEOFENCE_LOCATION_CHANGED = "eu.power_switch.geofence_location_changed";
     public static final String INTENT_GEOFENCE_ENTER_ACTION_ADDED = "eu.power_switch.geofence_enter_action_added";
     public static final String INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED = "eu.power_switch.geofence_enter_actions_changed";
     public static final String INTENT_GEOFENCE_EXIT_ACTION_ADDED = "eu.power_switch.geofence_exit_action_added";
@@ -66,6 +66,10 @@ public class LocalBroadcastConstants {
 
     public static final String INTENT_TIMER_ACTION_ADDED = "eu.power_switch.timer_action_added";
     public static final String INTENT_ALARM_EVENT_ACTION_ADDED = "eu.power_switch.alarm_event_action_added";
+
+
+    public static final String INTENT_PERMISSION_CHANGED = "eu.power_switch.permission_changed";
+
 
     /**
      * Private Constructor

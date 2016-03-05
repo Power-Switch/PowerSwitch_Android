@@ -22,7 +22,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -85,10 +84,10 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
@@ -715,28 +714,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    BackupFragment.sendBackupsChangedBroadcast(this);
-                } else {
-                    // Permission Denied
-                    StatusMessageHandler.showInfoMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
-                }
-                break;
-            case PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    // TODO: update geofences?
-                } else {
-                    // Permission Denied
-                    StatusMessageHandler.showInfoMessage(this, R.string.permission_denied, Snackbar.LENGTH_LONG);
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
+        // send permission change to possible listeners via local broadcast
+        PermissionHelper.sendPermissionChangedBroadcast(this, requestCode, grantResults);
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

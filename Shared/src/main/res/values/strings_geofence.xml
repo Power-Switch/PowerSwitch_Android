@@ -19,6 +19,12 @@
 
 <resources>
 
+    <string name="all_apartments_have_geofence">All Apartments already have an associated Geofence</string>
+
+    <string name="please_create_apartment_first">Please create an Apartment first</string>
+
+    <string name="grant">Grant</string>
+
     <string name="menu_geofences">Geofences</string>
     <string name="geofence">Geofence</string>
 

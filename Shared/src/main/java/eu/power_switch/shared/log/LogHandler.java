@@ -21,13 +21,11 @@ package eu.power_switch.shared.log;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
@@ -46,6 +44,7 @@ import java.util.zip.ZipOutputStream;
 
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
+import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * This class handles all Log file/folder related stuff
@@ -92,7 +91,7 @@ public class LogHandler {
     public static
     @Nullable
     File getLogsAsZip(@NonNull Context context) throws MissingPermissionException {
-        if (!checkWriteExternalStoragePermission(context)) {
+        if (!PermissionHelper.checkWriteExternalStoragePermission(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 
@@ -207,7 +206,7 @@ public class LogHandler {
     }
 
     public static void sendLogsAsMail(@NonNull Context context) throws Exception {
-        if (!checkWriteExternalStoragePermission(context)) {
+        if (!PermissionHelper.checkWriteExternalStoragePermission(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 
@@ -221,23 +220,6 @@ public class LogHandler {
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(context)));
 
         context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.send_to)));
-    }
-
-    /**
-     * Check if ExternalStorage write permission is available
-     *
-     * @param context any suitable context
-     * @return true if write permission is available, false otherwise
-     */
-    public static boolean checkWriteExternalStoragePermission(@NonNull Context context) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            // Marshmallow+
-            int hasWriteExternalStoragePermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            return hasWriteExternalStoragePermission == PackageManager.PERMISSION_GRANTED;
-        } else {
-            // Pre-Marshmallow
-            return true;
-        }
     }
 
     /**

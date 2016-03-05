@@ -18,14 +18,17 @@
 
 package eu.power_switch.gui.fragment.geofences;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -53,8 +56,10 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * Fragment containing a List of all Apartment related Geofences
@@ -117,8 +122,13 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             @Override
             public void onClick(View v) {
                 try {
-                    if (DatabaseHandler.getAllApartments().size() == geofences.size()) {
-                        StatusMessageHandler.showInfoMessage(getRecyclerView(), "All Apartments already have a geofence", Snackbar.LENGTH_LONG);
+                    int apartmentsCount = DatabaseHandler.getAllApartments().size();
+
+                    if (apartmentsCount == 0) {
+                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.please_create_apartment_first, Snackbar.LENGTH_LONG);
+                        return;
+                    } else if (DatabaseHandler.getAllApartments().size() == geofences.size()) {
+                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.all_apartments_have_geofence, Snackbar.LENGTH_LONG);
                         return;
                     }
                 } catch (Exception e) {
@@ -138,9 +148,38 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(this, "received intent: " + intent.getAction());
-                refreshGeofences();
+
+                switch (intent.getAction()) {
+                    case LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED:
+                        refreshGeofences();
+                        break;
+                    case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:
+                        int permissionRequestCode = intent.getIntExtra(PermissionConstants.KEY_REQUEST_CODE, 0);
+                        int[] result = intent.getIntArrayExtra(PermissionConstants.KEY_RESULTS);
+
+                        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
+                            if (result[0] == PackageManager.PERMISSION_GRANTED) {
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                            } else {
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_location_permission,
+                                        R.string.grant, new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                                        Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
+                                            }
+                                        }, Snackbar.LENGTH_INDEFINITE);
+                            }
+                        }
+
+                        break;
+                }
             }
         };
+
+        if (!PermissionHelper.checkLocationPermission(getContext())) {
+            requestLocationPermission();
+        }
 
         return rootView;
     }
@@ -180,6 +219,28 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         }
     }
 
+    private void requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // For example if the user has previously denied the permission.
+            Log.d("Displaying location permission rationale to provide additional context.");
+
+            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_location_permission,
+                    R.string.grant, new Runnable() {
+                        @Override
+                        public void run() {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                    Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
+                        }
+                    }, Snackbar.LENGTH_INDEFINITE);
+        } else {
+            Log.d("Displaying default location permission dialog to request permission");
+            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (super.onOptionsItemSelected(menuItem)) {
@@ -189,8 +250,13 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         switch (menuItem.getItemId()) {
             case R.id.create_geofence:
                 try {
-                    if (DatabaseHandler.getAllApartments().size() == geofences.size()) {
-                        StatusMessageHandler.showInfoMessage(getRecyclerView(), "All Apartments already have a geofence", Snackbar.LENGTH_LONG);
+                    int apartmentsCount = DatabaseHandler.getAllApartments().size();
+
+                    if (apartmentsCount == 0) {
+                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.please_create_apartment_first, Snackbar.LENGTH_LONG);
+                        return true;
+                    } else if (apartmentsCount == geofences.size()) {
+                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.all_apartments_have_geofence, Snackbar.LENGTH_LONG);
                         return true;
                     }
                 } catch (Exception e) {
@@ -228,6 +294,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
         geofenceApiHandler.onStart();
     }

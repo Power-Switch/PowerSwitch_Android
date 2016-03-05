@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -63,13 +64,20 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.permission.PermissionHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Fragment holding a list of all Backups
  */
 public class BackupFragment extends RecyclerViewFragment {
+
+    private static final Comparator<Backup> backupsComparator = new Comparator<Backup>() {
+        @Override
+        public int compare(Backup lhs, Backup rhs) {
+            return lhs.compareDate(rhs);
+        }
+    };
 
     private View rootView;
     private ArrayList<Backup> backups;
@@ -189,7 +197,34 @@ public class BackupFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d("BackupFragment", "received intent: " + intent.getAction());
-                updateUI();
+
+                switch (intent.getAction()) {
+                    case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:
+                        int permissionRequestCode = intent.getIntExtra(PermissionConstants.KEY_REQUEST_CODE, 0);
+                        int[] results = intent.getIntArrayExtra(PermissionConstants.KEY_RESULTS);
+
+                        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION) {
+                            if (results[0] == PackageManager.PERMISSION_GRANTED) {
+                                // Permission Granted
+                                refreshBackups();
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                            } else {
+                                // Permission Denied
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_external_storage_permission,
+                                        R.string.grant, new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+                                            }
+                                        }, Snackbar.LENGTH_INDEFINITE);
+                            }
+                        }
+
+                        break;
+                    case LocalBroadcastConstants.INTENT_BACKUP_CHANGED:
+                        updateUI();
+                }
             }
         };
 
@@ -219,7 +254,7 @@ public class BackupFragment extends RecyclerViewFragment {
     private void refreshBackups() {
         backups.clear();
 
-        if (!LogHandler.checkWriteExternalStoragePermission(getContext())) {
+        if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
             requestExternalStoragePermission();
         } else {
             BackupHandler backupHandler = new BackupHandler(getActivity());
@@ -227,12 +262,7 @@ public class BackupFragment extends RecyclerViewFragment {
                 backups.add(backup);
             }
 
-            Collections.sort(backups, new Comparator<Backup>() {
-                @Override
-                public int compare(Backup lhs, Backup rhs) {
-                    return lhs.compareDate(rhs);
-                }
-            });
+            Collections.sort(backups, backupsComparator);
         }
 
         backupArrayAdapter.notifyDataSetChanged();
@@ -246,7 +276,7 @@ public class BackupFragment extends RecyclerViewFragment {
             Log.d("Displaying storage permission rationale to provide additional context.");
 
             StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_external_storage_permission,
-                    android.R.string.ok, new Runnable() {
+                    R.string.grant, new Runnable() {
                         @Override
                         public void run() {
                             ActivityCompat.requestPermissions(getActivity(), new String[]{
@@ -309,6 +339,7 @@ public class BackupFragment extends RecyclerViewFragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
