@@ -66,8 +66,7 @@ public class EditActivity extends AbstractPluginActivity {
     private ArrayList<String> apartmentNames;
     private ArrayList<String> roomNames;
     private ArrayList<String> receiverNames;
-    private ArrayList<String> buttonNamesReceiver;
-    private ArrayList<String> buttonNamesAll;
+    private ArrayList<String> buttonNames;
     private ArrayList<String> sceneNames;
 
     private Spinner spinner_apartment;
@@ -152,15 +151,7 @@ public class EditActivity extends AbstractPluginActivity {
                 receiverNames.add(receiver.getName());
             }
 
-            buttonNamesReceiver = new ArrayList<>();
-            buttonNamesAll = new ArrayList<>();
-            for (Receiver receiver : availableReceivers) {
-                for (Button button : receiver.getButtons()) {
-                    if (!buttonNamesAll.contains(button.getName())) {
-                        buttonNamesAll.add(button.getName());
-                    }
-                }
-            }
+            buttonNames = new ArrayList<>();
 
             ArrayList<Scene> availableScenes = (ArrayList<Scene>) DatabaseHandler.getAllScenes();
             sceneNames = new ArrayList<>();
@@ -270,7 +261,7 @@ public class EditActivity extends AbstractPluginActivity {
         spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                updateReceiverButtonList();
+                updateButtonList();
                 setPositiveButtonVisibility(checkValidity());
             }
 
@@ -300,7 +291,7 @@ public class EditActivity extends AbstractPluginActivity {
         });
 
         spinner_button = (Spinner) findViewById(R.id.spinner_button);
-        buttonSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, buttonNamesReceiver);
+        buttonSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, buttonNames);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_button.setAdapter(buttonSpinnerArrayAdapter);
         spinnerInteractionListener = new SpinnerInteractionListener() {
@@ -397,7 +388,7 @@ public class EditActivity extends AbstractPluginActivity {
                 setButtonInputType(InputType.MANUAL);
                 editText_button.setText(localeBundle.getString(ApiConstants.KEY_BUTTON));
             } else {
-                spinner_button.setSelection(buttonNamesReceiver.indexOf(localeBundle.getString(ApiConstants.KEY_BUTTON)));
+                spinner_button.setSelection(buttonNames.indexOf(localeBundle.getString(ApiConstants.KEY_BUTTON)));
             }
         } else if (localeBundle.containsKey(ApiConstants.KEY_ROOM) && localeBundle.containsKey(ApiConstants.KEY_BUTTON)) {
             updateActionType(Action.ACTION_TYPE_ROOM);
@@ -413,7 +404,7 @@ public class EditActivity extends AbstractPluginActivity {
                 setButtonInputType(InputType.MANUAL);
                 editText_button.setText(localeBundle.getString(ApiConstants.KEY_BUTTON));
             } else {
-                spinner_button.setSelection(buttonNamesReceiver.indexOf(localeBundle.getString(ApiConstants.KEY_BUTTON)));
+                spinner_button.setSelection(buttonNames.indexOf(localeBundle.getString(ApiConstants.KEY_BUTTON)));
             }
         } else if (localeBundle.containsKey(ApiConstants.KEY_SCENE)) {
             updateActionType(Action.ACTION_TYPE_SCENE);
@@ -521,7 +512,6 @@ public class EditActivity extends AbstractPluginActivity {
         roomSpinnerArrayAdapter.notifyDataSetChanged();
 
         updateReceiverList();
-        updateRoomButtonsList();
     }
 
     private void updateReceiverList() {
@@ -534,18 +524,28 @@ public class EditActivity extends AbstractPluginActivity {
                     receiverNames.add(receiver.getName());
                 }
                 spinner_receiver.setSelection(0);
-                updateReceiverButtonList();
             }
         } catch (Exception e) {
             Log.e(e);
         }
+        updateButtonList();
 
         receiverSpinnerArrayAdapter.notifyDataSetChanged();
     }
 
-    private void updateReceiverButtonList() {
-        buttonNamesReceiver.clear();
+    private void updateButtonList() {
+        buttonNames.clear();
 
+        if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
+            updateReceiverButtonList();
+        } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
+            updateRoomButtonsList();
+        }
+
+        buttonSpinnerArrayAdapter.notifyDataSetChanged();
+    }
+
+    private void updateReceiverButtonList() {
         try {
             Room selectedRoom = getSelectedRoom();
             Receiver selectedReceiver = selectedRoom.getReceiver(
@@ -553,22 +553,17 @@ public class EditActivity extends AbstractPluginActivity {
 
             if (selectedReceiver != null) {
                 for (Button button : selectedReceiver.getButtons()) {
-                    buttonNamesReceiver.add(button.getName());
+                    buttonNames.add(button.getName());
                 }
             }
 
             spinner_button.setSelection(0);
         } catch (Exception e) {
             Log.e(e);
-            buttonNamesReceiver.clear();
         }
-
-        buttonSpinnerArrayAdapter.notifyDataSetChanged();
     }
 
     private void updateRoomButtonsList() {
-        buttonNamesAll.clear();
-
         try {
             Room selectedRoom = getSelectedRoom();
 
@@ -578,14 +573,12 @@ public class EditActivity extends AbstractPluginActivity {
                     uniqueButtonNames.add(button.getName());
                 }
             }
-            buttonNamesAll.addAll(uniqueButtonNames);
+            buttonNames.addAll(uniqueButtonNames);
 
             spinner_button.setSelection(0);
         } catch (Exception e) {
             Log.e(e);
         }
-
-        buttonSpinnerArrayAdapter.notifyDataSetChanged();
     }
 
     private Room getSelectedRoom() {

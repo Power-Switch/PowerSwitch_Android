@@ -85,7 +85,7 @@
                     android:layout_marginTop="@dimen/title_margin_top"
                     android:layout_weight="1"
                     android:text="@string/apartment"
-                    android:textColor="@color/color_light_blue_a700"/>
+                    android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
                     android:id="@+id/imageButton_switchApartment"
@@ -97,7 +97,7 @@
             <Spinner
                 android:id="@+id/spinner_apartment"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
             <EditText
                 android:id="@+id/editText_apartment"
@@ -124,7 +124,7 @@
                     android:layout_marginTop="@dimen/title_margin_top"
                     android:layout_weight="1"
                     android:text="@string/room"
-                    android:textColor="@color/color_light_blue_a700"/>
+                    android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
                     android:id="@+id/imageButton_switchRoom"
@@ -136,7 +136,7 @@
             <Spinner
                 android:id="@+id/spinner_room"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
             <EditText
                 android:id="@+id/editText_room"
@@ -163,7 +163,7 @@
                     android:layout_marginTop="@dimen/title_margin_top"
                     android:layout_weight="1"
                     android:text="@string/receiver"
-                    android:textColor="@color/color_light_blue_a700"/>
+                    android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
                     android:id="@+id/imageButton_switchReceiver"
@@ -175,7 +175,7 @@
             <Spinner
                 android:id="@+id/spinner_receiver"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
             <EditText
                 android:id="@+id/editText_receiver"
@@ -202,7 +202,7 @@
                     android:layout_marginTop="@dimen/title_margin_top"
                     android:layout_weight="1"
                     android:text="@string/button"
-                    android:textColor="@color/color_light_blue_a700"/>
+                    android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
                     android:id="@+id/imageButton_switchButton"
@@ -214,7 +214,7 @@
             <Spinner
                 android:id="@+id/spinner_button"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
             <EditText
                 android:id="@+id/editText_button"
@@ -241,7 +241,7 @@
                     android:layout_marginTop="@dimen/title_margin_top"
                     android:layout_weight="1"
                     android:text="@string/scene"
-                    android:textColor="@color/color_light_blue_a700"/>
+                    android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
                     android:id="@+id/imageButton_switchScene"
@@ -253,7 +253,7 @@
             <Spinner
                 android:id="@+id/spinner_scene"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
             <EditText
                 android:id="@+id/editText_scene"

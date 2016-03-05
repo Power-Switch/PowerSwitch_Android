@@ -32,7 +32,6 @@
         android:paddingTop="@dimen/dialog_margin_top">
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/title_margin_top"
@@ -69,113 +68,109 @@
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/apartment"
-            android:textColor="@color/color_light_blue_a700"/>
-
-        <Spinner
-            android:id="@+id/spinner_apartment"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/timer_action_spinner_height"/>
-
         <LinearLayout
-            android:id="@+id/linearLayout_receiver_action"
+            android:id="@+id/linearLayout_apartment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/room"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:layout_weight="1"
+                style="@style/sub_header"
+                android:text="@string/apartment"
+                android:textColor="?attr/colorAccent"/>
 
             <Spinner
-                android:id="@+id/spinner_receiver_action_room"
+                android:id="@+id/spinner_apartment"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/title_margin_top"
+                android:layout_weight="1"
+                android:text="@string/room"
+                android:textColor="?attr/colorAccent"/>
+
+            <Spinner
+                android:id="@+id/spinner_room"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_spinner_height"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_receiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:layout_weight="1"
                 android:text="@string/receiver"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:textColor="?attr/colorAccent"/>
 
             <Spinner
-                android:id="@+id/spinner_receiver_action_receiver"
+                android:id="@+id/spinner_receiver"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/button"
-                android:textColor="@color/color_light_blue_a700"/>
-
-            <Spinner
-                android:id="@+id/spinner_receiver_action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_room_action"
+            android:id="@+id/linearLayout_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/room"
-                android:textColor="@color/color_light_blue_a700"/>
-
-            <Spinner
-                android:id="@+id/spinner_room_action_room"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/title_margin_top"
+                android:layout_weight="1"
                 android:text="@string/button"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:textColor="?attr/colorAccent"/>
 
             <Spinner
-                android:id="@+id/spinner_room_action_button"
+                android:id="@+id/spinner_button"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout_scene_action"
+            android:id="@+id/linearLayout_scene"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/title_margin_top"
+                android:layout_weight="1"
                 android:text="@string/scene"
-                android:textColor="@color/color_light_blue_a700"/>
+                android:textColor="?attr/colorAccent"/>
 
             <Spinner
-                android:id="@+id/spinner_scene_action_scene"
+                android:id="@+id/spinner_scene"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/timer_action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
         </LinearLayout>
 
