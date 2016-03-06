@@ -236,19 +236,14 @@ abstract class ActionHandler {
             long buttonId = cursor1.getLong(2);
 
             Room room = RoomHandler.get(roomId);
+//            Apartment apartment = ApartmentHandler.get(room);
+            String apartmentName = ApartmentHandler.getName(room.getApartmentId());
             Receiver receiver = ReceiverHandler.get(receiverId);
-            Button button = null;
-
-            for (Button currentButton : receiver.getButtons()) {
-                if (currentButton.getId() == buttonId) {
-                    button = currentButton;
-                    break;
-                }
-            }
+            Button button = receiver.getButton(buttonId);
 
             cursor1.close();
 
-            return new ReceiverAction(actionId, room, receiver, button);
+            return new ReceiverAction(actionId, apartmentName, room, receiver, button);
         } else if (Action.ACTION_TYPE_ROOM.equals(actionType)) {
             String[] columns1 = {RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME};
             Cursor cursor1 = DatabaseHandler.database.query(RoomActionTable.TABLE_NAME, columns1,
@@ -257,10 +252,12 @@ abstract class ActionHandler {
 
             long roomId = cursor1.getLong(0);
             Room room = RoomHandler.get(roomId);
+//            Apartment apartment = ApartmentHandler.get(room);
+            String apartmentName = ApartmentHandler.getName(room.getApartmentId());
             String buttonName = cursor1.getString(1);
 
             cursor1.close();
-            return new RoomAction(actionId, room, buttonName);
+            return new RoomAction(actionId, apartmentName, room, buttonName);
         } else if (Action.ACTION_TYPE_SCENE.equals(actionType)) {
             String[] columns1 = {SceneActionTable.COLUMN_SCENE_ID};
             Cursor cursor1 = DatabaseHandler.database.query(SceneActionTable.TABLE_NAME, columns1,
@@ -269,12 +266,14 @@ abstract class ActionHandler {
 
             long sceneId = cursor1.getLong(0);
             Scene scene = SceneHandler.get(sceneId);
+            String apartmentName = ApartmentHandler.getName(scene.getApartmentId());
+//            Apartment apartment = ApartmentHandler.get(scene);
 
             cursor1.close();
-            return new SceneAction(actionId, scene);
+            return new SceneAction(actionId, apartmentName, scene);
         } else {
             Log.e("Unknown ActionType!");
-            throw new RuntimeException();
+            throw new RuntimeException("Unknown ActionType: " + actionType);
         }
     }
 }

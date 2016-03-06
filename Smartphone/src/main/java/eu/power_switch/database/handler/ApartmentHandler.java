@@ -186,6 +186,23 @@ abstract class ApartmentHandler {
     }
 
     /**
+     * Get Name of Apartment
+     *
+     * @param apartmentId ID of Apartment
+     * @return Name of Apartment, null if not found
+     */
+    public static String getName(Long apartmentId) throws Exception {
+        String[] columns = {ApartmentTable.COLUMN_NAME};
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_ID + "==" + apartmentId, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            return cursor.getString(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Gets all Apartments from Database
      *
      * @return List of Apartments

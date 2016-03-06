@@ -30,16 +30,19 @@ import eu.power_switch.obj.Scene;
  */
 public class SceneAction extends Action {
 
+    //    private Apartment apartment;
+    private String apartmentName;
     private Scene scene;
 
-    public SceneAction(long id, @NonNull Scene scene) {
+    public SceneAction(long id, @NonNull String apartmentName, @NonNull Scene scene) {
         this.id = id;
+//        this.apartment = apartment;
+        this.apartmentName = apartmentName;
         this.scene = scene;
     }
 
-    public
     @NonNull
-    Scene getScene() {
+    public Scene getScene() {
         return scene;
     }
 
@@ -51,10 +54,9 @@ public class SceneAction extends Action {
     }
 
     @Override
-    public
     @NonNull
-    String toString() {
-        return scene.getName();
+    public String toString() {
+        return apartmentName + ": " + scene.getName();
     }
 
     @Override

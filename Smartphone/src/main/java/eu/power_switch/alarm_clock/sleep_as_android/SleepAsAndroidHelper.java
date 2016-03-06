@@ -26,6 +26,8 @@ import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * Helper class for Sleep As Android specific tasks
+ * <p/>
  * Created by Markus on 20.02.2016.
  */
 public class SleepAsAndroidHelper {

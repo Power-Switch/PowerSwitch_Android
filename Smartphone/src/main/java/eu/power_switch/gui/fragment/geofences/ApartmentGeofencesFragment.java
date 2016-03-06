@@ -30,6 +30,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -86,7 +87,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_apartment_geofences, container, false);
         setHasOptionsMenu(true);
@@ -125,10 +126,16 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                     int apartmentsCount = DatabaseHandler.getAllApartments().size();
 
                     if (apartmentsCount == 0) {
-                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.please_create_apartment_first, Snackbar.LENGTH_LONG);
+                        new AlertDialog.Builder(getContext())
+                                .setMessage(R.string.please_create_apartment_first)
+                                .setNeutralButton(android.R.string.ok, null)
+                                .show();
                         return;
                     } else if (DatabaseHandler.getAllApartments().size() == geofences.size()) {
-                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.all_apartments_have_geofence, Snackbar.LENGTH_LONG);
+                        new AlertDialog.Builder(getContext())
+                                .setMessage(R.string.all_apartments_have_geofence)
+                                .setNeutralButton(android.R.string.ok, null)
+                                .show();
                         return;
                     }
                 } catch (Exception e) {

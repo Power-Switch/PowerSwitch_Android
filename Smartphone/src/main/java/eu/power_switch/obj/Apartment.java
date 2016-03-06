@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj;
 
+import android.support.annotation.NonNull;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -91,46 +93,92 @@ public class Apartment {
         this.geofence = geofence;
     }
 
+    /**
+     * Get the ID of this apartment
+     *
+     * @return id of this apartment
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Get the name of this apartment
+     *
+     * @return name of this apartment
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = name;
     }
 
+    /**
+     * Get the list of rooms of this apartment
+     *
+     * @return list of rooms
+     */
     public List<Room> getRooms() {
         return rooms;
     }
 
-    public void setRooms(List<Room> rooms) {
+    public void setRooms(@NonNull List<Room> rooms) {
         this.rooms = rooms;
     }
 
+    /**
+     * Get the list of scenes of this apartment
+     *
+     * @return list of scenes
+     */
     public List<Scene> getScenes() {
         return scenes;
     }
 
-    public void setScenes(List<Scene> scenes) {
+    /**
+     * Set the list of scenes of this apartment
+     *
+     * @param scenes list of scenes
+     */
+    public void setScenes(@NonNull List<Scene> scenes) {
         this.scenes = scenes;
     }
 
+    /**
+     * Get associated Gateways of this apartment
+     *
+     * @return list of Gateways
+     */
     public List<Gateway> getAssociatedGateways() {
         return gateways;
     }
 
+    /**
+     * Get active state of this apartment
+     *
+     * @return true if the apartment is currently active in gui, false otherwise
+     */
     public boolean isActive() {
         return isActive;
     }
 
+    /**
+     * Set active state of this apartment
+     *
+     * @param active true if the apartment is currently active in gui, false otherwise
+     */
     public void setActive(boolean active) {
         isActive = active;
     }
 
+    /**
+     * Get a room in this apartment by its name
+     *
+     * @param name name of room
+     * @return Room or null
+     */
     public Room getRoom(String name) {
         for (Room room : rooms) {
             if (room.getName().equals(name)) {
@@ -140,6 +188,12 @@ public class Apartment {
         return null;
     }
 
+    /**
+     * Get a room in this apartment by its id
+     *
+     * @param id id of room
+     * @return Room or null
+     */
     public Room getRoom(Long id) {
         for (Room room : rooms) {
             if (room.getId().equals(id)) {
@@ -149,6 +203,12 @@ public class Apartment {
         return null;
     }
 
+    /**
+     * Get a scene in this apartment by its name
+     *
+     * @param name name of scene
+     * @return Scene or null
+     */
     public Scene getScene(String name) {
         for (Scene scene : scenes) {
             if (scene.getName().equals(name)) {
@@ -158,6 +218,12 @@ public class Apartment {
         return null;
     }
 
+    /**
+     * Get a scene in this apartment by its id
+     *
+     * @param id id of scene
+     * @return Scene or null
+     */
     public Scene getScene(Long id) {
         for (Scene scene : scenes) {
             if (scene.getId().equals(id)) {
@@ -167,6 +233,11 @@ public class Apartment {
         return null;
     }
 
+    /**
+     * Get geofence of this apartment
+     *
+     * @return Geofence, null if none exists
+     */
     public Geofence getGeofence() {
         return geofence;
     }

@@ -27,8 +27,19 @@ import java.util.Calendar;
  */
 public class HistoryItem {
 
+    /**
+     * ID of this HistoryItem
+     */
     private Long id;
+
+    /**
+     * Date/Time of this HistoryItem
+     */
     private Calendar time;
+
+    /**
+     * Description of this HistoryItem
+     */
     private String description;
 
     public HistoryItem(Long id, Long timeInMilliseconds, String description) {
@@ -44,14 +55,29 @@ public class HistoryItem {
         this.description = description;
     }
 
+    /**
+     * Get ID of this HistoryItem
+     *
+     * @return Id of this HistoryItem
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Get description of this HistoryItem
+     *
+     * @return description of this HistoryItem
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Get Date/Time of this HistoryItem
+     *
+     * @return Date/Time of this HistoryItem
+     */
     public Calendar getTime() {
         return time;
     }

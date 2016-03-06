@@ -132,6 +132,11 @@ public class PowerSwitch extends MultiDexApplication {
         }
     }
 
+    /**
+     * Check if the current is the UI thread
+     *
+     * @return true if the current thread is the same as the UI thread
+     */
     public boolean isUIThread() {
         return Looper.getMainLooper().getThread() == Thread.currentThread();
     }

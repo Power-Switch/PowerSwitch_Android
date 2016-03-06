@@ -54,6 +54,7 @@ import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * Created by Markus on 29.01.2016.
@@ -229,9 +230,11 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
             actionsMap.put(Geofence.EventType.ENTER, currentEnterActions);
             actionsMap.put(Geofence.EventType.EXIT, currentExitActions);
 
+            boolean isLocationPermissionAvailable = PermissionHelper.checkLocationPermission(getContext());
+
             if (apartmentId == -1) {
                 if (currentId == -1) {
-                    Geofence geofence = new Geofence(currentId, true, currentName, currentLocation,
+                    Geofence geofence = new Geofence(currentId, isLocationPermissionAvailable, currentName, currentLocation,
                             currentGeofenceRadius, currentSnapshot, actionsMap);
                     DatabaseHandler.addGeofence(geofence);
 
@@ -255,7 +258,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                 if (apartment.getGeofence() == null) {
                     updatedApartment = new Apartment(apartment.getId(),
                             apartment.getName(), apartment.getAssociatedGateways(),
-                            new Geofence((long) -1, true, apartment.getName(), currentLocation, currentGeofenceRadius,
+                            new Geofence((long) -1, isLocationPermissionAvailable, apartment.getName(), currentLocation, currentGeofenceRadius,
                                     currentSnapshot, currentEnterActions, currentExitActions));
                 } else {
                     Geofence geofence = apartment.getGeofence();

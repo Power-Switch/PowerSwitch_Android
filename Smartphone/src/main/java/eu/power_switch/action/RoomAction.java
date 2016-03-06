@@ -30,24 +30,27 @@ import eu.power_switch.obj.Room;
  */
 public class RoomAction extends Action {
 
+    //    private Apartment apartment;
+    private String apartmentName;
     private Room room;
     private String buttonName;
 
-    public RoomAction(long id, @NonNull Room room, @NonNull String buttonName) {
+    public RoomAction(long id, @NonNull String apartmentName, @NonNull Room room, @NonNull String buttonName) {
         this.id = id;
+//        this.apartment = apartment;
+        this.apartmentName = apartmentName;
         this.room = room;
         this.buttonName = buttonName;
     }
 
-    public
     @NonNull
-    Room getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public
+
     @NonNull
-    String getButtonName() {
+    public String getButtonName() {
         return buttonName;
     }
 
@@ -59,10 +62,9 @@ public class RoomAction extends Action {
     }
 
     @Override
-    public
     @NonNull
-    String toString() {
-        return room.getName() + ": " + buttonName;
+    public String toString() {
+        return apartmentName + ": " + room.getName() + ": " + buttonName;
     }
 
     @Override

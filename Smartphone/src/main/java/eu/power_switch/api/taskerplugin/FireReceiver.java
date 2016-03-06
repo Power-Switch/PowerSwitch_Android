@@ -36,6 +36,8 @@ import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * BroadcastReceiver responsible for executing actions fired by Tasker
+ * <p/>
  * Created by Markus on 22.02.2016.
  */
 public class FireReceiver extends BroadcastReceiver {

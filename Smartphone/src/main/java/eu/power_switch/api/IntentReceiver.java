@@ -43,6 +43,9 @@ import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 
+/**
+ * BroadcastReceiver for action API via Intents
+ */
 public class IntentReceiver extends BroadcastReceiver {
 
     @Override

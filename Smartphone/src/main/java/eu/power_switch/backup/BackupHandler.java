@@ -56,6 +56,11 @@ public class BackupHandler {
      */
     private Context context;
 
+    /**
+     * Constructor
+     *
+     * @param context any suitable context
+     */
     public BackupHandler(@NonNull Context context) {
         this.context = context;
     }

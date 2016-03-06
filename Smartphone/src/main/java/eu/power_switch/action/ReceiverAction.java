@@ -32,32 +32,33 @@ import eu.power_switch.obj.receiver.Receiver;
  */
 public class ReceiverAction extends Action {
 
+    //    private Apartment apartment;
+    private String apartmentName;
     private Room room;
     private Receiver receiver;
     private Button button;
 
-    public ReceiverAction(long id, @NonNull Room room, @NonNull Receiver receiver, @NonNull Button button) {
+    public ReceiverAction(long id, @NonNull String apartmentName, @NonNull Room room, @NonNull Receiver receiver, @NonNull Button button) {
         this.id = id;
+//        this.apartment = apartment;
+        this.apartmentName = apartmentName;
         this.room = room;
         this.receiver = receiver;
         this.button = button;
     }
 
-    public
     @NonNull
-    Room getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public
     @NonNull
-    Receiver getReceiver() {
+    public Receiver getReceiver() {
         return receiver;
     }
 
-    public
     @NonNull
-    Button getButton() {
+    public Button getButton() {
         return button;
     }
 
@@ -69,10 +70,12 @@ public class ReceiverAction extends Action {
     }
 
     @Override
-    public
     @NonNull
-    String toString() {
-        return room.getName() + ": " + receiver.getName() + ": " + button.getName();
+    public String toString() {
+        return apartmentName + ": " +
+                room.getName() + ": " +
+                receiver.getName() + ": " +
+                button.getName();
     }
 
     @Override

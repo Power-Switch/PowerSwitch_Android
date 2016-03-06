@@ -172,6 +172,8 @@ import java.security.SecureRandom;
 import java.util.regex.Pattern;
 
 /**
+ * Helper class for Tasker plugin specific tasks
+ * <p/>
  * Created by Markus on 24.02.2016.
  */
 public class TaskerPlugin {

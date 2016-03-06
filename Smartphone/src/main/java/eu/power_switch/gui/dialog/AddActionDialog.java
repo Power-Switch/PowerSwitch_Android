@@ -432,6 +432,7 @@ public abstract class AddActionDialog extends DialogFragment {
                 Log.d(spinner_receiver.getSelectedItem().toString());
                 Log.d(spinner_button.getSelectedItem().toString());
 
+                Apartment selectedApartment = currentApartment;
                 Room selectedRoom = getSelectedRoom();
                 Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver.getSelectedItem()
                         .toString());
@@ -442,21 +443,21 @@ public abstract class AddActionDialog extends DialogFragment {
                     }
                 }
 
-                action = new ReceiverAction(-1, selectedRoom, selectedReceiver, selectedButton);
+                action = new ReceiverAction(-1, currentApartment.getName(), selectedRoom, selectedReceiver, selectedButton);
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
                 Log.d(spinner_room.getSelectedItem().toString());
                 Log.d(spinner_button.getSelectedItem().toString());
 
                 Room selectedRoom = getSelectedRoom();
 
-                action = new RoomAction(-1, selectedRoom, spinner_button.getSelectedItem()
+                action = new RoomAction(-1, currentApartment.getName(), selectedRoom, spinner_button.getSelectedItem()
                         .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
                 Log.d(spinner_scene.getSelectedItem().toString());
 
                 Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem().toString());
 
-                action = new SceneAction(-1, selectedScene);
+                action = new SceneAction(-1, currentApartment.getName(), selectedScene);
             }
 
         } catch (Exception e) {

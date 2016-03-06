@@ -41,6 +41,12 @@ public class IconicsHelper {
     private IconicsHelper() {
     }
 
+    /**
+     * Get "Menu" icon
+     *
+     * @param context any suitable context
+     * @return "Menu" Icon
+     */
     public static IconicsDrawable getMenuIcon(Context context) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_menu)
                 .sizeDp(24);
@@ -54,6 +60,13 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Add" icon
+     *
+     * @param context         any suitable context
+     * @param colorResourceId icon color
+     * @return "Add" icon
+     */
     public static IconicsDrawable getAddIcon(Context context, @ColorRes int colorResourceId) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_plus)
                 .color(ContextCompat.getColor(context, colorResourceId))
@@ -63,6 +76,13 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Refresh" icon
+     *
+     * @param context         any suitable context
+     * @param colorResourceId icon color
+     * @return "Refresh" icon
+     */
     public static IconicsDrawable getRefreshIcon(Context context, @ColorRes int colorResourceId) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_refresh)
                 .color(ContextCompat.getColor(context, colorResourceId))
@@ -72,6 +92,12 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Cancel" icon
+     *
+     * @param context any suitable context
+     * @return "Cancel" icon
+     */
     public static IconicsDrawable getCancelIcon(Context context) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_close_circle)
                 .color(ContextCompat.getColor(context, R.color.inactive_gray))
@@ -80,6 +106,13 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Delete" icon
+     *
+     * @param context         any suitable context
+     * @param colorResourceId icon color
+     * @return "Delete" icon
+     */
     public static IconicsDrawable getDeleteIcon(Context context, @ColorRes int colorResourceId) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_delete)
                 .color(ContextCompat.getColor(context, colorResourceId))
@@ -88,6 +121,12 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Next" icon
+     *
+     * @param context any suitable context
+     * @return "Next" icon
+     */
     public static IconicsDrawable getNextIcon(Context context) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_arrow_forward)
                 .sizeDp(36)
@@ -102,6 +141,12 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Save" icon
+     *
+     * @param context any suitable context
+     * @return "Save" icon
+     */
     public static IconicsDrawable getSaveIcon(Context context) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_check_circle)
                 .sizeDp(36);
@@ -115,6 +160,12 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Reorder" icon
+     *
+     * @param context any suitable context
+     * @return "Reorder" icon
+     */
     public static IconicsDrawable getReorderIcon(Context context) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_reorder)
                 .sizeDp(24);
@@ -128,6 +179,13 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Search" icon
+     *
+     * @param context         any suitable context
+     * @param colorResourceId icon color
+     * @return "Search" icon
+     */
     public static IconicsDrawable getSearchIcon(Context context, @ColorRes int colorResourceId) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_search)
                 .color(ContextCompat.getColor(context, colorResourceId))
@@ -136,6 +194,12 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Attention" icon
+     *
+     * @param context any suitable context
+     * @return "Attention" icon
+     */
     public static IconicsDrawable getAttentionIcon(Context context) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_report_problem)
                 .color(ContextCompat.getColor(context, R.color.color_red_a700))
@@ -144,6 +208,12 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Up" icon
+     *
+     * @param context any suitable context
+     * @return "Up" icon
+     */
     public static Drawable getUpIcon(Context context) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_arrow_upward)
                 .sizeDp(24);

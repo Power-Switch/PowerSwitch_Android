@@ -51,7 +51,7 @@ public class PlayStoreModeDataModel {
 
     private Context context;
 
-    private Apartment apartment;
+    private Apartment apartment = new Apartment((long) 0, "Home");
 
     private ArrayList<Room> rooms = new ArrayList<>();
     private ArrayList<Scene> scenes = new ArrayList<>();
@@ -233,7 +233,7 @@ public class PlayStoreModeDataModel {
     public ArrayList<Timer> getTimers() {
         ArrayList<Timer> timers = new ArrayList<>();
 
-        ReceiverAction timerReceiverAction = new ReceiverAction(0, wohnzimmer, ecklampe_wohnzimmer,
+        ReceiverAction timerReceiverAction = new ReceiverAction(0, apartment.getName(), wohnzimmer, ecklampe_wohnzimmer,
                 ecklampe_wohnzimmer.getButtons().getFirst());
         ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
         days.add(WeekdayTimer.Day.MONDAY);
@@ -254,7 +254,7 @@ public class PlayStoreModeDataModel {
         timers.add(new WeekdayTimer(0, true, "Abendlicht", c, days, actions));
 
 
-        ReceiverAction timerReceiverAction2 = new ReceiverAction(0, kueche, kaffeemaschine_kueche,
+        ReceiverAction timerReceiverAction2 = new ReceiverAction(0, apartment.getName(), kueche, kaffeemaschine_kueche,
                 ecklampe_wohnzimmer.getButtons().getFirst());
 
         ArrayList<Action> actions2 = new ArrayList<>();

@@ -37,7 +37,9 @@ public abstract class Action {
     public static final String ACTION_TYPE_ROOM = "action_type_room";
     public static final String ACTION_TYPE_SCENE = "action_type_scene";
     public static final String ACTION_TYPE_PAUSE = "action_type_pause";
-
+    /**
+     * ID of this Action
+     */
     protected long id;
 
     /**
@@ -77,4 +79,5 @@ public abstract class Action {
     @Retention(RetentionPolicy.SOURCE)
     public @interface ActionType {
     }
+
 }
