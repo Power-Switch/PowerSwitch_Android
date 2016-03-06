@@ -74,8 +74,11 @@ public class ReceiverTable {
             case 7:
                 db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_LAST_ACTIVATED_BUTTON_ID + " int;");
             case 8:
-
-                // insert data from old timer_action table into ActionTable and TimerActionTable
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+                // update receiver classpath
                 String[] columns = {COLUMN_ID, COLUMN_CLASSNAME, COLUMN_TYPE};
                 Cursor cursor = db.query(TABLE_NAME, columns,
                         null, null, null, null, null);
@@ -104,7 +107,6 @@ public class ReceiverTable {
                 }
 
                 cursor.close();
-                break;
         }
     }
 }
