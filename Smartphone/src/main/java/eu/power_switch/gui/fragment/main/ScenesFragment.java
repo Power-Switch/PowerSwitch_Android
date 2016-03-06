@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -112,6 +113,19 @@ public class ScenesFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
+                        new AlertDialog.Builder(getContext())
+                                .setMessage(R.string.please_create_or_activate_apartment_first)
+                                .setNeutralButton(android.R.string.ok, null)
+                                .show();
+                        return;
+                    }
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                    return;
+                }
+
                 ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
                 configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureSceneDialog.show(getFragmentManager(), null);

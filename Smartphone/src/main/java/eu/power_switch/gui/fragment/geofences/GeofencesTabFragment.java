@@ -99,13 +99,6 @@ public class GeofencesTabFragment extends Fragment {
 
         skipTutorial = false;
 
-        tabLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showTutorial(tabViewPager.getCurrentItem());
-            }
-        }, 500);
-
         return rootView;
     }
 
@@ -145,6 +138,12 @@ public class GeofencesTabFragment extends Fragment {
                 .singleUse(showcaseKey)
                 .setDelay(500)
                 .show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showTutorial(tabViewPager.getCurrentItem());
     }
 
     private static class CustomTabAdapter extends FragmentPagerAdapter {

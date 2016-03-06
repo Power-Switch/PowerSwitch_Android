@@ -38,20 +38,42 @@ public class ReceiverWidget {
      */
     private long receiverId;
 
+    /**
+     * Constructor
+     *
+     * @param widgetId   ID of this Widget
+     * @param roomId     ID of associated Room
+     * @param receiverId ID of associated Receiver
+     */
     public ReceiverWidget(int widgetId, long roomId, long receiverId) {
         this.widgetId = widgetId;
         this.roomId = roomId;
         this.receiverId = receiverId;
     }
 
+    /**
+     * Get ID of this Widget
+     *
+     * @return ID of this Widget
+     */
     public int getWidgetId() {
         return widgetId;
     }
 
+    /**
+     * Get ID of Receiver this Widget is associated with
+     *
+     * @return ID of associated Receiver
+     */
     public long getReceiverId() {
         return receiverId;
     }
 
+    /**
+     * Get ID of Room this Widget is associated with
+     *
+     * @return ID of associated Room
+     */
     public long getRoomId() {
         return roomId;
     }

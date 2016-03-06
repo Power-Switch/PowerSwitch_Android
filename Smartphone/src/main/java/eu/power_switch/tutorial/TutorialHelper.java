@@ -21,6 +21,8 @@ package eu.power_switch.tutorial;
 import eu.power_switch.shared.constants.TutorialConstants;
 
 /**
+ * Helper class for Tutorial specific tasks
+ * <p/>
  * Created by Markus on 12.12.2015.
  */
 public class TutorialHelper {

@@ -118,79 +118,82 @@ public class ConfigureReceiverWidgetActivity extends Activity {
 
         android.widget.Button save = (android.widget.Button) findViewById(R.id.button_widgetSave);
         save.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                // First, get the App Widget ID from the Intent that launched the Activity:
-                Intent intent = getIntent();
-                Bundle extras = intent.getExtras();
-                if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-                    int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-                    // Perform your App Widget configuration:
-                    Room selectedRoom = roomsList.get(spinnerRoom.getSelectedItemPosition());
-                    Receiver selectedReceiver = null;
-                    for (Receiver receiver : selectedRoom.getReceivers()) {
-                        if (receiver.getName().equals(spinnerReceiver.getSelectedItem().toString())) {
-                            selectedReceiver = receiver;
-                            break;
-                        }
-                    }
-
-                    // save new widget data to database
-                    ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId, selectedRoom.getId(),
-                            selectedReceiver.getId());
-                    try {
-                        DatabaseHandler.addReceiverWidget(receiverWidget);
-                    } catch (Exception e) {
-                        Log.e(e);
-                    }
-                    // When the configuration is complete, get an instance of
-                    // the AppWidgetManager by calling getInstance(Context):
-                    AppWidgetManager appWidgetManager = AppWidgetManager
-                            .getInstance(ConfigureReceiverWidgetActivity.this);
-                    // Update the App Widget with a RemoteViews layout by
-                    // calling updateAppWidget(int, RemoteViews):
-                    RemoteViews remoteViews = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME),
-                            R.layout.widget_receiver);
-
-                    LinkedList<Button> buttons = selectedReceiver.getButtons();
-
-                    remoteViews.setTextViewText(R.id.textView_receiver_widget_name, selectedRoom.getName() + ": " +
-                            selectedReceiver.getName());
-
-                    int buttonOffset = 0;
-                    for (Button button : buttons) {
-                        // set button action
-                        RemoteViews buttonView = new RemoteViews(getApplicationContext().getResources()
-                                .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
-                        SpannableString s = new SpannableString(button.getName());
-                        s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
-                        buttonView.setTextViewText(R.id.button_widget_universal, s);
-                        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
-                                .getLastActivatedButtonId().equals(button.getId())) {
-                            buttonView.setTextColor(R.id.button_widget_universal,
-                                    ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));
-                        }
-
-                        PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(), selectedRoom,
-                                selectedReceiver, button, appWidgetId * 15 + buttonOffset);
-
-                        buttonView.setOnClickPendingIntent(R.id.button_widget_universal, pendingIntent);
-
-                        remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
-                        buttonOffset++;
-                    }
-
-                    appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-
-                    // Finally, create the return Intent, set it with the
-                    // Activity result, and finish the Activity:
-                    Intent resultValue = new Intent();
-                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                    setResult(RESULT_OK, resultValue);
-                    finish();
-                }
+                saveCurrentConfiguration();
             }
         });
+    }
+
+    private void saveCurrentConfiguration() {
+        // First, get the App Widget ID from the Intent that launched the Activity:
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+            int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            // Perform your App Widget configuration:
+            Room selectedRoom = roomsList.get(spinnerRoom.getSelectedItemPosition());
+            Receiver selectedReceiver = null;
+            for (Receiver receiver : selectedRoom.getReceivers()) {
+                if (receiver.getName().equals(spinnerReceiver.getSelectedItem().toString())) {
+                    selectedReceiver = receiver;
+                    break;
+                }
+            }
+
+            // save new widget data to database
+            ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId, selectedRoom.getId(),
+                    selectedReceiver.getId());
+            try {
+                DatabaseHandler.addReceiverWidget(receiverWidget);
+            } catch (Exception e) {
+                Log.e(e);
+            }
+            // When the configuration is complete, get an instance of
+            // the AppWidgetManager by calling getInstance(Context):
+            AppWidgetManager appWidgetManager = AppWidgetManager
+                    .getInstance(ConfigureReceiverWidgetActivity.this);
+            // Update the App Widget with a RemoteViews layout by
+            // calling updateAppWidget(int, RemoteViews):
+            RemoteViews remoteViews = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME),
+                    R.layout.widget_receiver);
+
+            LinkedList<Button> buttons = selectedReceiver.getButtons();
+
+            remoteViews.setTextViewText(R.id.textView_receiver_widget_name, selectedRoom.getName() + ": " +
+                    selectedReceiver.getName());
+
+            int buttonOffset = 0;
+            for (Button button : buttons) {
+                // set button action
+                RemoteViews buttonView = new RemoteViews(getApplicationContext().getResources()
+                        .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
+                SpannableString s = new SpannableString(button.getName());
+                s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
+                buttonView.setTextViewText(R.id.button_widget_universal, s);
+                if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
+                        .getLastActivatedButtonId().equals(button.getId())) {
+                    buttonView.setTextColor(R.id.button_widget_universal,
+                            ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));
+                }
+
+                PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(), selectedRoom,
+                        selectedReceiver, button, appWidgetId * 15 + buttonOffset);
+
+                buttonView.setOnClickPendingIntent(R.id.button_widget_universal, pendingIntent);
+
+                remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
+                buttonOffset++;
+            }
+
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+
+            // Finally, create the return Intent, set it with the
+            // Activity result, and finish the Activity:
+            Intent resultValue = new Intent();
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            setResult(RESULT_OK, resultValue);
+            finish();
+        }
     }
 }

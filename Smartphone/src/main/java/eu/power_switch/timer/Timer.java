@@ -18,6 +18,10 @@
 
 package eu.power_switch.timer;
 
+import android.support.annotation.StringDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -33,12 +37,41 @@ public abstract class Timer {
     public static final String EXECUTION_TYPE_WEEKDAY = "weekday_timer";
     public static final String EXECUTION_TYPE_INTERVAL = "interval_timer";
 
+    /**
+     * ID of this Timer
+     */
     protected long id;
+
+    /**
+     * Active state of this Timer
+     */
     protected boolean active;
+
+    /**
+     * Name of this Timer
+     */
     protected String name;
+
+    /**
+     * ExecutionType of this Timer
+     */
+    @ExecutionType
     protected String executionType;
+
+    /**
+     * Actions of this Timer
+     */
     protected ArrayList<Action> actions;
 
+    /**
+     * Constructor
+     *
+     * @param id            ID of this Timer
+     * @param active        "Active" state of this Timer
+     * @param name          Name of this Timer
+     * @param executionType {@see ExecutionType} of this Timer
+     * @param actions       list of actions
+     */
     public Timer(long id, boolean active, String name, String executionType, ArrayList<Action> actions) {
         this.id = id;
         this.active = active;
@@ -59,12 +92,17 @@ public abstract class Timer {
     /**
      * Returns if this Timer is active or not
      *
-     * @return true if active
+     * @return true if active, false otherwise
      */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * Set "Active" state of this Timer
+     *
+     * @param active true if active, false otherwise
+     */
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -83,6 +121,7 @@ public abstract class Timer {
      *
      * @return execution type
      */
+    @ExecutionType
     public String getExecutionType() {
         return executionType;
     }
@@ -109,4 +148,9 @@ public abstract class Timer {
      * @return Interval
      */
     public abstract long getExecutionInterval();
+
+    @StringDef({EXECUTION_TYPE_WEEKDAY, EXECUTION_TYPE_INTERVAL})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface ExecutionType {
+    }
 }

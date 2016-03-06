@@ -234,7 +234,7 @@ public class StatusMessageHandler {
         snackbar.setAction(parent.getContext().getString(R.string.dismiss), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                snackbar.dismiss();
+                // do nothing, just dismiss the snackbar
             }
         });
 
@@ -287,7 +287,6 @@ public class StatusMessageHandler {
             @Override
             public void onClick(View v) {
                 runnable.run();
-                snackbar.dismiss();
             }
         });
 

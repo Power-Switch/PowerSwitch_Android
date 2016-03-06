@@ -117,12 +117,6 @@ public class TimersFragment extends RecyclerViewFragment {
                 configureTimerDialog.show(getFragmentManager(), null);
             }
         });
-        addTimerFAB.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showTutorial();
-            }
-        }, 500);
 
         if (SmartphonePreferencesHandler.getHideAddFAB()) {
             addTimerFAB.setVisibility(View.GONE);
@@ -213,6 +207,12 @@ public class TimersFragment extends RecyclerViewFragment {
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showTutorial();
     }
 
     @Override

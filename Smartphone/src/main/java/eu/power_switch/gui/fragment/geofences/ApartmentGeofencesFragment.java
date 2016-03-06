@@ -127,7 +127,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
                     if (apartmentsCount == 0) {
                         new AlertDialog.Builder(getContext())
-                                .setMessage(R.string.please_create_apartment_first)
+                                .setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
                         return;
@@ -139,7 +139,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                         return;
                     }
                 } catch (Exception e) {
-                    Log.e(e);
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                    return;
                 }
 
                 SelectApartmentForGeofenceDialog selectApartmentForGeofenceDialog = new SelectApartmentForGeofenceDialog();
@@ -171,14 +172,15 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                                 sendApartmentGeofencesChangedBroadcast(context);
                                 CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(context);
                             } else {
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_location_permission,
-                                        R.string.grant, new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                                        Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
-                                            }
-                                        }, Snackbar.LENGTH_INDEFINITE);
+                                Snackbar snackbar = Snackbar.make(getRecyclerView(), R.string.missing_location_permission, Snackbar.LENGTH_INDEFINITE);
+                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                                Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
+                                    }
+                                });
+                                snackbar.show();
                             }
                         }
 
@@ -263,7 +265,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                     int apartmentsCount = DatabaseHandler.getAllApartments().size();
 
                     if (apartmentsCount == 0) {
-                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.please_create_apartment_first, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.please_create_or_activate_apartment_first, Snackbar.LENGTH_LONG);
                         return true;
                     } else if (apartmentsCount == geofences.size()) {
                         StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.all_apartments_have_geofence, Snackbar.LENGTH_LONG);

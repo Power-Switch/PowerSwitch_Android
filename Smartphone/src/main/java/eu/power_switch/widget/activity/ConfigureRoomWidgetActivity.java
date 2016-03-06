@@ -83,50 +83,54 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                // First, get the App Widget ID from the Intent that launched the Activity:
-                Intent intent = getIntent();
-                Bundle extras = intent.getExtras();
-                if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-                    int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                            AppWidgetManager.INVALID_APPWIDGET_ID);
-                    // Perform your App Widget configuration:
-                    Room room = roomsList.get(spinnerRoom.getSelectedItemPosition());
-                    // save new widget data to database
-                    RoomWidget roomWidget = new RoomWidget(appWidgetId, room.getId());
-                    try {
-                        DatabaseHandler.addRoomWidget(roomWidget);
-                    } catch (Exception e) {
-                        Log.e(e);
-                    }
-
-                    // When the configuration is complete, get an instance of
-                    // the AppWidgetManager by calling getInstance(Context):
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ConfigureRoomWidgetActivity.this);
-                    // Update the App Widget with a RemoteViews layout by
-                    // calling updateAppWidget(int, RemoteViews):
-                    RemoteViews views = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_room);
-                    // update UI
-                    views.setTextViewText(R.id.textView_room_widget_name, room.getName());
-                    // set button action
-                    views.setOnClickPendingIntent(R.id.button_on,
-                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(), room,
-                                    getString(R.string.on), ROOM_INTENT_ID_OFFSET + appWidgetId));
-                    views.setOnClickPendingIntent(R.id.button_off,
-                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(),
-                                    room, getString(R.string.off), ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
-                    views.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
-
-
-                    appWidgetManager.updateAppWidget(appWidgetId, views);
-
-                    // Finally, create the return Intent, set it with the
-                    // Activity result, and finish the Activity:
-                    Intent resultValue = new Intent();
-                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                    setResult(RESULT_OK, resultValue);
-                    finish();
-                }
+                saveCurrentConfiguration();
             }
         });
+    }
+
+    private void saveCurrentConfiguration() {
+        // First, get the App Widget ID from the Intent that launched the Activity:
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+            int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
+            // Perform your App Widget configuration:
+            Room room = roomsList.get(spinnerRoom.getSelectedItemPosition());
+            // save new widget data to database
+            RoomWidget roomWidget = new RoomWidget(appWidgetId, room.getId());
+            try {
+                DatabaseHandler.addRoomWidget(roomWidget);
+            } catch (Exception e) {
+                Log.e(e);
+            }
+
+            // When the configuration is complete, get an instance of
+            // the AppWidgetManager by calling getInstance(Context):
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ConfigureRoomWidgetActivity.this);
+            // Update the App Widget with a RemoteViews layout by
+            // calling updateAppWidget(int, RemoteViews):
+            RemoteViews views = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_room);
+            // update UI
+            views.setTextViewText(R.id.textView_room_widget_name, room.getName());
+            // set button action
+            views.setOnClickPendingIntent(R.id.button_on,
+                    WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(), room,
+                            getString(R.string.on), ROOM_INTENT_ID_OFFSET + appWidgetId));
+            views.setOnClickPendingIntent(R.id.button_off,
+                    WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(),
+                            room, getString(R.string.off), ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
+            views.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
+
+
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+
+            // Finally, create the return Intent, set it with the
+            // Activity result, and finish the Activity:
+            Intent resultValue = new Intent();
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            setResult(RESULT_OK, resultValue);
+            finish();
+        }
     }
 }

@@ -83,42 +83,46 @@ public class ConfigureSceneWidgetActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                // First, get the App Widget ID from the Intent that launched the Activity:
-                Intent intent = getIntent();
-                Bundle extras = intent.getExtras();
-                if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-                    int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                            AppWidgetManager.INVALID_APPWIDGET_ID);
-                    // Perform your App Widget configuration:
-                    Scene scene = scenesList.get(spinnerScene.getSelectedItemPosition());
-                    // save new widget data to database
-                    SceneWidget sceneWidget = new SceneWidget(appWidgetId, scene.getId());
-                    try {
-                        DatabaseHandler.addSceneWidget(sceneWidget);
-                    } catch (Exception e) {
-                        Log.e(e);
-                    }
-
-                    // When the configuration is complete, get an instance of
-                    // the AppWidgetManager by calling getInstance(Context):
-                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ConfigureSceneWidgetActivity.this);
-                    // Update the App Widget with a RemoteViews layout by
-                    // calling updateAppWidget(int, RemoteViews):
-                    RemoteViews views = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
-                    views.setTextViewText(R.id.buttonActivate_scene_widget, getString(R.string.activate));
-                    views.setTextViewText(R.id.textView_scene_widget_name, scene.getName());
-                    views.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
-                            WidgetIntentReceiver.buildSceneWidgetPendingIntent(getApplicationContext(), scene, SCENE_INTENT_ID_OFFSET + appWidgetId));
-                    appWidgetManager.updateAppWidget(appWidgetId, views);
-
-                    // Finally, create the return Intent, set it with the
-                    // Activity result, and finish the Activity:
-                    Intent resultValue = new Intent();
-                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                    setResult(RESULT_OK, resultValue);
-                    finish();
-                }
+                saveCurrentConfiguration();
             }
         });
+    }
+
+    private void saveCurrentConfiguration() {
+        // First, get the App Widget ID from the Intent that launched the Activity:
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+            int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID);
+            // Perform your App Widget configuration:
+            Scene scene = scenesList.get(spinnerScene.getSelectedItemPosition());
+            // save new widget data to database
+            SceneWidget sceneWidget = new SceneWidget(appWidgetId, scene.getId());
+            try {
+                DatabaseHandler.addSceneWidget(sceneWidget);
+            } catch (Exception e) {
+                Log.e(e);
+            }
+
+            // When the configuration is complete, get an instance of
+            // the AppWidgetManager by calling getInstance(Context):
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ConfigureSceneWidgetActivity.this);
+            // Update the App Widget with a RemoteViews layout by
+            // calling updateAppWidget(int, RemoteViews):
+            RemoteViews views = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
+            views.setTextViewText(R.id.buttonActivate_scene_widget, getString(R.string.activate));
+            views.setTextViewText(R.id.textView_scene_widget_name, scene.getName());
+            views.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
+                    WidgetIntentReceiver.buildSceneWidgetPendingIntent(getApplicationContext(), scene, SCENE_INTENT_ID_OFFSET + appWidgetId));
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+
+            // Finally, create the return Intent, set it with the
+            // Activity result, and finish the Activity:
+            Intent resultValue = new Intent();
+            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            setResult(RESULT_OK, resultValue);
+            finish();
+        }
     }
 }

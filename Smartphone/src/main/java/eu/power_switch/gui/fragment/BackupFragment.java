@@ -185,12 +185,6 @@ public class BackupFragment extends RecyclerViewFragment {
                 createBackupDialog.show(getFragmentManager(), null);
             }
         });
-        fab.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showTutorial();
-            }
-        }, 500);
 
         // BroadcastReceiver to get notifications from background service if data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -210,14 +204,15 @@ public class BackupFragment extends RecyclerViewFragment {
                                 StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
                             } else {
                                 // Permission Denied
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_external_storage_permission,
-                                        R.string.grant, new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
-                                            }
-                                        }, Snackbar.LENGTH_INDEFINITE);
+                                Snackbar snackbar = Snackbar.make(getRecyclerView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_INDEFINITE);
+                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+                                    }
+                                });
+                                snackbar.show();
                             }
                         }
 
@@ -332,6 +327,8 @@ public class BackupFragment extends RecyclerViewFragment {
         } else {
             fab.setVisibility(View.VISIBLE);
         }
+
+        showTutorial();
     }
 
     @Override

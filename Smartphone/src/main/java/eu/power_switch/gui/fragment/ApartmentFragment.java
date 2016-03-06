@@ -136,12 +136,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 }
             }
         });
-        fab.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showTutorial();
-            }
-        }, 500);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -172,18 +166,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 .singleUse(TutorialConstants.APARTMENT_KEY)
                 .setDelay(500)
                 .show();
-
-        if (apartments.size() == 0) {
-            new MaterialShowcaseView.Builder(getActivity())
-                    .setTarget(fab)
-                    .setUseAutoRadius(false)
-                    .setRadius(64 * 3)
-                    .setDismissOnTouch(true)
-                    .setDismissText(getString(R.string.tutorial__got_it))
-                    .setContentText("Der erste Schritt zur Nutzung von PowerSwitch ist das Erstellen eines Apartments.")
-                    .setDelay(500)
-                    .show();
-        }
     }
 
     @Override
@@ -237,6 +219,8 @@ public class ApartmentFragment extends RecyclerViewFragment {
         } else {
             fab.setVisibility(View.VISIBLE);
         }
+
+        showTutorial();
     }
 
     @Override

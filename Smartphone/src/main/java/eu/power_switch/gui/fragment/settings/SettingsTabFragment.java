@@ -105,13 +105,6 @@ public class SettingsTabFragment extends Fragment {
             tabViewPager.setCurrentItem(tabIndex);
         }
 
-        tabLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showTutorial(tabViewPager.getCurrentItem());
-            }
-        }, 500);
-
         return rootView;
     }
 
@@ -168,6 +161,12 @@ public class SettingsTabFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showTutorial(tabViewPager.getCurrentItem());
     }
 
     private static class CustomTabAdapter extends FragmentPagerAdapter {

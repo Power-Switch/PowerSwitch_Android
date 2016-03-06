@@ -33,15 +33,31 @@ public class SceneWidget {
      */
     private long sceneId;
 
+    /**
+     * Constructor
+     *
+     * @param widgetId ID of this Widget
+     * @param sceneId  ID of associated Scene
+     */
     public SceneWidget(int widgetId, long sceneId) {
         this.widgetId = widgetId;
         this.sceneId = sceneId;
     }
 
+    /**
+     * Get ID of this Widget
+     *
+     * @return ID of this Widget
+     */
     public int getWidgetId() {
         return widgetId;
     }
 
+    /**
+     * Get ID of Scene this Widget is associated with
+     *
+     * @return ID of associated Scene
+     */
     public long getSceneId() {
         return sceneId;
     }

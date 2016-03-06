@@ -58,11 +58,6 @@ public class SceneWidgetProvider extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
-        super.onEnabled(context);
-    }
-
-    @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d("Updating Scene Widgets...");
         // Perform this loop procedure for each App Widget that belongs to this provider

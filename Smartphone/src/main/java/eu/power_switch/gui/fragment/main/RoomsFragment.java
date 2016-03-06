@@ -25,6 +25,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -111,6 +112,14 @@ public class RoomsFragment extends RecyclerViewFragment {
 //                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
                 } else {
 
+                }
+
+                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
+                    new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.please_create_or_activate_apartment_first)
+                            .setNeutralButton(android.R.string.ok, null)
+                            .show();
+                    return;
                 }
 
                 ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
@@ -208,7 +217,6 @@ public class RoomsFragment extends RecyclerViewFragment {
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
-        // throw new RuntimeException("FSAMPFSA");
     }
 
     @Override

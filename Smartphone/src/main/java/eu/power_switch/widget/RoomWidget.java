@@ -33,15 +33,31 @@ public class RoomWidget {
      */
     private long roomId;
 
+    /**
+     * Constructor
+     *
+     * @param widgetId ID of this Widget
+     * @param roomId   ID of associated Room
+     */
     public RoomWidget(int widgetId, long roomId) {
         this.widgetId = widgetId;
         this.roomId = roomId;
     }
 
+    /**
+     * Get ID of this Widget
+     *
+     * @return ID of this Widget
+     */
     public int getWidgetId() {
         return widgetId;
     }
 
+    /**
+     * Get ID of Room this Widget is associated with
+     *
+     * @return ID of associated Room
+     */
     public long getRoomId() {
         return roomId;
     }

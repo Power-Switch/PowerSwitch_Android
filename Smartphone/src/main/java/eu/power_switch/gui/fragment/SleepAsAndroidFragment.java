@@ -144,12 +144,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
-        addActionFAB.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                showTutorial();
-            }
-        }, 500);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -193,6 +187,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         recyclerViewAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -201,6 +196,18 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            addActionFAB.setVisibility(View.GONE);
+        } else {
+            addActionFAB.setVisibility(View.VISIBLE);
+        }
+
+        showTutorial();
     }
 
     @Override
@@ -242,15 +249,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            addActionFAB.setVisibility(View.GONE);
-        } else {
-            addActionFAB.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     public RecyclerView getRecyclerView() {

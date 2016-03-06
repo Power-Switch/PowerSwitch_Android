@@ -21,7 +21,7 @@
 
     <string name="all_apartments_have_geofence">Jede Wohnung hat bereits einen Geofence</string>
 
-    <string name="please_create_apartment_first">Bitte erstelle zuerst eine Wohnung</string>
+    <string name="please_create_or_activate_apartment_first">Bitte erstelle oder aktiviere zuerst eine Wohnung</string>
 
     <string name="grant">Erlauben</string>
 
