@@ -20,6 +20,7 @@ package eu.power_switch.application;
 
 import android.app.Application;
 
+import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
@@ -29,7 +30,28 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class PowerSwitchWear extends Application {
 
+    // Default System Handler for uncaught Exceptions
+    private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
+
     public PowerSwitchWear() {
+        // save original uncaught exception handler
+        originalUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+
+        // Set up our own UncaughtExceptionHandler to log errors we couldn't even think of
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, final Throwable throwable) {
+                Log.e("FATAL EXCEPTION", throwable);
+
+                // not possible without killing all app processes, including the UnkownErrorDialog!?
+                if (originalUncaughtExceptionHandler != null) {
+                    //Delegates to Android's error handling
+                    originalUncaughtExceptionHandler.uncaughtException(thread, throwable);
+                }
+
+//                System.exit(2); //Prevents the service/app from freezing
+            }
+        });
     }
 
     @Override
