@@ -142,6 +142,7 @@ public class Scene {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Scene: ").
                 append(getName())
+                .append("(").append(getId()).append(")")
                 .append(" {\n");
 
         for (SceneItem sceneItem : getSceneItems()) {

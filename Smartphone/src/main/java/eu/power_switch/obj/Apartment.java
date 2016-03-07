@@ -248,6 +248,7 @@ public class Apartment {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Apartment: ").
                 append(getName())
+                .append("(").append(getId()).append(")")
                 .append(" {\n");
 
         for (Room room : getRooms()) {

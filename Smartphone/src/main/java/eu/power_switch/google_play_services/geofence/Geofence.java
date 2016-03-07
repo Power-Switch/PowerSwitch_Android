@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.power_switch.action.Action;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Internal representation of a Geofence
@@ -98,6 +99,15 @@ public class Geofence {
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     * Set ID of this Geofence
+     *
+     * @param id new ID of this Gateway
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
     /**
@@ -198,6 +208,34 @@ public class Geofence {
      */
     public void setSnapshot(Bitmap snapshot) {
         this.snapshot = snapshot;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Geofence: ");
+        if (active) {
+            stringBuilder.append("(enabled) ");
+        } else {
+            stringBuilder.append("(disabled) ");
+        }
+        stringBuilder.append(getName())
+                .append("(").append(getId()).append(") Location: ")
+                .append(getCenterLocation().toString())
+                .append(" {\n");
+
+        StringBuilder eventActions = new StringBuilder();
+        for (EventType eventType : actionsMap.keySet()) {
+            eventActions.append("EventType: ").append(eventType.toString()).append(" {\n");
+            for (Action action : actionsMap.get(eventType)) {
+                eventActions.append(LogHandler.addIndentation(action.toString())).append("\n");
+            }
+            eventActions.append("}\n");
+        }
+        stringBuilder.append(LogHandler.addIndentation(eventActions.toString()));
+
+        stringBuilder.append("\n}");
+        return stringBuilder.toString();
     }
 
     /**

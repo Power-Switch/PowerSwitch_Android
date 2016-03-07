@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import eu.power_switch.action.Action;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Timer based on just a start time and an interval
@@ -49,5 +50,27 @@ public class IntervalTimer extends Timer {
     @Override
     public long getExecutionInterval() {
         return executionInterval;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Timer: ");
+        if (active) {
+            stringBuilder.append("(enabled) ");
+        } else {
+            stringBuilder.append("(disabled) ");
+        }
+        stringBuilder.append(getName())
+                .append("(").append(getId()).append(") Time: ")
+                .append(getExecutionTime().getTimeInMillis())
+                .append(" {\n");
+
+        for (Action action : getActions()) {
+            stringBuilder.append(LogHandler.addIndentation(action.toString())).append("\n");
+        }
+
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 }

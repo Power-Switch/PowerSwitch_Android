@@ -34,7 +34,6 @@ import eu.power_switch.action.Action;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.geofence.GeofenceTable;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Provides database methods for managing Geofences
@@ -76,6 +75,12 @@ abstract class GeofenceHandler {
         return newId;
     }
 
+    /**
+     * Get a Geofence from Database
+     *
+     * @param id ID of Geofence
+     * @return Geofence
+     */
     protected static Geofence get(Long id) throws Exception {
         if (id == null) {
             return null;
@@ -112,7 +117,7 @@ abstract class GeofenceHandler {
     }
 
     /**
-     * Disables all existing Gateways
+     * Disables all existing Geofences
      */
     protected static void disableAll() throws Exception {
         ContentValues values = new ContentValues();
@@ -242,7 +247,6 @@ abstract class GeofenceHandler {
                 GeofenceTable.COLUMN_ID + "=" + geofence.getId(), null);
     }
 
-
     /**
      * Creates a Geofence Object out of Database information
      *
@@ -250,38 +254,32 @@ abstract class GeofenceHandler {
      * @return Geofence, can be null
      */
     private static Geofence dbToGeofence(Cursor c) throws Exception {
-        try {
-            Geofence geofence;
-            Long id = c.getLong(0);
-            boolean active = c.getInt(1) > 0;
-            String name = c.getString(2);
-            double latitude = c.getDouble(3);
-            double longitude = c.getDouble(4);
-            double radius = c.getDouble(5);
-            Bitmap snapshot = null;
-            if (!c.isNull(6)) {
-                snapshot = getImage(c.getBlob(6));
-            }
-
-            LatLng location;
-            if (latitude == Integer.MAX_VALUE || longitude == Integer.MAX_VALUE) {
-                location = null;
-            } else {
-                location = new LatLng(latitude, longitude);
-            }
-
-            HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
-            for (Geofence.EventType eventType : Geofence.EventType.values()) {
-                actionsMap.put(eventType, GeofenceActionHandler.get(id, eventType));
-            }
-
-            geofence = new Geofence(id, active, name, location, radius, snapshot, actionsMap);
-            return geofence;
-        } catch (Exception e) {
-            Log.e(e);
+        Geofence geofence;
+        Long id = c.getLong(0);
+        boolean active = c.getInt(1) > 0;
+        String name = c.getString(2);
+        double latitude = c.getDouble(3);
+        double longitude = c.getDouble(4);
+        double radius = c.getDouble(5);
+        Bitmap snapshot = null;
+        if (!c.isNull(6)) {
+            snapshot = getImage(c.getBlob(6));
         }
 
-        return null;
+        LatLng location;
+        if (latitude == Integer.MAX_VALUE || longitude == Integer.MAX_VALUE) {
+            location = null;
+        } else {
+            location = new LatLng(latitude, longitude);
+        }
+
+        HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
+        for (Geofence.EventType eventType : Geofence.EventType.values()) {
+            actionsMap.put(eventType, GeofenceActionHandler.get(id, eventType));
+        }
+
+        geofence = new Geofence(id, active, name, location, radius, snapshot, actionsMap);
+        return geofence;
     }
 
     // convert from bitmap to byte array

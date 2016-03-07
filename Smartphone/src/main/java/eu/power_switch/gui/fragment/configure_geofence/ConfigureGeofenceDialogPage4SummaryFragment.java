@@ -233,10 +233,14 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
             boolean isLocationPermissionAvailable = PermissionHelper.checkLocationPermission(getContext());
 
             if (apartmentId == -1) {
+                // custom geofence
+
                 if (currentId == -1) {
                     Geofence geofence = new Geofence(currentId, isLocationPermissionAvailable, currentName, currentLocation,
                             currentGeofenceRadius, currentSnapshot, actionsMap);
-                    DatabaseHandler.addGeofence(geofence);
+                    long geofenceId = DatabaseHandler.addGeofence(geofence);
+                    // update ID of Geofence
+                    geofence.setId(geofenceId);
 
                     geofenceApiHandler.addGeofence(geofence);
                 } else {
@@ -252,6 +256,8 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                     }
                 }
             } else {
+                // apartment geofence
+
                 Apartment apartment = DatabaseHandler.getApartment(apartmentId);
                 Apartment updatedApartment;
 
@@ -270,12 +276,16 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                             apartment.getName(), apartment.getAssociatedGateways(), updatedGeofence);
 
                     geofenceApiHandler.removeGeofence(geofence.getId());
-                    if (geofence.isActive()) {
-                        geofenceApiHandler.addGeofence(updatedGeofence);
-                    }
                 }
 
+                // update apartment in database
                 DatabaseHandler.updateApartment(updatedApartment);
+
+                // reload from database to get correct geofence ID
+                apartment = DatabaseHandler.getApartment(apartmentId);
+                if (apartment.getGeofence().isActive()) {
+                    geofenceApiHandler.addGeofence(apartment.getGeofence());
+                }
             }
 
             ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(getContext());

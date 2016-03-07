@@ -36,6 +36,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Apartment;
@@ -44,6 +45,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.timer.Timer;
 
 /**
  * Entry Point for the Application
@@ -88,9 +90,8 @@ public class PowerSwitch extends MultiDexApplication {
 
                 // not possible without killing all app processes, including the UnkownErrorDialog!?
 //                if (originalUncaughtExceptionHandler != null) {
-//                    //Delegates to Android's error handling
-//                    originalUncaughtExceptionHandler.uncaughtException(
-//                            thread, ((NestedException) throwable).getThrowable());
+                // Delegates to Android's error handling
+//                    originalUncaughtExceptionHandler.uncaughtException(thread, throwable);
 //                }
 
                 System.exit(2); //Prevents the service/app from freezing
@@ -180,6 +181,14 @@ public class PowerSwitch extends MultiDexApplication {
                 try {
                     for (Apartment apartment : DatabaseHandler.getAllApartments()) {
                         Log.d(apartment.toString());
+                    }
+
+                    for (Timer timer : DatabaseHandler.getAllTimers()) {
+                        Log.d(timer.toString());
+                    }
+
+                    for (Geofence geofence : DatabaseHandler.getAllGeofences()) {
+                        Log.d(geofence.toString());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -1381,6 +1381,24 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Get a list of all Geofences
+     *
+     * @return list of Geofences
+     */
+    public static List<Geofence> getAllGeofences() throws Exception {
+        openReadable();
+        List<Geofence> geofences = null;
+        try {
+            geofences = GeofenceHandler.getAll();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return geofences;
+    }
+
+    /**
      * Get a list of all active/inactive Geofences
      *
      * @param isActive true if active, false otherwise

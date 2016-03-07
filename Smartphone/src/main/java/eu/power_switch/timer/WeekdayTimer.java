@@ -25,6 +25,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Timer based on an execution time and weekdays
@@ -66,6 +67,32 @@ public class WeekdayTimer extends Timer {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Timer: ");
+        if (active) {
+            stringBuilder.append("(enabled) ");
+        } else {
+            stringBuilder.append("(disabled) ");
+        }
+        stringBuilder.append(getName())
+                .append("(").append(getId()).append(") Time: ")
+                .append(getExecutionTime().getTimeInMillis())
+                .append(" Days: ");
+        for (Day day : getExecutionDays()) {
+            stringBuilder.append(day.positionInWeek).append(" ");
+        }
+        stringBuilder.append(" {\n");
+
+        for (Action action : getActions()) {
+            stringBuilder.append(LogHandler.addIndentation(action.toString())).append("\n");
+        }
+
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 
     /**

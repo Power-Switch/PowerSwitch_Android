@@ -266,7 +266,7 @@ public abstract class Receiver {
 
     @Override
     public String toString() {
-        return getBrand().toString() + " " + getModel() + ": " + getName();
+        return getBrand().toString() + " " + getModel() + ": " + getName() + "(" + getId() + ")";
     }
 
     /**

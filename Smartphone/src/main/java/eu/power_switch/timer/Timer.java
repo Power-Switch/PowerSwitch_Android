@@ -149,6 +149,10 @@ public abstract class Timer {
      */
     public abstract long getExecutionInterval();
 
+
+    @Override
+    public abstract String toString();
+
     @StringDef({EXECUTION_TYPE_WEEKDAY, EXECUTION_TYPE_INTERVAL})
     @Retention(RetentionPolicy.SOURCE)
     public @interface ExecutionType {

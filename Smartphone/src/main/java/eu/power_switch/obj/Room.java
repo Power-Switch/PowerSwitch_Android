@@ -175,6 +175,7 @@ public class Room {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Room: ").
                 append(getName())
+                .append("(").append(getId()).append(")")
                 .append(" {\n");
 
         for (Receiver receiver : getReceivers()) {
