@@ -22,8 +22,11 @@ import android.content.Context;
 
 import java.util.LinkedList;
 
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class FSS33600W extends FSS31000W implements DipReceiver {
     // dips are 12345 ABCDE
@@ -33,5 +36,10 @@ public class FSS33600W extends FSS31000W implements DipReceiver {
     public FSS33600W(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
         super(context, id, name, dips, roomId);
         model = MODEL;
+    }
+
+    @Override
+    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+        return super.getSignal(gateway, action);
     }
 }

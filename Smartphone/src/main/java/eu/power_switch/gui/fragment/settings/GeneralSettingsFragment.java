@@ -18,12 +18,14 @@
 
 package eu.power_switch.gui.fragment.settings;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
@@ -51,6 +53,7 @@ import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.Log;
@@ -265,7 +268,15 @@ public class GeneralSettingsFragment extends Fragment {
                 try {
                     LogHandler.sendLogsAsMail(getContext());
                 } catch (MissingPermissionException e) {
-                    StatusMessageHandler.showInfoMessage(getContext(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction(R.string.grant, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+                        }
+                    });
+                    snackbar.show();
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getContext(), e);
                 }

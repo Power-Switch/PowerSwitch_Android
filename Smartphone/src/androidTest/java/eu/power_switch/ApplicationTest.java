@@ -16,18 +16,18 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.twofortyfouram.locale;
+package eu.power_switch;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import android.app.Application;
+import android.test.ApplicationTestCase;
 
 /**
- * To work on unit tests, switch the Test Artifact in the Build Variants view.
+ * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
-public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+public abstract class ApplicationTest extends ApplicationTestCase<Application> {
+
+    public ApplicationTest() {
+        super(Application.class);
     }
+
 }

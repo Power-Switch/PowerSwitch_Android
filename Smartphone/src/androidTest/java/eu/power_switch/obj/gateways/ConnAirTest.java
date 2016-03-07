@@ -16,16 +16,24 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.twofortyfouram.locale;
+package eu.power_switch.obj.gateways;
 
-import android.app.Application;
-import android.test.ApplicationTestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
-/**
- * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
- */
-public class ApplicationTest extends ApplicationTestCase<Application> {
-    public ApplicationTest() {
-        super(Application.class);
+import eu.power_switch.obj.gateway.ConnAir;
+
+public class ConnAirTest {
+    /***
+     * This test is not really useful because it test a constant.
+     * But we use it to test if our testframework works.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testGetModelAsString() throws Exception {
+        ConnAir connAir = new ConnAir((long) 0, true, "Gateway", "Firmware", "10.10.10.10", 1234);
+        String model = connAir.getModel();
+        Assert.assertEquals("ConnAir", model);
     }
 }

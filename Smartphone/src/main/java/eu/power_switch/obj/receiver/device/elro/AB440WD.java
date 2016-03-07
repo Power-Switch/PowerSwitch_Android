@@ -22,9 +22,12 @@ import android.content.Context;
 
 import java.util.LinkedList;
 
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class AB440WD extends AB440ID implements DipReceiver {
     // dips are 12345 ABCDE
@@ -61,5 +64,10 @@ public class AB440WD extends AB440ID implements DipReceiver {
         }
 
         model = MODEL;
+    }
+
+    @Override
+    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+        return super.getSignal(gateway, action);
     }
 }

@@ -20,8 +20,11 @@ package eu.power_switch.obj.receiver.device.intertechno;
 
 import android.content.Context;
 
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class YCR1000 extends CMR1000 implements MasterSlaveReceiver {
 
@@ -30,5 +33,10 @@ public class YCR1000 extends CMR1000 implements MasterSlaveReceiver {
     public YCR1000(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId) {
         super(context, id, name, channelMaster, channelSlave, roomId);
         model = MODEL;
+    }
+
+    @Override
+    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+        return super.getSignal(gateway, action);
     }
 }
