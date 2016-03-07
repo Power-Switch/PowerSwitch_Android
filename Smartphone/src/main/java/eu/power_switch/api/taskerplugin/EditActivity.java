@@ -63,11 +63,11 @@ public class EditActivity extends AbstractPluginActivity {
     private RadioButton radioButtonRoomAction;
     private RadioButton radioButtonSceneAction;
 
-    private ArrayList<String> apartmentNames;
-    private ArrayList<String> roomNames;
-    private ArrayList<String> receiverNames;
-    private ArrayList<String> buttonNames;
-    private ArrayList<String> sceneNames;
+    private ArrayList<String> apartmentNames = new ArrayList<>();
+    private ArrayList<String> roomNames = new ArrayList<>();
+    private ArrayList<String> receiverNames = new ArrayList<>();
+    private ArrayList<String> buttonNames = new ArrayList<>();
+    private ArrayList<String> sceneNames = new ArrayList<>();
 
     private Spinner spinner_apartment;
     private EditText editText_apartment;
@@ -103,6 +103,7 @@ public class EditActivity extends AbstractPluginActivity {
     private boolean useManualButtonInput = false;
     private boolean useManualSceneInput = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,29 +135,8 @@ public class EditActivity extends AbstractPluginActivity {
 
         try {
             ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
-            apartmentNames = new ArrayList<>();
             for (Apartment apartment : availableApartments) {
                 apartmentNames.add(apartment.getName());
-            }
-
-            ArrayList<Room> availableRooms = (ArrayList<Room>) DatabaseHandler.getAllRooms();
-            roomNames = new ArrayList<>();
-            for (Room room : availableRooms) {
-                roomNames.add(room.getName());
-            }
-
-            ArrayList<Receiver> availableReceivers = (ArrayList<Receiver>) DatabaseHandler.getAllReceivers();
-            receiverNames = new ArrayList<>();
-            for (Receiver receiver : availableReceivers) {
-                receiverNames.add(receiver.getName());
-            }
-
-            buttonNames = new ArrayList<>();
-
-            ArrayList<Scene> availableScenes = (ArrayList<Scene>) DatabaseHandler.getAllScenes();
-            sceneNames = new ArrayList<>();
-            for (Scene scene : availableScenes) {
-                sceneNames.add(scene.getName());
             }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(this, e);
@@ -365,6 +345,7 @@ public class EditActivity extends AbstractPluginActivity {
             editText_apartment.setText(localeBundle.getString(ApiConstants.KEY_APARTMENT));
         } else {
             spinner_apartment.setSelection(apartmentNames.indexOf(localeBundle.getString(ApiConstants.KEY_APARTMENT)));
+            updateLists();
         }
 
         if (localeBundle.containsKey(ApiConstants.KEY_ROOM) && localeBundle.containsKey(ApiConstants.KEY_RECEIVER) && localeBundle.containsKey(ApiConstants.KEY_BUTTON)) {
@@ -377,12 +358,16 @@ public class EditActivity extends AbstractPluginActivity {
                 spinner_room.setSelection(roomNames.indexOf(localeBundle.getString(ApiConstants.KEY_ROOM)));
             }
 
+            updateReceiverList();
+
             if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_RECEIVER)) {
                 setReceiverInputType(InputType.MANUAL);
                 editText_receiver.setText(localeBundle.getString(ApiConstants.KEY_RECEIVER));
             } else {
                 spinner_receiver.setSelection(receiverNames.indexOf(localeBundle.getString(ApiConstants.KEY_RECEIVER)));
             }
+
+            updateButtonList();
 
             if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_BUTTON)) {
                 setButtonInputType(InputType.MANUAL);
@@ -399,6 +384,8 @@ public class EditActivity extends AbstractPluginActivity {
             } else {
                 spinner_room.setSelection(roomNames.indexOf(localeBundle.getString(ApiConstants.KEY_ROOM)));
             }
+
+            updateButtonList();
 
             if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_BUTTON)) {
                 setButtonInputType(InputType.MANUAL);
@@ -480,34 +467,43 @@ public class EditActivity extends AbstractPluginActivity {
 
     protected void updateLists() {
         try {
-            currentApartment = DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
+            currentApartment = getSelectedApartment();
 
             updateRoomList();
-            updateScenesList();
+            updateSceneList();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(this, e);
         }
     }
 
-    private void updateScenesList() {
+    private void updateSceneList() {
         sceneNames.clear();
 
-        for (Scene scene : currentApartment.getScenes()) {
-            sceneNames.add(scene.getName());
+        try {
+            for (Scene scene : currentApartment.getScenes()) {
+                sceneNames.add(scene.getName());
+            }
+
+            spinner_scene.setSelection(0);
+        } catch (Exception e) {
+            Log.e(e);
         }
 
-        spinner_scene.setSelection(0);
         sceneSpinnerArrayAdapter.notifyDataSetChanged();
     }
 
     private void updateRoomList() {
         roomNames.clear();
 
-        for (Room room : currentApartment.getRooms()) {
-            roomNames.add(room.getName());
-        }
+        try {
+            for (Room room : currentApartment.getRooms()) {
+                roomNames.add(room.getName());
+            }
 
-        spinner_room.setSelection(0);
+            spinner_room.setSelection(0);
+        } catch (Exception e) {
+            Log.e(e);
+        }
 
         roomSpinnerArrayAdapter.notifyDataSetChanged();
 
@@ -528,60 +524,64 @@ public class EditActivity extends AbstractPluginActivity {
         } catch (Exception e) {
             Log.e(e);
         }
-        updateButtonList();
-
         receiverSpinnerArrayAdapter.notifyDataSetChanged();
+
+        updateButtonList();
     }
 
     private void updateButtonList() {
         buttonNames.clear();
 
-        if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            updateReceiverButtonList();
-        } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            updateRoomButtonsList();
+        try {
+            if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
+                updateReceiverButtonList();
+            } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
+                updateRoomButtonsList();
+            }
+
+            spinner_button.setSelection(0);
+        } catch (Exception e) {
+            Log.e(e);
         }
 
         buttonSpinnerArrayAdapter.notifyDataSetChanged();
     }
 
-    private void updateReceiverButtonList() {
-        try {
-            Room selectedRoom = getSelectedRoom();
-            Receiver selectedReceiver = selectedRoom.getReceiver(
-                    spinner_receiver.getSelectedItem().toString());
+    private void updateReceiverButtonList() throws Exception {
+        Room selectedRoom = getSelectedRoom();
+        Receiver selectedReceiver = selectedRoom.getReceiver(
+                spinner_receiver.getSelectedItem().toString());
 
-            if (selectedReceiver != null) {
-                for (Button button : selectedReceiver.getButtons()) {
-                    buttonNames.add(button.getName());
-                }
+        if (selectedReceiver != null) {
+            for (Button button : selectedReceiver.getButtons()) {
+                buttonNames.add(button.getName());
             }
-
-            spinner_button.setSelection(0);
-        } catch (Exception e) {
-            Log.e(e);
         }
     }
 
-    private void updateRoomButtonsList() {
-        try {
-            Room selectedRoom = getSelectedRoom();
+    private void updateRoomButtonsList() throws Exception {
+        Room selectedRoom = getSelectedRoom();
 
-            HashSet<String> uniqueButtonNames = new HashSet<>();
-            for (Receiver receiver : selectedRoom.getReceivers()) {
-                for (Button button : receiver.getButtons()) {
-                    uniqueButtonNames.add(button.getName());
-                }
+        HashSet<String> uniqueButtonNames = new HashSet<>();
+        for (Receiver receiver : selectedRoom.getReceivers()) {
+            for (Button button : receiver.getButtons()) {
+                uniqueButtonNames.add(button.getName());
             }
-            buttonNames.addAll(uniqueButtonNames);
+        }
+        buttonNames.addAll(uniqueButtonNames);
+    }
 
-            spinner_button.setSelection(0);
+    private Apartment getSelectedApartment() throws Exception {
+        try {
+            return DatabaseHandler.getApartment(getApartmentName());
         } catch (Exception e) {
             Log.e(e);
         }
+
+        return null;
     }
 
-    private Room getSelectedRoom() {
+    private Room getSelectedRoom() throws Exception {
         if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
             return currentApartment.getRoom(spinner_room.getSelectedItem().toString());
         } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
@@ -725,7 +725,7 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualApartmentInput) {
             return editText_apartment.getText().toString();
         } else {
-            return currentApartment.getName();
+            return spinner_apartment.getSelectedItem().toString();
         }
     }
 

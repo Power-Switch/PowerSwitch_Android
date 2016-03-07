@@ -78,14 +78,17 @@ public abstract class AddActionDialog extends DialogFragment {
     private Spinner spinner_receiver;
     private Spinner spinner_button;
     private Spinner spinner_scene;
-    private ArrayList<String> buttonNames;
+
+    private Apartment currentApartment;
+
+    private ArrayList<String> apartmentNames = new ArrayList<>();
+    private ArrayList<String> roomNames = new ArrayList<>();
+    private ArrayList<String> receiverNames = new ArrayList<>();
+    private ArrayList<String> buttonNames = new ArrayList<>();
+    private ArrayList<String> sceneNames = new ArrayList<>();
+
     private ArrayAdapter<String> receiverSpinnerArrayAdapter;
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
-    private ArrayList<String> receiverNames;
-    private ArrayList<String> roomNames;
-    private ArrayList<String> sceneNames;
-    private ArrayList<String> apartmentNames;
-    private Apartment currentApartment;
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
 
@@ -130,29 +133,8 @@ public abstract class AddActionDialog extends DialogFragment {
 
         try {
             ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
-            apartmentNames = new ArrayList<>();
             for (Apartment apartment : availableApartments) {
                 apartmentNames.add(apartment.getName());
-            }
-
-            ArrayList<Room> availableRooms = (ArrayList<Room>) DatabaseHandler.getAllRooms();
-            roomNames = new ArrayList<>();
-            for (Room room : availableRooms) {
-                roomNames.add(room.getName());
-            }
-
-            ArrayList<Receiver> availableReceivers = (ArrayList<Receiver>) DatabaseHandler.getAllReceivers();
-            receiverNames = new ArrayList<>();
-            for (Receiver receiver : availableReceivers) {
-                receiverNames.add(receiver.getName());
-            }
-
-            buttonNames = new ArrayList<>();
-
-            ArrayList<Scene> availableScenes = (ArrayList<Scene>) DatabaseHandler.getAllScenes();
-            sceneNames = new ArrayList<>();
-            for (Scene scene : availableScenes) {
-                sceneNames.add(scene.getName());
             }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -284,7 +266,7 @@ public abstract class AddActionDialog extends DialogFragment {
 
     protected void updateLists() {
         try {
-            currentApartment = DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
+            currentApartment = getSelectedApartment();
 
             updateRoomList();
             updateScenesList();
@@ -384,6 +366,16 @@ public abstract class AddActionDialog extends DialogFragment {
         } catch (Exception e) {
             Log.e(e);
         }
+    }
+
+    private Apartment getSelectedApartment() {
+        try {
+            return DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
+        } catch (Exception e) {
+            Log.e(e);
+        }
+
+        return null;
     }
 
     private Room getSelectedRoom() {
