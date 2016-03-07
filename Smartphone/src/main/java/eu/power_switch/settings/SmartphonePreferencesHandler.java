@@ -92,6 +92,20 @@ public class SmartphonePreferencesHandler {
         highlightLastActivatedButtonCache = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
         useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, false);
         currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, SettingsConstants.INVALID_APARTMENT_ID);
+
+        Log.d(SmartphonePreferencesHandler.class, "AutoDiscover: " + autoDiscoverCache);
+        Log.d(SmartphonePreferencesHandler.class, "BackupPath: " + backupPathCache);
+        Log.d(SmartphonePreferencesHandler.class, "ShowRoomAllOnOff: " + showRoomAllOnOffCache);
+        Log.d(SmartphonePreferencesHandler.class, "AutoCollapseRooms: " + autoCollapseRoomsCache);
+        Log.d(SmartphonePreferencesHandler.class, "AutoCollapseTimers: " + autoCollapseTimersCache);
+        Log.d(SmartphonePreferencesHandler.class, "Theme: " + themeCache);
+        Log.d(SmartphonePreferencesHandler.class, "VibrateOnButtonPress: " + vibrateOnButtonPressCache);
+        Log.d(SmartphonePreferencesHandler.class, "VibrationDuration: " + vibrationDurationCache);
+        Log.d(SmartphonePreferencesHandler.class, "HighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
+        Log.d(SmartphonePreferencesHandler.class, "HideAddFAB: " + hideAddFABCache);
+        Log.d(SmartphonePreferencesHandler.class, "StartupDefaultTab: " + startupDefaultTabCache);
+        Log.d(SmartphonePreferencesHandler.class, "UseCompactDrawer: " + useCompactDrawerCache);
+        Log.d(SmartphonePreferencesHandler.class, "CurrentApartmentId: " + currentApartmentIdCache);
     }
 
     /**
@@ -107,7 +121,6 @@ public class SmartphonePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getAutoDiscover() {
-        Log.d(SmartphonePreferencesHandler.class, "getAutoDiscover: " + autoDiscoverCache);
         return autoDiscoverCache;
     }
 
@@ -131,7 +144,6 @@ public class SmartphonePreferencesHandler {
      * @return Backup Path
      */
     public static String getBackupPath() {
-        Log.d(SmartphonePreferencesHandler.class, "getBackupPath: " + backupPathCache);
         return backupPathCache;
     }
 
@@ -156,7 +168,6 @@ public class SmartphonePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getShowRoomAllOnOff() {
-        Log.d(SmartphonePreferencesHandler.class, "getShowRoomAllOnOff: " + showRoomAllOnOffCache);
         return showRoomAllOnOffCache;
     }
 
@@ -180,7 +191,6 @@ public class SmartphonePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getAutoCollapseRooms() {
-        Log.d(SmartphonePreferencesHandler.class, "getAutoCollapseRooms: " + autoCollapseRoomsCache);
         return autoCollapseRoomsCache;
     }
 
@@ -204,7 +214,6 @@ public class SmartphonePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getAutoCollapseTimers() {
-        Log.d(SmartphonePreferencesHandler.class, "getAutoCollapseTimers: " + autoCollapseTimersCache);
         return autoCollapseTimersCache;
     }
 
@@ -228,7 +237,6 @@ public class SmartphonePreferencesHandler {
      * @return ID (internal) of Theme
      */
     public static int getTheme() {
-        Log.d(SmartphonePreferencesHandler.class, "getTheme: " + themeCache);
         return themeCache;
     }
 
@@ -252,7 +260,6 @@ public class SmartphonePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getVibrateOnButtonPress() {
-        Log.d(SmartphonePreferencesHandler.class, "getVibrateOnButtonPress: " + vibrateOnButtonPressCache);
         return vibrateOnButtonPressCache;
     }
 
@@ -276,7 +283,6 @@ public class SmartphonePreferencesHandler {
      * @return time in ms
      */
     public static int getVibrationDuration() {
-        Log.d(SmartphonePreferencesHandler.class, "getVibrationDuration: " + vibrationDurationCache);
         return vibrationDurationCache;
     }
 
@@ -300,7 +306,6 @@ public class SmartphonePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getHighlightLastActivatedButton() {
-        Log.d(SmartphonePreferencesHandler.class, "getHighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
         return highlightLastActivatedButtonCache;
     }
 
@@ -324,7 +329,6 @@ public class SmartphonePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getHideAddFAB() {
-        Log.d(SmartphonePreferencesHandler.class, "getHideAddFAB: " + hideAddFABCache);
         return hideAddFABCache;
     }
 
@@ -348,7 +352,6 @@ public class SmartphonePreferencesHandler {
      * @return tab index
      */
     public static int getStartupDefaultTab() {
-        Log.d(SmartphonePreferencesHandler.class, "getStartupDefaultTab: " + startupDefaultTabCache);
         return startupDefaultTabCache;
     }
 
@@ -372,7 +375,6 @@ public class SmartphonePreferencesHandler {
      * @return tab index
      */
     public static boolean getUseCompactDrawer() {
-        Log.d(SmartphonePreferencesHandler.class, "getUseCompactDrawer: " + useCompactDrawerCache);
         return useCompactDrawerCache;
     }
 
@@ -391,7 +393,6 @@ public class SmartphonePreferencesHandler {
     }
 
     public static Long getCurrentApartmentId() {
-        Log.d(SmartphonePreferencesHandler.class, "getCurrentApartmentId: " + currentApartmentIdCache);
         return currentApartmentIdCache;
     }
 

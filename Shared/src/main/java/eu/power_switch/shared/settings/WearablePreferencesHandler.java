@@ -81,6 +81,13 @@ public class WearablePreferencesHandler {
         vibrationDurationCache = sharedPreferences.getInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants
                 .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
         highlightLastActivatedButtonCache = sharedPreferences.getBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
+
+        Log.d(WearablePreferencesHandler.class, "getShowRoomAllOnOff: " + showRoomAllOnOffCache);
+        Log.d(WearablePreferencesHandler.class, "getAutoCollapseRooms: " + autoCollapseRoomsCache);
+        Log.d(WearablePreferencesHandler.class, "getTheme: " + themeCache);
+        Log.d(WearablePreferencesHandler.class, "getVibrateOnButtonPress: " + vibrateOnButtonPressCache);
+        Log.d(WearablePreferencesHandler.class, "getVibrationDuration: " + vibrationDurationCache);
+        Log.d(WearablePreferencesHandler.class, "getHighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
     }
 
     /**
@@ -96,7 +103,6 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getShowRoomAllOnOff() {
-        Log.d(WearablePreferencesHandler.class, "getShowRoomAllOnOff: " + showRoomAllOnOffCache);
         return showRoomAllOnOffCache;
     }
 
@@ -120,7 +126,6 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getAutoCollapseRooms() {
-        Log.d(WearablePreferencesHandler.class, "getAutoCollapseRooms: " + autoCollapseRoomsCache);
         return autoCollapseRoomsCache;
     }
 
@@ -144,7 +149,6 @@ public class WearablePreferencesHandler {
      * @return ID (internal) of Theme
      */
     public static int getTheme() {
-        Log.d(WearablePreferencesHandler.class, "getTheme: " + themeCache);
         return themeCache;
     }
 
@@ -168,7 +172,6 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getVibrateOnButtonPress() {
-        Log.d(WearablePreferencesHandler.class, "getVibrateOnButtonPress: " + vibrateOnButtonPressCache);
         return vibrateOnButtonPressCache;
     }
 
@@ -192,7 +195,6 @@ public class WearablePreferencesHandler {
      * @return time in ms
      */
     public static int getVibrationDuration() {
-        Log.d(WearablePreferencesHandler.class, "getVibrationDuration: " + vibrationDurationCache);
         return vibrationDurationCache;
     }
 
@@ -216,7 +218,6 @@ public class WearablePreferencesHandler {
      * @return true if enabled
      */
     public static boolean getHighlightLastActivatedButton() {
-        Log.d(WearablePreferencesHandler.class, "getHighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
         return highlightLastActivatedButtonCache;
     }
 

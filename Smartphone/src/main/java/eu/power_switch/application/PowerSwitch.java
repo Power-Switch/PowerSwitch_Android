@@ -28,6 +28,8 @@ import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import org.apache.log4j.LogManager;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.ZipEntry;
@@ -61,6 +63,7 @@ public class PowerSwitch extends MultiDexApplication {
             @Override
             public void uncaughtException(Thread thread, final Throwable throwable) {
                 Log.e("FATAL EXCEPTION", throwable);
+
                 try {
                     if (isUIThread()) {
                         startActivity(UnknownErrorDialog.getNewInstanceIntent(
@@ -88,6 +91,7 @@ public class PowerSwitch extends MultiDexApplication {
 //                    originalUncaughtExceptionHandler.uncaughtException(
 //                            thread, ((NestedException) throwable).getThrowable());
 //                }
+
                 System.exit(2); //Prevents the service/app from freezing
             }
         });
@@ -170,4 +174,10 @@ public class PowerSwitch extends MultiDexApplication {
         DeveloperPreferencesHandler.init(this);
     }
 
+    @Override
+    public void onTerminate() {
+        LogManager.shutdown();
+
+        super.onTerminate();
+    }
 }

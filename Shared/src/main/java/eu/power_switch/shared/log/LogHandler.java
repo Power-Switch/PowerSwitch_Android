@@ -94,9 +94,8 @@ public class LogHandler {
      *
      * @return Zip file containing log files
      */
-    public static
     @Nullable
-    File getLogsAsZip(@NonNull Context context) throws MissingPermissionException {
+    public static File getLogsAsZip(@NonNull Context context) throws MissingPermissionException {
         if (!PermissionHelper.checkWriteExternalStoragePermission(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -194,9 +193,8 @@ public class LogHandler {
      *
      * @return list of log files
      */
-    private static
     @NonNull
-    List<File> getLogFiles() {
+    private static List<File> getLogFiles() {
         File logFolder = new File(Environment.getExternalStorageDirectory()
                 .getPath() + File.separator + LOG_FOLDER);
         File[] logFiles = logFolder.listFiles(new FilenameFilter() {

@@ -64,6 +64,10 @@ public class DeveloperPreferencesHandler {
         playStoreModeCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.PLAY_STORE_MODE_KEY, false);
         forceLanguageCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.FORCE_LANGUAGE_KEY, false);
         localeCache = sharedPreferences.getString(DeveloperSettingsConstants.LOCALE_KEY, Locale.GERMAN.toString());
+
+        Log.d(DeveloperPreferencesHandler.class, "PlayStoreMode: " + playStoreModeCache);
+        Log.d(DeveloperPreferencesHandler.class, "ForceLanguage: " + forceLanguageCache);
+        Log.d(DeveloperPreferencesHandler.class, "Locale: " + localeCache);
     }
 
     /**
@@ -79,7 +83,6 @@ public class DeveloperPreferencesHandler {
      * @return true if enabled
      */
     public static boolean getPlayStoreMode() {
-        Log.d(DeveloperPreferencesHandler.class, "getPlayStoreMode: " + playStoreModeCache);
         return playStoreModeCache;
     }
 
@@ -98,7 +101,6 @@ public class DeveloperPreferencesHandler {
     }
 
     public static boolean getForceLanguage() {
-        Log.d(DeveloperPreferencesHandler.class, "getForceLanguage: " + forceLanguageCache);
         return forceLanguageCache;
     }
 
@@ -112,8 +114,6 @@ public class DeveloperPreferencesHandler {
     }
 
     public static Locale getLocale() {
-        Log.d(DeveloperPreferencesHandler.class, "getLocale: " + localeCache);
-
         return new Locale(localeCache);
     }
 
