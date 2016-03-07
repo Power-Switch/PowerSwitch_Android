@@ -259,10 +259,10 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
                 // init existing receiver
                 final Receiver receiver = DatabaseHandler.getReceiver(receiverId);
 
-                int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand());
+                int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand().getName());
                 brandListView.setItemChecked(brandPosition, true);
                 brandListView.smoothScrollToPosition(brandPosition);
-                updateModelList(receiver.getBrand().toString());
+                updateModelList(receiver.getBrand().getName());
 
                 int modelPosition = modelNamesAdapter.getPosition(receiver.getModel());
                 modelListView.setItemChecked(modelPosition, true);
