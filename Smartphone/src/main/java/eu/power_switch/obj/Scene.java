@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Represents a Scene
@@ -136,5 +137,18 @@ public class Scene {
         return items;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Scene: ").
+                append(getName())
+                .append(" {\n");
 
+        for (SceneItem sceneItem : getSceneItems()) {
+            stringBuilder.append(LogHandler.addIndentation(sceneItem.toString())).append("\n");
+        }
+
+        stringBuilder.append("}");
+        return stringBuilder.toString();
+    }
 }

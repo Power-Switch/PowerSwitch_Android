@@ -38,6 +38,7 @@ import java.util.zip.ZipFile;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
@@ -172,6 +173,19 @@ public class PowerSwitch extends MultiDexApplication {
         WearablePreferencesHandler.init(this);
 
         DeveloperPreferencesHandler.init(this);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for (Apartment apartment : DatabaseHandler.getAllApartments()) {
+                        Log.d(apartment.toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override

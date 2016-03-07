@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Represents a room that can contain receivers
@@ -167,5 +168,20 @@ public class Room {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Room: ").
+                append(getName())
+                .append(" {\n");
+
+        for (Receiver receiver : getReceivers()) {
+            stringBuilder.append(LogHandler.addIndentation(receiver.toString())).append("\n");
+        }
+
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 }

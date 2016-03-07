@@ -264,6 +264,11 @@ public abstract class Receiver {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return getBrand().toString() + " " + getModel() + ": " + getName();
+    }
+
     /**
      * Type constants
      */

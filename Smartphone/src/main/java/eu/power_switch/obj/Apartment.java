@@ -25,6 +25,7 @@ import java.util.List;
 
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Represents an Apartment that contains Rooms and Scenes
@@ -240,5 +241,24 @@ public class Apartment {
      */
     public Geofence getGeofence() {
         return geofence;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Apartment: ").
+                append(getName())
+                .append(" {\n");
+
+        for (Room room : getRooms()) {
+            stringBuilder.append(LogHandler.addIndentation(room.toString())).append("\n");
+        }
+
+        for (Scene scene : getScenes()) {
+            stringBuilder.append(LogHandler.addIndentation(scene.toString())).append("\n");
+        }
+
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 }

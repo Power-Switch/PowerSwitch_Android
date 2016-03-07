@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -256,5 +257,29 @@ public class LogHandler {
             phrase += c;
         }
         return phrase;
+    }
+
+    /**
+     * Add indentation to a String with multiple lines
+     *
+     * @param string
+     * @return indented string
+     */
+    public static String addIndentation(String string) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Scanner scanner = new Scanner(string);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            // process the line
+            stringBuilder.append("\t").append(line);
+
+            if (scanner.hasNextLine()) {
+                stringBuilder.append("\n");
+            }
+        }
+        scanner.close();
+
+        return stringBuilder.toString();
     }
 }

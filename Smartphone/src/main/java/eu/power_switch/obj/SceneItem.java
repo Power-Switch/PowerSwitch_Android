@@ -74,4 +74,13 @@ public class SceneItem {
     public void setActiveButton(Button button) {
         this.activeButton = button;
     }
+
+    @Override
+    public String toString() {
+        return "SceneItem(" +
+                receiver.getName() +
+                ":" +
+                activeButton.getName() +
+                ")";
+    }
 }
