@@ -66,7 +66,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
         final Scene scene = scenes.get(position);
 
@@ -85,7 +85,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             }
         });
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

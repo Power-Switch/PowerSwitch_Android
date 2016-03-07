@@ -76,7 +76,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
     @Override
     public void onBindViewHolder(final BackupRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Backup backup = backups.get(position);
+        final Backup backup = backups.get(holder.getAdapterPosition());
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
         holder.backupName.setText(backup.getName());
@@ -110,7 +110,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
             }
         });
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

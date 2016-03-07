@@ -70,8 +70,8 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
     }
 
     @Override
-    public void onBindViewHolder(GatewayRecyclerViewAdapter.ViewHolder holder, final int position) {
-        final Gateway gateway = gateways.get(position);
+    public void onBindViewHolder(GatewayRecyclerViewAdapter.ViewHolder holder, int position) {
+        final Gateway gateway = gateways.get(holder.getAdapterPosition());
 
         boolean isAssociatedWithApartment = DatabaseHandler.isAssociatedWithAnyApartment(gateway);
 
@@ -117,7 +117,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
             }
         });
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

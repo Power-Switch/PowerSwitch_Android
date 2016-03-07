@@ -74,8 +74,8 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
     }
 
     @Override
-    public void onBindViewHolder(GeofenceRecyclerViewAdapter.ViewHolder holder, final int position) {
-        final Geofence geofence = geofences.get(position);
+    public void onBindViewHolder(GeofenceRecyclerViewAdapter.ViewHolder holder, int position) {
+        final Geofence geofence = geofences.get(holder.getAdapterPosition());
 
         holder.geofenceName.setText(geofence.getName());
         holder.geofenceSwitchStatus.setChecked(geofence.isActive());
@@ -124,7 +124,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
             holder.linearLayoutExitActions.addView(textViewActionDescription);
         }
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

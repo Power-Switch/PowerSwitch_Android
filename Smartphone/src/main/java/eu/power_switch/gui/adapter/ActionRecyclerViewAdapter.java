@@ -60,7 +60,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
 
     @Override
     public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Action action = actions.get(position);
+        final Action action = actions.get(holder.getAdapterPosition());
         holder.description.setText(action.toString());
     }
 

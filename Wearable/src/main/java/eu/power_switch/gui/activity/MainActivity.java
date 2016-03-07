@@ -40,11 +40,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.ThemeHelper;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
@@ -69,28 +69,7 @@ public class MainActivity extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        switch (WearablePreferencesHandler.getTheme()) {
-            case SettingsConstants.THEME_DARK_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                break;
-            case SettingsConstants.THEME_DARK_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
-                break;
-            case SettingsConstants.THEME_LIGHT_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
-                setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
-                break;
-            case SettingsConstants.THEME_LIGHT_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Light_Red);
-                setTheme(R.style.PowerSwitchWearTheme_Light_Red);
-                break;
-            default:
-                getApplicationContext().setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                break;
-        }
+        ThemeHelper.applyTheme(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

@@ -53,13 +53,13 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
     }
 
     @Override
-    public void onBindViewHolder(final HistoryItemRecyclerViewAdapter.ViewHolder holder, final int position) {
-        final HistoryItem historyItem = historyItems.get(position);
+    public void onBindViewHolder(final HistoryItemRecyclerViewAdapter.ViewHolder holder, int position) {
+        final HistoryItem historyItem = historyItems.get(holder.getAdapterPosition());
 
         holder.time.setText(historyItem.getTime().getTime().toString());
         holder.description.setText(historyItem.getDescription());
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

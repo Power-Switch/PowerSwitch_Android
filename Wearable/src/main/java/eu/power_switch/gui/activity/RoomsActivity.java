@@ -34,14 +34,13 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.ThemeHelper;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 26.08.2015.
@@ -60,23 +59,7 @@ public class RoomsActivity extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        switch (WearablePreferencesHandler.getTheme()) {
-            case SettingsConstants.THEME_DARK_BLUE:
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                break;
-            case SettingsConstants.THEME_DARK_RED:
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
-                break;
-            case SettingsConstants.THEME_LIGHT_BLUE:
-                setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
-                break;
-            case SettingsConstants.THEME_LIGHT_RED:
-                setTheme(R.style.PowerSwitchWearTheme_Light_Red);
-                break;
-            default:
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                break;
-        }
+        ThemeHelper.applyTheme(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rooms);
@@ -107,7 +90,7 @@ public class RoomsActivity extends WearableActivity {
                 relativeLayoutAmbientMode = (RelativeLayout) findViewById(R.id.relativeLayout_ambientMode);
 
                 roomsRecyclerView = (RecyclerView) findViewById(R.id.rooms_recyclerView);
-                roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getApplicationContext(), roomsRecyclerView,
+                roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(stub.getContext(), roomsRecyclerView,
                         roomList, dataApiHandler);
                 roomsRecyclerView.setAdapter(roomsRecyclerViewAdapter);
 

@@ -73,7 +73,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
     @Override
     public void onBindViewHolder(final TimerRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Timer timer = timers.get(position);
+        final Timer timer = timers.get(holder.getAdapterPosition());
 
         final LinearLayout linearLayoutDescription = holder.linearLayoutTimerDescription;
         holder.name.setOnClickListener(new View.OnClickListener() {
@@ -167,7 +167,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
             linearLayoutDescription.setVisibility(View.GONE);
         }
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

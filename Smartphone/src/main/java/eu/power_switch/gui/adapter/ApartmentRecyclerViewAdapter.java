@@ -69,7 +69,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
 
     @Override
     public void onBindViewHolder(ApartmentRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Apartment apartment = apartments.get(position);
+        final Apartment apartment = apartments.get(holder.getAdapterPosition());
 
         holder.active.setChecked(apartment.isActive());
         holder.active.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +108,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         }
         holder.contentSummary.setText(contentSummary);
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

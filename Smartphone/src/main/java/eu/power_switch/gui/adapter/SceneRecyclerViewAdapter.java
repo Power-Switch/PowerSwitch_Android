@@ -84,7 +84,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
     @Override
     public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Scene scene = scenes.get(position);
+        final Scene scene = scenes.get(holder.getAdapterPosition());
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) fragmentActivity.getSystemService(inflaterString);
@@ -192,7 +192,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             }
         }
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

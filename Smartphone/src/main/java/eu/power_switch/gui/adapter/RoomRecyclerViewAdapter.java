@@ -82,7 +82,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     @Override
     public void onBindViewHolder(final RoomRecyclerViewAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
-        final Room room = rooms.get(position);
+        final Room room = rooms.get(holder.getAdapterPosition());
 
         // Set item views based on the data model
         holder.roomName.setText(room.getName());
@@ -167,7 +167,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             linearLayout.setVisibility(View.VISIBLE);
         }
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

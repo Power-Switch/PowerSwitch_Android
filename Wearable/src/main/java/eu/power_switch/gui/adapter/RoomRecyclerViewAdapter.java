@@ -35,6 +35,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.ThemeHelper;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
@@ -74,7 +75,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(final RoomRecyclerViewAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RoomRecyclerViewAdapter.ViewHolder holder, int position) {
         // Get the data model based on position
         final Room room = rooms.get(position);
 
@@ -104,7 +105,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     holder.linearLayoutOfReceivers.setVisibility(View.VISIBLE);
                     holder.linearLayout_AllOnOffButtons.setVisibility(View.GONE);
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) parentRecyclerView.getLayoutManager();
-                    linearLayoutManager.smoothScrollToPosition(parentRecyclerView, new RecyclerView.State(), position);
+                    linearLayoutManager.smoothScrollToPosition(parentRecyclerView, new RecyclerView.State(), holder.getAdapterPosition());
                 }
             }
         });
@@ -179,7 +180,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 if (button.getId() == receiver.getLastActivatedButtonId()
                         && WearablePreferencesHandler.getHighlightLastActivatedButton()) {
-                    buttonView.setTextColor(ContextCompat.getColor(context, R.attr.colorAccent));
+                    buttonView.setTextColor(ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent));
                 }
 
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
@@ -224,7 +225,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             }
         }
 
-        if (position == getItemCount() - 1) {
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

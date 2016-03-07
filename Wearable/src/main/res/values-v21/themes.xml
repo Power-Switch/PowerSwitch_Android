@@ -31,6 +31,8 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
+        <item name="android:colorAccent">@color/color_light_blue_a700</item>
     </style>
 
     <style name="PowerSwitchWearTheme.Dark.Red" parent="PowerSwitchWearThemeBase.Dark.Red">
@@ -45,6 +47,8 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
+        <item name="android:colorAccent">@color/color_red_a700</item>
     </style>
 
     <style name="PowerSwitchWearTheme.Light.Blue" parent="PowerSwitchWearThemeBase.Light.Blue">
@@ -59,6 +63,8 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
+        <item name="android:colorAccent">@color/color_light_blue_a700</item>
     </style>
 
     <style name="PowerSwitchWearTheme.Light.Red" parent="PowerSwitchWearThemeBase.Light.Red">
@@ -73,6 +79,8 @@
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
         <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
+        <item name="android:colorAccent">@color/color_red_a700</item>
     </style>
 
 </resources>

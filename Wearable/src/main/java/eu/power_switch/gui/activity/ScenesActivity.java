@@ -34,14 +34,13 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.ThemeHelper;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 26.08.2015.
@@ -60,23 +59,7 @@ public class ScenesActivity extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        switch (WearablePreferencesHandler.getTheme()) {
-            case SettingsConstants.THEME_DARK_BLUE:
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                break;
-            case SettingsConstants.THEME_DARK_RED:
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Red);
-                break;
-            case SettingsConstants.THEME_LIGHT_BLUE:
-                setTheme(R.style.PowerSwitchWearTheme_Light_Blue);
-                break;
-            case SettingsConstants.THEME_LIGHT_RED:
-                setTheme(R.style.PowerSwitchWearTheme_Light_Red);
-                break;
-            default:
-                setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
-                break;
-        }
+        ThemeHelper.applyTheme(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scenes);
@@ -107,7 +90,7 @@ public class ScenesActivity extends WearableActivity {
                 relativeLayoutAmbientMode = (RelativeLayout) findViewById(R.id.relativeLayout_ambientMode);
 
                 scenesRecyclerView = (RecyclerView) findViewById(R.id.scenes_recyclerView);
-                sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getApplicationContext(), scenesRecyclerView,
+                sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(stub.getContext(), scenesRecyclerView,
                         sceneList, dataApiHandler);
                 scenesRecyclerView.setAdapter(sceneRecyclerViewAdapter);
 
