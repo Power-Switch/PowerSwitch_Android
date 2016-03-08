@@ -30,6 +30,7 @@ public class RoomTable {
     public static final String COLUMN_APARTMENT_ID = "apartment_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_POSITION = "position";
+    public static final String COLUMN_COLLAPSED = "collapsed";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
@@ -37,6 +38,7 @@ public class RoomTable {
             COLUMN_NAME + " text not null, " +
             COLUMN_POSITION + " integer," +
             COLUMN_APARTMENT_ID + " integer not null " +
+            COLUMN_COLLAPSED + " integer not null" +
             ");";
     //@formatter:on
 
@@ -53,6 +55,11 @@ public class RoomTable {
 
         if (oldVersion <= 10) {
             db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_APARTMENT_ID +
+                    " integer not null DEFAULT 0");
+        }
+
+        if (oldVersion <= 13) {
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_COLLAPSED +
                     " integer not null DEFAULT 0");
         }
     }

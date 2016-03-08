@@ -19,6 +19,7 @@
 package eu.power_switch.obj;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +69,7 @@ public class Apartment {
      */
     private Geofence geofence;
 
-    public Apartment(Long id, String name) {
+    public Apartment(@NonNull Long id, @NonNull String name) {
         this.id = id;
         this.name = name;
         this.rooms = Collections.EMPTY_LIST;
@@ -76,7 +77,7 @@ public class Apartment {
         this.gateways = Collections.EMPTY_LIST;
     }
 
-    public Apartment(Long id, String name, List<Gateway> gateways, Geofence geofence) {
+    public Apartment(@NonNull Long id, @NonNull String name, @NonNull List<Gateway> gateways, @Nullable Geofence geofence) {
         this.id = id;
         this.name = name;
         this.rooms = Collections.EMPTY_LIST;
@@ -85,7 +86,7 @@ public class Apartment {
         this.geofence = geofence;
     }
 
-    public Apartment(Long id, String name, List<Room> rooms, List<Scene> scenes, List<Gateway> gateways, Geofence geofence) {
+    public Apartment(@NonNull Long id, @NonNull String name, @NonNull List<Room> rooms, @NonNull List<Scene> scenes, @NonNull List<Gateway> gateways, @Nullable Geofence geofence) {
         this.id = id;
         this.name = name;
         this.rooms = rooms;
@@ -108,6 +109,7 @@ public class Apartment {
      *
      * @return name of this apartment
      */
+    @NonNull
     public String getName() {
         return name;
     }
@@ -121,6 +123,7 @@ public class Apartment {
      *
      * @return list of rooms
      */
+    @NonNull
     public List<Room> getRooms() {
         return rooms;
     }
@@ -134,6 +137,7 @@ public class Apartment {
      *
      * @return list of scenes
      */
+    @NonNull
     public List<Scene> getScenes() {
         return scenes;
     }
@@ -152,6 +156,7 @@ public class Apartment {
      *
      * @return list of Gateways
      */
+    @NonNull
     public List<Gateway> getAssociatedGateways() {
         return gateways;
     }
@@ -180,9 +185,26 @@ public class Apartment {
      * @param name name of room
      * @return Room or null
      */
+    @Nullable
     public Room getRoom(String name) {
         for (Room room : rooms) {
             if (room.getName().equals(name)) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get a room in this apartment by its name, ignoring case
+     *
+     * @param name name of room
+     * @return Room or null
+     */
+    @Nullable
+    public Room getRoomCaseInsensitive(String name) {
+        for (Room room : rooms) {
+            if (room.getName().equalsIgnoreCase(name)) {
                 return room;
             }
         }
@@ -195,6 +217,7 @@ public class Apartment {
      * @param id id of room
      * @return Room or null
      */
+    @Nullable
     public Room getRoom(Long id) {
         for (Room room : rooms) {
             if (room.getId().equals(id)) {
@@ -210,9 +233,26 @@ public class Apartment {
      * @param name name of scene
      * @return Scene or null
      */
+    @Nullable
     public Scene getScene(String name) {
         for (Scene scene : scenes) {
             if (scene.getName().equals(name)) {
+                return scene;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get a scene in this apartment by its name, ignoring case
+     *
+     * @param name name of scene
+     * @return Scene or null
+     */
+    @Nullable
+    public Scene getSceneCaseInsensitive(String name) {
+        for (Scene scene : scenes) {
+            if (scene.getName().equalsIgnoreCase(name)) {
                 return scene;
             }
         }
@@ -225,6 +265,7 @@ public class Apartment {
      * @param id id of scene
      * @return Scene or null
      */
+    @Nullable
     public Scene getScene(Long id) {
         for (Scene scene : scenes) {
             if (scene.getId().equals(id)) {
@@ -239,6 +280,7 @@ public class Apartment {
      *
      * @return Geofence, null if none exists
      */
+    @Nullable
     public Geofence getGeofence() {
         return geofence;
     }

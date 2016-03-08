@@ -73,7 +73,12 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
     public void onBindViewHolder(GatewayRecyclerViewAdapter.ViewHolder holder, int position) {
         final Gateway gateway = gateways.get(holder.getAdapterPosition());
 
-        boolean isAssociatedWithApartment = DatabaseHandler.isAssociatedWithAnyApartment(gateway);
+        boolean isAssociatedWithApartment = true;
+        try {
+            isAssociatedWithApartment = DatabaseHandler.isAssociatedWithAnyApartment(gateway);
+        } catch (Exception e) {
+            Log.e(e);
+        }
 
         holder.attention.setImageDrawable(IconicsHelper.getAttentionIcon(context));
         holder.attention.setOnClickListener(new View.OnClickListener() {

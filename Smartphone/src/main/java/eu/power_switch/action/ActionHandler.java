@@ -168,7 +168,7 @@ public class ActionHandler {
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
-            Button button = receiver.getButton(buttonName);
+            Button button = receiver.getButtonCaseInsensitive(buttonName);
             if (button != null) {
                 for (Gateway gateway : apartment.getAssociatedGateways()) {
                     if (gateway.isActive()) {

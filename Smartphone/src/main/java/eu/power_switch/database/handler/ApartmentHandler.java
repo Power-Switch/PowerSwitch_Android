@@ -195,11 +195,34 @@ abstract class ApartmentHandler {
         String[] columns = {ApartmentTable.COLUMN_NAME};
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_ID + "==" + apartmentId, null, null, null, null);
 
+        String name = null;
         if (cursor.moveToFirst()) {
-            return cursor.getString(0);
-        } else {
-            return null;
+            name = cursor.getString(0);
         }
+
+        cursor.close();
+        return name;
+    }
+
+    /**
+     * Get Name of all Apartment
+     *
+     * @return List of Apartment names
+     */
+    public static ArrayList<String> getAllNames() throws Exception {
+        ArrayList<String> apartmentNames = new ArrayList<>();
+
+        String[] columns = {ApartmentTable.COLUMN_NAME};
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, null, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            apartmentNames.add(cursor.getString(0));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return apartmentNames;
     }
 
     /**

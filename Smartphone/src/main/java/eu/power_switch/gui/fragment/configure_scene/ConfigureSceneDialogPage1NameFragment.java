@@ -72,7 +72,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context any suitable context
+     * @param context           any suitable context
      * @param name              Current Name of Scene
      * @param selectedReceivers Currently selected Receivers to include in Scene
      */
@@ -260,7 +260,9 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
 
                 if (room == null) {
                     // copy room
-                    room = new Room(originalRoom.getId(), originalRoom.getApartmentId(), originalRoom.getName());
+                    room = new Room(originalRoom.getId(), originalRoom.getApartmentId(),
+                            originalRoom.getName(), originalRoom.getPositionInApartment(),
+                            originalRoom.isCollapsed());
                     // add room to list
                     checkedReceivers.add(room);
                 }

@@ -107,7 +107,7 @@ public class CreateRoomDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName()));
+                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName(), 0, false));
 
                     ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
                     RoomsFragment.sendReceiverChangedBroadcast(getActivity());

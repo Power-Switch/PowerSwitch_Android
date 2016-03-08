@@ -21,6 +21,7 @@ package eu.power_switch.database.handler;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -160,6 +161,12 @@ public final class DatabaseHandler {
      * /////////////////////////
      */
 
+    /**
+     * Add Apartment to Database
+     *
+     * @param apartment Apartment
+     * @return ID of added Apartment
+     */
     public static long addApartment(Apartment apartment) throws Exception {
         openWritable();
         long id = -1;
@@ -219,6 +226,7 @@ public final class DatabaseHandler {
      * @param name Name of Apartment
      * @return Apartment
      */
+    @Nullable
     public static Apartment getApartment(String name) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -233,11 +241,12 @@ public final class DatabaseHandler {
     }
 
     /**
-     * Get an Apartment by Name
+     * Get an Apartment by ID
      *
      * @param id ID of Apartment
      * @return Apartment
      */
+    @Nullable
     public static Apartment getApartment(Long id) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -251,9 +260,56 @@ public final class DatabaseHandler {
         return apartment;
     }
 
+    /**
+     * Get the Name of an Apartment by ID
+     *
+     * @param id ID of Apartment
+     * @return Name of Apartment
+     */
+    @Nullable
+    public static String getApartmentName(Long id) throws Exception {
+        openReadable();
+        String apartmentName = null;
+        try {
+            apartmentName = ApartmentHandler.getName(id);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartmentName;
+    }
+
+    /**
+     * Get all Apartments from Database
+     *
+     * @return List of Apartment Names
+     * @throws Exception
+     */
+    @NonNull
+    public static List<String> getAllApartmentNames() throws Exception {
+        openReadable();
+        List<String> apartmentNames = new ArrayList<>();
+        try {
+            apartmentNames = ApartmentHandler.getAllNames();
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartmentNames;
+    }
+
+    /**
+     * Get all Apartments from Database
+     *
+     * @return List of Apartments
+     * @throws Exception
+     */
+    @NonNull
     public static List<Apartment> getAllApartments() throws Exception {
         openReadable();
-        List<Apartment> apartments = null;
+        List<Apartment> apartments = new ArrayList<>();
         try {
             apartments = ApartmentHandler.getAll();
         } catch (Exception e) {
@@ -262,6 +318,66 @@ public final class DatabaseHandler {
             close();
         }
         return apartments;
+    }
+
+    /**
+     * Get Apartment that contains a specific Receiver
+     *
+     * @param receiver Receiver
+     * @return Apartment
+     */
+    @Nullable
+    public static Apartment getContainingApartment(Receiver receiver) {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(receiver);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
+
+    /**
+     * Get Apartment that contains a specific Room
+     *
+     * @param room Room
+     * @return Apartment
+     */
+    @Nullable
+    public static Apartment getContainingApartment(Room room) {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(room);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
+
+    /**
+     * Get Apartment that contains a specific Scene
+     *
+     * @param scene Scene
+     * @return Apartment
+     */
+    @Nullable
+    public static Apartment getContainingApartment(Scene scene) {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.get(scene);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
     }
 
     /**
@@ -276,11 +392,13 @@ public final class DatabaseHandler {
      * Save a room to the database.
      *
      * @param room the new room
+     * @return ID of added Room
      */
-    public static void addRoom(Room room) throws Exception {
+    public static long addRoom(Room room) throws Exception {
         openWritable();
+        long id = -1;
         try {
-            RoomHandler.add(room);
+            id = RoomHandler.add(room);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
@@ -289,6 +407,8 @@ public final class DatabaseHandler {
         } finally {
             close();
         }
+
+        return id;
     }
 
     /**
@@ -301,6 +421,26 @@ public final class DatabaseHandler {
         openWritable();
         try {
             RoomHandler.update(id, newName);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            close();
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
+    /**
+     * Update collapsed state of an existing room.
+     *
+     * @param id          the ID of the Room
+     * @param isCollapsed the new Name
+     */
+    public static void updateRoomCollapsed(Long id, boolean isCollapsed) throws Exception {
+        openWritable();
+        try {
+            RoomHandler.updateCollapsed(id, isCollapsed);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
@@ -334,6 +474,7 @@ public final class DatabaseHandler {
      * @param name the name of the room
      * @return a room object
      */
+    @Nullable
     public static Room getRoom(String name) throws Exception {
         openReadable();
         Room room = null;
@@ -353,6 +494,7 @@ public final class DatabaseHandler {
      * @param id the ID of the room
      * @return a room object
      */
+    @Nullable
     public static Room getRoom(Long id) throws Exception {
         openReadable();
         Room room = null;
@@ -371,9 +513,10 @@ public final class DatabaseHandler {
      *
      * @return a list of all rooms
      */
+    @NonNull
     public static List<Room> getAllRooms() throws Exception {
         openReadable();
-        List<Room> rooms = null;
+        List<Room> rooms = new ArrayList<>();
         try {
             rooms = RoomHandler.getAll();
         } catch (Exception e) {
@@ -389,9 +532,10 @@ public final class DatabaseHandler {
      *
      * @return a list of rooms
      */
+    @NonNull
     public static List<Room> getRooms(Long apartmentId) throws Exception {
         openReadable();
-        List<Room> rooms = null;
+        List<Room> rooms = new ArrayList<>();
         try {
             rooms = RoomHandler.getByApartment(apartmentId);
         } catch (Exception e) {
@@ -400,6 +544,25 @@ public final class DatabaseHandler {
             close();
         }
         return rooms;
+    }
+
+    /**
+     * Get all room IDs of a specific Apartment.
+     *
+     * @return a list of room IDs
+     */
+    @NonNull
+    public static ArrayList<Long> getRoomIds(Long apartmentId) throws Exception {
+        openReadable();
+        ArrayList<Long> roomIds = new ArrayList<>();
+        try {
+            roomIds = RoomHandler.getIdsByApartment(apartmentId);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return roomIds;
     }
 
     /**
@@ -450,6 +613,7 @@ public final class DatabaseHandler {
      * @param id ID of the Receiver
      * @return Receiver, can be null
      */
+    @Nullable
     public static Receiver getReceiver(Long id) throws Exception {
         openReadable();
         Receiver receiver = null;
@@ -469,9 +633,10 @@ public final class DatabaseHandler {
      * @param id ID of room
      * @return List of Receivers
      */
-    public static ArrayList<Receiver> getReceiverByRoomId(Long id) throws Exception {
+    @NonNull
+    public static List<Receiver> getReceiverByRoomId(Long id) throws Exception {
         openReadable();
-        ArrayList<Receiver> receivers = null;
+        List<Receiver> receivers = new ArrayList<>();
         try {
             receivers = ReceiverHandler.getByRoom(id);
         } catch (Exception e) {
@@ -489,6 +654,7 @@ public final class DatabaseHandler {
      * @param receiverName Name of Receiver
      * @return List of Receivers
      */
+    @Nullable
     public static Receiver getReceiverByRoomId(Long roomId, String receiverName) throws Exception {
         openReadable();
         Receiver receiver = null;
@@ -507,9 +673,10 @@ public final class DatabaseHandler {
      *
      * @return List of Receivers
      */
+    @NonNull
     public static List<Receiver> getAllReceivers() throws Exception {
         openReadable();
-        List<Receiver> receivers = null;
+        List<Receiver> receivers = new ArrayList<>();
         try {
             receivers = ReceiverHandler.getAll();
         } catch (Exception e) {
@@ -543,6 +710,7 @@ public final class DatabaseHandler {
      * @param id ID of Button
      * @return Button
      */
+    @Nullable
     public static Button getButton(Long id) throws Exception {
         openReadable();
         Button button = null;
@@ -562,9 +730,10 @@ public final class DatabaseHandler {
      * @param receiverId ID of Receiver
      * @return List of Buttons
      */
+    @NonNull
     public static List<UniversalButton> getButtons(Long receiverId) throws Exception {
         openReadable();
-        List<UniversalButton> buttons = null;
+        List<UniversalButton> buttons = new ArrayList<>();
         try {
             buttons = UniversalButtonHandler.getUniversalButtons(receiverId);
         } catch (Exception e) {
@@ -658,6 +827,7 @@ public final class DatabaseHandler {
      * @param name Name of Scene
      * @return Scene
      */
+    @Nullable
     public static Scene getScene(String name) throws Exception {
         openReadable();
         Scene scene = null;
@@ -677,6 +847,7 @@ public final class DatabaseHandler {
      * @param id ID of Scene
      * @return Scene
      */
+    @Nullable
     public static Scene getScene(Long id) throws Exception {
         openReadable();
         Scene scene = null;
@@ -695,9 +866,10 @@ public final class DatabaseHandler {
      *
      * @return a list of scenes
      */
+    @NonNull
     public static List<Scene> getScenes(Long apartmentId) throws Exception {
         openReadable();
-        List<Scene> scenes = null;
+        List<Scene> scenes = new ArrayList<>();
         try {
             scenes = SceneHandler.getByApartment(apartmentId);
         } catch (Exception e) {
@@ -713,9 +885,10 @@ public final class DatabaseHandler {
      *
      * @return List of Scenes
      */
+    @NonNull
     public static List<Scene> getAllScenes() throws Exception {
         openReadable();
-        List<Scene> scenes = null;
+        List<Scene> scenes = new ArrayList<>();
         try {
             scenes = SceneHandler.getAll();
         } catch (Exception e) {
@@ -833,6 +1006,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
+    @Nullable
     public static Gateway getGateway(Long id) throws Exception {
         openReadable();
         Gateway gateway = null;
@@ -851,9 +1025,10 @@ public final class DatabaseHandler {
      *
      * @return List of Gateways
      */
+    @NonNull
     public static List<Gateway> getAllGateways() throws Exception {
         openReadable();
-        List<Gateway> gateways = null;
+        List<Gateway> gateways = new ArrayList<>();
         try {
             gateways = GatewayHandler.getAll();
         } catch (Exception e) {
@@ -870,9 +1045,10 @@ public final class DatabaseHandler {
      * @param isActive true if Gateway is enabled
      * @return List of Gateways
      */
+    @NonNull
     public static List<Gateway> getAllGateways(boolean isActive) throws Exception {
         openReadable();
-        List<Gateway> gateways = null;
+        List<Gateway> gateways = new ArrayList<>();
         try {
             gateways = GatewayHandler.getAll(isActive);
         } catch (Exception e) {
@@ -889,7 +1065,7 @@ public final class DatabaseHandler {
      * @param gateway gateway to check for associations
      * @return true if associated with at least one apartment, false otherwise
      */
-    public static boolean isAssociatedWithAnyApartment(Gateway gateway) {
+    public static boolean isAssociatedWithAnyApartment(Gateway gateway) throws Exception {
         openReadable();
         boolean isAssociatedWithApartment = false;
         try {
@@ -949,6 +1125,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
+    @Nullable
     public static ReceiverWidget getReceiverWidget(int id) throws Exception {
         openReadable();
         ReceiverWidget receiverWidget = null;
@@ -1001,6 +1178,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
+    @Nullable
     public static RoomWidget getRoomWidget(int id) throws Exception {
         openReadable();
         RoomWidget roomWidget = null;
@@ -1053,6 +1231,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
+    @Nullable
     public static SceneWidget getSceneWidget(int id) throws Exception {
         openWritable();
         SceneWidget sceneWidget = null;
@@ -1074,6 +1253,7 @@ public final class DatabaseHandler {
      * @param id ID of Timer
      * @return Timer
      */
+    @Nullable
     public static Timer getTimer(Long id) throws Exception {
         openReadable();
         Timer timer = null;
@@ -1092,9 +1272,10 @@ public final class DatabaseHandler {
      *
      * @return a list of all Timers
      */
+    @NonNull
     public static List<Timer> getAllTimers() throws Exception {
         openReadable();
-        List<Timer> timers = null;
+        List<Timer> timers = new ArrayList<>();
         try {
             timers = TimerHandler.getAll();
         } catch (Exception e) {
@@ -1111,9 +1292,10 @@ public final class DatabaseHandler {
      * @param isActive true if Timer is active
      * @return a list of all active/inactive Timers
      */
+    @NonNull
     public static List<Timer> getAllTimers(boolean isActive) throws Exception {
         openReadable();
-        List<Timer> timers = null;
+        List<Timer> timers = new ArrayList<>();
         try {
             timers = TimerHandler.getAll(isActive);
         } catch (Exception e) {
@@ -1244,6 +1426,7 @@ public final class DatabaseHandler {
      * @param event alarm event
      * @return List of Actions
      */
+    @NonNull
     public static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         openReadable();
         List<Action> actions = new ArrayList<>();
@@ -1286,6 +1469,7 @@ public final class DatabaseHandler {
      *
      * @return List of HistoryItems
      */
+    @NonNull
     public static LinkedList<HistoryItem> getHistory() throws Exception {
         openReadable();
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
@@ -1316,45 +1500,6 @@ public final class DatabaseHandler {
         }
     }
 
-    public static Apartment getContainingApartment(Receiver receiver) {
-        openReadable();
-        Apartment apartment = null;
-        try {
-            apartment = ApartmentHandler.get(receiver);
-        } catch (Exception e) {
-            Log.e(e);
-        } finally {
-            close();
-        }
-        return apartment;
-    }
-
-    public static Apartment getContainingApartment(Room room) {
-        openReadable();
-        Apartment apartment = null;
-        try {
-            apartment = ApartmentHandler.get(room);
-        } catch (Exception e) {
-            Log.e(e);
-        } finally {
-            close();
-        }
-        return apartment;
-    }
-
-    public static Apartment getContainingApartment(Scene scene) {
-        openReadable();
-        Apartment apartment = null;
-        try {
-            apartment = ApartmentHandler.get(scene);
-        } catch (Exception e) {
-            Log.e(e);
-        } finally {
-            close();
-        }
-        return apartment;
-    }
-
     /**
      * ////////////////////////
      * // Geofence functions //
@@ -1367,6 +1512,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
+    @Nullable
     public static Geofence getGeofence(Long id) throws Exception {
         openReadable();
         Geofence geofence = null;
@@ -1385,9 +1531,10 @@ public final class DatabaseHandler {
      *
      * @return list of Geofences
      */
+    @NonNull
     public static List<Geofence> getAllGeofences() throws Exception {
         openReadable();
-        List<Geofence> geofences = null;
+        List<Geofence> geofences = new ArrayList<>();
         try {
             geofences = GeofenceHandler.getAll();
         } catch (Exception e) {
@@ -1404,9 +1551,10 @@ public final class DatabaseHandler {
      * @param isActive true if active, false otherwise
      * @return list of Geofences
      */
+    @NonNull
     public static List<Geofence> getAllGeofences(boolean isActive) throws Exception {
         openReadable();
-        List<Geofence> geofences = null;
+        List<Geofence> geofences = new ArrayList<>();
         try {
             geofences = GeofenceHandler.getAll(isActive);
         } catch (Exception e) {
@@ -1422,9 +1570,10 @@ public final class DatabaseHandler {
      *
      * @return list of custom Geofences
      */
+    @NonNull
     public static List<Geofence> getCustomGeofences() throws Exception {
         openReadable();
-        List<Geofence> geofences = null;
+        List<Geofence> geofences = new ArrayList<>();
         try {
             geofences = GeofenceHandler.getCustom();
         } catch (Exception e) {

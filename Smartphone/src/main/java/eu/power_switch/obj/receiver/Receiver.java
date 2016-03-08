@@ -19,6 +19,8 @@
 package eu.power_switch.obj.receiver;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -178,11 +180,24 @@ public abstract class Receiver {
         this.roomId = roomId;
     }
 
+    /**
+     * Get java classpath of corresponding Class by Model Name
+     *
+     * @param model Receiver Model
+     * @return Java Classpath
+     */
     public static String getJavaPath(String model) {
         return receiverMap.get(model);
     }
 
-    public static String getModelName(String javaPath) {
+    /**
+     * Get Model name by Java Classpath
+     *
+     * @param javaPath Classpath
+     * @return Model name
+     */
+    @Nullable
+    public static String getModelName(@NonNull String javaPath) {
         Set<Map.Entry<String, String>> entrySet = receiverMap.entrySet();
 
         for (Map.Entry<String, String> entry : entrySet) {
@@ -194,58 +209,138 @@ public abstract class Receiver {
         return null;
     }
 
+    /**
+     * Get ID of this Receiver
+     *
+     * @return ID of this Receiver
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Get Name of this Receiver
+     *
+     * @return Name of this Receiver
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get Brand of this Receiver
+     *
+     * @return Brand of this receiver
+     */
     public Brand getBrand() {
         return brand;
     }
 
+    /**
+     * Get Model of this Receiver
+     *
+     * @return Model of this Receiver
+     */
     public String getModel() {
         return model;
     }
 
+    /**
+     * Get all Buttons of this Receiver
+     *
+     * @return List of Buttons
+     */
     public LinkedList<Button> getButtons() {
         return buttons;
     }
 
+    /**
+     * Get ID of Room this Receiver is associated with
+     *
+     * @return ID of Room
+     */
     public Long getRoomId() {
         return roomId;
     }
 
+    /**
+     * Get Type of this Receiver
+     *
+     * @return Type of this Receiver
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     * Get Position in Room of this Receiver
+     *
+     * @return position in room
+     */
     public Integer getPositionInRoom() {
         return positionInRoom;
     }
 
+    /**
+     * Set Position in Room of this Receiver
+     *
+     * @param positionInRoom position in room
+     */
     public void setPositionInRoom(int positionInRoom) {
         this.positionInRoom = positionInRoom;
     }
 
+    /**
+     * Get ID of last activated Button
+     *
+     * @return ID of last activated Button
+     */
     public Long getLastActivatedButtonId() {
         return lastActivatedButtonId;
     }
 
+    /**
+     * Set ID of last activated Button
+     *
+     * @param lastActivatedButtonId ID of last activated Button
+     */
     public void setLastActivatedButtonId(Long lastActivatedButtonId) {
         this.lastActivatedButtonId = lastActivatedButtonId;
     }
 
+    /**
+     * Get NetworkPackage for a Gateway/Action combination for this Receiver
+     *
+     * @param gateway Gateway
+     * @param action  Action name (Button name)
+     * @return NetworkPackage
+     * @throws GatewayNotSupportedException thrown if this Receiver doesn't support the given Gateway
+     * @throws ActionNotSupportedException  thrown if this Receiver doesn't support the given Action
+     */
     public NetworkPackage getNetworkPackage(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String signal = getSignal(gateway, action);
         return new NetworkPackage(gateway.getCommunicationType(), gateway.getHost(), gateway.getPort(), signal,
                 gateway.getTimeout());
     }
 
+    /**
+     * Get network signal for a given Gateway/Action combination
+     *
+     * @param gateway
+     * @param action
+     * @return Network signal
+     * @throws GatewayNotSupportedException thrown if this Receiver doesn't support the given Gateway
+     * @throws ActionNotSupportedException  thrown if this Receiver doesn't support the given Action
+     */
     protected abstract String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException;
 
+    /**
+     * Get a Button of this Receiver by its name
+     *
+     * @param name Name of Button
+     * @return Button or null
+     */
+    @Nullable
     public Button getButton(String name) {
         for (Button button : buttons) {
             if (button.getName().equals(name)) {
@@ -255,6 +350,29 @@ public abstract class Receiver {
         return null;
     }
 
+    /**
+     * Get a Button of this Receiver by its name, ignoring case
+     *
+     * @param name Name of Button
+     * @return Button or null
+     */
+    @Nullable
+    public Button getButtonCaseInsensitive(String name) {
+        for (Button button : buttons) {
+            if (button.getName().equalsIgnoreCase(name)) {
+                return button;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get a Button of this Receiver by its ID
+     *
+     * @param id ID of Button
+     * @return Button or null
+     */
+    @Nullable
     public Button getButton(Long id) {
         for (Button button : buttons) {
             if (button.getId().equals(id)) {
@@ -356,6 +474,11 @@ public abstract class Receiver {
             return valueOf(name);
         }
 
+        /**
+         * Get Name of this Model
+         *
+         * @return
+         */
         public String getName() {
             return name;
         }

@@ -49,11 +49,11 @@ abstract class RoomHandler {
      *
      * @param room Room
      */
-    protected static void add(Room room) throws Exception {
+    protected static long add(Room room) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, room.getName());
         values.put(RoomTable.COLUMN_APARTMENT_ID, room.getApartmentId());
-        DatabaseHandler.database.insert(RoomTable.TABLE_NAME, null, values);
+        return DatabaseHandler.database.insert(RoomTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -67,6 +67,19 @@ abstract class RoomHandler {
         values.put(RoomTable.COLUMN_NAME, newName);
         DatabaseHandler.database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
     }
+
+    /**
+     * Updates the collapsed state of a Room in Database
+     *
+     * @param id          ID of Room
+     * @param isCollapsed new collapsed state of Room
+     */
+    protected static void updateCollapsed(Long id, boolean isCollapsed) throws Exception {
+        ContentValues values = new ContentValues();
+        values.put(RoomTable.COLUMN_COLLAPSED, isCollapsed);
+        DatabaseHandler.database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
+    }
+
 
     /**
      * Deletes Room from Database
@@ -127,10 +140,16 @@ abstract class RoomHandler {
         return room;
     }
 
-    public static LinkedList<Room> getByApartment(Long id) throws Exception {
+    /**
+     * Get Rooms of a specific Apartment
+     *
+     * @param apartmentId ID of Apartment
+     * @return list of Rooms
+     */
+    public static LinkedList<Room> getByApartment(Long apartmentId) throws Exception {
         LinkedList<Room> rooms = new LinkedList<>();
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_APARTMENT_ID +
-                        "==" + id,
+                        "==" + apartmentId,
                 null, null, null, null);
         cursor.moveToFirst();
 
@@ -144,6 +163,21 @@ abstract class RoomHandler {
         }
         cursor.close();
         return rooms;
+    }
+
+    public static ArrayList<Long> getIdsByApartment(Long apartmentId) throws Exception {
+        ArrayList<Long> roomIds = new ArrayList<>();
+        String[] columns = new String[]{RoomTable.COLUMN_ID};
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, columns, RoomTable.COLUMN_APARTMENT_ID +
+                "==" + apartmentId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            roomIds.add(cursor.getLong(0));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return roomIds;
     }
 
     /**
@@ -175,7 +209,9 @@ abstract class RoomHandler {
      * @return Room
      */
     private static Room dbToRoom(Cursor c) throws Exception {
-        Room room = new Room(c.getLong(0), c.getLong(3), c.getString(1));
+        boolean isCollapsed = c.getInt(4) > 0;
+
+        Room room = new Room(c.getLong(0), c.getLong(3), c.getString(1), c.getInt(2), isCollapsed);
         room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
         return room;
     }

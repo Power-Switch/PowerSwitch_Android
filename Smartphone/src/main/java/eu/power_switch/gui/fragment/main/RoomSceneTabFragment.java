@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
-import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -152,8 +151,8 @@ public class RoomSceneTabFragment extends Fragment {
             if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 textView_currentApartmentInfo.setText(" - ");
             } else {
-                Apartment apartment = DatabaseHandler.getApartment(currentApartmentId);
-                textView_currentApartmentInfo.setText(apartment.getName());
+                String apartmentName = DatabaseHandler.getApartmentName(currentApartmentId);
+                textView_currentApartmentInfo.setText(apartmentName);
             }
         } catch (Exception e) {
             Log.e(e);

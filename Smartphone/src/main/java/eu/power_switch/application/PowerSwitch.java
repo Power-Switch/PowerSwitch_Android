@@ -40,6 +40,7 @@ import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
@@ -178,7 +179,11 @@ public class PowerSwitch extends MultiDexApplication {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
                 try {
+                    // wait some time for application to finish loading
+                    Thread.sleep(5000);
+
                     for (Apartment apartment : DatabaseHandler.getAllApartments()) {
                         Log.d(apartment.toString());
                     }
@@ -190,8 +195,12 @@ public class PowerSwitch extends MultiDexApplication {
                     for (Geofence geofence : DatabaseHandler.getAllGeofences()) {
                         Log.d(geofence.toString());
                     }
+
+                    for (Gateway gateway : DatabaseHandler.getAllGateways()) {
+                        Log.d(gateway.toString() + "\n");
+                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e(e);
                 }
             }
         }).start();

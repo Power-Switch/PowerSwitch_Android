@@ -94,9 +94,7 @@ public class SelectApartmentDialog extends DialogFragment {
         ArrayList<String> apartmentNames = new ArrayList<>();
 
         try {
-            for (Apartment apartment : DatabaseHandler.getAllApartments()) {
-                apartmentNames.add(apartment.getName());
-            }
+            apartmentNames.addAll(DatabaseHandler.getAllApartmentNames());
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

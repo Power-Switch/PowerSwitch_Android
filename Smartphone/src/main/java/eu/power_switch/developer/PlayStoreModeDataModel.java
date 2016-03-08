@@ -61,11 +61,11 @@ public class PlayStoreModeDataModel {
     private Scene scene_abendessen = new Scene((long) 1, (long) 0, "Abendessen");
     private Scene scene_feier = new Scene((long) 2, (long) 0, "Feier");
     // Rooms
-    private Room wohnzimmer = new Room((long) 0, (long) 0, "Wohnzimmer");
-    private Room schlafzimmer = new Room((long) 1, (long) 0, "Schlafzimmer");
-    private Room kueche = new Room((long) 2, (long) 0, "Küche");
-    private Room kinderzimmer = new Room((long) 3, (long) 0, "Kinderzimmer");
-    private Room garten = new Room((long) 4, (long) 0, "Garten");
+    private Room wohnzimmer = new Room((long) 0, (long) 0, "Wohnzimmer", 0, false);
+    private Room schlafzimmer = new Room((long) 1, (long) 0, "Schlafzimmer", 0, false);
+    private Room kueche = new Room((long) 2, (long) 0, "Küche", 0, false);
+    private Room kinderzimmer = new Room((long) 3, (long) 0, "Kinderzimmer", 0, false);
+    private Room garten = new Room((long) 4, (long) 0, "Garten", 0, false);
     // Receiver
     private Receiver sofa_wohnzimmer;
     private Receiver ecklampe_wohnzimmer;

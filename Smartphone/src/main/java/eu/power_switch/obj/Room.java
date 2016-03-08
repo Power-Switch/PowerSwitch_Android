@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj;
 
+import android.support.annotation.Nullable;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,6 +52,11 @@ public class Room {
     private LinkedList<Receiver> receivers;
 
     /**
+     * Position in apartment (list) of this Room
+     */
+    private Integer positionInApartment = -1;
+
+    /**
      * Specifies if this room should be rendered collapsed
      */
     private boolean collapsed;
@@ -61,11 +68,13 @@ public class Room {
      * @param apartmentId ID of Apartment
      * @param name        Name of this Room
      */
-    public Room(Long id, Long apartmentId, String name) {
+    public Room(Long id, Long apartmentId, String name, int positionInApartment, boolean isCollapsed) {
         this.id = id;
         this.apartmentId = apartmentId;
         this.name = name;
-        receivers = new LinkedList<>();
+        this.receivers = new LinkedList<>();
+        this.positionInApartment = positionInApartment;
+        this.collapsed = isCollapsed;
     }
 
     /**
@@ -123,6 +132,24 @@ public class Room {
     }
 
     /**
+     * Get Position of this Room in List
+     *
+     * @return position
+     */
+    public Integer getPositionInApartment() {
+        return positionInApartment;
+    }
+
+    /**
+     * Set Position of this Room in List
+     *
+     * @param positionInApartment position
+     */
+    public void setPositionInApartment(Integer positionInApartment) {
+        this.positionInApartment = positionInApartment;
+    }
+
+    /**
      * Get collapsed state of this Room
      *
      * @return true if collapsed
@@ -146,9 +173,26 @@ public class Room {
      * @param name Name of Receiver
      * @return Receiver
      */
+    @Nullable
     public Receiver getReceiver(String name) {
         for (Receiver receiver : receivers) {
             if (receiver.getName().equals(name)) {
+                return receiver;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets a specific Receiver in this Room, ignoring case
+     *
+     * @param name Name of Receiver
+     * @return Receiver
+     */
+    @Nullable
+    public Receiver getReceiverCaseInsensitive(String name) {
+        for (Receiver receiver : receivers) {
+            if (receiver.getName().equalsIgnoreCase(name)) {
                 return receiver;
             }
         }
@@ -161,6 +205,7 @@ public class Room {
      * @param id ID of Receiver
      * @return Receiver
      */
+    @Nullable
     public Receiver getReceiver(Long id) {
         for (Receiver receiver : receivers) {
             if (receiver.getId().equals(id)) {

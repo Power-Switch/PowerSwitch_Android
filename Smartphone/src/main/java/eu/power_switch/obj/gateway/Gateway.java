@@ -174,7 +174,7 @@ public abstract class Gateway {
      */
     @Override
     public String toString() {
-        return name + " (" + model + ", firmware: " + firmware + "): " + host + ":" + port;
+        return "Gateway: " + name + " (" + model + ", firmware: " + firmware + "): " + host + ":" + port;
     }
 
     /**

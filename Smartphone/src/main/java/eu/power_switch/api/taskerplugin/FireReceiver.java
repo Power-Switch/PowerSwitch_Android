@@ -54,54 +54,36 @@ public class FireReceiver extends BroadcastReceiver {
     private void parseActionIntent(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
-//            if (extras != null && extras.containsKey(ApiConstants.KEY_APARTMENT)) {
-//                // NOTE: Every action needs the Apartment:<ApartmentName> Extra (and some other)
 
             if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
                     extras.containsKey(ApiConstants.KEY_ROOM) &&
                     extras.containsKey(ApiConstants.KEY_RECEIVER) &&
                     extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
-                try {
-                    Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM));
-                    Receiver receiver = room.getReceiver(extras.getString(ApiConstants.KEY_RECEIVER));
-                    Button button = receiver.getButton(extras.getString(ApiConstants.KEY_BUTTON));
+                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
+                Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER).trim());
+                Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON).trim());
 
-                    ActionHandler.execute(context, receiver, button);
-                } catch (Exception e) {
-                    Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
-                }
-
+                ActionHandler.execute(context, receiver, button);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
                     extras.containsKey(ApiConstants.KEY_ROOM) &&
                     extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
-                try {
-                    Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT));
-                    Room room = apartment.getRoom(extras.getString(ApiConstants.KEY_ROOM));
-                    String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
+                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
+                String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
 
-                    ActionHandler.execute(context, room, buttonName);
-                } catch (Exception e) {
-                    Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
-                }
+                ActionHandler.execute(context, room, buttonName);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
                     extras.containsKey(ApiConstants.KEY_SCENE)) {
 
-                try {
-                    Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT));
-                    Scene scene = apartment.getScene(extras.getString(ApiConstants.KEY_SCENE));
+                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE).trim());
 
-                    ActionHandler.execute(context, scene);
-                } catch (Exception e) {
-                    Log.e("Error!", e);
-                    Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
-                }
-//                }
+                ActionHandler.execute(context, scene);
             } else {
-                throw new NullPointerException("extras are null!");
+                Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG).show();
             }
 
         } catch (Exception e) {
