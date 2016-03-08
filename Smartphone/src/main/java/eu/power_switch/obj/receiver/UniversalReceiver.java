@@ -31,11 +31,13 @@ import eu.power_switch.shared.log.Log;
 
 public class UniversalReceiver extends Receiver {
 
+    private static final String MODEL = Receiver.getModelName(UniversalReceiver.class.getCanonicalName());
+
     private List<UniversalButton> universalButtons = new ArrayList<>();
 
     public UniversalReceiver(Context context, Long id, String name, List<UniversalButton> buttons, Long
             roomId) {
-        super(context, id, name, Brand.UNIVERSAL, "Custom Buttons", Type.UNIVERSAL, roomId);
+        super(context, id, name, Brand.UNIVERSAL, MODEL, Type.UNIVERSAL, roomId);
         universalButtons.addAll(buttons);
         for (UniversalButton universalButton : universalButtons) {
             this.buttons.add(new Button(universalButton.getId(), universalButton.getName(), universalButton
