@@ -21,7 +21,9 @@ package eu.power_switch.api.taskerplugin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -103,13 +105,30 @@ public class EditActivity extends AbstractPluginActivity {
     private boolean useManualButtonInput = false;
     private boolean useManualSceneInput = false;
 
+    private final TextWatcher editTextTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            setPositiveButtonVisibility(checkValidity());
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasker_plugin);
 
-        View.OnClickListener onClickListener = new View.OnClickListener() {
+        View.OnClickListener actionTypeOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.radioButton_receiver_action) {
@@ -127,11 +146,11 @@ public class EditActivity extends AbstractPluginActivity {
 
         // Action Type Selection
         radioButtonReceiverAction = (RadioButton) findViewById(R.id.radioButton_receiver_action);
-        radioButtonReceiverAction.setOnClickListener(onClickListener);
+        radioButtonReceiverAction.setOnClickListener(actionTypeOnClickListener);
         radioButtonRoomAction = (RadioButton) findViewById(R.id.radioButton_room_action);
-        radioButtonRoomAction.setOnClickListener(onClickListener);
+        radioButtonRoomAction.setOnClickListener(actionTypeOnClickListener);
         radioButtonSceneAction = (RadioButton) findViewById(R.id.radioButton_scene_action);
-        radioButtonSceneAction.setOnClickListener(onClickListener);
+        radioButtonSceneAction.setOnClickListener(actionTypeOnClickListener);
 
         try {
             ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
@@ -154,6 +173,8 @@ public class EditActivity extends AbstractPluginActivity {
                 } else {
                     setApartmentInputType(InputType.MANUAL);
                 }
+
+                checkValidity();
             }
         });
 
@@ -177,6 +198,7 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_apartment.setOnItemSelectedListener(spinnerInteractionListener);
 
         editText_apartment = (EditText) findViewById(R.id.editText_apartment);
+        editText_apartment.addTextChangedListener(editTextTextWatcher);
 
         linearLayoutRoom = (LinearLayout) findViewById(R.id.linearLayout_room);
         linearLayoutReceiver = (LinearLayout) findViewById(R.id.linearLayout_receiver);
@@ -195,6 +217,8 @@ public class EditActivity extends AbstractPluginActivity {
                 } else {
                     setRoomInputType(InputType.MANUAL);
                 }
+
+                checkValidity();
             }
         });
 
@@ -218,6 +242,7 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_room.setOnItemSelectedListener(spinnerInteractionListener);
 
         editText_room = (EditText) findViewById(R.id.editText_room);
+        editText_room.addTextChangedListener(editTextTextWatcher);
 
         ImageButton imageButtonSwitchReceiver = (ImageButton) findViewById(R.id.imageButton_switchReceiver);
         imageButtonSwitchReceiver.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
@@ -231,6 +256,8 @@ public class EditActivity extends AbstractPluginActivity {
                 } else {
                     setReceiverInputType(InputType.MANUAL);
                 }
+
+                checkValidity();
             }
         });
 
@@ -254,6 +281,7 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_receiver.setOnItemSelectedListener(spinnerInteractionListener);
 
         editText_receiver = (EditText) findViewById(R.id.editText_receiver);
+        editText_receiver.addTextChangedListener(editTextTextWatcher);
 
         ImageButton imageButtonSwitchButton = (ImageButton) findViewById(R.id.imageButton_switchButton);
         imageButtonSwitchButton.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
@@ -267,6 +295,8 @@ public class EditActivity extends AbstractPluginActivity {
                 } else {
                     setButtonInputType(InputType.MANUAL);
                 }
+
+                checkValidity();
             }
         });
 
@@ -289,6 +319,7 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_button.setOnItemSelectedListener(spinnerInteractionListener);
 
         editText_button = (EditText) findViewById(R.id.editText_button);
+        editText_button.addTextChangedListener(editTextTextWatcher);
 
         ImageButton imageButtonSwitchScene = (ImageButton) findViewById(R.id.imageButton_switchScene);
         imageButtonSwitchScene.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
@@ -302,6 +333,8 @@ public class EditActivity extends AbstractPluginActivity {
                 } else {
                     setSceneInputType(InputType.MANUAL);
                 }
+
+                checkValidity();
             }
         });
 
@@ -324,6 +357,7 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener);
 
         editText_scene = (EditText) findViewById(R.id.editText_scene);
+        editText_scene.addTextChangedListener(editTextTextWatcher);
 
 
         updateLists();
@@ -472,7 +506,7 @@ public class EditActivity extends AbstractPluginActivity {
             updateRoomList();
             updateSceneList();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
+            Log.e(e);
         }
     }
 
@@ -572,13 +606,7 @@ public class EditActivity extends AbstractPluginActivity {
     }
 
     private Apartment getSelectedApartment() throws Exception {
-        try {
-            return DatabaseHandler.getApartment(getApartmentName());
-        } catch (Exception e) {
-            Log.e(e);
-        }
-
-        return null;
+        return DatabaseHandler.getApartment(getApartmentName());
     }
 
     private Room getSelectedRoom() throws Exception {
@@ -625,90 +653,45 @@ public class EditActivity extends AbstractPluginActivity {
     }
 
     private boolean checkValidity() {
-        if (currentActionType == null) {
-            return false;
-        }
+        try {
+            if (currentActionType == null) {
+                return false;
+            }
 
-        // check other values based on action type
-        if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            return checkApartmentValidity() && checkRoomValidity() && checkReceiverValidity() && checkButtonValidity();
-        } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            return checkApartmentValidity() && checkRoomValidity() && checkButtonValidity();
-        } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-            return checkApartmentValidity() && checkSceneValidity();
-        } else {
+            // check other values based on action type
+            if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
+                return checkApartmentValidity() && checkRoomValidity() && checkReceiverValidity() && checkButtonValidity();
+            } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
+                return checkApartmentValidity() && checkRoomValidity() && checkButtonValidity();
+            } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
+                return checkApartmentValidity() && checkSceneValidity();
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            Log.e(e);
             return false;
         }
     }
 
     private boolean checkApartmentValidity() {
-        if (useManualApartmentInput) {
-            if (TextUtils.isEmpty(editText_apartment.getText())) {
-                return false;
-            }
-        } else {
-            if (spinner_apartment.getSelectedItem() == null) {
-                return false;
-            }
-        }
-
-        return true;
+        return !TextUtils.isEmpty(getApartmentName());
     }
 
     private boolean checkRoomValidity() {
-        if (useManualRoomInput) {
-            if (TextUtils.isEmpty(editText_room.getText())) {
-                return false;
-            }
-        } else {
-            if (spinner_room.getSelectedItem() == null) {
-                return false;
-            }
-        }
-
-        return true;
+        return !TextUtils.isEmpty(getRoomName());
     }
 
     private boolean checkReceiverValidity() {
-        if (useManualReceiverInput) {
-            if (TextUtils.isEmpty(editText_receiver.getText())) {
-                return false;
-            }
-        } else {
-            if (spinner_receiver.getSelectedItem() == null) {
-                return false;
-            }
-        }
-
-        return true;
+        return !TextUtils.isEmpty(getReceiverName());
     }
 
     private boolean checkButtonValidity() {
-        if (useManualButtonInput) {
-            if (TextUtils.isEmpty(editText_button.getText())) {
-                return false;
-            }
-        } else {
-            if (spinner_button.getSelectedItem() == null) {
-                return false;
-            }
-        }
-
-        return true;
+        return !TextUtils.isEmpty(getButtonName());
     }
 
     private boolean checkSceneValidity() {
-        if (useManualSceneInput) {
-            if (TextUtils.isEmpty(editText_scene.getText())) {
-                return false;
-            }
-        } else {
-            if (spinner_scene.getSelectedItem() == null) {
-                return false;
-            }
-        }
-
-        return true;
+        return !TextUtils.isEmpty(getSceneName());
     }
 
     private void setPositiveButtonVisibility(boolean isValid) {
@@ -725,7 +708,12 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualApartmentInput) {
             return editText_apartment.getText().toString().trim();
         } else {
-            return spinner_apartment.getSelectedItem().toString().trim();
+            Object selectedItem = spinner_apartment.getSelectedItem();
+            if (selectedItem != null) {
+                return selectedItem.toString().trim();
+            } else {
+                return null;
+            }
         }
     }
 
@@ -733,7 +721,12 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualRoomInput) {
             return editText_room.getText().toString().trim();
         } else {
-            return spinner_room.getSelectedItem().toString().trim();
+            Object selectedItem = spinner_room.getSelectedItem();
+            if (selectedItem != null) {
+                return selectedItem.toString().trim();
+            } else {
+                return null;
+            }
         }
     }
 
@@ -741,7 +734,12 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualReceiverInput) {
             return editText_receiver.getText().toString().trim();
         } else {
-            return spinner_receiver.getSelectedItem().toString().trim();
+            Object selectedItem = spinner_receiver.getSelectedItem();
+            if (selectedItem != null) {
+                return selectedItem.toString().trim();
+            } else {
+                return null;
+            }
         }
     }
 
@@ -749,7 +747,12 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualButtonInput) {
             return editText_button.getText().toString().trim();
         } else {
-            return spinner_button.getSelectedItem().toString().trim();
+            Object selectedItem = spinner_button.getSelectedItem();
+            if (selectedItem != null) {
+                return selectedItem.toString().trim();
+            } else {
+                return null;
+            }
         }
     }
 
@@ -757,7 +760,12 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualSceneInput) {
             return editText_scene.getText().toString().trim();
         } else {
-            return spinner_scene.getSelectedItem().toString().trim();
+            Object selectedItem = spinner_scene.getSelectedItem();
+            if (selectedItem != null) {
+                return selectedItem.toString().trim();
+            } else {
+                return null;
+            }
         }
     }
 
