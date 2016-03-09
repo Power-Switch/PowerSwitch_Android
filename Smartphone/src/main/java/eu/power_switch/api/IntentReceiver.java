@@ -91,7 +91,7 @@ public class IntentReceiver extends BroadcastReceiver {
                 // Receiver:<ReceiverName>
                 // Button:<ButtonName>
 
-                Room room = DatabaseHandler.getRoom(extras.getString(ApiConstants.KEY_ROOM).trim());
+                Room room = DatabaseHandler.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
                 Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER).trim());
                 Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON).trim());
 
@@ -106,7 +106,7 @@ public class IntentReceiver extends BroadcastReceiver {
                 // Where ButtonName is the name of the Button that is
                 // pressed for each Receiver in the specified Room
 
-                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
                 String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
 
@@ -116,7 +116,7 @@ public class IntentReceiver extends BroadcastReceiver {
                 // Expects the following Extras:
                 // Scene:<SceneName>
 
-                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
                 Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE).trim());
 
                 ActionHandler.execute(context, scene);
@@ -169,12 +169,12 @@ public class IntentReceiver extends BroadcastReceiver {
                                 buttonName = context.getString(R.string.off);
                             }
 
-                            Room room = DatabaseHandler.getRoom(roomName);
+                            Room room = DatabaseHandler.getRoomCaseInsensitive(roomName);
 
                             List<NetworkPackage> networkPackages = new ArrayList<>();
 
-                            Receiver receiver = room.getReceiver(switchName);
-                            Button button = receiver.getButton(buttonName);
+                            Receiver receiver = room.getReceiverCaseInsensitive(switchName);
+                            Button button = receiver.getButtonCaseInsensitive(buttonName);
                             for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
                                 networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
                             }
@@ -209,11 +209,11 @@ public class IntentReceiver extends BroadcastReceiver {
                                 buttonName = context.getString(R.string.off);
                             }
 
-                            Room room = DatabaseHandler.getRoom(roomName);
+                            Room room = DatabaseHandler.getRoomCaseInsensitive(roomName);
 
                             List<NetworkPackage> networkPackages = new ArrayList<>();
                             for (Receiver receiver : room.getReceivers()) {
-                                Button button = receiver.getButton(buttonName);
+                                Button button = receiver.getButtonCaseInsensitive(buttonName);
                                 for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
                                     networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
                                 }

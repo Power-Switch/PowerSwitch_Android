@@ -113,7 +113,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
             @Override
             public void afterTextChanged(Editable s) {
                 if (isInitialized) {
-                    checkValidity();
+                    checkSetupValidity();
                     sendSetupApartmentChangedBroadcast(getContext());
                 }
             }
@@ -135,7 +135,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
                 checkBox.setChecked(true);
             }
         }
-        checkValidity();
+        checkSetupValidity();
 
         isInitialized = true;
 
@@ -167,13 +167,6 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
         }
     }
 
-    private boolean checkValidity() {
-        boolean nameIsValid;
-        nameIsValid = checkNameValidity(getCurrentName());
-
-        return nameIsValid;
-    }
-
     /**
      * Checks if current name is valid
      *
@@ -198,7 +191,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
 
     private boolean checkNameAlreadyExists() {
         for (Apartment apartment : existingApartments) {
-            if (!apartment.getId().equals(apartmentId) && apartment.getName().equals(getCurrentName())) {
+            if (!apartment.getId().equals(apartmentId) && apartment.getName().equalsIgnoreCase(getCurrentName())) {
                 return true;
             }
         }
@@ -320,6 +313,9 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
 
     @Override
     public boolean checkSetupValidity() {
-        return checkValidity();
+        boolean nameIsValid;
+        nameIsValid = checkNameValidity(getCurrentName());
+
+        return nameIsValid;
     }
 }

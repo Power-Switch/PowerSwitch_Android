@@ -140,6 +140,22 @@ abstract class ApartmentHandler {
     }
 
     /**
+     * Gets Apartment from Database, ignoring case
+     *
+     * @param name Name of Apartment
+     * @return Apartment
+     */
+    protected static Apartment getCaseInsensitive(String name) throws Exception {
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, ApartmentTable.COLUMN_NAME + "=='" +
+                name + "' COLLATE NOCASE", null, null, null, null);
+        cursor.moveToFirst();
+
+        Apartment Apartment = dbToApartment(cursor);
+        cursor.close();
+        return Apartment;
+    }
+
+    /**
      * Gets Apartment from Database
      *
      * @param id ID of Apartment

@@ -145,7 +145,7 @@ public class CreateRoomDialog extends DialogFragment {
             setPositiveButtonVisibility(false);
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);
-        } else if (roomNames.contains(getRoomName())) {
+        } else if (checkRoomAlreadyExists()) {
             setPositiveButtonVisibility(false);
             floatingName.setError(getString(R.string.room_already_exists));
             floatingName.setErrorEnabled(true);
@@ -154,6 +154,16 @@ public class CreateRoomDialog extends DialogFragment {
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);
         }
+    }
+
+    private boolean checkRoomAlreadyExists() {
+        for (String roomName : roomNames) {
+            if (roomName.equalsIgnoreCase(getRoomName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void setPositiveButtonVisibility(boolean visibility) {

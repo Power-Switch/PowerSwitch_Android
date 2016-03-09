@@ -723,41 +723,41 @@ public class EditActivity extends AbstractPluginActivity {
 
     private String getApartmentName() {
         if (useManualApartmentInput) {
-            return editText_apartment.getText().toString();
+            return editText_apartment.getText().toString().trim();
         } else {
-            return spinner_apartment.getSelectedItem().toString();
+            return spinner_apartment.getSelectedItem().toString().trim();
         }
     }
 
     private String getRoomName() {
         if (useManualRoomInput) {
-            return editText_room.getText().toString();
+            return editText_room.getText().toString().trim();
         } else {
-            return spinner_room.getSelectedItem().toString();
+            return spinner_room.getSelectedItem().toString().trim();
         }
     }
 
     private String getReceiverName() {
         if (useManualReceiverInput) {
-            return editText_receiver.getText().toString();
+            return editText_receiver.getText().toString().trim();
         } else {
-            return spinner_receiver.getSelectedItem().toString();
+            return spinner_receiver.getSelectedItem().toString().trim();
         }
     }
 
     private String getButtonName() {
         if (useManualButtonInput) {
-            return editText_button.getText().toString();
+            return editText_button.getText().toString().trim();
         } else {
-            return spinner_button.getSelectedItem().toString();
+            return spinner_button.getSelectedItem().toString().trim();
         }
     }
 
     private String getSceneName() {
         if (useManualSceneInput) {
-            return editText_scene.getText().toString();
+            return editText_scene.getText().toString().trim();
         } else {
-            return spinner_scene.getSelectedItem().toString();
+            return spinner_scene.getSelectedItem().toString().trim();
         }
     }
 

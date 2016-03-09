@@ -115,6 +115,7 @@
         -->
         <activity
             android:name=".api.taskerplugin.EditActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/powerswitch_plugin_name"

@@ -233,11 +233,11 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
             return false;
         }
 
-        if (!currentReceiverName.equals(originalName)) {
+        if (!currentReceiverName.equalsIgnoreCase(originalName)) {
             try {
                 Room selectedRoom = DatabaseHandler.getRoom(currentRoomName);
                 for (Receiver receiver : selectedRoom.getReceivers()) {
-                    if (receiver.getName().equals(currentReceiverName)) {
+                    if (receiver.getName().equalsIgnoreCase(currentReceiverName)) {
                         throw new ReceiverAlreadyExistsException();
                     }
                 }

@@ -232,7 +232,7 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
             return false;
         } else {
             for (Scene scene : existingScenes) {
-                if (!scene.getId().equals(sceneId) & scene.getName().equals(getCurrentSceneName())) {
+                if (!scene.getId().equals(sceneId) & scene.getName().equalsIgnoreCase(getCurrentSceneName())) {
                     floatingName.setError(getString(R.string.scene_name_already_exists));
                     floatingName.setErrorEnabled(true);
                     sendNameSceneChangedBroadcast(getActivity(), null, getCheckedReceivers());

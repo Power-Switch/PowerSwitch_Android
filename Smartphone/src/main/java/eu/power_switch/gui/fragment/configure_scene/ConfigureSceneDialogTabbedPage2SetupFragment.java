@@ -192,7 +192,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
 
     @Override
     public boolean checkSetupValidity() {
-        if (currentName == null || currentName.trim().length() <= 0) {
+        if (currentName == null || currentName.trim().isEmpty()) {
             return false;
         }
 

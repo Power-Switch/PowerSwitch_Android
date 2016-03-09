@@ -241,6 +241,26 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Get an Apartment by Name, ignoring case
+     *
+     * @param name Name of Apartment
+     * @return Apartment
+     */
+    @Nullable
+    public static Apartment getApartmentCaseInsensitive(String name) throws Exception {
+        openReadable();
+        Apartment apartment = null;
+        try {
+            apartment = ApartmentHandler.getCaseInsensitive(name);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return apartment;
+    }
+
+    /**
      * Get an Apartment by ID
      *
      * @param id ID of Apartment
@@ -480,6 +500,26 @@ public final class DatabaseHandler {
         Room room = null;
         try {
             room = RoomHandler.get(name);
+        } catch (Exception e) {
+            Log.e(e);
+        } finally {
+            close();
+        }
+        return room;
+    }
+
+    /**
+     * Get a room object by its name, ignoring case
+     *
+     * @param name the name of the room
+     * @return a room object
+     */
+    @Nullable
+    public static Room getRoomCaseInsensitive(String name) throws Exception {
+        openReadable();
+        Room room = null;
+        try {
+            room = RoomHandler.getCaseInsensitive(name);
         } catch (Exception e) {
             Log.e(e);
         } finally {

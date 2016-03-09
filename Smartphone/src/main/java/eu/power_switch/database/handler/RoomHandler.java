@@ -122,6 +122,22 @@ abstract class RoomHandler {
     }
 
     /**
+     * Gets Room from Database, ignoring case
+     *
+     * @param name Name of Room
+     * @return Room
+     */
+    protected static Room getCaseInsensitive(String name) throws Exception {
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_NAME + "=='" +
+                name.toLowerCase() + "' COLLATE NOCASE", null, null, null, null);
+        cursor.moveToFirst();
+
+        Room room = dbToRoom(cursor);
+        cursor.close();
+        return room;
+    }
+
+    /**
      * Gets Room from Database
      *
      * @param id ID of Room

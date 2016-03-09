@@ -163,7 +163,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
             floatingName.setError(getString(R.string.please_enter_name));
             floatingName.setErrorEnabled(true);
             return false;
-        } else if (roomNames.contains(getCurrentRoomName())) {
+        } else if (checkRoomAlreadyExists()) {
             floatingName.setError(getString(R.string.room_already_exists));
             floatingName.setErrorEnabled(true);
             return false;
@@ -172,6 +172,16 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
             floatingName.setErrorEnabled(false);
             return true;
         }
+    }
+
+    private boolean checkRoomAlreadyExists() {
+        for (String roomName : roomNames) {
+            if (roomName.equalsIgnoreCase(getCurrentRoomName())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override

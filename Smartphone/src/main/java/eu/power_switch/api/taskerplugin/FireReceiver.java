@@ -60,7 +60,7 @@ public class FireReceiver extends BroadcastReceiver {
                     extras.containsKey(ApiConstants.KEY_RECEIVER) &&
                     extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
                 Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER).trim());
                 Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON).trim());
@@ -70,7 +70,7 @@ public class FireReceiver extends BroadcastReceiver {
                     extras.containsKey(ApiConstants.KEY_ROOM) &&
                     extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
                 String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
 
@@ -78,7 +78,7 @@ public class FireReceiver extends BroadcastReceiver {
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
                     extras.containsKey(ApiConstants.KEY_SCENE)) {
 
-                Apartment apartment = DatabaseHandler.getApartment(extras.getString(ApiConstants.KEY_APARTMENT).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
                 Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE).trim());
 
                 ActionHandler.execute(context, scene);
