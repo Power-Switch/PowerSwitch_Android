@@ -40,7 +40,7 @@
     <string name="menu_about">Über uns</string>
 
     <!-- intent receiver -->
-    <string name="error_parsing_intent">Fehler beim Parsen des Intents!</string>
+    <string name="error_parsing_intent">Fehler beim Parsen des Intents: %1$s</string>
 
     <!-- network -->
     <string name="sending">Sende&#8230;</string>

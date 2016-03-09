@@ -18,10 +18,12 @@
 
 package eu.power_switch.obj;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.LogHandler;
@@ -172,15 +174,16 @@ public class Room {
      *
      * @param name Name of Receiver
      * @return Receiver
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Receiver getReceiver(String name) {
+    @NonNull
+    public Receiver getReceiver(@Nullable String name) {
         for (Receiver receiver : receivers) {
             if (receiver.getName().equals(name)) {
                 return receiver;
             }
         }
-        return null;
+        throw new NoSuchElementException("Receiver \"" + name + "\" not found");
     }
 
     /**
@@ -188,15 +191,16 @@ public class Room {
      *
      * @param name Name of Receiver
      * @return Receiver
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Receiver getReceiverCaseInsensitive(String name) {
+    @NonNull
+    public Receiver getReceiverCaseInsensitive(@Nullable String name) {
         for (Receiver receiver : receivers) {
             if (receiver.getName().equalsIgnoreCase(name)) {
                 return receiver;
             }
         }
-        return null;
+        throw new NoSuchElementException("Receiver \"" + name + "\" not found");
     }
 
     /**
@@ -204,15 +208,16 @@ public class Room {
      *
      * @param id ID of Receiver
      * @return Receiver
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Receiver getReceiver(Long id) {
+    @NonNull
+    public Receiver getReceiver(@Nullable Long id) {
         for (Receiver receiver : receivers) {
             if (receiver.getId().equals(id)) {
                 return receiver;
             }
         }
-        return null;
+        throw new NoSuchElementException("Receiver with ID \"" + id + "\" not found");
     }
 
     @Override

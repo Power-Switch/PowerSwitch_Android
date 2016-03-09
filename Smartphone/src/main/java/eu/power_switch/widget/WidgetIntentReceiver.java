@@ -174,7 +174,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
         }
     }
 }

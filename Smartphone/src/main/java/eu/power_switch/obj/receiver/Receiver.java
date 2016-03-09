@@ -25,6 +25,7 @@ import android.support.annotation.Nullable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import eu.power_switch.network.NetworkPackage;
@@ -339,15 +340,16 @@ public abstract class Receiver {
      *
      * @param name Name of Button
      * @return Button or null
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Button getButton(String name) {
+    @NonNull
+    public Button getButton(@Nullable String name) {
         for (Button button : buttons) {
             if (button.getName().equals(name)) {
                 return button;
             }
         }
-        return null;
+        throw new NoSuchElementException("Button \"" + name + "\" not found");
     }
 
     /**
@@ -355,15 +357,16 @@ public abstract class Receiver {
      *
      * @param name Name of Button
      * @return Button or null
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Button getButtonCaseInsensitive(String name) {
+    @NonNull
+    public Button getButtonCaseInsensitive(@Nullable String name) {
         for (Button button : buttons) {
             if (button.getName().equalsIgnoreCase(name)) {
                 return button;
             }
         }
-        return null;
+        throw new NoSuchElementException("Button \"" + name + "\" not found");
     }
 
     /**
@@ -371,15 +374,16 @@ public abstract class Receiver {
      *
      * @param id ID of Button
      * @return Button or null
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Button getButton(Long id) {
+    @NonNull
+    public Button getButton(@Nullable Long id) {
         for (Button button : buttons) {
             if (button.getId().equals(id)) {
                 return button;
             }
         }
-        return null;
+        throw new NoSuchElementException("Button with ID \"" + id + "\" not found");
     }
 
     @Override

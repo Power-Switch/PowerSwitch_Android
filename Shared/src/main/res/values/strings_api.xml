@@ -20,5 +20,6 @@
 <resources>
 
     <string name="invalid_arguments">Invalid arguments</string>
+    <string name="error_executing_action_template">Error executing Action: %1$s</string>
 
 </resources>

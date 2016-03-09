@@ -24,6 +24,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.util.NoSuchElementException;
+
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -85,11 +87,12 @@ public class FireReceiver extends BroadcastReceiver {
             } else {
                 Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG).show();
             }
-
+        } catch (NoSuchElementException e) {
+            Log.e(this, e);
+            Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
         }
     }
-
 }

@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
@@ -55,7 +56,6 @@ public class IntentReceiver extends BroadcastReceiver {
         Log.d(this, intent);
 
         try {
-
             if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
                 Log.d("IntentReceiver", "appwidget update");
             } else if (ApiConstants.UNIVERSAL_ACTION_INTENT.equals(intent.getAction())) {
@@ -123,10 +123,12 @@ public class IntentReceiver extends BroadcastReceiver {
             } else {
                 Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG).show();
             }
-
+        } catch (NoSuchElementException e) {
+            Log.e(this, e);
+            Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -237,7 +239,7 @@ public class IntentReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             Log.e(e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
         }
     }
 }

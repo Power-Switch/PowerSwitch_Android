@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.obj.gateway.Gateway;
@@ -183,96 +184,102 @@ public class Apartment {
      * Get a room in this apartment by its name
      *
      * @param name name of room
-     * @return Room or null
+     * @return Room
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Room getRoom(String name) {
+    @NonNull
+    public Room getRoom(@Nullable String name) {
         for (Room room : rooms) {
             if (room.getName().equals(name)) {
                 return room;
             }
         }
-        return null;
+        throw new NoSuchElementException("Room \"" + name + "\" not found");
     }
 
     /**
      * Get a room in this apartment by its name, ignoring case
      *
      * @param name name of room
-     * @return Room or null
+     * @return Room
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Room getRoomCaseInsensitive(String name) {
+    @NonNull
+    public Room getRoomCaseInsensitive(@Nullable String name) {
         for (Room room : rooms) {
             if (room.getName().equalsIgnoreCase(name)) {
                 return room;
             }
         }
-        return null;
+        throw new NoSuchElementException("Room \"" + name + "\" not found");
     }
 
     /**
      * Get a room in this apartment by its id
      *
      * @param id id of room
-     * @return Room or null
+     * @return Room
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Room getRoom(Long id) {
+    @NonNull
+    public Room getRoom(@Nullable Long id) {
         for (Room room : rooms) {
             if (room.getId().equals(id)) {
                 return room;
             }
         }
-        return null;
+        throw new NoSuchElementException("Room with ID  \"" + id + "\" not found");
     }
 
     /**
      * Get a scene in this apartment by its name
      *
      * @param name name of scene
-     * @return Scene or null
+     * @return Scene
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Scene getScene(String name) {
+    @NonNull
+    public Scene getScene(@Nullable String name) {
         for (Scene scene : scenes) {
             if (scene.getName().equals(name)) {
                 return scene;
             }
         }
-        return null;
+        throw new NoSuchElementException("Scene \"" + name + "\" not found");
     }
 
     /**
      * Get a scene in this apartment by its name, ignoring case
      *
      * @param name name of scene
-     * @return Scene or null
+     * @return Scene
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Scene getSceneCaseInsensitive(String name) {
+    @NonNull
+    public Scene getSceneCaseInsensitive(@Nullable String name) {
         for (Scene scene : scenes) {
             if (scene.getName().equalsIgnoreCase(name)) {
                 return scene;
             }
         }
-        return null;
+        throw new NoSuchElementException("Scene \"" + name + "\" not found");
     }
 
     /**
      * Get a scene in this apartment by its id
      *
      * @param id id of scene
-     * @return Scene or null
+     * @return Scene
+     * @throws NoSuchElementException if no element was not found
      */
-    @Nullable
-    public Scene getScene(Long id) {
+    @NonNull
+    public Scene getScene(@Nullable Long id) {
         for (Scene scene : scenes) {
             if (scene.getId().equals(id)) {
                 return scene;
             }
         }
-        return null;
+        throw new NoSuchElementException("Scene with ID \"" + id + "\" not found");
     }
 
     /**

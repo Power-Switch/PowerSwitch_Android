@@ -52,7 +52,7 @@
     <string name="menu_about">About</string>
 
     <!-- intent receiver -->
-    <string name="error_parsing_intent">Error parsing Intent!</string>
+    <string name="error_parsing_intent">Error parsing Intent: %1$s</string>
 
     <!-- network -->
     <string name="sending">Sending&#8230;</string>
