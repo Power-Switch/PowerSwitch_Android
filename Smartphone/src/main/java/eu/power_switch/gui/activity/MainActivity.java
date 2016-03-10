@@ -731,6 +731,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (navigationDrawer.isDrawerOpen()) {
+            navigationDrawer.closeDrawer();
+            return;
+        }
+
+        if (historyDrawer.isDrawerOpen()) {
+            historyDrawer.closeDrawer();
+            return;
+        }
+
         super.onBackPressed();
 
         lastFragmentClasses.pop();
