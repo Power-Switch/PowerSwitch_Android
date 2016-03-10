@@ -22,13 +22,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -47,6 +40,12 @@ import eu.power_switch.timer.Timer;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.SceneWidget;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This class handles all database related operations used anywhere in the app.
@@ -115,27 +114,29 @@ public final class DatabaseHandler {
     /**
      * Open Database for read-only access
      */
-    synchronized private static void openReadable() {
+    synchronized private static void openReadable() throws Exception {
         lock.lock();
         try {
             database = dbHelper.getReadableDatabase();
         } catch (Exception e) {
-            Log.e(e);
+            Log.e("Error getting read-only Database", e);
             lock.unlock();
+            throw e;
         }
     }
 
     /**
      * Open Database for read-write access
      */
-    synchronized private static void openWritable() {
+    synchronized private static void openWritable() throws Exception {
         lock.lock();
         try {
             database = dbHelper.getWritableDatabase();
             database.beginTransaction();
         } catch (Exception e) {
-            Log.e(e);
+            Log.e("Error getting writable Database", e);
             lock.unlock();
+            throw e;
         }
     }
 
@@ -147,7 +148,9 @@ public final class DatabaseHandler {
             if (database.inTransaction()) {
                 database.endTransaction();
             }
-            dbHelper.close();
+            if (database.isOpen()) {
+                dbHelper.close();
+            }
         } catch (Exception e) {
             Log.e("Error closing Database", e);
         } finally {
@@ -175,7 +178,6 @@ public final class DatabaseHandler {
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
-            close();
             throw e;
         } finally {
             close();
@@ -196,7 +198,7 @@ public final class DatabaseHandler {
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
-            close();
+            throw e;
         } finally {
             close();
         }
@@ -214,7 +216,7 @@ public final class DatabaseHandler {
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);
-            close();
+            throw e;
         } finally {
             close();
         }
