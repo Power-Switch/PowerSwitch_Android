@@ -28,6 +28,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
@@ -227,6 +229,15 @@ public class GeneralSettingsFragment extends Fragment {
         button_changeBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!PermissionHelper.checkLocationPermission(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_external_storage_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    return;
+                }
+
                 PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
                 pathChooserDialog.setTargetFragment(fragment, 0);
                 pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);

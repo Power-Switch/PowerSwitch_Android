@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * Fragment containing a List of all custom Geofences created by the user
@@ -110,6 +112,15 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!PermissionHelper.checkLocationPermission(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_location_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    return;
+                }
+
                 ConfigureGeofenceDialog configureGeofenceDialog = new ConfigureGeofenceDialog();
                 configureGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureGeofenceDialog.show(getFragmentManager(), null);

@@ -122,6 +122,15 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!PermissionHelper.checkLocationPermission(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_location_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    return;
+                }
+
                 try {
                     int apartmentsCount = DatabaseHandler.getAllApartments().size();
 
@@ -172,18 +181,9 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                                 sendApartmentGeofencesChangedBroadcast(context);
                                 CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(context);
                             } else {
-                                Snackbar snackbar = Snackbar.make(getRecyclerView(), R.string.missing_location_permission, Snackbar.LENGTH_INDEFINITE);
-                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                                Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
-                                    }
-                                });
-                                snackbar.show();
+                                StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.ACCESS_FINE_LOCATION);
                             }
                         }
-
                         break;
                 }
             }
@@ -238,14 +238,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             // For example if the user has previously denied the permission.
             Log.d("Displaying location permission rationale to provide additional context.");
 
-            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_location_permission,
-                    R.string.grant, new Runnable() {
-                        @Override
-                        public void run() {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                    Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
-                        }
-                    }, Snackbar.LENGTH_INDEFINITE);
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             Log.d("Displaying default location permission dialog to request permission");
             ActivityCompat.requestPermissions(getActivity(), new String[]{
@@ -261,6 +254,15 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_geofence:
+                if (!PermissionHelper.checkLocationPermission(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_location_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    break;
+                }
+
                 try {
                     int apartmentsCount = DatabaseHandler.getAllApartments().size();
 

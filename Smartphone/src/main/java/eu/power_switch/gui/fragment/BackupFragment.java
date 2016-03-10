@@ -112,6 +112,15 @@ public class BackupFragment extends RecyclerViewFragment {
         textViewBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_external_storage_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    return;
+                }
+
                 PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
                 pathChooserDialog.setTargetFragment(recyclerViewFragment, 0);
                 pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
@@ -180,6 +189,15 @@ public class BackupFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_external_storage_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    return;
+                }
+
                 CreateBackupDialog createBackupDialog = new CreateBackupDialog();
                 createBackupDialog.setTargetFragment(recyclerViewFragment, 0);
                 createBackupDialog.show(getFragmentManager(), null);
@@ -204,15 +222,7 @@ public class BackupFragment extends RecyclerViewFragment {
                                 StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
                             } else {
                                 // Permission Denied
-                                Snackbar snackbar = Snackbar.make(getRecyclerView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_INDEFINITE);
-                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                                Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
-                                    }
-                                });
-                                snackbar.show();
+                                StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
                             }
                         }
 
@@ -270,14 +280,7 @@ public class BackupFragment extends RecyclerViewFragment {
             // For example if the user has previously denied the permission.
             Log.d("Displaying storage permission rationale to provide additional context.");
 
-            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_external_storage_permission,
-                    R.string.grant, new Runnable() {
-                        @Override
-                        public void run() {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
-                        }
-                    }, Snackbar.LENGTH_INDEFINITE);
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         } else {
             Log.d("Displaying default storage permission dialog to request permission");
             ActivityCompat.requestPermissions(getActivity(), new String[]{
@@ -293,6 +296,15 @@ public class BackupFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_backup:
+                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_external_storage_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    break;
+                }
+
                 CreateBackupDialog createBackupDialog = new CreateBackupDialog();
                 createBackupDialog.setTargetFragment(this, 0);
                 createBackupDialog.show(getFragmentManager(), null);

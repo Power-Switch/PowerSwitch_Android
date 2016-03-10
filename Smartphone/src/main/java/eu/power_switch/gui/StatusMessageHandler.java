@@ -18,11 +18,14 @@
 
 package eu.power_switch.gui;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -35,6 +38,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
+import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -221,6 +225,98 @@ public class StatusMessageHandler {
     }
 
     /**
+     * Shows "No active Gateway" Message
+     *
+     * @param recyclerViewFragment
+     */
+    public static void showNoActiveGatewayMessage(final RecyclerViewFragment recyclerViewFragment) {
+        showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_active_gateway, R.string.open_settings, new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class,
+                        recyclerViewFragment.getActivity().getString(R.string.menu_settings));
+
+                SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
+                recyclerViewFragment.getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim
+                                .slide_in_right, R.anim.slide_out_left, android.R.anim
+                                .slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.mainContentFrameLayout, settingsTabFragment)
+                        .addToBackStack(null).commit();
+            }
+        }, Snackbar.LENGTH_LONG);
+    }
+
+    /**
+     * Shows "No active Gateway" Message
+     *
+     * @param fragmentActivity
+     */
+    public static void showNoActiveGatewayMessage(final FragmentActivity fragmentActivity) {
+        showInfoMessage(fragmentActivity, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class, fragmentActivity
+                        .getString(R.string.menu_settings));
+                SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
+                fragmentActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim
+                                .slide_in_right, R.anim.slide_out_left, android.R.anim
+                                .slide_in_left, android.R.anim.slide_out_right)
+                        .replace(R.id.mainContentFrameLayout, settingsTabFragment)
+                        .addToBackStack(null).commit();
+            }
+        }, Snackbar.LENGTH_LONG);
+    }
+
+    /**
+     * Show missing permission message with "Grant" button to trigger permission request dialog
+     *
+     * @param activity     activity used for permission changed callbacks
+     * @param recyclerView recyclerview to show snackbar on
+     * @param permission   permission constant
+     */
+    public static void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final String permission) {
+
+        int messageResource;
+        final int requestCode;
+
+        switch (permission) {
+            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
+                messageResource = R.string.missing_external_storage_permission;
+                requestCode = PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION;
+                break;
+            case Manifest.permission.ACCESS_FINE_LOCATION:
+                messageResource = R.string.missing_location_permission;
+                requestCode = PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION;
+                break;
+            default:
+                messageResource = R.string.missing_permission;
+                requestCode = -1;
+        }
+
+        Snackbar snackbar = Snackbar.make(recyclerView, messageResource, Snackbar.LENGTH_INDEFINITE);
+        if (requestCode != -1) {
+            snackbar.setAction(R.string.grant, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+                }
+            });
+        } else {
+            snackbar.setAction(R.string.dismiss, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // do nothing, just dismiss the snackbar
+                }
+            });
+        }
+        snackbar.show();
+    }
+
+    /**
      * Show Snackbar with default "Dismiss" action button
      *
      * @param parent   parent view
@@ -231,7 +327,7 @@ public class StatusMessageHandler {
         Log.d("Status Snackbar: " + message);
         final Snackbar snackbar = Snackbar.make(parent, message, duration);
 
-        snackbar.setAction(parent.getContext().getString(R.string.dismiss), new View.OnClickListener() {
+        snackbar.setAction(R.string.dismiss, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // do nothing, just dismiss the snackbar
@@ -350,52 +446,5 @@ public class StatusMessageHandler {
                 lastToast = toast;
             }
         });
-    }
-
-    /**
-     * Shows "No active Gateway" Message
-     *
-     * @param recyclerViewFragment
-     */
-    public static void showNoActiveGatewayMessage(final RecyclerViewFragment recyclerViewFragment) {
-        showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_active_gateway, R.string.open_settings, new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class,
-                        recyclerViewFragment.getActivity().getString(R.string.menu_settings));
-
-                SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
-                recyclerViewFragment.getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim
-                                .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                .slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                        .addToBackStack(null).commit();
-            }
-        }, Snackbar.LENGTH_LONG);
-    }
-
-    /**
-     * Shows "No active Gateway" Message
-     *
-     * @param fragmentActivity
-     */
-    public static void showNoActiveGatewayMessage(final FragmentActivity fragmentActivity) {
-        showInfoMessage(fragmentActivity, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class, fragmentActivity
-                        .getString(R.string.menu_settings));
-                SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
-                fragmentActivity.getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim
-                                .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                .slide_in_left, android.R.anim.slide_out_right)
-                        .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                        .addToBackStack(null).commit();
-            }
-        }, Snackbar.LENGTH_LONG);
     }
 }
