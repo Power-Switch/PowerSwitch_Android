@@ -58,7 +58,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
 
     private RecyclerView recyclerViewApartments;
     private ApartmentRecyclerViewAdapter apartmentArrayAdapter;
-    private ArrayList<Apartment> apartments;
+    private ArrayList<Apartment> apartments = new ArrayList<>();
     private FloatingActionButton fab;
     private BroadcastReceiver broadcastReceiver;
 
@@ -81,11 +81,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
-        try {
-            apartments = new ArrayList<>(DatabaseHandler.getAllApartments());
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
-        }
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_apartments);
         apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
 
@@ -137,18 +132,14 @@ public class ApartmentFragment extends RecyclerViewFragment {
             }
         });
 
+        refreshApartments();
+
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(this, "received intent: " + intent.getAction());
-                try {
-                    apartments.clear();
-                    apartments.addAll(DatabaseHandler.getAllApartments());
-                    apartmentArrayAdapter.notifyDataSetChanged();
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
-                }
+                refreshApartments();
             }
         };
 
@@ -166,6 +157,17 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 .singleUse(TutorialConstants.APARTMENT_KEY)
                 .setDelay(500)
                 .show();
+    }
+
+    private void refreshApartments() {
+        apartments.clear();
+        try {
+            apartments.addAll(DatabaseHandler.getAllApartments());
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+        }
+
+        apartmentArrayAdapter.notifyDataSetChanged();
     }
 
     @Override
