@@ -59,7 +59,6 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
@@ -194,17 +193,6 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
     public boolean checkSetupValidity() {
         if (currentName == null || currentName.trim().isEmpty()) {
             return false;
-        }
-
-        if (currentId == -1) {
-            try {
-                if (DatabaseHandler.getScene(currentName) != null) {
-                    return false;
-                }
-            } catch (Exception e) {
-                Log.e(e);
-                return false;
-            }
         }
 
         return !rooms.isEmpty();
