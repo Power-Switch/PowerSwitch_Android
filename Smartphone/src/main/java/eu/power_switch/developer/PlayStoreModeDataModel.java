@@ -51,7 +51,7 @@ public class PlayStoreModeDataModel {
 
     private Context context;
 
-    private Apartment apartment = new Apartment((long) 0, "Home");
+    private Apartment apartment;
 
     private ArrayList<Room> rooms = new ArrayList<>();
     private ArrayList<Scene> scenes = new ArrayList<>();
@@ -93,7 +93,7 @@ public class PlayStoreModeDataModel {
         initRooms();
         initScenes();
 
-        apartment = new Apartment((long) 0, "Heimat", getRooms(), getScenes(), getGateways(),
+        apartment = new Apartment((long) 0, true, "Heimat", getRooms(), getScenes(), getGateways(),
                 new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
                         null, new HashMap<Geofence.EventType, List<Action>>()));
     }

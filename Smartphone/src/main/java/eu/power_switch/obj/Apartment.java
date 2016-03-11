@@ -70,16 +70,18 @@ public class Apartment {
      */
     private Geofence geofence;
 
-    public Apartment(@NonNull Long id, @NonNull String name) {
+    public Apartment(@NonNull Long id, boolean isActive, @NonNull String name) {
         this.id = id;
+        this.isActive = isActive;
         this.name = name;
         this.rooms = Collections.EMPTY_LIST;
         this.scenes = Collections.EMPTY_LIST;
         this.gateways = Collections.EMPTY_LIST;
     }
 
-    public Apartment(@NonNull Long id, @NonNull String name, @NonNull List<Gateway> gateways, @Nullable Geofence geofence) {
+    public Apartment(@NonNull Long id, boolean isActive, @NonNull String name, @NonNull List<Gateway> gateways, @Nullable Geofence geofence) {
         this.id = id;
+        this.isActive = isActive;
         this.name = name;
         this.rooms = Collections.EMPTY_LIST;
         this.scenes = Collections.EMPTY_LIST;
@@ -87,8 +89,9 @@ public class Apartment {
         this.geofence = geofence;
     }
 
-    public Apartment(@NonNull Long id, @NonNull String name, @NonNull List<Room> rooms, @NonNull List<Scene> scenes, @NonNull List<Gateway> gateways, @Nullable Geofence geofence) {
+    public Apartment(@NonNull Long id, boolean isActive, @NonNull String name, @NonNull List<Room> rooms, @NonNull List<Scene> scenes, @NonNull List<Gateway> gateways, @Nullable Geofence geofence) {
         this.id = id;
+        this.isActive = isActive;
         this.name = name;
         this.rooms = rooms;
         this.scenes = scenes;

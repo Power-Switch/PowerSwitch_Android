@@ -262,7 +262,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                 Apartment updatedApartment;
 
                 if (apartment.getGeofence() == null) {
-                    updatedApartment = new Apartment(apartment.getId(),
+                    updatedApartment = new Apartment(apartment.getId(), apartment.isActive(),
                             apartment.getName(), apartment.getAssociatedGateways(),
                             new Geofence((long) -1, isLocationPermissionAvailable, apartment.getName(), currentLocation, currentGeofenceRadius,
                                     currentSnapshot, currentEnterActions, currentExitActions));
@@ -272,7 +272,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                             apartment.getName(), currentLocation, currentGeofenceRadius, currentSnapshot,
                             currentEnterActions, currentExitActions);
 
-                    updatedApartment = new Apartment(apartment.getId(),
+                    updatedApartment = new Apartment(apartment.getId(), apartment.isActive(),
                             apartment.getName(), apartment.getAssociatedGateways(), updatedGeofence);
 
                     geofenceApiHandler.removeGeofence(geofence.getId());

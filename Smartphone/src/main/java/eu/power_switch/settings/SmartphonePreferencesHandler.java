@@ -25,6 +25,7 @@ import android.os.Environment;
 import java.io.File;
 
 import eu.power_switch.backup.BackupHandler;
+import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -33,6 +34,7 @@ import eu.power_switch.shared.log.Log;
  */
 public class SmartphonePreferencesHandler {
 
+    private static Context context;
     private static SharedPreferences sharedPreferences;
 
     // cached values
@@ -64,6 +66,8 @@ public class SmartphonePreferencesHandler {
             forceRefresh();
             return;
         }
+
+        SmartphonePreferencesHandler.context = context;
         sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         initCache();
     }
@@ -91,7 +95,13 @@ public class SmartphonePreferencesHandler {
         vibrationDurationCache = sharedPreferences.getInt(SettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
         highlightLastActivatedButtonCache = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
         useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, false);
-        currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, SettingsConstants.INVALID_APARTMENT_ID);
+
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, SettingsConstants.INVALID_APARTMENT_ID);
+        } else {
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(SmartphonePreferencesHandler.context);
+            currentApartmentIdCache = playStoreModeDataModel.getApartments().get(0).getId();
+        }
 
         Log.d(SmartphonePreferencesHandler.class, "AutoDiscover: " + autoDiscoverCache);
         Log.d(SmartphonePreferencesHandler.class, "BackupPath: " + backupPathCache);
@@ -397,6 +407,11 @@ public class SmartphonePreferencesHandler {
     }
 
     public static void setCurrentApartmentId(Long apartmentId) {
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            Log.w("PlayStoreMode is active, cant set current apartment ID!");
+            return;
+        }
+
         Log.d(SmartphonePreferencesHandler.class, "setCurrentApartmentId: " + apartmentId);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, apartmentId);

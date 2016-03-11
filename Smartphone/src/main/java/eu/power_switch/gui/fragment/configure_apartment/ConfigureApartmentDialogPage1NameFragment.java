@@ -290,18 +290,18 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
         if (apartmentId == -1) {
-            Apartment newApartment = new Apartment((long) -1, getCurrentName(),
+            boolean isActive = DatabaseHandler.getAllApartments().size() == 1;
+            Apartment newApartment = new Apartment((long) -1, isActive, getCurrentName(),
                     getCheckedGateways(), null);
 
             long newId = DatabaseHandler.addApartment(newApartment);
-
             // set new apartment as active if it is the first and only one
-            if (DatabaseHandler.getAllApartments().size() == 1) {
+            if (isActive) {
                 SmartphonePreferencesHandler.setCurrentApartmentId(newId);
             }
         } else {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-            Apartment updatedApartment = new Apartment(apartmentId, getCurrentName(), getCheckedGateways(), apartment.getGeofence());
+            Apartment updatedApartment = new Apartment(apartmentId, apartment.isActive(), getCurrentName(), getCheckedGateways(), apartment.getGeofence());
 
             DatabaseHandler.updateApartment(updatedApartment);
         }
