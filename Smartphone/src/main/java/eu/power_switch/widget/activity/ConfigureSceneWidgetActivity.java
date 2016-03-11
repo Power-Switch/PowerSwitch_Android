@@ -21,6 +21,7 @@ package eu.power_switch.widget.activity;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,7 +49,9 @@ public class ConfigureSceneWidgetActivity extends Activity {
     public static final int SCENE_INTENT_ID_OFFSET = 10000;
 
     private Spinner spinnerScene;
-    private List<Scene> scenesList;
+    private List<Scene> sceneList = new ArrayList<>();
+    private ArrayList<String> sceneNamesList = new ArrayList<>();
+    private ArrayAdapter<String> adapterScenes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +60,9 @@ public class ConfigureSceneWidgetActivity extends Activity {
 
         setContentView(R.layout.widget_dialog_configure_scene);
 
-        try {
-            scenesList = DatabaseHandler.getAllScenes();
-        } catch (Exception e) {
-            Log.e(e);
-        }
         spinnerScene = (Spinner) findViewById(R.id.Spinner_widgetScene);
 
-        ArrayList<String> sceneNamesList = new ArrayList<>();
-        for (Scene scene : scenesList) {
-            sceneNamesList.add(scene.getName());
-        }
-        if (sceneNamesList.isEmpty()) {
-            Toast.makeText(this, getString(R.string.please_define_scene_in_main_app), Toast.LENGTH_LONG).show();
-            finish();
-        }
-
-        ArrayAdapter<String> adapterScenes = new ArrayAdapter<>(this,
+        adapterScenes = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, sceneNamesList);
         adapterScenes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerScene.setAdapter(adapterScenes);
@@ -86,6 +75,39 @@ public class ConfigureSceneWidgetActivity extends Activity {
                 saveCurrentConfiguration();
             }
         });
+
+        updateUI();
+    }
+
+    private void updateUI() {
+        new AsyncTask<Void, Void, List<Scene>>() {
+            @Override
+            protected List<Scene> doInBackground(Void... params) {
+                try {
+                    return DatabaseHandler.getAllScenes();
+                } catch (Exception e) {
+                    return new ArrayList<>();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<Scene> result) {
+                sceneList.clear();
+                sceneList.addAll(result);
+
+                // Abort if no rooms are defined in main app
+                if (sceneList.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), R.string.please_define_scene_in_main_app, Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
+                for (Scene scene : sceneList) {
+                    sceneNamesList.add(scene.getName());
+                }
+
+                adapterScenes.notifyDataSetChanged();
+            }
+        }.execute();
     }
 
     private void saveCurrentConfiguration() {
@@ -96,7 +118,7 @@ public class ConfigureSceneWidgetActivity extends Activity {
             int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             // Perform your App Widget configuration:
-            Scene scene = scenesList.get(spinnerScene.getSelectedItemPosition());
+            Scene scene = sceneList.get(spinnerScene.getSelectedItemPosition());
             // save new widget data to database
             SceneWidget sceneWidget = new SceneWidget(appWidgetId, scene.getId());
             try {

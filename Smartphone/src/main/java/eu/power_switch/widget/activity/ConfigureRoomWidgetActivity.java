@@ -21,6 +21,7 @@ package eu.power_switch.widget.activity;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,7 +49,9 @@ public class ConfigureRoomWidgetActivity extends Activity {
     public static final int ROOM_INTENT_ID_OFFSET = 20000;
 
     private Spinner spinnerRoom;
-    private List<Room> roomsList;
+    private List<Room> roomList = new ArrayList<>();
+    private ArrayList<String> roomNamesList = new ArrayList<>();
+    private ArrayAdapter<String> adapterRooms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +60,8 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
         setContentView(R.layout.widget_dialog_configure_room);
 
-        try {
-            roomsList = DatabaseHandler.getAllRooms();
-        } catch (Exception e) {
-            Log.e(e);
-        }
         spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
-
-        ArrayList<String> roomNamesList = new ArrayList<>();
-        for (Room room : roomsList) {
-            roomNamesList.add(room.getName());
-        }
-        if (roomNamesList.isEmpty()) {
-            Toast.makeText(this, getString(R.string.please_define_room_in_main_app), Toast.LENGTH_LONG).show();
-            finish();
-        }
-
-        ArrayAdapter<String> adapterRooms = new ArrayAdapter<>(this,
+        adapterRooms = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, roomNamesList);
         adapterRooms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapterRooms);
@@ -86,6 +74,44 @@ public class ConfigureRoomWidgetActivity extends Activity {
                 saveCurrentConfiguration();
             }
         });
+
+        updateUI();
+    }
+
+    private void updateUI() {
+        new AsyncTask<Void, Void, List<Room>>() {
+            @Override
+            protected List<Room> doInBackground(Void... params) {
+                try {
+                    return DatabaseHandler.getAllRooms();
+                } catch (Exception e) {
+                    return new ArrayList<>();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<Room> result) {
+                roomList.clear();
+                roomList.addAll(result);
+
+                if (roomList.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_room_in_main_app), Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
+                // Abort if no rooms are defined in main app
+                if (roomList.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_receiver_in_main_app), Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
+                for (Room room : roomList) {
+                    roomNamesList.add(room.getName());
+                }
+
+                adapterRooms.notifyDataSetChanged();
+            }
+        }.execute();
     }
 
     private void saveCurrentConfiguration() {
@@ -96,7 +122,7 @@ public class ConfigureRoomWidgetActivity extends Activity {
             int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
                     AppWidgetManager.INVALID_APPWIDGET_ID);
             // Perform your App Widget configuration:
-            Room room = roomsList.get(spinnerRoom.getSelectedItemPosition());
+            Room room = roomList.get(spinnerRoom.getSelectedItemPosition());
             // save new widget data to database
             RoomWidget roomWidget = new RoomWidget(appWidgetId, room.getId());
             try {

@@ -110,7 +110,7 @@ public class DonationDialog extends DialogFragment {
             }
         };
 
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layout_loading);
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
 
         layoutDonationButtons = (LinearLayout) rootView.findViewById(R.id.layout_donate_buttons);
         donate10 = (Button) rootView.findViewById(R.id.button_donate_10);

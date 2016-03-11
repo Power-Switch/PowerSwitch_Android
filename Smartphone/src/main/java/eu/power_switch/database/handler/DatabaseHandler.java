@@ -22,6 +22,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.WorkerThread;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -40,12 +48,6 @@ import eu.power_switch.timer.Timer;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.SceneWidget;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This class handles all database related operations used anywhere in the app.
@@ -170,6 +172,7 @@ public final class DatabaseHandler {
      * @param apartment Apartment
      * @return ID of added Apartment
      */
+    @WorkerThread
     public static long addApartment(Apartment apartment) throws Exception {
         openWritable();
         long id = -1;
@@ -191,6 +194,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Apartment
      */
+    @WorkerThread
     public static void deleteApartment(Long id) throws Exception {
         openWritable();
         try {
@@ -209,6 +213,7 @@ public final class DatabaseHandler {
      *
      * @param apartment updated Apartment
      */
+    @WorkerThread
     public static void updateApartment(Apartment apartment) throws Exception {
         openWritable();
         try {
@@ -229,6 +234,7 @@ public final class DatabaseHandler {
      * @return Apartment
      */
     @Nullable
+    @WorkerThread
     public static Apartment getApartment(String name) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -250,6 +256,7 @@ public final class DatabaseHandler {
      * @return Apartment
      */
     @Nullable
+    @WorkerThread
     public static Apartment getApartmentCaseInsensitive(String name) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -271,6 +278,7 @@ public final class DatabaseHandler {
      * @return Apartment
      */
     @Nullable
+    @WorkerThread
     public static Apartment getApartment(Long id) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -292,6 +300,7 @@ public final class DatabaseHandler {
      * @return Name of Apartment
      */
     @Nullable
+    @WorkerThread
     public static String getApartmentName(Long id) throws Exception {
         openReadable();
         String apartmentName = null;
@@ -313,6 +322,7 @@ public final class DatabaseHandler {
      * @throws Exception
      */
     @NonNull
+    @WorkerThread
     public static List<String> getAllApartmentNames() throws Exception {
         openReadable();
         List<String> apartmentNames = new ArrayList<>();
@@ -334,6 +344,7 @@ public final class DatabaseHandler {
      * @throws Exception
      */
     @NonNull
+    @WorkerThread
     public static List<Apartment> getAllApartments() throws Exception {
         openReadable();
         List<Apartment> apartments = new ArrayList<>();
@@ -355,6 +366,7 @@ public final class DatabaseHandler {
      * @return Apartment
      */
     @Nullable
+    @WorkerThread
     public static Apartment getContainingApartment(Receiver receiver) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -376,6 +388,7 @@ public final class DatabaseHandler {
      * @return Apartment
      */
     @Nullable
+    @WorkerThread
     public static Apartment getContainingApartment(Room room) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -397,6 +410,7 @@ public final class DatabaseHandler {
      * @return Apartment
      */
     @Nullable
+    @WorkerThread
     public static Apartment getContainingApartment(Scene scene) throws Exception {
         openReadable();
         Apartment apartment = null;
@@ -425,6 +439,7 @@ public final class DatabaseHandler {
      * @param room the new room
      * @return ID of added Room
      */
+    @WorkerThread
     public static long addRoom(Room room) throws Exception {
         openWritable();
         long id = -1;
@@ -447,6 +462,7 @@ public final class DatabaseHandler {
      * @param id      the ID of the Room
      * @param newName the new Name
      */
+    @WorkerThread
     public static void updateRoom(Long id, String newName) throws Exception {
         openWritable();
         try {
@@ -466,6 +482,7 @@ public final class DatabaseHandler {
      * @param id          the ID of the Room
      * @param isCollapsed the new Name
      */
+    @WorkerThread
     public static void updateRoomCollapsed(Long id, boolean isCollapsed) throws Exception {
         openWritable();
         try {
@@ -484,6 +501,7 @@ public final class DatabaseHandler {
      *
      * @param id the ID of the room
      */
+    @WorkerThread
     public static void deleteRoom(Long id) throws Exception {
         openWritable();
         try {
@@ -504,6 +522,7 @@ public final class DatabaseHandler {
      * @return a room object
      */
     @Nullable
+    @WorkerThread
     public static Room getRoom(String name) throws Exception {
         openReadable();
         Room room = null;
@@ -525,6 +544,7 @@ public final class DatabaseHandler {
      * @return a room object
      */
     @Nullable
+    @WorkerThread
     public static Room getRoomCaseInsensitive(String name) throws Exception {
         openReadable();
         Room room = null;
@@ -546,6 +566,7 @@ public final class DatabaseHandler {
      * @return a room object
      */
     @Nullable
+    @WorkerThread
     public static Room getRoom(Long id) throws Exception {
         openReadable();
         Room room = null;
@@ -566,6 +587,7 @@ public final class DatabaseHandler {
      * @return a list of all rooms
      */
     @NonNull
+    @WorkerThread
     public static List<Room> getAllRooms() throws Exception {
         openReadable();
         List<Room> rooms = new ArrayList<>();
@@ -586,6 +608,7 @@ public final class DatabaseHandler {
      * @return a list of rooms
      */
     @NonNull
+    @WorkerThread
     public static List<Room> getRooms(Long apartmentId) throws Exception {
         openReadable();
         List<Room> rooms = new ArrayList<>();
@@ -606,6 +629,7 @@ public final class DatabaseHandler {
      * @return a list of room IDs
      */
     @NonNull
+    @WorkerThread
     public static ArrayList<Long> getRoomIds(Long apartmentId) throws Exception {
         openReadable();
         ArrayList<Long> roomIds = new ArrayList<>();
@@ -633,6 +657,7 @@ public final class DatabaseHandler {
      *
      * @param receiver the new Receiver
      */
+    @WorkerThread
     public static void addReceiver(Receiver receiver) throws Exception {
         openWritable();
         try {
@@ -651,6 +676,7 @@ public final class DatabaseHandler {
      *
      * @param receiver the edited Receiver
      */
+    @WorkerThread
     public static void updateReceiver(Receiver receiver) throws Exception {
         openWritable();
         try {
@@ -671,6 +697,7 @@ public final class DatabaseHandler {
      * @return Receiver, can be null
      */
     @Nullable
+    @WorkerThread
     public static Receiver getReceiver(Long id) throws Exception {
         openReadable();
         Receiver receiver = null;
@@ -692,6 +719,7 @@ public final class DatabaseHandler {
      * @return List of Receivers
      */
     @NonNull
+    @WorkerThread
     public static List<Receiver> getReceiverByRoomId(Long id) throws Exception {
         openReadable();
         List<Receiver> receivers = new ArrayList<>();
@@ -714,6 +742,7 @@ public final class DatabaseHandler {
      * @return List of Receivers
      */
     @Nullable
+    @WorkerThread
     public static Receiver getReceiverByRoomId(Long roomId, String receiverName) throws Exception {
         openReadable();
         Receiver receiver = null;
@@ -734,6 +763,7 @@ public final class DatabaseHandler {
      * @return List of Receivers
      */
     @NonNull
+    @WorkerThread
     public static List<Receiver> getAllReceivers() throws Exception {
         openReadable();
         List<Receiver> receivers = new ArrayList<>();
@@ -753,6 +783,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Receiver
      */
+    @WorkerThread
     public static void deleteReceiver(Long id) throws Exception {
         openWritable();
         try {
@@ -773,6 +804,7 @@ public final class DatabaseHandler {
      * @return Button
      */
     @Nullable
+    @WorkerThread
     public static Button getButton(Long id) throws Exception {
         openReadable();
         Button button = null;
@@ -794,6 +826,7 @@ public final class DatabaseHandler {
      * @return List of Buttons
      */
     @NonNull
+    @WorkerThread
     public static List<UniversalButton> getButtons(Long receiverId) throws Exception {
         openReadable();
         List<UniversalButton> buttons = new ArrayList<>();
@@ -814,6 +847,7 @@ public final class DatabaseHandler {
      * @param receiverId ID of Receiver
      * @param buttonId   ID of Button
      */
+    @WorkerThread
     public static void setLastActivatedButtonId(Long receiverId, Long buttonId) throws Exception {
         openWritable();
         try {
@@ -840,6 +874,7 @@ public final class DatabaseHandler {
      *
      * @param scene the new Scene
      */
+    @WorkerThread
     public static void addScene(Scene scene) throws Exception {
         openWritable();
         try {
@@ -858,6 +893,7 @@ public final class DatabaseHandler {
      *
      * @param scene the edited Scene
      */
+    @WorkerThread
     public static void updateScene(Scene scene) throws Exception {
         openWritable();
         try {
@@ -876,6 +912,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Scene
      */
+    @WorkerThread
     public static void deleteScene(Long id) throws Exception {
         openWritable();
         try {
@@ -896,6 +933,7 @@ public final class DatabaseHandler {
      * @return Scene
      */
     @Nullable
+    @WorkerThread
     public static Scene getScene(String name) throws Exception {
         openReadable();
         Scene scene = null;
@@ -917,6 +955,7 @@ public final class DatabaseHandler {
      * @return Scene
      */
     @Nullable
+    @WorkerThread
     public static Scene getScene(Long id) throws Exception {
         openReadable();
         Scene scene = null;
@@ -937,6 +976,7 @@ public final class DatabaseHandler {
      * @return a list of scenes
      */
     @NonNull
+    @WorkerThread
     public static List<Scene> getScenes(Long apartmentId) throws Exception {
         openReadable();
         List<Scene> scenes = new ArrayList<>();
@@ -957,6 +997,7 @@ public final class DatabaseHandler {
      * @return List of Scenes
      */
     @NonNull
+    @WorkerThread
     public static List<Scene> getAllScenes() throws Exception {
         openReadable();
         List<Scene> scenes = new ArrayList<>();
@@ -986,6 +1027,7 @@ public final class DatabaseHandler {
      * @return ID of saved Database entry
      * @throws GatewayAlreadyExistsException
      */
+    @WorkerThread
     public static long addGateway(Gateway gateway) throws Exception {
         openWritable();
         long id;
@@ -1006,6 +1048,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
+    @WorkerThread
     public static void enableGateway(Long id) throws Exception {
         openWritable();
         try {
@@ -1024,6 +1067,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
+    @WorkerThread
     public static void disableGateway(Long id) throws Exception {
         openWritable();
         try {
@@ -1046,6 +1090,7 @@ public final class DatabaseHandler {
      * @param address new Address (Host) of Gateway
      * @param port    new Port of Gateway
      */
+    @WorkerThread
     public static void updateGateway(Long id, String name, String model, String address, Integer port) throws Exception {
         openWritable();
         try {
@@ -1064,6 +1109,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Gateway
      */
+    @WorkerThread
     public static void deleteGateway(Long id) throws Exception {
         openWritable();
         try {
@@ -1084,6 +1130,7 @@ public final class DatabaseHandler {
      * @return Gateway
      */
     @Nullable
+    @WorkerThread
     public static Gateway getGateway(Long id) throws Exception {
         openReadable();
         Gateway gateway = null;
@@ -1104,6 +1151,7 @@ public final class DatabaseHandler {
      * @return List of Gateways
      */
     @NonNull
+    @WorkerThread
     public static List<Gateway> getAllGateways() throws Exception {
         openReadable();
         List<Gateway> gateways = new ArrayList<>();
@@ -1125,6 +1173,7 @@ public final class DatabaseHandler {
      * @return List of Gateways
      */
     @NonNull
+    @WorkerThread
     public static List<Gateway> getAllGateways(boolean isActive) throws Exception {
         openReadable();
         List<Gateway> gateways = new ArrayList<>();
@@ -1145,6 +1194,7 @@ public final class DatabaseHandler {
      * @param gateway gateway to check for associations
      * @return true if associated with at least one apartment, false otherwise
      */
+    @WorkerThread
     public static boolean isAssociatedWithAnyApartment(Gateway gateway) throws Exception {
         openReadable();
         boolean isAssociatedWithApartment = false;
@@ -1172,6 +1222,7 @@ public final class DatabaseHandler {
      *
      * @param receiverWidget WidgetInfo Object
      */
+    @WorkerThread
     public static void addReceiverWidget(ReceiverWidget receiverWidget) throws Exception {
         openWritable();
         try {
@@ -1190,6 +1241,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
+    @WorkerThread
     public static void deleteReceiverWidget(int id) throws Exception {
         openWritable();
         try {
@@ -1209,6 +1261,7 @@ public final class DatabaseHandler {
      * @param id WidgetId
      */
     @Nullable
+    @WorkerThread
     public static ReceiverWidget getReceiverWidget(int id) throws Exception {
         openReadable();
         ReceiverWidget receiverWidget = null;
@@ -1228,6 +1281,7 @@ public final class DatabaseHandler {
      *
      * @param roomWidget WidgetInfo Object
      */
+    @WorkerThread
     public static void addRoomWidget(RoomWidget roomWidget) throws Exception {
         openWritable();
         try {
@@ -1246,6 +1300,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
+    @WorkerThread
     public static void deleteRoomWidget(int id) throws Exception {
         openWritable();
         try {
@@ -1265,6 +1320,7 @@ public final class DatabaseHandler {
      * @param id WidgetId
      */
     @Nullable
+    @WorkerThread
     public static RoomWidget getRoomWidget(int id) throws Exception {
         openReadable();
         RoomWidget roomWidget = null;
@@ -1284,6 +1340,7 @@ public final class DatabaseHandler {
      *
      * @param sceneWidget WidgetInfo Object
      */
+    @WorkerThread
     public static void addSceneWidget(SceneWidget sceneWidget) throws Exception {
         openWritable();
         try {
@@ -1302,6 +1359,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
+    @WorkerThread
     public static void deleteSceneWidget(int id) throws Exception {
         openWritable();
         try {
@@ -1321,6 +1379,7 @@ public final class DatabaseHandler {
      * @param id WidgetId
      */
     @Nullable
+    @WorkerThread
     public static SceneWidget getSceneWidget(int id) throws Exception {
         openWritable();
         SceneWidget sceneWidget = null;
@@ -1344,6 +1403,7 @@ public final class DatabaseHandler {
      * @return Timer
      */
     @Nullable
+    @WorkerThread
     public static Timer getTimer(Long id) throws Exception {
         openReadable();
         Timer timer = null;
@@ -1364,6 +1424,7 @@ public final class DatabaseHandler {
      * @return a list of all Timers
      */
     @NonNull
+    @WorkerThread
     public static List<Timer> getAllTimers() throws Exception {
         openReadable();
         List<Timer> timers = new ArrayList<>();
@@ -1385,6 +1446,7 @@ public final class DatabaseHandler {
      * @return a list of all active/inactive Timers
      */
     @NonNull
+    @WorkerThread
     public static List<Timer> getAllTimers(boolean isActive) throws Exception {
         openReadable();
         List<Timer> timers = new ArrayList<>();
@@ -1404,6 +1466,7 @@ public final class DatabaseHandler {
      *
      * @param timer Timer Object
      */
+    @WorkerThread
     public static long addTimer(Timer timer) throws Exception {
         openWritable();
         long id = -1;
@@ -1425,6 +1488,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
+    @WorkerThread
     public static void enableTimer(Long id) throws Exception {
         openWritable();
         try {
@@ -1443,6 +1507,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
+    @WorkerThread
     public static void disableTimer(Long id) throws Exception {
         openWritable();
         try {
@@ -1461,6 +1526,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Timer
      */
+    @WorkerThread
     public static void deleteTimer(Long id) throws Exception {
         openWritable();
         try {
@@ -1479,6 +1545,7 @@ public final class DatabaseHandler {
      *
      * @param timer new Timer with same ID as old one
      */
+    @WorkerThread
     public static void updateTimer(Timer timer) throws Exception {
         openWritable();
         try {
@@ -1498,6 +1565,7 @@ public final class DatabaseHandler {
      * @param receiverId ID of Receiver
      * @param position   position in room
      */
+    @WorkerThread
     public static void setPositionInRoom(Long receiverId, Long position) throws Exception {
         openWritable();
         try {
@@ -1526,6 +1594,7 @@ public final class DatabaseHandler {
      * @return List of Actions
      */
     @NonNull
+    @WorkerThread
     public static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
         openReadable();
         List<Action> actions = new ArrayList<>();
@@ -1546,6 +1615,7 @@ public final class DatabaseHandler {
      * @param event   alarm event
      * @param actions List of Actions
      */
+    @WorkerThread
     public static void setAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
         openWritable();
         try {
@@ -1571,6 +1641,7 @@ public final class DatabaseHandler {
      * @return List of HistoryItems
      */
     @NonNull
+    @WorkerThread
     public static LinkedList<HistoryItem> getHistory() throws Exception {
         openReadable();
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
@@ -1590,6 +1661,7 @@ public final class DatabaseHandler {
      *
      * @param historyItem HistoryItem
      */
+    @WorkerThread
     public static void addHistoryItem(HistoryItem historyItem) throws Exception {
         openWritable();
         try {
@@ -1616,6 +1688,7 @@ public final class DatabaseHandler {
      * @return Gateway
      */
     @Nullable
+    @WorkerThread
     public static Geofence getGeofence(Long id) throws Exception {
         openReadable();
         Geofence geofence = null;
@@ -1636,6 +1709,7 @@ public final class DatabaseHandler {
      * @return list of Geofences
      */
     @NonNull
+    @WorkerThread
     public static List<Geofence> getAllGeofences() throws Exception {
         openReadable();
         List<Geofence> geofences = new ArrayList<>();
@@ -1657,6 +1731,7 @@ public final class DatabaseHandler {
      * @return list of Geofences
      */
     @NonNull
+    @WorkerThread
     public static List<Geofence> getAllGeofences(boolean isActive) throws Exception {
         openReadable();
         List<Geofence> geofences = new ArrayList<>();
@@ -1677,6 +1752,7 @@ public final class DatabaseHandler {
      * @return list of custom Geofences
      */
     @NonNull
+    @WorkerThread
     public static List<Geofence> getCustomGeofences() throws Exception {
         openReadable();
         List<Geofence> geofences = new ArrayList<>();
@@ -1697,6 +1773,7 @@ public final class DatabaseHandler {
      * @param geofence new Geofence
      * @return ID of saved Database entry
      */
+    @WorkerThread
     public static long addGeofence(Geofence geofence) throws Exception {
         openWritable();
         long id;
@@ -1717,6 +1794,7 @@ public final class DatabaseHandler {
      *
      * @param geofence updated Geofence
      */
+    @WorkerThread
     public static void updateGeofence(Geofence geofence) throws Exception {
         openWritable();
         try {
@@ -1735,6 +1813,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Geofence
      */
+    @WorkerThread
     public static void enableGeofence(Long id) throws Exception {
         openWritable();
         try {
@@ -1753,6 +1832,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Geofence
      */
+    @WorkerThread
     public static void disableGeofence(Long id) throws Exception {
         openWritable();
         try {
@@ -1769,6 +1849,7 @@ public final class DatabaseHandler {
     /**
      * Disable all existing Geofences
      */
+    @WorkerThread
     public static void disableGeofences() throws Exception {
         openWritable();
         try {
@@ -1787,6 +1868,7 @@ public final class DatabaseHandler {
      *
      * @param id ID of Geofence
      */
+    @WorkerThread
     public static void deleteGeofence(Long id) throws Exception {
         openWritable();
         try {

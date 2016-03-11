@@ -276,4 +276,9 @@ public class PlayStoreModeDataModel {
         return timers;
     }
 
+    public ArrayList<Apartment> getApartments() {
+        ArrayList<Apartment> apartments = new ArrayList<>();
+        apartments.add(apartment);
+        return apartments;
+    }
 }

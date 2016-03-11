@@ -24,17 +24,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include layout="@layout/loading"/>
+
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:visibility="gone">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_list_of_apartments"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fadeScrollbars="false"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_apartment_fab"

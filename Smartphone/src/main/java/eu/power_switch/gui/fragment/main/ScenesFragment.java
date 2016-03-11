@@ -22,8 +22,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.UiThread;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +36,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -59,12 +61,14 @@ import eu.power_switch.wear.service.UtilityService;
  */
 public class ScenesFragment extends RecyclerViewFragment {
 
-    private ArrayList<Scene> scenes;
+    private ArrayList<Scene> scenes = new ArrayList<>();
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
     private RecyclerView recyclerViewScenes;
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
     private FloatingActionButton fab;
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify Scene Fragment (this) that Scenes have changed
@@ -85,7 +89,8 @@ public class ScenesFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
         setHasOptionsMenu(true);
 
-        scenes = new ArrayList<>();
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         recyclerViewScenes = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_scenes);
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes);
@@ -106,7 +111,7 @@ public class ScenesFragment extends RecyclerViewFragment {
             }
         });
 
-        refreshScenes();
+        updateUI();
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_scene_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
@@ -137,34 +142,50 @@ public class ScenesFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d("ScenesFragment", "received intent: " + intent.getAction());
-                refreshScenes();
+                updateUI();
             }
         };
 
         return rootView;
     }
 
-    @UiThread
-    private void refreshScenes() {
-        Log.d("ScenesFragment", "refreshScenes");
-        scenes.clear();
+    private void updateUI() {
+        Log.d("ScenesFragment", "updateUI");
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            scenes.addAll(playStoreModeDataModel.getScenes());
-        } else {
-            fillListWithScenes();
-        }
+        new AsyncTask<Context, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    scenes.clear();
 
-        sceneRecyclerViewAdapter.notifyDataSetChanged();
-    }
+                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+                        scenes.addAll(playStoreModeDataModel.getScenes());
+                    } else {
+                        scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
+                    }
 
-    private void fillListWithScenes() {
-        try {
-            scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    sceneRecyclerViewAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(getContext());
     }
 
     @Override

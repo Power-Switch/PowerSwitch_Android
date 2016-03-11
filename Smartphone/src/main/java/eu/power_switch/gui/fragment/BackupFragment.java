@@ -27,7 +27,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -41,6 +43,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -80,12 +83,14 @@ public class BackupFragment extends RecyclerViewFragment {
     };
 
     private View rootView;
-    private ArrayList<Backup> backups;
+    private ArrayList<Backup> backups = new ArrayList<>();
     private RecyclerView recyclerViewBackups;
     private BackupRecyclerViewAdapter backupArrayAdapter;
     private BroadcastReceiver broadcastReceiver;
     private FloatingActionButton fab;
     private TextView textViewBackupPath;
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify Backup Fragment (this) that Backups have changed
@@ -105,10 +110,12 @@ public class BackupFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);
 
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
+
         final RecyclerViewFragment recyclerViewFragment = this;
 
         textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
-        textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
         textViewBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +134,6 @@ public class BackupFragment extends RecyclerViewFragment {
             }
         });
 
-        backups = new ArrayList<>();
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_backups);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
         backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
@@ -233,7 +239,7 @@ public class BackupFragment extends RecyclerViewFragment {
             }
         };
 
-        refreshBackups();
+        updateUI();
 
         return rootView;
     }
@@ -257,20 +263,42 @@ public class BackupFragment extends RecyclerViewFragment {
     }
 
     private void refreshBackups() {
-        backups.clear();
-
         if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
             requestExternalStoragePermission();
         } else {
-            BackupHandler backupHandler = new BackupHandler(getActivity());
-            for (Backup backup : backupHandler.getBackups()) {
-                backups.add(backup);
-            }
+            new AsyncTask<Context, Void, Exception>() {
+                @Override
+                protected Exception doInBackground(Context... contexts) {
+                    try {
+                        backups.clear();
 
-            Collections.sort(backups, backupsComparator);
+                        BackupHandler backupHandler = new BackupHandler(getActivity());
+                        for (Backup backup : backupHandler.getBackups()) {
+                            backups.add(backup);
+                        }
+
+                        Collections.sort(backups, backupsComparator);
+
+                        return null;
+                    } catch (Exception e) {
+                        return e;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(Exception exception) {
+                    layoutLoading.setVisibility(View.GONE);
+
+                    if (exception == null) {
+                        backupArrayAdapter.notifyDataSetChanged();
+                        contentLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        contentLayout.setVisibility(View.GONE);
+                        StatusMessageHandler.showErrorMessage(getContext(), exception);
+                    }
+                }
+            }.execute(getContext());
         }
-
-        backupArrayAdapter.notifyDataSetChanged();
     }
 
     private void requestExternalStoragePermission() {

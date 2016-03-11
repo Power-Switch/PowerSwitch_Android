@@ -22,7 +22,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -34,6 +36,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +75,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     private ArrayList<Gateway> gateways = new ArrayList<>();
     private FloatingActionButton searchGatewayFAB;
     private FloatingActionButton addGatewayFAB;
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
 
     public static void sendGatewaysChangedBroadcast(Context context) {
         Log.d(GatewaySettingsFragment.class, "sendGatewaysChangedBroadcast");
@@ -85,6 +90,9 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_gateway_settings, container, false);
         setHasOptionsMenu(true);
+
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -135,9 +143,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                updateUI();
+                refreshGateways();
             }
         };
+
+        updateUI();
 
         return rootView;
     }
@@ -207,17 +217,37 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     private void refreshGateways() {
         Log.d("GatewaySettingsFragment", "refreshGateways");
 
-        gateways.clear();
+        new AsyncTask<Context, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    gateways.clear();
 
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            gateways.addAll(PlayStoreModeDataModel.getGateways());
-        } else {
-            try {
-                gateways.addAll(DatabaseHandler.getAllGateways());
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                        gateways.addAll(PlayStoreModeDataModel.getGateways());
+                    } else {
+                        gateways.addAll(DatabaseHandler.getAllGateways());
+                    }
+
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
             }
-        }
+
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    gatewayRecyclerViewAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(getContext());
     }
 
     private void updateUI() {
@@ -230,8 +260,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         }
 
         refreshGateways();
-
-        gatewayRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -286,12 +314,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     public void onStop() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI();
     }
 
     @Override

@@ -23,6 +23,7 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -59,36 +60,23 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     private Spinner spinnerRoom;
     private Spinner spinnerReceiver;
 
-    private List<Room> roomsList;
-    private ArrayList<String> roomNamesList;
+    private List<Room> roomList = new ArrayList<>();
+    private ArrayList<String> roomNamesList = new ArrayList<>();
+
+    private ArrayAdapter<String> adapterRooms;
+    private ArrayAdapter<String> adapterReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(this);
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.widget_dialog_configure_receiver);
 
         spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
         spinnerReceiver = (Spinner) findViewById(R.id.spinner_widgetSwitch);
 
-        try {
-            roomsList = DatabaseHandler.getAllRooms();
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
-        }
-        roomNamesList = new ArrayList<>();
-        for (Room room : roomsList) {
-            roomNamesList.add(room.getName());
-        }
-
-        // Abort if no rooms are defined in main app
-        if (roomNamesList.isEmpty()) {
-            Toast.makeText(this, getString(R.string.please_define_receiver_in_main_app), Toast.LENGTH_LONG).show();
-            finish();
-        }
-
-        ArrayAdapter<String> adapterRooms = new ArrayAdapter<>(this,
+        adapterRooms = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item, roomNamesList);
         adapterRooms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapterRooms);
@@ -98,10 +86,10 @@ public class ConfigureReceiverWidgetActivity extends Activity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 try {
                     ArrayList<String> receiverList = new ArrayList<>();
-                    for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(roomsList.get(arg2).getId())) {
+                    for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(roomList.get(arg2).getId())) {
                         receiverList.add(receiver.getName());
                     }
-                    ArrayAdapter<String> adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this,
+                    adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this,
                             android.R.layout.simple_spinner_dropdown_item, receiverList);
                     adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerReceiver.setAdapter(adapterReceiver);
@@ -123,6 +111,39 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                 saveCurrentConfiguration();
             }
         });
+
+        updateUI();
+    }
+
+    private void updateUI() {
+        new AsyncTask<Void, Void, List<Room>>() {
+            @Override
+            protected List<Room> doInBackground(Void... params) {
+                try {
+                    return DatabaseHandler.getAllRooms();
+                } catch (Exception e) {
+                    return new ArrayList<>();
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<Room> result) {
+                roomList.clear();
+                roomList.addAll(result);
+
+                // Abort if no rooms are defined in main app
+                if (roomList.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_receiver_in_main_app), Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
+                for (Room room : roomList) {
+                    roomNamesList.add(room.getName());
+                }
+
+                adapterRooms.notifyDataSetChanged();
+            }
+        }.execute();
     }
 
     private void saveCurrentConfiguration() {
@@ -132,7 +153,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
             int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             // Perform your App Widget configuration:
-            Room selectedRoom = roomsList.get(spinnerRoom.getSelectedItemPosition());
+            Room selectedRoom = roomList.get(spinnerRoom.getSelectedItemPosition());
             Receiver selectedReceiver = null;
             for (Receiver receiver : selectedRoom.getReceivers()) {
                 if (receiver.getName().equals(spinnerReceiver.getSelectedItem().toString())) {

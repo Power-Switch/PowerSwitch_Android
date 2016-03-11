@@ -500,6 +500,24 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        final PrimaryDrawerItem itemHistory = new PrimaryDrawerItem().withName(R.string.history)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withSelectable(false)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            historyDrawer.openDrawer();
+                            navigationDrawer.closeDrawer();
+                            return true;
+                        } catch (Exception e) {
+                            Log.e(e);
+                            return false;
+                        }
+                    }
+                });
         final PrimaryDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
                         .color(tintColor)
@@ -675,13 +693,13 @@ public class MainActivity extends AppCompatActivity {
                 .withHeaderPadding(true)
                 .addDrawerItems(
                         itemHome,
+                        itemHistory,
                         new DividerDrawerItem(),
                         itemApartments,
                         itemRoomsScenes,
-                        new DividerDrawerItem(),
+                        itemTimer,
                         itemGeofences,
                         itemSleepAsAndroid,
-                        itemTimer,
                         new DividerDrawerItem(),
                         itemBackupRestore,
                         itemSettings,

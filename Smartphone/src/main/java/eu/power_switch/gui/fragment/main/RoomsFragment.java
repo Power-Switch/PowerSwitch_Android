@@ -22,7 +22,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -34,6 +36,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -66,6 +69,8 @@ public class RoomsFragment extends RecyclerViewFragment {
     private FloatingActionButton addReceiverFAB;
     private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
     private RecyclerView recyclerViewRooms;
+    private CoordinatorLayout contentLayout;
+    private LinearLayout layoutLoading;
 
     /**
      * Used to notify Room Fragment (this) that Rooms have changed
@@ -85,6 +90,9 @@ public class RoomsFragment extends RecyclerViewFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
         setHasOptionsMenu(true);
+
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         rooms = new ArrayList<>();
         recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_rooms);
@@ -141,28 +149,45 @@ public class RoomsFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        rooms.clear();
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            rooms.addAll(playStoreModeDataModel.getRooms());
-        } else {
-            fillListWithRooms();
-        }
+        new AsyncTask<Context, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    rooms.clear();
 
-        roomsRecyclerViewAdapter.notifyDataSetChanged();
-    }
+                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+                        rooms.addAll(playStoreModeDataModel.getRooms());
+                    } else {
+                        long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
+                        if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
+                            // Get Rooms and Receivers
+                            rooms.addAll(DatabaseHandler.getRooms(currentApartmentId));
+                        }
+                    }
 
-    private void fillListWithRooms() {
-        try {
-            long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
-            if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
-                // Get Rooms and Receivers
-                rooms.addAll(DatabaseHandler.getRooms(currentApartmentId));
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
             }
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
+
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    roomsRecyclerViewAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(getContext());
     }
 
     @Override

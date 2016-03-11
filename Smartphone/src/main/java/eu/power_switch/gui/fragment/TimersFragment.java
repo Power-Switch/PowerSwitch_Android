@@ -22,7 +22,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +35,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -59,12 +62,14 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  */
 public class TimersFragment extends RecyclerViewFragment {
 
-    private ArrayList<Timer> timers;
+    private ArrayList<Timer> timers = new ArrayList<>();
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
     private RecyclerView recyclerViewTimers;
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
     private FloatingActionButton addTimerFAB;
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify Timer Fragment (this) that Timers have changed
@@ -84,11 +89,12 @@ public class TimersFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_timers, container, false);
         setHasOptionsMenu(true);
 
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
+
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        timers = new ArrayList<>();
         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), timers);
-
         recyclerViewTimers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_timers);
         recyclerViewTimers.setAdapter(timerRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -105,7 +111,7 @@ public class TimersFragment extends RecyclerViewFragment {
             }
         });
 
-        refreshTimers();
+        updateUI();
 
         addTimerFAB = (FloatingActionButton) rootView.findViewById(R.id.add_timer_fab);
         addTimerFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
@@ -127,7 +133,7 @@ public class TimersFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d("TimersFragment", "received intent: " + intent.getAction());
-                refreshTimers();
+                updateUI();
             }
         };
 
@@ -146,22 +152,45 @@ public class TimersFragment extends RecyclerViewFragment {
                 .show();
     }
 
-    private void refreshTimers() {
-        Log.d("TimersFragment", "refreshTimers");
-        timers.clear();
+    private void updateUI() {
+        Log.d("TimersFragment", "updateUI");
 
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            timers.addAll(playStoreModeDataModel.getTimers());
-        } else {
-            try {
-                timers.addAll(DatabaseHandler.getAllTimers());
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getActivity(), e);
+        new AsyncTask<Context, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    timers.clear();
+
+                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+                        timers.addAll(playStoreModeDataModel.getTimers());
+                    } else {
+                        try {
+                            timers.addAll(DatabaseHandler.getAllTimers());
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        }
+                    }
+
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
             }
-        }
 
-        timerRecyclerViewAdapter.notifyDataSetChanged();
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    timerRecyclerViewAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(getContext());
     }
 
     @Override

@@ -22,8 +22,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.UiThread;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +37,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
@@ -58,13 +61,15 @@ import eu.power_switch.shared.permission.PermissionHelper;
  */
 public class CustomGeofencesFragment extends RecyclerViewFragment {
 
-    private ArrayList<Geofence> geofences;
+    private ArrayList<Geofence> geofences = new ArrayList<>();
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
     private RecyclerView recyclerViewGeofences;
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
     private FloatingActionButton fab;
     private GeofenceApiHandler geofenceApiHandler;
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify the custom geofence page (this) that geofences have changed
@@ -82,9 +87,10 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
         rootView = inflater.inflate(R.layout.fragment_custom_geofences, container, false);
         setHasOptionsMenu(true);
 
-        geofenceApiHandler = new GeofenceApiHandler(getActivity());
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
-        geofences = new ArrayList<>();
+        geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
         recyclerViewGeofences = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_geofences);
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
@@ -105,7 +111,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
             }
         });
 
-        refreshGeofences();
+        updateUI();
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_geofence_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
@@ -132,7 +138,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(this, "received intent: " + intent.getAction());
-                refreshGeofences();
+                updateUI();
             }
         };
 
@@ -140,26 +146,41 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     }
 
     @UiThread
-    private void refreshGeofences() {
-        Log.d(this, "refreshGeofences");
-        geofences.clear();
+    private void updateUI() {
+        Log.d(this, "updateUI");
+
+        new AsyncTask<Context, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    geofences.clear();
 
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getScenes());
 //        } else {
-        fillListWithGeofences();
+                    geofences.addAll(DatabaseHandler.getCustomGeofences());
 //        }
 
-        geofenceRecyclerViewAdapter.notifyDataSetChanged();
-    }
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
+            }
 
-    private void fillListWithGeofences() {
-        try {
-            geofences.addAll(DatabaseHandler.getCustomGeofences());
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    geofenceRecyclerViewAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(getContext());
     }
 
     @Override

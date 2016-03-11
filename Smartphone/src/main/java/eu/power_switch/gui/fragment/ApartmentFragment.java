@@ -22,7 +22,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,16 +35,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -61,6 +66,8 @@ public class ApartmentFragment extends RecyclerViewFragment {
     private ArrayList<Apartment> apartments = new ArrayList<>();
     private FloatingActionButton fab;
     private BroadcastReceiver broadcastReceiver;
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify other Fragments that the selected Apartment has changed
@@ -79,6 +86,9 @@ public class ApartmentFragment extends RecyclerViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
         setHasOptionsMenu(true);
+
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_apartments);
@@ -132,14 +142,14 @@ public class ApartmentFragment extends RecyclerViewFragment {
             }
         });
 
-        refreshApartments();
+        refreshUI();
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(this, "received intent: " + intent.getAction());
-                refreshApartments();
+                refreshUI();
             }
         };
 
@@ -159,15 +169,42 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 .show();
     }
 
-    private void refreshApartments() {
-        apartments.clear();
-        try {
-            apartments.addAll(DatabaseHandler.getAllApartments());
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
-        }
+    private void refreshUI() {
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
-        apartmentArrayAdapter.notifyDataSetChanged();
+        new AsyncTask<Context, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    apartments.clear();
+
+                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+                        apartments.addAll(playStoreModeDataModel.getApartments());
+                    } else {
+                        apartments.addAll(DatabaseHandler.getAllApartments());
+                    }
+
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    apartmentArrayAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(getContext());
     }
 
     @Override

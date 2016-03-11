@@ -194,7 +194,10 @@ abstract class GatewayHandler {
         Cursor cursor = DatabaseHandler.database.query(ApartmentGatewayRelationTable.TABLE_NAME,
                 null, ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
 
-        return cursor.moveToFirst();
+        boolean hasElement = cursor.moveToFirst();
+        cursor.close();
+
+        return hasElement;
     }
 
     /**
