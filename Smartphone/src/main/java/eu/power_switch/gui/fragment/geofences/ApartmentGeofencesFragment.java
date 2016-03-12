@@ -164,8 +164,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             }
         });
 
-        refreshGeofences();
-
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -182,12 +180,15 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
                         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
                             if (result[0] == PackageManager.PERMISSION_GRANTED) {
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(),
+                                        R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                                 sendApartmentGeofencesChangedBroadcast(context);
                                 CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(context);
                             } else {
-                                StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.ACCESS_FINE_LOCATION);
+                                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                                        getRecyclerView(),
+                                        Manifest.permission.ACCESS_FINE_LOCATION);
                             }
                         }
                         break;
@@ -196,7 +197,11 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         };
 
         if (!PermissionHelper.checkLocationPermission(getContext())) {
+            layoutLoading.setVisibility(View.GONE);
+            contentLayout.setVisibility(View.VISIBLE);
             requestLocationPermission();
+        } else {
+            refreshGeofences();
         }
 
         return rootView;
@@ -204,6 +209,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
     private void refreshGeofences() {
         Log.d(this, "refreshGeofences");
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
         new AsyncTask<Context, Void, Exception>() {
             @Override

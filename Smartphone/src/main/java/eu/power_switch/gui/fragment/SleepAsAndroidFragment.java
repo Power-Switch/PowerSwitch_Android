@@ -18,18 +18,33 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+
+import java.util.ArrayList;
+
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -44,8 +59,6 @@ import eu.power_switch.shared.constants.SleepAsAndroidConstants.SLEEP_AS_ANDROID
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-
-import java.util.ArrayList;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling
@@ -62,6 +75,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     private ActionRecyclerViewAdapter recyclerViewAdapter;
     private Spinner spinnerEventType;
     private FloatingActionButton addActionFAB;
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,6 +85,9 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
+
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         spinnerEventType = (Spinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -161,16 +179,41 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        actions.clear();
+        refreshActions(
+                SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition()));
+    }
 
-        try {
-            actions.addAll(DatabaseHandler.getAlarmActions(
-                    SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition())));
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
+    private void refreshActions(SLEEP_AS_ANDROID_ALARM_EVENT event) {
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
-        recyclerViewAdapter.notifyDataSetChanged();
+        new AsyncTask<SLEEP_AS_ANDROID_ALARM_EVENT, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(SLEEP_AS_ANDROID_ALARM_EVENT... events) {
+                try {
+                    actions.clear();
+
+                    actions.addAll(DatabaseHandler.getAlarmActions(events[0]));
+
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    recyclerViewAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(event);
     }
 
 

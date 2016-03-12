@@ -154,6 +154,8 @@ public class TimersFragment extends RecyclerViewFragment {
 
     private void updateUI() {
         Log.d("TimersFragment", "updateUI");
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
         new AsyncTask<Context, Void, Exception>() {
             @Override

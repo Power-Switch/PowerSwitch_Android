@@ -148,6 +148,8 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     @UiThread
     private void updateUI() {
         Log.d(this, "updateUI");
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
         new AsyncTask<Context, Void, Exception>() {
             @Override

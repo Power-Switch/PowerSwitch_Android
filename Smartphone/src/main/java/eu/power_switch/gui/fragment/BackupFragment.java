@@ -225,10 +225,13 @@ public class BackupFragment extends RecyclerViewFragment {
                             if (results[0] == PackageManager.PERMISSION_GRANTED) {
                                 // Permission Granted
                                 refreshBackups();
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(),
+                                        R.string.permission_granted, Snackbar.LENGTH_SHORT);
                             } else {
                                 // Permission Denied
-                                StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                                        getRecyclerView(),
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
                             }
                         }
 
@@ -259,46 +262,49 @@ public class BackupFragment extends RecyclerViewFragment {
 
     private void updateUI() {
         textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
-        refreshBackups();
+
+        if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+            layoutLoading.setVisibility(View.GONE);
+            contentLayout.setVisibility(View.VISIBLE);
+            requestExternalStoragePermission();
+        } else {
+            refreshBackups();
+        }
     }
 
     private void refreshBackups() {
-        if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
-            requestExternalStoragePermission();
-        } else {
-            new AsyncTask<Context, Void, Exception>() {
-                @Override
-                protected Exception doInBackground(Context... contexts) {
-                    try {
-                        backups.clear();
+        new AsyncTask<Context, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    backups.clear();
 
-                        BackupHandler backupHandler = new BackupHandler(getActivity());
-                        for (Backup backup : backupHandler.getBackups()) {
-                            backups.add(backup);
-                        }
-
-                        Collections.sort(backups, backupsComparator);
-
-                        return null;
-                    } catch (Exception e) {
-                        return e;
+                    BackupHandler backupHandler = new BackupHandler(getActivity());
+                    for (Backup backup : backupHandler.getBackups()) {
+                        backups.add(backup);
                     }
-                }
 
-                @Override
-                protected void onPostExecute(Exception exception) {
-                    layoutLoading.setVisibility(View.GONE);
+                    Collections.sort(backups, backupsComparator);
 
-                    if (exception == null) {
-                        backupArrayAdapter.notifyDataSetChanged();
-                        contentLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        contentLayout.setVisibility(View.GONE);
-                        StatusMessageHandler.showErrorMessage(getContext(), exception);
-                    }
+                    return null;
+                } catch (Exception e) {
+                    return e;
                 }
-            }.execute(getContext());
-        }
+            }
+
+            @Override
+            protected void onPostExecute(Exception exception) {
+                layoutLoading.setVisibility(View.GONE);
+
+                if (exception == null) {
+                    backupArrayAdapter.notifyDataSetChanged();
+                    contentLayout.setVisibility(View.VISIBLE);
+                } else {
+                    contentLayout.setVisibility(View.GONE);
+                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                }
+            }
+        }.execute(getContext());
     }
 
     private void requestExternalStoragePermission() {

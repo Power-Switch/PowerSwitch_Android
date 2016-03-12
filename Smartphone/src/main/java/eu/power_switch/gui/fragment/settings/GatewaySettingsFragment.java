@@ -216,6 +216,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
     private void refreshGateways() {
         Log.d("GatewaySettingsFragment", "refreshGateways");
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
 
         new AsyncTask<Context, Void, Exception>() {
             @Override
