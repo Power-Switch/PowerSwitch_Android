@@ -30,6 +30,7 @@ import java.util.Arrays;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.RoomWidget;
@@ -70,17 +71,18 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                 RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
                 if (roomWidget != null) {
                     Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
-
                     if (room != null) {
+                        Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
+
                         // update UI
                         remoteViews.setTextViewText(R.id.textView_room_widget_name, room.getName());
 
                         // set button action
                         remoteViews.setOnClickPendingIntent(R.id.button_on,
-                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R.string.on),
+                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R.string.on),
                                         ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
                         remoteViews.setOnClickPendingIntent(R.id.button_off,
-                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, room, context.getString(R
+                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R
                                                 .string.off),
                                         ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                         remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);

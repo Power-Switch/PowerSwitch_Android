@@ -25,10 +25,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/TextView_widgetRoom"
+        style="@style/sub_header"
+        android:text="@string/apartment"/>
+
+    <Spinner
+        android:id="@+id/Spinner_widgetApartment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/rooms"/>
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/sub_header"
+        android:text="@string/room"/>
 
     <Spinner
         android:id="@+id/Spinner_widgetRoom"

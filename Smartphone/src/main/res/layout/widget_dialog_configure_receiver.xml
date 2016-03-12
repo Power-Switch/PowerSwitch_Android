@@ -25,11 +25,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/TextView_widgetRoom"
+        style="@style/sub_header"
+        android:text="@string/apartment"/>
+
+    <Spinner
+        android:id="@+id/Spinner_widgetApartment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/room"
-        android:textColor="?attr/colorAccent"/>
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        style="@style/sub_header"
+        android:text="@string/room"/>
 
     <Spinner
         android:id="@+id/Spinner_widgetRoom"
@@ -37,11 +43,8 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/textView_widgetSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/receiver"
-        android:textColor="?attr/colorAccent"/>
+        style="@style/sub_header"
+        android:text="@string/receiver"/>
 
     <Spinner
         android:id="@+id/spinner_widgetSwitch"

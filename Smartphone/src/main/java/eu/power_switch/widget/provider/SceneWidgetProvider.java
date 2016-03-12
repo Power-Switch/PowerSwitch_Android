@@ -30,6 +30,7 @@ import java.util.Arrays;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.SceneWidget;
@@ -72,11 +73,12 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                     // update UI
                     Scene scene = DatabaseHandler.getScene(sceneWidget.getSceneId());
                     if (scene != null) {
+                        Apartment apartment = DatabaseHandler.getApartment(scene.getApartmentId());
 
                         remoteViews.setTextViewText(R.id.textView_scene_widget_name, scene.getName());
                         // set button action
                         remoteViews.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
-                                WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
+                                WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, apartment, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
                         remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.VISIBLE);
                     } else {
                         remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_deleted));

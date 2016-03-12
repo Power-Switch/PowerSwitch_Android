@@ -28,6 +28,7 @@ import android.widget.Toast;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
@@ -36,7 +37,6 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Intent Receiver for Widgets
@@ -45,11 +45,6 @@ import eu.power_switch.shared.log.LogHandler;
  * Created by Markus on 07.11.2015.
  */
 public class WidgetIntentReceiver extends BroadcastReceiver {
-
-    private static String KEY_BUTTON = "Button";
-    private static String KEY_RECEIVER = "Receiver";
-    private static String KEY_ROOM = "Room";
-    private static String KEY_SCENE = "Scene";
 
     /**
      * Generates a unique PendingIntent for actions on receiver widgets
@@ -61,18 +56,19 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
      * @param uniqueRequestCode unique identifier for different combinations of rooms, receivers and buttons
      * @return PendingIntent
      */
-    public static PendingIntent buildReceiverWidgetActionPendingIntent(Context context, Room room, Receiver receiver,
+    public static PendingIntent buildReceiverWidgetActionPendingIntent(Context context, Apartment apartment, Room room, Receiver receiver,
                                                                        Button button, int uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context, uniqueRequestCode, createReceiverButtonIntent(room.getName(),
+        return PendingIntent.getBroadcast(context, uniqueRequestCode, createReceiverButtonIntent(apartment.getName(), room.getName(),
                 receiver.getName(), button.getName()), PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private static Intent createReceiverButtonIntent(String roomName, String receiverName, String buttonName) {
+    private static Intent createReceiverButtonIntent(String apartmentName, String roomName, String receiverName, String buttonName) {
         Intent intent = new Intent();
         intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
-        intent.putExtra(KEY_ROOM, roomName);
-        intent.putExtra(KEY_RECEIVER, receiverName);
-        intent.putExtra(KEY_BUTTON, buttonName);
+        intent.putExtra(WidgetConstants.KEY_APARTMENT, apartmentName);
+        intent.putExtra(WidgetConstants.KEY_ROOM, roomName);
+        intent.putExtra(WidgetConstants.KEY_RECEIVER, receiverName);
+        intent.putExtra(WidgetConstants.KEY_BUTTON, buttonName);
 
         return intent;
     }
@@ -86,17 +82,18 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
      * @param uniqueRequestCode unique identifier for different combinations of rooms, receivers and buttons
      * @return PendingIntent
      */
-    public static PendingIntent buildRoomWidgetButtonPendingIntent(Context context, Room room, String buttonName,
+    public static PendingIntent buildRoomWidgetButtonPendingIntent(Context context, Apartment apartment, Room room, String buttonName,
                                                                    int uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context, uniqueRequestCode, createRoomButtonIntent(room.getName(), buttonName),
+        return PendingIntent.getBroadcast(context, uniqueRequestCode, createRoomButtonIntent(apartment.getName(), room.getName(), buttonName),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private static Intent createRoomButtonIntent(String roomName, String buttonName) {
+    private static Intent createRoomButtonIntent(String apartmentName, String roomName, String buttonName) {
         Intent intent = new Intent();
         intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
-        intent.putExtra(KEY_ROOM, roomName);
-        intent.putExtra(KEY_BUTTON, buttonName);
+        intent.putExtra(WidgetConstants.KEY_APARTMENT, apartmentName);
+        intent.putExtra(WidgetConstants.KEY_ROOM, roomName);
+        intent.putExtra(WidgetConstants.KEY_BUTTON, buttonName);
 
         return intent;
     }
@@ -109,24 +106,23 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
      * @param uniqueRequestCode unique identifier for different combinations of rooms, receivers and buttons
      * @return PendingIntent
      */
-    public static PendingIntent buildSceneWidgetPendingIntent(Context context, Scene scene, int
+    public static PendingIntent buildSceneWidgetPendingIntent(Context context, Apartment apartment, Scene scene, int
             uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context, uniqueRequestCode, createSceneIntent(scene.getName()), PendingIntent
+        return PendingIntent.getBroadcast(context, uniqueRequestCode, createSceneIntent(apartment.getName(), scene.getName()), PendingIntent
                 .FLAG_UPDATE_CURRENT);
     }
 
-    private static Intent createSceneIntent(String sceneName) {
+    private static Intent createSceneIntent(String apartmentName, String sceneName) {
         Intent intent = new Intent();
         intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
-        intent.putExtra(KEY_SCENE, sceneName);
+        intent.putExtra(WidgetConstants.KEY_APARTMENT, apartmentName);
+        intent.putExtra(WidgetConstants.KEY_SCENE, sceneName);
 
         return intent;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogHandler.configureLogger();
-
         Log.d(this, intent);
 
         try {
@@ -148,29 +144,43 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
     private void parseWidgetActionIntent(Context context, Intent intent) {
         try {
             Bundle extras = intent.getExtras();
-            if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_RECEIVER) && extras.containsKey(KEY_BUTTON)) {
-                String roomName = extras.getString(KEY_ROOM);
-                String receiverName = extras.getString(KEY_RECEIVER);
-                String buttonName = extras.getString(KEY_BUTTON);
+            if (extras.containsKey(WidgetConstants.KEY_APARTMENT)
+                    && extras.containsKey(WidgetConstants.KEY_ROOM)
+                    && extras.containsKey(WidgetConstants.KEY_RECEIVER)
+                    && extras.containsKey(WidgetConstants.KEY_BUTTON)) {
+                String apartmentName = extras.getString(WidgetConstants.KEY_APARTMENT);
+                String roomName = extras.getString(WidgetConstants.KEY_ROOM);
+                String receiverName = extras.getString(WidgetConstants.KEY_RECEIVER);
+                String buttonName = extras.getString(WidgetConstants.KEY_BUTTON);
 
-                Room room = DatabaseHandler.getRoom(roomName);
+                Apartment apartment = DatabaseHandler.getApartment(apartmentName);
+                Room room = apartment.getRoom(roomName);
                 Receiver receiver = room.getReceiver(receiverName);
                 Button button = receiver.getButton(buttonName);
 
                 ActionHandler.execute(context, receiver, button);
-            } else if (extras.containsKey(KEY_ROOM) && extras.containsKey(KEY_BUTTON)) {
-                String roomName = extras.getString(KEY_ROOM);
-                String buttonName = extras.getString(KEY_BUTTON);
+            } else if (extras.containsKey(WidgetConstants.KEY_APARTMENT)
+                    && extras.containsKey(WidgetConstants.KEY_ROOM)
+                    && extras.containsKey(WidgetConstants.KEY_BUTTON)) {
+                String apartmentName = extras.getString(WidgetConstants.KEY_APARTMENT);
+                String roomName = extras.getString(WidgetConstants.KEY_ROOM);
+                String buttonName = extras.getString(WidgetConstants.KEY_BUTTON);
 
-                Room room = DatabaseHandler.getRoom(roomName);
+                Apartment apartment = DatabaseHandler.getApartment(apartmentName);
+                Room room = apartment.getRoom(roomName);
 
                 ActionHandler.execute(context, room, buttonName);
-            } else if (extras.containsKey(KEY_SCENE)) {
-                String sceneName = extras.getString(KEY_SCENE);
+            } else if (extras.containsKey(WidgetConstants.KEY_APARTMENT)
+                    && extras.containsKey(WidgetConstants.KEY_SCENE)) {
+                String apartmentName = extras.getString(WidgetConstants.KEY_APARTMENT);
+                String sceneName = extras.getString(WidgetConstants.KEY_SCENE);
 
-                Scene scene = DatabaseHandler.getScene(sceneName);
+                Apartment apartment = DatabaseHandler.getApartment(apartmentName);
+                Scene scene = apartment.getScene(sceneName);
 
                 ActionHandler.execute(context, scene);
+            } else {
+                Toast.makeText(context, R.string.invalid_arguments, Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
             Log.e("Error parsing intent!", e);

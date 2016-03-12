@@ -28,6 +28,12 @@ public class WidgetConstants {
     // Widgets
     public static final String WIDGET_ACTION_INTENT = "eu.power_switch.widget_action";
 
+    public static final String KEY_APARTMENT = "Apartment";
+    public static final String KEY_ROOM = "Room";
+    public static final String KEY_RECEIVER = "Receiver";
+    public static final String KEY_BUTTON = "Button";
+    public static final String KEY_SCENE = "Scene";
+
     /**
      * Private Constructor
      *

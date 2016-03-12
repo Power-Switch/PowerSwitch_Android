@@ -36,6 +36,7 @@ import java.util.LinkedList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
@@ -81,6 +82,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                     Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
 
                     if (room != null && receiver != null) {
+                        Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
                         // update UI
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name, room.getName() + ": " + receiver.getName());
 
@@ -104,7 +106,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                                         ContextCompat.getColor(context, R.color.color_light_blue_a700));
                             }
 
-                            PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, room,
+                            PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, apartment, room,
                                     receiver, button, appWidgetId * 15 + buttonOffset);
                             buttonView.setOnClickPendingIntent(R.id.button_widget_universal, intent);
 

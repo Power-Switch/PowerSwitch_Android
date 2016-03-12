@@ -31,7 +31,6 @@ import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.RemoteViews;
 import android.widget.Spinner;
@@ -44,6 +43,8 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.listener.SpinnerInteractionListener;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
@@ -57,12 +58,17 @@ import eu.power_switch.widget.WidgetIntentReceiver;
  */
 public class ConfigureReceiverWidgetActivity extends Activity {
 
+    private Spinner spinnerApartment;
     private Spinner spinnerRoom;
     private Spinner spinnerReceiver;
 
-    private List<Room> roomList = new ArrayList<>();
-    private ArrayList<String> roomNamesList = new ArrayList<>();
+    private List<Apartment> apartmentList = new ArrayList<>();
 
+    private ArrayList<String> apartmentNameList = new ArrayList<>();
+    private ArrayList<String> roomNameList = new ArrayList<>();
+    private ArrayList<String> receiverNameList = new ArrayList<>();
+
+    private ArrayAdapter<String> adapterApartments;
     private ArrayAdapter<String> adapterRooms;
     private ArrayAdapter<String> adapterReceiver;
 
@@ -73,36 +79,48 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.widget_dialog_configure_receiver);
 
+        spinnerApartment = (Spinner) findViewById(R.id.Spinner_widgetApartment);
         spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
         spinnerReceiver = (Spinner) findViewById(R.id.spinner_widgetSwitch);
 
+        adapterApartments = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
+        adapterApartments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerApartment.setAdapter(adapterApartments);
+        SpinnerInteractionListener apartmentSpinnerInteractionListener = new SpinnerInteractionListener() {
+            @Override
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
+                updateRoomList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        };
+        spinnerApartment.setOnItemSelectedListener(apartmentSpinnerInteractionListener);
+        spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);
+
         adapterRooms = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, roomNamesList);
+                android.R.layout.simple_spinner_dropdown_item, roomNameList);
         adapterRooms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapterRooms);
-        spinnerRoom.setOnItemSelectedListener(new OnItemSelectedListener() {
-
+        SpinnerInteractionListener roomSpinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                try {
-                    ArrayList<String> receiverList = new ArrayList<>();
-                    for (Receiver receiver : DatabaseHandler.getReceiverByRoomId(roomList.get(arg2).getId())) {
-                        receiverList.add(receiver.getName());
-                    }
-                    adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this,
-                            android.R.layout.simple_spinner_dropdown_item, receiverList);
-                    adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinnerReceiver.setAdapter(adapterReceiver);
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(arg1.getContext(), e);
-                }
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
+                updateReceiverList();
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-
+            public void onNothingSelected(AdapterView<?> parent) {
             }
-        });
+        };
+        spinnerRoom.setOnItemSelectedListener(roomSpinnerInteractionListener);
+        spinnerRoom.setOnTouchListener(roomSpinnerInteractionListener);
+
+        adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this,
+                android.R.layout.simple_spinner_dropdown_item, receiverNameList);
+        adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerReceiver.setAdapter(adapterReceiver);
 
         android.widget.Button save = (android.widget.Button) findViewById(R.id.button_widgetSave);
         save.setOnClickListener(new OnClickListener() {
@@ -116,105 +134,147 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     }
 
     private void updateUI() {
-        new AsyncTask<Void, Void, List<Room>>() {
+        new AsyncTask<Void, Void, List<Apartment>>() {
             @Override
-            protected List<Room> doInBackground(Void... params) {
+            protected List<Apartment> doInBackground(Void... params) {
                 try {
-                    return DatabaseHandler.getAllRooms();
+                    return DatabaseHandler.getAllApartments();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
             }
 
             @Override
-            protected void onPostExecute(List<Room> result) {
-                roomList.clear();
-                roomList.addAll(result);
+            protected void onPostExecute(List<Apartment> result) {
+                apartmentList.clear();
+                apartmentList.addAll(result);
+
+                for (Apartment apartment : apartmentList) {
+                    apartmentNameList.add(apartment.getName());
+                }
+
+                spinnerApartment.setSelection(0);
+                adapterApartments.notifyDataSetChanged();
+
+                updateRoomList();
 
                 // Abort if no rooms are defined in main app
-                if (roomList.isEmpty()) {
+                if (receiverNameList.isEmpty()) {
                     Toast.makeText(getApplicationContext(), getString(R.string.please_define_receiver_in_main_app), Toast.LENGTH_LONG).show();
                     finish();
                 }
-
-                for (Room room : roomList) {
-                    roomNamesList.add(room.getName());
-                }
-
-                adapterRooms.notifyDataSetChanged();
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    private Apartment getSelectedApartment() throws Exception {
+        return DatabaseHandler.getApartment(spinnerApartment.getSelectedItem().toString());
+    }
+
+    private Room getSelectedRoom() throws Exception {
+        return getSelectedApartment().getRoom(spinnerRoom.getSelectedItem().toString());
+    }
+
+    private void updateRoomList() {
+        roomNameList.clear();
+
+        try {
+            for (Room room : getSelectedApartment().getRooms()) {
+                roomNameList.add(room.getName());
+            }
+
+            spinnerRoom.setSelection(0);
+
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(this, e);
+        }
+
+        adapterRooms.notifyDataSetChanged();
+
+        updateReceiverList();
+    }
+
+    private void updateReceiverList() {
+        receiverNameList.clear();
+
+        try {
+            for (Receiver receiver : getSelectedRoom().getReceivers()) {
+                receiverNameList.add(receiver.getName());
+            }
+
+            spinnerReceiver.setSelection(0);
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(this, e);
+        }
+
+        adapterReceiver.notifyDataSetChanged();
+    }
+
     private void saveCurrentConfiguration() {
-        // First, get the App Widget ID from the Intent that launched the Activity:
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-            int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-            // Perform your App Widget configuration:
-            Room selectedRoom = roomList.get(spinnerRoom.getSelectedItemPosition());
-            Receiver selectedReceiver = null;
-            for (Receiver receiver : selectedRoom.getReceivers()) {
-                if (receiver.getName().equals(spinnerReceiver.getSelectedItem().toString())) {
-                    selectedReceiver = receiver;
-                    break;
-                }
-            }
+        try {
+            // First, get the App Widget ID from the Intent that launched the Activity:
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+            if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
+                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                // Perform your App Widget configuration:
+                Apartment selectedApartment = getSelectedApartment();
+                Room selectedRoom = selectedApartment.getRoom(spinnerRoom.getSelectedItem().toString());
+                Receiver selectedReceiver = selectedRoom.getReceiver(spinnerReceiver.getSelectedItem().toString());
 
-            // save new widget data to database
-            ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId, selectedRoom.getId(),
-                    selectedReceiver.getId());
-            try {
+                // save new widget data to database
+                ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId,
+                        selectedRoom.getId(), selectedReceiver.getId());
                 DatabaseHandler.addReceiverWidget(receiverWidget);
-            } catch (Exception e) {
-                Log.e(e);
-            }
-            // When the configuration is complete, get an instance of
-            // the AppWidgetManager by calling getInstance(Context):
-            AppWidgetManager appWidgetManager = AppWidgetManager
-                    .getInstance(ConfigureReceiverWidgetActivity.this);
-            // Update the App Widget with a RemoteViews layout by
-            // calling updateAppWidget(int, RemoteViews):
-            RemoteViews remoteViews = new RemoteViews(getResources().getString(eu.power_switch.shared.R.string.PACKAGE_NAME),
-                    R.layout.widget_receiver);
+                // When the configuration is complete, get an instance of
+                // the AppWidgetManager by calling getInstance(Context):
+                AppWidgetManager appWidgetManager = AppWidgetManager
+                        .getInstance(ConfigureReceiverWidgetActivity.this);
+                // Update the App Widget with a RemoteViews layout by
+                // calling updateAppWidget(int, RemoteViews):
+                RemoteViews remoteViews = new RemoteViews(
+                        getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
 
-            LinkedList<Button> buttons = selectedReceiver.getButtons();
+                LinkedList<Button> buttons = selectedReceiver.getButtons();
 
-            remoteViews.setTextViewText(R.id.textView_receiver_widget_name, selectedRoom.getName() + ": " +
-                    selectedReceiver.getName());
+                remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
+                        selectedRoom.getName() + ": " + selectedReceiver.getName());
 
-            int buttonOffset = 0;
-            for (Button button : buttons) {
-                // set button action
-                RemoteViews buttonView = new RemoteViews(getApplicationContext().getResources()
-                        .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
-                SpannableString s = new SpannableString(button.getName());
-                s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
-                buttonView.setTextViewText(R.id.button_widget_universal, s);
-                if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() && selectedReceiver
-                        .getLastActivatedButtonId().equals(button.getId())) {
-                    buttonView.setTextColor(R.id.button_widget_universal,
-                            ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));
+                int buttonOffset = 0;
+                for (Button button : buttons) {
+                    // set button action
+                    RemoteViews buttonView = new RemoteViews(
+                            getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
+                    SpannableString s = new SpannableString(button.getName());
+                    s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
+                    buttonView.setTextViewText(R.id.button_widget_universal, s);
+
+                    if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() &&
+                            selectedReceiver.getLastActivatedButtonId().equals(button.getId())) {
+                        buttonView.setTextColor(R.id.button_widget_universal,
+                                ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));
+                    }
+
+                    PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(), selectedApartment, selectedRoom,
+                            selectedReceiver, button, appWidgetId * 15 + buttonOffset);
+
+                    buttonView.setOnClickPendingIntent(R.id.button_widget_universal, pendingIntent);
+
+                    remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
+                    buttonOffset++;
                 }
 
-                PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(), selectedRoom,
-                        selectedReceiver, button, appWidgetId * 15 + buttonOffset);
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
-                buttonView.setOnClickPendingIntent(R.id.button_widget_universal, pendingIntent);
-
-                remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
-                buttonOffset++;
+                // Finally, create the return Intent, set it with the
+                // Activity result, and finish the Activity:
+                Intent resultValue = new Intent();
+                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                setResult(RESULT_OK, resultValue);
+                finish();
             }
-
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-
-            // Finally, create the return Intent, set it with the
-            // Activity result, and finish the Activity:
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(this, e);
         }
     }
 }
