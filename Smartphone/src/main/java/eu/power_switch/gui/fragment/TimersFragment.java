@@ -167,11 +167,7 @@ public class TimersFragment extends RecyclerViewFragment {
                         PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
                         timers.addAll(playStoreModeDataModel.getTimers());
                     } else {
-                        try {
-                            timers.addAll(DatabaseHandler.getAllTimers());
-                        } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
+                        timers.addAll(DatabaseHandler.getAllTimers());
                     }
 
                     return null;
@@ -182,17 +178,15 @@ public class TimersFragment extends RecyclerViewFragment {
 
             @Override
             protected void onPostExecute(Exception exception) {
+                getRecyclerViewAdapter().notifyDataSetChanged();
                 layoutLoading.setVisibility(View.GONE);
+                contentLayout.setVisibility(View.VISIBLE);
 
-                if (exception == null) {
-                    timerRecyclerViewAdapter.notifyDataSetChanged();
-                    contentLayout.setVisibility(View.VISIBLE);
-                } else {
-                    contentLayout.setVisibility(View.GONE);
-                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                if (exception != null) {
+                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
                 }
             }
-        }.execute(getContext());
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
     }
 
     @Override
@@ -255,5 +249,10 @@ public class TimersFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView getRecyclerView() {
         return recyclerViewTimers;
+    }
+
+    @Override
+    public RecyclerView.Adapter getRecyclerViewAdapter() {
+        return timerRecyclerViewAdapter;
     }
 }

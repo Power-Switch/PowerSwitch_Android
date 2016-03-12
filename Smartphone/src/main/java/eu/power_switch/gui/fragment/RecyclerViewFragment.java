@@ -30,4 +30,6 @@ import android.support.v7.widget.RecyclerView;
 public abstract class RecyclerViewFragment extends Fragment {
 
     public abstract RecyclerView getRecyclerView();
+
+    public abstract RecyclerView.Adapter getRecyclerViewAdapter();
 }

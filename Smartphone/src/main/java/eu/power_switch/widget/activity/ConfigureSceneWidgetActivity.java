@@ -107,7 +107,7 @@ public class ConfigureSceneWidgetActivity extends Activity {
 
                 adapterScenes.notifyDataSetChanged();
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void saveCurrentConfiguration() {

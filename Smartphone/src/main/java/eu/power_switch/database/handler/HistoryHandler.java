@@ -29,6 +29,8 @@ import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.history.HistoryItem;
 
 /**
+ * Handler for History related Database actions
+ * <p/>
  * Created by Markus on 08.12.2015.
  */
 class HistoryHandler {
@@ -84,6 +86,13 @@ class HistoryHandler {
         values.put(HistoryTable.COLUMN_DESCRIPTION, historyItem.getDescription());
         values.put(HistoryTable.COLUMN_TIME, historyItem.getTime().getTimeInMillis());
         return DatabaseHandler.database.insert(HistoryTable.TABLE_NAME, null, values);
+    }
+
+    /**
+     * Delete the entire History from Database
+     */
+    public static void clear() throws Exception {
+        DatabaseHandler.database.delete(HistoryTable.TABLE_NAME, null, null);
     }
 
     private static HistoryItem dbToHistoryItem(Cursor cursor) throws Exception {

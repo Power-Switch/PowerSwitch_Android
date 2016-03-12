@@ -203,17 +203,15 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
             @Override
             protected void onPostExecute(Exception exception) {
+                getRecyclerViewAdapter().notifyDataSetChanged();
                 layoutLoading.setVisibility(View.GONE);
+                contentLayout.setVisibility(View.VISIBLE);
 
-                if (exception == null) {
-                    recyclerViewAdapter.notifyDataSetChanged();
-                    contentLayout.setVisibility(View.VISIBLE);
-                } else {
-                    contentLayout.setVisibility(View.GONE);
-                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                if (exception != null) {
+                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
                 }
             }
-        }.execute(event);
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, event);
     }
 
 
@@ -282,5 +280,10 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView getRecyclerView() {
         return recyclerViewActions;
+    }
+
+    @Override
+    public RecyclerView.Adapter getRecyclerViewAdapter() {
+        return recyclerViewAdapter;
     }
 }

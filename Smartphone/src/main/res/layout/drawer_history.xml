@@ -18,8 +18,8 @@
   -->
 
 <LinearLayout
-    android:id="@+id/linearLayout_historyDrawer"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout_historyDrawer"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="end"
@@ -27,16 +27,32 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        style="@style/header_settings"
-        android:paddingTop="16dp"
-        android:text="@string/history"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/header_settings"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:text="@string/history"/>
+
+        <Button
+            android:id="@+id/buttonClear"
+            style="@style/room_on_off_buttons"
+            android:text="@string/clear"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/loading"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview_history"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadeScrollbars="false"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:visibility="gone"/>
 
 </LinearLayout>

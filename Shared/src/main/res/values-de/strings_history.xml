@@ -30,4 +30,6 @@
 
     <string name="history">Verlauf</string>
 
+    <string name="clear">Löschen</string>
+
 </resources>

@@ -1657,6 +1657,23 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Delete entire History from Database
+     */
+    @WorkerThread
+    public static void clearHistory() throws Exception {
+        openWritable();
+        try {
+            HistoryHandler.clear();
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
+    /**
      * Adds a HistoryItem to database
      *
      * @param historyItem HistoryItem

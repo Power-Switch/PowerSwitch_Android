@@ -294,17 +294,15 @@ public class BackupFragment extends RecyclerViewFragment {
 
             @Override
             protected void onPostExecute(Exception exception) {
+                getRecyclerViewAdapter().notifyDataSetChanged();
                 layoutLoading.setVisibility(View.GONE);
+                contentLayout.setVisibility(View.VISIBLE);
 
-                if (exception == null) {
-                    backupArrayAdapter.notifyDataSetChanged();
-                    contentLayout.setVisibility(View.VISIBLE);
-                } else {
-                    contentLayout.setVisibility(View.GONE);
-                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                if (exception != null) {
+                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
                 }
             }
-        }.execute(getContext());
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
     }
 
     private void requestExternalStoragePermission() {
@@ -395,5 +393,10 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView getRecyclerView() {
         return recyclerViewBackups;
+    }
+
+    @Override
+    public RecyclerView.Adapter getRecyclerViewAdapter() {
+        return backupArrayAdapter;
     }
 }

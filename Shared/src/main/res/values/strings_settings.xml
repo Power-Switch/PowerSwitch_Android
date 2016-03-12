@@ -46,7 +46,7 @@
     <string name="search_gateway">Search Gateway</string>
     <string name="draw_room_buttons">Show Room On/Off Buttons</string>
     <string name="use_menu_instead_of_FABs">Use option menu instead of Floating Action Buttons</string>
-    <string name="vibrate_on_button_press">Vibration Feedback</string>
+    <string name="vibrate_on_button_press">Vibrate on touch</string>
     <string name="duration_title">Duration:</string>
     <string name="haptic_feedback_duration_hint">80</string>
     <string name="highlight_last_activated_button">Highlight last activated Button</string>

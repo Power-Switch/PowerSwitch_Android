@@ -41,6 +41,8 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -123,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
     private Drawer navigationDrawer;
     private Drawer historyDrawer;
     private MiniDrawer miniDrawer;
+    private LinearLayout layoutLoadingHistory;
 
     /**
      * Add class to Backstack
@@ -219,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         initNavigationDrawer();
-        initHistoryDrawer();
+        initHistoryDrawer(navigationDrawer);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -290,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return null;
                 }
-            }.execute(this);
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
         }
 
         new AsyncTask<Context, Void, Void>() {
@@ -319,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                 SceneWidgetProvider.forceWidgetUpdate(context);
                 return null;
             }
-        }.execute(this);
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
     private void applyLocale() {
@@ -380,22 +383,28 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        while (drawerPositionStack.size() > 1) {
-                            drawerPositionStack.pop();
-                        }
-                        while (lastFragmentClasses.size() > 1) {
-                            lastFragmentClasses.pop();
-                        }
-                        while (lastFragmentTitles.size() > 1) {
-                            lastFragmentTitles.pop();
-                        }
+                        try {
+                            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            while (drawerPositionStack.size() > 1) {
+                                drawerPositionStack.pop();
+                            }
+                            while (lastFragmentClasses.size() > 1) {
+                                lastFragmentClasses.pop();
+                            }
+                            while (lastFragmentTitles.size() > 1) {
+                                lastFragmentTitles.pop();
+                            }
 
-                        setTitle(R.string.powerswitch_app_name);
-                        navigationDrawer.setSelection(IDENTIFIER_ROOMS_SCENES);
+                            setTitle(R.string.powerswitch_app_name);
+                            navigationDrawer.setSelection(IDENTIFIER_ROOMS_SCENES);
 
-                        navigationDrawer.closeDrawer();
-                        return true;
+                            return true;
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
+                        }
                     }
                 });
         final PrimaryDrawerItem itemRoomsScenes = new PrimaryDrawerItem().withName(R.string.menu_rooms_scenes)
@@ -410,11 +419,12 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES, getString(R.string.menu_rooms_scenes),
                                     RoomSceneTabFragment.class.newInstance());
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -430,11 +440,12 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_APARTMENTS, getString(R.string.menu_apartments),
                                     ApartmentFragment.class.newInstance());
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -450,11 +461,12 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_GEOFENCES, getString(R.string.menu_geofences),
                                     GeofencesTabFragment.class.newInstance());
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -471,11 +483,12 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_SLEEP_AS_ANDROID, getString(R.string.menu_sleep_as_android),
                                     SleepAsAndroidFragment.class.newInstance());
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -492,11 +505,12 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_TIMERS, getString(R.string.timers),
                                     TimersFragment.class.newInstance());
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -510,11 +524,12 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
                             historyDrawer.openDrawer();
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -530,11 +545,12 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_BACKUP_RESTORE, getString(R.string.menu_backup_restore),
                                     BackupFragment.class.newInstance());
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -550,11 +566,12 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_SETTINGS, getString(R.string.menu_settings),
                                     SettingsTabFragment.class.newInstance());
-                            navigationDrawer.closeDrawer();
                             return true;
                         } catch (Exception e) {
-                            Log.e(e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
                         }
                     }
                 });
@@ -566,11 +583,16 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        String url = "http://power-switch.eu/faq/";
-                        startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
-
-                        navigationDrawer.closeDrawer();
-                        return true;
+                        try {
+                            String url = "http://power-switch.eu/faq/";
+                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                            return true;
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
+                        }
                     }
                 });
         final SecondaryDrawerItem itemDonate = new SecondaryDrawerItem().withName(R.string.donate)
@@ -581,11 +603,17 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        DonationDialog donationDialog = new DonationDialog();
-                        donationDialog.show(getSupportFragmentManager(), null);
+                        try {
+                            DonationDialog donationDialog = new DonationDialog();
+                            donationDialog.show(getSupportFragmentManager(), null);
 
-                        navigationDrawer.closeDrawer();
-                        return true;
+                            return true;
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
+                        }
                     }
                 });
         final SecondaryDrawerItem itemAbout = new SecondaryDrawerItem().withName(R.string.menu_about)
@@ -710,8 +738,41 @@ public class MainActivity extends AppCompatActivity {
                 .build();
     }
 
-    private void initHistoryDrawer() {
+    private void initHistoryDrawer(Drawer navigationDrawer) {
+        // parent HAS to be null, so it can be attached to navigationDrawer later on
         View historyView = LayoutInflater.from(this).inflate(R.layout.drawer_history, null, false);
+
+        Button clearHistory = (Button) historyView.findViewById(R.id.buttonClear);
+        clearHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AsyncTask<Void, Void, Exception>() {
+
+                    @Override
+                    protected Exception doInBackground(Void... params) {
+                        try {
+                            DatabaseHandler.clearHistory();
+                        } catch (Exception e) {
+                            return e;
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Exception exception) {
+                        updateHistory();
+
+                        if (exception != null) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), exception);
+                        }
+
+                    }
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+
+        layoutLoadingHistory = (LinearLayout) historyView.findViewById(R.id.layoutLoading);
 
         recyclerViewHistory = (RecyclerView) historyView.findViewById(R.id.recyclerview_history);
         historyItemArrayAdapter = new HistoryItemRecyclerViewAdapter(this, historyItems);
@@ -728,15 +789,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateHistory() {
-        try {
-            historyItems.clear();
-            historyItems.addAll(DatabaseHandler.getHistory());
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
-        }
+        layoutLoadingHistory.setVisibility(View.VISIBLE);
+        recyclerViewHistory.setVisibility(View.GONE);
 
-        historyItemArrayAdapter.notifyDataSetChanged();
-        recyclerViewHistory.scrollToPosition(historyItems.size() - 1);
+        new AsyncTask<Void, Void, Exception>() {
+            @Override
+            protected Exception doInBackground(Void... params) {
+                try {
+                    historyItems.clear();
+                    historyItems.addAll(DatabaseHandler.getHistory());
+
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Exception exception) {
+                historyItemArrayAdapter.notifyDataSetChanged();
+                layoutLoadingHistory.setVisibility(View.GONE);
+                recyclerViewHistory.setVisibility(View.VISIBLE);
+
+                recyclerViewHistory.scrollToPosition(historyItems.size() - 1);
+
+                if (exception != null) {
+                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override

@@ -111,7 +111,7 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
                 adapterRooms.notifyDataSetChanged();
             }
-        }.execute();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void saveCurrentConfiguration() {

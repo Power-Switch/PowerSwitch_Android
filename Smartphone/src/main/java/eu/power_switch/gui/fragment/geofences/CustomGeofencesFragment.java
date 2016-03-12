@@ -172,17 +172,15 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
 
             @Override
             protected void onPostExecute(Exception exception) {
+                getRecyclerViewAdapter().notifyDataSetChanged();
                 layoutLoading.setVisibility(View.GONE);
+                contentLayout.setVisibility(View.VISIBLE);
 
-                if (exception == null) {
-                    geofenceRecyclerViewAdapter.notifyDataSetChanged();
-                    contentLayout.setVisibility(View.VISIBLE);
-                } else {
-                    contentLayout.setVisibility(View.GONE);
-                    StatusMessageHandler.showErrorMessage(getContext(), exception);
+                if (exception != null) {
+                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
                 }
             }
-        }.execute(getContext());
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
     }
 
     @Override
@@ -248,5 +246,10 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView getRecyclerView() {
         return recyclerViewGeofences;
+    }
+
+    @Override
+    public RecyclerView.Adapter getRecyclerViewAdapter() {
+        return geofenceRecyclerViewAdapter;
     }
 }

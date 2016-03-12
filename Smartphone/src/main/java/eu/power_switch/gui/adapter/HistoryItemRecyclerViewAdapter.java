@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 import eu.power_switch.R;
@@ -56,7 +57,8 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
     public void onBindViewHolder(final HistoryItemRecyclerViewAdapter.ViewHolder holder, int position) {
         final HistoryItem historyItem = historyItems.get(holder.getAdapterPosition());
 
-        holder.time.setText(historyItem.getTime().getTime().toString());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
+        holder.time.setText(simpleDateFormat.format(historyItem.getTime().getTime()));
         holder.description.setText(historyItem.getDescription());
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
