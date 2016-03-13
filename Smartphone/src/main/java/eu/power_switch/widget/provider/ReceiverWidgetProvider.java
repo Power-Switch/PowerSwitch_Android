@@ -84,7 +84,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                     if (room != null && receiver != null) {
                         Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
                         // update UI
-                        remoteViews.setTextViewText(R.id.textView_receiver_widget_name, room.getName() + ": " + receiver.getName());
+                        remoteViews.setTextViewText(R.id.textView_receiver_widget_name, apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
 
                         LinkedList<Button> buttons = receiver.getButtons();
 

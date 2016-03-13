@@ -26,6 +26,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -168,8 +169,8 @@ public class ActionHandler {
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
-            Button button = receiver.getButtonCaseInsensitive(buttonName);
-            if (button != null) {
+            try {
+                Button button = receiver.getButtonCaseInsensitive(buttonName);
                 for (Gateway gateway : apartment.getAssociatedGateways()) {
                     if (gateway.isActive()) {
                         try {
@@ -188,6 +189,8 @@ public class ActionHandler {
                 }
 
                 DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+            } catch (NoSuchElementException e) {
+                // ignore if Receiver doesnt support this action
             }
         }
 
@@ -219,8 +222,8 @@ public class ActionHandler {
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
-            Button button = receiver.getButton(buttonId);
-            if (button != null) {
+            try {
+                Button button = receiver.getButton(buttonId);
                 for (Gateway gateway : apartment.getAssociatedGateways()) {
                     if (gateway.isActive()) {
                         try {
@@ -239,6 +242,8 @@ public class ActionHandler {
                 }
 
                 DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+            } catch (NoSuchElementException e) {
+                // ignore if Receiver doesnt support this action
             }
         }
 

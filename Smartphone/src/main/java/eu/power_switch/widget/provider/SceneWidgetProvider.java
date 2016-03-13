@@ -75,7 +75,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                     if (scene != null) {
                         Apartment apartment = DatabaseHandler.getApartment(scene.getApartmentId());
 
-                        remoteViews.setTextViewText(R.id.textView_scene_widget_name, scene.getName());
+                        remoteViews.setTextViewText(R.id.textView_scene_widget_name, apartment.getName() + ": " + scene.getName());
                         // set button action
                         remoteViews.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
                                 WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, apartment, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));

@@ -75,7 +75,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                         Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
 
                         // update UI
-                        remoteViews.setTextViewText(R.id.textView_room_widget_name, room.getName());
+                        remoteViews.setTextViewText(R.id.textView_room_widget_name, apartment.getName() + ": " + room.getName());
 
                         // set button action
                         remoteViews.setOnClickPendingIntent(R.id.button_on,

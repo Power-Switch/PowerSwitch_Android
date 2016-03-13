@@ -168,7 +168,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     }
 
     private Apartment getSelectedApartment() throws Exception {
-        return DatabaseHandler.getApartment(spinnerApartment.getSelectedItem().toString());
+        return apartmentList.get(spinnerApartment.getSelectedItemPosition());
     }
 
     private Room getSelectedRoom() throws Exception {
@@ -238,7 +238,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                 LinkedList<Button> buttons = selectedReceiver.getButtons();
 
                 remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
-                        selectedRoom.getName() + ": " + selectedReceiver.getName());
+                        selectedApartment.getName() + ": " + selectedRoom.getName() + ": " + selectedReceiver.getName());
 
                 int buttonOffset = 0;
                 for (Button button : buttons) {
