@@ -21,7 +21,6 @@ package eu.power_switch.action;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -196,8 +195,8 @@ public class ActionHandler {
 
         if (networkPackages.size() <= 0) {
             Log.d(context.getString(R.string.no_receiver_supports_this_action));
-            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
-                    .LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context,
+                    context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
             NetworkHandler.send(networkPackages);
         }
@@ -249,8 +248,8 @@ public class ActionHandler {
 
         if (networkPackages.size() <= 0) {
             Log.d(context.getString(R.string.no_receiver_supports_this_action));
-            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Toast
-                    .LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context,
+                    context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
             NetworkHandler.send(networkPackages);
         }
@@ -289,8 +288,8 @@ public class ActionHandler {
 
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
         if (apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
-                    Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context,
+                    R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 

@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
@@ -133,9 +134,11 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                     // update list item
                     for (Receiver receiver : room.getReceivers()) {
-                        Button button = receiver.getButton(buttonName);
-                        if (button != null) {
+                        try {
+                            Button button = receiver.getButton(buttonName);
                             receiver.setLastActivatedButtonId(button.getId());
+                        } catch (NoSuchElementException e) {
+                            // ignore if receiver doesnt support this action
                         }
                     }
 
