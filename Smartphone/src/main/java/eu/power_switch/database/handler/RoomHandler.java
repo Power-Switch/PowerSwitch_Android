@@ -112,11 +112,14 @@ abstract class RoomHandler {
      * @return Room
      */
     protected static Room get(String name) throws Exception {
+        Room room = null;
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_NAME + "=='" +
                 name + "'", null, null, null, null);
-        cursor.moveToFirst();
 
-        Room room = dbToRoom(cursor);
+        if (cursor.moveToFirst()) {
+            room = dbToRoom(cursor);
+        }
+
         cursor.close();
         return room;
     }
@@ -128,11 +131,15 @@ abstract class RoomHandler {
      * @return Room
      */
     protected static Room getCaseInsensitive(String name) throws Exception {
+        Room room = null;
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_NAME + "=='" +
                 name.toLowerCase() + "' COLLATE NOCASE", null, null, null, null);
         cursor.moveToFirst();
 
-        Room room = dbToRoom(cursor);
+        if (cursor.moveToFirst()) {
+            room = dbToRoom(cursor);
+        }
+
         cursor.close();
         return room;
     }
@@ -144,14 +151,15 @@ abstract class RoomHandler {
      * @return Room
      */
     protected static Room get(Long id) throws Exception {
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_ID + "==" + id,
-                null, null, null, null);
-        cursor.moveToFirst();
+        Room room = null;
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null,
+                RoomTable.COLUMN_ID + "==" + id, null, null, null, null);
 
-        boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
+        if (cursor.moveToFirst()) {
+            room = dbToRoom(cursor);
+            room.setCollapsed(SmartphonePreferencesHandler.getAutoCollapseRooms());
+        }
 
-        Room room = dbToRoom(cursor);
-        room.setCollapsed(autoCollapseRooms);
         cursor.close();
         return room;
     }

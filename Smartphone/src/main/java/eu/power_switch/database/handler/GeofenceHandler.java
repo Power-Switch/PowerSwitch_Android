@@ -86,10 +86,14 @@ abstract class GeofenceHandler {
             return null;
         }
 
+        Geofence geofence = null;
         Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
                 GeofenceTable.COLUMN_ID + "=" + id, null, null, null, null);
-        cursor.moveToFirst();
-        Geofence geofence = dbToGeofence(cursor);
+
+        if (cursor.moveToFirst()) {
+            geofence = dbToGeofence(cursor);
+        }
+
         cursor.close();
         return geofence;
     }

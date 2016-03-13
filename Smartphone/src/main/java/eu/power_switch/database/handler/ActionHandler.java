@@ -115,17 +115,15 @@ abstract class ActionHandler {
      * @return Action
      */
     protected static Action get(long id) throws Exception {
+        Action action = null;
         String[] columns = {ActionTable.COLUMN_ID, ActionTable.COLUMN_ACTION_TYPE};
         Cursor cursor = DatabaseHandler.database.query(ActionTable.TABLE_NAME, columns,
                 ActionTable.COLUMN_ID + "=" + id, null, null, null, null);
-        cursor.moveToFirst();
 
-        if (cursor.isAfterLast()) {
-            cursor.close();
-            return null;
+        if (cursor.moveToFirst()) {
+            action = dbToAction(cursor);
         }
 
-        Action action = dbToAction(cursor);
         cursor.close();
         return action;
     }

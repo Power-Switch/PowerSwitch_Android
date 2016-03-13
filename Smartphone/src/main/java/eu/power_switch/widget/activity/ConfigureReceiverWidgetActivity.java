@@ -186,7 +186,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
             spinnerRoom.setSelection(0);
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
+            Log.e(e);
         }
 
         adapterRooms.notifyDataSetChanged();

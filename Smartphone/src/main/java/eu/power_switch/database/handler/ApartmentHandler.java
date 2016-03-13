@@ -130,13 +130,16 @@ abstract class ApartmentHandler {
      * @return Apartment
      */
     protected static Apartment get(String name) throws Exception {
+        Apartment apartment = null;
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, ApartmentTable.COLUMN_NAME + "=='" +
                 name + "'", null, null, null, null);
-        cursor.moveToFirst();
 
-        Apartment Apartment = dbToApartment(cursor);
+        if (cursor.moveToFirst()) {
+            apartment = dbToApartment(cursor);
+        }
+
         cursor.close();
-        return Apartment;
+        return apartment;
     }
 
     /**
@@ -146,13 +149,15 @@ abstract class ApartmentHandler {
      * @return Apartment
      */
     protected static Apartment getCaseInsensitive(String name) throws Exception {
+        Apartment apartment = null;
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, ApartmentTable.COLUMN_NAME + "=='" +
                 name + "' COLLATE NOCASE", null, null, null, null);
-        cursor.moveToFirst();
 
-        Apartment Apartment = dbToApartment(cursor);
+        if (cursor.moveToFirst()) {
+            apartment = dbToApartment(cursor);
+        }
         cursor.close();
-        return Apartment;
+        return apartment;
     }
 
     /**
@@ -162,13 +167,16 @@ abstract class ApartmentHandler {
      * @return Apartment
      */
     protected static Apartment get(Long id) throws Exception {
+        Apartment apartment = null;
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, ApartmentTable.COLUMN_ID + "==" + id,
                 null, null, null, null);
-        cursor.moveToFirst();
 
-        Apartment Apartment = dbToApartment(cursor);
+        if (cursor.moveToFirst()) {
+            apartment = dbToApartment(cursor);
+        }
+
         cursor.close();
-        return Apartment;
+        return apartment;
     }
 
     /**
@@ -260,27 +268,6 @@ abstract class ApartmentHandler {
         return apartments;
     }
 
-    /**
-     * Creates a Apartment Object out of Database information
-     *
-     * @param c cursor pointing to a Apartment database entry
-     * @return Apartment
-     */
-    private static Apartment dbToApartment(Cursor c) throws Exception {
-        Long apartmentId = c.getLong(0);
-        String name = c.getString(1);
-        LinkedList<Room> rooms = RoomHandler.getByApartment(apartmentId);
-        LinkedList<Scene> scenes = SceneHandler.getByApartment(apartmentId);
-        LinkedList<Gateway> gateways = getAssociatedGateways(apartmentId);
-
-        Geofence geofence = GeofenceHandler.get(getAssociatedGeofenceId(apartmentId));
-
-        boolean isActive = SmartphonePreferencesHandler.getCurrentApartmentId().equals(apartmentId);
-
-        Apartment apartment = new Apartment(apartmentId, isActive, name, rooms, scenes, gateways, geofence);
-        return apartment;
-    }
-
     private static Long getAssociatedGeofenceId(Long apartmentId) throws Exception {
         String[] columns = {ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID,
                 ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID};
@@ -349,5 +336,26 @@ abstract class ApartmentHandler {
         // delete old associated gateways
         DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME,
                 ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId, null);
+    }
+
+    /**
+     * Creates a Apartment Object out of Database information
+     *
+     * @param c cursor pointing to a Apartment database entry
+     * @return Apartment
+     */
+    private static Apartment dbToApartment(Cursor c) throws Exception {
+        Long apartmentId = c.getLong(0);
+        String name = c.getString(1);
+        LinkedList<Room> rooms = RoomHandler.getByApartment(apartmentId);
+        LinkedList<Scene> scenes = SceneHandler.getByApartment(apartmentId);
+        LinkedList<Gateway> gateways = getAssociatedGateways(apartmentId);
+
+        Geofence geofence = GeofenceHandler.get(getAssociatedGeofenceId(apartmentId));
+
+        boolean isActive = SmartphonePreferencesHandler.getCurrentApartmentId().equals(apartmentId);
+
+        Apartment apartment = new Apartment(apartmentId, isActive, name, rooms, scenes, gateways, geofence);
+        return apartment;
     }
 }

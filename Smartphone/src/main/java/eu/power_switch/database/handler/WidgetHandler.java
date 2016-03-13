@@ -116,18 +116,16 @@ abstract class WidgetHandler {
      * @return
      */
     protected static ReceiverWidget getReceiverWidget(int widgetId) throws Exception {
+        ReceiverWidget receiverWidget = null;
         String[] widgetColumns = {ReceiverWidgetTable.COLUMN_WIDGET_APP_ID, ReceiverWidgetTable.COLUMN_ROOM_ID,
                 ReceiverWidgetTable.COLUMN_RECEIVER_ID};
         Cursor cursor = DatabaseHandler.database.query(ReceiverWidgetTable.TABLE_NAME, widgetColumns,
                 ReceiverWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null, null, null, null);
-        cursor.moveToFirst();
 
-        if (cursor.isAfterLast()) {
-            cursor.close();
-            return null;
+        if (cursor.moveToFirst()) {
+            receiverWidget = dbToReceiverWidgetInfo(cursor);
         }
 
-        ReceiverWidget receiverWidget = dbToReceiverWidgetInfo(cursor);
         cursor.close();
         return receiverWidget;
     }
@@ -139,17 +137,16 @@ abstract class WidgetHandler {
      * @return
      */
     protected static RoomWidget getRoomWidget(int widgetId) throws Exception {
+        RoomWidget roomWidget = null;
         String[] widgetColumns = {RoomWidgetTable.COLUMN_WIDGET_APP_ID, RoomWidgetTable.COLUMN_ROOM_ID};
         Cursor cursor = DatabaseHandler.database.query(RoomWidgetTable.TABLE_NAME, widgetColumns,
                 RoomWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null, null, null, null);
         cursor.moveToFirst();
 
-        if (cursor.isAfterLast()) {
-            cursor.close();
-            return null;
+        if (cursor.moveToFirst()) {
+            roomWidget = dbToRoomWidgetInfo(cursor);
         }
 
-        RoomWidget roomWidget = dbToRoomWidgetInfo(cursor);
         cursor.close();
         return roomWidget;
     }
@@ -161,17 +158,14 @@ abstract class WidgetHandler {
      * @return
      */
     protected static SceneWidget getSceneWidget(int widgetId) throws Exception {
+        SceneWidget sceneWidget = null;
         String[] widgetColumns = {SceneWidgetTable.COLUMN_WIDGET_APP_ID, SceneWidgetTable.COLUMN_SCENE_ID};
         Cursor cursor = DatabaseHandler.database.query(SceneWidgetTable.TABLE_NAME, widgetColumns,
                 SceneWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null, null, null, null);
-        cursor.moveToFirst();
 
-        if (cursor.isAfterLast()) {
-            cursor.close();
-            return null;
+        if (cursor.moveToFirst()) {
+            sceneWidget = dbToSceneWidgetInfo(cursor);
         }
-
-        SceneWidget sceneWidget = dbToSceneWidgetInfo(cursor);
         cursor.close();
         return sceneWidget;
     }

@@ -69,33 +69,30 @@ public class RoomWidgetProvider extends AppWidgetProvider {
 
             try {
                 RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
-                if (roomWidget != null) {
-                    Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
-                    if (room != null) {
-                        Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
+                Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
+                if (room != null) {
+                    Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
 
-                        // update UI
-                        remoteViews.setTextViewText(R.id.textView_room_widget_name, apartment.getName() + ": " + room.getName());
+                    // update UI
+                    remoteViews.setTextViewText(R.id.textView_room_widget_name, apartment.getName() + ": " + room.getName());
 
-                        // set button action
-                        remoteViews.setOnClickPendingIntent(R.id.button_on,
-                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R.string.on),
-                                        ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
-                        remoteViews.setOnClickPendingIntent(R.id.button_off,
-                                WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R
-                                                .string.off),
-                                        ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
-                        remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
-                    } else {
-                        remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_deleted));
-                        remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
-                    }
+                    // set button action
+                    remoteViews.setOnClickPendingIntent(R.id.button_on,
+                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R.string.on),
+                                    ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
+                    remoteViews.setOnClickPendingIntent(R.id.button_off,
+                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R
+                                            .string.off),
+                                    ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
+                    remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
                 } else {
-                    remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.unknown_error));
+                    remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_deleted));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
                 }
             } catch (Exception e) {
                 Log.e(e);
+                remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.unknown_error));
+                remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
             }
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }

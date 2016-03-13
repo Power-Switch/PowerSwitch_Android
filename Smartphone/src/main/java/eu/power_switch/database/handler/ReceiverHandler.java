@@ -140,13 +140,17 @@ class ReceiverHandler {
      * @return Receiver
      */
     protected static Receiver get(Long id) throws Exception {
+        Receiver receiver = null;
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
                 ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
                 ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
                 + id, null, null, null, null);
-        cursor.moveToFirst();
-        Receiver receiver = dbToReceiver(cursor);
+
+        if (cursor.moveToFirst()) {
+            receiver = dbToReceiver(cursor);
+        }
+
         cursor.close();
         return receiver;
     }

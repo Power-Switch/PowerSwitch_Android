@@ -136,10 +136,14 @@ abstract class GatewayHandler {
      * @return Gateway
      */
     protected static Gateway get(Long id) throws Exception {
+        Gateway gateway = null;
         Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, GatewayTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
-        cursor.moveToFirst();
-        Gateway gateway = dbToGateway(cursor);
+
+        if (cursor.moveToFirst()) {
+            gateway = dbToGateway(cursor);
+        }
+
         cursor.close();
         return gateway;
     }

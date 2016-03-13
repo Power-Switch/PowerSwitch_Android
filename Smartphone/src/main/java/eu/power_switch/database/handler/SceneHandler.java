@@ -101,10 +101,14 @@ abstract class SceneHandler {
      * @return Scene
      */
     protected static Scene get(String name) throws Exception {
+        Scene scene = null;
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_NAME + "=='" + name + "'", null,
                 null, null, null);
-        cursor.moveToFirst();
-        Scene scene = dbToScene(cursor);
+
+        if (cursor.moveToFirst()) {
+            scene = dbToScene(cursor);
+        }
+
         cursor.close();
         return scene;
     }
@@ -116,10 +120,14 @@ abstract class SceneHandler {
      * @return Scene
      */
     protected static Scene get(Long id) throws Exception {
+        Scene scene = null;
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_ID + "==" + id, null, null, null,
                 null);
-        cursor.moveToFirst();
-        Scene scene = dbToScene(cursor);
+
+        if (cursor.moveToFirst()) {
+            scene = dbToScene(cursor);
+        }
+
         cursor.close();
         return scene;
     }

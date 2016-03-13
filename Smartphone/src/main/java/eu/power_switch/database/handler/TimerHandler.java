@@ -149,6 +149,7 @@ abstract class TimerHandler {
      * @return Timer
      */
     protected static Timer get(Long timerId) throws Exception {
+        Timer timer = null;
         String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
                 TimerTable.COLUMN_EXECUTION_TIME, TimerTable.COLUMN_EXECUTION_INTERVAL,
                 TimerTable.COLUMN_EXECUTION_TYPE};
@@ -156,7 +157,10 @@ abstract class TimerHandler {
                 TimerTable.COLUMN_ID + "=" + timerId, null, null, null, null);
         cursor.moveToFirst();
 
-        Timer timer = dbToTimer(cursor);
+        if (cursor.moveToFirst()) {
+            timer = dbToTimer(cursor);
+        }
+
         cursor.close();
         return timer;
     }
