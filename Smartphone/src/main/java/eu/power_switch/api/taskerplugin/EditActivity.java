@@ -19,7 +19,6 @@
 package eu.power_switch.api.taskerplugin;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -40,7 +39,6 @@ import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
@@ -153,6 +151,15 @@ public class EditActivity extends AbstractPluginActivity {
         radioButtonRoomAction.setOnClickListener(actionTypeOnClickListener);
         radioButtonSceneAction = (RadioButton) findViewById(R.id.radioButton_scene_action);
         radioButtonSceneAction.setOnClickListener(actionTypeOnClickListener);
+
+        try {
+            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
+            for (Apartment apartment : availableApartments) {
+                apartmentNames.add(apartment.getName());
+            }
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(this, e);
+        }
 
         ImageButton imageButtonSwitchApartment = (ImageButton) findViewById(R.id.imageButton_switchApartment);
         imageButtonSwitchApartment.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
@@ -352,26 +359,8 @@ public class EditActivity extends AbstractPluginActivity {
         editText_scene = (EditText) findViewById(R.id.editText_scene);
         editText_scene.addTextChangedListener(editTextTextWatcher);
 
-        new AsyncTask<Void, Void, List<Apartment>>() {
-            @Override
-            protected List<Apartment> doInBackground(Void... params) {
-                try {
-                    return DatabaseHandler.getAllApartments();
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
-                    return new ArrayList<>();
-                }
-            }
 
-            @Override
-            protected void onPostExecute(List<Apartment> apartments) {
-                for (Apartment apartment : apartments) {
-                    apartmentNames.add(apartment.getName());
-                }
-
-                updateLists();
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        updateLists();
 
         BundleScrubber.scrub(getIntent());
         final Bundle localeBundle = getIntent().getBundleExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE);
