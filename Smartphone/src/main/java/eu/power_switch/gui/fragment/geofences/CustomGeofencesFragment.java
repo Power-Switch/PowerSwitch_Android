@@ -40,6 +40,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -68,8 +69,6 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     private View rootView;
     private FloatingActionButton fab;
     private GeofenceApiHandler geofenceApiHandler;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify the custom geofence page (this) that geofences have changed
@@ -82,13 +81,9 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_custom_geofences, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
@@ -148,39 +143,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     @UiThread
     private void updateUI() {
         Log.d(this, "updateUI");
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    geofences.clear();
-
-//        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
-//            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-//            geofences.addAll(playStoreModeDataModel.getScenes());
-//        } else {
-                    geofences.addAll(DatabaseHandler.getCustomGeofences());
-//        }
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        updateListContent();
     }
 
     @Override
@@ -251,5 +214,19 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return geofenceRecyclerViewAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        geofences.clear();
+
+//        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
+//            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+//            geofences.addAll(playStoreModeDataModel.getScenes());
+//        } else {
+        geofences.addAll(DatabaseHandler.getCustomGeofences());
+//        }
+
+        return geofences;
     }
 }

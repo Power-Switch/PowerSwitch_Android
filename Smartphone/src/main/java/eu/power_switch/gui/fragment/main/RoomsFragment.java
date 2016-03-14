@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -69,8 +70,6 @@ public class RoomsFragment extends RecyclerViewFragment {
     private FloatingActionButton addReceiverFAB;
     private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
     private RecyclerView recyclerViewRooms;
-    private CoordinatorLayout contentLayout;
-    private LinearLayout layoutLoading;
 
     /**
      * Used to notify Room Fragment (this) that Rooms have changed
@@ -86,13 +85,9 @@ public class RoomsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         rooms = new ArrayList<>();
         recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_rooms);
@@ -149,43 +144,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    rooms.clear();
-
-                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-                        rooms.addAll(playStoreModeDataModel.getRooms());
-                    } else {
-                        long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
-                        if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
-                            // Get Rooms and Receivers
-                            rooms.addAll(DatabaseHandler.getRooms(currentApartmentId));
-                        }
-                    }
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        updateListContent();
     }
 
     @Override
@@ -256,5 +215,23 @@ public class RoomsFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return roomsRecyclerViewAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        rooms.clear();
+
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+            rooms.addAll(playStoreModeDataModel.getRooms());
+        } else {
+            long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
+            if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
+                // Get Rooms and Receivers
+                rooms.addAll(DatabaseHandler.getRooms(currentApartmentId));
+            }
+        }
+
+        return rooms;
     }
 }

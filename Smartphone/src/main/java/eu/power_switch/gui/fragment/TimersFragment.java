@@ -22,28 +22,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-
+import android.view.*;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -54,6 +42,9 @@ import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment containing a List of all Timers
@@ -68,8 +59,6 @@ public class TimersFragment extends RecyclerViewFragment {
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
     private FloatingActionButton addTimerFAB;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify Timer Fragment (this) that Timers have changed
@@ -84,13 +73,9 @@ public class TimersFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_timers, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -154,39 +139,7 @@ public class TimersFragment extends RecyclerViewFragment {
 
     private void updateUI() {
         Log.d("TimersFragment", "updateUI");
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    timers.clear();
-
-                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-                        timers.addAll(playStoreModeDataModel.getTimers());
-                    } else {
-                        timers.addAll(DatabaseHandler.getAllTimers());
-                    }
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        updateListContent();
     }
 
     @Override
@@ -254,5 +207,19 @@ public class TimersFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return timerRecyclerViewAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        timers.clear();
+
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+            timers.addAll(playStoreModeDataModel.getTimers());
+        } else {
+            timers.addAll(DatabaseHandler.getAllTimers());
+        }
+
+        return timers;
     }
 }

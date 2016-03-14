@@ -29,16 +29,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -56,6 +48,10 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Created by Markus on 25.12.2015.
  */
@@ -66,8 +62,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
     private ArrayList<Apartment> apartments = new ArrayList<>();
     private FloatingActionButton fab;
     private BroadcastReceiver broadcastReceiver;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify other Fragments that the selected Apartment has changed
@@ -83,12 +77,9 @@ public class ApartmentFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_apartments);
@@ -121,7 +112,8 @@ public class ApartmentFragment extends RecyclerViewFragment {
             public void onItemLongClick(View itemView, final int position) {
                 Apartment apartment = apartments.get(position);
 
-                ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment.getId());
+                ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(
+                        apartment.getId());
                 configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureApartmentDialog.show(getFragmentManager(), null);
             }
@@ -142,8 +134,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
             }
         });
 
-        refreshUI();
-
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -153,6 +143,8 @@ public class ApartmentFragment extends RecyclerViewFragment {
             }
         };
 
+
+        super.onCreateView(inflater, container, savedInstanceState);
         return rootView;
     }
 
@@ -170,39 +162,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
     }
 
     private void refreshUI() {
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    apartments.clear();
-
-                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-                        apartments.addAll(playStoreModeDataModel.getApartments());
-                    } else {
-                        apartments.addAll(DatabaseHandler.getAllApartments());
-                    }
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        updateListContent();
     }
 
     @Override
@@ -251,6 +211,20 @@ public class ApartmentFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return apartmentArrayAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        apartments.clear();
+
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+            apartments.addAll(playStoreModeDataModel.getApartments());
+        } else {
+            apartments.addAll(DatabaseHandler.getAllApartments());
+        }
+
+        return apartments;
     }
 
     @Override

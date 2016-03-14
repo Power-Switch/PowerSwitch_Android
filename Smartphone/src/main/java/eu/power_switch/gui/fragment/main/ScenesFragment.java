@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -67,8 +68,6 @@ public class ScenesFragment extends RecyclerViewFragment {
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
     private FloatingActionButton fab;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify Scene Fragment (this) that Scenes have changed
@@ -84,13 +83,9 @@ public class ScenesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         recyclerViewScenes = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_scenes);
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes);
@@ -151,39 +146,7 @@ public class ScenesFragment extends RecyclerViewFragment {
 
     private void updateUI() {
         Log.d("ScenesFragment", "updateUI");
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    scenes.clear();
-
-                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                        PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-                        scenes.addAll(playStoreModeDataModel.getScenes());
-                    } else {
-                        scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
-                    }
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        updateListContent();
     }
 
     @Override
@@ -255,5 +218,19 @@ public class ScenesFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return sceneRecyclerViewAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        scenes.clear();
+
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+            scenes.addAll(playStoreModeDataModel.getScenes());
+        } else {
+            scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
+        }
+
+        return scenes;
     }
 }

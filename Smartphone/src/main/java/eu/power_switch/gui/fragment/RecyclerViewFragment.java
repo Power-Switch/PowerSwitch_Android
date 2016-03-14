@@ -18,8 +18,21 @@
 
 package eu.power_switch.gui.fragment;
 
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import eu.power_switch.R;
+import eu.power_switch.gui.StatusMessageHandler;
+
+import java.util.List;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy
@@ -29,7 +42,74 @@ import android.support.v7.widget.RecyclerView;
  */
 public abstract class RecyclerViewFragment extends Fragment {
 
+    private LinearLayout layoutLoading;
+    private CoordinatorLayout contentLayout;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View rootView = onCreateViewEvent(inflater, container, savedInstanceState);
+
+        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
+
+        updateListContent();
+
+        return rootView;
+    }
+
+    public void updateListContent() {
+        showLoadingAnimation();
+
+        new AsyncTask<Context, Void, Exception>() {
+
+            @Override
+            protected Exception doInBackground(Context... contexts) {
+                try {
+                    refreshListData();
+                    return null;
+                } catch (Exception e) {
+                    return e;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Exception e) {
+                getRecyclerViewAdapter().notifyDataSetChanged();
+
+                if (e == null) {
+                    showList();
+                } else {
+                    showError();
+                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+    }
+
+    protected void showLoadingAnimation() {
+        layoutLoading.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
+    }
+
+    protected void showList() {
+        layoutLoading.setVisibility(View.GONE);
+        contentLayout.setVisibility(View.VISIBLE);
+    }
+
+    protected void showError() {
+        layoutLoading.setVisibility(View.GONE);
+        contentLayout.setVisibility(View.VISIBLE);
+    }
+
+    protected abstract View onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container,
+                                              @Nullable Bundle savedInstanceState);
+
     public abstract RecyclerView getRecyclerView();
 
     public abstract RecyclerView.Adapter getRecyclerViewAdapter();
+
+    public abstract List refreshListData() throws Exception;
+
 }

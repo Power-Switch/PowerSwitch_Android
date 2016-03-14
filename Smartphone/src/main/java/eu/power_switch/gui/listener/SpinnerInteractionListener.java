@@ -28,6 +28,7 @@ import android.widget.AdapterView;
  * <p/>
  * Usage:
  * <p/>
+ * Spinner spinner = (Spinner) findViewById(R.id.spinner);
  * SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
  *
  * @Override public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
@@ -36,8 +37,8 @@ import android.widget.AdapterView;
  * @Override public void onNothingSelected(AdapterView<?> parent) {
  * }
  * };
- * model.setOnTouchListener(spinnerInteractionListener);
- * model.setOnItemSelectedListener(spinnerInteractionListener);
+ * spinner.setOnTouchListener(spinnerInteractionListener);
+ * spinner.setOnItemSelectedListener(spinnerInteractionListener);
  * <p/>
  * <p/>
  * Created by Markus on 19.02.2016.

@@ -24,7 +24,20 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 /**
- * SpinnerInteractionListener used to react <b>only to user selections</b>
+ * CheckBoxInteractionListener used to react <b>only to user selections</b>
+ * <p/>
+ * Usage:
+ * <p/>
+ * CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
+ * CheckBoxInteractionListener checkboxInteractionListener = new CheckBoxInteractionListener() {
+ *
+ * @Override public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
+ * notifyConfigurationChanged();
+ * }
+ * };
+ * checkBox.setOnTouchListener(checkboxInteractionListener);
+ * checkBox.setOnItemSelectedListener(checkboxInteractionListener);
+ * <p/>
  * <p/>
  * Created by Markus on 19.02.2016.
  */

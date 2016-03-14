@@ -22,25 +22,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import android.view.*;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -59,6 +47,9 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Fragment containing all settings related to Gateways
  * <p/>
@@ -75,8 +66,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     private ArrayList<Gateway> gateways = new ArrayList<>();
     private FloatingActionButton searchGatewayFAB;
     private FloatingActionButton addGatewayFAB;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
 
     public static void sendGatewaysChangedBroadcast(Context context) {
         Log.d(GatewaySettingsFragment.class, "sendGatewaysChangedBroadcast");
@@ -86,13 +75,9 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_gateway_settings, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -154,7 +139,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
     private void startAutoDiscovery() {
         if (!NetworkHandler.isWifiAvailable()) {
-            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection,
+                    Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -176,7 +162,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                     });
 
                     if (foundGateways == null || foundGateways.isEmpty()) {
-                        StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_gateway_found,
+                        StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
+                                R.string.no_gateway_found,
                                 Snackbar.LENGTH_LONG);
                         return;
                     }
@@ -216,38 +203,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
     private void refreshGateways() {
         Log.d("GatewaySettingsFragment", "refreshGateways");
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    gateways.clear();
-
-                    if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                        gateways.addAll(PlayStoreModeDataModel.getGateways());
-                    } else {
-                        gateways.addAll(DatabaseHandler.getAllGateways());
-                    }
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        updateListContent();
     }
 
     private void updateUI() {
@@ -324,5 +280,18 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return gatewayRecyclerViewAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        gateways.clear();
+
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            gateways.addAll(PlayStoreModeDataModel.getGateways());
+        } else {
+            gateways.addAll(DatabaseHandler.getAllGateways());
+        }
+
+        return gateways;
     }
 }

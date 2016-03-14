@@ -77,8 +77,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     private View rootView;
     private GeofenceApiHandler geofenceApiHandler;
     private FloatingActionButton fab;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
     private List<Apartment> apartments;
 
     /**
@@ -91,14 +89,12 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_apartment_geofences, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
@@ -197,8 +193,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         };
 
         if (!PermissionHelper.checkLocationPermission(getContext())) {
-            layoutLoading.setVisibility(View.GONE);
-            contentLayout.setVisibility(View.VISIBLE);
+            showError();
             requestLocationPermission();
         } else {
             refreshGeofences();
@@ -209,51 +204,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
     private void refreshGeofences() {
         Log.d(this, "refreshGeofences");
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    geofences.clear();
-                    geofenceIdApartmentMap.clear();
-
-//        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
-//            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-//            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
-//        } else {
-                    apartments = DatabaseHandler.getAllApartments();
-                    for (Apartment apartment : apartments) {
-                        // apartment can have no associated Geofence, so we just ignore it
-                        if (apartment.getGeofence() != null) {
-                            geofences.add(apartment.getGeofence());
-                            geofenceIdApartmentMap.put(apartment.getGeofence().getId(), apartment);
-                        }
-                    }
-//        }
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-
-                if (apartments.size() == geofences.size()) {
-                    fab.setVisibility(View.GONE);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        updateListContent();
     }
 
     private void requestLocationPermission() {
@@ -363,5 +314,26 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return geofenceRecyclerViewAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        geofences.clear();
+        geofenceIdApartmentMap.clear();
+
+//        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
+//            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+//            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
+//        } else {
+        apartments = DatabaseHandler.getAllApartments();
+        for (Apartment apartment : apartments) {
+            // apartment can have no associated Geofence, so we just ignore it
+            if (apartment.getGeofence() != null) {
+                geofences.add(apartment.getGeofence());
+                geofenceIdApartmentMap.put(apartment.getGeofence().getId(), apartment);
+            }
+        }
+
+        return geofences;
     }
 }

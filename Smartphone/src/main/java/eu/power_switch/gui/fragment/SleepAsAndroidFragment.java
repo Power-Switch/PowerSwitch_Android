@@ -18,33 +18,18 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
+import android.content.*;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-
-import java.util.ArrayList;
-
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -59,6 +44,9 @@ import eu.power_switch.shared.constants.SleepAsAndroidConstants.SLEEP_AS_ANDROID
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling
@@ -75,19 +63,14 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     private ActionRecyclerViewAdapter recyclerViewAdapter;
     private Spinner spinnerEventType;
     private FloatingActionButton addActionFAB;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
+    private static SLEEP_AS_ANDROID_ALARM_EVENT currentEventType;
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_sleep_as_android, container, false);
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         spinnerEventType = (Spinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -116,9 +99,11 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     actions.remove(position);
-                                    DatabaseHandler.setAlarmActions(SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType
-                                            .getSelectedItemPosition()), actions);
-                                    StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.action_removed, Snackbar.LENGTH_LONG);
+                                    DatabaseHandler.setAlarmActions(
+                                            SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType
+                                                    .getSelectedItemPosition()), actions);
+                                    StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
+                                            R.string.action_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                                 }
@@ -139,8 +124,9 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(spinnerEventType
-                        .getSelectedItemPosition());
+                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(
+                        spinnerEventType
+                                .getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
@@ -179,39 +165,12 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        refreshActions(
-                SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition()));
+        refreshActions();
     }
 
-    private void refreshActions(SLEEP_AS_ANDROID_ALARM_EVENT event) {
-        layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
-
-        new AsyncTask<SLEEP_AS_ANDROID_ALARM_EVENT, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(SLEEP_AS_ANDROID_ALARM_EVENT... events) {
-                try {
-                    actions.clear();
-
-                    actions.addAll(DatabaseHandler.getAlarmActions(events[0]));
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, event);
+    private void refreshActions() {
+        currentEventType = SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition());
+        updateListContent();
     }
 
 
@@ -251,8 +210,9 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.add_action:
-                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(spinnerEventType
-                        .getSelectedItemPosition());
+                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(
+                        spinnerEventType
+                                .getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(this, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             default:
@@ -285,5 +245,13 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return recyclerViewAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        actions.clear();
+        actions.addAll(DatabaseHandler.getAlarmActions(currentEventType));
+
+        return actions;
     }
 }

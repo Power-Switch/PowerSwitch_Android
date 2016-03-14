@@ -21,15 +21,9 @@ package eu.power_switch.gui.fragment;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -37,19 +31,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.*;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
@@ -70,6 +53,11 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Fragment holding a list of all Backups
  */
@@ -89,8 +77,6 @@ public class BackupFragment extends RecyclerViewFragment {
     private BroadcastReceiver broadcastReceiver;
     private FloatingActionButton fab;
     private TextView textViewBackupPath;
-    private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
 
     /**
      * Used to notify Backup Fragment (this) that Backups have changed
@@ -105,13 +91,9 @@ public class BackupFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);
-
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -142,33 +124,36 @@ public class BackupFragment extends RecyclerViewFragment {
                 final Backup backup = backups.get(position);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setPositiveButton(getActivity().getString(R.string.restore), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getActivity().getString(R.string.restore),
+                        new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            BackupHandler backupHandler = new BackupHandler(getActivity());
-                            backupHandler.restoreBackup(backup.getName());
-                            // restart app to apply
-                            // prepare intent to rerun app shortly after termination
-                            Intent mStartActivity = new Intent(getActivity(), MainActivity.class);
-                            int mPendingIntentId = 123456;
-                            PendingIntent mPendingIntent = PendingIntent.getActivity(getActivity(), mPendingIntentId,
-                                    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                            AlarmManager mgr = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-                            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                            // kill app
-                            android.os.Process.killProcess(android.os.Process.myPid());
-                        } catch (BackupNotFoundException e) {
-                            Log.e(e);
-                            StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView()
-                                    , R.string.backup_not_found, Snackbar
-                                            .LENGTH_LONG);
-                        } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
-                        }
-                    }
-                }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    BackupHandler backupHandler = new BackupHandler(getActivity());
+                                    backupHandler.restoreBackup(backup.getName());
+                                    // restart app to apply
+                                    // prepare intent to rerun app shortly after termination
+                                    Intent mStartActivity = new Intent(getActivity(), MainActivity.class);
+                                    int mPendingIntentId = 123456;
+                                    PendingIntent mPendingIntent = PendingIntent.getActivity(getActivity(),
+                                            mPendingIntentId,
+                                            mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                                    AlarmManager mgr = (AlarmManager) getActivity().getSystemService(
+                                            Context.ALARM_SERVICE);
+                                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                                    // kill app
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                } catch (BackupNotFoundException e) {
+                                    Log.e(e);
+                                    StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView()
+                                            , R.string.backup_not_found, Snackbar
+                                                    .LENGTH_LONG);
+                                } catch (Exception e) {
+                                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                                }
+                            }
+                        }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
                         .setTitle(getActivity().getString(R.string.are_you_sure))
                         .setMessage(R.string.restore_backup_message);
                 AlertDialog dialog = builder.create();
@@ -224,7 +209,7 @@ public class BackupFragment extends RecyclerViewFragment {
                         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION) {
                             if (results[0] == PackageManager.PERMISSION_GRANTED) {
                                 // Permission Granted
-                                refreshBackups();
+                                updateListContent();
                                 StatusMessageHandler.showInfoMessage(getRecyclerView(),
                                         R.string.permission_granted, Snackbar.LENGTH_SHORT);
                             } else {
@@ -264,55 +249,23 @@ public class BackupFragment extends RecyclerViewFragment {
         textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
 
         if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
-            layoutLoading.setVisibility(View.GONE);
-            contentLayout.setVisibility(View.VISIBLE);
+            showError();
             requestExternalStoragePermission();
         } else {
-            refreshBackups();
+            updateListContent();
         }
     }
 
-    private void refreshBackups() {
-        new AsyncTask<Context, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Context... contexts) {
-                try {
-                    backups.clear();
-
-                    BackupHandler backupHandler = new BackupHandler(getActivity());
-                    for (Backup backup : backupHandler.getBackups()) {
-                        backups.add(backup);
-                    }
-
-                    Collections.sort(backups, backupsComparator);
-
-                    return null;
-                } catch (Exception e) {
-                    return e;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Exception exception) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-                layoutLoading.setVisibility(View.GONE);
-                contentLayout.setVisibility(View.VISIBLE);
-
-                if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
-    }
-
     private void requestExternalStoragePermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // For example if the user has previously denied the permission.
             Log.d("Displaying storage permission rationale to provide additional context.");
 
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
         } else {
             Log.d("Displaying default storage permission dialog to request permission");
             ActivityCompat.requestPermissions(getActivity(), new String[]{
@@ -398,5 +351,19 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return backupArrayAdapter;
+    }
+
+    @Override
+    public List refreshListData() throws Exception {
+        backups.clear();
+
+        BackupHandler backupHandler = new BackupHandler(getActivity());
+        for (Backup backup : backupHandler.getBackups()) {
+            backups.add(backup);
+        }
+
+        Collections.sort(backups, backupsComparator);
+
+        return backups;
     }
 }
