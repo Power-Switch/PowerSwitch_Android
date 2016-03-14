@@ -22,15 +22,21 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.*;
-import android.widget.LinearLayout;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -47,10 +53,6 @@ import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Markus on 25.12.2015.
@@ -77,8 +79,8 @@ public class ApartmentFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
+    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
@@ -139,13 +141,14 @@ public class ApartmentFragment extends RecyclerViewFragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 Log.d(this, "received intent: " + intent.getAction());
-                refreshUI();
+                updateUI();
             }
         };
+    }
 
-
-        super.onCreateView(inflater, container, savedInstanceState);
-        return rootView;
+    @Override
+    protected void onInitialized() {
+        updateUI();
     }
 
     private void showTutorial() {
@@ -161,7 +164,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 .show();
     }
 
-    private void refreshUI() {
+    private void updateUI() {
         updateListContent();
     }
 

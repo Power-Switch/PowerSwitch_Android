@@ -22,9 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -36,7 +34,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +63,6 @@ public class ScenesFragment extends RecyclerViewFragment {
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
     private RecyclerView recyclerViewScenes;
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
     private FloatingActionButton fab;
 
     /**
@@ -83,7 +79,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
         setHasOptionsMenu(true);
 
@@ -105,8 +101,6 @@ public class ScenesFragment extends RecyclerViewFragment {
                 configureSceneDialog.show(getFragmentManager(), null);
             }
         });
-
-        updateUI();
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_scene_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
@@ -140,8 +134,11 @@ public class ScenesFragment extends RecyclerViewFragment {
                 updateUI();
             }
         };
+    }
 
-        return rootView;
+    @Override
+    protected void onInitialized() {
+        updateUI();
     }
 
     private void updateUI() {

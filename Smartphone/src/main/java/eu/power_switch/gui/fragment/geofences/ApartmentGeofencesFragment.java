@@ -24,9 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -40,7 +38,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +71,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
     private RecyclerView recyclerViewGeofences;
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
     private GeofenceApiHandler geofenceApiHandler;
     private FloatingActionButton fab;
     private List<Apartment> apartments;
@@ -89,10 +85,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-
-
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_apartment_geofences, container, false);
         setHasOptionsMenu(true);
 
@@ -191,15 +185,16 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                 }
             }
         };
+    }
 
+    @Override
+    protected void onInitialized() {
         if (!PermissionHelper.checkLocationPermission(getContext())) {
             showError();
             requestLocationPermission();
         } else {
             refreshGeofences();
         }
-
-        return rootView;
     }
 
     private void refreshGeofences() {

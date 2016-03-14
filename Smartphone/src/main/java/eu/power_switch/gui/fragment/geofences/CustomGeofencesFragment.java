@@ -22,10 +22,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.UiThread;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -37,7 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +44,6 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -66,7 +62,6 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
     private RecyclerView recyclerViewGeofences;
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
     private FloatingActionButton fab;
     private GeofenceApiHandler geofenceApiHandler;
 
@@ -81,7 +76,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_custom_geofences, container, false);
         setHasOptionsMenu(true);
 
@@ -105,8 +100,6 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
                 configureGeofenceDialog.show(getFragmentManager(), null);
             }
         });
-
-        updateUI();
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_geofence_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
@@ -136,8 +129,11 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
                 updateUI();
             }
         };
+    }
 
-        return rootView;
+    @Override
+    protected void onInitialized() {
+        updateUI();
     }
 
     @UiThread

@@ -27,7 +27,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -43,9 +52,6 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Fragment containing a List of all Timers
  * <p/>
@@ -57,7 +63,6 @@ public class TimersFragment extends RecyclerViewFragment {
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
     private RecyclerView recyclerViewTimers;
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
     private FloatingActionButton addTimerFAB;
 
     /**
@@ -73,7 +78,7 @@ public class TimersFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_timers, container, false);
         setHasOptionsMenu(true);
 
@@ -95,8 +100,6 @@ public class TimersFragment extends RecyclerViewFragment {
                 configureTimerDialog.show(getFragmentManager(), null);
             }
         });
-
-        updateUI();
 
         addTimerFAB = (FloatingActionButton) rootView.findViewById(R.id.add_timer_fab);
         addTimerFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
@@ -121,8 +124,11 @@ public class TimersFragment extends RecyclerViewFragment {
                 updateUI();
             }
         };
+    }
 
-        return rootView;
+    @Override
+    protected void onInitialized() {
+        updateUI();
     }
 
     private void showTutorial() {

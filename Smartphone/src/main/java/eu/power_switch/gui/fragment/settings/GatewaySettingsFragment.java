@@ -28,7 +28,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -47,17 +56,12 @@ import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Fragment containing all settings related to Gateways
  * <p/>
  * Created by Markus on 30.08.2015.
  */
 public class GatewaySettingsFragment extends RecyclerViewFragment {
-
-    private View rootView;
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -75,7 +79,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_gateway_settings, container, false);
         setHasOptionsMenu(true);
 
@@ -131,10 +135,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                 refreshGateways();
             }
         };
+    }
 
+    @Override
+    protected void onInitialized() {
         updateUI();
-
-        return rootView;
     }
 
     private void startAutoDiscovery() {

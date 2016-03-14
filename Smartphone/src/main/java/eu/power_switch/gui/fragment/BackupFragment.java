@@ -21,7 +21,11 @@ package eu.power_switch.gui.fragment;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,8 +35,19 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
@@ -53,11 +68,6 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 /**
  * Fragment holding a list of all Backups
  */
@@ -70,7 +80,6 @@ public class BackupFragment extends RecyclerViewFragment {
         }
     };
 
-    private View rootView;
     private ArrayList<Backup> backups = new ArrayList<>();
     private RecyclerView recyclerViewBackups;
     private BackupRecyclerViewAdapter backupArrayAdapter;
@@ -91,7 +100,7 @@ public class BackupFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
         setHasOptionsMenu(true);
 
@@ -226,10 +235,11 @@ public class BackupFragment extends RecyclerViewFragment {
                 }
             }
         };
+    }
 
+    @Override
+    protected void onInitialized() {
         updateUI();
-
-        return rootView;
     }
 
     private void showTutorial() {

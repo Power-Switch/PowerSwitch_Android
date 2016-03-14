@@ -29,19 +29,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 
 import java.util.List;
+
+import eu.power_switch.R;
+import eu.power_switch.gui.StatusMessageHandler;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy
  * It is used to be able to move possible Floating Action Buttons accordingly when displaying Snackbars
+ * It also handles async list updates and displaying error messages
  * <p/>
  * Created by Markus on 25.11.2015.
  */
 public abstract class RecyclerViewFragment extends Fragment {
 
+    protected View rootView;
     private LinearLayout layoutLoading;
     private CoordinatorLayout contentLayout;
 
@@ -49,15 +52,17 @@ public abstract class RecyclerViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = onCreateViewEvent(inflater, container, savedInstanceState);
+        onCreateViewEvent(inflater, container, savedInstanceState);
 
         layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
         contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
 
-        updateListContent();
+        onInitialized();
 
         return rootView;
     }
+
+    protected abstract void onInitialized();
 
     public void updateListContent() {
         showLoadingAnimation();
@@ -103,7 +108,7 @@ public abstract class RecyclerViewFragment extends Fragment {
         contentLayout.setVisibility(View.VISIBLE);
     }
 
-    protected abstract View onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container,
+    protected abstract void onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container,
                                               @Nullable Bundle savedInstanceState);
 
     public abstract RecyclerView getRecyclerView();

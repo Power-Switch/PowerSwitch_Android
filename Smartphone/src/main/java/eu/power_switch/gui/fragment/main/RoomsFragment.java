@@ -22,9 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -36,7 +34,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +42,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
@@ -66,7 +62,6 @@ public class RoomsFragment extends RecyclerViewFragment {
     private ArrayList<Room> rooms;
 
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
     private FloatingActionButton addReceiverFAB;
     private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
     private RecyclerView recyclerViewRooms;
@@ -85,7 +80,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public View onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
         setHasOptionsMenu(true);
 
@@ -96,7 +91,6 @@ public class RoomsFragment extends RecyclerViewFragment {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getResources().getInteger(R.integer.room_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewRooms.setLayoutManager(layoutManager);
-        updateUI();
 
         addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_receiver_fab);
         addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
@@ -139,8 +133,11 @@ public class RoomsFragment extends RecyclerViewFragment {
                 updateUI();
             }
         };
+    }
 
-        return rootView;
+    @Override
+    protected void onInitialized() {
+        updateUI();
     }
 
     private void updateUI() {
