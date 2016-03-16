@@ -82,10 +82,6 @@ public class ConfigureRoomWidgetActivity extends Activity {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateRoomList();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
         };
         spinnerApartment.setOnItemSelectedListener(apartmentSpinnerInteractionListener);
         spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);

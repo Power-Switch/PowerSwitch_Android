@@ -92,10 +92,6 @@ public class ConfigureReceiverWidgetActivity extends Activity {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateRoomList();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
         };
         spinnerApartment.setOnItemSelectedListener(apartmentSpinnerInteractionListener);
         spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);
@@ -108,10 +104,6 @@ public class ConfigureReceiverWidgetActivity extends Activity {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverList();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
             }
         };
         spinnerRoom.setOnItemSelectedListener(roomSpinnerInteractionListener);

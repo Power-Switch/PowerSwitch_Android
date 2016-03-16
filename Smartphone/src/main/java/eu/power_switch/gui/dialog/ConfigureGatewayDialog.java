@@ -129,10 +129,6 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 notifyConfigurationChanged();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
         };
         model.setOnTouchListener(spinnerInteractionListener);
         model.setOnItemSelectedListener(spinnerInteractionListener);

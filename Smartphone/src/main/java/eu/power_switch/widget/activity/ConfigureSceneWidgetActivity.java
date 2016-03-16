@@ -83,10 +83,6 @@ public class ConfigureSceneWidgetActivity extends Activity {
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateSceneList();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
         };
         spinnerApartment.setOnItemSelectedListener(apartmentSpinnerInteractionListener);
         spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);

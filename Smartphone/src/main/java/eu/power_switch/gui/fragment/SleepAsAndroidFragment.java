@@ -50,6 +50,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddAlarmEventActionDialog;
+import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -85,16 +86,14 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                 R.array.sleep_as_android_event_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEventType.setAdapter(adapter);
-        spinnerEventType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateUI();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+        };
+        spinnerEventType.setOnItemSelectedListener(spinnerInteractionListener);
+        spinnerEventType.setOnTouchListener(spinnerInteractionListener);
 
         recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_alarm_event_actions);
         recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);

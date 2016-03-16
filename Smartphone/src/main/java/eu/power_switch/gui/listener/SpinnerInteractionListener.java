@@ -54,6 +54,18 @@ public abstract class SpinnerInteractionListener implements AdapterView.OnItemSe
         return false;
     }
 
+    /**
+     * This method is always called, when a change to the spinner selection was made.
+     * Note: If you override this method, you have to call super.onItemSelected(...).
+     * Notice that in case of user selection this will trigger both onItemSelected, as well as onItemSelectedByUser
+     * and in case of system selection both onItemSelected, as well as onItemSelectedBySystem.
+     * It is therefore NOT RECOMMENDED to override this method.
+     *
+     * @param parent parent adapter view
+     * @param view   view
+     * @param pos    position
+     * @param id     id
+     */
     @Override
     @CallSuper
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -61,7 +73,29 @@ public abstract class SpinnerInteractionListener implements AdapterView.OnItemSe
             onItemSelectedByUser(parent, view, pos, id);
 
             userSelect = false;
+        } else {
+            onItemSelectedBySystem(parent, view, pos, id);
         }
+    }
+
+    /**
+     * Empty default implementation for less code bloat
+     *
+     * @param adapterView
+     */
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+    /**
+     * This Method is only called, if the spinner selection was made by the system (and not a user)
+     *
+     * @param parent parent adapter view
+     * @param view   view
+     * @param pos    position
+     * @param id     id
+     */
+    protected void onItemSelectedBySystem(AdapterView<?> parent, View view, int pos, long id) {
     }
 
     /**
@@ -72,6 +106,7 @@ public abstract class SpinnerInteractionListener implements AdapterView.OnItemSe
      * @param pos    position
      * @param id     id
      */
-    public abstract void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id);
+    public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
+    }
 
 }
