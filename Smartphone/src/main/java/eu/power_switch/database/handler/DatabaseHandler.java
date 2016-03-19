@@ -294,6 +294,28 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Get the ID of an Apartment by its name, ignoring case
+     *
+     * @param name Name of Apartment
+     * @return ID of Apartment
+     */
+    @Nullable
+    @WorkerThread
+    public static Long getApartmentId(String name) throws Exception {
+        openReadable();
+        Long apartmentId = null;
+        try {
+            apartmentId = ApartmentHandler.getId(name);
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+        return apartmentId;
+    }
+
+    /**
      * Get the Name of an Apartment by ID
      *
      * @param id ID of Apartment

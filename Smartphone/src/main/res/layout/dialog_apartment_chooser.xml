@@ -27,14 +27,8 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="center"-->
-    <!--android:text="@string/select_apartment"/>-->
-
     <ListView
-        android:id="@+id/recyclerview_apartments"
+        android:id="@+id/listview_apartments"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

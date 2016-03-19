@@ -229,6 +229,26 @@ abstract class ApartmentHandler {
     }
 
     /**
+     * Get ID of an Apartment by its name
+     *
+     * @param name Name of Apartment, ignoring case
+     * @return ID of matching Apartment, might be null
+     */
+    public static Long getId(String name) throws Exception {
+        String[] columns = {ApartmentTable.COLUMN_ID};
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_NAME + "=='" +
+                name + "' COLLATE NOCASE", null, null, null, null);
+
+        Long id = null;
+        if (cursor.moveToFirst()) {
+            id = cursor.getLong(0);
+        }
+
+        cursor.close();
+        return id;
+    }
+
+    /**
      * Get Name of all Apartment
      *
      * @return List of Apartment names

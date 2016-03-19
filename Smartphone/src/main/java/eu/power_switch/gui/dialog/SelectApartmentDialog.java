@@ -35,7 +35,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.ApartmentFragment;
-import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
@@ -54,19 +53,20 @@ public class SelectApartmentDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         rootView = inflater.inflate(R.layout.dialog_apartment_chooser, null);
 
-        ListView listViewApartments = (ListView) rootView.findViewById(R.id.recyclerview_apartments);
+        ListView listViewApartments = (ListView) rootView.findViewById(R.id.listview_apartments);
 
+        // should be called async but since its still very fast it doesn't make that much of a difference
         apartmentNames.addAll(getApartmentNames());
 
-        ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, apartmentNames);
+        ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_list_item_1, apartmentNames);
         listViewApartments.setAdapter(apartmentNamesAdapter);
         listViewApartments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    Apartment selectedApartment = DatabaseHandler.getApartment(apartmentNames.get(position));
-                    onApartmentClicked(selectedApartment);
+                    onApartmentClicked(
+                            DatabaseHandler.getApartmentId(apartmentNames.get(position)));
                 } catch (Exception e) {
                     dismiss();
                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -105,10 +105,10 @@ public class SelectApartmentDialog extends DialogFragment {
     /**
      * This Method is called when an Apartment has been selected from the list
      *
-     * @param apartment the selected Apartment
+     * @param apartmentId the selected Apartment
      */
-    protected void onApartmentClicked(Apartment apartment) {
-        SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
+    protected void onApartmentClicked(Long apartmentId) {
+        SmartphonePreferencesHandler.setCurrentApartmentId(apartmentId);
         ApartmentFragment.sendApartmentChangedBroadcast(getContext());
         dismiss();
     }
