@@ -22,7 +22,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,10 +29,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.Calendar;
 import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.UnknownErrorDialog;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy
@@ -46,7 +47,9 @@ public abstract class RecyclerViewFragment extends Fragment {
 
     protected View rootView;
     private LinearLayout layoutLoading;
-    private CoordinatorLayout contentLayout;
+    private LinearLayout layoutEmpty;
+    private LinearLayout layoutError;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -55,7 +58,9 @@ public abstract class RecyclerViewFragment extends Fragment {
         onCreateViewEvent(inflater, container, savedInstanceState);
 
         layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        contentLayout = (CoordinatorLayout) rootView.findViewById(R.id.contentLayout);
+        layoutEmpty = (LinearLayout) rootView.findViewById(R.id.layoutEmpty);
+        layoutError = (LinearLayout) rootView.findViewById(R.id.layoutError);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
 
         onInitialized();
 
@@ -67,45 +72,68 @@ public abstract class RecyclerViewFragment extends Fragment {
     public void updateListContent() {
         showLoadingAnimation();
 
-        new AsyncTask<Context, Void, Exception>() {
+        new AsyncTask<Context, Void, RecyclerViewUpdateResult>() {
 
             @Override
-            protected Exception doInBackground(Context... contexts) {
+            protected RecyclerViewUpdateResult doInBackground(Context... contexts) {
                 try {
-                    refreshListData();
-                    return null;
+                    return new RecyclerViewUpdateResult(refreshListData());
                 } catch (Exception e) {
-                    return e;
+                    return new RecyclerViewUpdateResult(e);
                 }
             }
 
             @Override
-            protected void onPostExecute(Exception e) {
+            protected void onPostExecute(RecyclerViewUpdateResult result) {
                 getRecyclerViewAdapter().notifyDataSetChanged();
 
-                if (e == null) {
-                    showList();
+                if (result.isSuccess()) {
+                    if (result.getElements().size() == 0) {
+                        showEmpty();
+                    } else {
+                        showList();
+                    }
                 } else {
-                    showError();
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    showError(result.getException(), Calendar.getInstance().getTimeInMillis());
+                    StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
     }
 
     protected void showLoadingAnimation() {
+        layoutEmpty.setVisibility(View.GONE);
+        layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
     }
 
     protected void showList() {
+        layoutEmpty.setVisibility(View.GONE);
+        layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.GONE);
-        contentLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
-    protected void showError() {
+    protected void showEmpty() {
+        layoutEmpty.setVisibility(View.VISIBLE);
+        layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.GONE);
-        contentLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    protected void showError(final Exception e, final long timeInMilliseconds) {
+        layoutEmpty.setVisibility(View.GONE);
+        layoutError.setVisibility(View.VISIBLE);
+        layoutLoading.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+
+        layoutError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(UnknownErrorDialog.getNewInstanceIntent(e, timeInMilliseconds));
+            }
+        });
     }
 
     protected abstract void onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container,

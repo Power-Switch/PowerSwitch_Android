@@ -53,10 +53,10 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     private View rootView;
 
     private ListView brandListView;
-    private ArrayAdapter brandNamesAdapter;
+    private ArrayAdapter<String> brandNamesAdapter;
 
     private ListView modelListView;
-    private ArrayAdapter modelNamesAdapter;
+    private ArrayAdapter<String> modelNamesAdapter;
 
     private TextView modelTextView;
 
@@ -128,7 +128,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     private String getSelectedModel() {
         try {
             int position = modelListView.getCheckedItemPosition();
-            return modelNamesAdapter.getItem(position).toString();
+            return modelNamesAdapter.getItem(position);
         } catch (Exception e) {
             return null;
         }

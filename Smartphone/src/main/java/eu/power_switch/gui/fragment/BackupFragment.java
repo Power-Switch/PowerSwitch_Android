@@ -125,7 +125,7 @@ public class BackupFragment extends RecyclerViewFragment {
             }
         });
 
-        recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_backups);
+        recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
         backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
             @Override
@@ -184,7 +184,7 @@ public class BackupFragment extends RecyclerViewFragment {
                 getResources().getInteger(R.integer.backup_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewBackups.setLayoutManager(layoutManager);
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_backup_fab);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,7 +259,7 @@ public class BackupFragment extends RecyclerViewFragment {
         textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
 
         if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
-            showError();
+            showEmpty();
             requestExternalStoragePermission();
         } else {
             updateListContent();

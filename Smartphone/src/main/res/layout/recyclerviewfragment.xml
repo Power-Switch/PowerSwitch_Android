@@ -17,48 +17,29 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    <include layout="@layout/loading"/>
 
     <include layout="@layout/empty"/>
 
     <include layout="@layout/error"/>
 
-    <include layout="@layout/loading"/>
-
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/contentLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/padding"
-            android:layout_marginTop="@dimen/padding"
-            android:layout_weight="1"
             android:fadeScrollbars="false"
             android:scrollbars="vertical"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/search_gateway_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="16dp"
-            app:backgroundTint="?attr/colorAccent"
-            app:borderWidth="0dp"
-            app:elevation="8dp"
-            app:fabSize="normal"
-            app:layout_anchor="@id/recyclerview"
-            app:layout_anchorGravity="bottom|left|end"
-            app:layout_behavior="eu.power_switch.gui.animation.ScrollAwareFABBehavior"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_fab"

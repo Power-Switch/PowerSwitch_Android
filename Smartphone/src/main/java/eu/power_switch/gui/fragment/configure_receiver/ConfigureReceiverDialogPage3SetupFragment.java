@@ -76,10 +76,10 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
     private View rootView;
 
     private ListView channelMasterListView;
-    private ArrayAdapter channelMasterNamesAdapter;
+    private ArrayAdapter<String> channelMasterNamesAdapter;
 
     private ListView channelSlaveListView;
-    private ArrayAdapter channelSlaveNamesAdapter;
+    private ArrayAdapter<String> channelSlaveNamesAdapter;
 
     private TableLayout layoutMasterSlave;
     private NestedScrollView layoutDip;

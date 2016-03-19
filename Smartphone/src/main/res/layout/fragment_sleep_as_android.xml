@@ -19,7 +19,6 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -44,37 +43,6 @@
 
     </LinearLayout>
 
-    <include layout="@layout/loading"/>
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/contentLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_list_of_alarm_event_actions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadeScrollbars="false"
-            android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_action_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:transitionName="configureReceiverTransition"
-            app:backgroundTint="?attr/colorAccent"
-            app:borderWidth="0dp"
-            app:elevation="8dp"
-            app:fabSize="normal"
-            app:layout_anchor="@id/recyclerview_list_of_alarm_event_actions"
-            app:layout_anchorGravity="bottom|right|end"
-            app:layout_behavior="eu.power_switch.gui.animation.ScrollAwareFABBehavior"/>
-
-    </android.support.design.widget.CoordinatorLayout>
+    <include layout="@layout/recyclerviewfragment"/>
 
 </LinearLayout>

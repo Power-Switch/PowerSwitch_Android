@@ -84,7 +84,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
-        recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_apartments);
+        recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
 
         recyclerViewApartments.setAdapter(apartmentArrayAdapter);
@@ -121,7 +121,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
             }
         });
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_apartment_fab);
+        fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

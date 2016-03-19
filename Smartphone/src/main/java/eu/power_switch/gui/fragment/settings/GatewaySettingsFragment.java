@@ -89,7 +89,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
             public void onClick(View view) {
 
                 switch (view.getId()) {
-                    case R.id.add_gateway_fab:
+                    case R.id.add_fab:
                         ConfigureGatewayDialog configureGatewayDialog = new ConfigureGatewayDialog();
                         configureGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
                         configureGatewayDialog.show(getFragmentManager(), null);
@@ -107,11 +107,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         searchGatewayFAB.setImageDrawable(IconicsHelper.getRefreshIcon(getActivity(), android.R.color.white));
         searchGatewayFAB.setOnClickListener(onClickListener);
 
-        addGatewayFAB = (FloatingActionButton) rootView.findViewById(R.id.add_gateway_fab);
+        addGatewayFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
         addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         addGatewayFAB.setOnClickListener(onClickListener);
 
-        recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_gateways);
+        recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override

@@ -16,20 +16,37 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0-alpha3'
-    }
-}
+package eu.power_switch.gui.fragment;
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
+import java.util.List;
+
+/**
+ * Created by Markus on 19.03.2016.
+ */
+public class RecyclerViewUpdateResult {
+
+    private Exception exception;
+    private List elements;
+
+    public RecyclerViewUpdateResult(Exception e) {
+        this.exception = e;
+        this.elements = null;
+    }
+
+    public RecyclerViewUpdateResult(List elements) {
+        this.exception = null;
+        this.elements = elements;
+    }
+
+    public boolean isSuccess() {
+        return exception == null && elements != null;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public List getElements() {
+        return elements;
     }
 }

@@ -67,7 +67,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     private EditText name;
 
     private ListView roomsListView;
-    private ArrayAdapter roomNamesAdapter;
+    private ArrayAdapter<String> roomNamesAdapter;
     private ArrayList<String> roomList = new ArrayList<>();
 
     private FloatingActionButton addRoomFAB;

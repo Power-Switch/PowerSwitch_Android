@@ -58,7 +58,7 @@ public class SelectApartmentDialog extends DialogFragment {
 
         apartmentNames.addAll(getApartmentNames());
 
-        ArrayAdapter apartmentNamesAdapter = new ArrayAdapter<>(getActivity(),
+        ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, apartmentNames);
         listViewApartments.setAdapter(apartmentNamesAdapter);
         listViewApartments.setOnItemClickListener(new AdapterView.OnItemClickListener() {

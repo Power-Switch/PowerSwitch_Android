@@ -91,10 +91,10 @@ public class EditActivity extends AbstractPluginActivity {
     private Spinner spinner_scene;
     private EditText editText_scene;
 
-    private ArrayAdapter roomSpinnerArrayAdapter;
-    private ArrayAdapter receiverSpinnerArrayAdapter;
-    private ArrayAdapter buttonSpinnerArrayAdapter;
-    private ArrayAdapter sceneSpinnerArrayAdapter;
+    private ArrayAdapter<String> roomSpinnerArrayAdapter;
+    private ArrayAdapter<String> receiverSpinnerArrayAdapter;
+    private ArrayAdapter<String> buttonSpinnerArrayAdapter;
+    private ArrayAdapter<String> sceneSpinnerArrayAdapter;
 
     private Apartment currentApartment;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;

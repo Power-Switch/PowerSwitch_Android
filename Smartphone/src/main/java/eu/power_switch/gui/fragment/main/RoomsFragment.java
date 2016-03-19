@@ -85,14 +85,14 @@ public class RoomsFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         rooms = new ArrayList<>();
-        recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_rooms);
+        recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms);
         recyclerViewRooms.setAdapter(roomsRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getResources().getInteger(R.integer.room_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewRooms.setLayoutManager(layoutManager);
 
-        addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_receiver_fab);
+        addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
         addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         final RecyclerViewFragment recyclerViewFragment = this;
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {
@@ -229,6 +229,7 @@ public class RoomsFragment extends RecyclerViewFragment {
             }
         }
 
-        return rooms;
+        throw new Exception("OH MEIN GOTT");
+//        return rooms;
     }
 }

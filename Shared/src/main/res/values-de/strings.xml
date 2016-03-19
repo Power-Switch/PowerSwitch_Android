@@ -63,6 +63,8 @@
     <string name="missing_wifi_connection">Keine WLAN Verbindung!</string>
     <string name="missing_network_connection">Keine Netzwerkverbindung!</string>
 
+    <string name="no_elements">Keine Elemente</string>
+
     <string name="report">Bericht senden</string>
     <string name="send_via_mail">Per E-Mail senden</string>
     <string name="share_plain_text">Text teilen</string>

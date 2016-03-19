@@ -95,7 +95,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         spinnerEventType.setOnItemSelectedListener(spinnerInteractionListener);
         spinnerEventType.setOnTouchListener(spinnerInteractionListener);
 
-        recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_alarm_event_actions);
+        recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);
         recyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
@@ -126,7 +126,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                 getResources().getInteger(R.integer.timer_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);
 
-        addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action_fab);
+        addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
