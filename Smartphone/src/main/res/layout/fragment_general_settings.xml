@@ -46,170 +46,202 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp">
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="8dp"
-                    android:text="@string/startup_default_tab"/>
-
-                <Spinner
-                    android:id="@+id/spinner_startupDefaultTab"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"/>
-
-            </LinearLayout>
-
-            <CheckBox
-                android:id="@+id/checkBox_autoDiscover"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/autodiscover"/>
-
-            <CheckBox
-                android:id="@+id/checkBox_autoCollapseRooms"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/auto_collapse_rooms"/>
-
-            <CheckBox
-                android:id="@+id/checkBox_autoCollapseTimers"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/auto_collapse_timers"/>
-
-            <CheckBox
-                android:id="@+id/checkBox_showRoomAllOnOffButtons"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/show_room_all_on_off_buttons"/>
-
-            <CheckBox
-                android:id="@+id/checkBox_hideAddFAB"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/use_menu_instead_of_FABs"/>
-
-            <CheckBox
-                android:id="@+id/checkBox_highlightLastActivatedButton"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/highlight_last_activated_button"/>
-
-            <CheckBox
-                android:id="@+id/checkBox_vibrateOnButtonPress"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="4dp"
-                android:checked="false"
-                android:text="@string/vibrate_on_button_press"/>
-
-            <LinearLayout
-                android:id="@+id/linearLayout_vibrationDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginLeft="32dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:gravity="center"
-                    android:text="@string/duration_title"/>
-
-                <EditText
-                    android:id="@+id/editText_vibrationDuration"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="8dp"
+                        android:text="@string/startup_default_tab"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_startupDefaultTab"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"/>
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/checkBox_autoDiscover"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:layout_marginBottom="4dp"
-                    android:hint="@string/haptic_feedback_duration_hint"
-                    android:inputType="number"
-                    android:maxLength="3"/>
+                    android:text="@string/autodiscover"/>
 
-                <TextView
+                <CheckBox
+                    android:id="@+id/checkBox_autoCollapseRooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/auto_collapse_rooms"/>
+
+                <CheckBox
+                    android:id="@+id/checkBox_autoCollapseTimers"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/auto_collapse_timers"/>
+
+                <CheckBox
+                    android:id="@+id/checkBox_showRoomAllOnOffButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/show_room_all_on_off_buttons"/>
+
+                <CheckBox
+                    android:id="@+id/checkBox_hideAddFAB"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/use_menu_instead_of_FABs"/>
+
+                <CheckBox
+                    android:id="@+id/checkBox_highlightLastActivatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/highlight_last_activated_button"/>
+
+                <CheckBox
+                    android:id="@+id/checkBox_vibrateOnButtonPress"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="4dp"
+                    android:checked="false"
+                    android:text="@string/vibrate_on_button_press"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_vibrationDuration"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="ms"/>
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="32dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="4dp"
+                        android:gravity="center"
+                        android:text="@string/duration_title"/>
+
+                    <EditText
+                        android:id="@+id/editText_vibrationDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:hint="@string/haptic_feedback_duration_hint"
+                        android:inputType="number"
+                        android:maxLength="3"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="ms"/>
+
+                </LinearLayout>
 
             </LinearLayout>
-
-            <TextView
-                style="@style/header_settings"
-                android:text="@string/history"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="@dimen/activity_margin_horizontal"
-                    android:text="@string/keep_history_for"
-                    android:textColor="?attr/colorAccent"/>
-
-                <Spinner
-                    android:id="@+id/spinner_keep_history"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-            <TextView
-                style="@style/header_settings"
-                android:text="@string/backup"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="@dimen/activity_margin_horizontal"
-                    android:text="@string/path"
-                    android:textColor="?attr/colorAccent"/>
-
-                <TextView
-                    android:id="@+id/textView_backupPath"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/button_changeBackupPath"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/change_backup_path"/>
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
 
-            <TextView
-                android:id="@+id/TextView_theme"
-                style="@style/header_settings"
-                android:text="@string/theme"/>
+                <TextView
+                    style="@style/header_settings"
+                    android:text="@string/history"/>
 
-            <RadioButton
-                android:id="@+id/radioButton_darkBlue"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="@string/theme_dark_blue"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/radioButton_lightBlue"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="@string/theme_light_blue"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/activity_margin_horizontal"
+                        android:text="@string/keep_history_for"
+                        android:textColor="?attr/colorAccent"/>
+
+                    <Spinner
+                        android:id="@+id/spinner_keep_history"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    style="@style/header_settings"
+                    android:text="@string/backup"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/activity_margin_horizontal"
+                        android:text="@string/path"
+                        android:textColor="?attr/colorAccent"/>
+
+                    <TextView
+                        android:id="@+id/textView_backupPath"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button_changeBackupPath"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_backup_path"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/TextView_theme"
+                    style="@style/header_settings"
+                    android:text="@string/theme"/>
+
+                <RadioButton
+                    android:id="@+id/radioButton_darkBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/theme_dark_blue"/>
+
+                <RadioButton
+                    android:id="@+id/radioButton_lightBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/theme_light_blue"/>
+
+            </LinearLayout>
 
             <TextView
                 style="@style/header_settings"
