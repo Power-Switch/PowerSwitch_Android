@@ -42,6 +42,7 @@ public class SettingsConstants {
     public static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
     public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
     public static final String CURRENT_APARTMENT_ID_KEY = "currentApartmentId";
+    public static final String KEEP_HISTORY_DURATION = "keepHistoryDuration";
 
     public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 40;
 
@@ -55,6 +56,13 @@ public class SettingsConstants {
     public static final int GENERAL_SETTINGS_TAB_INDEX = 0;
     public static final int GATEWAYS_TAB_INDEX = 1;
     public static final int WEARABLE_TAB_INDEX = 2;
+
+    // Keep History items
+    public static final int KEEP_HISTORY_FOREVER = 0;
+    public static final int KEEP_HISTORY_1_YEAR = 1;
+    public static final int KEEP_HISTORY_6_MONTHS = 2;
+    public static final int KEEP_HISTORY_1_MONTH = 3;
+    public static final int KEEP_HISTORY_14_DAYS = 4;
 
 
     // Theme

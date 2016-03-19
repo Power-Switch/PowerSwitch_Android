@@ -21,12 +21,14 @@ package eu.power_switch.database.handler;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.history.HistoryItem;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Handler for History related Database actions
@@ -45,7 +47,7 @@ class HistoryHandler {
     }
 
     /**
-     * Gets all history items from database
+     * Gets all history items from database, sorted by date/time
      *
      * @return List of History Items
      */
@@ -53,7 +55,7 @@ class HistoryHandler {
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
 
         String[] columns = {HistoryTable.COLUMN_ID, HistoryTable.COLUMN_DESCRIPTION, HistoryTable.COLUMN_TIME};
-        Cursor cursor = DatabaseHandler.database.query(HistoryTable.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(HistoryTable.TABLE_NAME, columns, null, null, null, null, HistoryTable.COLUMN_TIME + " ASC");
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -61,17 +63,6 @@ class HistoryHandler {
             cursor.moveToNext();
         }
         cursor.close();
-
-        Collections.sort(historyItems, new Comparator<HistoryItem>() {
-            @Override
-            public int compare(HistoryItem t0, HistoryItem t1) {
-                if (t0.getTime().getTimeInMillis() - t1.getTime().getTimeInMillis() < 0) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            }
-        });
 
         return historyItems;
     }
@@ -85,7 +76,36 @@ class HistoryHandler {
         ContentValues values = new ContentValues();
         values.put(HistoryTable.COLUMN_DESCRIPTION, historyItem.getDescription());
         values.put(HistoryTable.COLUMN_TIME, historyItem.getTime().getTimeInMillis());
-        return DatabaseHandler.database.insert(HistoryTable.TABLE_NAME, null, values);
+        long id = DatabaseHandler.database.insert(HistoryTable.TABLE_NAME, null, values);
+        deleteOldEntries();
+        return id;
+    }
+
+    private static void deleteOldEntries() throws Exception {
+        Calendar calendar = Calendar.getInstance();
+
+        switch (SmartphonePreferencesHandler.getKeepHistoryDuration()) {
+            case SettingsConstants.KEEP_HISTORY_FOREVER:
+                // dont delete anything
+                return;
+            case SettingsConstants.KEEP_HISTORY_1_YEAR:
+                calendar.add(Calendar.YEAR, -1);
+                break;
+            case SettingsConstants.KEEP_HISTORY_6_MONTHS:
+                calendar.add(Calendar.MONTH, -6);
+                break;
+            case SettingsConstants.KEEP_HISTORY_1_MONTH:
+                calendar.add(Calendar.MONTH, -1);
+                break;
+            case SettingsConstants.KEEP_HISTORY_14_DAYS:
+                calendar.add(Calendar.DAY_OF_YEAR, -14);
+                break;
+            default:
+                Log.w("Unknown \"Keep History\" duration selection! Nothing will be deleted.");
+                return;
+        }
+
+        DatabaseHandler.database.delete(HistoryTable.TABLE_NAME, HistoryTable.COLUMN_TIME + " <= " + calendar.getTimeInMillis(), null);
     }
 
     /**

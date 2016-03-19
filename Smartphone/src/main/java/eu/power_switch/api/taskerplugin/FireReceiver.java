@@ -28,6 +28,7 @@ import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
+import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -38,7 +39,7 @@ import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
- * BroadcastReceiver responsible for executing actions fired by Tasker
+ * BroadcastReceiver responsible for executing actions fired by Tasker (and other locale compatible Apps)
  * <p/>
  * Created by Markus on 22.02.2016.
  */
@@ -46,10 +47,12 @@ public class FireReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(intent);
+        Log.d(FireReceiver.class, intent);
 
         if (com.twofortyfouram.locale.Intent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
-            parseActionIntent(context, intent);
+            if (PluginBundleManager.isBundleValid(context, intent.getExtras())) {
+                parseActionIntent(context, intent);
+            }
         }
     }
 

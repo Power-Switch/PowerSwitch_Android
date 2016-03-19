@@ -93,6 +93,14 @@
         <item>@string/scenes</item>
     </string-array>
 
+    <string-array name="keep_history_selection_names">
+        <item>@string/selection_forever</item>
+        <item>@string/selection_1_year</item>
+        <item>@string/selection_6_months</item>
+        <item>@string/selection_1_month</item>
+        <item>@string/selection_14_days</item>
+    </string-array>
+
     <string-array name="locales">
         <item>en</item>
         <item>de</item>

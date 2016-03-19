@@ -1636,7 +1636,7 @@ public final class DatabaseHandler {
      */
 
     /**
-     * Gets all HistoryItems in Database
+     * Gets all HistoryItems in Database, sorted by date/time
      *
      * @return List of HistoryItems
      */

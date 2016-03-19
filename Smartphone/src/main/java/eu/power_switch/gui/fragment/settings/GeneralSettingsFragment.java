@@ -90,6 +90,7 @@ public class GeneralSettingsFragment extends Fragment {
     private Spinner startupDefaultTab;
     private BroadcastReceiver broadcastReceiver;
     private TextView textView_backupPath;
+    private Spinner keepHistoryDuration;
 
 
     @Override
@@ -223,6 +224,22 @@ public class GeneralSettingsFragment extends Fragment {
             }
         });
 
+        keepHistoryDuration = (Spinner) rootView.findViewById(R.id.spinner_keep_history);
+        ArrayAdapter<CharSequence> adapterHistory = ArrayAdapter.createFromResource(getContext(),
+                R.array.keep_history_selection_names, android.R.layout.simple_spinner_item);
+        adapterHistory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        keepHistoryDuration.setAdapter(adapterHistory);
+        keepHistoryDuration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SmartphonePreferencesHandler.setKeepHistoryDuration(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         textView_backupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
 
         Button button_changeBackupPath = (Button) rootView.findViewById(R.id.button_changeBackupPath);
@@ -315,6 +332,7 @@ public class GeneralSettingsFragment extends Fragment {
         highlightLastActivatedButton.setChecked(SmartphonePreferencesHandler.getHighlightLastActivatedButton());
         vibrateOnButtonPress.setChecked(SmartphonePreferencesHandler.getVibrateOnButtonPress());
         vibrationDuration.setText(String.valueOf(SmartphonePreferencesHandler.getVibrationDuration()));
+        keepHistoryDuration.setSelection(SmartphonePreferencesHandler.getKeepHistoryDuration());
         if (!SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {

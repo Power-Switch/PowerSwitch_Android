@@ -32,6 +32,14 @@
     <string name="show_room_all_on_off_buttons">An/Aus Buttons für Räume anzeigen</string>
     <string name="change_backup_path">Pfad ändern</string>
 
+    <!-- History -->
+    <string name="selection_forever">Immer</string>
+    <string name="selection_1_year">1 Jahr</string>
+    <string name="selection_6_months">6 Moante</string>
+    <string name="selection_1_month">1 Monat</string>
+    <string name="selection_14_days">14 Tage</string>
+    <string name="keep_history_for">Behalte Verlauf für </string>
+
     <!-- Themes -->
     <string name="theme">Theme</string>
     <string name="theme_dark_blue">Dunkel Blau</string>

@@ -229,7 +229,6 @@ public class RoomsFragment extends RecyclerViewFragment {
             }
         }
 
-        throw new Exception("OH MEIN GOTT");
-//        return rooms;
+        return rooms;
     }
 }

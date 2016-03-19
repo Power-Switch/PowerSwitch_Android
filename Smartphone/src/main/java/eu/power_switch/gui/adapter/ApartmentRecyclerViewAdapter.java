@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
@@ -37,14 +38,14 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
- * * Adapter to visualize Gateway items in RecyclerView
+ * Adapter to visualize Gateway items in RecyclerView
  * <p/>
  * Created by Markus on 27.07.2015.
  */
 public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<ApartmentRecyclerViewAdapter.ViewHolder> {
+    private static final DecimalFormat decimalFormat = new DecimalFormat("##.00000");
     private ArrayList<Apartment> apartments;
     private Context context;
-
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
@@ -102,7 +103,8 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         contentSummary += context.getString(R.string.location) + ": ";
         if (apartment.getGeofence() != null) {
             LatLng location = apartment.getGeofence().getCenterLocation();
-            contentSummary += location.latitude + ", " + location.longitude;
+            contentSummary += decimalFormat.format(location.latitude) + ", " +
+                    decimalFormat.format(location.longitude);
         } else {
             contentSummary += context.getString(R.string.none);
         }

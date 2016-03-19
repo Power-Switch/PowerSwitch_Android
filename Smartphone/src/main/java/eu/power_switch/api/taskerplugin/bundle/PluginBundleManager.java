@@ -26,19 +26,11 @@ import android.text.TextUtils;
 
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.ApiConstants;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Class for managing the {@link com.twofortyfouram.locale.Intent#EXTRA_BUNDLE} for this plug-in.
  */
 public final class PluginBundleManager {
-    /**
-     * Type: {@code String}.
-     * <p/>
-     * String message to display in a Toast message.
-     */
-    public static final String BUNDLE_EXTRA_STRING_MESSAGE = "com.yourcompany.yourapp.extra.STRING_MESSAGE"; //$NON-NLS-1$
-
     /**
      * Type: {@code int}.
      * <p/>
@@ -50,7 +42,7 @@ public final class PluginBundleManager {
      * having the version, the plug-in can better detect when such bugs occur.
      */
     public static final String BUNDLE_EXTRA_INT_VERSION_CODE =
-            "com.yourcompany.yourcondition.extra.INT_VERSION_CODE"; //$NON-NLS-1$
+            "eu.power_switch.extra.INT_VERSION_CODE"; //$NON-NLS-1$
 
     /**
      * Private constructor prevents instantiation
@@ -78,36 +70,27 @@ public final class PluginBundleManager {
          * Make sure the expected extras exist
          */
         if (!bundle.containsKey(ApiConstants.KEY_APARTMENT)) {
-            Log.e(String.format("bundle must contain extra %s", ApiConstants.KEY_APARTMENT)); //$NON-NLS-1$
+            StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be missing.", ApiConstants.KEY_APARTMENT), Snackbar.LENGTH_LONG);
             return false;
         } else if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_APARTMENT))) {
             StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_APARTMENT), Snackbar.LENGTH_LONG);
-//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_APARTMENT)); //$NON-NLS-1$
             return false;
         }
-
-//        if (!bundle.containsKey(BUNDLE_EXTRA_INT_VERSION_CODE)) {
-//            Log.e(String.format("bundle must contain extra %s", BUNDLE_EXTRA_INT_VERSION_CODE)); //$NON-NLS-1$
-//            return false;
-//        }
 
         // Receiver Action
         if (bundle.keySet().size() == 3 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_ROOM) && bundle.containsKey(ApiConstants.KEY_RECEIVER) && bundle.containsKey(ApiConstants.KEY_BUTTON)) {
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_ROOM))) {
                 StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM), Snackbar.LENGTH_LONG);
-//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM)); //$NON-NLS-1$
                 return false;
             }
 
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_RECEIVER))) {
                 StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_RECEIVER), Snackbar.LENGTH_LONG);
-//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_RECEIVER)); //$NON-NLS-1$
                 return false;
             }
 
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_BUTTON))) {
                 StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON), Snackbar.LENGTH_LONG);
-//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON)); //$NON-NLS-1$
                 return false;
             }
 
@@ -118,13 +101,11 @@ public final class PluginBundleManager {
         if (bundle.keySet().size() == 2 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_ROOM) && bundle.containsKey(ApiConstants.KEY_BUTTON)) {
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_ROOM))) {
                 StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM), Snackbar.LENGTH_LONG);
-//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM)); //$NON-NLS-1$
                 return false;
             }
 
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_BUTTON))) {
                 StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON), Snackbar.LENGTH_LONG);
-//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON)); //$NON-NLS-1$
                 return false;
             }
 
@@ -135,13 +116,17 @@ public final class PluginBundleManager {
         if (bundle.keySet().size() == 1 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_SCENE)) {
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_SCENE))) {
                 StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_SCENE), Snackbar.LENGTH_LONG);
-//                Log.e(String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON)); //$NON-NLS-1$
                 return false;
             }
 
             return true;
         }
 
+
+//        if (!bundle.containsKey(BUNDLE_EXTRA_INT_VERSION_CODE)) {
+//            Log.e(String.format("bundle must contain extra %s", BUNDLE_EXTRA_INT_VERSION_CODE)); //$NON-NLS-1$
+//            return false;
+//        }
 
 //        if (bundle.getInt(BUNDLE_EXTRA_INT_VERSION_CODE, 0) != bundle.getInt(BUNDLE_EXTRA_INT_VERSION_CODE, 1)) {
 //            Log.e(String.format("bundle extra %s appears to be the wrong type.  It must be an int", BUNDLE_EXTRA_INT_VERSION_CODE)); //$NON-NLS-1$
@@ -164,7 +149,6 @@ public final class PluginBundleManager {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        result.putString(BUNDLE_EXTRA_STRING_MESSAGE, message);
 
         return result;
     }

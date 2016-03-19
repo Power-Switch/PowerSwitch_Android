@@ -51,6 +51,7 @@ public class SmartphonePreferencesHandler {
     private static boolean highlightLastActivatedButtonCache;
     private static boolean useCompactDrawerCache;
     private static long currentApartmentIdCache;
+    private static int keepHistoryDurationCache;
 
     /**
      * Private Constructor
@@ -95,6 +96,7 @@ public class SmartphonePreferencesHandler {
         vibrationDurationCache = sharedPreferences.getInt(SettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
         highlightLastActivatedButtonCache = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
         useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, false);
+        keepHistoryDurationCache = sharedPreferences.getInt(SettingsConstants.KEEP_HISTORY_DURATION, SettingsConstants.KEEP_HISTORY_FOREVER);
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, SettingsConstants.INVALID_APARTMENT_ID);
@@ -418,5 +420,23 @@ public class SmartphonePreferencesHandler {
         editor.apply();
 
         currentApartmentIdCache = apartmentId;
+    }
+
+    /**
+     * Retrieves setting for duration to keep history elements
+     *
+     * @return duration
+     */
+    public static int getKeepHistoryDuration() {
+        return keepHistoryDurationCache;
+    }
+
+    public static void setKeepHistoryDuration(int durationSelection) {
+        Log.d(SmartphonePreferencesHandler.class, "setKeepHistoryDuration: " + durationSelection);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(SettingsConstants.KEEP_HISTORY_DURATION, durationSelection);
+        editor.apply();
+
+        keepHistoryDurationCache = durationSelection;
     }
 }

@@ -174,7 +174,7 @@ public class EditActivity extends AbstractPluginActivity {
                     setApartmentInputType(InputType.MANUAL);
                 }
 
-                checkValidity();
+                setPositiveButtonVisibility(checkValidity());
             }
         });
 
@@ -218,7 +218,7 @@ public class EditActivity extends AbstractPluginActivity {
                     setRoomInputType(InputType.MANUAL);
                 }
 
-                checkValidity();
+                setPositiveButtonVisibility(checkValidity());
             }
         });
 
@@ -257,7 +257,7 @@ public class EditActivity extends AbstractPluginActivity {
                     setReceiverInputType(InputType.MANUAL);
                 }
 
-                checkValidity();
+                setPositiveButtonVisibility(checkValidity());
             }
         });
 
@@ -296,7 +296,7 @@ public class EditActivity extends AbstractPluginActivity {
                     setButtonInputType(InputType.MANUAL);
                 }
 
-                checkValidity();
+                setPositiveButtonVisibility(checkValidity());
             }
         });
 
@@ -334,7 +334,7 @@ public class EditActivity extends AbstractPluginActivity {
                     setSceneInputType(InputType.MANUAL);
                 }
 
-                checkValidity();
+                setPositiveButtonVisibility(checkValidity());
             }
         });
 
