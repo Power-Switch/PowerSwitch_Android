@@ -18,6 +18,8 @@
 
 package eu.power_switch.history;
 
+import android.support.annotation.NonNull;
+
 import java.util.Calendar;
 
 /**
@@ -38,21 +40,43 @@ public class HistoryItem {
     private Calendar time;
 
     /**
-     * Description of this HistoryItem
+     * Short description of this HistoryItem
      */
-    private String description;
+    private String shortDescription;
 
-    public HistoryItem(Long id, Long timeInMilliseconds, String description) {
+    /**
+     * Long description of this HistoryItem
+     */
+    private String longDescription;
+
+    public HistoryItem(long id, @NonNull Long timeInMilliseconds, @NonNull String shortDescription) {
         this.id = id;
         this.time = Calendar.getInstance();
         this.time.setTimeInMillis(timeInMilliseconds);
-        this.description = description;
+        this.shortDescription = shortDescription;
+        this.longDescription = "";
     }
 
-    public HistoryItem(Long id, Calendar time, String description) {
+    public HistoryItem(long id, @NonNull Long timeInMilliseconds, @NonNull String shortDescription, @NonNull String longDescription) {
+        this.id = id;
+        this.time = Calendar.getInstance();
+        this.time.setTimeInMillis(timeInMilliseconds);
+        this.shortDescription = shortDescription;
+        this.longDescription = longDescription;
+    }
+
+    public HistoryItem(long id, @NonNull Calendar time, @NonNull String shortDescription) {
         this.id = id;
         this.time = time;
-        this.description = description;
+        this.shortDescription = shortDescription;
+        this.longDescription = "";
+    }
+
+    public HistoryItem(long id, @NonNull Calendar time, @NonNull String shortDescription, @NonNull String longDescription) {
+        this.id = id;
+        this.time = time;
+        this.shortDescription = shortDescription;
+        this.longDescription = longDescription;
     }
 
     /**
@@ -60,17 +84,29 @@ public class HistoryItem {
      *
      * @return Id of this HistoryItem
      */
+    @NonNull
     public Long getId() {
         return id;
     }
 
     /**
-     * Get description of this HistoryItem
+     * Get shortDescription of this HistoryItem
      *
-     * @return description of this HistoryItem
+     * @return shortDescription of this HistoryItem
      */
-    public String getDescription() {
-        return description;
+    @NonNull
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    /**
+     * Get longDescription of this HistoryItem
+     *
+     * @return longDescription of this HistoryItem
+     */
+    @NonNull
+    public String getLongDescription() {
+        return longDescription;
     }
 
     /**
@@ -78,6 +114,7 @@ public class HistoryItem {
      *
      * @return Date/Time of this HistoryItem
      */
+    @NonNull
     public Calendar getTime() {
         return time;
     }

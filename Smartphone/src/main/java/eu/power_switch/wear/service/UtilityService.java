@@ -234,15 +234,18 @@ public class UtilityService extends IntentService {
             if (DeveloperPreferencesHandler.getPlayStoreMode()) {
                 PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
 
-                List<Room> rooms = playStoreModeDataModel.getRooms();
-                List<Receiver> receivers = playStoreModeDataModel.getReceivers();
+                List<Room> rooms = playStoreModeDataModel.getActiveApartment().getRooms();
+                List<Receiver> receivers = new ArrayList<>();
+                for (Room room : rooms) {
+                    receivers.addAll(room.getReceivers());
+                }
 
                 List<Button> buttons = new ArrayList<>();
                 for (Receiver receiver : receivers) {
                     buttons.addAll(receiver.getButtons());
                 }
 
-                List<Scene> scenes = playStoreModeDataModel.getScenes();
+                List<Scene> scenes = playStoreModeDataModel.getActiveApartment().getScenes();
 
                 sendDataToWearable(rooms, receivers, buttons, scenes);
                 return;

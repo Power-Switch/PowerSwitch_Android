@@ -31,6 +31,8 @@ public class UniversalButtonTable {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_SIGNAL = "signal";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_RECEIVER_ID, COLUMN_NAME, COLUMN_SIGNAL};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +

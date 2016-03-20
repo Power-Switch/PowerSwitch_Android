@@ -116,8 +116,7 @@ abstract class ActionHandler {
      */
     protected static Action get(long id) throws Exception {
         Action action = null;
-        String[] columns = {ActionTable.COLUMN_ID, ActionTable.COLUMN_ACTION_TYPE};
-        Cursor cursor = DatabaseHandler.database.query(ActionTable.TABLE_NAME, columns,
+        Cursor cursor = DatabaseHandler.database.query(ActionTable.TABLE_NAME, ActionTable.ALL_COLUMNS,
                 ActionTable.COLUMN_ID + "=" + id, null, null, null, null);
 
         if (cursor.moveToFirst()) {

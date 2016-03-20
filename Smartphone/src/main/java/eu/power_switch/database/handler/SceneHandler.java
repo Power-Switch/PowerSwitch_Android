@@ -102,7 +102,7 @@ abstract class SceneHandler {
      */
     protected static Scene get(String name) throws Exception {
         Scene scene = null;
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_NAME + "=='" + name + "'", null,
+        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_NAME + "=='" + name + "'", null,
                 null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -121,7 +121,7 @@ abstract class SceneHandler {
      */
     protected static Scene get(Long id) throws Exception {
         Scene scene = null;
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_ID + "==" + id, null, null, null,
+        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_ID + "==" + id, null, null, null,
                 null);
 
         if (cursor.moveToFirst()) {
@@ -134,7 +134,7 @@ abstract class SceneHandler {
 
     public static LinkedList<Scene> getByApartment(Long id) throws Exception {
         LinkedList<Scene> scenes = new LinkedList<>();
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, SceneTable.COLUMN_APARTMENT_ID +
+        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_APARTMENT_ID +
                 "==" + id, null, null, null, null);
         cursor.moveToFirst();
 
@@ -153,7 +153,7 @@ abstract class SceneHandler {
      */
     protected static List<Scene> getAll() throws Exception {
         List<Scene> scenes = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -171,7 +171,12 @@ abstract class SceneHandler {
      * @return Scene
      */
     private static Scene dbToScene(Cursor c) throws Exception {
-        Scene scene = new Scene(c.getLong(0), c.getLong(3), c.getString(1));
+        long id = c.getLong(0);
+        long apartmentId = c.getLong(1);
+        String name = c.getString(2);
+        int position = c.getInt(3);
+
+        Scene scene = new Scene(id, apartmentId, name);
         for (SceneItem item : SceneItemHandler.getSceneItems(scene.getId())) {
             scene.addSceneItem(item);
         }

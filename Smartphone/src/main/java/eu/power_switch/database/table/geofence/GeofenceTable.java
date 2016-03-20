@@ -34,6 +34,8 @@ public class GeofenceTable {
     public static final String COLUMN_RADIUS = "radius";
     public static final String COLUMN_SNAPSHOT = "snapshot";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME, COLUMN_LATITUDE, COLUMN_LONGITUDE, COLUMN_RADIUS, COLUMN_SNAPSHOT};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +

@@ -39,7 +39,9 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -147,12 +149,18 @@ public class RoomSceneTabFragment extends Fragment {
 
     private void updateCurrentApartmentInfo() {
         try {
-            long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
-            if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
-                textView_currentApartmentInfo.setText(" - ");
+            if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
+                textView_currentApartmentInfo.setText(
+                        playStoreModeDataModel.getApartments().get(0).getName());
             } else {
-                String apartmentName = DatabaseHandler.getApartmentName(currentApartmentId);
-                textView_currentApartmentInfo.setText(apartmentName);
+                long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
+                if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
+                    textView_currentApartmentInfo.setText(" - ");
+                } else {
+                    String apartmentName = DatabaseHandler.getApartmentName(currentApartmentId);
+                    textView_currentApartmentInfo.setText(apartmentName);
+                }
             }
         } catch (Exception e) {
             Log.e(e);
@@ -161,7 +169,6 @@ public class RoomSceneTabFragment extends Fragment {
     }
 
     private void showTutorial(int tabIndex) {
-
         ArrayList<View> views = new ArrayList<>();
         tabLayout.findViewsWithText(views, customTabAdapter.getPageTitle(tabIndex), View.FIND_VIEWS_WITH_TEXT);
 

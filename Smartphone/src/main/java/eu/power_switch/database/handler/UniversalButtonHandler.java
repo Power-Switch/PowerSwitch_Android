@@ -95,9 +95,7 @@ abstract class UniversalButtonHandler {
      * @return Button
      */
     protected static UniversalButton getUniversalButton(Long id) throws Exception {
-
-
-        Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, null, UniversalButtonTable.COLUMN_ID + "=" + id, null, null,
+        Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.ALL_COLUMNS, UniversalButtonTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
         cursor.moveToFirst();
         UniversalButton universalButton = dbToUniversalButton(cursor);
@@ -113,7 +111,7 @@ abstract class UniversalButtonHandler {
      */
     protected static List<UniversalButton> getUniversalButtons(Long receiverId) throws Exception {
         List<UniversalButton> buttons = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, null, UniversalButtonTable.COLUMN_RECEIVER_ID +
+        Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.ALL_COLUMNS, UniversalButtonTable.COLUMN_RECEIVER_ID +
                 "=" + receiverId, null, null, null, null);
         cursor.moveToFirst();
 

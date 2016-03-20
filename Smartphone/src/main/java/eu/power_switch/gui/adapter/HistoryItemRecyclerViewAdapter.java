@@ -40,11 +40,15 @@ import eu.power_switch.history.HistoryItem;
 public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<HistoryItemRecyclerViewAdapter.ViewHolder> {
     private LinkedList<HistoryItem> historyItems;
     private Context context;
-
+    private OnItemClickListener onItemClickListener;
 
     public HistoryItemRecyclerViewAdapter(Context context, LinkedList<HistoryItem> historyItems) {
         this.historyItems = historyItems;
         this.context = context;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
         holder.time.setText(simpleDateFormat.format(historyItem.getTime().getTime()));
-        holder.description.setText(historyItem.getDescription());
+        holder.description.setText(historyItem.getShortDescription());
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
@@ -83,11 +87,20 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
         public TextView description;
         public LinearLayout footer;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             this.time = (TextView) itemView.findViewById(R.id.txt_time);
             this.description = (TextView) itemView.findViewById(R.id.txt_description);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                    }
+                }
+            });
         }
     }
 }

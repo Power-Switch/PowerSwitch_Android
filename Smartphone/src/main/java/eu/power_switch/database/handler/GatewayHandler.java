@@ -137,7 +137,7 @@ abstract class GatewayHandler {
      */
     protected static Gateway get(Long id) throws Exception {
         Gateway gateway = null;
-        Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, GatewayTable.COLUMN_ID + "=" + id, null, null,
+        Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, GatewayTable.ALL_COLUMNS, GatewayTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
 
         if (cursor.moveToFirst()) {
@@ -155,7 +155,7 @@ abstract class GatewayHandler {
      */
     protected static List<Gateway> getAll() throws Exception {
         List<Gateway> gateways = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, GatewayTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -175,7 +175,7 @@ abstract class GatewayHandler {
     protected static List<Gateway> getAll(boolean isActive) throws Exception {
         List<Gateway> gateways = new ArrayList<>();
         int isActiveInt = isActive ? 1 : 0;
-        Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, null, GatewayTable.COLUMN_ACTIVE + "=" + isActiveInt,
+        Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, GatewayTable.ALL_COLUMNS, GatewayTable.COLUMN_ACTIVE + "=" + isActiveInt,
                 null, null, null, null);
         cursor.moveToFirst();
 
@@ -196,7 +196,7 @@ abstract class GatewayHandler {
      */
     public static boolean isAssociatedWithAnyApartment(Long id) {
         Cursor cursor = DatabaseHandler.database.query(ApartmentGatewayRelationTable.TABLE_NAME,
-                null, ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
+                GatewayTable.ALL_COLUMNS, ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
 
         boolean hasElement = cursor.moveToFirst();
         cursor.close();

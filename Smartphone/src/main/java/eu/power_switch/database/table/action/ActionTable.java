@@ -31,6 +31,8 @@ public class ActionTable {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ACTION_TYPE = "action_type";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTION_TYPE};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +

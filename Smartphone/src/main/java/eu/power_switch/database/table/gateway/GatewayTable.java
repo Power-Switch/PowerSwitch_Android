@@ -34,6 +34,8 @@ public class GatewayTable {
     public static final String COLUMN_ADDRESS = "address";
     public static final String COLUMN_PORT = "port";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME, COLUMN_MODEL, COLUMN_FIRMWARE, COLUMN_ADDRESS, COLUMN_PORT};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +

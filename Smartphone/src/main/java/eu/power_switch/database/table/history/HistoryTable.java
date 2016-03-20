@@ -28,13 +28,17 @@ public class HistoryTable {
     public static final String TABLE_NAME = "history_items";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_DESCRIPTION_LONG = "description_long";
     public static final String COLUMN_TIME = "time";
+
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_DESCRIPTION, COLUMN_DESCRIPTION_LONG, COLUMN_TIME};
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +
             COLUMN_TIME + " integer not null," +
-            COLUMN_DESCRIPTION + " text not null" +
+            COLUMN_DESCRIPTION + " text not null," +
+            COLUMN_DESCRIPTION_LONG + " text not null" +
         ");";
     //@formatter:on
 
@@ -55,6 +59,12 @@ public class HistoryTable {
             case 9:
                 onCreate(db);
                 break;
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_DESCRIPTION_LONG + " text not null DEFAULT '';");
         }
     }
 }

@@ -131,8 +131,9 @@ abstract class ApartmentHandler {
      */
     protected static Apartment get(String name) throws Exception {
         Apartment apartment = null;
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, ApartmentTable.COLUMN_NAME + "=='" +
-                name + "'", null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
+                ApartmentTable.ALL_COLUMNS, ApartmentTable.COLUMN_NAME + "=='" + name + "'",
+                null, null, null, null);
 
         if (cursor.moveToFirst()) {
             apartment = dbToApartment(cursor);
@@ -150,7 +151,7 @@ abstract class ApartmentHandler {
      */
     protected static Apartment getCaseInsensitive(String name) throws Exception {
         Apartment apartment = null;
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, ApartmentTable.COLUMN_NAME + "=='" +
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, ApartmentTable.ALL_COLUMNS, ApartmentTable.COLUMN_NAME + "=='" +
                 name + "' COLLATE NOCASE", null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -168,7 +169,8 @@ abstract class ApartmentHandler {
      */
     protected static Apartment get(Long id) throws Exception {
         Apartment apartment = null;
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, ApartmentTable.COLUMN_ID + "==" + id,
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
+                ApartmentTable.ALL_COLUMNS, ApartmentTable.COLUMN_ID + "==" + id,
                 null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -276,7 +278,8 @@ abstract class ApartmentHandler {
      */
     protected static List<Apartment> getAll() throws Exception {
         List<Apartment> apartments = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
+                ApartmentTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {

@@ -58,7 +58,7 @@ import eu.power_switch.shared.log.Log;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

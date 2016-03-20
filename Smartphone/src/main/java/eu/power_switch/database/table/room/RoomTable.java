@@ -32,6 +32,8 @@ public class RoomTable {
     public static final String COLUMN_POSITION = "position";
     public static final String COLUMN_COLLAPSED = "collapsed";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_APARTMENT_ID, COLUMN_NAME, COLUMN_POSITION, COLUMN_COLLAPSED};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +

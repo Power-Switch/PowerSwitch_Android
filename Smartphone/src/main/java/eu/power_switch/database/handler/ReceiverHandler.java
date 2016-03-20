@@ -141,10 +141,7 @@ class ReceiverHandler {
      */
     protected static Receiver get(Long id) throws Exception {
         Receiver receiver = null;
-        String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
-                ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
-                ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
+        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, ReceiverTable.COLUMN_ID + "="
                 + id, null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -180,10 +177,7 @@ class ReceiverHandler {
      */
     protected static ArrayList<Receiver> getByRoom(Long roomId) throws Exception {
         ArrayList<Receiver> receivers = new ArrayList<>();
-        String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
-                ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
-                ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ROOM_ID +
+        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, ReceiverTable.COLUMN_ROOM_ID +
                 "=" + roomId, null, null, null, null);
         cursor.moveToFirst();
 
@@ -210,10 +204,7 @@ class ReceiverHandler {
      */
     protected static List<Receiver> getAll() throws Exception {
         List<Receiver> receivers = new ArrayList<>();
-        String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_NAME, ReceiverTable.COLUMN_MODEL,
-                ReceiverTable.COLUMN_TYPE, ReceiverTable.COLUMN_CLASSNAME, ReceiverTable.COLUMN_ROOM_ID,
-                ReceiverTable.COLUMN_POSITION_IN_ROOM, ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {

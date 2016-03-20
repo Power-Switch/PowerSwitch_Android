@@ -98,7 +98,7 @@ public class SmartphonePreferencesHandler {
         useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, false);
         keepHistoryDurationCache = sharedPreferences.getInt(SettingsConstants.KEEP_HISTORY_DURATION, SettingsConstants.KEEP_HISTORY_FOREVER);
 
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+        if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
             currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, SettingsConstants.INVALID_APARTMENT_ID);
         } else {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(SmartphonePreferencesHandler.context);

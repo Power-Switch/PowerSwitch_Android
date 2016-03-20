@@ -41,6 +41,10 @@ public class ReceiverTable {
     public static final String COLUMN_POSITION_IN_ROOM = "positionInRoom";
     public static final String COLUMN_LAST_ACTIVATED_BUTTON_ID = "lastActivatedButton";
 
+    public static final String[] ALL_COLUMNS = {
+            COLUMN_ID, COLUMN_NAME, COLUMN_MODEL, COLUMN_TYPE, COLUMN_CLASSNAME, COLUMN_ROOM_ID,
+            COLUMN_POSITION_IN_ROOM, COLUMN_LAST_ACTIVATED_BUTTON_ID};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +

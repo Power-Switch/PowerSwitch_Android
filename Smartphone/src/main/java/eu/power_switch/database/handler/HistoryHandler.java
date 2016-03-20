@@ -54,8 +54,7 @@ class HistoryHandler {
     public static LinkedList<HistoryItem> getHistory() throws Exception {
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
 
-        String[] columns = {HistoryTable.COLUMN_ID, HistoryTable.COLUMN_DESCRIPTION, HistoryTable.COLUMN_TIME};
-        Cursor cursor = DatabaseHandler.database.query(HistoryTable.TABLE_NAME, columns, null, null, null, null, HistoryTable.COLUMN_TIME + " ASC");
+        Cursor cursor = DatabaseHandler.database.query(HistoryTable.TABLE_NAME, HistoryTable.ALL_COLUMNS, null, null, null, null, HistoryTable.COLUMN_TIME + " ASC");
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -74,7 +73,8 @@ class HistoryHandler {
      */
     public static Long add(HistoryItem historyItem) throws Exception {
         ContentValues values = new ContentValues();
-        values.put(HistoryTable.COLUMN_DESCRIPTION, historyItem.getDescription());
+        values.put(HistoryTable.COLUMN_DESCRIPTION, historyItem.getShortDescription());
+        values.put(HistoryTable.COLUMN_DESCRIPTION_LONG, historyItem.getLongDescription());
         values.put(HistoryTable.COLUMN_TIME, historyItem.getTime().getTimeInMillis());
         long id = DatabaseHandler.database.insert(HistoryTable.TABLE_NAME, null, values);
         deleteOldEntries();
@@ -117,10 +117,11 @@ class HistoryHandler {
 
     private static HistoryItem dbToHistoryItem(Cursor cursor) throws Exception {
         Long id = cursor.getLong(0);
-        String description = cursor.getString(1);
-        Long time = cursor.getLong(2);
+        String shortDescription = cursor.getString(1);
+        String longDescription = !cursor.isNull(2) ? cursor.getString(2) : "";
+        Long time = cursor.getLong(3);
 
-        return new HistoryItem(id, time, description);
+        return new HistoryItem(id, time, shortDescription, longDescription);
     }
 
 }

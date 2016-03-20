@@ -33,6 +33,9 @@ public class TimerTable {
     public static final String COLUMN_EXECUTION_INTERVAL = "execution_interval";
     public static final String COLUMN_EXECUTION_TYPE = "execution_type";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME,
+            COLUMN_EXECUTION_TIME, COLUMN_EXECUTION_INTERVAL, COLUMN_EXECUTION_TYPE};
+
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +

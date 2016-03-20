@@ -150,10 +150,7 @@ abstract class TimerHandler {
      */
     protected static Timer get(Long timerId) throws Exception {
         Timer timer = null;
-        String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
-                TimerTable.COLUMN_EXECUTION_TIME, TimerTable.COLUMN_EXECUTION_INTERVAL,
-                TimerTable.COLUMN_EXECUTION_TYPE};
-        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, columns,
+        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS,
                 TimerTable.COLUMN_ID + "=" + timerId, null, null, null, null);
         cursor.moveToFirst();
 
@@ -172,10 +169,7 @@ abstract class TimerHandler {
      */
     protected static List<Timer> getAll() throws Exception {
         List<Timer> timers = new ArrayList<>();
-        String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
-                TimerTable.COLUMN_EXECUTION_TIME, TimerTable.COLUMN_EXECUTION_INTERVAL,
-                TimerTable.COLUMN_EXECUTION_TYPE};
-        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {

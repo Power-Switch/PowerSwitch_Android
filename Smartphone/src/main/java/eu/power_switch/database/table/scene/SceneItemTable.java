@@ -31,6 +31,8 @@ public class SceneItemTable {
     public static final String COLUMN_RECEIVER_ID = "receiver_id";
     public static final String COLUMN_ACTIVE_BUTTON_ID = "active_button_id";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_SCENE_ID, COLUMN_RECEIVER_ID, COLUMN_ACTIVE_BUTTON_ID};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_ID + " integer primary key autoincrement," +

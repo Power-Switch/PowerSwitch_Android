@@ -34,6 +34,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -167,18 +168,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public static View getMainAppView() {
         return appBarLayout;
-    }
-
-    /**
-     * Used to notify Room Fragment (this) that Rooms have changed
-     *
-     * @param context any suitable context
-     */
-    public static void sendHistoryChangedBroadcast(Context context) {
-        Log.d(MainActivity.class, "sendHistoryChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     public void startFragmentTransaction(int menuItemIdentifier, String menuItemTitle, Fragment fragment) {
@@ -781,6 +770,16 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerViewHistory = (RecyclerView) historyView.findViewById(R.id.recyclerview_history);
         historyItemArrayAdapter = new HistoryItemRecyclerViewAdapter(this, historyItems);
+        historyItemArrayAdapter.setOnItemClickListener(new HistoryItemRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                HistoryItem historyItem = historyItems.get(position);
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.details)
+                        .setMessage(historyItem.getLongDescription())
+                        .show();
+            }
+        });
         recyclerViewHistory.setAdapter(historyItemArrayAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewHistory.setLayoutManager(layoutManager);

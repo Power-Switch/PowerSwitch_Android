@@ -113,7 +113,7 @@ abstract class RoomHandler {
      */
     protected static Room get(String name) throws Exception {
         Room room = null;
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_NAME + "=='" +
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_NAME + "=='" +
                 name + "'", null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -132,7 +132,7 @@ abstract class RoomHandler {
      */
     protected static Room getCaseInsensitive(String name) throws Exception {
         Room room = null;
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_NAME + "=='" +
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_NAME + "=='" +
                 name.toLowerCase() + "' COLLATE NOCASE", null, null, null, null);
         cursor.moveToFirst();
 
@@ -152,7 +152,7 @@ abstract class RoomHandler {
      */
     protected static Room get(Long id) throws Exception {
         Room room = null;
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null,
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS,
                 RoomTable.COLUMN_ID + "==" + id, null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -172,7 +172,7 @@ abstract class RoomHandler {
      */
     public static LinkedList<Room> getByApartment(Long apartmentId) throws Exception {
         LinkedList<Room> rooms = new LinkedList<>();
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, RoomTable.COLUMN_APARTMENT_ID +
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_APARTMENT_ID +
                         "==" + apartmentId,
                 null, null, null, null);
         cursor.moveToFirst();
@@ -189,6 +189,11 @@ abstract class RoomHandler {
         return rooms;
     }
 
+    /**
+     * Get all room IDs of a specific Apartment.
+     *
+     * @return a list of room IDs
+     */
     public static ArrayList<Long> getIdsByApartment(Long apartmentId) throws Exception {
         ArrayList<Long> roomIds = new ArrayList<>();
         String[] columns = new String[]{RoomTable.COLUMN_ID};
@@ -211,7 +216,7 @@ abstract class RoomHandler {
      */
     protected static List<Room> getAll() throws Exception {
         List<Room> rooms = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
@@ -233,9 +238,13 @@ abstract class RoomHandler {
      * @return Room
      */
     private static Room dbToRoom(Cursor c) throws Exception {
+        long id = c.getLong(0);
+        long apartmentId = c.getLong(1);
+        String name = c.getString(2);
+        int position = c.getInt(3);
         boolean isCollapsed = c.getInt(4) > 0;
 
-        Room room = new Room(c.getLong(0), c.getLong(3), c.getString(1), c.getInt(2), isCollapsed);
+        Room room = new Room(id, apartmentId, name, position, isCollapsed);
         room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
         return room;
     }

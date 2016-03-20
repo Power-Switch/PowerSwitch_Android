@@ -87,7 +87,7 @@ abstract class GeofenceHandler {
         }
 
         Geofence geofence = null;
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS,
                 GeofenceTable.COLUMN_ID + "=" + id, null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -165,7 +165,7 @@ abstract class GeofenceHandler {
      */
     protected static List<Geofence> getAll() throws Exception {
         List<Geofence> geofences = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -183,7 +183,7 @@ abstract class GeofenceHandler {
      */
     public static List<Geofence> getCustom() throws Exception {
         List<Geofence> geofences = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -213,7 +213,7 @@ abstract class GeofenceHandler {
     protected static List<Geofence> getAll(boolean isActive) throws Exception {
         List<Geofence> geofences = new ArrayList<>();
         int isActiveInt = isActive ? 1 : 0;
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, null,
+        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS,
                 GeofenceTable.COLUMN_ACTIVE + "=" + isActiveInt, null, null, null, null);
         cursor.moveToFirst();
 

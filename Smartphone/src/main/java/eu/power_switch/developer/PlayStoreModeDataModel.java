@@ -49,53 +49,70 @@ import eu.power_switch.timer.WeekdayTimer;
  */
 public class PlayStoreModeDataModel {
 
-    private Context context;
+    private static Context context;
 
-    private Apartment apartment;
+    private static ArrayList<Apartment> apartments = new ArrayList<>();
+    private static ArrayList<Room> rooms = new ArrayList<>();
+    private static ArrayList<Receiver> receivers = new ArrayList<>();
+    private static ArrayList<Scene> scenes = new ArrayList<>();
 
-    private ArrayList<Room> rooms = new ArrayList<>();
-    private ArrayList<Scene> scenes = new ArrayList<>();
+    private static ArrayList<Gateway> gateways = new ArrayList<>();
 
+    // apartments
+    private static Apartment heimat;
     // Scenes
-    private Scene scene_kinoabend = new Scene((long) 0, (long) 0, "Kinoabend");
-    private Scene scene_abendessen = new Scene((long) 1, (long) 0, "Abendessen");
-    private Scene scene_feier = new Scene((long) 2, (long) 0, "Feier");
+    private static Scene scene_kinoabend = new Scene((long) 0, (long) 0, "Kinoabend");
+    private static Scene scene_abendessen = new Scene((long) 1, (long) 0, "Abendessen");
+    private static Scene scene_feier = new Scene((long) 2, (long) 0, "Feier");
     // Rooms
-    private Room wohnzimmer = new Room((long) 0, (long) 0, "Wohnzimmer", 0, false);
-    private Room schlafzimmer = new Room((long) 1, (long) 0, "Schlafzimmer", 0, false);
-    private Room kueche = new Room((long) 2, (long) 0, "Küche", 0, false);
-    private Room kinderzimmer = new Room((long) 3, (long) 0, "Kinderzimmer", 0, false);
-    private Room garten = new Room((long) 4, (long) 0, "Garten", 0, false);
+    private static Room wohnzimmer = new Room((long) 0, (long) 0, "Wohnzimmer", 0, false);
+    private static Room schlafzimmer = new Room((long) 1, (long) 0, "Schlafzimmer", 0, false);
+    private static Room kueche = new Room((long) 2, (long) 0, "Küche", 0, false);
+    private static Room kinderzimmer = new Room((long) 3, (long) 0, "Kinderzimmer", 0, false);
+    private static Room garten = new Room((long) 4, (long) 0, "Garten", 0, false);
     // Receiver
-    private Receiver sofa_wohnzimmer;
-    private Receiver ecklampe_wohnzimmer;
-    private Receiver verstaerker_wohnzimmer;
-    private Receiver decke_schlafzimmer;
-    private Receiver fenster_schlafzimmer;
-    private Receiver nachttische_schlafzimmer;
-    private Receiver abzugshaube_kueche;
-    private Receiver esstisch_kueche;
-    private Receiver arbeitsflaeche_kueche;
-    private Receiver kaffeemaschine_kueche;
-    private Receiver decke_kinderzimmer;
-    private Receiver nachtlicht_kinderzimmer;
-    private Receiver terrasse_garten;
-    private Receiver wegbeleuchtung_garten;
-    private Receiver hinterhaus_garten;
-    private Receiver weihnachtsdeko_garten;
+    private static Receiver sofa_wohnzimmer;
+    private static Receiver ecklampe_wohnzimmer;
+    private static Receiver verstaerker_wohnzimmer;
+    private static Receiver decke_schlafzimmer;
+    private static Receiver fenster_schlafzimmer;
+    private static Receiver nachttische_schlafzimmer;
+    private static Receiver abzugshaube_kueche;
+    private static Receiver esstisch_kueche;
+    private static Receiver arbeitsflaeche_kueche;
+    private static Receiver kaffeemaschine_kueche;
+    private static Receiver decke_kinderzimmer;
+    private static Receiver nachtlicht_kinderzimmer;
+    private static Receiver terrasse_garten;
+    private static Receiver wegbeleuchtung_garten;
+    private static Receiver hinterhaus_garten;
+    private static Receiver weihnachtsdeko_garten;
+
+    static {
+        initReceivers(context);
+        initRooms();
+        initScenes();
+        initGateways();
+
+        heimat = new Apartment((long) 0, true, "Heimat", rooms, scenes, getGateways(),
+                new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
+                        null, new HashMap<Geofence.EventType, List<Action>>()));
+
+        apartments.add(heimat);
+    }
 
     /**
      * Default constructor
      */
     public PlayStoreModeDataModel(Context context) {
-        this.context = context;
-        initReceiver();
-        initRooms();
-        initScenes();
+        PlayStoreModeDataModel.context = context;
+    }
 
-        apartment = new Apartment((long) 0, true, "Heimat", getRooms(), getScenes(), getGateways(),
-                new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
-                        null, new HashMap<Geofence.EventType, List<Action>>()));
+    private static void initGateways() {
+        gateways = new ArrayList<>();
+        gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880));
+        gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880));
+        gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880));
     }
 
     /**
@@ -104,16 +121,10 @@ public class PlayStoreModeDataModel {
      * @return List of Gateways
      */
     public static ArrayList<Gateway> getGateways() {
-        ArrayList<Gateway> gateways = new ArrayList<>();
-
-        gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880));
-        gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880));
-        gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880));
-
         return gateways;
     }
 
-    private void initReceiver() {
+    private static void initReceivers(Context context) {
         sofa_wohnzimmer = new CMR1000(context, (long) 0, "Sofa", 'E', 1, wohnzimmer.getId());
         ecklampe_wohnzimmer = new CMR1000(context, (long) 1, "Ecklampe", 'E', 1, wohnzimmer.getId());
         verstaerker_wohnzimmer = new CMR1000(context, (long) 2, "Verstärker", 'E', 1, wohnzimmer.getId());
@@ -132,7 +143,7 @@ public class PlayStoreModeDataModel {
         weihnachtsdeko_garten = new CMR1000(context, (long) 15, "Weihnachtsdeko", 'E', 1, garten.getId());
     }
 
-    private void initScenes() {
+    private static void initScenes() {
         scene_kinoabend.addSceneItem(sofa_wohnzimmer, sofa_wohnzimmer.getButtons().getFirst());
         scene_kinoabend.addSceneItem(ecklampe_wohnzimmer, ecklampe_wohnzimmer.getButtons().getLast());
         scene_kinoabend.addSceneItem(verstaerker_wohnzimmer, verstaerker_wohnzimmer.getButtons().getFirst());
@@ -151,7 +162,7 @@ public class PlayStoreModeDataModel {
         scenes.add(scene_feier);
     }
 
-    private void initRooms() {
+    private static void initRooms() {
         wohnzimmer.addReceiver(sofa_wohnzimmer);
         wohnzimmer.addReceiver(ecklampe_wohnzimmer);
         wohnzimmer.addReceiver(verstaerker_wohnzimmer);
@@ -180,49 +191,12 @@ public class PlayStoreModeDataModel {
         rooms.add(garten);
     }
 
-    /**
-     * Get all Rooms
-     *
-     * @return List of Rooms
-     */
-    public ArrayList<Room> getRooms() {
-        return rooms;
+    public static ArrayList<Apartment> getApartments() {
+        return apartments;
     }
 
-    /**
-     * Get all Scenes
-     *
-     * @return List of Scenes
-     */
-    public ArrayList<Scene> getScenes() {
-        return scenes;
-    }
-
-    /**
-     * Get all Receivers
-     *
-     * @return List of Receivers
-     */
-    public ArrayList<Receiver> getReceivers() {
-        ArrayList<Receiver> receivers = new ArrayList<>();
-        receivers.add(sofa_wohnzimmer);
-        receivers.add(ecklampe_wohnzimmer);
-        receivers.add(verstaerker_wohnzimmer);
-        receivers.add(decke_schlafzimmer);
-        receivers.add(fenster_schlafzimmer);
-        receivers.add(nachttische_schlafzimmer);
-        receivers.add(abzugshaube_kueche);
-        receivers.add(esstisch_kueche);
-        receivers.add(arbeitsflaeche_kueche);
-        receivers.add(kaffeemaschine_kueche);
-        receivers.add(decke_kinderzimmer);
-        receivers.add(nachtlicht_kinderzimmer);
-        receivers.add(terrasse_garten);
-        receivers.add(wegbeleuchtung_garten);
-        receivers.add(hinterhaus_garten);
-        receivers.add(weihnachtsdeko_garten);
-
-        return receivers;
+    public static Apartment getActiveApartment() {
+        return apartments.get(0);
     }
 
     /**
@@ -233,7 +207,7 @@ public class PlayStoreModeDataModel {
     public ArrayList<Timer> getTimers() {
         ArrayList<Timer> timers = new ArrayList<>();
 
-        ReceiverAction timerReceiverAction = new ReceiverAction(0, apartment.getName(), wohnzimmer, ecklampe_wohnzimmer,
+        ReceiverAction timerReceiverAction = new ReceiverAction(0, heimat.getName(), wohnzimmer, ecklampe_wohnzimmer,
                 ecklampe_wohnzimmer.getButtons().getFirst());
         ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
         days.add(WeekdayTimer.Day.MONDAY);
@@ -254,7 +228,7 @@ public class PlayStoreModeDataModel {
         timers.add(new WeekdayTimer(0, true, "Abendlicht", c, days, actions));
 
 
-        ReceiverAction timerReceiverAction2 = new ReceiverAction(0, apartment.getName(), kueche, kaffeemaschine_kueche,
+        ReceiverAction timerReceiverAction2 = new ReceiverAction(0, heimat.getName(), kueche, kaffeemaschine_kueche,
                 ecklampe_wohnzimmer.getButtons().getFirst());
 
         ArrayList<Action> actions2 = new ArrayList<>();
@@ -274,11 +248,5 @@ public class PlayStoreModeDataModel {
         timers.add(new WeekdayTimer(1, true, "Morgenkaffee", c2, days2, actions2));
 
         return timers;
-    }
-
-    public ArrayList<Apartment> getApartments() {
-        ArrayList<Apartment> apartments = new ArrayList<>();
-        apartments.add(apartment);
-        return apartments;
     }
 }

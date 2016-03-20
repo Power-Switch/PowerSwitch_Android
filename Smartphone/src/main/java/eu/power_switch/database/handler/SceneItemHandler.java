@@ -103,7 +103,7 @@ abstract class SceneItemHandler {
     protected static List<SceneItem> getSceneItems(Long sceneId) throws Exception {
         LinkedList<SceneItem> sceneItems = new LinkedList<>();
 
-        Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, null,
+        Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, SceneItemTable.ALL_COLUMNS,
                 SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -141,8 +141,8 @@ abstract class SceneItemHandler {
      * @return SceneItem
      */
     private static SceneItem dbToSceneItem(Cursor c) throws Exception {
-        long receiverId = c.getLong(1);
-        long activeButtonId = c.getLong(2);
+        long receiverId = c.getLong(2);
+        long activeButtonId = c.getLong(3);
 
         String activeButtonName = getActiveButtonName(activeButtonId);
 
