@@ -28,7 +28,6 @@ import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -50,9 +49,9 @@ public class FireReceiver extends BroadcastReceiver {
         Log.d(FireReceiver.class, intent);
 
         if (com.twofortyfouram.locale.Intent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
-            if (PluginBundleManager.isBundleValid(context, intent.getExtras())) {
-                parseActionIntent(context, intent);
-            }
+            // no validation check done here,
+            // because the intent contains more extras (added by tasker) than before
+            parseActionIntent(context, intent);
         }
     }
 
