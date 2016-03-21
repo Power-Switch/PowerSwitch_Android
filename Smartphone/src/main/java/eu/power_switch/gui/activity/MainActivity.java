@@ -63,6 +63,7 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -774,9 +775,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View itemView, int position) {
                 HistoryItem historyItem = historyItems.get(position);
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.details)
-                        .setMessage(historyItem.getLongDescription())
+                        .setMessage(simpleDateFormat.format(historyItem.getTime().getTime()) + "\n\n" +
+                                historyItem.getShortDescription() + "\n\n" +
+                                historyItem.getLongDescription())
+                        .setNeutralButton(R.string.close, null)
                         .show();
             }
         });
