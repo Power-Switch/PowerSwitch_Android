@@ -22,6 +22,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -32,11 +33,14 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
@@ -91,6 +95,12 @@ public abstract class AddActionDialog extends DialogFragment {
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
+    private ProgressBar progressApartment;
+    private ProgressBar progressRoom;
+    private ProgressBar progressReceiver;
+    private ProgressBar progressButton;
+    private ProgressBar progressScene;
+    private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
 
     @NonNull
     @Override
@@ -119,7 +129,6 @@ public abstract class AddActionDialog extends DialogFragment {
                 }
 
                 updateLists();
-                setPositiveButtonVisibility(checkValidity());
             }
         };
 
@@ -131,29 +140,14 @@ public abstract class AddActionDialog extends DialogFragment {
         radioButtonSceneAction = (RadioButton) rootView.findViewById(R.id.radioButton_scene_action);
         radioButtonSceneAction.setOnClickListener(onClickListener);
 
-        try {
-            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
-            for (Apartment apartment : availableApartments) {
-                apartmentNames.add(apartment.getName());
-            }
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
-
         spinner_apartment = (Spinner) rootView.findViewById(R.id.spinner_apartment);
-        ArrayAdapter<String> apartmentSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, apartmentNames);
+        apartmentSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, apartmentNames);
         apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_apartment.setAdapter(apartmentSpinnerArrayAdapter);
         SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateLists();
-                setPositiveButtonVisibility(checkValidity());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_apartment.setOnTouchListener(spinnerInteractionListener);
@@ -164,6 +158,11 @@ public abstract class AddActionDialog extends DialogFragment {
         linearLayoutButton = (LinearLayout) rootView.findViewById(R.id.linearLayout_button);
         linearLayoutScene = (LinearLayout) rootView.findViewById(R.id.linearLayout_scene);
 
+        progressApartment = (ProgressBar) rootView.findViewById(R.id.progressApartment);
+        progressRoom = (ProgressBar) rootView.findViewById(R.id.progressRoom);
+        progressReceiver = (ProgressBar) rootView.findViewById(R.id.progressReceiver);
+        progressButton = (ProgressBar) rootView.findViewById(R.id.progressButton);
+        progressScene = (ProgressBar) rootView.findViewById(R.id.progressScene);
 
         spinner_room = (Spinner) rootView.findViewById(R.id.spinner_room);
         roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
@@ -173,12 +172,6 @@ public abstract class AddActionDialog extends DialogFragment {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateReceiverList();
-                setPositiveButtonVisibility(checkValidity());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_room.setOnTouchListener(spinnerInteractionListener2);
@@ -192,12 +185,6 @@ public abstract class AddActionDialog extends DialogFragment {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
                 updateButtonList();
-                setPositiveButtonVisibility(checkValidity());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                setPositiveButtonVisibility(checkValidity());
             }
         };
         spinner_receiver.setOnTouchListener(spinnerInteractionListener3);
@@ -210,12 +197,7 @@ public abstract class AddActionDialog extends DialogFragment {
         SpinnerInteractionListener spinnerInteractionListener4 = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                setPositiveButtonVisibility(checkValidity());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                setPositiveButtonVisibility(checkValidity());
+                updatePositiveButton();
             }
         };
         spinner_button.setOnTouchListener(spinnerInteractionListener4);
@@ -228,19 +210,14 @@ public abstract class AddActionDialog extends DialogFragment {
         SpinnerInteractionListener spinnerInteractionListener7 = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                setPositiveButtonVisibility(checkValidity());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                setPositiveButtonVisibility(checkValidity());
+                updatePositiveButton();
             }
         };
         spinner_scene.setOnTouchListener(spinnerInteractionListener7);
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener7);
 
         updateActionType(Action.ACTION_TYPE_RECEIVER);
-        updateLists();
+        updateApartmentList();
 
         builder.setTitle(R.string.add_action);
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
@@ -266,70 +243,218 @@ public abstract class AddActionDialog extends DialogFragment {
 
     protected void updateLists() {
         try {
+            setPositiveButtonVisibility(false);
+
             currentApartment = getSelectedApartment();
 
-            updateRoomList();
-            updateScenesList();
-        } catch (Exception e) {
-            Log.e(e);
-        }
-    }
-
-    private void updateScenesList() {
-        sceneNames.clear();
-
-        for (Scene scene : currentApartment.getScenes()) {
-            sceneNames.add(scene.getName());
-        }
-
-        spinner_scene.setSelection(0);
-        sceneSpinnerArrayAdapter.notifyDataSetChanged();
-    }
-
-    private void updateRoomList() {
-        roomNames.clear();
-
-        for (Room room : currentApartment.getRooms()) {
-            roomNames.add(room.getName());
-        }
-
-        spinner_room.setSelection(0);
-
-        roomSpinnerArrayAdapter.notifyDataSetChanged();
-
-        updateReceiverList();
-    }
-
-    private void updateReceiverList() {
-        receiverNames.clear();
-
-        try {
-            Room selectedRoom = getSelectedRoom();
-            if (selectedRoom != null) {
-                for (Receiver receiver : selectedRoom.getReceivers()) {
-                    receiverNames.add(receiver.getName());
-                }
-                spinner_receiver.setSelection(0);
+            if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
+                updateSceneList();
+            } else {
+                updateRoomList();
             }
         } catch (Exception e) {
             Log.e(e);
         }
+    }
 
-        updateButtonList();
+    private void updateApartmentList() {
+        setPositiveButtonVisibility(false);
 
-        receiverSpinnerArrayAdapter.notifyDataSetChanged();
+        progressApartment.setVisibility(View.VISIBLE);
+        spinner_apartment.setVisibility(View.GONE);
+
+        progressRoom.setVisibility(View.VISIBLE);
+        spinner_room.setVisibility(View.GONE);
+
+        progressReceiver.setVisibility(View.VISIBLE);
+        spinner_receiver.setVisibility(View.GONE);
+
+        progressButton.setVisibility(View.VISIBLE);
+        spinner_button.setVisibility(View.GONE);
+
+        progressScene.setVisibility(View.VISIBLE);
+        spinner_scene.setVisibility(View.GONE);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
+                    for (Apartment apartment : availableApartments) {
+                        apartmentNames.add(apartment.getName());
+                    }
+                } catch (Exception e) {
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                progressApartment.setVisibility(View.GONE);
+                spinner_apartment.setVisibility(View.VISIBLE);
+
+                spinner_apartment.setSelection(0);
+                apartmentSpinnerArrayAdapter.notifyDataSetChanged();
+
+                currentApartment = getSelectedApartment();
+                updateRoomList();
+                updateSceneList();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void updateSceneList() {
+        setPositiveButtonVisibility(false);
+
+        progressScene.setVisibility(View.VISIBLE);
+        spinner_scene.setVisibility(View.GONE);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    sceneNames.clear();
+
+                    for (Scene scene : currentApartment.getScenes()) {
+                        sceneNames.add(scene.getName());
+                    }
+                } catch (Exception e) {
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                progressScene.setVisibility(View.GONE);
+                spinner_scene.setVisibility(View.VISIBLE);
+
+                spinner_scene.setSelection(0);
+                sceneSpinnerArrayAdapter.notifyDataSetChanged();
+
+                updatePositiveButton();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void updateRoomList() {
+        setPositiveButtonVisibility(false);
+
+        progressRoom.setVisibility(View.VISIBLE);
+        spinner_room.setVisibility(View.GONE);
+
+        progressReceiver.setVisibility(View.VISIBLE);
+        spinner_receiver.setVisibility(View.GONE);
+
+        progressButton.setVisibility(View.VISIBLE);
+        spinner_button.setVisibility(View.GONE);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    roomNames.clear();
+
+                    for (Room room : currentApartment.getRooms()) {
+                        roomNames.add(room.getName());
+                    }
+                } catch (Exception e) {
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                progressRoom.setVisibility(View.GONE);
+                spinner_room.setVisibility(View.VISIBLE);
+
+                spinner_room.setSelection(0);
+
+                roomSpinnerArrayAdapter.notifyDataSetChanged();
+
+                updateReceiverList();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void updateReceiverList() {
+        setPositiveButtonVisibility(false);
+
+        progressReceiver.setVisibility(View.VISIBLE);
+        spinner_receiver.setVisibility(View.GONE);
+
+        progressButton.setVisibility(View.VISIBLE);
+        spinner_button.setVisibility(View.GONE);
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                receiverNames.clear();
+
+                try {
+                    Room selectedRoom = getSelectedRoom();
+                    if (selectedRoom != null) {
+                        for (Receiver receiver : selectedRoom.getReceivers()) {
+                            receiverNames.add(receiver.getName());
+                        }
+                    }
+                } catch (NoSuchElementException e) {
+
+                } catch (Exception e) {
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                progressReceiver.setVisibility(View.GONE);
+                spinner_receiver.setVisibility(View.VISIBLE);
+
+                spinner_receiver.setSelection(0);
+                receiverSpinnerArrayAdapter.notifyDataSetChanged();
+
+                updateButtonList();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void updateButtonList() {
-        buttonNames.clear();
+        setPositiveButtonVisibility(false);
 
-        if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            updateReceiverButtonList();
-        } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            updateRoomButtonsList();
-        }
+        progressButton.setVisibility(View.VISIBLE);
+        spinner_button.setVisibility(View.GONE);
 
-        buttonSpinnerArrayAdapter.notifyDataSetChanged();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                buttonNames.clear();
+
+                if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
+                    updateReceiverButtonList();
+                } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
+                    updateRoomButtonsList();
+                }
+
+                Collections.sort(buttonNames);
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                progressButton.setVisibility(View.GONE);
+                spinner_button.setVisibility(View.VISIBLE);
+
+                spinner_button.setSelection(0);
+
+                buttonSpinnerArrayAdapter.notifyDataSetChanged();
+
+                updatePositiveButton();
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void updateReceiverButtonList() {
@@ -344,9 +469,7 @@ public abstract class AddActionDialog extends DialogFragment {
                 }
             }
 
-            spinner_button.setSelection(0);
         } catch (Exception e) {
-            Log.e(e);
         }
     }
 
@@ -361,10 +484,7 @@ public abstract class AddActionDialog extends DialogFragment {
                 }
             }
             buttonNames.addAll(uniqueButtonNames);
-
-            spinner_button.setSelection(0);
         } catch (Exception e) {
-            Log.e(e);
         }
     }
 
@@ -378,7 +498,7 @@ public abstract class AddActionDialog extends DialogFragment {
         return null;
     }
 
-    private Room getSelectedRoom() {
+    private Room getSelectedRoom() throws Exception {
         return currentApartment.getRoom(spinner_room.getSelectedItem().toString());
     }
 
@@ -453,7 +573,7 @@ public abstract class AddActionDialog extends DialogFragment {
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(rootView, e);
         }
 
         return action;
@@ -493,7 +613,7 @@ public abstract class AddActionDialog extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setPositiveButtonVisibility(checkValidity());
+        updatePositiveButton();
     }
 
     private void setPositiveButtonVisibility(boolean visibility) {
@@ -506,5 +626,19 @@ public abstract class AddActionDialog extends DialogFragment {
                 ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
             }
         }
+    }
+
+    private void updatePositiveButton() {
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                return checkValidity();
+            }
+
+            @Override
+            protected void onPostExecute(Boolean bool) {
+                setPositiveButtonVisibility(bool);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 }

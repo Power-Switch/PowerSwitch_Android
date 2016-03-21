@@ -75,11 +75,11 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/sub_header"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:layout_weight="1"
-                style="@style/sub_header"
                 android:text="@string/apartment"
                 android:textColor="?attr/colorAccent"/>
 
@@ -87,6 +87,14 @@
                 android:id="@+id/spinner_apartment"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_spinner_height"/>
+
+            <ProgressBar
+                android:id="@+id/progressApartment"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -109,6 +117,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_spinner_height"/>
 
+            <ProgressBar
+                android:id="@+id/progressRoom"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -129,6 +145,14 @@
                 android:id="@+id/spinner_receiver"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_spinner_height"/>
+
+            <ProgressBar
+                android:id="@+id/progressReceiver"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
@@ -151,6 +175,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_spinner_height"/>
 
+            <ProgressBar
+                android:id="@+id/progressButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -171,6 +203,14 @@
                 android:id="@+id/spinner_scene"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_spinner_height"/>
+
+            <ProgressBar
+                android:id="@+id/progressScene"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:indeterminate="true"
+                android:visibility="gone"/>
 
         </LinearLayout>
 
