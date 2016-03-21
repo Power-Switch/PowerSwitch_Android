@@ -44,8 +44,9 @@
 
         <ProgressBar
             android:id="@+id/searchAddressProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
             android:indeterminate="true"
             android:visibility="gone"/>
 
