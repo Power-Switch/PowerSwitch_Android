@@ -53,6 +53,7 @@ abstract class RoomHandler {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, room.getName());
         values.put(RoomTable.COLUMN_APARTMENT_ID, room.getApartmentId());
+        values.put(RoomTable.COLUMN_COLLAPSED, room.isCollapsed());
         return DatabaseHandler.database.insert(RoomTable.TABLE_NAME, null, values);
     }
 

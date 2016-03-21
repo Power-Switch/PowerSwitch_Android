@@ -290,7 +290,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
         if (apartmentId == -1) {
-            boolean isActive = DatabaseHandler.getAllApartments().size() == 1;
+            boolean isActive = DatabaseHandler.getAllApartmentNames().size() <= 0;
             Apartment newApartment = new Apartment((long) -1, isActive, getCurrentName(),
                     getCheckedGateways(), null);
 

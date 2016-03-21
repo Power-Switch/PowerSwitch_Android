@@ -141,9 +141,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                            if (SmartphonePreferencesHandler.getCurrentApartmentId()
-                                    .equals(apartment.getId())) {
+                            if (SmartphonePreferencesHandler.getCurrentApartmentId().equals(apartmentId)) {
                                 DatabaseHandler.deleteApartment(apartmentId);
 
                                 // update current Apartment selection

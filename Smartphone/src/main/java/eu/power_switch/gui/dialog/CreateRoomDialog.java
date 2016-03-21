@@ -111,10 +111,9 @@ public class CreateRoomDialog extends DialogFragment {
 
                     ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
                     RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-                    Snackbar.make(getTargetFragment().getView(), R.string.room_saved, Snackbar.LENGTH_LONG)
-                            .show();
+                    StatusMessageHandler.showInfoMessage(getTargetFragment().getView().findViewById(R.id.listView_rooms), R.string.room_saved, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView().findViewById(R.id.listView_rooms), e);
                 }
             }
         });

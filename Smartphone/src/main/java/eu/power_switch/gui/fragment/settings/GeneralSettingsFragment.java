@@ -320,11 +320,11 @@ public class GeneralSettingsFragment extends Fragment {
                             // all is good
                         } else {
                             if (booleanAsyncTaskResult.getException() instanceof MissingPermissionException) {
-                                Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_INDEFINITE);
+                                Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
                                 snackbar.setAction(R.string.grant, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                        ActivityCompat.requestPermissions(MainActivity.getActivity(), new String[]{
                                                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
                                     }
                                 });
