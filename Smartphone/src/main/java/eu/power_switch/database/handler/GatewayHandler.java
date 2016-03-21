@@ -194,9 +194,9 @@ abstract class GatewayHandler {
      * @param id ID of Gateway
      * @return true if the gateway is associated with at least one apartment, false otherwise
      */
-    public static boolean isAssociatedWithAnyApartment(Long id) {
+    public static boolean isAssociatedWithAnyApartment(Long id) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(ApartmentGatewayRelationTable.TABLE_NAME,
-                GatewayTable.ALL_COLUMNS, ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
+                ApartmentGatewayRelationTable.ALL_COLUMNS, ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
 
         boolean hasElement = cursor.moveToFirst();
         cursor.close();

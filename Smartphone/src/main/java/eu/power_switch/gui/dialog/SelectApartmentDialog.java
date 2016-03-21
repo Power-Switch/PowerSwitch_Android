@@ -33,8 +33,11 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.ApartmentFragment;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
@@ -94,7 +97,14 @@ public class SelectApartmentDialog extends DialogFragment {
         ArrayList<String> apartmentNames = new ArrayList<>();
 
         try {
-            apartmentNames.addAll(DatabaseHandler.getAllApartmentNames());
+            if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
+                for (Apartment apartment : PlayStoreModeDataModel.getApartments()) {
+                    apartmentNames.add(apartment.getName());
+                }
+            } else {
+                apartmentNames.addAll(DatabaseHandler.getAllApartmentNames());
+            }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

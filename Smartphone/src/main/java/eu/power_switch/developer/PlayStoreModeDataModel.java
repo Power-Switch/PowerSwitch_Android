@@ -88,7 +88,12 @@ public class PlayStoreModeDataModel {
     private static Receiver hinterhaus_garten;
     private static Receiver weihnachtsdeko_garten;
 
-    static {
+    /**
+     * Default constructor
+     */
+    public PlayStoreModeDataModel(Context context) {
+        PlayStoreModeDataModel.context = context;
+
         initReceivers(context);
         initRooms();
         initScenes();
@@ -98,18 +103,12 @@ public class PlayStoreModeDataModel {
                 new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
                         null, new HashMap<Geofence.EventType, List<Action>>()));
 
+        apartments.clear();
         apartments.add(heimat);
     }
 
-    /**
-     * Default constructor
-     */
-    public PlayStoreModeDataModel(Context context) {
-        PlayStoreModeDataModel.context = context;
-    }
-
     private static void initGateways() {
-        gateways = new ArrayList<>();
+        gateways.clear();
         gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880));
         gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880));
         gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880));
@@ -144,46 +143,56 @@ public class PlayStoreModeDataModel {
     }
 
     private static void initScenes() {
+        scene_kinoabend.getSceneItems().clear();
         scene_kinoabend.addSceneItem(sofa_wohnzimmer, sofa_wohnzimmer.getButtons().getFirst());
         scene_kinoabend.addSceneItem(ecklampe_wohnzimmer, ecklampe_wohnzimmer.getButtons().getLast());
         scene_kinoabend.addSceneItem(verstaerker_wohnzimmer, verstaerker_wohnzimmer.getButtons().getFirst());
 
+        scene_abendessen.getSceneItems().clear();
         scene_abendessen.addSceneItem(esstisch_kueche, esstisch_kueche.getButtons().getFirst());
         scene_abendessen.addSceneItem(abzugshaube_kueche, abzugshaube_kueche.getButtons().getLast());
         scene_abendessen.addSceneItem(arbeitsflaeche_kueche, arbeitsflaeche_kueche.getButtons().getLast());
 
+        scene_feier.getSceneItems().clear();
         scene_feier.addSceneItem(wegbeleuchtung_garten, wegbeleuchtung_garten.getButtons().getFirst());
         scene_feier.addSceneItem(esstisch_kueche, esstisch_kueche.getButtons().getFirst());
         scene_feier.addSceneItem(sofa_wohnzimmer, sofa_wohnzimmer.getButtons().getFirst());
         scene_feier.addSceneItem(terrasse_garten, terrasse_garten.getButtons().getFirst());
 
+        scenes.clear();
         scenes.add(scene_kinoabend);
         scenes.add(scene_abendessen);
         scenes.add(scene_feier);
     }
 
     private static void initRooms() {
+        wohnzimmer.getReceivers().clear();
         wohnzimmer.addReceiver(sofa_wohnzimmer);
         wohnzimmer.addReceiver(ecklampe_wohnzimmer);
         wohnzimmer.addReceiver(verstaerker_wohnzimmer);
 
+        schlafzimmer.getReceivers().clear();
         schlafzimmer.addReceiver(decke_schlafzimmer);
         schlafzimmer.addReceiver(fenster_schlafzimmer);
         schlafzimmer.addReceiver(nachttische_schlafzimmer);
 
+        kueche.getReceivers().clear();
         kueche.addReceiver(abzugshaube_kueche);
         kueche.addReceiver(esstisch_kueche);
         kueche.addReceiver(arbeitsflaeche_kueche);
         kueche.addReceiver(kaffeemaschine_kueche);
 
+        kinderzimmer.getReceivers().clear();
         kinderzimmer.addReceiver(decke_kinderzimmer);
         kinderzimmer.addReceiver(nachtlicht_kinderzimmer);
 
+        garten.getReceivers().clear();
         garten.addReceiver(terrasse_garten);
         garten.addReceiver(wegbeleuchtung_garten);
         garten.addReceiver(hinterhaus_garten);
         garten.addReceiver(weihnachtsdeko_garten);
 
+        rooms.clear();
         rooms.add(wohnzimmer);
         rooms.add(schlafzimmer);
         rooms.add(kueche);

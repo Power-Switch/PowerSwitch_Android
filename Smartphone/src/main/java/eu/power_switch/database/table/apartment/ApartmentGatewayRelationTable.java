@@ -33,6 +33,8 @@ public class ApartmentGatewayRelationTable {
     public static final String COLUMN_APARTMENT_ID = "apartment_id";
     public static final String COLUMN_GATEWAY_ID = "gateway_id";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_APARTMENT_ID, COLUMN_GATEWAY_ID};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_APARTMENT_ID + " integer not null," +
