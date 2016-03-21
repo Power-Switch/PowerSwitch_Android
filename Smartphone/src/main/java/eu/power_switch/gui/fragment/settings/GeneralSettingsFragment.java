@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -41,6 +42,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -52,6 +54,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
+import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
@@ -91,6 +94,8 @@ public class GeneralSettingsFragment extends Fragment {
     private BroadcastReceiver broadcastReceiver;
     private TextView textView_backupPath;
     private Spinner keepHistoryDuration;
+    private ProgressBar sendLogsProgress;
+    private Button sendLogs;
 
 
     @Override
@@ -289,25 +294,50 @@ public class GeneralSettingsFragment extends Fragment {
         radioButtonLightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_lightBlue);
         radioButtonLightBlue.setOnClickListener(onClickListener);
 
-        Button sendLogs = (Button) rootView.findViewById(R.id.button_sendLogs);
+        sendLogsProgress = (ProgressBar) rootView.findViewById(R.id.sendLogsProgress);
+        sendLogs = (Button) rootView.findViewById(R.id.button_sendLogs);
         sendLogs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    LogHandler.sendLogsAsMail(getContext());
-                } catch (MissingPermissionException e) {
-                    Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_INDEFINITE);
-                    snackbar.setAction(R.string.grant, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+                sendLogs.setEnabled(false);
+                sendLogsProgress.setVisibility(View.VISIBLE);
+
+                new AsyncTask<Void, Void, AsyncTaskResult<Boolean>>() {
+                    @Override
+                    protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
+                        try {
+                            LogHandler.sendLogsAsMail(getContext());
+                            return new AsyncTaskResult<>(true);
+                        } catch (Exception e) {
+                            return new AsyncTaskResult<>(e);
                         }
-                    });
-                    snackbar.show();
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getContext(), e);
-                }
+                    }
+
+                    @Override
+                    protected void onPostExecute(AsyncTaskResult<Boolean> booleanAsyncTaskResult) {
+
+                        if (booleanAsyncTaskResult.isSuccess()) {
+                            // all is good
+                        } else {
+                            if (booleanAsyncTaskResult.getException() instanceof MissingPermissionException) {
+                                Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_INDEFINITE);
+                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+                                    }
+                                });
+                                snackbar.show();
+                            } else {
+                                StatusMessageHandler.showErrorMessage(getContext(), booleanAsyncTaskResult.getException());
+                            }
+                        }
+
+                        sendLogs.setEnabled(true);
+                        sendLogsProgress.setVisibility(View.GONE);
+                    }
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
