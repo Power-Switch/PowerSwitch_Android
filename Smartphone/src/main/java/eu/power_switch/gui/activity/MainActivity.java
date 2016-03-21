@@ -251,14 +251,18 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 protected AsyncTaskResult<Gateway> doInBackground(Context... contexts) {
-                    Context context = contexts[0];
-                    NetworkHandler.init(context);
-                    List<Gateway> foundGateways = NetworkHandler.searchGateways();
+                    try {
+                        Context context = contexts[0];
+                        NetworkHandler.init(context);
+                        List<Gateway> foundGateways = NetworkHandler.searchGateways();
 
-                    Gateway[] gatewaysArray = new Gateway[foundGateways.size()];
-                    foundGateways.toArray(gatewaysArray);
+                        Gateway[] gatewaysArray = new Gateway[foundGateways.size()];
+                        foundGateways.toArray(gatewaysArray);
 
-                    return new AsyncTaskResult<>(gatewaysArray);
+                        return new AsyncTaskResult<>(gatewaysArray);
+                    } catch (Exception e) {
+                        return new AsyncTaskResult<>(e);
+                    }
                 }
 
                 @Override
