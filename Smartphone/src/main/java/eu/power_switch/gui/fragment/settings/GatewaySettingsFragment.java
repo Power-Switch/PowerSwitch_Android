@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -151,11 +152,10 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
 
         searchGatewayFAB.startAnimation(AnimationHandler.getRotationClockwiseAnimation(getContext()));
         final RecyclerViewFragment recyclerViewFragment = this;
-        new Thread(new Runnable() {
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
                 try {
-                    NetworkHandler.init(getContext());
                     final List<Gateway> foundGateways = NetworkHandler.searchGateways();
 
                     // stop animation
@@ -170,7 +170,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                         StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                 R.string.no_gateway_found,
                                 Snackbar.LENGTH_LONG);
-                        return;
+                        return null;
                     }
 
                     int unknownGatewaysCount = 0;
@@ -202,8 +202,18 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
                 } catch (Exception e) {
                     Log.e(e);
                 }
+
+                return null;
             }
-        }).start();
+
+            @Override
+            protected void onProgressUpdate(Void... values) {
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void refreshGateways() {

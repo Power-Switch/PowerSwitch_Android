@@ -42,6 +42,10 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
 
     @Override
     protected LinkedList<String> doInBackground(Void... params) {
+        return doDiscovery();
+    }
+
+    public LinkedList<String> doDiscovery() {
         DatagramSocket socket = null;
         LinkedList<String> receivedMessages = new LinkedList<>();
 
@@ -121,5 +125,4 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
 
         return receivedMessages;
     }
-
 }

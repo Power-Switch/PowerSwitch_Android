@@ -25,6 +25,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.WorkerThread;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.gateway.BrematicGWY433;
@@ -192,6 +192,7 @@ public abstract class NetworkHandler {
      *
      * @return List of found Gateways
      */
+    @WorkerThread
     public static List<Gateway> searchGateways() {
         List<Gateway> foundGateways = new ArrayList<>();
         Log.d("NetworkManager", "searchGateways");
@@ -199,25 +200,17 @@ public abstract class NetworkHandler {
         synchronized (lockObject) {
             try {
                 LinkedList<String> messages;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    messages = new AutoGatewayDiscover(context).
-                            executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null).get();
-                } else {
-                    messages = new AutoGatewayDiscover(context).execute().get();
-                }
 
+                AutoGatewayDiscover autoGatewayDiscover = new AutoGatewayDiscover(context);
+                messages = autoGatewayDiscover.doDiscovery();
+//                messages = new AutoGatewayDiscover(context).
+//                        executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null).get();
                 for (String message : messages) {
                     Gateway newGateway = parseMessageToGateway(message);
                     foundGateways.add(newGateway);
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 Log.e(e);
-                e.printStackTrace();
-                return null;
-            } catch (ExecutionException e) {
-                Log.e(e);
-                e.printStackTrace();
-                return null;
             }
         }
 
@@ -231,6 +224,7 @@ public abstract class NetworkHandler {
      * @param message some text
      * @return Gateway null if message could not be parsed
      */
+
     private static Gateway parseMessageToGateway(String message) {
         Log.d("parsing Gateway Message: " + message);
 

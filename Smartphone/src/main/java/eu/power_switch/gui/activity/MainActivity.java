@@ -32,7 +32,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +49,6 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.LibsConfiguration;
 import com.mikepenz.aboutlibraries.entity.Library;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -78,6 +76,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
+import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
@@ -203,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         applyLocale();
 
         // set Iconics LayoutInflater for XML Icon support
-        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
+//        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
 
         activity = this;
 
@@ -246,21 +245,31 @@ public class MainActivity extends AppCompatActivity {
             Log.e(e);
         }
 
-        if (SmartphonePreferencesHandler.getAutoDiscover() && (NetworkHandler.isWifiAvailable() || NetworkHandler
-                .isEthernetAvailable())) {
-            new AsyncTask<Context, Void, Void>() {
+        if (SmartphonePreferencesHandler.getAutoDiscover() &&
+                (NetworkHandler.isWifiAvailable() || NetworkHandler.isEthernetAvailable())) {
+            new AsyncTask<Context, Void, AsyncTaskResult<Gateway>>() {
 
                 @Override
-                protected Void doInBackground(Context... contexts) {
+                protected AsyncTaskResult<Gateway> doInBackground(Context... contexts) {
                     Context context = contexts[0];
                     NetworkHandler.init(context);
                     List<Gateway> foundGateways = NetworkHandler.searchGateways();
 
-                    if (foundGateways != null) {
+                    Gateway[] gatewaysArray = new Gateway[foundGateways.size()];
+                    foundGateways.toArray(gatewaysArray);
+
+                    return new AsyncTaskResult<>(gatewaysArray);
+                }
+
+                @Override
+                protected void onPostExecute(AsyncTaskResult<Gateway> result) {
+                    if (result.isSuccess()) {
+                        List<Gateway> foundGateways = result.getResult();
+
                         try {
                             if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways().isEmpty()) {
-                                StatusMessageHandler.showInfoMessage(context, R.string.no_gateway_found, Snackbar
-                                        .LENGTH_LONG);
+                                StatusMessageHandler.showInfoMessage(getActivity(),
+                                        R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                             } else {
                                 for (Gateway gateway : foundGateways) {
                                     if (gateway == null) {
@@ -268,25 +277,27 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     try {
                                         DatabaseHandler.addGateway(gateway);
-                                        StatusMessageHandler.showInfoMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                        StatusMessageHandler.showInfoMessage(getActivity(),
+                                                R.string.gateway_found, Snackbar.LENGTH_LONG);
                                     } catch (GatewayAlreadyExistsException e) {
                                         try {
                                             DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
-                                            StatusMessageHandler.showInfoMessage(context, R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                            StatusMessageHandler.showInfoMessage(getActivity(),
+                                                    R.string.gateway_found, Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
                                             Log.e(e1);
-                                            StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, Snackbar.LENGTH_LONG);
+                                            StatusMessageHandler.showInfoMessage(getActivity(),
+                                                    R.string.error_enabling_gateway, Snackbar.LENGTH_LONG);
                                         }
-                                    } catch (Exception e) {
-                                        StatusMessageHandler.showErrorMessage(context, e);
                                     }
                                 }
                             }
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(context, e);
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
                         }
+                    } else {
+                        StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
                     }
-                    return null;
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
         }
