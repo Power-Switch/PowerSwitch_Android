@@ -38,6 +38,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 import eu.power_switch.R;
@@ -60,6 +62,13 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 22.02.2016.
  */
 public class EditActivity extends AbstractPluginActivity {
+
+    private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
+        @Override
+        public int compare(String lhs, String rhs) {
+            return lhs.compareToIgnoreCase(rhs);
+        }
+    };
 
     private RadioButton radioButtonReceiverAction;
     private RadioButton radioButtonRoomAction;
@@ -157,6 +166,7 @@ public class EditActivity extends AbstractPluginActivity {
             for (Apartment apartment : availableApartments) {
                 apartmentNames.add(apartment.getName());
             }
+            Collections.sort(apartmentNames, compareToIgnoreCase);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(this, e);
         }
@@ -523,6 +533,7 @@ public class EditActivity extends AbstractPluginActivity {
             Log.e(e);
         }
 
+        Collections.sort(sceneNames, compareToIgnoreCase);
         sceneSpinnerArrayAdapter.notifyDataSetChanged();
     }
 
@@ -539,6 +550,7 @@ public class EditActivity extends AbstractPluginActivity {
             Log.e(e);
         }
 
+        Collections.sort(roomNames, compareToIgnoreCase);
         roomSpinnerArrayAdapter.notifyDataSetChanged();
 
         updateReceiverList();
@@ -558,6 +570,8 @@ public class EditActivity extends AbstractPluginActivity {
         } catch (Exception e) {
             Log.e(e);
         }
+
+        Collections.sort(receiverNames, compareToIgnoreCase);
         receiverSpinnerArrayAdapter.notifyDataSetChanged();
 
         updateButtonList();
@@ -577,6 +591,8 @@ public class EditActivity extends AbstractPluginActivity {
         } catch (Exception e) {
             Log.e(e);
         }
+
+        Collections.sort(buttonNames, compareToIgnoreCase);
 
         buttonSpinnerArrayAdapter.notifyDataSetChanged();
     }

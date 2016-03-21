@@ -39,6 +39,7 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 
@@ -63,6 +64,13 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 28.09.2015.
  */
 public abstract class AddActionDialog extends DialogFragment {
+
+    private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
+        @Override
+        public int compare(String lhs, String rhs) {
+            return lhs.compareToIgnoreCase(rhs);
+        }
+    };
 
     private Dialog dialog;
     private View rootView;
@@ -278,13 +286,18 @@ public abstract class AddActionDialog extends DialogFragment {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                apartmentNames.clear();
+
                 try {
                     ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
                     for (Apartment apartment : availableApartments) {
                         apartmentNames.add(apartment.getName());
                     }
+
                 } catch (Exception e) {
                 }
+
+                Collections.sort(apartmentNames, compareToIgnoreCase);
 
                 return null;
             }
@@ -301,7 +314,7 @@ public abstract class AddActionDialog extends DialogFragment {
                 updateRoomList();
                 updateSceneList();
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     private void updateSceneList() {
@@ -319,8 +332,11 @@ public abstract class AddActionDialog extends DialogFragment {
                     for (Scene scene : currentApartment.getScenes()) {
                         sceneNames.add(scene.getName());
                     }
+
                 } catch (Exception e) {
                 }
+
+                Collections.sort(sceneNames, compareToIgnoreCase);
 
                 return null;
             }
@@ -335,7 +351,7 @@ public abstract class AddActionDialog extends DialogFragment {
 
                 updatePositiveButton();
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     private void updateRoomList() {
@@ -362,6 +378,8 @@ public abstract class AddActionDialog extends DialogFragment {
                 } catch (Exception e) {
                 }
 
+                Collections.sort(roomNames, compareToIgnoreCase);
+
                 return null;
             }
 
@@ -376,7 +394,7 @@ public abstract class AddActionDialog extends DialogFragment {
 
                 updateReceiverList();
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     private void updateReceiverList() {
@@ -405,6 +423,8 @@ public abstract class AddActionDialog extends DialogFragment {
                 } catch (Exception e) {
                 }
 
+                Collections.sort(receiverNames, compareToIgnoreCase);
+
                 return null;
             }
 
@@ -418,7 +438,7 @@ public abstract class AddActionDialog extends DialogFragment {
 
                 updateButtonList();
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     private void updateButtonList() {
@@ -438,7 +458,7 @@ public abstract class AddActionDialog extends DialogFragment {
                     updateRoomButtonsList();
                 }
 
-                Collections.sort(buttonNames);
+                Collections.sort(buttonNames, compareToIgnoreCase);
 
                 return null;
             }
@@ -454,7 +474,7 @@ public abstract class AddActionDialog extends DialogFragment {
 
                 updatePositiveButton();
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
     private void updateReceiverButtonList() {
