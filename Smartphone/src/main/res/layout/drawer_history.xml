@@ -19,29 +19,38 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayout_historyDrawer"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_gravity="end"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="25dp">
 
         <TextView
             style="@style/header_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingTop="16dp"
             android:text="@string/history"/>
 
-        <Button
+        <com.mikepenz.iconics.view.IconicsImageView
             android:id="@+id/buttonClear"
-            style="@style/room_on_off_buttons"
-            android:text="@string/clear"/>
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            app:iiv_color="?attr/dialog_bottomBar_next_color"
+            app:iiv_icon="gmd-clear-all"/>
 
     </LinearLayout>
 

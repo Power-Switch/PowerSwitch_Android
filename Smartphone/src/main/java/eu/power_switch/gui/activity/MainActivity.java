@@ -43,7 +43,6 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.mikepenz.aboutlibraries.Libs;
@@ -52,6 +51,7 @@ import com.mikepenz.aboutlibraries.LibsConfiguration;
 import com.mikepenz.aboutlibraries.entity.Library;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.context.IconicsLayoutInflater;
+import com.mikepenz.iconics.view.IconicsImageView;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -736,7 +736,7 @@ public class MainActivity extends AppCompatActivity {
         // parent HAS to be null, so it can be attached to navigationDrawer later on
         View historyView = LayoutInflater.from(this).inflate(R.layout.drawer_history, null, false);
 
-        Button clearHistory = (Button) historyView.findViewById(R.id.buttonClear);
+        IconicsImageView clearHistory = (IconicsImageView) historyView.findViewById(R.id.buttonClear);
         clearHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
