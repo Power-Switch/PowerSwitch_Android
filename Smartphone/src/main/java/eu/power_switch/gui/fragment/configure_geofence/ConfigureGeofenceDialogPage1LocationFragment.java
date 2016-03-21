@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -37,6 +38,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -52,10 +54,11 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
+import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.map.MapViewHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.exception.location.AddressNotFoundException;
+import eu.power_switch.shared.exception.location.CoordinatesNotFoundException;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -82,6 +85,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
 
     private boolean cameraChangedBySystem = true;
     private boolean isFirstTimeMapInit = true;
+    private ProgressBar searchAddressProgress;
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -111,6 +115,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
         mapViewHandler.addOnMapReadyListener(this);
         mapViewHandler.initMapAsync();
 
+        searchAddressProgress = (ProgressBar) rootView.findViewById(R.id.searchAddressProgress);
         searchAddressTextInputLayout = (TextInputLayout) rootView.findViewById(R.id
                 .searchAddressTextInputLayout);
         searchAddressEditText = (EditText) rootView.findViewById(R.id.searchAddressEditText);
@@ -120,31 +125,50 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
         searchAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    LatLng location = mapViewHandler.findCoordinates(searchAddressEditText.getText().toString());
-                    hideSoftwareKeyboard(getView());
+                hideSoftwareKeyboard(getView());
 
-                    if (geofenceView == null) {
-                        geofenceView = mapViewHandler.addGeofence(location, currentGeofenceRadius);
-                    } else {
-                        geofenceView.setCenter(location);
-                        geofenceView.setRadius(currentGeofenceRadius);
+                searchAddressEditText.setEnabled(false);
+                searchAddressProgress.setVisibility(View.VISIBLE);
+                new AsyncTask<String, Void, AsyncTaskResult<LatLng>>() {
+                    @Override
+                    protected AsyncTaskResult<LatLng> doInBackground(String... params) {
+                        try {
+                            LatLng location = mapViewHandler.findCoordinates(params[0]);
+                            return new AsyncTaskResult<>(location);
+                        } catch (Exception e) {
+                            return new AsyncTaskResult<>(e);
+                        }
                     }
 
-                    cameraChangedBySystem = true;
-                    mapViewHandler.moveCamera(location, 14, true);
+                    @Override
+                    protected void onPostExecute(AsyncTaskResult<LatLng> result) {
+                        if (result.isSuccess()) {
+                            searchAddressTextInputLayout.setError(null);
+                            searchAddressTextInputLayout.setErrorEnabled(false);
 
-                    // name = searchAddressEditText.getText().toString();
+                            if (geofenceView == null) {
+                                geofenceView = mapViewHandler.addGeofence(result.getResult().get(0), currentGeofenceRadius);
+                            } else {
+                                geofenceView.setCenter(result.getResult().get(0));
+                                geofenceView.setRadius(currentGeofenceRadius);
+                            }
 
-                    searchAddressTextInputLayout.setError(null);
-                    searchAddressTextInputLayout.setErrorEnabled(false);
-                } catch (AddressNotFoundException e) {
-                    searchAddressTextInputLayout.setErrorEnabled(true);
-                    searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
-                } catch (Exception e) {
-                    searchAddressTextInputLayout.setErrorEnabled(true);
-                    searchAddressTextInputLayout.setError(getString(R.string.unknown_error));
-                }
+                            cameraChangedBySystem = true;
+                            mapViewHandler.moveCamera(result.getResult().get(0), 14, true);
+                        } else {
+                            if (result.getException() instanceof CoordinatesNotFoundException) {
+                                searchAddressTextInputLayout.setErrorEnabled(true);
+                                searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
+                            } else {
+                                searchAddressTextInputLayout.setErrorEnabled(true);
+                                searchAddressTextInputLayout.setError(getString(R.string.unknown_error));
+                            }
+                        }
+
+                        searchAddressEditText.setEnabled(true);
+                        searchAddressProgress.setVisibility(View.GONE);
+                    }
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, searchAddressEditText.getText().toString());
             }
         });
 
@@ -305,14 +329,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                     geofenceView.setRadius(currentGeofenceRadius);
                 }
 
-                try {
-                    String address = mapViewHandler.findAddress(latLng);
-                    if (address != null && address.length() > 0) {
-                        searchAddressEditText.setText(address);
-                    }
-                } catch (AddressNotFoundException e) {
-                    Log.e(e);
-                }
+                findAddress(latLng);
 
                 cameraChangedBySystem = true;
                 if (mapViewHandler.getCurrentZoomLevel() < 13) {
@@ -342,14 +359,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                 if (geofenceView.getMarker().getId().equals(marker.getId())) {
                     geofenceView.setCenter(marker.getPosition());
 
-                    try {
-                        String address = mapViewHandler.findAddress(marker.getPosition());
-                        if (address != null && address.length() > 0) {
-                            searchAddressEditText.setText(address);
-                        }
-                    } catch (AddressNotFoundException e) {
-                        Log.e(e);
-                    }
+                    findAddress(marker.getPosition());
 
                     cameraChangedBySystem = true;
                     mapViewHandler.moveCamera(marker.getPosition(), true);
@@ -381,6 +391,41 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
                 Log.e(e);
             }
         }
+    }
+
+    private void findAddress(LatLng latLng) {
+        searchAddressEditText.setEnabled(false);
+        searchAddressProgress.setVisibility(View.VISIBLE);
+
+        new AsyncTask<LatLng, Void, AsyncTaskResult<String>>() {
+
+            @Override
+            protected AsyncTaskResult<String> doInBackground(LatLng... addresses) {
+                try {
+                    String address = mapViewHandler.findAddress(addresses[0]);
+                    return new AsyncTaskResult<>(address);
+                } catch (Exception e) {
+                    Log.e(e);
+                    return new AsyncTaskResult<>(e);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(AsyncTaskResult<String> result) {
+                searchAddressProgress.setVisibility(View.GONE);
+
+                if (result.isSuccess()) {
+                    searchAddressTextInputLayout.setError(null);
+                    searchAddressTextInputLayout.setErrorEnabled(false);
+
+                    searchAddressEditText.setText(result.getResult().get(0));
+                } else {
+                    searchAddressEditText.setText("");
+                }
+
+                searchAddressEditText.setEnabled(true);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, latLng);
     }
 
     @Override

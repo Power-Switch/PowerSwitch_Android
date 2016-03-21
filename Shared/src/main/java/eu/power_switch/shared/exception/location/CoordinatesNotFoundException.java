@@ -21,15 +21,15 @@ package eu.power_switch.shared.exception.location;
 /**
  * Created by Markus on 25.01.2016.
  */
-public class AddressNotFoundException extends Exception {
+public class CoordinatesNotFoundException extends Exception {
 
-    String coordinates;
+    String address;
 
-    public AddressNotFoundException(String coordinates) {
-        super("No Address could be found for the given coordinates: " + coordinates);
+    public CoordinatesNotFoundException(String address) {
+        super("No Coordinates could be found for the given address: " + address);
     }
 
-    public String getCoordinates() {
-        return coordinates;
+    public String getAddress() {
+        return address;
     }
 }

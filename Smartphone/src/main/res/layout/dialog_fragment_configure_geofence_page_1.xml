@@ -42,6 +42,13 @@
         android:layout_marginLeft="4dp"
         android:orientation="horizontal">
 
+        <ProgressBar
+            android:id="@+id/searchAddressProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+
         <android.support.design.widget.TextInputLayout
             android:id="@+id/searchAddressTextInputLayout"
             android:layout_width="0dp"

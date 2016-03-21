@@ -16,20 +16,38 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.shared.exception.location;
+package eu.power_switch.gui.fragment;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Created by Markus on 25.01.2016.
+ * Created by Markus on 19.03.2016.
  */
-public class AddressNotFoundException extends Exception {
+public class AsyncTaskResult<T> {
 
-    String coordinates;
+    private Exception exception;
+    private List<T> elements;
 
-    public AddressNotFoundException(String coordinates) {
-        super("No Address could be found for the given coordinates: " + coordinates);
+    public AsyncTaskResult(Exception e) {
+        this.exception = e;
+        this.elements = null;
     }
 
-    public String getCoordinates() {
-        return coordinates;
+    public AsyncTaskResult(T... elements) {
+        this.exception = null;
+        this.elements = Arrays.asList(elements);
+    }
+
+    public boolean isSuccess() {
+        return exception == null && elements != null;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public List<T> getResult() {
+        return elements;
     }
 }

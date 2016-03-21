@@ -46,6 +46,7 @@ import java.util.Set;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.exception.location.AddressNotFoundException;
+import eu.power_switch.shared.exception.location.CoordinatesNotFoundException;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -277,7 +278,7 @@ public class MapViewHandler implements OnMapReadyCallback {
      * @return coordinate near the given address
      * @throws AddressNotFoundException
      */
-    public LatLng findCoordinates(String address) throws AddressNotFoundException {
+    public LatLng findCoordinates(String address) throws CoordinatesNotFoundException {
         /* get latitude and longitude from the address */
         Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
         try {
@@ -290,7 +291,7 @@ public class MapViewHandler implements OnMapReadyCallback {
                 final LatLng location = new LatLng(lat, lon);
                 return location;
             } else {
-                throw new AddressNotFoundException(address);
+                throw new CoordinatesNotFoundException(address);
             }
         } catch (IOException e) {
             Log.e(e);
