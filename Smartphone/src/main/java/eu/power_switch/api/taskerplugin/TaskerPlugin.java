@@ -289,11 +289,11 @@ public class TaskerPlugin {
     }
 
     /**
-     * Specifies to host which variables might be used by the plugin.
+     * Specifies to localHost which variables might be used by the plugin.
      * <p/>
      * Used in EditActivity, before setResult().
      *
-     * @param intentToHost  the intent being returned to the host
+     * @param intentToHost  the intent being returned to the localHost
      * @param variableNames array of relevant variable names
      */
     public static void addRelevantVariableList(Intent intentToHost, String[] variableNames) {
@@ -338,9 +338,9 @@ public class TaskerPlugin {
     // ----------------------------- CONDITION/EVENT PLUGIN ONLY --------------------------------- //
 
     /**
-     * Allows the plugin/host to indicate to each other a set of variables which they are referencing.
-     * The host may use this to e.g. show a variable selection list in it's UI.
-     * The host should use this if it previously indicated to the plugin that it supports relevant vars
+     * Allows the plugin/localHost to indicate to each other a set of variables which they are referencing.
+     * The localHost may use this to e.g. show a variable selection list in it's UI.
+     * The localHost should use this if it previously indicated to the plugin that it supports relevant vars
      *
      * @param fromHostIntentExtras usually from getIntent().getExtras()
      * @return variableNames an array of relevant variable names
@@ -557,7 +557,7 @@ public class TaskerPlugin {
         /**
          * Used by: plugin EditActivity.
          * <p/>
-         * Indicates to plugin that host will replace variables in specified bundle keys.
+         * Indicates to plugin that localHost will replace variables in specified bundle keys.
          * <p/>
          * Replacement takes place every time the setting is fired, before the bundle is
          * passed to the plugin FireReceiver.
@@ -603,8 +603,8 @@ public class TaskerPlugin {
         }
 
         /**
-         * Request the host to wait the specified number of milliseconds before continuing.
-         * Note that the host may choose to ignore the request.
+         * Request the localHost to wait the specified number of milliseconds before continuing.
+         * Note that the localHost may choose to ignore the request.
          * <p/>
          * Maximum value is REQUESTED_TIMEOUT_MS_MAX.
          * Also available are REQUESTED_TIMEOUT_MS_NONE (continue immediately without waiting
@@ -613,7 +613,7 @@ public class TaskerPlugin {
          * <p/>
          * Used in EditActivity, before setResult().
          *
-         * @param intentToHost the intent being returned to the host
+         * @param intentToHost the intent being returned to the localHost
          * @param timeoutMS
          */
         public static void requestTimeoutMS(Intent intentToHost, int timeoutMS) {
@@ -634,9 +634,9 @@ public class TaskerPlugin {
         /**
          * Used by: plugin EditActivity
          * <p/>
-         * Indicates to host which bundle keys should be replaced.
+         * Indicates to localHost which bundle keys should be replaced.
          *
-         * @param resultBundleToHost the bundle being returned to the host
+         * @param resultBundleToHost the bundle being returned to the localHost
          * @param listOfKeyNames     which bundle keys to replace variables in when setting fires
          * @see #hostSupportsOnFireVariableReplacement(Bundle)
          */
@@ -668,7 +668,7 @@ public class TaskerPlugin {
         /**
          * Used by: plugin FireReceiver
          * <p/>
-         * Indicates to plugin whether the host will process variables which it passes back
+         * Indicates to plugin whether the localHost will process variables which it passes back
          *
          * @param extrasFromHost intent extras from the intent received by the FireReceiver
          * @see #signalFinish(Context, Intent, int, Bundle)
@@ -680,13 +680,13 @@ public class TaskerPlugin {
         /**
          * Used by: plugin FireReceiver
          * <p/>
-         * Tell the host that the plugin has finished execution.
+         * Tell the localHost that the plugin has finished execution.
          * <p/>
          * This should only be used if RESULT_CODE_PENDING was returned by FireReceiver.onReceive().
          *
-         * @param originalFireIntent the intent received from the host (via onReceive())
+         * @param originalFireIntent the intent received from the localHost (via onReceive())
          * @param resultCode         level of success in performing the settings
-         * @param vars               any variables that the plugin wants to set in the host
+         * @param vars               any variables that the plugin wants to set in the localHost
          * @see #hostSupportsSynchronousExecution(Bundle)
          */
         public static boolean signalFinish(Context context, Intent originalFireIntent, int resultCode, Bundle vars) {
@@ -731,7 +731,7 @@ public class TaskerPlugin {
         }
 
         /**
-         * Check for a hint on the timeout value the host is using.
+         * Check for a hint on the timeout value the localHost is using.
          * Used by: plugin FireReceiver.
          * Requires Tasker 4.7+
          *
@@ -763,7 +763,7 @@ public class TaskerPlugin {
         /**
          * Used by: plugin QueryReceiver
          * <p/>
-         * Indicates to plugin whether the host will process variables which it passes back
+         * Indicates to plugin whether the localHost will process variables which it passes back
          *
          * @param extrasFromHost intent extras from the intent received by the QueryReceiver
          * @see #addVariableBundle(Bundle, Bundle)
@@ -789,26 +789,26 @@ public class TaskerPlugin {
 
         /**
          * Specify a bundle of data (probably representing whatever change happened in the condition)
-         * which will be included in the QUERY_CONDITION broadcast sent by the host for each
+         * which will be included in the QUERY_CONDITION broadcast sent by the localHost for each
          * event instance of the plugin.
          * <p/>
          * The minimal purpose is to enable the plugin to associate a QUERY_CONDITION to the
          * with the REQUEST_QUERY that caused it.
          * <p/>
          * Note that for security reasons it is advisable to also store a message ID with the bundle
-         * which can be compared to known IDs on receipt. The host cannot validate the source of
+         * which can be compared to known IDs on receipt. The localHost cannot validate the source of
          * REQUEST_QUERY intents so fake data may be passed. Replay attacks are also possible.
          * addPassThroughMesssageID() can be used to add an ID if the plugin doesn't wish to add it's
          * own ID to the pass through bundle.
          * <p/>
          * Note also that there are several situations where REQUEST_QUERY will not result in a
-         * QUERY_CONDITION intent (e.g. event throttling by the host), so plugin-local data
+         * QUERY_CONDITION intent (e.g. event throttling by the localHost), so plugin-local data
          * indexed with a message ID needs to be timestamped and eventually timed-out.
          * <p/>
          * This function can be called multiple times, each time all keys in data will be added to
          * that of previous calls.
          *
-         * @param requestQueryIntent intent being sent to the host
+         * @param requestQueryIntent intent being sent to the localHost
          * @param data               the data to be passed-through
          * @see #hostSupportsRequestQueryDataPassThrough(Bundle)
          * @see #retrievePassThroughData(Intent)
@@ -822,13 +822,13 @@ public class TaskerPlugin {
         }
 
         /**
-         * Retrieve the pass through data from a QUERY_REQUEST from the host which was generated
+         * Retrieve the pass through data from a QUERY_REQUEST from the localHost which was generated
          * by a REQUEST_QUERY from the plugin.
          * <p/>
          * Note that if addPassThroughMessageID() was previously called, the data will contain an extra
          * key TaskerPlugin.Event.PASS_THOUGH_BUNDLE_MESSAGE_ID_KEY.
          *
-         * @param queryConditionIntent QUERY_REQUEST sent from host
+         * @param queryConditionIntent QUERY_REQUEST sent from localHost
          * @return data previously added to the REQUEST_QUERY intent
          * @see #hostSupportsRequestQueryDataPassThrough(Bundle)
          * @see #addPassThroughData(Intent, Bundle)
@@ -844,13 +844,13 @@ public class TaskerPlugin {
 
         /**
          * Add a message ID to a REQUEST_QUERY intent which will then be included in the corresponding
-         * QUERY_CONDITION broadcast sent by the host for each event instance of the plugin.
+         * QUERY_CONDITION broadcast sent by the localHost for each event instance of the plugin.
          * <p/>
          * The minimal purpose is to enable the plugin to associate a QUERY_CONDITION to the
          * with the REQUEST_QUERY that caused it. It also allows the message to be verified
          * by the plugin to prevent e.g. replay attacks
          *
-         * @param requestQueryIntent intent being sent to the host
+         * @param requestQueryIntent intent being sent to the localHost
          * @return an ID for the bundle so it can be identified and the caller verified when it is again received by the plugin
          * @see #hostSupportsRequestQueryDataPassThrough(Bundle)
          * @see #retrievePassThroughData(Intent)
@@ -867,11 +867,11 @@ public class TaskerPlugin {
         }
 
         /*
-         * Retrieve the pass through data from a QUERY_REQUEST from the host which was generated
+         * Retrieve the pass through data from a QUERY_REQUEST from the localHost which was generated
          * by a REQUEST_QUERY from the plugin.
          *
-         * @param queryConditionIntent QUERY_REQUEST sent from host
-         * @return the ID which was passed through by the host, or -1 if no ID was found
+         * @param queryConditionIntent QUERY_REQUEST sent from localHost
+         * @return the ID which was passed through by the localHost, or -1 if no ID was found
          * @see #hostSupportsRequestQueryDataPassThrough(Bundle)
          * @see #addPassThroughData(Intent,Bundle)
         */
@@ -916,7 +916,7 @@ public class TaskerPlugin {
     public static class Host {
 
         /**
-         * Tell the plugin what capabilities the host support. This should be called when sending
+         * Tell the plugin what capabilities the localHost support. This should be called when sending
          * intents to any EditActivity, FireReceiver or QueryReceiver.
          *
          * @param toPlugin the intent we're sending
@@ -931,8 +931,8 @@ public class TaskerPlugin {
          * can use to signal when it is finished. Only use if @code{pluginWantsSychronousExecution} is true.
          *
          * @param fireIntent       fire intent going to the plugin
-         * @param completionIntent intent which will signal the host that the plugin is finished.
-         *                         Implementation is host-dependent.
+         * @param completionIntent intent which will signal the localHost that the plugin is finished.
+         *                         Implementation is localHost-dependent.
          */
         public static void addCompletionIntent(Intent fireIntent, Intent completionIntent) {
             fireIntent.putExtra(
@@ -942,7 +942,7 @@ public class TaskerPlugin {
         }
 
         /**
-         * When a setting plugin is finished, it sends the host the intent which was passed to it
+         * When a setting plugin is finished, it sends the localHost the intent which was passed to it
          * via @code{addCompletionIntent}.
          *
          * @param completionIntent intent returned from the plugin when it finished.
@@ -957,7 +957,7 @@ public class TaskerPlugin {
 
         /**
          * Extract a bundle of variables from an intent received from the FireReceiver. This
-         * should be called if the host previously indicated to the plugin
+         * should be called if the localHost previously indicated to the plugin
          * that it supports setting variable return.
          *
          * @param resultExtras getResultExtras() from BroadcastReceiver:onReceive()
@@ -972,7 +972,7 @@ public class TaskerPlugin {
         }
 
         /**
-         * Inform a setting plugin of the timeout value the host is using.
+         * Inform a setting plugin of the timeout value the localHost is using.
          *
          * @param toPlugin  the intent we're sending
          * @param timeoutMS the hosts timeout setting for the action. Note that this may differ from

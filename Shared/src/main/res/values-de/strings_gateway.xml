@@ -26,13 +26,14 @@
     <!-- configure gateway -->
     <string name="hint_name">Name</string>
     <string name="hint_room">Raum</string>
-    <string name="hint_ip">IP-Address</string>
+    <string name="hint_ip">IP-Adresse (Beispiel: 192.168.178.20)</string>
     <string name="edit_gateway">Gateway bearbeiten</string>
-    <string name="address">Addresse</string>
+    <string name="address">Adresse</string>
     <string name="firmware">Firmware</string>
-    <string name="hint_url">Addresse (Beispiel: myaddress.dyndns.org)</string>
+    <string name="hint_url">Adresse (Beispiel: myaddress.dyndns.org)</string>
     <string name="gateway_model">Modell</string>
     <string name="gateway_type">Typ</string>
+
     <string name="gateway_saved">Gateway gespeichert</string>
     <string name="gateway_found">Gateway gefunden</string>
     <string name="gateway_already_exists_it_has_been_enabled">Gateway existiert bereits. Es wurde aktiviert.</string>

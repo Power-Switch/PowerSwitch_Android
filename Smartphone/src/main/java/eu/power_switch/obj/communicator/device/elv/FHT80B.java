@@ -45,8 +45,8 @@ public class FHT80B extends Communicator implements HeatingControl {
 
     public Object requestValue(Gateway gateway, Object key) {
         String signal = getSignal(gateway, key);
-        NetworkPackage networkPackage = new NetworkPackage(gateway.getCommunicationType(), gateway.getHost(), gateway
-                .getPort(), signal, gateway.getTimeout());
+        NetworkPackage networkPackage = new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway
+                .getLocalPort(), signal, gateway.getTimeout());
         NetworkHandler.send(networkPackage);
 
         return null;

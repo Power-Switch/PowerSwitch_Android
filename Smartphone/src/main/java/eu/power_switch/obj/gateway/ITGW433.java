@@ -30,14 +30,19 @@ public class ITGW433 extends Gateway {
      */
     public static final String MODEL = "ITGW-433";
 
-    public ITGW433(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
+    public ITGW433(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort) {
+        super(id, active, name, MODEL, firmware, localAddress, localPort, wanAddress, wanPort);
         capabilities.add(Capability.SEND);
     }
 
     @Override
     public int getTimeout() {
         return 1000;
+    }
+
+    @Override
+    protected Integer getDefaultLocalPort() {
+        return 49880;
     }
 
     @Override

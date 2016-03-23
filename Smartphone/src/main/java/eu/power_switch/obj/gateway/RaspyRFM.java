@@ -28,8 +28,8 @@ public class RaspyRFM extends ConnAir {
      */
     public static final String MODEL = "RaspyRFM";
 
-    public RaspyRFM(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, firmware, address, port);
+    public RaspyRFM(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort) {
+        super(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
         model = MODEL;
     }
 

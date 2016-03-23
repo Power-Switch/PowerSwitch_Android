@@ -32,6 +32,8 @@ public class DatabaseConstants {
     public static final long BUTTON_STOP_ID = BUTTON_ON_ID - 3;
     public static final long BUTTON_DOWN_ID = BUTTON_ON_ID - 4;
 
+    public static final Integer INVALID_GATEWAY_PORT = -1;
+
     /**
      * Private Constructor
      *

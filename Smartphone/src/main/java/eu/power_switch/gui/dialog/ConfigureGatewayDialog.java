@@ -47,6 +47,7 @@ import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
+import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 import eu.power_switch.shared.log.Log;
@@ -65,21 +66,27 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     private TextInputLayout floatingName;
     private EditText name;
 
-    private TextInputLayout floatingAddress;
-    private EditText address;
+    private TextInputLayout floatingLocalAddress;
+    private EditText localAddress;
 
     private Spinner model;
 
-    private TextInputLayout floatingPort;
-    private EditText port;
+    private TextInputLayout floatingLocalPort;
+    private EditText localPort;
 
     private List<Gateway> existingGateways;
 
     private long gatewayId = -1;
 
     private String originalName;
-    private String originalAddress;
-    private int originalPort;
+    private String originalLocalAddress = "";
+    private String originalLocalPort = "";
+    private String originalWanAddress = "";
+    private String originalWanPort = "";
+    private TextInputLayout floatingWanAddress;
+    private EditText wanAddress;
+    private TextInputLayout floatingWanPort;
+    private EditText wanPort;
 
     public static ConfigureGatewayDialog newInstance(long gatewayId) {
         Bundle args = new Bundle();
@@ -133,13 +140,21 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
         model.setOnTouchListener(spinnerInteractionListener);
         model.setOnItemSelectedListener(spinnerInteractionListener);
 
-        floatingAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_address_text_input_layout);
-        address = (EditText) rootView.findViewById(R.id.txt_edit_gateway_address);
-        address.addTextChangedListener(textWatcher);
+        floatingLocalAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_local_address_text_input_layout);
+        localAddress = (EditText) rootView.findViewById(R.id.txt_edit_gateway_local_address);
+        localAddress.addTextChangedListener(textWatcher);
 
-        floatingPort = (TextInputLayout) rootView.findViewById(R.id.gateway_port_text_input_layout);
-        port = (EditText) rootView.findViewById(R.id.txt_edit_gateway_port);
-        port.addTextChangedListener(textWatcher);
+        floatingLocalPort = (TextInputLayout) rootView.findViewById(R.id.gateway_local_port_text_input_layout);
+        localPort = (EditText) rootView.findViewById(R.id.txt_edit_gateway_local_port);
+        localPort.addTextChangedListener(textWatcher);
+
+        floatingWanAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_wan_address_text_input_layout);
+        wanAddress = (EditText) rootView.findViewById(R.id.txt_edit_gateway_wan_address);
+        wanAddress.addTextChangedListener(textWatcher);
+
+        floatingWanPort = (TextInputLayout) rootView.findViewById(R.id.gateway_wan_port_text_input_layout);
+        wanPort = (EditText) rootView.findViewById(R.id.txt_edit_gateway_wan_port);
+        wanPort.addTextChangedListener(textWatcher);
 
         return rootView;
     }
@@ -170,13 +185,22 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     private void initializeGatewayData(long gatewayId) {
         try {
             Gateway gateway = DatabaseHandler.getGateway(gatewayId);
+
             originalName = gateway.getName();
-            originalAddress = gateway.getHost();
-            originalPort = gateway.getPort();
+            originalLocalAddress = gateway.getLocalHost();
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(gateway.getLocalPort())) {
+                originalLocalPort = gateway.getLocalPort().toString();
+            }
+            originalWanAddress = gateway.getWanHost();
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(gateway.getWanPort())) {
+                originalWanPort = gateway.getWanPort().toString();
+            }
 
             name.setText(originalName);
-            address.setText(originalAddress);
-            port.setText(String.valueOf(originalPort));
+            localAddress.setText(originalLocalAddress);
+            localPort.setText(String.valueOf(originalLocalPort));
+            wanAddress.setText(originalWanAddress);
+            wanPort.setText(String.valueOf(originalWanPort));
 
             // restore spinner position
             for (int i = 0; i < model.getCount(); i++) {
@@ -193,47 +217,24 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     @Override
     protected boolean isValid() {
         boolean nameIsValid;
-        boolean addressIsValid;
-        boolean portIsValid;
-        boolean gatewayAlreadyExists;
+        boolean localAddressIsValid;
+        boolean localPortIsValid;
+        boolean wanAddressIsValid;
+        boolean wanPortIsValid;
 
         String name = getCurrentName();
-        String address = getCurrentAddress();
-        String portText = getCurrentPortText();
+        String localAddress = getCurrentLocalAddress();
+        String localPortText = getCurrentLocalPortText();
+        String wanAddress = getCurrentWanAddress();
+        String wanPortText = getCurrentWanPortText();
 
         nameIsValid = checkNameValidity(name);
-        addressIsValid = checkAddressValidity(address);
-        portIsValid = checkPortValidity(portText);
-        gatewayAlreadyExists = checkGatewayAlreadyExists();
+        localAddressIsValid = checkLocalAddressValidity(localAddress);
+        localPortIsValid = checkLocalPortValidity(localPortText);
+        wanAddressIsValid = checkWanAddressValidity(wanAddress);
+        wanPortIsValid = checkWanPortValidity(wanPortText);
 
-        return nameIsValid && addressIsValid && portIsValid && !gatewayAlreadyExists;
-    }
-
-    /**
-     * Checks if current configuration already exists in database
-     *
-     * @return true if a similar gateway already exists
-     */
-    private boolean checkGatewayAlreadyExists() {
-        boolean gatewayAlreadyExists = false;
-        for (Gateway gateway : existingGateways) {
-            if (gateway.getId() != gatewayId) {
-                if (gateway.getHost().equals(getCurrentAddress()) &&
-                        getCurrentPortText().equals(String.valueOf(gateway.getPort()))) {
-                    gatewayAlreadyExists = true;
-                }
-            }
-        }
-
-        if (gatewayAlreadyExists) {
-            floatingName.setErrorEnabled(false);
-            floatingAddress.setError(getString(R.string.gateway_already_exists));
-            floatingAddress.setErrorEnabled(true);
-            floatingPort.setError(getString(R.string.gateway_already_exists));
-            floatingPort.setErrorEnabled(true);
-        }
-
-        return gatewayAlreadyExists;
+        return nameIsValid && ((localAddressIsValid && localPortIsValid) || (wanAddressIsValid && wanPortIsValid));
     }
 
     /**
@@ -255,15 +256,15 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     }
 
     /**
-     * Checks if current host address is valid
+     * Checks if current local host address is valid
      *
-     * @param address current address value
+     * @param address current local host address value
      * @return true if valid
      */
-    private boolean checkAddressValidity(String address) {
+    private boolean checkLocalAddressValidity(String address) {
         if (address.length() <= 0) {
-            floatingAddress.setError(getString(R.string.please_enter_host));
-            floatingAddress.setErrorEnabled(true);
+            floatingLocalAddress.setError(getString(R.string.please_enter_host));
+            floatingLocalAddress.setErrorEnabled(true);
             return false;
         } else {
 //            try {
@@ -271,44 +272,104 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
 //                URL testUrl = new URL(address);
 
             // if it works, everything is ok
-            floatingAddress.setError(null);
-            floatingAddress.setErrorEnabled(false);
+            floatingLocalAddress.setError(null);
+            floatingLocalAddress.setErrorEnabled(false);
             return true;
 
 //            } catch (MalformedURLException e) {
-//                floatingAddress.setError(getString(R.string.malformed_url));
-//                floatingAddress.setErrorEnabled(true);
+//                floatingLocalAddress.setError(getString(R.string.malformed_url));
+//                floatingLocalAddress.setErrorEnabled(true);
 //            }
         }
     }
 
     /**
-     * Checks if current Port is valid
+     * Checks if current local Port is valid
      *
-     * @param portText current port value
+     * @param portText current local port value
      * @return true if valid
      */
-    private boolean checkPortValidity(String portText) {
+    private boolean checkLocalPortValidity(String portText) {
         if (portText.length() <= 0) {
-            floatingPort.setError(null);
-            floatingPort.setErrorEnabled(false);
+            floatingLocalPort.setError(null);
+            floatingLocalPort.setErrorEnabled(false);
             return true;
         } else {
             try {
                 // try to convert text to int
                 int port = Integer.valueOf(portText);
                 if (port > 65535 || port <= 0) {
-                    floatingPort.setError(getString(R.string.port_invalid));
-                    floatingPort.setErrorEnabled(true);
+                    floatingLocalPort.setError(getString(R.string.port_invalid));
+                    floatingLocalPort.setErrorEnabled(true);
                     return true;
                 } else {
-                    floatingPort.setError(null);
-                    floatingPort.setErrorEnabled(false);
+                    floatingLocalPort.setError(null);
+                    floatingLocalPort.setErrorEnabled(false);
                     return true;
                 }
             } catch (Exception e) {
-                floatingPort.setError(getString(R.string.unknown_error));
-                floatingPort.setErrorEnabled(true);
+                floatingLocalPort.setError(getString(R.string.unknown_error));
+                floatingLocalPort.setErrorEnabled(true);
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Checks if current WAN Host address is valid
+     *
+     * @param address current wan address value
+     * @return true if valid
+     */
+    private boolean checkWanAddressValidity(String address) {
+        if (address.length() <= 0) {
+            floatingWanAddress.setError(getString(R.string.please_enter_host));
+            floatingWanAddress.setErrorEnabled(true);
+            return false;
+        } else {
+//            try {
+            // try to create a URL object, catch Exception to know it was not well formatted
+//                URL testUrl = new URL(address);
+
+            // if it works, everything is ok
+            floatingWanAddress.setError(null);
+            floatingWanAddress.setErrorEnabled(false);
+            return true;
+
+//            } catch (MalformedURLException e) {
+//                floatingLocalAddress.setError(getString(R.string.malformed_url));
+//                floatingLocalAddress.setErrorEnabled(true);
+//            }
+        }
+    }
+
+    /**
+     * Checks if current WAN Port is valid
+     *
+     * @param portText current WAN port value
+     * @return true if valid
+     */
+    private boolean checkWanPortValidity(String portText) {
+        if (portText.length() <= 0) {
+            floatingWanPort.setError(null);
+            floatingWanPort.setErrorEnabled(false);
+            return true;
+        } else {
+            try {
+                // try to convert text to int
+                int port = Integer.valueOf(portText);
+                if (port > 65535 || port <= 0) {
+                    floatingWanPort.setError(getString(R.string.port_invalid));
+                    floatingWanPort.setErrorEnabled(true);
+                    return true;
+                } else {
+                    floatingWanPort.setError(null);
+                    floatingWanPort.setErrorEnabled(false);
+                    return true;
+                }
+            } catch (Exception e) {
+                floatingWanPort.setError(getString(R.string.unknown_error));
+                floatingWanPort.setErrorEnabled(true);
                 return false;
             }
         }
@@ -328,21 +389,25 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
      *
      * @return Address of Gateway
      */
-    public String getCurrentAddress() {
-        return address.getText().toString().trim();
+    public String getCurrentLocalAddress() {
+        return localAddress.getText().toString().trim();
     }
 
     /**
-     * Gets current port field value
+     * Gets current localPort field value
      *
      * @return Port of Gateway (as String)
      */
-    private String getCurrentPortText() {
-        if (port.getText().toString().trim().length() == 0) {
-            return "49880";
-        } else {
-            return port.getText().toString().trim();
-        }
+    private String getCurrentLocalPortText() {
+        return localPort.getText().toString().trim();
+    }
+
+    private String getCurrentWanAddress() {
+        return wanAddress.getText().toString().trim();
+    }
+
+    private String getCurrentWanPortText() {
+        return wanPort.getText().toString().trim();
     }
 
     /**
@@ -352,32 +417,37 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         try {
-            if (gatewayId == -1) {
-                String gatewayModel = model.getSelectedItem().toString();
-                String gatewayName = getCurrentName();
-                String gatewayAddress = getCurrentAddress();
-                int gatewayPort = 49880;
-                if (getCurrentPortText().length() != 0) {
-                    gatewayPort = Integer.parseInt(getCurrentPortText());
-                }
+            String model = this.model.getSelectedItem().toString();
+            String name = getCurrentName();
+            String localAddress = getCurrentLocalAddress();
+            int localPort = DatabaseConstants.INVALID_GATEWAY_PORT;
+            if (getCurrentLocalPortText().length() > 0) {
+                localPort = Integer.parseInt(getCurrentLocalPortText());
+            }
+            String wanAddress = getCurrentWanAddress();
+            int wanPort = DatabaseConstants.INVALID_GATEWAY_PORT;
+            if (getCurrentWanPortText().length() > 0) {
+                wanPort = Integer.parseInt(getCurrentWanPortText());
+            }
 
+            if (gatewayId == -1) {
                 Gateway newGateway;
 
-                switch (gatewayModel) {
+                switch (model) {
                     case BrematicGWY433.MODEL:
-                        newGateway = new BrematicGWY433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        newGateway = new BrematicGWY433((long) -1, true, name, "", localAddress, localPort, wanAddress, wanPort);
                         break;
                     case ConnAir.MODEL:
-                        newGateway = new ConnAir((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        newGateway = new ConnAir((long) -1, true, name, "", localAddress, localPort, wanAddress, wanPort);
                         break;
                     case EZControl_XS1.MODEL:
-                        newGateway = new EZControl_XS1((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        newGateway = new EZControl_XS1((long) -1, true, name, "", localAddress, localPort, wanAddress, wanPort);
                         break;
                     case ITGW433.MODEL:
-                        newGateway = new ITGW433((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        newGateway = new ITGW433((long) -1, true, name, "", localAddress, localPort, wanAddress, wanPort);
                         break;
                     case RaspyRFM.MODEL:
-                        newGateway = new RaspyRFM((long) -1, true, gatewayName, "", gatewayAddress, gatewayPort);
+                        newGateway = new RaspyRFM((long) -1, true, name, "", localAddress, localPort, wanAddress, wanPort);
                         break;
                     default:
                         throw new GatewayUnknownException();
@@ -390,12 +460,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialog {
                             R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
                 }
             } else {
-                int portInt = 49880;
-                if (getCurrentPortText().length() > 0) {
-                    portInt = Integer.valueOf(getCurrentPortText());
-                }
-                DatabaseHandler.updateGateway(gatewayId, getCurrentName(), model.getSelectedItem()
-                        .toString(), getCurrentAddress(), portInt);
+                DatabaseHandler.updateGateway(gatewayId, name, model, localAddress, localPort, wanAddress, wanPort);
             }
 
             GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());

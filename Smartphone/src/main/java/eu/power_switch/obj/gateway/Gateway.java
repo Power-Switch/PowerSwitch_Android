@@ -18,10 +18,13 @@
 
 package eu.power_switch.obj.gateway;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import eu.power_switch.network.NetworkPackage;
+import eu.power_switch.shared.constants.DatabaseConstants;
 
 /**
  * Represents a Gateway that can receive network packages from the app and convert them for the actual wireless devices
@@ -49,35 +52,45 @@ public abstract class Gateway {
      */
     protected String firmware;
     /**
-     * Host address where this Gateway is accessible
+     * Host address where this Gateway is accessible via local network (WiFi/Lan etc.)
      */
-    protected String host;
+    protected String localHost;
     /**
-     * Port on which data can be exchanged with this Gateway
+     * Port on which data can be exchanged with this Gateway via local network (WiFi/Lan etc.)
      */
-    protected int port;
+    protected Integer localPort;
+    /**
+     * Host address where this Gateway is accessible via WAN
+     */
+    protected String wanHost;
+    /**
+     * Port on which data can be exchanged with this Gateway via WAN
+     */
+    protected Integer wanPort;
 
     protected Set<Capability> capabilities = new HashSet<>();
 
     /**
      * Constructor
      *
-     * @param id       ID of this Gateway
-     * @param active   true if this gateway is used to send network signals
-     * @param name     name of this gateway
-     * @param model    model of this gateway
-     * @param firmware firmware version of this gateway
-     * @param address  host address of this gateway
-     * @param port     port of this gateway
+     * @param id        ID of this Gateway
+     * @param active    true if this gateway is used to send network signals
+     * @param name      name of this gateway
+     * @param model     model of this gateway
+     * @param firmware  firmware version of this gateway
+     * @param localHost localHost address of this gateway
+     * @param localPort localPort of this gateway
      */
-    public Gateway(long id, boolean active, String name, String model, String firmware, String address, int port) {
+    public Gateway(long id, boolean active, @NonNull String name, @NonNull String model, @NonNull String firmware, @NonNull String localHost, @NonNull Integer localPort, @NonNull String wanHost, @NonNull Integer wanPort) {
         this.id = id;
         this.active = active;
         this.name = name;
         this.model = model;
         this.firmware = firmware;
-        this.host = address;
-        this.port = port;
+        this.localHost = localHost;
+        this.localPort = localPort;
+        this.wanHost = wanHost;
+        this.wanPort = wanPort;
     }
 
     /**
@@ -116,12 +129,61 @@ public abstract class Gateway {
     }
 
     /**
-     * Get Host address of this Gateway
+     * Get local Host address of this Gateway
      *
      * @return Host address of this Gateway
      */
-    public String getHost() {
-        return host;
+    @NonNull
+    public String getLocalHost() {
+        return localHost;
+    }
+
+    /**
+     * Get local Port over which data can be exchanged with this Gateway
+     *
+     * @return local Port of this Gateway
+     */
+    @NonNull
+    public Integer getLocalPort() {
+        if (DatabaseConstants.INVALID_GATEWAY_PORT.equals(localPort) && getLocalHost().length() > 0) {
+            return getDefaultLocalPort();
+        } else {
+            return localPort;
+        }
+    }
+
+    public boolean hasValidLocalAddress() {
+        return getLocalHost().length() > 0 && getLocalPort() != 0;
+    }
+
+    protected abstract Integer getDefaultLocalPort();
+
+    /**
+     * Get WAN Host address of this Gateway
+     *
+     * @return WAN Host address of this Gateway
+     */
+    @NonNull
+    public String getWanHost() {
+        return wanHost;
+    }
+
+    /**
+     * Get WAN Port over which data can be exchanged with this Gateway
+     *
+     * @return WAN Port of this Gateway
+     */
+    @NonNull
+    public Integer getWanPort() {
+        if (DatabaseConstants.INVALID_GATEWAY_PORT.equals(wanPort) && getWanHost().length() > 0) {
+            return getDefaultLocalPort();
+        } else {
+            return wanPort;
+        }
+    }
+
+    public boolean hasValidWanAddress() {
+        return getWanHost().length() > 0 && getWanPort() > 0;
     }
 
     /**
@@ -129,6 +191,7 @@ public abstract class Gateway {
      *
      * @return Name of this Gateway
      */
+    @NonNull
     public String getName() {
         return name;
     }
@@ -138,6 +201,7 @@ public abstract class Gateway {
      *
      * @return Model of this Gateway
      */
+    @NonNull
     public String getModel() {
         return model;
     }
@@ -147,17 +211,9 @@ public abstract class Gateway {
      *
      * @return Firmware of this Gateway
      */
+    @NonNull
     public String getFirmware() {
         return firmware;
-    }
-
-    /**
-     * Get port over which data can be exchanged with this Gateway
-     *
-     * @return Port of this Gateway
-     */
-    public int getPort() {
-        return port;
     }
 
     /**
@@ -172,19 +228,21 @@ public abstract class Gateway {
     /**
      * @return String representation of this Gateway
      */
+    @NonNull
     @Override
     public String toString() {
-        return "Gateway: " + name + " (" + model + ", firmware: " + firmware + "): " + host + ":" + port;
+        return "Gateway: " + name + " (" + model + ", firmware: " + firmware + "): " + localHost + ":" + localPort;
     }
 
     /**
-     * Compare host address and port to another Gateway
+     * Compare localHost address and localPort to another Gateway
      *
      * @param gateway Gateway to compare with this Gateway
-     * @return true if address & port match
+     * @return true if local address & local port match
      */
-    public boolean hasSameAddress(Gateway gateway) {
-        return (gateway.getHost().equals(this.host) && gateway.getPort() == this.port);
+    public boolean hasSameLocalAddress(@NonNull Gateway gateway) {
+        return String.valueOf(gateway.getLocalHost()).equals(String.valueOf(getLocalHost())) &&
+                (String.valueOf(gateway.getLocalPort()).equals(String.valueOf(getLocalPort())));
     }
 
     public abstract NetworkPackage.CommunicationType getCommunicationType();

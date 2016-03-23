@@ -320,7 +320,7 @@ public abstract class Receiver {
      */
     public NetworkPackage getNetworkPackage(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String signal = getSignal(gateway, action);
-        return new NetworkPackage(gateway.getCommunicationType(), gateway.getHost(), gateway.getPort(), signal,
+        return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
                 gateway.getTimeout());
     }
 

@@ -24,11 +24,11 @@ package eu.power_switch.network;
 public class NetworkPackage {
 
     /**
-     * Destination host of this network package
+     * Destination localHost of this network package
      */
     private String host;
     /**
-     * Destination port of this network package
+     * Destination localPort of this network package
      */
     private int port;
     /**
@@ -72,7 +72,7 @@ public class NetworkPackage {
     /**
      * Get Host address that this NetworkPackage should be sent to
      *
-     * @return host address
+     * @return localHost address
      */
     public String getHost() {
         return host;
@@ -81,7 +81,7 @@ public class NetworkPackage {
     /**
      * Get Port that this NetworkPackage should be sent to
      *
-     * @return port
+     * @return localPort
      */
     public int getPort() {
         return port;

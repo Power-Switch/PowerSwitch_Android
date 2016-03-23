@@ -31,7 +31,7 @@
 ////        Mockito.when(gw.getName()).thenReturn("dummy");
 ////        Mockito.when(gw.getModelAsString()).thenReturn(ConnAir.MODEL);
 ////        Mockito.when(gw.getFirmware()).thenReturn("firmware");
-////        Mockito.when(gw.getHost()).thenReturn("10.10.10.10");
+////        Mockito.when(gw.getLocalHost()).thenReturn("10.10.10.10");
 ////        Mockito.when(gw.getPort()).thenReturn(1000);
 ////
 //        ConnAir gw = new ConnAir(0, true, "dummy", "firmware", "10.10.10.10", 1000);
@@ -42,7 +42,7 @@
 ////        Mockito.verify(gw).getName();
 ////        Mockito.verify(gw).getModelAsString();
 ////        Mockito.verify(gw).getFirmware();
-////        Mockito.verify(gw).getHost();
+////        Mockito.verify(gw).getLocalHost();
 ////        Mockito.verify(gw).getPort();
 ////        Mockito.verify(gw).getId();
 ////        assertEquals(0, -1);

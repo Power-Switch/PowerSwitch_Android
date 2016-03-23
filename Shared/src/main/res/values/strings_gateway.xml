@@ -26,16 +26,19 @@
     <!-- configure gateway -->
     <string name="hint_name">Name</string>
     <string name="hint_room">Room</string>
-    <string name="hint_ip">IP-Address</string>
-    <string name="port">Port</string>
+    <string name="hint_ip">IP-Address (example: 192.168.178.20)</string>
+    <string name="local_port">Local Port</string>
+    <string name="wan_port">WAN Port</string>
     <string name="hint_port">Port (49880)</string>
     <string name="edit_gateway">Edit Gateway</string>
-    <string name="address">Address</string>
+    <string name="local_address">Local Address</string>
+    <string name="wan_address">WAN Address</string>
     <string name="firmware">Firmware</string>
     <string name="hint_url">Address (example: myaddress.dyndns.org)</string>
     <string name="predefined_port">49880</string>
     <string name="gateway_model">Model</string>
     <string name="gateway_type">Type</string>
+
     <string name="gateway_saved">Gateway successfully saved</string>
     <string name="gateway_found">Gateway found</string>
     <string name="gateway_already_exists_it_has_been_enabled">Gateway already exists. It has been enabled.</string>
@@ -53,7 +56,7 @@
     <string name="disabled">Disabled</string>
 
     <string name="port_invalid">Port invalid</string>
-    <string name="please_enter_port">Please enter port</string>
+    <string name="please_enter_port">Please enter localPort</string>
     <string name="please_enter_host">Please enter host</string>
 
 </resources>

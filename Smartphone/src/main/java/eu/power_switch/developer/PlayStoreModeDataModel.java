@@ -39,6 +39,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
+import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 
@@ -109,9 +110,9 @@ public class PlayStoreModeDataModel {
 
     private static void initGateways() {
         gateways.clear();
-        gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880));
-        gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880));
-        gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880));
+        gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT));
+        gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT));
+        gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT));
     }
 
     /**

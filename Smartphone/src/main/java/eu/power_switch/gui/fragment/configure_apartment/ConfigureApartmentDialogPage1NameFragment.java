@@ -255,7 +255,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
                 gatewayType.setText(gateway.getModel());
 
                 TextView gatewayHost = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayHost);
-                gatewayHost.setText(String.format(Locale.getDefault(), "%s:%d", gateway.getHost(), gateway.getPort()));
+                gatewayHost.setText(String.format(Locale.getDefault(), "%s:%d", gateway.getLocalHost(), gateway.getLocalPort()));
 
                 TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
                 if (gateway.isActive()) {

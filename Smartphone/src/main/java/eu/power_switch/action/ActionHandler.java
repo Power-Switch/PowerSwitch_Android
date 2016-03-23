@@ -68,8 +68,8 @@ public class ActionHandler {
         try {
             executeReceiverAction(context, receiver, button);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                    .receiver_action_history_text, receiver.getName(), button.getName())));
+            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
         } catch (ActionNotSupportedException e) {
             Log.e("Action not supported by Receiver!", e);
             StatusMessageHandler.showInfoMessage(context,
@@ -130,8 +130,8 @@ public class ActionHandler {
         try {
             executeRoomAction(context, room, buttonName);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                    .room_action_history_text, room.getName(), buttonName)));
+            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.room_action_history_text, room.getName(), buttonName)));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -153,8 +153,8 @@ public class ActionHandler {
         try {
             executeRoomAction(context, room, buttonId);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                    .room_action_history_text, room.getName(), Button.getName(context, buttonId))));
+            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.room_action_history_text, room.getName(), Button.getName(context, buttonId))));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -281,8 +281,8 @@ public class ActionHandler {
         try {
             executeScene(context, scene);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                    .scene_action_history_text, scene.getName())));
+            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.scene_action_history_text, scene.getName())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -338,8 +338,8 @@ public class ActionHandler {
         try {
             executeActions(context, timer.getActions());
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                    .timer_action_history_text, timer.getName())));
+            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.timer_action_history_text, timer.getName())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -361,8 +361,8 @@ public class ActionHandler {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(context, actions);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                    .sleep_as_android_action_history_text, event.toString())));
+            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -386,14 +386,14 @@ public class ActionHandler {
 
             HistoryItem historyItem;
             if (Geofence.EventType.ENTER.equals(eventType)) {
-                historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                        .geofence_enter_action_history_text, geofence.getName()));
+                historyItem = new HistoryItem((long) -1, Calendar.getInstance(),
+                        context.getString(R.string.geofence_enter_action_history_text, geofence.getName()));
             } else if (Geofence.EventType.EXIT.equals(eventType)) {
-                historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                        .geofence_exit_action_history_text, geofence.getName()));
+                historyItem = new HistoryItem((long) -1, Calendar.getInstance(),
+                        context.getString(R.string.geofence_exit_action_history_text, geofence.getName()));
             } else {
-                historyItem = new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string
-                        .geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
+                historyItem = new HistoryItem((long) -1, Calendar.getInstance(),
+                        context.getString(R.string.geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
             }
 
             HistoryHelper.add(context, historyItem);

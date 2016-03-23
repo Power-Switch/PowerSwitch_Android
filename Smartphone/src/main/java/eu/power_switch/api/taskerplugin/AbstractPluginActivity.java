@@ -33,7 +33,7 @@ import eu.power_switch.shared.log.Log;
 
 /**
  * Superclass for plug-in Activities. This class takes care of initializing aspects of the plug-in's UI to
- * look more integrated with the plug-in host.
+ * look more integrated with the plug-in localHost.
  */
 public abstract class AbstractPluginActivity extends Activity {
     /**
@@ -122,17 +122,17 @@ public abstract class AbstractPluginActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         /*
-         * Note: There is a small TOCTOU error here, in that the host could be uninstalled right after
+         * Note: There is a small TOCTOU error here, in that the localHost could be uninstalled right after
          * launching the plug-in. That would cause getApplicationIcon() to return the default application
          * icon. It won't fail, but it will return an incorrect icon.
          *
-         * In practice, the chances that the host will be uninstalled while the plug-in UI is running are very
+         * In practice, the chances that the localHost will be uninstalled while the plug-in UI is running are very
          * slim.
          */
         try {
             getActionBar().setIcon(getPackageManager().getApplicationIcon(getCallingPackage()));
         } catch (final NameNotFoundException e) {
-            Log.e("An error occurred loading the host's icon", e); //$NON-NLS-1$
+            Log.e("An error occurred loading the localHost's icon", e); //$NON-NLS-1$
         }
     }
 

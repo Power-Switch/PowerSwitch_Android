@@ -59,7 +59,7 @@ abstract class GatewayHandler {
      */
     protected static long add(Gateway gateway) throws Exception {
         for (Gateway existingGateway : getAll()) {
-            if (existingGateway.hasSameAddress(gateway)) {
+            if (existingGateway.hasSameLocalAddress(gateway)) {
                 throw new GatewayAlreadyExistsException(existingGateway.getId());
             }
         }
@@ -69,8 +69,10 @@ abstract class GatewayHandler {
         values.put(GatewayTable.COLUMN_NAME, gateway.getName());
         values.put(GatewayTable.COLUMN_MODEL, gateway.getModel());
         values.put(GatewayTable.COLUMN_FIRMWARE, gateway.getFirmware());
-        values.put(GatewayTable.COLUMN_ADDRESS, gateway.getHost());
-        values.put(GatewayTable.COLUMN_PORT, gateway.getPort());
+        values.put(GatewayTable.COLUMN_LAN_ADDRESS, gateway.getLocalHost());
+        values.put(GatewayTable.COLUMN_LAN_PORT, gateway.getLocalPort());
+        values.put(GatewayTable.COLUMN_WAN_ADDRESS, gateway.getWanHost());
+        values.put(GatewayTable.COLUMN_WAN_PORT, gateway.getWanPort());
 
         long newId = DatabaseHandler.database.insert(GatewayTable.TABLE_NAME, null, values);
         return newId;
@@ -101,18 +103,22 @@ abstract class GatewayHandler {
     /**
      * Updates an existing Gateway
      *
-     * @param id      ID of Gateway
-     * @param name    new Name
-     * @param model   new Model
-     * @param address new Address (Host)
-     * @param port    new Port
+     * @param id           ID of Gateway
+     * @param name         new Name
+     * @param model        new Model
+     * @param localAddress new local Address (Host)
+     * @param localPort    new local Port
+     * @param wanAddress   new WAN Address (Host)
+     * @param wanPort      new WAN Port
      */
-    protected static void update(Long id, String name, String model, String address, Integer port) throws Exception {
+    protected static void update(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_NAME, name);
         values.put(GatewayTable.COLUMN_MODEL, model);
-        values.put(GatewayTable.COLUMN_ADDRESS, address);
-        values.put(GatewayTable.COLUMN_PORT, port);
+        values.put(GatewayTable.COLUMN_LAN_ADDRESS, localAddress);
+        values.put(GatewayTable.COLUMN_LAN_PORT, localPort);
+        values.put(GatewayTable.COLUMN_WAN_ADDRESS, wanAddress);
+        values.put(GatewayTable.COLUMN_WAN_PORT, wanPort);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -217,24 +223,26 @@ abstract class GatewayHandler {
         String name = c.getString(2);
         String rawModel = c.getString(3);
         String firmware = c.getString(4);
-        String address = c.getString(5);
-        int port = c.getInt(6);
+        String localAddress = c.getString(5);
+        int localPort = c.getInt(6);
+        String wanAddress = c.getString(7);
+        int wanPort = c.getInt(8);
 
         switch (rawModel) {
             case BrematicGWY433.MODEL:
-                gateway = new BrematicGWY433(id, active, name, firmware, address, port);
+                gateway = new BrematicGWY433(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
                 break;
             case ConnAir.MODEL:
-                gateway = new ConnAir(id, active, name, firmware, address, port);
+                gateway = new ConnAir(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
                 break;
             case EZControl_XS1.MODEL:
-                gateway = new EZControl_XS1(id, active, name, firmware, address, port);
+                gateway = new EZControl_XS1(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
                 break;
             case ITGW433.MODEL:
-                gateway = new ITGW433(id, active, name, firmware, address, port);
+                gateway = new ITGW433(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
                 break;
             case RaspyRFM.MODEL:
-                gateway = new RaspyRFM(id, active, name, firmware, address, port);
+                gateway = new RaspyRFM(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
                 break;
             default:
                 throw new GatewayUnknownException(rawModel);

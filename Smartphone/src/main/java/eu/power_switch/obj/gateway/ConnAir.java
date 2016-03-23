@@ -30,14 +30,19 @@ public class ConnAir extends Gateway {
      */
     public static final String MODEL = "ConnAir";
 
-    public ConnAir(Long id, boolean active, String name, String firmware, String address, int port) {
-        super(id, active, name, MODEL, firmware, address, port);
+    public ConnAir(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort) {
+        super(id, active, name, MODEL, firmware, localAddress, localPort, wanAddress, wanPort);
         capabilities.add(Capability.SEND);
     }
 
     @Override
     public int getTimeout() {
         return 0;
+    }
+
+    @Override
+    protected Integer getDefaultLocalPort() {
+        return 49880;
     }
 
     @Override

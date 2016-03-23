@@ -1106,17 +1106,19 @@ public final class DatabaseHandler {
     /**
      * Update existing Gateway
      *
-     * @param id      ID of Gateway
-     * @param name    new Name of Gateway
-     * @param model   new Model of Gateway
-     * @param address new Address (Host) of Gateway
-     * @param port    new Port of Gateway
+     * @param id           ID of Gateway
+     * @param name         new Name of Gateway
+     * @param model        new Model of Gateway
+     * @param localAddress new local Address (Host) of Gateway
+     * @param localPort    new local Port of Gateway
+     * @param wanAddress   new WAN Address (Host) of Gateway
+     * @param wanPort      new WAN Port of Gateway
      */
     @WorkerThread
-    public static void updateGateway(Long id, String name, String model, String address, Integer port) throws Exception {
+    public static void updateGateway(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort) throws Exception {
         openWritable();
         try {
-            GatewayHandler.update(id, name, model, address, port);
+            GatewayHandler.update(id, name, model, localAddress, localPort, wanAddress, wanPort);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);

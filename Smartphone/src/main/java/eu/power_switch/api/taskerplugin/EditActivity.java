@@ -798,7 +798,7 @@ public class EditActivity extends AbstractPluginActivity {
 //          stored in the Bundle, as Locale's classloader will not recognize it).
             final Bundle resultBundle = new Bundle();
 
-            // The blurb is concise status text to be displayed in the host's UI.
+            // The blurb is concise status text to be displayed in the localHost's UI.
             String blurb = getApartmentName() + ": ";
 
             if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {

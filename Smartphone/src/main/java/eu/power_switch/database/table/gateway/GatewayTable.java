@@ -20,6 +20,8 @@ package eu.power_switch.database.table.gateway;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import eu.power_switch.shared.constants.DatabaseConstants;
+
 /**
  * Gateway table description
  */
@@ -31,10 +33,12 @@ public class GatewayTable {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_MODEL = "model";
     public static final String COLUMN_FIRMWARE = "firmware";
-    public static final String COLUMN_ADDRESS = "address";
-    public static final String COLUMN_PORT = "port";
+    public static final String COLUMN_LAN_ADDRESS = "address";
+    public static final String COLUMN_LAN_PORT = "port";
+    public static final String COLUMN_WAN_ADDRESS = "wan_address";
+    public static final String COLUMN_WAN_PORT = "wan_port";
 
-    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME, COLUMN_MODEL, COLUMN_FIRMWARE, COLUMN_ADDRESS, COLUMN_PORT};
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME, COLUMN_MODEL, COLUMN_FIRMWARE, COLUMN_LAN_ADDRESS, COLUMN_LAN_PORT, COLUMN_WAN_ADDRESS, COLUMN_WAN_PORT};
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
@@ -43,8 +47,11 @@ public class GatewayTable {
             COLUMN_NAME + " text not null, " +
             COLUMN_MODEL + " text not null, " +
             COLUMN_FIRMWARE + " text not null, " +
-            COLUMN_ADDRESS + " text not null, " +
-            COLUMN_PORT + " integer not null" + ");";
+            COLUMN_LAN_ADDRESS + " text not null, " +
+            COLUMN_LAN_PORT + " integer not null," +
+            COLUMN_WAN_ADDRESS + " text not null, " +
+            COLUMN_WAN_PORT + " integer not null" +
+            ");";
     //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
@@ -52,6 +59,9 @@ public class GatewayTable {
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 16) {
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_WAN_ADDRESS + " text not null DEFAULT '';");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_WAN_PORT + " integer not null DEFAULT " + DatabaseConstants.INVALID_GATEWAY_PORT + ";");
+        }
     }
 }

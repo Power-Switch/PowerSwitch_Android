@@ -59,7 +59,7 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
             // prepare Data to send
             byte[] buffer = "SEARCH HCGW".getBytes();
 
-            // create UDP Packet with data & destination(url+port)
+            // create UDP Packet with data & destination(url+localPort)
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, ip, port);
 
             // send packet
