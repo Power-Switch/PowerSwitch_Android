@@ -56,6 +56,7 @@ public class ActionTable {
             case 8:
                 // create new table
                 onCreate(db);
+                break;
         }
     }
 }

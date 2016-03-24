@@ -266,6 +266,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
                 AppCompatTextView receiverName = new AppCompatTextView(context);
                 receiverName.setText(receiver.getName());
                 receiverName.setTextSize(18);
+                receiverName.setTextColor(ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary));
                 receiverName.setGravity(Gravity.CENTER_VERTICAL);
                 receiverRow.addView(receiverName, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));

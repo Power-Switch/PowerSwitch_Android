@@ -27,6 +27,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -152,7 +153,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
         updateRoomNamesList();
 
         addRoomFAB = (FloatingActionButton) rootView.findViewById(R.id.add_room_fab);
-        addRoomFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        addRoomFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final Fragment fragment = this;
         addRoomFAB.setOnClickListener(new View.OnClickListener() {
             @Override

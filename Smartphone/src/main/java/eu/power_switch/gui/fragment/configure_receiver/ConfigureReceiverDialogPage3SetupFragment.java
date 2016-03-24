@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatEditText;
@@ -306,7 +307,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends Fragment {
         layoutUniversal = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalButtons);
         FloatingActionButton addUniversalButtonFAB = (FloatingActionButton) rootView.findViewById(R.id
                 .add_universalButton_fab);
-        addUniversalButtonFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        addUniversalButtonFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         buttonsList = (LinearLayout) rootView.findViewById(R.id.universalButtons_List);
 
         addUniversalButtonFAB.setOnClickListener(new View.OnClickListener() {

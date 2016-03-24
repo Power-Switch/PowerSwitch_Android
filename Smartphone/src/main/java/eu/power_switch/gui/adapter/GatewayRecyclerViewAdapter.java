@@ -105,15 +105,13 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         } else {
             holder.layoutLocalAddress.setVisibility(View.GONE);
         }
-        holder.localAddress.setText(gateway.getLocalHost());
-        holder.localPort.setText(String.valueOf(gateway.getLocalPort()));
+        holder.localAddress.setText(gateway.getLocalHost() + ":" + String.valueOf(gateway.getLocalPort()));
         if (gateway.hasValidWanAddress()) {
             holder.layoutWanAddress.setVisibility(View.VISIBLE);
         } else {
             holder.layoutWanAddress.setVisibility(View.GONE);
         }
-        holder.wanAddress.setText(gateway.getWanHost());
-        holder.wanPort.setText(String.valueOf(gateway.getWanPort()));
+        holder.wanAddress.setText(gateway.getWanHost() + ":" + String.valueOf(gateway.getWanPort()));
 
         holder.gatewaySwitchStatus.setChecked(gateway.isActive());
         holder.gatewaySwitchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -162,10 +160,8 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         public TextView model;
         public LinearLayout layoutLocalAddress;
         public TextView localAddress;
-        public TextView localPort;
         public LinearLayout layoutWanAddress;
         public TextView wanAddress;
-        public TextView wanPort;
         public android.support.v7.widget.SwitchCompat gatewaySwitchStatus;
         public LinearLayout footer;
 
@@ -176,10 +172,8 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
             model = (TextView) itemView.findViewById(R.id.txt_gateway_model);
             layoutLocalAddress = (LinearLayout) itemView.findViewById(R.id.layout_local_address);
             localAddress = (TextView) itemView.findViewById(R.id.txt_gateway_local_address);
-            localPort = (TextView) itemView.findViewById(R.id.txt_gateway_local_port);
             layoutWanAddress = (LinearLayout) itemView.findViewById(R.id.layout_wan_address);
             wanAddress = (TextView) itemView.findViewById(R.id.txt_gateway_wan_address);
-            wanPort = (TextView) itemView.findViewById(R.id.txt_gateway_wan_port);
 
             gatewaySwitchStatus = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_gateway_status);
             footer = (LinearLayout) itemView.findViewById(R.id.list_footer);

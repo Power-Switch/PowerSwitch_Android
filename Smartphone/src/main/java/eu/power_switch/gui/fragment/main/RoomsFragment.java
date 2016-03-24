@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,7 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
@@ -82,7 +84,10 @@ public class RoomsFragment extends RecyclerViewFragment {
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
-        setHasOptionsMenu(true);
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            setHasOptionsMenu(true);
+        }
 
         rooms = new ArrayList<>();
         recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview);
@@ -93,7 +98,7 @@ public class RoomsFragment extends RecyclerViewFragment {
         recyclerViewRooms.setLayoutManager(layoutManager);
 
         addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
-        addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final RecyclerViewFragment recyclerViewFragment = this;
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,18 +170,9 @@ public class RoomsFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            inflater.inflate(R.menu.room_fragment_menu, menu);
-            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-                menu.findItem(R.id.create_receiver)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-            } else {
-                menu.findItem(R.id.create_receiver)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-            }
-        }
-
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.room_fragment_menu, menu);
+        final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
+        menu.findItem(R.id.create_receiver).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
     }
 
     @Override

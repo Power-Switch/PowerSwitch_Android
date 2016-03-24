@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -47,8 +48,8 @@ import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
@@ -81,7 +82,10 @@ public class ApartmentFragment extends RecyclerViewFragment {
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
-        setHasOptionsMenu(true);
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            setHasOptionsMenu(true);
+        }
 
         final RecyclerViewFragment recyclerViewFragment = this;
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview);
@@ -122,7 +126,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
         });
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getContext(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,17 +174,9 @@ public class ApartmentFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            inflater.inflate(R.menu.apartment_fragment_menu, menu);
-            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-                menu.findItem(R.id.create_apartment)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-            } else {
-                menu.findItem(R.id.create_apartment)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-            }
-        }
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.apartment_fragment_menu, menu);
+        final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
+        menu.findItem(R.id.create_apartment).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
     }
 
     @Override

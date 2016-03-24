@@ -49,6 +49,7 @@
                     android:id="@+id/txt_backup_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?android:textColorSecondary"
                     android:textSize="12sp"/>
 
                 <TextView
@@ -56,6 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
+                    android:textColor="?android:textColorPrimary"
                     android:textSize="18sp"/>
             </LinearLayout>
 

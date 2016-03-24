@@ -52,6 +52,7 @@ public class DipTable {
             case 1:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+                break;
             case 2:
                 break;
 

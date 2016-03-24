@@ -72,6 +72,7 @@ public class GeofenceTable {
             case 12:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+                break;
             case 13:
             case 14:
             case 15:

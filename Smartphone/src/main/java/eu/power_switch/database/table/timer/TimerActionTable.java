@@ -59,10 +59,12 @@ public class TimerActionTable {
             case 6:
                 db.execSQL("DROP TABLE IF EXISTS " + "timer_action");
                 onCreate(db);
+                break;
             case 7:
             case 8:
                 // upgrading data happens in Database.java
                 onCreate(db);
+                break;
         }
     }
 }

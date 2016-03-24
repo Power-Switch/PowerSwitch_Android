@@ -54,9 +54,11 @@ public class SceneItemTable {
             case 1:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+                break;
             case 2:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+                break;
             case 3:
                 break;
         }

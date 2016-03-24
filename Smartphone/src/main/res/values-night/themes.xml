@@ -153,10 +153,10 @@
 
         <!-- text color -->
         <item name="textColorInactive">@color/color_gray_500</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
-        <item name="android:textColorSecondary">@color/textColorSecondary</item>
-        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
-        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+        <!--<item name="android:textColorPrimary">@color/textColorPrimary</item>-->
+        <!--<item name="android:textColorSecondary">@color/textColorSecondary</item>-->
+        <!--<item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>-->
+        <!--<item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>-->
 
         <!-- About Libraries -->
         <item name="about_libraries_window_background">@color/windowBackgroundColor</item>

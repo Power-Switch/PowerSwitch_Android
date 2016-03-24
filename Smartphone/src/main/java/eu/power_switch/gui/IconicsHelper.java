@@ -20,7 +20,6 @@ package eu.power_switch.gui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -52,26 +51,19 @@ public class IconicsHelper {
                 .sizeDp(24)
                 .color(color);
 
-//
-//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-//        } else {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-//        }
-
         return iconicsDrawable;
     }
 
     /**
      * Get "Add" icon
      *
-     * @param context         any suitable context
-     * @param colorResourceId icon color
+     * @param context any suitable context
+     * @param color   icon color
      * @return "Add" icon
      */
-    public static IconicsDrawable getAddIcon(Context context, @ColorRes int colorResourceId) {
+    public static IconicsDrawable getAddIcon(Context context, int color) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_plus)
-                .color(ContextCompat.getColor(context, colorResourceId))
+                .color(color)
                 .sizeDp(24)
                 .paddingDp(5);
 
@@ -82,12 +74,11 @@ public class IconicsHelper {
      * Get "Refresh" icon
      *
      * @param context         any suitable context
-     * @param colorResourceId icon color
      * @return "Refresh" icon
      */
-    public static IconicsDrawable getRefreshIcon(Context context, @ColorRes int colorResourceId) {
+    public static IconicsDrawable getRefreshIcon(Context context, int color) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_refresh)
-                .color(ContextCompat.getColor(context, colorResourceId))
+                .color(color)
                 .sizeDp(24)
                 .paddingDp(2);
 
@@ -112,12 +103,11 @@ public class IconicsHelper {
      * Get "Delete" icon
      *
      * @param context         any suitable context
-     * @param colorResourceId icon color
      * @return "Delete" icon
      */
-    public static IconicsDrawable getDeleteIcon(Context context, @ColorRes int colorResourceId) {
+    public static IconicsDrawable getDeleteIcon(Context context, int color) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_delete)
-                .color(ContextCompat.getColor(context, colorResourceId))
+                .color(color)
                 .sizeDp(36);
 
         return iconicsDrawable;
@@ -136,12 +126,6 @@ public class IconicsHelper {
                 .paddingDp(2)
                 .color(color);
 
-//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-//        } else {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-//        }
-
         return iconicsDrawable;
     }
 
@@ -156,12 +140,6 @@ public class IconicsHelper {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_check_circle)
                 .sizeDp(36)
                 .color(color);
-
-//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-//        } else {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-//        }
 
         return iconicsDrawable;
     }
@@ -178,12 +156,6 @@ public class IconicsHelper {
                 .sizeDp(24)
                 .color(color);
 
-//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-//        } else {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-//        }
-
         return iconicsDrawable;
     }
 
@@ -191,12 +163,11 @@ public class IconicsHelper {
      * Get "Search" icon
      *
      * @param context         any suitable context
-     * @param colorResourceId icon color
      * @return "Search" icon
      */
-    public static IconicsDrawable getSearchIcon(Context context, @ColorRes int colorResourceId) {
+    public static IconicsDrawable getSearchIcon(Context context, int color) {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_search)
-                .color(ContextCompat.getColor(context, colorResourceId))
+                .color(color)
                 .sizeDp(24);
 
         return iconicsDrawable;
@@ -227,12 +198,6 @@ public class IconicsHelper {
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_arrow_upward)
                 .sizeDp(24)
                 .color(color);
-
-//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-//        } else {
-//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-//        }
 
         return iconicsDrawable;
     }

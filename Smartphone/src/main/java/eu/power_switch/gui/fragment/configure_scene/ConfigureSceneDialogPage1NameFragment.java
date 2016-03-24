@@ -48,6 +48,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -136,10 +137,12 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
             for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId())) {
                 LinearLayout roomLayout = new LinearLayout(getActivity());
                 roomLayout.setOrientation(LinearLayout.VERTICAL);
+                roomLayout.setPadding(0, 8, 0, 8);
                 linearLayout_selectableReceivers.addView(roomLayout);
 
                 TextView roomName = new TextView(getActivity());
                 roomName.setText(room.getName());
+                roomName.setTextColor(ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary));
                 roomLayout.addView(roomName);
 
                 for (Receiver receiver : room.getReceivers()) {

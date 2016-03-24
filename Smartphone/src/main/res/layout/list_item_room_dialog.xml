@@ -47,6 +47,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center"
+                    android:textColor="?attr/colorAccent"
                     android:textSize="@dimen/font_title_size"/>
 
             </LinearLayout>

@@ -141,6 +141,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             AppCompatTextView receiverName = new AppCompatTextView(fragmentActivity);
             receiverName.setText(sceneItem.getReceiver().getName());
             receiverName.setTextSize(18);
+            receiverName.setTextColor(ThemeHelper.getThemeAttrColor(fragmentActivity, android.R.attr.textColorPrimary));
             receiverName.setGravity(Gravity.CENTER_VERTICAL);
             receiverRow.addView(receiverName, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.MATCH_PARENT, 1.0f));

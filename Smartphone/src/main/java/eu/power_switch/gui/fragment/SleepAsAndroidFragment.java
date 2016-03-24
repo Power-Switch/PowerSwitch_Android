@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -52,8 +53,8 @@ import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddAlarmEventActionDialog;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
@@ -77,7 +78,10 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     @Override
     public void onCreateViewEvent(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_sleep_as_android, container, false);
-        setHasOptionsMenu(true);
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            setHasOptionsMenu(true);
+        }
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -127,7 +131,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         recyclerViewActions.setLayoutManager(layoutManager);
 
         addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
-        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,15 +237,9 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            inflater.inflate(R.menu.sleep_as_android_fragment_menu, menu);
-            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-                menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-            } else {
-                menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-            }
-        }
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.sleep_as_android_fragment_menu, menu);
+        final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
+        menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
     }
 
 

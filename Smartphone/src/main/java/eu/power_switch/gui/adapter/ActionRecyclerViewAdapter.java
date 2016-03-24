@@ -20,6 +20,7 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +83,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
             super(itemView);
             this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
             this.deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_action_fab);
-            deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(context, android.R.color.white));
+            deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(context, ContextCompat.getColor(context, android.R.color.white)));
 
             this.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -95,7 +96,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Fragment {
 
         final Fragment fragment = this;
         FloatingActionButton addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action);
-        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +191,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Fragment {
                 super(itemView);
                 action = (TextView) itemView.findViewById(R.id.txt_action_description);
                 deleteActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_action_fab);
-                deleteActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), android.R.color.white));
+                deleteActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
             }
         }
     }

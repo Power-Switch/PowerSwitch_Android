@@ -70,6 +70,7 @@ public class ReceiverTable {
             case 1:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+                break;
             case 2:
             case 3:
             case 4:

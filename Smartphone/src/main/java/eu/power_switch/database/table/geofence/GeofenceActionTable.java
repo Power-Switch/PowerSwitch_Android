@@ -67,6 +67,7 @@ public class GeofenceActionTable {
             case 12:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+                break;
         }
     }
 }

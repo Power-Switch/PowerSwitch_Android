@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -55,9 +56,9 @@ import eu.power_switch.gui.dialog.SelectApartmentForGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 
@@ -88,7 +89,10 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_apartment_geofences, container, false);
-        setHasOptionsMenu(true);
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            setHasOptionsMenu(true);
+        }
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
@@ -114,7 +118,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         });
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -260,18 +264,9 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            inflater.inflate(R.menu.apartment_geofences_fragment_menu, menu);
-            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-                menu.findItem(R.id.create_geofence)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-            } else {
-                menu.findItem(R.id.create_geofence)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-            }
-        }
-
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.apartment_geofences_fragment_menu, menu);
+        final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
+        menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
     }
 
     @Override

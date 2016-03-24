@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -141,7 +142,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
             this.backupName = (TextView) itemView.findViewById(R.id.txt_backup_name);
             this.backupDate = (TextView) itemView.findViewById(R.id.txt_backup_date);
             this.deleteButton = (FloatingActionButton) itemView.findViewById(R.id.delete_backup_fab);
-            deleteButton.setImageDrawable(IconicsHelper.getDeleteIcon(context, android.R.color.white));
+            deleteButton.setImageDrawable(IconicsHelper.getDeleteIcon(context, ContextCompat.getColor(context, android.R.color.white)));
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {

@@ -53,6 +53,7 @@ public class MasterSlaveTable {
                 db.execSQL("DROP TABLE IF EXISTS " + "master_slave_receiver");
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+                break;
             case 2:
                 break;
 

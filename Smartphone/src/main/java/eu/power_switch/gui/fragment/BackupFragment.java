@@ -19,8 +19,6 @@
 package eu.power_switch.gui.fragment;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,6 +29,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -59,9 +58,9 @@ import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
@@ -102,7 +101,10 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
-        setHasOptionsMenu(true);
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            setHasOptionsMenu(true);
+        }
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -141,25 +143,21 @@ public class BackupFragment extends RecyclerViewFragment {
                                 try {
                                     BackupHandler backupHandler = new BackupHandler(getActivity());
                                     backupHandler.restoreBackup(backup.getName());
+
                                     // restart app to apply
-                                    // prepare intent to rerun app shortly after termination
-                                    Intent mStartActivity = new Intent(getActivity(), MainActivity.class);
-                                    int mPendingIntentId = 123456;
-                                    PendingIntent mPendingIntent = PendingIntent.getActivity(getActivity(),
-                                            mPendingIntentId,
-                                            mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                                    AlarmManager mgr = (AlarmManager) getActivity().getSystemService(
-                                            Context.ALARM_SERVICE);
-                                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                                    // kill app
-                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    getActivity().finish();
+                                    Intent intent = new Intent(getContext(), MainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
                                 } catch (BackupNotFoundException e) {
                                     Log.e(e);
-                                    StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView()
-                                            , R.string.backup_not_found, Snackbar
-                                                    .LENGTH_LONG);
+                                    StatusMessageHandler.showInfoMessage(
+                                            recyclerViewFragment.getRecyclerView(),
+                                            R.string.backup_not_found, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                                    StatusMessageHandler.showErrorMessage(
+                                            recyclerViewFragment.getRecyclerView(), e);
                                 }
                             }
                         }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
@@ -185,7 +183,7 @@ public class BackupFragment extends RecyclerViewFragment {
         recyclerViewBackups.setLayoutManager(layoutManager);
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
-        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
+        fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -313,17 +311,9 @@ public class BackupFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            inflater.inflate(R.menu.backup_fragment_menu, menu);
-            if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-                menu.findItem(R.id.create_backup)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.white));
-            } else {
-                menu.findItem(R.id.create_backup)
-                        .setIcon(IconicsHelper.getAddIcon(getActivity(), android.R.color.black));
-            }
-        }
-        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.backup_fragment_menu, menu);
+        final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
+        menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
     }
 
     @Override

@@ -29,6 +29,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -121,7 +122,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
         searchAddressEditText = (EditText) rootView.findViewById(R.id.searchAddressEditText);
 
         searchAddressButton = (ImageButton) rootView.findViewById(R.id.searchAddressImageButton);
-        searchAddressButton.setImageDrawable(IconicsHelper.getSearchIcon(getActivity(), android.R.color.white));
+        searchAddressButton.setImageDrawable(IconicsHelper.getSearchIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         searchAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
