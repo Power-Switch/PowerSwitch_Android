@@ -23,11 +23,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.shared.ThemeHelper;
 
 /**
  * Created by Markus on 21.02.2016.
@@ -58,11 +58,12 @@ public class ChromeCustomTabHelper {
 
     public static Intent getBrowserIntent(Context context, String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        
+
+        final int accentColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Bundle extras = new Bundle();
             extras.putBinder(EXTRA_CUSTOM_TABS_SESSION, null);
-            intent.putExtra(EXTRA_CUSTOM_TABS_TOOLBAR_COLOR, ContextCompat.getColor(context, R.color.color_blue_700));
+            intent.putExtra(EXTRA_CUSTOM_TABS_TOOLBAR_COLOR, accentColor);
             intent.putExtras(extras);
 
             // Optional. Use an ArrayList for specifying menu related params. There

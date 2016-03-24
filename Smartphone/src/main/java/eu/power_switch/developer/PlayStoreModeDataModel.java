@@ -102,7 +102,7 @@ public class PlayStoreModeDataModel {
 
         heimat = new Apartment((long) 0, true, "Heimat", rooms, scenes, getGateways(),
                 new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
-                        null, new HashMap<Geofence.EventType, List<Action>>()));
+                        null, new HashMap<Geofence.EventType, List<Action>>(), Geofence.STATE_NONE));
 
         apartments.clear();
         apartments.add(heimat);

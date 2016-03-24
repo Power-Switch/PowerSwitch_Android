@@ -19,8 +19,8 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -34,18 +34,15 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -117,17 +114,13 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                     VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                 }
 
-                try {
-                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
-                    if (activeGateways.isEmpty()) {
-                        StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
-                        return;
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        ActionHandler.execute(fragmentActivity, scene);
+                        return null;
                     }
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
-                }
-
-                ActionHandler.execute(fragmentActivity, scene);
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
@@ -173,9 +166,12 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);
 
-                final int accentColor = ContextCompat.getColor(fragmentActivity, R.color.color_light_blue_a700);
+                final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
+                final int inactiveColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.textColorInactive);
                 if (sceneItem.getActiveButton().equals(button)) {
                     buttonView.setTextColor(accentColor);
+                } else {
+                    buttonView.setTextColor(inactiveColor);
                 }
 
                 if (i == 0 || i % buttonsPerRow == 0) {

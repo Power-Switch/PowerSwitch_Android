@@ -20,6 +20,8 @@ package eu.power_switch.database.table.geofence;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import eu.power_switch.google_play_services.geofence.Geofence;
+
 /**
  * Geofence table description
  */
@@ -33,8 +35,9 @@ public class GeofenceTable {
     public static final String COLUMN_LONGITUDE = "longitude";
     public static final String COLUMN_RADIUS = "radius";
     public static final String COLUMN_SNAPSHOT = "snapshot";
+    public static final String COLUMN_STATE = "state";
 
-    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME, COLUMN_LATITUDE, COLUMN_LONGITUDE, COLUMN_RADIUS, COLUMN_SNAPSHOT};
+    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME, COLUMN_LATITUDE, COLUMN_LONGITUDE, COLUMN_RADIUS, COLUMN_SNAPSHOT, COLUMN_STATE};
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
@@ -44,7 +47,8 @@ public class GeofenceTable {
             COLUMN_LATITUDE + " real not null, " +
             COLUMN_LONGITUDE + " real not null, " +
             COLUMN_RADIUS + " real not null, " +
-            COLUMN_SNAPSHOT + " blob" +
+            COLUMN_SNAPSHOT + " blob," +
+            COLUMN_STATE + " text not null" +
             ");";
     //@formatter:on
 
@@ -68,6 +72,10 @@ public class GeofenceTable {
             case 12:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
+            case 13:
+            case 14:
+            case 15:
+                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_STATE + " text not null DEFAULT " + Geofence.STATE_NONE + ";");
         }
     }
 }

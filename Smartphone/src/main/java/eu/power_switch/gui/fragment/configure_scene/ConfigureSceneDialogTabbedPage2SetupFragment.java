@@ -23,12 +23,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -58,6 +56,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
@@ -295,8 +294,12 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
                     android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, null, false);
                     buttonList.add(buttonView);
 
-                    if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId() == button.getId()) {
-                        buttonView.setTextColor(ContextCompat.getColor(getContext(), R.color.color_light_blue_a700));
+                    final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
+                    final int inactiveColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.textColorInactive);
+                    if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId().equals(button.getId())) {
+                        buttonView.setTextColor(accentColor);
+                    } else {
+                        buttonView.setTextColor(inactiveColor);
                     }
                     buttonView.setText(button.getName());
                     buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
@@ -306,7 +309,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
                             sendSetupSceneChangedBroadcast(context);
                             for (android.widget.Button button : buttonList) {
                                 if (button == v) {
-                                    button.setTextColor(ContextCompat.getColor(getContext(), R.color.color_light_blue_a700));
+                                    button.setTextColor(accentColor);
 
                                     for (Button receiverButton : receiver.getButtons()) {
                                         if (receiverButton.getName().equals(button.getText())) {
@@ -316,7 +319,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
                                         }
                                     }
                                 } else {
-                                    button.setTextColor(Color.WHITE);
+                                    button.setTextColor(inactiveColor);
                                 }
                             }
                         }

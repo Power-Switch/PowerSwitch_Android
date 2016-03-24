@@ -46,7 +46,7 @@ public class UniversalReceiver extends Receiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) {
+    public String getSignal(Gateway gateway, String action) {
         try {
             for (UniversalButton button : DatabaseHandler.getButtons(id)) {
                 if (button.getName().equals(action)) {

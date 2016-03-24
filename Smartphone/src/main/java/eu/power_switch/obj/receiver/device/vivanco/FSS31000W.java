@@ -94,7 +94,7 @@ public class FSS31000W extends Receiver implements DipReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         boolean actionSupported = false;
         for (Button button : buttons) {
             if (button.getName().equals(action)) {

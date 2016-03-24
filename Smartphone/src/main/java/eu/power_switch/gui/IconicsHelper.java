@@ -28,8 +28,7 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import eu.power_switch.R;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.ThemeHelper;
 
 /**
  * Helper class for access to often used icons
@@ -48,14 +47,17 @@ public class IconicsHelper {
      * @return "Menu" Icon
      */
     public static IconicsDrawable getMenuIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_menu)
-                .sizeDp(24);
+                .sizeDp(24)
+                .color(color);
 
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-        } else {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-        }
+//
+//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
+//        } else {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
+//        }
 
         return iconicsDrawable;
     }
@@ -128,15 +130,17 @@ public class IconicsHelper {
      * @return "Next" icon
      */
     public static IconicsDrawable getNextIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_arrow_forward)
                 .sizeDp(36)
-                .paddingDp(2);
+                .paddingDp(2)
+                .color(color);
 
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-        } else {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-        }
+//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
+//        } else {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
+//        }
 
         return iconicsDrawable;
     }
@@ -148,14 +152,16 @@ public class IconicsHelper {
      * @return "Save" icon
      */
     public static IconicsDrawable getSaveIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_check_circle)
-                .sizeDp(36);
+                .sizeDp(36)
+                .color(color);
 
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-        } else {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-        }
+//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
+//        } else {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
+//        }
 
         return iconicsDrawable;
     }
@@ -167,14 +173,16 @@ public class IconicsHelper {
      * @return "Reorder" icon
      */
     public static IconicsDrawable getReorderIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_reorder)
-                .sizeDp(24);
+                .sizeDp(24)
+                .color(color);
 
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-        } else {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-        }
+//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
+//        } else {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
+//        }
 
         return iconicsDrawable;
     }
@@ -215,14 +223,16 @@ public class IconicsHelper {
      * @return "Up" icon
      */
     public static Drawable getUpIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_arrow_upward)
-                .sizeDp(24);
+                .sizeDp(24)
+                .color(color);
 
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
-        } else {
-            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
-        }
+//        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.white));
+//        } else {
+//            iconicsDrawable.color(ContextCompat.getColor(context, android.R.color.black));
+//        }
 
         return iconicsDrawable;
     }

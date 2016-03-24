@@ -51,6 +51,16 @@ public class GeofencesTabFragment extends Fragment {
     private int currentTab = 0;
     private boolean skipTutorial = false;
 
+    /**
+     * Used to notify all Geofence Tabs that geofences have changed
+     *
+     * @param context any suitable context
+     */
+    public static void sendGeofencesChangedBroadcast(Context context) {
+        ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(context);
+        CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(context);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.geofences_tabs, container, false);

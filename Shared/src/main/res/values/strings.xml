@@ -69,12 +69,12 @@
     <string name="missing_external_storage_permission">Missing Permission for External Storage</string>
     <string name="permission_granted">Permission granted</string>
     <string name="permission_denied">Permission denied</string>
-    <string name="no_active_gateway">No active Gateway!</string>
-    <string name="missing_wifi_connection">No WLAN connection!</string>
+    <string name="no_active_gateway">No active Gateway</string>
+    <string name="missing_wifi_connection">No WLAN connection</string>
+    <string name="missing_network_connection">No Network connection</string>
 
     <string name="no_elements">No elements</string>
 
-    <string name="missing_network_connection">No Network connection!</string>
     <string name="missing_permission">Missing permission</string>
     <string name="missing_location_permission">Missing location permission</string>
     <string name="details">Details</string>

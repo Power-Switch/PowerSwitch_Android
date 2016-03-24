@@ -237,7 +237,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
 
                 if (currentId == -1) {
                     Geofence geofence = new Geofence(currentId, isLocationPermissionAvailable, currentName, currentLocation,
-                            currentGeofenceRadius, currentSnapshot, actionsMap);
+                            currentGeofenceRadius, currentSnapshot, actionsMap, Geofence.STATE_NONE);
                     long geofenceId = DatabaseHandler.addGeofence(geofence);
                     // update ID of Geofence
                     geofence.setId(geofenceId);
@@ -247,7 +247,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                     Geofence geofence = DatabaseHandler.getGeofence(currentId);
 
                     Geofence updatedGeofence = new Geofence(currentId, geofence.isActive(), currentName, currentLocation,
-                            currentGeofenceRadius, currentSnapshot, actionsMap);
+                            currentGeofenceRadius, currentSnapshot, actionsMap, geofence.getState());
                     DatabaseHandler.updateGeofence(updatedGeofence);
 
                     geofenceApiHandler.removeGeofence(geofence.getId());
@@ -265,12 +265,12 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
                     updatedApartment = new Apartment(apartment.getId(), apartment.isActive(),
                             apartment.getName(), apartment.getAssociatedGateways(),
                             new Geofence((long) -1, isLocationPermissionAvailable, apartment.getName(), currentLocation, currentGeofenceRadius,
-                                    currentSnapshot, currentEnterActions, currentExitActions));
+                                    currentSnapshot, currentEnterActions, currentExitActions, Geofence.STATE_NONE));
                 } else {
                     Geofence geofence = apartment.getGeofence();
                     Geofence updatedGeofence = new Geofence(geofence.getId(), geofence.isActive(),
                             apartment.getName(), currentLocation, currentGeofenceRadius, currentSnapshot,
-                            currentEnterActions, currentExitActions);
+                            currentEnterActions, currentExitActions, geofence.getState());
 
                     updatedApartment = new Apartment(apartment.getId(), apartment.isActive(),
                             apartment.getName(), apartment.getAssociatedGateways(), updatedGeofence);

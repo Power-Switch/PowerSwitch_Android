@@ -28,11 +28,13 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Represents any kind of device that can receive network signals
@@ -320,8 +322,22 @@ public abstract class Receiver {
      */
     public NetworkPackage getNetworkPackage(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String signal = getSignal(gateway, action);
-        return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
-                gateway.getTimeout());
+        if (gateway.hasValidLocalAddress()) {
+
+            if (NetworkHandler.isWifiAvailable()) {
+                Log.d("Using local address");
+                return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
+                        gateway.getTimeout());
+            } else {
+                Log.d("Using WAN address");
+                return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
+                        gateway.getTimeout());
+            }
+        } else {
+            Log.d("Using WAN address");
+            return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
+                    gateway.getTimeout());
+        }
     }
 
     /**
@@ -333,7 +349,8 @@ public abstract class Receiver {
      * @throws GatewayNotSupportedException thrown if this Receiver doesn't support the given Gateway
      * @throws ActionNotSupportedException  thrown if this Receiver doesn't support the given Action
      */
-    protected abstract String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException;
+
+    public abstract String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException;
 
     /**
      * Get a Button of this Receiver by its name

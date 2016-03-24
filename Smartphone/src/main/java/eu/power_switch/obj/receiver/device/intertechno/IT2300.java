@@ -61,7 +61,7 @@ public class IT2300 extends Receiver implements AutoPairReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String lo = "3,";
         String hi = "15,";
         String seqLo = lo + lo + lo + hi;

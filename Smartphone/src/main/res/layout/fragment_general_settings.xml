@@ -241,6 +241,12 @@
                     android:layout_height="48dp"
                     android:text="@string/theme_light_blue"/>
 
+                <RadioButton
+                    android:id="@+id/radioButton_dayNight_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/theme_dayNight_blue"/>
+
             </LinearLayout>
 
             <TextView

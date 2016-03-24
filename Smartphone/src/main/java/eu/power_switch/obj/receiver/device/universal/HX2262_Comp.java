@@ -70,7 +70,7 @@ public class HX2262_Comp extends Receiver implements AutoPairReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         return getAutoPairSignal(gateway, action);
     }
 

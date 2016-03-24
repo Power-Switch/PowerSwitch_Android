@@ -126,7 +126,7 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
 
         if (getType().equals(Type.MASTER_SLAVE)) {
             return getMasterSlaveSignal(gateway, action);

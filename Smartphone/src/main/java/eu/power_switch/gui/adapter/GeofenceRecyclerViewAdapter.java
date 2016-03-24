@@ -77,9 +77,22 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
     public void onBindViewHolder(GeofenceRecyclerViewAdapter.ViewHolder holder, int position) {
         final Geofence geofence = geofences.get(holder.getAdapterPosition());
 
+        switch (geofence.getState()) {
+            case Geofence.STATE_INSIDE:
+                holder.geofenceState.setVisibility(View.VISIBLE);
+                holder.geofenceState.setText(R.string.inside);
+                break;
+            case Geofence.STATE_OUTSIDE:
+                holder.geofenceState.setVisibility(View.VISIBLE);
+                holder.geofenceState.setText(R.string.outside);
+                break;
+            case Geofence.STATE_NONE:
+                holder.geofenceState.setVisibility(View.GONE);
+                break;
+        }
         holder.geofenceName.setText(geofence.getName());
-        holder.geofenceSwitchStatus.setChecked(geofence.isActive());
-        holder.geofenceSwitchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.geofenceSwitchActive.setChecked(geofence.isActive());
+        holder.geofenceSwitchActive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // check if user pressed the button
@@ -101,9 +114,9 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
             }
         });
         if (!PermissionHelper.checkLocationPermission(context)) {
-            holder.geofenceSwitchStatus.setEnabled(false);
+            holder.geofenceSwitchActive.setEnabled(false);
         } else {
-            holder.geofenceSwitchStatus.setEnabled(true);
+            holder.geofenceSwitchActive.setEnabled(true);
         }
 
         holder.geofenceSnapshot.setImageBitmap(geofence.getSnapshot());
@@ -145,8 +158,9 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView geofenceState;
         public TextView geofenceName;
-        public android.support.v7.widget.SwitchCompat geofenceSwitchStatus;
+        public android.support.v7.widget.SwitchCompat geofenceSwitchActive;
         public ImageView geofenceSnapshot;
         public LinearLayout linearLayoutEnterActions;
         public LinearLayout linearLayoutExitActions;
@@ -155,8 +169,9 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
 
         public ViewHolder(final View itemView) {
             super(itemView);
+            this.geofenceState = (TextView) itemView.findViewById(R.id.txt_geofence_state);
             this.geofenceName = (TextView) itemView.findViewById(R.id.txt_geofence_name);
-            this.geofenceSwitchStatus = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_geofence_status);
+            this.geofenceSwitchActive = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_geofence_active);
             this.geofenceSnapshot = (ImageView) itemView.findViewById(R.id.imageView_locationSnapshot);
             this.linearLayoutEnterActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_enterActions);
             this.linearLayoutExitActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_exitActions);

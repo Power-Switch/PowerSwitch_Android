@@ -65,7 +65,7 @@ public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         boolean actionSupported = false;
         for (Button button : buttons) {
             if (button.getName().equals(action)) {

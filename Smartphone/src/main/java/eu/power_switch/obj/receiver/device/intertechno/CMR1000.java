@@ -106,7 +106,7 @@ public class CMR1000 extends Receiver implements MasterSlaveReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws ActionNotSupportedException, GatewayNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws ActionNotSupportedException, GatewayNotSupportedException {
 
         String lo = "4,";
         String hi = "12,";

@@ -24,6 +24,12 @@
     <color name="color_gray_100">#FFF5F5F5</color>
     <!-- Grey 200 #EEEEEE -->
     <color name="color_gray_200">#FFEEEEEE</color>
+    <!-- Grey 500 #9E9E9E -->
+    <color name="color_gray_500">#FF9E9E9E</color>
+    <!-- Grey 600 #757575 -->
+    <color name="color_gray_600">#FF757575</color>
+    <!-- Grey 700 #616161 -->
+    <color name="color_gray_700">#FF616161</color>
     <!-- Grey 800 #424242 -->
     <color name="color_gray_800">#FF424242</color>
     <!-- Grey 900 #212121 -->
@@ -78,6 +84,8 @@
     <!-- inverse text color: 87% black -->
     <color name="textColorPrimaryInverse">#DE000000</color>
     <color name="textColorSecondaryInverse">#8A000000</color>
+    <color name="textColorInactive">#FFFFFFFF</color>
+
 
     <color name="delete_color">@color/color_red_900</color>
 

@@ -20,8 +20,8 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,21 +32,17 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.EditRoomDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 
 /**
@@ -118,35 +114,30 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                 }
 
-                try {
-                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
-
-                    if (activeGateways.isEmpty()) {
-                        StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
-                        return;
-                    }
-
-                    android.widget.Button buttonView = (android.widget.Button) v;
-                    String buttonName = buttonView.getText().toString();
-
-                    // send signal
-                    ActionHandler.execute(fragmentActivity, room, buttonName);
-
-                    // update list item
-                    for (Receiver receiver : room.getReceivers()) {
+                android.widget.Button buttonView = (android.widget.Button) v;
+                String buttonName = buttonView.getText().toString();
+                new AsyncTask<String, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(String... buttonNames) {
                         try {
-                            Button button = receiver.getButton(buttonName);
-                            receiver.setLastActivatedButtonId(button.getId());
-                        } catch (NoSuchElementException e) {
-                            // ignore if receiver doesnt support this action
+                            String buttonName = buttonNames[0];
+
+                            // send signal
+                            ActionHandler.execute(fragmentActivity, room, buttonName);
+
+
+                        } catch (Exception e) {
+
                         }
+
+                        return null;
                     }
 
-                    updateReceiverViews(holder, room);
-
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
-                }
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        updateReceiverViews(holder, room);
+                    }
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, buttonName);
             }
         };
 
@@ -213,50 +204,45 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
                 final android.widget.Button buttonView = (android.widget.Button) inflater
-                        .inflate(R.layout.simple_button,
-                                buttonRow, false);
+                        .inflate(R.layout.simple_button, buttonRow, false);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
+                final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
                 if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() && lastActivatedButtonId != -1 && button
                         .getId
                                 () == lastActivatedButtonId) {
-                    buttonView.setTextColor(ContextCompat.getColor(fragmentActivity, R.color.color_light_blue_a700));
+                    buttonView.setTextColor(accentColor);
                 }
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
 
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(final View v) {
                         if (SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
                             VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.getVibrationDuration());
                         }
-                        try {
-                            List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
-                            if (activeGateways.isEmpty()) {
-                                StatusMessageHandler.showNoActiveGatewayMessage(recyclerViewFragment);
-                                return;
+
+                        new AsyncTask<Void, Void, Void>() {
+                            @Override
+                            protected Void doInBackground(Void... params) {
+                                // send signal
+                                ActionHandler.execute(fragmentActivity, receiver, button);
+                                return null;
                             }
-                        } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
-                            return;
-                        }
 
-                        // send signal
-                        ActionHandler.execute(fragmentActivity, receiver, button);
-
-                        // update list item
-                        receiver.setLastActivatedButtonId(button.getId());
-
-                        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
-                            for (android.widget.Button button : buttonViews) {
-                                if (button != v) {
-                                    button.setTextColor(defaultTextColor);
-                                } else {
-                                    button.setTextColor(ContextCompat.getColor(fragmentActivity, R.color
-                                            .color_light_blue_a700));
+                            @Override
+                            protected void onPostExecute(Void aVoid) {
+                                if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+                                    for (android.widget.Button button : buttonViews) {
+                                        if (button != v) {
+                                            button.setTextColor(defaultTextColor);
+                                        } else {
+                                            button.setTextColor(accentColor);
+                                        }
+                                    }
                                 }
                             }
-                        }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                 });
 

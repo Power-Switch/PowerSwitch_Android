@@ -118,6 +118,7 @@ public class SmartphonePreferencesHandler {
         Log.d(SmartphonePreferencesHandler.class, "StartupDefaultTab: " + startupDefaultTabCache);
         Log.d(SmartphonePreferencesHandler.class, "UseCompactDrawer: " + useCompactDrawerCache);
         Log.d(SmartphonePreferencesHandler.class, "CurrentApartmentId: " + currentApartmentIdCache);
+        Log.d(SmartphonePreferencesHandler.class, "KeepHistoryDuration: " + keepHistoryDurationCache);
     }
 
     /**
@@ -248,6 +249,7 @@ public class SmartphonePreferencesHandler {
      *
      * @return ID (internal) of Theme
      */
+    @SettingsConstants.Theme
     public static int getTheme() {
         return themeCache;
     }
@@ -257,7 +259,7 @@ public class SmartphonePreferencesHandler {
      *
      * @param theme ID (internal) of Theme
      */
-    public static void setTheme(int theme) {
+    public static void setTheme(@SettingsConstants.Theme int theme) {
         Log.d(SmartphonePreferencesHandler.class, "setTheme: " + theme);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(SettingsConstants.THEME_KEY, theme);

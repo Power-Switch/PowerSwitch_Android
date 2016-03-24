@@ -25,6 +25,8 @@ import eu.power_switch.obj.button.OnButton;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class RC3600 extends Receiver implements AutoPairReceiver {
 
@@ -41,7 +43,7 @@ public class RC3600 extends Receiver implements AutoPairReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String string) {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         return null;
     }
 

@@ -19,9 +19,13 @@
 package eu.power_switch.google_play_services.geofence;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringDef;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +40,12 @@ import eu.power_switch.shared.log.LogHandler;
  */
 public class Geofence {
 
+
+    public static final String STATE_INSIDE = "Inside";
+    public static final String STATE_OUTSIDE = "Outside";
+    public static final String STATE_NONE = "none";
     public static final double INVALID_LAT = Integer.MAX_VALUE;
     public static final double INVALID_LON = Integer.MAX_VALUE;
-
     /**
      * ID of this Geofence
      */
@@ -59,18 +66,21 @@ public class Geofence {
      * Radius of this Geofence
      */
     private double radius;
-
     /**
      * Map of Actions per EventType
      */
     private Map<EventType, List<Action>> actionsMap;
-
     /**
      * Snapshot of this Geofence
      */
     private Bitmap snapshot;
+    /**
+     * State of this Geofence (Inside, Outside, "")
+     */
+    @State
+    private String state;
 
-    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, List<Action> enterActions, List<Action> exitActions) {
+    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, List<Action> enterActions, List<Action> exitActions, @State String state) {
         this.id = id;
         this.active = active;
         this.name = name;
@@ -80,9 +90,10 @@ public class Geofence {
         this.actionsMap = new HashMap<>();
         actionsMap.put(EventType.ENTER, enterActions);
         actionsMap.put(EventType.EXIT, exitActions);
+        this.state = state;
     }
 
-    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, Map<EventType, List<Action>> actionsMap) {
+    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, Map<EventType, List<Action>> actionsMap, @State String state) {
         this.id = id;
         this.active = active;
         this.name = name;
@@ -90,6 +101,7 @@ public class Geofence {
         this.radius = radius;
         this.snapshot = snapshot;
         this.actionsMap = actionsMap;
+        this.state = state;
     }
 
     /**
@@ -210,6 +222,12 @@ public class Geofence {
         this.snapshot = snapshot;
     }
 
+    @State
+    @NonNull
+    public String getState() {
+        return state;
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -219,6 +237,7 @@ public class Geofence {
         } else {
             stringBuilder.append("(disabled) ");
         }
+        stringBuilder.append("(").append(state).append(") ");
         stringBuilder.append(getName())
                 .append("(").append(getId()).append(") Location: ")
                 .append(getCenterLocation().toString())
@@ -244,5 +263,10 @@ public class Geofence {
     public enum EventType {
         ENTER,
         EXIT
+    }
+
+    @StringDef({STATE_INSIDE, STATE_OUTSIDE, STATE_NONE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface State {
     }
 }

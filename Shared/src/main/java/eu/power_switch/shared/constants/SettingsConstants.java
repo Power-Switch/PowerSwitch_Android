@@ -18,6 +18,11 @@
 
 package eu.power_switch.shared.constants;
 
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Class holding constants related to Settings for both Smartphone and Wearable Module
  * <p/>
@@ -63,27 +68,20 @@ public class SettingsConstants {
     public static final int KEEP_HISTORY_6_MONTHS = 2;
     public static final int KEEP_HISTORY_1_MONTH = 3;
     public static final int KEEP_HISTORY_14_DAYS = 4;
-
-
-    // Theme
     public static final int THEME_DARK_BLUE = 0;
     public static final int THEME_DARK_RED = 1;
     public static final int THEME_LIGHT_BLUE = 2;
     public static final int THEME_LIGHT_RED = 3;
-
+    public static final int THEME_DAY_NIGHT_BLUE = 4;
     // Google API
     public static final String VOK_ZWEQ =
             "jVMU2RnWW1oelVoMVF4ZXJkV1B1cDcwWFRYc3g0c0hScmN2WjhmR21NN3R0V3E5YlF4cWtVSUFiYjFUQ0EzcW9ScU00bUxNY0E0T29ZVjVsTE1hSGxXanVyVHdJREFRQUI=";
-
     public static final String KDH_SDSA =
             "TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF3UDlkSk9QYVZQNnBHZ1kxeUYzRVBVVHRRbkJMaHVwN2xYVnNyTzAyMFdXZlp4YmFSRnQ5c1I";
-
     public static final String DJA_IOVJ =
             "VvWE9iYnB2NTNJMmJVeEFkSkZyUm9pWVNaa3BQV1hXb201dVN4UHdSQ2x5cVdDZXlmeFZTYlN6NGdSNFAwOVlyODlIMXFzNFBQdHRIZ2k1cDNsd2FVT2pwNzlGSVFZb1pmZ";
-
     public static final String JKD_COAP =
             "0K0RzZDlHS3EvbjYyLzMySFFydkJXcVVQK1FrOE1FNDUvYWM2UTh2YmNtdmlCV0h1T3hUSVB2d1RucU5mdzNpMjJXd1VTZVV0WHRReURLVVpZODJYVjJwY0ZoSGkydnpmWW";
-
     public static final int GOOGLE_API_CLIENT_TIMEOUT = 10;
 
     /**
@@ -93,5 +91,11 @@ public class SettingsConstants {
      */
     private SettingsConstants() {
         throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    // Theme
+    @IntDef({THEME_DARK_BLUE, THEME_DARK_RED, THEME_LIGHT_BLUE, THEME_LIGHT_RED, THEME_DAY_NIGHT_BLUE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Theme {
     }
 }

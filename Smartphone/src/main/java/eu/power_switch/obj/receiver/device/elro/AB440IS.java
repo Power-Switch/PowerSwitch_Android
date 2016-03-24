@@ -63,7 +63,7 @@ public class AB440IS extends AB440ID implements DipReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         return super.getSignal(gateway, action);
     }
 }

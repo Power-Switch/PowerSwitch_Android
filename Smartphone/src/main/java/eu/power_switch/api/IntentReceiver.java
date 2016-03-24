@@ -25,20 +25,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.log.Log;
@@ -172,20 +168,10 @@ public class IntentReceiver extends BroadcastReceiver {
                             }
 
                             Room room = DatabaseHandler.getRoomCaseInsensitive(roomName);
-
-                            List<NetworkPackage> networkPackages = new ArrayList<>();
-
                             Receiver receiver = room.getReceiverCaseInsensitive(switchName);
                             Button button = receiver.getButtonCaseInsensitive(buttonName);
-                            for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                                networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
-                            }
-                            if (button != null) {
-                                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-                            }
 
-                            NetworkHandler.send(networkPackages);
-
+                            ActionHandler.execute(context, receiver, button);
                         } catch (Exception e) {
                             Log.e("invalid intent string: " + switchProperties + "\n", e);
                             Toast.makeText(context,
@@ -213,19 +199,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
                             Room room = DatabaseHandler.getRoomCaseInsensitive(roomName);
 
-                            List<NetworkPackage> networkPackages = new ArrayList<>();
-                            for (Receiver receiver : room.getReceivers()) {
-                                Button button = receiver.getButtonCaseInsensitive(buttonName);
-                                for (Gateway gateway : DatabaseHandler.getAllGateways(true)) {
-                                    networkPackages.add(receiver.getNetworkPackage(gateway, buttonName));
-                                }
-
-                                if (button != null) {
-                                    DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-                                }
-                            }
-                            NetworkHandler.send(networkPackages);
-
+                            ActionHandler.execute(context, room, buttonName);
                         } catch (Exception e) {
                             Log.e("invalid intent string" + "\n", e);
                             Toast.makeText(context,

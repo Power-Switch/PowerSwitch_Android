@@ -1905,6 +1905,23 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Update Geofence State
+     */
+    @WorkerThread
+    public static void updateState(Long id, @Geofence.State String state) throws Exception {
+        openWritable();
+        try {
+            GeofenceHandler.updateState(id, state);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
+    /**
      * Delete Geofence from Database
      *
      * @param id ID of Geofence

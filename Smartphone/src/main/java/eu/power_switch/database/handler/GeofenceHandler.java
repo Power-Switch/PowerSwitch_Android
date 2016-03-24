@@ -65,6 +65,7 @@ abstract class GeofenceHandler {
         values.put(GeofenceTable.COLUMN_LONGITUDE, geofence.getCenterLocation().longitude);
         values.put(GeofenceTable.COLUMN_RADIUS, geofence.getRadius());
         values.put(GeofenceTable.COLUMN_SNAPSHOT, getBytes(geofence.getSnapshot()));
+        values.put(GeofenceTable.COLUMN_STATE, geofence.getState());
 
         long newId = DatabaseHandler.database.insert(GeofenceTable.TABLE_NAME, null, values);
 
@@ -117,6 +118,12 @@ abstract class GeofenceHandler {
     protected static void disable(Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, false);
+        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
+    }
+
+    protected static void updateState(Long id, @Geofence.State String state) {
+        ContentValues values = new ContentValues();
+        values.put(GeofenceTable.COLUMN_STATE, state);
         DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -239,6 +246,7 @@ abstract class GeofenceHandler {
         values.put(GeofenceTable.COLUMN_LONGITUDE, geofence.getCenterLocation().longitude);
         values.put(GeofenceTable.COLUMN_RADIUS, geofence.getRadius());
         values.put(GeofenceTable.COLUMN_SNAPSHOT, getBytes(geofence.getSnapshot()));
+        values.put(GeofenceTable.COLUMN_STATE, geofence.getState());
 
         // delete old actions
         GeofenceActionHandler.delete(geofence.getId());
@@ -270,6 +278,9 @@ abstract class GeofenceHandler {
             snapshot = getImage(c.getBlob(6));
         }
 
+        @Geofence.State
+        String state = c.getString(7);
+
         LatLng location;
         if (latitude == Integer.MAX_VALUE || longitude == Integer.MAX_VALUE) {
             location = null;
@@ -282,7 +293,7 @@ abstract class GeofenceHandler {
             actionsMap.put(eventType, GeofenceActionHandler.get(id, eventType));
         }
 
-        geofence = new Geofence(id, active, name, location, radius, snapshot, actionsMap);
+        geofence = new Geofence(id, active, name, location, radius, snapshot, actionsMap, state);
         return geofence;
     }
 

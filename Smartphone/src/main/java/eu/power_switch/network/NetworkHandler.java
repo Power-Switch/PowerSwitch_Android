@@ -146,7 +146,7 @@ public abstract class NetworkHandler {
     /**
      * Get SSID of connected WiFi Network
      *
-     * @return SSID of connected WiFi Network, null if no WiFi connection
+     * @return SSID of connected WiFi Network, empty string if no WiFi connection
      */
     public static String getConnectedWifiSSID() {
         if (isWifiAvailable()) {
@@ -155,7 +155,7 @@ public abstract class NetworkHandler {
             Log.d("connected SSID: " + info.getSSID());
             return info.getSSID();
         } else {
-            return null;
+            return "";
         }
     }
 

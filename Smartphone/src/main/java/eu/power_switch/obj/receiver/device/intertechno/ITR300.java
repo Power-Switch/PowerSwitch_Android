@@ -36,7 +36,7 @@ public class ITR300 extends CMR1000 implements MasterSlaveReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         return super.getSignal(gateway, action);
     }
 }

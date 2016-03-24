@@ -87,6 +87,7 @@ public class GeneralSettingsFragment extends Fragment {
 
     private RadioButton radioButtonDarkBlue;
     private RadioButton radioButtonLightBlue;
+    private RadioButton radioButtonDayNightBlue;
 
     private int devMenuClickCounter = 0;
     private Calendar devMenuFirstClickTime;
@@ -276,6 +277,9 @@ public class GeneralSettingsFragment extends Fragment {
                     case R.id.radioButton_lightBlue:
                         SmartphonePreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
                         break;
+                    case R.id.radioButton_dayNight_blue:
+                        SmartphonePreferencesHandler.setTheme(SettingsConstants.THEME_DAY_NIGHT_BLUE);
+                        break;
                     default:
                         break;
                 }
@@ -293,6 +297,9 @@ public class GeneralSettingsFragment extends Fragment {
 
         radioButtonLightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_lightBlue);
         radioButtonLightBlue.setOnClickListener(onClickListener);
+
+        radioButtonDayNightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_dayNight_blue);
+        radioButtonDayNightBlue.setOnClickListener(onClickListener);
 
         sendLogsProgress = (ProgressBar) rootView.findViewById(R.id.sendLogsProgress);
         sendLogs = (Button) rootView.findViewById(R.id.button_sendLogs);
@@ -381,6 +388,9 @@ public class GeneralSettingsFragment extends Fragment {
                 radioButtonLightBlue.setChecked(true);
                 break;
             case SettingsConstants.THEME_LIGHT_RED:
+                break;
+            case SettingsConstants.THEME_DAY_NIGHT_BLUE:
+                radioButtonDayNightBlue.setChecked(true);
                 break;
             default:
                 break;

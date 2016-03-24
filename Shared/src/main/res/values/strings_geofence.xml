@@ -37,6 +37,9 @@
     <string name="enter">Enter</string>
     <string name="exit">Exit</string>
 
+    <string name="inside">Inside</string>
+    <string name="outside">Outside</string>
+
     <string name="enter_actions">Enter actions</string>
     <string name="exit_actions">Exit actions</string>
 

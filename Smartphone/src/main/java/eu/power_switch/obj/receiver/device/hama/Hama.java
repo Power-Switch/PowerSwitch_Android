@@ -61,7 +61,7 @@ public class Hama extends Receiver implements AutoPairReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String lo = "1,";
         String hi = "5,";
         String seqLo = lo + lo + lo + hi;

@@ -98,18 +98,32 @@ public class ActionHandler {
             StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
+        } else {
+            boolean hasActiveGateway = false;
+            for (Gateway gateway : apartment.getAssociatedGateways()) {
+                if (gateway.isActive()) {
+                    hasActiveGateway = true;
+                    break;
+                }
+            }
+
+            if (!hasActiveGateway) {
+                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+                return;
+            }
         }
 
         for (Gateway gateway : apartment.getAssociatedGateways()) {
             if (gateway.isActive()) {
-                NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                networkPackages.add(networkPackage);
+                networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
             }
         }
 
-        DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
-
         NetworkHandler.send(networkPackages);
+
+        // set on object, as well as in database
+        receiver.setLastActivatedButtonId(button.getId());
+        DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
 
         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
@@ -173,6 +187,19 @@ public class ActionHandler {
             StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
+        } else {
+            boolean hasActiveGateway = false;
+            for (Gateway gateway : apartment.getAssociatedGateways()) {
+                if (gateway.isActive()) {
+                    hasActiveGateway = true;
+                    break;
+                }
+            }
+
+            if (!hasActiveGateway) {
+                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+                return;
+            }
         }
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
@@ -182,8 +209,11 @@ public class ActionHandler {
                 for (Gateway gateway : apartment.getAssociatedGateways()) {
                     if (gateway.isActive()) {
                         try {
-                            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                            networkPackages.add(networkPackage);
+                            networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
+
+                            // set on object, as well as in database
+                            receiver.setLastActivatedButtonId(button.getId());
+                            DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
                         } catch (ActionNotSupportedException e) {
                             Log.e("Action not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context,
@@ -195,8 +225,6 @@ public class ActionHandler {
                         }
                     }
                 }
-
-                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
             } catch (NoSuchElementException e) {
                 // ignore if Receiver doesnt support this action
             }
@@ -226,6 +254,19 @@ public class ActionHandler {
             StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
+        } else {
+            boolean hasActiveGateway = false;
+            for (Gateway gateway : apartment.getAssociatedGateways()) {
+                if (gateway.isActive()) {
+                    hasActiveGateway = true;
+                    break;
+                }
+            }
+
+            if (!hasActiveGateway) {
+                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+                return;
+            }
         }
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
@@ -235,8 +276,7 @@ public class ActionHandler {
                 for (Gateway gateway : apartment.getAssociatedGateways()) {
                     if (gateway.isActive()) {
                         try {
-                            NetworkPackage networkPackage = receiver.getNetworkPackage(gateway, button.getName());
-                            networkPackages.add(networkPackage);
+                            networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
                         } catch (ActionNotSupportedException e) {
                             Log.e("Action not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context,
@@ -249,6 +289,8 @@ public class ActionHandler {
                     }
                 }
 
+                // set on object, as well as in database
+                receiver.setLastActivatedButtonId(button.getId());
                 DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
             } catch (NoSuchElementException e) {
                 // ignore if Receiver doesnt support this action
@@ -296,29 +338,42 @@ public class ActionHandler {
     private static void executeScene(@NonNull Context context, @NonNull Scene scene) throws Exception {
         NetworkHandler.init(context);
 
-        List<NetworkPackage> packages = new ArrayList<>();
+        List<NetworkPackage> networkPackages = new ArrayList<>();
 
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
         if (apartment.getAssociatedGateways().isEmpty()) {
             StatusMessageHandler.showInfoMessage(context,
                     R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
+        } else {
+            boolean hasActiveGateway = false;
+            for (Gateway gateway : apartment.getAssociatedGateways()) {
+                if (gateway.isActive()) {
+                    hasActiveGateway = true;
+                    break;
+                }
+            }
+
+            if (!hasActiveGateway) {
+                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+                return;
+            }
         }
 
         for (Gateway gateway : apartment.getAssociatedGateways()) {
             if (gateway.isActive()) {
                 for (SceneItem sceneItem : scene.getSceneItems()) {
+                    networkPackages.add(getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton()));
 
-                    packages.add(sceneItem.getReceiver().getNetworkPackage(gateway,
-                            sceneItem.getActiveButton().getName()));
-
+                    // set on object, as well as in database
+                    sceneItem.getReceiver().setLastActivatedButtonId(sceneItem.getActiveButton().getId());
                     DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
                             .getId(), sceneItem.getActiveButton().getId());
                 }
             }
         }
 
-        NetworkHandler.send(packages);
+        NetworkHandler.send(networkPackages);
 
         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
@@ -423,6 +478,47 @@ public class ActionHandler {
                     executeScene(context, sceneAction.getScene());
                     break;
             }
+        }
+    }
+
+    private static NetworkPackage getNetworkPackage(Apartment apartment, Gateway gateway, Receiver receiver, Button button) throws Exception {
+        String signal = receiver.getSignal(gateway, button.getName());
+
+        if (gateway.hasValidLocalAddress() && !gateway.hasValidWanAddress()) {
+            // only valid local address
+            Log.d("Using local address");
+            return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
+                    gateway.getTimeout());
+        } else if (!gateway.hasValidLocalAddress() && gateway.hasValidWanAddress()) {
+            // only valid WAN address
+            Log.d("Using WAN address");
+            return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
+                    gateway.getTimeout());
+        } else if (gateway.hasValidLocalAddress() && gateway.hasValidWanAddress()) {
+            // decide if local or WAN address should be used
+            if (NetworkHandler.isWifiAvailable() || NetworkHandler.isEthernetAvailable()) {
+                if (apartment.getGeofence() != null) {
+                    if (apartment.getGeofence().isActive() && Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
+                        Log.d("Using local address, inside geofence");
+                        return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
+                                gateway.getTimeout());
+                    } else {
+                        Log.d("Using WAN address, outside geofence");
+                        return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
+                                gateway.getTimeout());
+                    }
+                } else {
+                    Log.d("Using WAN address, missing geofence data");
+                    return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
+                            gateway.getTimeout());
+                }
+            } else {
+                Log.d("Using WAN address, no WiFi or LAN available");
+                return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
+                        gateway.getTimeout());
+            }
+        } else {
+            throw new Exception("Invalid Gateway configuration!");
         }
     }
 }

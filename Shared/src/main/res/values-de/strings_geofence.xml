@@ -36,6 +36,9 @@
     <string name="enter">Eintritt</string>
     <string name="exit">Austritt</string>
 
+    <string name="inside">Innerhalb</string>
+    <string name="outside">Außerhalb</string>
+
     <string name="enter_actions">Aktionen beim Eintreten</string>
     <string name="exit_actions">Aktionen beim Verlassen</string>
 

@@ -301,6 +301,10 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
             }
         } else {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+            if (apartment.getGeofence() != null) {
+                apartment.getGeofence().setName(getCurrentName());
+            }
+
             Apartment updatedApartment = new Apartment(apartmentId, apartment.isActive(), getCurrentName(), getCheckedGateways(), apartment.getGeofence());
 
             DatabaseHandler.updateApartment(updatedApartment);

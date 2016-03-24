@@ -39,7 +39,7 @@ public class FSS33600W extends FSS31000W implements DipReceiver {
     }
 
     @Override
-    protected String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         return super.getSignal(gateway, action);
     }
 }

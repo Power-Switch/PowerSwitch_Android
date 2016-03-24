@@ -31,6 +31,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -107,14 +108,48 @@ public class GeofenceIntentService extends IntentService {
 
         for (Geofence googleGeofence : triggeringGeofences) {
             try {
+                Long geofenceId = Long.valueOf(googleGeofence.getRequestId());
+
                 eu.power_switch.google_play_services.geofence.Geofence geofence =
-                        DatabaseHandler.getGeofence(Long.valueOf(googleGeofence.getRequestId()));
-                if (geofence.isActive()) {
+                        DatabaseHandler.getGeofence(geofenceId);
+                if (geofence.isActive() && geofenceStateChanged(geofence.getState(), eventType)) {
                     ActionHandler.execute(getApplicationContext(), geofence, eventType);
+
+                    switch (eventType) {
+                        case ENTER:
+                            DatabaseHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE);
+                            break;
+                        case EXIT:
+                            DatabaseHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE);
+                            break;
+                        default:
+                            DatabaseHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_NONE);
+                            break;
+                    }
                 }
             } catch (Exception e) {
                 Log.e(e);
             }
+        }
+        GeofencesTabFragment.sendGeofencesChangedBroadcast(getApplicationContext());
+    }
+
+    private boolean geofenceStateChanged(@eu.power_switch.google_play_services.geofence.Geofence.State String state, eu.power_switch.google_play_services.geofence.Geofence.EventType eventType) {
+        switch (eventType) {
+            case ENTER:
+                if (!eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE.equals(state)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case EXIT:
+                if (!eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE.equals(state)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            default:
+                return false;
         }
     }
 

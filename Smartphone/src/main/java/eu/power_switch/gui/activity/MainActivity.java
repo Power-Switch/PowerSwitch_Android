@@ -30,11 +30,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -88,6 +88,7 @@ import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
@@ -198,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate();
         applyTheme();
+
         // apply forced locale (if set in developer options)
         applyLocale();
 
@@ -364,6 +366,11 @@ public class MainActivity extends AppCompatActivity {
                 getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
                 setTheme(R.style.PowerSwitchTheme_Light_Red);
                 break;
+            case SettingsConstants.THEME_DAY_NIGHT_BLUE:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+
+                getApplicationContext().setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
+                setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
             default:
                 getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 setTheme(R.style.PowerSwitchTheme_Dark_Blue);
@@ -377,17 +384,12 @@ public class MainActivity extends AppCompatActivity {
         ab.setHomeAsUpIndicator(IconicsHelper.getMenuIcon(this));
         ab.setDisplayHomeAsUpEnabled(true);
 
-        int tintColor;
-        if (SettingsConstants.THEME_DARK_BLUE == SmartphonePreferencesHandler.getTheme()) {
-            tintColor = ContextCompat.getColor(this, R.color.textColorSecondary);
-        } else {
-            tintColor = ContextCompat.getColor(this, R.color.textColorSecondaryInverse);
-        }
-
+        final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
+        final int tintColor = ThemeHelper.getThemeAttrColor(this, android.R.attr.textColorPrimary);
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back)
-                        .color(ContextCompat.getColor(this, R.color.color_light_blue_a700))
+                        .color(accentColor)
                         .sizeDp(24))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {

@@ -20,7 +20,6 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -178,9 +177,11 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonView.setText(button.getName());
 
+                final int accentColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
+
                 if (button.getId() == receiver.getLastActivatedButtonId()
                         && WearablePreferencesHandler.getHighlightLastActivatedButton()) {
-                    buttonView.setTextColor(ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent));
+                    buttonView.setTextColor(accentColor);
                 }
 
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
@@ -202,8 +203,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                                 if (button != v) {
                                     button.setTextColor(defaultTextColor);
                                 } else {
-                                    button.setTextColor(ContextCompat.getColor(context, R.color
-                                            .color_light_blue_a700));
+                                    button.setTextColor(accentColor);
                                 }
                             }
                         }
