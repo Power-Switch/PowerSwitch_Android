@@ -496,14 +496,11 @@ public class ActionHandler {
             // decide if local or WAN address should be used
             if (NetworkHandler.isWifiAvailable() || NetworkHandler.isEthernetAvailable()) {
                 if (NetworkHandler.isInternetAvailable()) {
-                    if (apartment.getGeofence() != null) {
-                        if (apartment.getGeofence().isActive() && Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
-                            Log.d("Using local address, inside geofence");
-                            return getLocalNetworkPackage(gateway, signal);
-                        } else {
-                            Log.d("Using WAN address, outside geofence");
-                            return getWanNetworkPackage(gateway, signal);
-                        }
+                    if (apartment.getGeofence() != null &&
+                            apartment.getGeofence().isActive() &&
+                            Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
+                        Log.d("Using local address, inside geofence");
+                        return getLocalNetworkPackage(gateway, signal);
                     } else {
                         Log.d("Using WAN address, missing geofence data");
                         return getWanNetworkPackage(gateway, signal);
