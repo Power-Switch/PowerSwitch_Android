@@ -65,7 +65,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
         contentView = initContentView(inflater, contentViewContainer, savedInstanceState);
 
         imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
-        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), R.color.delete_color));
+        imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), R.color.delete_color)));
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
