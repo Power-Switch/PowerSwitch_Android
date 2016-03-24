@@ -27,6 +27,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.WorkerThread;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -82,6 +83,32 @@ public abstract class NetworkHandler {
                 networkPackageQueueHandler.execute();
             }
         }
+    }
+
+    /**
+     * Checks if Internet access is available
+     * <p/>
+     * Works by pinging the Google DNS
+     *
+     * @return true if available, false otherwise
+     * @see <a href="http://google.com">http://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-timeouts</a>
+     */
+    public static boolean isInternetAvailable() {
+        boolean isInternetAvailable = false;
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = ipProcess.waitFor();
+            isInternetAvailable = (exitValue == 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("isInternetAvailable: " + isInternetAvailable);
+        return isInternetAvailable;
     }
 
     /**

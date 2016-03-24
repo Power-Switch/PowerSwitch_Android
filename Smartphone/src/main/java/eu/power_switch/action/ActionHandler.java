@@ -487,38 +487,47 @@ public class ActionHandler {
         if (gateway.hasValidLocalAddress() && !gateway.hasValidWanAddress()) {
             // only valid local address
             Log.d("Using local address");
-            return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
-                    gateway.getTimeout());
+            return getLocalNetworkPackage(gateway, signal);
         } else if (!gateway.hasValidLocalAddress() && gateway.hasValidWanAddress()) {
             // only valid WAN address
             Log.d("Using WAN address");
-            return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
-                    gateway.getTimeout());
+            return getWanNetworkPackage(gateway, signal);
         } else if (gateway.hasValidLocalAddress() && gateway.hasValidWanAddress()) {
             // decide if local or WAN address should be used
             if (NetworkHandler.isWifiAvailable() || NetworkHandler.isEthernetAvailable()) {
-                if (apartment.getGeofence() != null) {
-                    if (apartment.getGeofence().isActive() && Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
-                        Log.d("Using local address, inside geofence");
-                        return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
-                                gateway.getTimeout());
+                if (NetworkHandler.isInternetAvailable()) {
+                    if (apartment.getGeofence() != null) {
+                        if (apartment.getGeofence().isActive() && Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
+                            Log.d("Using local address, inside geofence");
+                            return getLocalNetworkPackage(gateway, signal);
+                        } else {
+                            Log.d("Using WAN address, outside geofence");
+                            return getWanNetworkPackage(gateway, signal);
+                        }
                     } else {
-                        Log.d("Using WAN address, outside geofence");
-                        return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
-                                gateway.getTimeout());
+                        Log.d("Using WAN address, missing geofence data");
+                        return getWanNetworkPackage(gateway, signal);
                     }
                 } else {
-                    Log.d("Using WAN address, missing geofence data");
-                    return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
-                            gateway.getTimeout());
+                    Log.d("Using local address, no WAN (Internet connection) available");
+                    return getLocalNetworkPackage(gateway, signal);
                 }
             } else {
                 Log.d("Using WAN address, no WiFi or LAN available");
-                return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
-                        gateway.getTimeout());
+                return getWanNetworkPackage(gateway, signal);
             }
         } else {
             throw new Exception("Invalid Gateway configuration!");
         }
+    }
+
+    private static NetworkPackage getLocalNetworkPackage(Gateway gateway, String signal) {
+        return new NetworkPackage(gateway.getCommunicationType(),
+                gateway.getLocalHost(), gateway.getLocalPort(), signal, gateway.getTimeout());
+    }
+
+    private static NetworkPackage getWanNetworkPackage(Gateway gateway, String signal) {
+        return new NetworkPackage(gateway.getCommunicationType(),
+                gateway.getWanHost(), gateway.getWanPort(), signal, gateway.getTimeout());
     }
 }

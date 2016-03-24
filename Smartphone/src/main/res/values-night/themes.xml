@@ -201,6 +201,9 @@
     <style name="PowerSwitchThemeBase.DayNight.Blue" parent="PowerSwitchThemeBase.DayNight">
         <item name="colorAccent">@color/color_light_blue_a700</item>
         <item name="android:textColorLink">@color/color_light_blue_a700</item>
+
+        <!-- dialog -->
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleDayNightBlue</item>
     </style>
 
     <!-- Base Dark Red -->

@@ -381,6 +381,8 @@ public class EditActivity extends AbstractPluginActivity {
         } else {
             updateActionType(Action.ACTION_TYPE_RECEIVER);
         }
+
+        setPositiveButtonVisibility(checkValidity());
     }
 
     private void initData(Bundle localeBundle) {
@@ -446,7 +448,6 @@ public class EditActivity extends AbstractPluginActivity {
                 spinner_scene.setSelection(sceneNames.indexOf(localeBundle.getString(ApiConstants.KEY_SCENE)));
             }
         }
-
     }
 
     private void setApartmentInputType(InputType inputType) {
@@ -728,7 +729,7 @@ public class EditActivity extends AbstractPluginActivity {
             if (selectedItem != null) {
                 return selectedItem.toString().trim();
             } else {
-                return null;
+                return spinner_apartment.getItemAtPosition(0).toString().trim();
             }
         }
     }
@@ -741,7 +742,7 @@ public class EditActivity extends AbstractPluginActivity {
             if (selectedItem != null) {
                 return selectedItem.toString().trim();
             } else {
-                return null;
+                return spinner_room.getItemAtPosition(0).toString().trim();
             }
         }
     }
@@ -754,7 +755,7 @@ public class EditActivity extends AbstractPluginActivity {
             if (selectedItem != null) {
                 return selectedItem.toString().trim();
             } else {
-                return null;
+                return spinner_receiver.getItemAtPosition(0).toString().trim();
             }
         }
     }
@@ -767,7 +768,7 @@ public class EditActivity extends AbstractPluginActivity {
             if (selectedItem != null) {
                 return selectedItem.toString().trim();
             } else {
-                return null;
+                return spinner_button.getItemAtPosition(0).toString().trim();
             }
         }
     }
@@ -780,7 +781,7 @@ public class EditActivity extends AbstractPluginActivity {
             if (selectedItem != null) {
                 return selectedItem.toString().trim();
             } else {
-                return null;
+                return spinner_scene.getItemAtPosition(0).toString().trim();
             }
         }
     }
