@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -110,9 +111,9 @@ public class PlayStoreModeDataModel {
 
     private static void initGateways() {
         gateways.clear();
-        gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT));
-        gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT));
-        gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT));
+        gateways.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptyList()));
+        gateways.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptyList()));
+        gateways.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptyList()));
     }
 
     /**

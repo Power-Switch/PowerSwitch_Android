@@ -324,7 +324,7 @@ public abstract class Receiver {
         String signal = getSignal(gateway, action);
         if (gateway.hasValidLocalAddress()) {
 
-            if (NetworkHandler.isWifiAvailable()) {
+            if (NetworkHandler.isWifiConnected()) {
                 Log.d("Using local address");
                 return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
                         gateway.getTimeout());

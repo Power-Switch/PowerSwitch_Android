@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -51,7 +51,7 @@ import eu.power_switch.timer.WeekdayTimer;
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureTimerDialogPage4TabbedSummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private long currentId = -1;
     private boolean currentIsActive;
@@ -82,7 +82,6 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Fragment imp
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_4_summary, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed

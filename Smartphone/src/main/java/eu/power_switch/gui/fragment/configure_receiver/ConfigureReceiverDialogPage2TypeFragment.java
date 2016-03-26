@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +36,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -48,7 +48,7 @@ import static eu.power_switch.obj.receiver.Receiver.Brand;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
+public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialogFragment {
 
     private View rootView;
 
@@ -78,7 +78,6 @@ public class ConfigureReceiverDialogPage2TypeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_2, container, false);
 
         brandListView = (ListView) rootView.findViewById(R.id.listView_brands);

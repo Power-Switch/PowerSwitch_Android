@@ -44,13 +44,14 @@ import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.AddGeofenceEnterActionDialog;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Fragment {
+public class ConfigureGeofenceDialogPage2EnterActionsFragment extends ConfigurationDialogFragment {
 
     private static ArrayList<Action> currentEnterActions;
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
@@ -83,7 +84,6 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_2, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed

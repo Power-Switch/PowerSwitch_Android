@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -39,6 +38,7 @@ import java.util.Calendar;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -47,7 +47,7 @@ import eu.power_switch.timer.Timer;
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
+public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFragment {
 
     private View rootView;
     private TextInputLayout floatingName;
@@ -71,7 +71,6 @@ public class ConfigureTimerDialogPage1TimeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_1, container, false);
 
         floatingName = (TextInputLayout) rootView.findViewById(R.id.timer_name_text_input_layout);

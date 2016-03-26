@@ -26,7 +26,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +45,7 @@ import java.util.HashMap;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -65,7 +65,7 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
@@ -89,7 +89,6 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends Fragment imple
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_scene_page_2, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed

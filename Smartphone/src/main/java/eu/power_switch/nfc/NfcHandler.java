@@ -16,23 +16,26 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.gateway;
+package eu.power_switch.nfc;
 
-import java.util.List;
+import android.content.Context;
+import android.nfc.NfcAdapter;
 
 /**
- * RaspyRFM represents a RasperyPi ConnAir emulator Gateway
+ * This class is responsible for writing actions to NFC Tags
+ * <p/>
+ * Created by Markus on 24.03.2016.
  */
-public class RaspyRFM extends ConnAir {
+public class NfcHandler {
 
     /**
-     * Model constant
+     * Checks if NFC is supported by the device
+     *
+     * @param context any suitable context
+     * @return true if NFC is supported, false otherwise
      */
-    public static final String MODEL = "RaspyRFM";
-
-    public RaspyRFM(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, List<String> ssids) {
-        super(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
-        model = MODEL;
+    public static boolean isNfcSupported(Context context) {
+        return NfcAdapter.getDefaultAdapter(context) != null;
     }
 
 }

@@ -26,7 +26,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +45,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
@@ -59,7 +59,7 @@ import eu.power_switch.shared.permission.PermissionHelper;
 /**
  * Created by Markus on 29.01.2016.
  */
-public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private BroadcastReceiver broadcastReceiver;
     private View rootView;
@@ -90,7 +90,6 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends Fragment implem
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_4, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed

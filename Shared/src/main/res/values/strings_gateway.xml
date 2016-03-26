@@ -38,6 +38,7 @@
     <string name="predefined_port">49880</string>
     <string name="gateway_model">Model</string>
     <string name="gateway_type">Type</string>
+    <string name="add_ssid">Add SSID</string>
 
     <string name="gateway_saved">Gateway successfully saved</string>
     <string name="gateway_found">Gateway found</string>

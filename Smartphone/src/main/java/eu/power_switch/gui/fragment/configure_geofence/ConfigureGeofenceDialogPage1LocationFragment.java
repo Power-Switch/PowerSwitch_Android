@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
@@ -54,6 +53,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.map.MapViewHandler;
@@ -67,7 +67,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.01.2016.
  */
-public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
+public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationDialogFragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     private long geofenceId = -1;
 
@@ -108,7 +108,6 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends Fragment imple
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_1, container, false);
 
         MapView mapView = (MapView) rootView.findViewById(R.id.mapView);

@@ -86,20 +86,6 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean isValid() {
-        try {
-            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-            ConfigurationDialogTabbedSummaryFragment summaryFragment =
-                    customTabAdapter.getSummaryFragment();
-
-            return summaryFragment.checkSetupValidity();
-        } catch (Exception e) {
-            Log.e(e);
-            return false;
-        }
-    }
-
-    @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(RECEIVER_ID_KEY)) {
             // init dialog using existing receiver
@@ -119,21 +105,6 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     @Override
     protected int getDialogTitle() {
         return R.string.configure_receiver;
-    }
-
-    @Override
-    protected void saveCurrentConfigurationToDatabase() {
-        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment summaryFragment =
-                customTabAdapter.getSummaryFragment();
-        if (summaryFragment.checkSetupValidity()) {
-            try {
-                summaryFragment.saveCurrentConfigurationToDatabase();
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getActivity(), e);
-            }
-            getDialog().dismiss();
-        }
     }
 
     @Override

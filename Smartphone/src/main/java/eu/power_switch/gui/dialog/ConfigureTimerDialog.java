@@ -105,34 +105,9 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean isValid() {
-        try {
-            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-            ConfigurationDialogTabbedSummaryFragment summaryFragment = customTabAdapter.getSummaryFragment();
-
-            return summaryFragment.checkSetupValidity();
-        } catch (Exception e) {
-            Log.e(e);
-            return false;
-        }
-    }
-
-    @Override
     protected void saveCurrentConfigurationToDatabase() {
         Log.d("Saving timer");
-        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment summaryFragment =
-                customTabAdapter.getSummaryFragment();
-
-        if (isValid()) {
-            try {
-                summaryFragment.saveCurrentConfigurationToDatabase();
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getActivity(), e);
-            }
-        }
-
-        getDialog().dismiss();
+        super.saveCurrentConfigurationToDatabase();
     }
 
     @Override

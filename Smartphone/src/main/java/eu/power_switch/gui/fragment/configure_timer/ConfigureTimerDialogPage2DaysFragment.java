@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.Timer;
@@ -43,7 +43,7 @@ import eu.power_switch.timer.WeekdayTimer;
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage2DaysFragment extends Fragment {
+public class ConfigureTimerDialogPage2DaysFragment extends ConfigurationDialogFragment {
 
     private View rootView;
     private ToggleButton toggleButtonMonday;
@@ -76,7 +76,6 @@ public class ConfigureTimerDialogPage2DaysFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_2, container, false);
 
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {

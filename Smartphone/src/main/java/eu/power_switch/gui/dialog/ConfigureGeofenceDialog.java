@@ -87,20 +87,6 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean isValid() {
-        try {
-            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-            ConfigurationDialogTabbedSummaryFragment summaryFragment =
-                    customTabAdapter.getSummaryFragment();
-
-            return summaryFragment.checkSetupValidity();
-        } catch (Exception e) {
-            Log.e(e);
-            return false;
-        }
-    }
-
-    @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(GEOFENCE_ID_KEY)) {
             // init dialog using existing geofence
@@ -120,21 +106,6 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     @Override
     protected int getDialogTitle() {
         return R.string.configure_geofence;
-    }
-
-    @Override
-    protected void saveCurrentConfigurationToDatabase() {
-        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment summaryFragment =
-                customTabAdapter.getSummaryFragment();
-        if (summaryFragment.checkSetupValidity()) {
-            try {
-                summaryFragment.saveCurrentConfigurationToDatabase();
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getActivity(), e);
-            }
-            getDialog().dismiss();
-        }
     }
 
     @Override

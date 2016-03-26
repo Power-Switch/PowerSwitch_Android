@@ -19,13 +19,19 @@
 package eu.power_switch.gui.dialog;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +42,7 @@ import android.widget.ImageButton;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -55,9 +62,20 @@ public abstract class ConfigurationDialog extends DialogFragment {
     private View rootView;
     private View contentView;
 
+    private BroadcastReceiver broadcastReceiver;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED.equals(intent.getAction())) {
+                    notifyConfigurationChanged();
+                }
+            }
+        };
+
         rootView = inflater.inflate(R.layout.dialog_configuration, null);
 
         FrameLayout contentViewContainer = (FrameLayout) rootView.findViewById(R.id.contentView);
@@ -274,4 +292,20 @@ public abstract class ConfigurationDialog extends DialogFragment {
      * the dialog. Delete the existing configuration of your object from the database in this method.
      */
     protected abstract void deleteExistingConfigurationFromDatabase();
+
+    @Override
+    @CallSuper
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    @CallSuper
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
+    }
 }

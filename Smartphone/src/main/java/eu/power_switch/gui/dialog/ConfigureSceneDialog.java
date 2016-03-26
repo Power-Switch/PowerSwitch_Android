@@ -102,31 +102,9 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean isValid() {
-        try {
-            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-            ConfigurationDialogTabbedSummaryFragment setupFragment =
-                    customTabAdapter.getSummaryFragment();
-            return setupFragment.checkSetupValidity();
-        } catch (Exception e) {
-            Log.e(e);
-            return false;
-        }
-    }
-
-    @Override
     protected void saveCurrentConfigurationToDatabase() {
         Log.d("Saving scene");
-        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment setupFragment =
-                customTabAdapter.getSummaryFragment();
-        try {
-            setupFragment.saveCurrentConfigurationToDatabase();
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
-
-        getDialog().dismiss();
+        super.saveCurrentConfigurationToDatabase();
     }
 
     @Override

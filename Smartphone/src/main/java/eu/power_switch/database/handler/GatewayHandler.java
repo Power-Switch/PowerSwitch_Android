@@ -154,6 +154,13 @@ abstract class GatewayHandler {
         return gateway;
     }
 
+    private static List<String> getSSIDs(Long id) {
+        List<String> ssids = new ArrayList<>();
+        // TODO: get ssid data from ssid<->gateway table
+
+        return ssids;
+    }
+
     /**
      * Gets all Gateways from Database
      *
@@ -227,22 +234,23 @@ abstract class GatewayHandler {
         int localPort = c.getInt(6);
         String wanAddress = c.getString(7);
         int wanPort = c.getInt(8);
+        List<String> ssids = getSSIDs(id);
 
         switch (rawModel) {
             case BrematicGWY433.MODEL:
-                gateway = new BrematicGWY433(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
+                gateway = new BrematicGWY433(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
                 break;
             case ConnAir.MODEL:
-                gateway = new ConnAir(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
+                gateway = new ConnAir(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
                 break;
             case EZControl_XS1.MODEL:
-                gateway = new EZControl_XS1(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
+                gateway = new EZControl_XS1(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
                 break;
             case ITGW433.MODEL:
-                gateway = new ITGW433(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
+                gateway = new ITGW433(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
                 break;
             case RaspyRFM.MODEL:
-                gateway = new RaspyRFM(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort);
+                gateway = new RaspyRFM(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
                 break;
             default:
                 throw new GatewayUnknownException(rawModel);

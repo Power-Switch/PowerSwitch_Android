@@ -46,6 +46,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.obj.Room;
@@ -60,7 +61,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
+public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialogFragment {
 
     private View rootView;
 
@@ -106,7 +107,6 @@ public class ConfigureReceiverDialogPage1NameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_1, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed

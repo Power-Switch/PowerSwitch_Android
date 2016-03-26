@@ -18,9 +18,9 @@
   -->
 
 <manifest
+    package="eu.power_switch"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="eu.power_switch"
     android:versionCode="83"
     android:versionName="@string/app_version">
 
@@ -28,6 +28,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
@@ -183,6 +184,14 @@
                 <action android:name="de.ressel.powerswitch.action.Switch.OFF"/>
                 <action android:name="de.ressel.powerswitch.action.Room.ON"/>
                 <action android:name="de.ressel.powerswitch.action.Room.OFF"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".nfc.IntentReceiver">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data
+                    android:scheme="eu.power_switch"/>
             </intent-filter>
         </receiver>
         <receiver android:name=".timer.alarm.AlarmIntentReceiver">

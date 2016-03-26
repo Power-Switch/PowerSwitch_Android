@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +45,7 @@ import java.util.Locale;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
@@ -61,7 +61,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage1NameFragment extends Fragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private View rootView;
 
@@ -91,7 +91,6 @@ public class ConfigureApartmentDialogPage1NameFragment extends Fragment implemen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_apartment_page_1, container, false);
 
         try {

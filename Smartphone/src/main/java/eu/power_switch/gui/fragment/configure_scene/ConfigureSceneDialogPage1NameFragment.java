@@ -23,7 +23,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,6 +41,7 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -56,7 +56,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogPage1NameFragment extends Fragment {
+public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFragment {
 
     private View rootView;
 
@@ -88,7 +88,6 @@ public class ConfigureSceneDialogPage1NameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_scene_page_1, container, false);
 
         floatingName = (TextInputLayout) rootView.findViewById(R.id.scene_name_text_input_layout);

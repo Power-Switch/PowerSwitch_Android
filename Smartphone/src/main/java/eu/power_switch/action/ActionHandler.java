@@ -494,8 +494,8 @@ public class ActionHandler {
             return getWanNetworkPackage(gateway, signal);
         } else if (gateway.hasValidLocalAddress() && gateway.hasValidWanAddress()) {
             // decide if local or WAN address should be used
-            if (NetworkHandler.isWifiAvailable() || NetworkHandler.isEthernetAvailable()) {
-                if (NetworkHandler.isInternetAvailable()) {
+            if (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected()) {
+                if (NetworkHandler.isInternetConnected()) {
                     if (apartment.getGeofence() != null &&
                             apartment.getGeofence().isActive() &&
                             Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {

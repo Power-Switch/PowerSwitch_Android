@@ -94,7 +94,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
     }
 
     private void processQueue() {
-        if (NetworkHandler.isNetworkAvailable()) {
+        if (NetworkHandler.isNetworkConnected()) {
             StatusMessageHandler.showInfoMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
             NetworkPackage currentNetworkPackage;

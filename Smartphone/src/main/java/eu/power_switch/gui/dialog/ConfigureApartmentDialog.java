@@ -103,33 +103,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean isValid() {
-        try {
-            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-            ConfigurationDialogTabbedSummaryFragment setupFragment =
-                    customTabAdapter.getSummaryFragment();
-            return setupFragment.checkSetupValidity();
-        } catch (Exception e) {
-            Log.e(e);
-            return false;
-        }
-    }
-
-    /**
-     * Saves current configuration to database
-     * Either updates an existing Gateway or creates a new one
-     */
-    @Override
     protected void saveCurrentConfigurationToDatabase() {
         Log.d("Saving apartment");
-        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment setupFragment = customTabAdapter.getSummaryFragment();
-        try {
-            setupFragment.saveCurrentConfigurationToDatabase();
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
-        getDialog().dismiss();
+        super.saveCurrentConfigurationToDatabase();
     }
 
     @Override

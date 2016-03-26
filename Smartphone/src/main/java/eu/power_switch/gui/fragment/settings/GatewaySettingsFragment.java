@@ -148,7 +148,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     }
 
     private void startAutoDiscovery() {
-        if (!NetworkHandler.isWifiAvailable()) {
+        if (!NetworkHandler.isWifiConnected()) {
             StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection,
                     Snackbar.LENGTH_LONG);
             return;

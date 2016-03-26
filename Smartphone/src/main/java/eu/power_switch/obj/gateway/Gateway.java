@@ -21,6 +21,7 @@ package eu.power_switch.obj.gateway;
 import android.support.annotation.NonNull;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import eu.power_switch.network.NetworkPackage;
@@ -68,6 +69,8 @@ public abstract class Gateway {
      */
     protected Integer wanPort;
 
+    protected List<String> ssids;
+
     protected Set<Capability> capabilities = new HashSet<>();
 
     /**
@@ -81,7 +84,7 @@ public abstract class Gateway {
      * @param localHost localHost address of this gateway
      * @param localPort localPort of this gateway
      */
-    public Gateway(long id, boolean active, @NonNull String name, @NonNull String model, @NonNull String firmware, @NonNull String localHost, @NonNull Integer localPort, @NonNull String wanHost, @NonNull Integer wanPort) {
+    public Gateway(long id, boolean active, @NonNull String name, @NonNull String model, @NonNull String firmware, @NonNull String localHost, @NonNull Integer localPort, @NonNull String wanHost, @NonNull Integer wanPort, @NonNull List<String> ssids) {
         this.id = id;
         this.active = active;
         this.name = name;
@@ -91,6 +94,7 @@ public abstract class Gateway {
         this.localPort = localPort;
         this.wanHost = wanHost;
         this.wanPort = wanPort;
+        this.ssids = ssids;
     }
 
     /**
@@ -214,6 +218,16 @@ public abstract class Gateway {
     @NonNull
     public String getFirmware() {
         return firmware;
+    }
+
+    /**
+     * Get list of SSIDs that should always communicate via local address
+     *
+     * @return List of SSIDs
+     */
+    @NonNull
+    public List<String> getSsids() {
+        return ssids;
     }
 
     /**

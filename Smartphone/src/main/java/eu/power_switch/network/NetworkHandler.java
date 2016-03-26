@@ -30,6 +30,7 @@ import android.support.annotation.WorkerThread;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,88 +87,88 @@ public abstract class NetworkHandler {
     }
 
     /**
-     * Checks if Internet access is available
+     * Checks if Internet access is connected
      * <p/>
      * Works by pinging the Google DNS
      *
-     * @return true if available, false otherwise
+     * @return true if connected, false otherwise
      * @see <a href="http://google.com">http://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-timeouts</a>
      */
-    public static boolean isInternetAvailable() {
-        boolean isInternetAvailable = false;
+    public static boolean isInternetConnected() {
+        boolean isInternetconnected = false;
 
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
             int exitValue = ipProcess.waitFor();
-            isInternetAvailable = (exitValue == 0);
+            isInternetconnected = (exitValue == 0);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        Log.d("isInternetAvailable: " + isInternetAvailable);
-        return isInternetAvailable;
+        Log.d("isInternetConnected: " + isInternetconnected);
+        return isInternetconnected;
     }
 
     /**
-     * checks if WLAN is available
+     * checks if WLAN is connected
      *
-     * @return false if WLAN is not available
+     * @return false if WLAN is not connected
      */
-    public static boolean isWifiAvailable() {
+    public static boolean isWifiConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isWifiAvailable = (networkInfo != null &&
+        boolean isWificonnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_WIFI == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isWifiAvailable: " + isWifiAvailable);
-        return isWifiAvailable;
+        Log.d("isWifiConnected: " + isWificonnected);
+        return isWificonnected;
     }
 
     /**
-     * checks if Ethernet is available
+     * checks if Ethernet is connected
      *
-     * @return false if Ethernet is not available
+     * @return false if Ethernet is not connected
      */
-    public static boolean isEthernetAvailable() {
+    public static boolean isEthernetConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isWifiAvailable = (networkInfo != null &&
+        boolean isWificonnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_ETHERNET == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isEthernetAvailable: " + isWifiAvailable);
-        return isWifiAvailable;
+        Log.d("isEthernetConnected: " + isWificonnected);
+        return isWificonnected;
     }
 
     /**
-     * checks if GPRS is available
+     * checks if GPRS is connected
      *
-     * @return false if GPRS is not available
+     * @return false if GPRS is not connected
      */
-    public static boolean isGprsAvailable() {
+    public static boolean isGprsConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isGprsAvailable = (networkInfo != null &&
+        boolean isGprsconnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isGprsAvailable: " + isGprsAvailable);
-        return isGprsAvailable;
+        Log.d("isGprsConnected: " + isGprsconnected);
+        return isGprsconnected;
     }
 
     /**
-     * checks if any kind of network connection is available
+     * checks if any kind of network connection is connected
      *
-     * @return true if a network connection is available, false otherwise
+     * @return true if a network connection is connected, false otherwise
      */
-    public static boolean isNetworkAvailable() {
+    public static boolean isNetworkConnected() {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isAvailable = (networkInfo != null && networkInfo.isConnectedOrConnecting());
-        Log.d("isNetworkAvailable: " + isAvailable);
-        return isAvailable;
+        boolean isconnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
+        Log.d("isNetworkConnected: " + isconnected);
+        return isconnected;
     }
 
     /**
@@ -176,7 +177,7 @@ public abstract class NetworkHandler {
      * @return SSID of connected WiFi Network, empty string if no WiFi connection
      */
     public static String getConnectedWifiSSID() {
-        if (isWifiAvailable()) {
+        if (isWifiConnected()) {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             WifiInfo info = wifiManager.getConnectionInfo();
             Log.d("connected SSID: " + info.getSSID());
@@ -309,26 +310,26 @@ public abstract class NetworkHandler {
                 // "HCGW:VC:Simple Solutions;MC:ConnAir433V1.1;FW:1.00;IP:192.168.2.125;;"
                 // "HCGW:VC:Simple Solutions;MC:ConnAir433;FW:V014;IP:192.168.2.125;;"
                 if (brand.contains("Simple Solutions") || model.contains("ConnAir")) {
-                    return new ConnAir((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT);
+                    return new ConnAir((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptyList());
                 }
 
                 // Brennenstuhl Gateway
                 // "HCGW:VC:Brennenstuhl;MC:0290217;FW:V016;IP:192.168.178.24;;"
                 if (brand.contains("Brennenstuhl") || model.contains("0290217")) {
-                    return new BrematicGWY433((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT);
+                    return new BrematicGWY433((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptyList());
                 }
 
                 // Intertechno Gateway
                 // "HCGW:VC:ITECHNO;MC:HCGW22;FW:11;IP:192.168.2.186;;"
                 // "HCGW:VC:ITECHNO;MC:ITGW-433;FW:300;IP:192.168.2.100;;"
                 if (brand.contains("ITECHNO") && (model.contains("HCGW22") || model.contains("ITGW-433"))) {
-                    return new ITGW433((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT);
+                    return new ITGW433((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptyList());
                 }
 
                 // RaspyRFM Gateway
                 // "HCGW:VC:Seegel Systeme;MC:RaspyRFM;FW:1.00;IP:192.168.2.125;;"
                 if (model.contains("RaspyRFM")) {
-                    return new RaspyRFM((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT);
+                    return new RaspyRFM((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptyList());
                 }
             }
             return null;

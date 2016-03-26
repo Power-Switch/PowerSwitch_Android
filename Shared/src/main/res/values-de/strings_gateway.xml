@@ -33,6 +33,7 @@
     <string name="hint_url">Adresse (Beispiel: myaddress.dyndns.org)</string>
     <string name="gateway_model">Modell</string>
     <string name="gateway_type">Typ</string>
+    <string name="add_ssid">SSID hinzufügen</string>
 
     <string name="gateway_saved">Gateway gespeichert</string>
     <string name="gateway_found">Gateway gefunden</string>

@@ -18,11 +18,23 @@
 
 package eu.power_switch.gui.dialog;
 
-/**
- * Created by Markus on 28.01.2016.
- */
-public interface ConfigurationDialogFragment {
+import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 
-    boolean isValid();
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
+
+/**
+ * Created by Markus on 25.03.2016.
+ */
+public abstract class ConfigurationDialogFragment extends Fragment {
+
+    /**
+     * Used to notify parent Dialog that configuration has changed
+     */
+    public void notifyConfigurationChanged() {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+    }
 
 }
