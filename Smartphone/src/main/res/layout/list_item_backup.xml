@@ -63,8 +63,8 @@
 
             <com.mikepenz.iconics.view.IconicsImageView
                 android:id="@+id/delete"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center_vertical|right"
                 android:layout_margin="8dp"
                 android:contentDescription="@string/delete"
