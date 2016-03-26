@@ -18,16 +18,12 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -43,7 +39,6 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActionsFragment;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4SummaryFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -61,8 +56,6 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     protected long geofenceId = -1;
     protected GeofenceApiHandler geofenceApiHandler;
 
-    private BroadcastReceiver broadcastReceiver;
-
     public static ConfigureGeofenceDialog newInstance(long geofenceId) {
         Bundle args = new Bundle();
         args.putLong(GEOFENCE_ID_KEY, geofenceId);
@@ -75,13 +68,6 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening " + getClass().getSimpleName() + "...");
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                notifyConfigurationChanged();
-            }
-        };
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
     }
@@ -138,15 +124,11 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
     @Override
     public void onStart() {
         super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_SETUP_GEOFENCE_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
         geofenceApiHandler.onStart();
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         geofenceApiHandler.onStop();
         super.onStop();
     }

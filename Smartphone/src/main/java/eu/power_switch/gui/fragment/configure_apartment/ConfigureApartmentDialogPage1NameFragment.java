@@ -20,12 +20,10 @@ package eu.power_switch.gui.fragment.configure_apartment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -54,7 +52,6 @@ import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog
@@ -76,17 +73,6 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
 
     private long apartmentId = -1;
     private boolean isInitialized;
-
-
-    /**
-     * Used to notify parent Dialog that configuration has changed
-     *
-     * @param context any suitable context
-     */
-    public static void sendSetupApartmentChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
 
     @Nullable
     @Override
@@ -113,7 +99,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
             public void afterTextChanged(Editable s) {
                 if (isInitialized) {
                     checkSetupValidity();
-                    sendSetupApartmentChangedBroadcast(getContext());
+                    notifyConfigurationChanged();
                 }
             }
         };
@@ -232,7 +218,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
-                        sendSetupApartmentChangedBroadcast(getContext());
+                        notifyConfigurationChanged();
                     }
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
@@ -243,7 +229,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
                     @Override
                     public void onClick(View v) {
                         checkBox.setChecked(!checkBox.isChecked());
-                        sendSetupApartmentChangedBroadcast(getContext());
+                        notifyConfigurationChanged();
                     }
                 });
 

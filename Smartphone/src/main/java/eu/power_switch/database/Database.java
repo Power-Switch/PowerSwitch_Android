@@ -31,6 +31,7 @@ import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentTable;
+import eu.power_switch.database.table.gateway.GatewaySsidTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.geofence.GeofenceTable;
@@ -70,6 +71,7 @@ public class Database extends SQLiteOpenHelper {
             db.beginTransaction();
 
             GatewayTable.onCreate(db);
+            GatewaySsidTable.onCreate(db);
 
             ReceiverTable.onCreate(db);
             MasterSlaveTable.onCreate(db);
@@ -131,6 +133,7 @@ public class Database extends SQLiteOpenHelper {
             }
 
             GatewayTable.onUpgrade(db, oldVersion, newVersion);
+            GatewaySsidTable.onUpgrade(db, oldVersion, newVersion);
 
             ApartmentTable.onUpgrade(db, oldVersion, newVersion);
             ApartmentGatewayRelationTable.onUpgrade(db, oldVersion, newVersion);

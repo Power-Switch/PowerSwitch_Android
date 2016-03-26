@@ -76,16 +76,6 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
     private long currentId = -1;
     private String currentName = null;
 
-    /**
-     * Used to notify parent Dialog that configuration has changed
-     *
-     * @param context any suitable context
-     */
-    public static void sendSetupSceneChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_SCENE_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,7 +90,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
                 rooms.addAll((ArrayList<Room>) intent.getSerializableExtra("selectedReceivers"));
                 updateSceneItemList();
 
-                sendSetupSceneChangedBroadcast(getActivity());
+                notifyConfigurationChanged();
             }
         };
 
@@ -306,7 +296,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
                         @Override
                         public void onClick(View v) {
-                            sendSetupSceneChangedBroadcast(context);
+                            notifyConfigurationChanged();
                             for (android.widget.Button button : buttonList) {
                                 if (button == v) {
                                     button.setTextColor(accentColor);

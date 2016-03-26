@@ -18,16 +18,12 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -42,7 +38,6 @@ import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1Tim
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2DaysFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4TabbedSummaryFragment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -56,8 +51,6 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
      * ID of existing Timer to Edit
      */
     public static final String TIMER_ID_KEY = "TimerId";
-
-    private BroadcastReceiver broadcastReceiver;
 
     private long timerId = -1;
 
@@ -73,13 +66,6 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d("Opening " + getClass().getSimpleName() + "...");
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                notifyConfigurationChanged();
-            }
-        };
     }
 
     @Override
@@ -134,20 +120,6 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                                 getDialog().dismiss();
                             }
                         }).setNeutralButton(android.R.string.cancel, null).show();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_SUMMARY_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {

@@ -39,16 +39,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -110,11 +112,12 @@ public class AddSsidDialog extends DialogFragment {
         contentView = inflater.inflate(R.layout.dialog_add_ssid, null);
         builder.setView(contentView);
 
-        Button refresh = (Button) contentView.findViewById(R.id.button_refresh);
+        final IconicsImageView refresh = (IconicsImageView) contentView.findViewById(R.id.button_refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mainWifi.isWifiEnabled()) {
+                    refresh.startAnimation(AnimationHandler.getRotationClockwiseAnimation(getContext()));
                     refreshSsids();
                 } else {
                     Toast.makeText(getActivity(), "WiFi disabled!", Toast.LENGTH_LONG).show();

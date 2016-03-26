@@ -30,6 +30,7 @@
     <string name="local_port">Local Port</string>
     <string name="wan_port">WAN Port</string>
     <string name="hint_port">Port (49880)</string>
+    <string name="address">Address</string>
     <string name="edit_gateway">Edit Gateway</string>
     <string name="local_address">Local Address</string>
     <string name="wan_address">WAN Address</string>
@@ -39,6 +40,7 @@
     <string name="gateway_model">Model</string>
     <string name="gateway_type">Type</string>
     <string name="add_ssid">Add SSID</string>
+    <string name="ssids">SSID\'s</string>
 
     <string name="gateway_saved">Gateway successfully saved</string>
     <string name="gateway_found">Gateway found</string>

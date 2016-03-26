@@ -18,16 +18,12 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -43,7 +39,6 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1NameFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -59,8 +54,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
      */
     public static final String APARTMENT_ID_KEY = "ApartmentId";
 
-    private BroadcastReceiver broadcastReceiver;
-
     private long apartmentId = -1;
 
     public static ConfigureApartmentDialog newInstance(long apartmentId) {
@@ -74,12 +67,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                notifyConfigurationChanged();
-            }
-        };
     }
 
     @Override
@@ -142,20 +129,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                         getDialog().dismiss();
                     }
                 }).setNeutralButton(android.R.string.cancel, null).show();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_SETUP_APARTMENT_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {

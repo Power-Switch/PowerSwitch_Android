@@ -18,9 +18,12 @@
 
 package eu.power_switch.gui.fragment.configure_gateway;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -39,6 +42,7 @@ import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.DatabaseConstants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog
@@ -71,6 +75,30 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
     private TextInputLayout floatingWanPort;
     private EditText wanPort;
 
+    private void sendAddressChangedBroadcast(Context context) {
+        String model = this.model.getSelectedItem().toString();
+        String name = getCurrentName();
+        String localAddress = getCurrentLocalAddress();
+        int localPort = DatabaseConstants.INVALID_GATEWAY_PORT;
+        if (getCurrentLocalPortText().length() > 0) {
+            localPort = Integer.parseInt(getCurrentLocalPortText());
+        }
+        String wanAddress = getCurrentWanAddress();
+        int wanPort = DatabaseConstants.INVALID_GATEWAY_PORT;
+        if (getCurrentWanPortText().length() > 0) {
+            wanPort = Integer.parseInt(getCurrentWanPortText());
+        }
+
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SETUP_CHANGED);
+        intent.putExtra("name", name);
+        intent.putExtra("model", model);
+        intent.putExtra("localAddress", localAddress);
+        intent.putExtra("localPort", localPort);
+        intent.putExtra("wanAddress", wanAddress);
+        intent.putExtra("wanPort", wanPort);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,7 +115,7 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
 
             @Override
             public void afterTextChanged(Editable s) {
-                notifyConfigurationChanged();
+                sendAddressChangedBroadcast(getActivity());
             }
         };
         floatingName = (TextInputLayout) rootView.findViewById(R.id.gateway_name_text_input_layout);
@@ -102,7 +130,7 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
         SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                notifyConfigurationChanged();
+                sendAddressChangedBroadcast(getActivity());
             }
         };
         model.setOnTouchListener(spinnerInteractionListener);

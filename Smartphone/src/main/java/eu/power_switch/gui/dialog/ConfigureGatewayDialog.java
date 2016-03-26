@@ -134,9 +134,9 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.setup);
+                    return context.getString(R.string.address);
                 case 1:
-//                    return context.getString(R.string.ssids);
+                    return context.getString(R.string.ssids);
             }
 
             return "" + (position + 1);

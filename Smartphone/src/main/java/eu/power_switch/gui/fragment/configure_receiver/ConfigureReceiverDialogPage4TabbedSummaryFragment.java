@@ -97,16 +97,6 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
     private LinearLayout linearLayoutAutoPairReceiver;
     private TextView seed;
 
-    /**
-     * Used to notify parent Dialog that configuration has changed
-     *
-     * @param context any suitable context
-     */
-    public static void sendSummaryChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_SUMMARY_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -153,7 +143,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
                 }
 
                 updateUi();
-                sendSummaryChangedBroadcast(getActivity());
+                notifyConfigurationChanged();
             }
         };
 

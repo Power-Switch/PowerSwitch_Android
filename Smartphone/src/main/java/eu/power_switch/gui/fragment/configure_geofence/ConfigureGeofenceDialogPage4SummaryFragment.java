@@ -80,13 +80,6 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
     private TextView textViewGeofenceRadius;
     private GeofenceApiHandler geofenceApiHandler;
 
-
-    private static void sendGeofenceSetupChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SETUP_GEOFENCE_CHANGED);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -117,7 +110,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
 
                 updateUi();
 
-                sendGeofenceSetupChangedBroadcast(getContext());
+                notifyConfigurationChanged();
             }
         };
 

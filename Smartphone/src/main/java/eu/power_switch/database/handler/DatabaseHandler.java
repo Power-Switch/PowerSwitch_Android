@@ -1115,10 +1115,10 @@ public final class DatabaseHandler {
      * @param wanPort      new WAN Port of Gateway
      */
     @WorkerThread
-    public static void updateGateway(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort) throws Exception {
+    public static void updateGateway(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort, List<String> ssids) throws Exception {
         openWritable();
         try {
-            GatewayHandler.update(id, name, model, localAddress, localPort, wanAddress, wanPort);
+            GatewayHandler.update(id, name, model, localAddress, localPort, wanAddress, wanPort, ssids);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);

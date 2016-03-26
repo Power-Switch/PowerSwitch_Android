@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
+import eu.power_switch.database.table.gateway.GatewaySsidTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -75,6 +76,8 @@ abstract class GatewayHandler {
         values.put(GatewayTable.COLUMN_WAN_PORT, gateway.getWanPort());
 
         long newId = DatabaseHandler.database.insert(GatewayTable.TABLE_NAME, null, values);
+        addSSIDs(newId, gateway.getSsids());
+
         return newId;
     }
 
@@ -111,7 +114,7 @@ abstract class GatewayHandler {
      * @param wanAddress   new WAN Address (Host)
      * @param wanPort      new WAN Port
      */
-    protected static void update(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort) throws Exception {
+    protected static void update(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort, List<String> ssids) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_NAME, name);
         values.put(GatewayTable.COLUMN_MODEL, model);
@@ -120,6 +123,11 @@ abstract class GatewayHandler {
         values.put(GatewayTable.COLUMN_WAN_ADDRESS, wanAddress);
         values.put(GatewayTable.COLUMN_WAN_PORT, wanPort);
         DatabaseHandler.database.update(GatewayTable.TABLE_NAME, values, GatewayTable.COLUMN_ID + "=" + id, null);
+
+        // delete old
+        deleteSSIDs(id);
+        // add new
+        addSSIDs(id, ssids);
     }
 
     /**
@@ -132,6 +140,7 @@ abstract class GatewayHandler {
         DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME, ApartmentGatewayRelationTable
                 .COLUMN_GATEWAY_ID + "=" + id, null);
 
+        deleteSSIDs(id);
         DatabaseHandler.database.delete(GatewayTable.TABLE_NAME, GatewayTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -154,9 +163,37 @@ abstract class GatewayHandler {
         return gateway;
     }
 
-    private static List<String> getSSIDs(Long id) {
+    private static void addSSIDs(Long id, List<String> ssids) throws Exception {
+        for (String ssid : ssids) {
+            ContentValues values = new ContentValues();
+            values.put(GatewaySsidTable.COLUMN_GATEWAY_ID, id);
+            values.put(GatewaySsidTable.COLUMN_SSID, ssid);
+            DatabaseHandler.database.insert(GatewaySsidTable.TABLE_NAME, null, values);
+        }
+    }
+
+    private static void deleteSSIDs(Long gatewayId) throws Exception {
+        DatabaseHandler.database.delete(GatewaySsidTable.TABLE_NAME, GatewaySsidTable.COLUMN_GATEWAY_ID + "=" + gatewayId, null);
+    }
+
+    /**
+     * Get the list of SSIDs associated with the given Gateway
+     *
+     * @param id ID of Gateway
+     * @return List of SSIDs (as String)
+     */
+    private static List<String> getSSIDs(Long id) throws Exception {
         List<String> ssids = new ArrayList<>();
-        // TODO: get ssid data from ssid<->gateway table
+
+        Cursor cursor = DatabaseHandler.database.query(GatewaySsidTable.TABLE_NAME, GatewaySsidTable.ALL_COLUMNS,
+                GatewaySsidTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            ssids.add(cursor.getString(2));
+            cursor.moveToNext();
+        }
+        cursor.close();
 
         return ssids;
     }

@@ -496,14 +496,24 @@ public class ActionHandler {
             // decide if local or WAN address should be used
             if (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected()) {
                 if (NetworkHandler.isInternetConnected()) {
-                    if (apartment.getGeofence() != null &&
-                            apartment.getGeofence().isActive() &&
-                            Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
-                        Log.d("Using local address, inside geofence");
-                        return getLocalNetworkPackage(gateway, signal);
+                    if (!gateway.getSsids().isEmpty()) {
+                        if (gateway.getSsids().contains(NetworkHandler.getConnectedWifiSSID())) {
+                            Log.d("Using local address, connected to SSID specified in Gateway");
+                            return getLocalNetworkPackage(gateway, signal);
+                        } else {
+                            Log.d("Using WAN address, connected to unspecified SSID");
+                            return getWanNetworkPackage(gateway, signal);
+                        }
                     } else {
-                        Log.d("Using WAN address, missing geofence data");
-                        return getWanNetworkPackage(gateway, signal);
+                        if (apartment.getGeofence() != null &&
+                                apartment.getGeofence().isActive() &&
+                                Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
+                            Log.d("Using local address, inside geofence");
+                            return getLocalNetworkPackage(gateway, signal);
+                        } else {
+                            Log.d("Using WAN address, outside or missing geofence data");
+                            return getWanNetworkPackage(gateway, signal);
+                        }
                     }
                 } else {
                     Log.d("Using local address, no WAN (Internet connection) available");

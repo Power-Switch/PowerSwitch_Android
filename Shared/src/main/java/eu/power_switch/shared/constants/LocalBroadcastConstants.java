@@ -29,6 +29,7 @@ public class LocalBroadcastConstants {
     public static final String INTENT_CONFIGURATION_DIALOG_CHANGED = "eu.power_switch.configuration_dialog_changed";
 
     public static final String INTENT_GATEWAY_CHANGED = "eu.power_switch.gateway_changed";
+    public static final String INTENT_GATEWAY_SETUP_CHANGED = "eu.power_switch.gateway_setup_changed";
     public static final String INTENT_GATEWAY_SSID_ADDED = "eu.power_switch.gateway_ssid_added";
 
     public static final String INTENT_RECEIVER_CHANGED = "eu.power_switch.receiver_changed";

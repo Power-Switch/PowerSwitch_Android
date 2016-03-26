@@ -69,16 +69,6 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
     private TextView textViewDays;
     private TextView textViewAction;
 
-    /**
-     * Used to notify parent Dialog that configuration has changed
-     *
-     * @param context any suitable context
-     */
-    public static void sendSummaryChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_SUMMARY_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,7 +93,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
 
                 updateUi();
 
-                sendSummaryChangedBroadcast(getContext());
+                notifyConfigurationChanged();
             }
         };
 

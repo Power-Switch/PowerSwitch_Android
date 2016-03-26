@@ -180,8 +180,15 @@ public abstract class NetworkHandler {
         if (isWifiConnected()) {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
             WifiInfo info = wifiManager.getConnectionInfo();
-            Log.d("connected SSID: " + info.getSSID());
-            return info.getSSID();
+            String ssid = info.getSSID();
+
+            // remove unnecessary quotation marks
+            if (ssid.startsWith("\"") && ssid.endsWith("\"")) {
+                ssid = ssid.substring(1, ssid.length() - 1);
+            }
+
+            Log.d("connected SSID: " + ssid);
+            return ssid;
         } else {
             return "";
         }

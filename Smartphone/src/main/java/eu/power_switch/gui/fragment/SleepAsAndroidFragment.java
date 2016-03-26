@@ -104,7 +104,9 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         recyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int position) {
-                new AlertDialog.Builder(getContext()).setMessage(R.string.are_you_sure)
+                new AlertDialog.Builder(getContext())
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.are_you_sure)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -122,7 +124,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                                 recyclerViewAdapter.notifyDataSetChanged();
                             }
                         })
-                        .setNeutralButton(android.R.string.cancel, null).show();
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .show();
             }
         });
         recyclerViewActions.setAdapter(recyclerViewAdapter);
