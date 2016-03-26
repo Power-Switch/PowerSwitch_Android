@@ -19,19 +19,19 @@
 package eu.power_switch.gui.adapter;
 
 import android.content.Context;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.gui.IconicsHelper;
 
 /**
  * Adapter to visualize Action items in RecyclerView
@@ -63,6 +63,12 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
         final Action action = actions.get(holder.getAdapterPosition());
         holder.description.setText(action.toString());
+
+        if (holder.getAdapterPosition() == getItemCount() - 1) {
+            holder.footer.setVisibility(View.VISIBLE);
+        } else {
+            holder.footer.setVisibility(View.GONE);
+        }
     }
 
     // Return the total count of items
@@ -77,19 +83,20 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView description;
-        public FloatingActionButton deleteTimerActionFAB;
+        public IconicsImageView delete;
+        public LinearLayout footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
-            this.deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_action_fab);
-            deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(context, ContextCompat.getColor(context, android.R.color.white)));
+            this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
+            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 
-            this.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
+            this.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onDeleteClickListener != null) {
-                        onDeleteClickListener.onItemClick(deleteTimerActionFAB, getLayoutPosition());
+                        onDeleteClickListener.onItemClick(delete, getLayoutPosition());
                     }
                 }
             });

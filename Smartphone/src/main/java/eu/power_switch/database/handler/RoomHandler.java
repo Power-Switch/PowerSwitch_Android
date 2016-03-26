@@ -83,6 +83,20 @@ abstract class RoomHandler {
 
 
     /**
+     * Sets the position of a Room
+     *
+     * @param roomId   ID of Room
+     * @param position position in apartment
+     */
+    protected static void setPosition(Long roomId, Long position) {
+        ContentValues values = new ContentValues();
+        values.put(RoomTable.COLUMN_POSITION, position);
+
+        DatabaseHandler.database.update(RoomTable.TABLE_NAME, values,
+                RoomTable.COLUMN_ID + "=" + roomId, null);
+    }
+
+    /**
      * Deletes Room from Database
      *
      * @param id ID of Room
@@ -175,7 +189,7 @@ abstract class RoomHandler {
         LinkedList<Room> rooms = new LinkedList<>();
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_APARTMENT_ID +
                         "==" + apartmentId,
-                null, null, null, null);
+                null, null, null, RoomTable.COLUMN_POSITION + " ASC");
         cursor.moveToFirst();
 
         boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
@@ -199,7 +213,7 @@ abstract class RoomHandler {
         ArrayList<Long> roomIds = new ArrayList<>();
         String[] columns = new String[]{RoomTable.COLUMN_ID};
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, columns, RoomTable.COLUMN_APARTMENT_ID +
-                "==" + apartmentId, null, null, null, null);
+                "==" + apartmentId, null, null, null, RoomTable.COLUMN_POSITION + " ASC");
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -249,5 +263,4 @@ abstract class RoomHandler {
         room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
         return room;
     }
-
 }

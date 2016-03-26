@@ -88,7 +88,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
         }
 
         final RecyclerViewFragment recyclerViewFragment = this;
-        recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
 
         recyclerViewApartments.setAdapter(apartmentArrayAdapter);

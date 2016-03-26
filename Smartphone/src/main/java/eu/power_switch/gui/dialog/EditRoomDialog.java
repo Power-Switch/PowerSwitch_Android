@@ -192,7 +192,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
             // save receiver order
             for (int position = 0; position < receivers.size(); position++) {
                 Receiver receiver = receivers.get(position);
-                DatabaseHandler.setPositionInRoom(receiver.getId(), (long) position);
+                DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
             }
 
             RoomsFragment.sendReceiverChangedBroadcast(getActivity());

@@ -22,8 +22,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import eu.power_switch.database.table.receiver.ReceiverTable;
@@ -178,7 +176,7 @@ class ReceiverHandler {
     protected static ArrayList<Receiver> getByRoom(Long roomId) throws Exception {
         ArrayList<Receiver> receivers = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, ReceiverTable.COLUMN_ROOM_ID +
-                "=" + roomId, null, null, null, null);
+                "=" + roomId, null, null, null, ReceiverTable.COLUMN_POSITION_IN_ROOM + " ASC");
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -186,13 +184,6 @@ class ReceiverHandler {
             cursor.moveToNext();
         }
         cursor.close();
-
-        Collections.sort(receivers, new Comparator<Receiver>() {
-            @Override
-            public int compare(Receiver t0, Receiver t1) {
-                return t0.getPositionInRoom() - t1.getPositionInRoom();
-            }
-        });
 
         return receivers;
     }

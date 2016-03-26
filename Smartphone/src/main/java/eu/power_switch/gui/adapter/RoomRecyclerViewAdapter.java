@@ -186,7 +186,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             holder.linearLayoutOfReceivers.addView(receiverLayout);
 
             // setup TextView to display device name
-            TextView receiverName = (TextView) receiverLayout.findViewById(R.id.txt_receiver_name);
+            TextView receiverName = (TextView) receiverLayout.findViewById(R.id.txt_name);
             receiverName.setText(receiver.getName());
             receiverName.setTextSize(18);
 

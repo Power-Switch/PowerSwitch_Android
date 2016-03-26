@@ -22,56 +22,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="@dimen/cardview_padding">
 
-    <android.support.v7.widget.CardView
-        style="@style/card_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/cardview_default_height"
-                android:orientation="horizontal"
-                android:padding="4dp">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_margin="4dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txt_ssid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="?android:textColorPrimary"/>
-
-                </LinearLayout>
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/delete_fab"
+                <TextView
+                    android:id="@+id/txt_ssid"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|right"
-                    android:contentDescription="@string/delete"
-                    app:backgroundTint="@color/delete_color"
-                    app:borderWidth="0dp"
-                    app:elevation="4dp"
-                    app:fabSize="normal"/>
+                    android:textColor="?android:textColorPrimary"/>
 
             </LinearLayout>
 
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/delete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_margin="8dp"
+                android:contentDescription="@string/delete"
+                android:elevation="4dp"
+                app:iiv_color="@color/delete_color"
+                app:iiv_icon="gmi-delete"/>
+
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <include layout="@layout/list_footer"/>
 
 </LinearLayout>

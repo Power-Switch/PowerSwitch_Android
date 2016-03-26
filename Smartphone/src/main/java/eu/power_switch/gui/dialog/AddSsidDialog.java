@@ -30,9 +30,13 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,6 +75,7 @@ public class AddSsidDialog extends DialogFragment {
     private WifiManager mainWifi;
     private ArrayAdapter<String> ssidAdapter;
     private LinearLayout layoutLoading;
+    private TextInputEditText editText_ssid;
 
     /**
      * Used to notify the setup page that some info has changed
@@ -112,6 +117,22 @@ public class AddSsidDialog extends DialogFragment {
         contentView = inflater.inflate(R.layout.dialog_add_ssid, null);
         builder.setView(contentView);
 
+        editText_ssid = (TextInputEditText) contentView.findViewById(R.id.editText_ssid);
+        editText_ssid.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkValidity();
+            }
+        });
+
         final IconicsImageView refresh = (IconicsImageView) contentView.findViewById(R.id.button_refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +158,7 @@ public class AddSsidDialog extends DialogFragment {
             }
         });
 
-        builder.setTitle(R.string.add_ssid);
+        builder.setTitle(R.string.add_ssids);
         builder.setPositiveButton(R.string.add, new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -171,6 +192,13 @@ public class AddSsidDialog extends DialogFragment {
     private ArrayList<String> getSelectedSSIDs() {
         ArrayList<String> selectedSSIDs = new ArrayList<>();
 
+        // manual
+        String manualSsid = editText_ssid.getText().toString().trim();
+        if (!TextUtils.isEmpty(manualSsid)) {
+            selectedSSIDs.add(manualSsid);
+        }
+
+        // available networks
         int len = listView.getCount();
         SparseBooleanArray checked = listView.getCheckedItemPositions();
         for (int i = 0; i < len; i++) {
@@ -200,7 +228,7 @@ public class AddSsidDialog extends DialogFragment {
     }
 
     private void checkValidity() {
-        if (ssids.isEmpty() || getSelectedSSIDs().isEmpty()) {
+        if (getSelectedSSIDs().isEmpty()) {
             setPositiveButtonVisibility(false);
         } else {
             setPositiveButtonVisibility(true);

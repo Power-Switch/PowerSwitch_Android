@@ -519,6 +519,26 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Sets the position of a Room
+     *
+     * @param roomId   ID of Room
+     * @param position position in apartment
+     */
+    @WorkerThread
+    public static void setPositionOfRoom(Long roomId, Long position) throws Exception {
+        openWritable();
+        try {
+            RoomHandler.setPosition(roomId, position);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
+    /**
      * Delte a room.
      *
      * @param id the ID of the room
@@ -777,6 +797,26 @@ public final class DatabaseHandler {
             close();
         }
         return receiver;
+    }
+
+    /**
+     * Sets the position of a Receiver
+     *
+     * @param receiverId ID of Receiver
+     * @param position   position in room
+     */
+    @WorkerThread
+    public static void setPositionOfReceiver(Long receiverId, Long position) throws Exception {
+        openWritable();
+        try {
+            ReceiverHandler.setPositionInRoom(receiverId, position);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
     }
 
     /**
@@ -1574,26 +1614,6 @@ public final class DatabaseHandler {
         openWritable();
         try {
             TimerHandler.update(timer);
-            database.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.e(e);
-            throw e;
-        } finally {
-            close();
-        }
-    }
-
-    /**
-     * Sets the position of a Receiver
-     *
-     * @param receiverId ID of Receiver
-     * @param position   position in room
-     */
-    @WorkerThread
-    public static void setPositionInRoom(Long receiverId, Long position) throws Exception {
-        openWritable();
-        try {
-            ReceiverHandler.setPositionInRoom(receiverId, position);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);

@@ -88,7 +88,7 @@ public class ScenesFragment extends RecyclerViewFragment {
             setHasOptionsMenu(true);
         }
 
-        recyclerViewScenes = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerViewScenes = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes);
         recyclerViewScenes.setAdapter(sceneRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(

@@ -42,6 +42,8 @@
     <!-- intent receiver -->
     <string name="error_parsing_intent">Fehler beim Parsen des Intents: %1$s</string>
 
+    <string name="reorder_rooms">Räume umsortieren</string>
+
     <!-- network -->
     <string name="sending">Sende&#8230;</string>
     <string name="sent">Gesendet</string>

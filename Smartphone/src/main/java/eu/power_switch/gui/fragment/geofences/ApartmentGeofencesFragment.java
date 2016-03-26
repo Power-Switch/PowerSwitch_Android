@@ -96,7 +96,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
-        recyclerViewGeofences = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerViewGeofences = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
         recyclerViewGeofences.setAdapter(geofenceRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager

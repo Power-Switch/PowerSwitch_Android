@@ -20,21 +20,23 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="@dimen/cardview_padding">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dialog_margin_top">
 
     <TextView
-        android:id="@+id/txt_name"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:textColor="?android:textColorPrimary"/>
+        style="@style/sub_header"
+        android:layout_marginBottom="@dimen/title_margin_top"
+        android:layout_marginLeft="@dimen/title_margin_horizontal"
+        android:layout_marginTop="@dimen/title_margin_top"
+        android:text="@string/order"/>
 
-    <TableLayout
-        android:id="@+id/buttonLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical"/>
 
 </LinearLayout>

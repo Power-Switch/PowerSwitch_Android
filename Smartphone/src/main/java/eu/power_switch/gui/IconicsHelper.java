@@ -73,7 +73,7 @@ public class IconicsHelper {
     /**
      * Get "Refresh" icon
      *
-     * @param context         any suitable context
+     * @param context any suitable context
      * @return "Refresh" icon
      */
     public static IconicsDrawable getRefreshIcon(Context context, int color) {
@@ -102,7 +102,7 @@ public class IconicsHelper {
     /**
      * Get "Delete" icon
      *
-     * @param context         any suitable context
+     * @param context any suitable context
      * @return "Delete" icon
      */
     public static IconicsDrawable getDeleteIcon(Context context, int color) {
@@ -150,7 +150,7 @@ public class IconicsHelper {
      * @param context any suitable context
      * @return "Reorder" icon
      */
-    public static IconicsDrawable getReorderIcon(Context context) {
+    public static IconicsDrawable getReorderHandleIcon(Context context) {
         final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_reorder)
                 .sizeDp(24)
@@ -159,10 +159,19 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    public static IconicsDrawable getReorderIcon(Context context, int color) {
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_reorder)
+                .color(color)
+                .sizeDp(24)
+                .paddingDp(2);
+
+        return iconicsDrawable;
+    }
+
     /**
      * Get "Search" icon
      *
-     * @param context         any suitable context
+     * @param context any suitable context
      * @return "Search" icon
      */
     public static IconicsDrawable getSearchIcon(Context context, int color) {

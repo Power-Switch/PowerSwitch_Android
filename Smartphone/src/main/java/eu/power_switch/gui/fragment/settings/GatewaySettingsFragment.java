@@ -116,7 +116,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addGatewayFAB.setOnClickListener(onClickListener);
 
-        recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override

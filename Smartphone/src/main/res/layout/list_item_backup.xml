@@ -61,17 +61,16 @@
                     android:textSize="18sp"/>
             </LinearLayout>
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/delete_backup_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/delete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center_vertical|right"
-                android:layout_margin="12dp"
+                android:layout_margin="8dp"
                 android:contentDescription="@string/delete"
-                app:backgroundTint="@color/delete_color"
-                app:borderWidth="0dp"
-                app:elevation="4dp"
-                app:fabSize="normal"/>
+                android:elevation="4dp"
+                app:iiv_color="@color/delete_color"
+                app:iiv_icon="gmi-delete"/>
 
         </LinearLayout>
 

@@ -36,35 +36,35 @@ import java.util.Collections;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.animation.AnimationHandler;
-import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.obj.Room;
 import eu.power_switch.shared.log.Log;
 
 /**
- * * Adapter to visualize Receiver name items in RecyclerView for reordering
+ * * Adapter to visualize Room name items in RecyclerView for reordering
  * <p/>
  * Created by Markus on 13.10.2015.
  */
-public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<ReceiverNameRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperAdapter {
-    private ArrayList<Receiver> receivers;
+public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperAdapter {
+    private ArrayList<Room> rooms;
     private Context context;
     private OnStartDragListener onStartDragListener;
 
-    public ReceiverNameRecyclerViewAdapter(Context context, ArrayList<Receiver> receivers, OnStartDragListener onStartDragListener) {
-        this.receivers = receivers;
+    public RoomNameRecyclerViewAdapter(Context context, ArrayList<Room> rooms, OnStartDragListener onStartDragListener) {
+        this.rooms = rooms;
         this.context = context;
         this.onStartDragListener = onStartDragListener;
     }
 
     @Override
-    public ReceiverNameRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RoomNameRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_receiver_name, parent, false);
-        return new ReceiverNameRecyclerViewAdapter.ViewHolder(itemView);
+        return new RoomNameRecyclerViewAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final ReceiverNameRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Receiver receiver = receivers.get(holder.getAdapterPosition());
-        holder.receiverName.setText(receiver.getName());
+    public void onBindViewHolder(final RoomNameRecyclerViewAdapter.ViewHolder holder, int position) {
+        final Room room = rooms.get(holder.getAdapterPosition());
+        holder.roomName.setText(room.getName());
 
         holder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -81,18 +81,18 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
     // Return the total count of items
     @Override
     public int getItemCount() {
-        return receivers.size();
+        return rooms.size();
     }
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(receivers, i, i + 1);
+                Collections.swap(rooms, i, i + 1);
             }
         } else {
             for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(receivers, i, i - 1);
+                Collections.swap(rooms, i, i - 1);
             }
         }
 
@@ -102,18 +102,18 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
     @Override
     public void onItemDismiss(int position) {
         Log.d("Item " + position + " dismissed");
-        receivers.remove(position);
+        rooms.remove(position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         public LinearLayout mainLayout;
-        public TextView receiverName;
+        public TextView roomName;
         public ImageView dragHandle;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.mainLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_main);
-            this.receiverName = (TextView) itemView.findViewById(R.id.txt_name);
+            this.roomName = (TextView) itemView.findViewById(R.id.txt_name);
             this.dragHandle = (ImageView) itemView.findViewById(R.id.drag_handle);
             this.dragHandle.setImageDrawable(IconicsHelper.getReorderHandleIcon(context));
         }

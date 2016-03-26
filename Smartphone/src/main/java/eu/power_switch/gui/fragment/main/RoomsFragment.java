@@ -46,6 +46,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
+import eu.power_switch.gui.dialog.EditRoomOrderDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -85,12 +86,10 @@ public class RoomsFragment extends RecyclerViewFragment {
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         rooms = new ArrayList<>();
-        recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms);
         recyclerViewRooms.setAdapter(roomsRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -160,6 +159,12 @@ public class RoomsFragment extends RecyclerViewFragment {
                 ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
                 configureReceiverDialog.setTargetFragment(this, 0);
                 configureReceiverDialog.show(getFragmentManager(), null);
+                break;
+            case R.id.reorder_rooms:
+                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(SmartphonePreferencesHandler.getCurrentApartmentId());
+                editRoomOrderDialog.setTargetFragment(this, 0);
+                editRoomOrderDialog.show(getFragmentManager(), null);
+                break;
             default:
                 break;
 
@@ -173,6 +178,13 @@ public class RoomsFragment extends RecyclerViewFragment {
         inflater.inflate(R.menu.room_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_receiver).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.reorder_rooms).setIcon(IconicsHelper.getReorderIcon(getActivity(), color));
+
+        if (!SmartphonePreferencesHandler.getHideAddFAB()) {
+            menu.findItem(R.id.create_receiver).setVisible(false).setEnabled(false);
+//            menu.removeItem(R.id.create_receiver);
+        }
+
     }
 
     @Override

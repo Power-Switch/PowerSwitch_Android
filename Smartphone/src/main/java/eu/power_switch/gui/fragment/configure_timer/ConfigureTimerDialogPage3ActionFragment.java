@@ -33,7 +33,10 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
@@ -166,9 +169,9 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
         @Override
         public void onBindViewHolder(final TimerActionRecyclerViewAdapter.ViewHolder holder, int position) {
             final Action action = actions.get(position);
-            holder.action.setText(action.toString());
+            holder.description.setText(action.toString());
 
-            holder.deleteTimerActionFAB.setOnClickListener(new View.OnClickListener() {
+            holder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     actions.remove(holder.getAdapterPosition());
@@ -176,6 +179,12 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
                     sendTimerActionChangedBroadcast(getContext(), actions);
                 }
             });
+
+            if (holder.getAdapterPosition() == getItemCount() - 1) {
+                holder.footer.setVisibility(View.VISIBLE);
+            } else {
+                holder.footer.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -184,14 +193,15 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView action;
-            public FloatingActionButton deleteTimerActionFAB;
+            public TextView description;
+            public IconicsImageView delete;
+            public LinearLayout footer;
 
-            public ViewHolder(final View itemView) {
+            public ViewHolder(View itemView) {
                 super(itemView);
-                action = (TextView) itemView.findViewById(R.id.txt_action_description);
-                deleteTimerActionFAB = (FloatingActionButton) itemView.findViewById(R.id.delete_action_fab);
-                deleteTimerActionFAB.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+                this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
+                this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
+                this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
             }
         }
     }

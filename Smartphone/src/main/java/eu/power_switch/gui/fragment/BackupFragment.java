@@ -127,7 +127,7 @@ public class BackupFragment extends RecyclerViewFragment {
             }
         });
 
-        recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
         backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
             @Override

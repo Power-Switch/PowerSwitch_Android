@@ -89,7 +89,7 @@ public class TimersFragment extends RecyclerViewFragment {
         final RecyclerViewFragment recyclerViewFragment = this;
 
         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), timers);
-        recyclerViewTimers = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerViewTimers = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerViewTimers.setAdapter(timerRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getResources().getInteger(R.integer.timer_grid_span_count), StaggeredGridLayoutManager.VERTICAL);

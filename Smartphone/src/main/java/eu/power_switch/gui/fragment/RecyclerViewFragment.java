@@ -60,7 +60,7 @@ public abstract class RecyclerViewFragment extends Fragment {
         layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
         layoutEmpty = (LinearLayout) rootView.findViewById(R.id.layoutEmpty);
         layoutError = (LinearLayout) rootView.findViewById(R.id.layoutError);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
 
         onInitialized();
 

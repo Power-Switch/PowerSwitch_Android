@@ -20,9 +20,7 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,12 +29,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.view.IconicsImageView;
+
 import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
@@ -81,7 +80,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
         holder.backupName.setText(backup.getName());
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+        holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -134,15 +133,14 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView backupName;
         public TextView backupDate;
-        public FloatingActionButton deleteButton;
+        public IconicsImageView delete;
         public LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             this.backupName = (TextView) itemView.findViewById(R.id.txt_backup_name);
             this.backupDate = (TextView) itemView.findViewById(R.id.txt_backup_date);
-            this.deleteButton = (FloatingActionButton) itemView.findViewById(R.id.delete_backup_fab);
-            deleteButton.setImageDrawable(IconicsHelper.getDeleteIcon(context, ContextCompat.getColor(context, android.R.color.white)));
+            this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
