@@ -41,18 +41,18 @@ import eu.power_switch.shared.constants.SleepAsAndroidConstants;
  * <p/>
  * Created by Markus on 28.09.2015.
  */
-public class AddAlarmEventActionDialog extends AddActionDialog {
+public class AddSleepAsAndroidAlarmEventActionDialog extends AddActionDialog {
 
     public static final String EVENT_ID_KEY = "eventId";
 
     SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT currentEventType =
             SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
 
-    public static AddAlarmEventActionDialog newInstance(int eventId) {
+    public static AddSleepAsAndroidAlarmEventActionDialog newInstance(int eventId) {
         Bundle args = new Bundle();
         args.putInt(EVENT_ID_KEY, eventId);
 
-        AddAlarmEventActionDialog fragment = new AddAlarmEventActionDialog();
+        AddSleepAsAndroidAlarmEventActionDialog fragment = new AddSleepAsAndroidAlarmEventActionDialog();
         fragment.setArguments(args);
         return fragment;
     }

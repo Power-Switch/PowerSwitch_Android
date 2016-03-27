@@ -27,6 +27,9 @@ import eu.power_switch.shared.Sets;
  */
 public class AlarmClockConstants {
 
+    public static final int STOCK_TAB_INDEX = 0;
+    public static final int SAA_TAB_INDEX = 1;
+
     // Stock Android App
     private static final String STOCK_TRIGGERED_INTENT = "com.android.deskclock.ALARM_ALERT";
     private static final String STOCK_DISMISS_INTENT = "com.android.deskclock.ALARM_DISMISS";

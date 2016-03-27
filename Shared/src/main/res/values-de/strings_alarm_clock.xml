@@ -25,4 +25,6 @@
 
     <string name="event_type">Event Typ:</string>
 
+    <string name="stock">System</string>
+
 </resources>

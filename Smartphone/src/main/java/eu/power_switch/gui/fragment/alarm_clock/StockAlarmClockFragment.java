@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment;
+package eu.power_switch.gui.fragment.alarm_clock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -50,24 +50,25 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.AddAlarmEventActionDialog;
+import eu.power_switch.gui.dialog.AddStockAlarmClockEventActionDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
+import eu.power_switch.shared.constants.AlarmClockConstants.Event;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT;
 import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
- * Fragment containing all settings related to Sleep As Android alarm clock event handling
+ * Fragment containing all settings related to stock alarm clock event handling
  * <p/>
- * Created by Markus on 08.10.2015.
+ * Created by Markus on 27.03.2016.
  */
-public class SleepAsAndroidFragment extends RecyclerViewFragment {
+public class StockAlarmClockFragment extends RecyclerViewFragment {
 
-    private static SLEEP_AS_ANDROID_ALARM_EVENT currentEventType = SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
+    private static Event currentEventType = Event.ALARM_TRIGGERED;
     private BroadcastReceiver broadcastReceiver;
     private ArrayList<Action> actions = new ArrayList<>();
     private RecyclerView recyclerViewActions;
@@ -113,7 +114,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                                 try {
                                     actions.remove(position);
                                     DatabaseHandler.setAlarmActions(
-                                            SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType
+                                            Event.getById(spinnerEventType
                                                     .getSelectedItemPosition()), actions);
                                     StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                             R.string.action_removed, Snackbar.LENGTH_LONG);
@@ -138,9 +139,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(
-                        spinnerEventType
-                                .getSelectedItemPosition());
+                AddStockAlarmClockEventActionDialog addAlarmEventActionDialog =
+                        AddStockAlarmClockEventActionDialog.newInstance(spinnerEventType.getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
@@ -184,7 +184,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     }
 
     private void refreshActions() {
-        currentEventType = SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType.getSelectedItemPosition());
+        currentEventType = Event.getById(spinnerEventType.getSelectedItemPosition());
         updateListContent();
     }
 
@@ -225,9 +225,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.add_action:
-                AddAlarmEventActionDialog addAlarmEventActionDialog = AddAlarmEventActionDialog.newInstance(
-                        spinnerEventType
-                                .getSelectedItemPosition());
+                AddStockAlarmClockEventActionDialog addAlarmEventActionDialog = AddStockAlarmClockEventActionDialog.newInstance(
+                        spinnerEventType.getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(this, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             default:

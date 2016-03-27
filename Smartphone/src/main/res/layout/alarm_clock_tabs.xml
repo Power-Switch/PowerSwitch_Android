@@ -17,21 +17,27 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <string name="alarm_triggered">Alarm Triggered</string>
-    <string name="alarm_snoozed">Alarm Snoozed</string>
-    <string name="alarm_dismissed">Alarm Dismissed</string>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:scrollbars="horizontal"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:tabGravity="fill"/>
 
-    <string name="event_type">Event Type:</string>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tabHost"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-    <string-array name="sleep_as_android_event_names">
-        <item>@string/alarm_triggered</item>
-        <item>@string/alarm_snoozed</item>
-        <item>@string/alarm_dismissed</item>
-    </string-array>
-
-    <string name="stock">Stock</string>
-    <string name="sleep_as_android">Sleep As Android</string>
-
-</resources>
+</LinearLayout>

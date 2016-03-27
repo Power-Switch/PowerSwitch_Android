@@ -78,8 +78,8 @@ import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.gui.fragment.SleepAsAndroidFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
+import eu.power_switch.gui.fragment.alarm_clock.AlarmClockTabFragment;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
 import eu.power_switch.gui.fragment.main.RoomSceneTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int IDENTIFIER_ROOMS_SCENES = 10;
     public static final int IDENTIFIER_APARTMENTS = 11;
     public static final int IDENTIFIER_GEOFENCES = 12;
-    public static final int IDENTIFIER_SLEEP_AS_ANDROID = 13;
+    public static final int IDENTIFIER_ALARM_CLOCK = 13;
     public static final int IDENTIFIER_TIMERS = 14;
     public static final int IDENTIFIER_BACKUP_RESTORE = 15;
     public static final int IDENTIFIER_SETTINGS = 16;
@@ -482,19 +482,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemSleepAsAndroid = new PrimaryDrawerItem().withName(R.string.menu_sleep_as_android)
+        final PrimaryDrawerItem itemSleepAsAndroid = new PrimaryDrawerItem().withName(R.string.menu_alarm_clock)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_alarm)
                         .color(tintColor)
                         .sizeDp(24))
                 .withSelectable(true)
-                .withIdentifier(IDENTIFIER_SLEEP_AS_ANDROID)
+                .withIdentifier(IDENTIFIER_ALARM_CLOCK)
                 .withEnabled(SleepAsAndroidHelper.isInstalled(this))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_SLEEP_AS_ANDROID, getString(R.string.menu_sleep_as_android),
-                                    SleepAsAndroidFragment.class.newInstance());
+                            startFragmentTransaction(IDENTIFIER_ALARM_CLOCK, getString(R.string.menu_alarm_clock),
+                                    AlarmClockTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
