@@ -42,7 +42,7 @@ public class AnimationHandler {
     }
 
     public static Animation getRotationClockwiseAnimation(Context context) {
-        Animation anim = AnimationUtils.loadAnimation(context, R.anim.rotate);
+        Animation anim = AnimationUtils.loadAnimation(context, R.anim.rotate_right_3);
         return anim;
     }
 
@@ -113,7 +113,7 @@ public class AnimationHandler {
     public static boolean checkTargetApi() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
-//
+
 //    @TargetApi(21)
 //    public static Transition.TransitionListener getDefaultRevealAnimationTransistionListener(final View v) {
 //        Transition.TransitionListener enterTransitionListener = new Transition.TransitionListener() {

@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Optional: Specify SSIDs over which this Gateway should always use the local address instead of the WAN address"/>
+        android:text="@string/optional_ssid_description"/>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
