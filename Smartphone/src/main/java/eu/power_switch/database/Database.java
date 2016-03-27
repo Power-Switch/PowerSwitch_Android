@@ -28,6 +28,8 @@ import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
+import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
+import eu.power_switch.database.table.alarm_clock.stock.AlarmClockActionTable;
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentTable;
@@ -44,7 +46,6 @@ import eu.power_switch.database.table.receiver.UniversalButtonTable;
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.database.table.scene.SceneTable;
-import eu.power_switch.database.table.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
 import eu.power_switch.database.table.timer.TimerTable;
 import eu.power_switch.database.table.timer.TimerWeekdayTable;
@@ -91,6 +92,7 @@ public class Database extends SQLiteOpenHelper {
             TimerWeekdayTable.onCreate(db);
             TimerActionTable.onCreate(db);
 
+            AlarmClockActionTable.onCreate(db);
             SleepAsAndroidActionTable.onCreate(db);
 
             ActionTable.onCreate(db);
@@ -161,6 +163,7 @@ public class Database extends SQLiteOpenHelper {
             TimerWeekdayTable.onUpgrade(db, oldVersion, newVersion);
             TimerActionTable.onUpgrade(db, oldVersion, newVersion);
 
+            AlarmClockActionTable.onUpgrade(db, oldVersion, newVersion);
             SleepAsAndroidActionTable.onUpgrade(db, oldVersion, newVersion);
 
             ActionTable.onUpgrade(db, oldVersion, newVersion);

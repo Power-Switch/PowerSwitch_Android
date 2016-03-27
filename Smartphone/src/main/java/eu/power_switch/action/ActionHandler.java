@@ -43,6 +43,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
@@ -418,6 +419,29 @@ public class ActionHandler {
 
             HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
                     context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(context, e);
+            try {
+                HistoryHelper.add(context, e);
+            } catch (Exception e1) {
+                Log.e(e1);
+            }
+        }
+    }
+
+    /**
+     * Execute Alarm Clock actions
+     *
+     * @param context any suitable context
+     * @param event   alarm event type
+     */
+    public static void execute(@NonNull Context context, @NonNull AlarmClockConstants.Event event) {
+        try {
+            List<Action> actions = DatabaseHandler.getAlarmActions(event);
+            executeActions(context, actions);
+
+            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.alarm_clock_action_history_text, event.toString())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {

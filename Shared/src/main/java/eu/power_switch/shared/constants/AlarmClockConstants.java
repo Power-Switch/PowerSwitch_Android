@@ -25,7 +25,7 @@ import eu.power_switch.shared.Sets;
 /**
  * Created by Markus on 20.02.2016.
  */
-public class ClockAppConstants {
+public class AlarmClockConstants {
 
     // Stock Android App
     private static final String STOCK_TRIGGERED_INTENT = "com.android.deskclock.ALARM_ALERT";
@@ -52,8 +52,33 @@ public class ClockAppConstants {
      *
      * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
-    private ClockAppConstants() {
+    private AlarmClockConstants() {
         throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    public enum Event {
+        ALARM_TRIGGERED(0),
+        ALARM_SNOOZED(1),
+        ALARM_DISMISSED(2);
+
+        private final int id;
+
+        Event(int id) {
+            this.id = id;
+        }
+
+        public static Event getById(int id) {
+            for (Event e : values()) {
+                if (e.getId() == id) {
+                    return e;
+                }
+            }
+            return null;
+        }
+
+        public int getId() {
+            return id;
+        }
     }
 
 }

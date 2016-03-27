@@ -25,31 +25,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
-import eu.power_switch.shared.constants.SleepAsAndroidConstants;
+import eu.power_switch.database.table.alarm_clock.stock.AlarmClockActionTable;
+import eu.power_switch.shared.constants.AlarmClockConstants;
 
 /**
  * Provides database methods for managing Sleep As Android related Actions
  * <p/>
  * Created by Markus on 30.11.2015.
  */
-abstract class SleepAsAndroidHandler {
+abstract class AlarmClockHandler {
 
     /**
      * Private Constructor
      *
      * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
-    private SleepAsAndroidHandler() {
+    private AlarmClockHandler() {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-    protected static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    protected static List<Action> getAlarmActions(AlarmClockConstants.Event event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
-        String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(SleepAsAndroidActionTable.TABLE_NAME, columns,
-                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(),
+        String[] columns = {AlarmClockActionTable.COLUMN_ALARM_TYPE_ID, AlarmClockActionTable.COLUMN_ACTION_ID};
+        Cursor cursor = DatabaseHandler.database.query(AlarmClockActionTable.TABLE_NAME, columns,
+                AlarmClockActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(),
                 null, null, null, null);
         cursor.moveToFirst();
 
@@ -63,25 +63,25 @@ abstract class SleepAsAndroidHandler {
         return actions;
     }
 
-    protected static void setAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    protected static void setAlarmActions(AlarmClockConstants.Event event, ArrayList<Action> actions) throws Exception {
         deleteAlarmActions(event);
         addAlarmActions(event, actions);
     }
 
-    private static void addAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    private static void addAlarmActions(AlarmClockConstants.Event event, ArrayList<Action> actions) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 
         // add AlarmTriggered <-> action relation
         for (Long actionId : actionIds) {
             ContentValues values = new ContentValues();
-            values.put(SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, event.getId());
-            values.put(SleepAsAndroidActionTable.COLUMN_ACTION_ID, actionId);
-            DatabaseHandler.database.insert(SleepAsAndroidActionTable.TABLE_NAME, null, values);
+            values.put(AlarmClockActionTable.COLUMN_ALARM_TYPE_ID, event.getId());
+            values.put(AlarmClockActionTable.COLUMN_ACTION_ID, actionId);
+            DatabaseHandler.database.insert(AlarmClockActionTable.TABLE_NAME, null, values);
         }
     }
 
-    private static void deleteAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    private static void deleteAlarmActions(AlarmClockConstants.Event event) throws Exception {
         for (Action action : getAlarmActions(event)) {
             ActionHandler.delete(action.getId());
         }

@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.database.table.sleep_as_android;
+package eu.power_switch.database.table.alarm_clock.stock;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -25,9 +25,9 @@ import android.database.sqlite.SQLiteDatabase;
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public class SleepAsAndroidActionTable {
+public class AlarmClockActionTable {
 
-    public static final String TABLE_NAME = "sleep_as_android_action";
+    public static final String TABLE_NAME = "alarm_clock_action";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ALARM_TYPE_ID = "alarm_type_id";
     public static final String COLUMN_ACTION_ID = "action_id";
@@ -53,7 +53,13 @@ public class SleepAsAndroidActionTable {
             case 6:
             case 7:
             case 8:
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
                 onCreate(db);
                 break;
 

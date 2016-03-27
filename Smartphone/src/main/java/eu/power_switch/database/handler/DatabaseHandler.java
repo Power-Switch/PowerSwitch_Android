@@ -41,6 +41,7 @@ import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
@@ -1614,6 +1615,56 @@ public final class DatabaseHandler {
         openWritable();
         try {
             TimerHandler.update(timer);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
+    /**
+     *
+     * ////////////////////////////////
+     * // Alarm Clock functions //
+     * ////////////////////////////////
+     *
+     */
+
+    /**
+     * Get Actions for a specific alarm event
+     *
+     * @param event alarm event
+     * @return List of Actions
+     */
+    @NonNull
+    @WorkerThread
+    public static List<Action> getAlarmActions(AlarmClockConstants.Event event) throws Exception {
+        openReadable();
+        List<Action> actions = new ArrayList<>();
+        try {
+            actions = AlarmClockHandler.getAlarmActions(event);
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+        return actions;
+    }
+
+    /**
+     * Set Actions for a specific alarm event
+     *
+     * @param event   alarm event
+     * @param actions List of Actions
+     */
+    @WorkerThread
+    public static void setAlarmActions(AlarmClockConstants.Event event, ArrayList<Action> actions) throws Exception {
+        openWritable();
+        try {
+            AlarmClockHandler.setAlarmActions(event, actions);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);

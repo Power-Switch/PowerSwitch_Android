@@ -22,7 +22,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import eu.power_switch.shared.constants.ClockAppConstants;
+import eu.power_switch.action.ActionHandler;
+import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 
@@ -40,12 +41,15 @@ public class IntentReceiver extends BroadcastReceiver {
         Log.d(this, intent);
 
         try {
-            if (ClockAppConstants.ALARM_TRIGGERED_INTENTS.contains(intent.getAction())) {
+            if (AlarmClockConstants.ALARM_TRIGGERED_INTENTS.contains(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm triggered!");
-            } else if (ClockAppConstants.ALARM_SNOOZED_INTENTS.contains(intent.getAction())) {
+                ActionHandler.execute(context, AlarmClockConstants.Event.ALARM_TRIGGERED);
+            } else if (AlarmClockConstants.ALARM_SNOOZED_INTENTS.contains(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm snoozed...");
-            } else if (ClockAppConstants.ALARM_DISMISSED_INTENTS.contains(intent.getAction())) {
+                ActionHandler.execute(context, AlarmClockConstants.Event.ALARM_SNOOZED);
+            } else if (AlarmClockConstants.ALARM_DISMISSED_INTENTS.contains(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm dismissed...");
+                ActionHandler.execute(context, AlarmClockConstants.Event.ALARM_DISMISSED);
             } else {
                 Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());
             }
