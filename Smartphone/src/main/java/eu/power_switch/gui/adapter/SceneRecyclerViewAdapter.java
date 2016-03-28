@@ -18,8 +18,10 @@
 
 package eu.power_switch.gui.adapter;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -79,8 +81,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         return new SceneRecyclerViewAdapter.ViewHolder(itemView);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onBindViewHolder(final SceneRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         final Scene scene = scenes.get(holder.getAdapterPosition());
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
@@ -143,11 +146,11 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             receiverName.setTextSize(18);
             receiverName.setTextColor(ThemeHelper.getThemeAttrColor(fragmentActivity, android.R.attr.textColorPrimary));
             receiverName.setGravity(Gravity.CENTER_VERTICAL);
-            receiverRow.addView(receiverName, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+            receiverRow.addView(receiverName, new LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.MATCH_PARENT, 1.0f));
 
             TableLayout buttonLayout = new TableLayout(fragmentActivity);
-            receiverRow.addView(buttonLayout, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+            receiverRow.addView(buttonLayout, new LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT));
 
             int buttonsPerRow;
@@ -159,11 +162,12 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
             int i = 0;
             TableRow buttonRow = null;
-            final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
             for (final Button button : sceneItem.getReceiver().getButtons()) {
                 final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button,
                         buttonRow, false);
-                buttonList.add(buttonView);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    buttonView.setElevation(0);
+                }
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);
 
@@ -177,7 +181,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
                 if (i == 0 || i % buttonsPerRow == 0) {
                     buttonRow = new TableRow(fragmentActivity);
-                    buttonRow.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                    buttonRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                             LayoutParams.MATCH_PARENT));
                     buttonRow.addView(buttonView);
                     buttonLayout.addView(buttonRow);

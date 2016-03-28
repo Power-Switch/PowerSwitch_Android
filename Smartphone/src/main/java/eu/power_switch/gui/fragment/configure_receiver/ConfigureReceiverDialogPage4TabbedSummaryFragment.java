@@ -49,7 +49,6 @@ import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
-import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.UniversalButton;
@@ -374,7 +373,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
                 break;
             case UNIVERSAL:
                 receiver = new UniversalReceiver(
-                        getActivity(), currentId, currentName, currentUniversalButtons,room.getId());
+                        getActivity(), currentId, currentName, currentUniversalButtons, room.getId());
                 break;
             case AUTOPAIR:
                 receiver = (Receiver) constructor.newInstance(
@@ -388,10 +387,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
             DatabaseHandler.updateReceiver(receiver);
         }
 
-
         RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-        // scenes could change too if receiver was used in a scene
-        ScenesFragment.sendScenesChangedBroadcast(getActivity());
 
         // update receiver widgets
         ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
