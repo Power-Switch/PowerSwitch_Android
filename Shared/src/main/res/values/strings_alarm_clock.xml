@@ -25,7 +25,7 @@
 
     <string name="event_type">Event Type:</string>
 
-    <string name="alarm_clock_hint">Warning: Because there is no official API for fetching alarm clock events there is no guarantee that the clock apps of your choice will trigger these actions.</string>
+    <string name="alarm_clock_hint">Warning: Because there is no official API for fetching alarm clock events there is no guarantee that the clock app of your choice will trigger these actions. As alternative you can download the Google Clock App or Sleep As Android from the Play Store.</string>
 
     <string-array name="stock_alarm_clock_event_names">
         <item>@string/alarm_triggered</item>

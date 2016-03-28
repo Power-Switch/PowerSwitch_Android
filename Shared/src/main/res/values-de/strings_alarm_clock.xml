@@ -25,7 +25,7 @@
 
     <string name="event_type">Event Typ:</string>
 
-    <string name="alarm_clock_hint">Achtung: Da es keine offizielle API zum abfangen von Wecker Events gibt, gibt es keine Garantie, dass die Wecker App deiner Wahl Events auslöst</string>
+    <string name="alarm_clock_hint">Achtung: Da es keine offizielle API zum abfangen von Wecker Events gibt, gibt es keine Garantie, dass die Wecker App deiner Wahl diese Events auslöst. Sollte es nicht funktionieren kannst du die Google Wecker App oder Sleep As Android aus dem Play Store herunterladen.</string>
 
     <string name="stock">System</string>
 
