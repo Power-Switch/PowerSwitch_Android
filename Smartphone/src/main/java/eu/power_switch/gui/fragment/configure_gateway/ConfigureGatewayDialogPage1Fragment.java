@@ -115,6 +115,7 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
 
             @Override
             public void afterTextChanged(Editable s) {
+                checkSetupValidity();
                 sendAddressChangedBroadcast(getActivity());
             }
         };
@@ -263,7 +264,7 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
                 if (port > 65535 || port <= 0) {
                     floatingLocalPort.setError(getString(R.string.port_invalid));
                     floatingLocalPort.setErrorEnabled(true);
-                    return true;
+                    return false;
                 } else {
                     floatingLocalPort.setError(null);
                     floatingLocalPort.setErrorEnabled(false);
@@ -323,7 +324,7 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
                 if (port > 65535 || port <= 0) {
                     floatingWanPort.setError(getString(R.string.port_invalid));
                     floatingWanPort.setErrorEnabled(true);
-                    return true;
+                    return false;
                 } else {
                     floatingWanPort.setError(null);
                     floatingWanPort.setErrorEnabled(false);
@@ -391,7 +392,21 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
         wanAddressIsValid = checkWanAddressValidity(wanAddress);
         wanPortIsValid = checkWanPortValidity(wanPortText);
 
-        return nameIsValid && ((localAddressIsValid && localPortIsValid) || (wanAddressIsValid && wanPortIsValid));
+        boolean oneAddressIsValid = ((localAddressIsValid && localPortIsValid) || (wanAddressIsValid && wanPortIsValid));
+
+        // disable error messages if one address is valid
+        if (oneAddressIsValid) {
+            floatingLocalAddress.setError(null);
+            floatingLocalAddress.setErrorEnabled(false);
+            floatingLocalPort.setError(null);
+            floatingLocalPort.setErrorEnabled(false);
+            floatingWanAddress.setError(null);
+            floatingWanAddress.setErrorEnabled(false);
+            floatingWanPort.setError(null);
+            floatingWanPort.setErrorEnabled(false);
+        }
+
+        return nameIsValid && oneAddressIsValid;
     }
 
 }
