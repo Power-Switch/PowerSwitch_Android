@@ -29,4 +29,8 @@
     <string name="please_define_room_in_main_app">Please define a Room in Main App first!</string>
     <string name="please_define_scene_in_main_app">Please define a Scene in Main App first!</string>
 
+    <string name="receiver_not_found">Receiver not found</string>
+    <string name="room_not_found">Room not found</string>
+    <string name="scene_not_found">Scene not found</string>
+
 </resources>

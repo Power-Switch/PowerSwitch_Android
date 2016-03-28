@@ -80,7 +80,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                             WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, apartment, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.VISIBLE);
                 } else {
-                    remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_deleted));
+                    remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_not_found));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
                 }
             } catch (Exception e) {

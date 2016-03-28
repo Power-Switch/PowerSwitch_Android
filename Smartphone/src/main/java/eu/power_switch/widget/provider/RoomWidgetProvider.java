@@ -86,7 +86,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                                     ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
                 } else {
-                    remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_deleted));
+                    remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_not_found));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
                 }
             } catch (Exception e) {

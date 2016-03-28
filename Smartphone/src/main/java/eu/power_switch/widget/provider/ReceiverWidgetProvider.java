@@ -78,43 +78,49 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
             try {
                 ReceiverWidget receiverWidget = DatabaseHandler.getReceiverWidget(appWidgetId);
                 Room room = DatabaseHandler.getRoom(receiverWidget.getRoomId());
-                Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
+                if (room != null) {
+                    Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
 
-                if (receiver != null) {
-                    Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
-                    // update UI
-                    remoteViews.setTextViewText(R.id.textView_receiver_widget_name, apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
+                    if (receiver != null) {
+                        Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
+                        // update UI
+                        remoteViews.setTextViewText(R.id.textView_receiver_widget_name, apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
 
-                    LinkedList<Button> buttons = receiver.getButtons();
+                        LinkedList<Button> buttons = receiver.getButtons();
 
-                    // remove all previous buttons
-                    remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
+                        // remove all previous buttons
+                        remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
 
-                    // add buttons from database
-                    int buttonOffset = 0;
-                    for (Button button : buttons) {
-                        // set button action
-                        RemoteViews buttonView = new RemoteViews(context.getResources()
-                                .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
-                        SpannableString s = new SpannableString(button.getName());
-                        s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
-                        buttonView.setTextViewText(R.id.button_widget_universal, s);
-                        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() &&
-                                receiver.getLastActivatedButtonId().equals(button.getId())) {
-                            buttonView.setTextColor(R.id.button_widget_universal,
-                                    ContextCompat.getColor(context, R.color.color_light_blue_a700));
+                        // add buttons from database
+                        int buttonOffset = 0;
+                        for (Button button : buttons) {
+                            // set button action
+                            RemoteViews buttonView = new RemoteViews(context.getResources()
+                                    .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
+                            SpannableString s = new SpannableString(button.getName());
+                            s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
+                            buttonView.setTextViewText(R.id.button_widget_universal, s);
+                            if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() &&
+                                    receiver.getLastActivatedButtonId().equals(button.getId())) {
+                                buttonView.setTextColor(R.id.button_widget_universal,
+                                        ContextCompat.getColor(context, R.color.color_light_blue_a700));
+                            }
+
+                            PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, apartment, room,
+                                    receiver, button, appWidgetId * 15 + buttonOffset);
+                            buttonView.setOnClickPendingIntent(R.id.button_widget_universal, intent);
+
+                            remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
+                            buttonOffset++;
                         }
-
-                        PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, apartment, room,
-                                receiver, button, appWidgetId * 15 + buttonOffset);
-                        buttonView.setOnClickPendingIntent(R.id.button_widget_universal, intent);
-
-                        remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);
-                        buttonOffset++;
+                        remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.VISIBLE);
+                    } else {
+                        remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.receiver_not_found));
+                        remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
+                        remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.GONE);
                     }
-                    remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.VISIBLE);
                 } else {
-                    remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.receiver_deleted));
+                    remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.room_not_found));
                     remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
                     remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.GONE);
                 }
