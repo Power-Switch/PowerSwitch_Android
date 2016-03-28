@@ -27,7 +27,7 @@
     </string>
     <string name="tutorial__scene_explanation">In diesem Tab werden Szenen angezeigt.\n
         \nMit einer Szene kannst du eine
-        bestimmte Konfiguration von An- oder Ausgeschalteten Steckdosen für den schnellen Zugriff zu einem späteren
+        bestimmte Konfiguration von an- oder ausgeschalteten Steckdosen für den schnellen Zugriff zu einem späteren
         Zeitpunkt speichern.\n
         \nEin Beispiel wäre die Szene \"Gartenbeleuchtung\", welche die Funksteckdose am Teich, am
         Weg und hinter der Laube einschaltet. Ein weiteres Beispiel ist der \"Kinoabend\", der den Fernseher und den
@@ -35,26 +35,31 @@
     </string>
     <string name="tutorial__timer_explanation">In diesem Tab werden Timer angezeigt.\n
         \nMit Timern kannst du zu
-        einer bestimmten Tageszeit an bestimmten Wochentagen automatisch aktionen Ausführen. Eine Aktion kann
-        dabei eine einzelne Funksteckdose, ein ganzer Raum oder auch eine Szene sein.\n
+        einer bestimmten Tageszeit an bestimmten Wochentagen automatisch Aktionen ausführen. Eine Aktion kann
+        dabei das Schalten einer einzelnen Funksteckdose, eines ganzen Raumes oder auch einer Szene sein.\n
         \nEin Beispiel für einen
         Timer wäre die Kaffeemaschine, die morgens um 6:00 von Montag bis Freitag an gehen soll.
     </string>
-    <string name="tutorial__sleep_as_android_explanation">In diesem Tab kannst du für Wecker Events der \"Sleep As
-        Android\" App Aktionen festlegen.\n
+    <string name="tutorial__stock_alarm_clock_explanation">In diesem Tab kannst du für Wecker der Standard App deines Handys Aktionen festlegen.\n
         \nWie bei Timern können Aktionen auch hier sowohl einzelne
-        Steckdosen, ganze Räume oder auch Szenen sein. Mögliche Events sind das aktivieren des Alarms, das
-        Snoozen (wenn man noch ein bisschen im Bett bleiben möchte) oder wenn man den klingelden Wecker
+        Steckdosen, ganze Räume oder auch Szenen sein. Mögliche Events sind das Aktivieren des Alarms und das Abschalten eines klingelnden Weckers.\n
+        \nEin einfaches Beispiel wäre die Nachttischbeleuchtung, die beim Klingeln des Weckers an geht.
+    </string>
+    <string name="tutorial__sleep_as_android_explanation">In diesem Tab kannst du für Wecker der \"Sleep As
+        Android\" App Aktionen festlegen.\n
+        \nWie bei Weckern der Standard App können Aktionen auch hier sowohl einzelne
+        Steckdosen, ganze Räume oder auch Szenen sein. Mögliche Events sind das Aktivieren des Alarms, das
+        Snoozen (wenn man noch ein bisschen im Bett bleiben möchte) oder wenn man den klingelnden Wecker
         abschaltet.\n
-        \nEin Beispiel wäre die Nachttischbeleuchtung, die beim Klingeln des Weckers an geht, beim
-        Szoozen wieder aus geht und beim deaktivieren des Weckers wird zusätzlich zum Nachttischlicht noch die
+        \nEin Beispiel wäre die Nachttischbeleuchtung, die beim Klingeln des Weckers an geht und beim
+        Szoozen wieder aus geht. Beim Deaktivieren des Weckers wird zusätzlich zum Nachttischlicht noch die
         Kaffeemaschine eingeschaltet.
     </string>
     <string name="tutorial__apartment_explanation">
         In diesem Tab kannst du Wohnungen erstellen und verwalten.\n
         \nVerschiedene Wohnungen haben verschiedene Räume und Szenen. Außerdem kannst du Gateways bestimmten
         Wohnungen zuweisen, sodass Netzwerksignale nur an die Gateways in der richtigen Wohnung gesendet werden.\n
-        \nWähle eine Wohnung mit einem klick aus, halte es gedrückt um es zu konfigurieren.
+        \nWähle eine Wohnung mit einem klick aus, halte gedrückt um sie zu konfigurieren.
     </string>
     <string name="tutorial__backup_explanation">
         In diesem Tab kannst du Sicherungen von PowerSwitch erstellen und einen alten Zustand wiederherstellen.\n
@@ -65,12 +70,12 @@
         \nGateways sind die Verbindung zwischen PowerSwitch (deinem Smartphone) und deinen Funksteckdosen.
         Wenn du auch von unterwegs aus steuern möchtest, gib anstelle einer IP eine DynDNS Adresse an.
         Nach korrekter Router Konfiguration ist alles bereit :)\n
-        \nFüge ein Gateway mit dem Plus Button hinzu, halte eins gedrückt um es zu konfigurieren.
+        \nFüge ein Gateway mit dem Plus Button hinzu. Tippe auf ein Gateway und halte gedrückt, um es zu konfigurieren.
     </string>
     <string name="tutorial__wearable_settings_explanation">
         In diesem Tab kannst du alle Einstellungen der Wearable App konfigurieren.\n
         \nÄndere die Vibration, wähle ein anderes Theme&#8230;\n
-        \nAchtung: Damit alle Daten korrekt mit der Wearable App synchronisiert werden sollte die
+        \nAchtung: Damit alle Daten korrekt mit der Wearable App synchronisiert werden, sollte die
         Wearable App auf der Smartwatch geöffnet sein, während du Einstellungen dazu auf dem
         Smartphone änderst. Beende die Wearable App danach kurz, um die neuen Einstellungen auf
         der Smartwatch zu laden.
@@ -78,7 +83,7 @@
     <string name="tutorial__geofences_apartment_explanation">
         In diesem Tab kannst du Geofences passend zu deinen Wohnungen konfigurieren.\n
         \nMit Geofences kannst du ortsabhängig Aktionen auslösen. Aktionen können getrennt für das Ein- und Austreten
-        in den festgelegten Bereich festgelegt werden. Geofences in diesem Tab sind immer auch einer Wohnung
+        in den gewünschten Bereich festgelegt werden. Geofences in diesem Tab sind immer auch einer Wohnung
         zugeordnet. D.h. die Position des Geofence einer Wohnung wird auch bei anderen Funktionen von PowerSwitch
         verwendet (z.B. automatisches Umschalten zwischen Wohnungen).\n
         \nBeispiel: Beim Verlassen der Wohnung das Licht in allen Zimemrn aus- und beim nach

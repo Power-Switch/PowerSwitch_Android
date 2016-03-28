@@ -57,9 +57,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT;
-import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling
@@ -165,19 +163,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         updateUI();
     }
 
-    private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(spinnerEventType)
-                .setUseAutoRadius(false)
-                .setRadius(64 * 3)
-                .setDismissOnTouch(true)
-                .setDismissText(getString(R.string.tutorial__got_it))
-                .setContentText(getString(R.string.tutorial__sleep_as_android_explanation))
-                .singleUse(TutorialConstants.SLEEP_AS_ANDROID_KEY)
-                .setDelay(500)
-                .show();
-    }
-
     private void updateUI() {
         refreshActions();
     }
@@ -217,8 +202,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
         }
-
-        showTutorial();
     }
 
     @Override

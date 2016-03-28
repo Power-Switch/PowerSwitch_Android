@@ -33,7 +33,6 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.constants.AlarmClockConstants;
-import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -122,15 +121,15 @@ public class AlarmClockTabFragment extends Fragment {
             dummyView = new View(getContext());
         }
 
-        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(tabIndex).toString());
+        String showcaseKey = TutorialHelper.getAlarmClockTabKey(customTabAdapter.getPageTitle(tabIndex).toString());
 
         String contentText;
         switch (tabIndex) {
-            case SettingsConstants.ROOMS_TAB_INDEX:
-                contentText = getString(R.string.tutorial__room_explanation);
+            case AlarmClockConstants.STOCK_TAB_INDEX:
+                contentText = getString(R.string.tutorial__stock_alarm_clock_explanation);
                 break;
-            case SettingsConstants.SCENES_TAB_INDEX:
-                contentText = getString(R.string.tutorial__scene_explanation);
+            case AlarmClockConstants.SAA_TAB_INDEX:
+                contentText = getString(R.string.tutorial__sleep_as_android_explanation);
                 break;
             default:
                 return;

@@ -37,9 +37,17 @@
         switching a single receiver or switching a hole room to activating a scene.\n
         \nAn example could be the coffee machine, that turns on every morning at 6:00 am during the work week.
     </string>
+    <string name="tutorial__stock_alarm_clock_explanation">In this tab you can configure actions for the stock alarm clock
+        app.\n
+        \nJust like with timers you can add receiver, room and scene actions. Possible events are the ringing alarm,
+        snoozing and disabling an active alarm.\n
+        \nAn example would be turning on your bedside lamp when an alarm goes off, turning the light off again when
+        you snooze the alarm and when you finally disable the alarm to stand up the light goes on again and the
+        coffee machine starts to work.
+    </string>
     <string name="tutorial__sleep_as_android_explanation">In this tab you can configure actions for the alarm clock
         app \"Sleep As Android\".\n
-        \nJust like with timers you can add receiver, room and scene actions. Possible events are the ringing alarm,
+        \nConfiguration is just like with stock alarms. Possible events are the ringing alarm,
         snoozing and disabling an active alarm.\n
         \nAn example would be turning on your bedside lamp when an alarm goes off, turning the light off again when
         you snooze the alarm and when you finally disable the alarm to stand up the light goes on again and the

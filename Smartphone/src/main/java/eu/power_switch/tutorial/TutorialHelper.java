@@ -43,4 +43,8 @@ public class TutorialHelper {
     public static String getSettingsTabKey(String pageTitle) {
         return TutorialConstants.SETTINGS_TABS_KEY_PREFIX + pageTitle;
     }
+
+    public static String getAlarmClockTabKey(String pageTitle) {
+        return TutorialConstants.ALARM_CLOCK_TABS_KEY_PREFIX + pageTitle;
+    }
 }
