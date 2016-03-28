@@ -84,9 +84,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_gateway_settings, container, false);
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         final View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -263,6 +261,10 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
         menu.findItem(R.id.search_gateways).setIcon(IconicsHelper.getRefreshIcon(getActivity(), color));
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            menu.findItem(R.id.create_gateway).setVisible(false).setEnabled(false);
+        }
     }
 
     @Override

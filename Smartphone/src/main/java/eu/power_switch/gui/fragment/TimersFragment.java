@@ -82,9 +82,7 @@ public class TimersFragment extends RecyclerViewFragment {
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_timers, container, false);
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -176,6 +174,10 @@ public class TimersFragment extends RecyclerViewFragment {
         inflater.inflate(R.menu.timer_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_timer).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            menu.findItem(R.id.create_timer).setVisible(false).setEnabled(false);
+        }
     }
 
     @Override

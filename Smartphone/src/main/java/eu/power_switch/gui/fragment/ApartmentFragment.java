@@ -82,10 +82,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
-
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         recyclerViewApartments = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -177,6 +174,10 @@ public class ApartmentFragment extends RecyclerViewFragment {
         inflater.inflate(R.menu.apartment_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_apartment).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            menu.findItem(R.id.create_apartment).setVisible(false).setEnabled(false);
+        }
     }
 
     @Override

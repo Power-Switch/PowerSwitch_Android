@@ -80,9 +80,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_custom_geofences, container, false);
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
@@ -169,6 +167,10 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
         inflater.inflate(R.menu.custom_geofences_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            menu.findItem(R.id.create_geofence).setVisible(false).setEnabled(false);
+        }
     }
 
     @Override

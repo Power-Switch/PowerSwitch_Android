@@ -101,10 +101,7 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_backup, container, false);
-
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -314,6 +311,10 @@ public class BackupFragment extends RecyclerViewFragment {
         inflater.inflate(R.menu.backup_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            menu.findItem(R.id.create_backup).setVisible(false).setEnabled(false);
+        }
     }
 
     @Override

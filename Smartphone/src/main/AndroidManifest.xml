@@ -204,31 +204,49 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".alarm_clock.stock.IntentReceiver">
+        <receiver
+            android:name="eu.power_switch.alarm_clock.stock.IntentReceiver"
+            android:enabled="true"
+            android:exported="true">
             <!-- Other Clock Apps -->
             <intent-filter>
                 <!-- Stock App -->
+                <action android:name="com.android.alarmclock.ALARM_ALERT"/>
+                <action android:name="com.android.alarmclock.ALARM_DONE"/>
+                <action android:name="com.google.android.deskclock.ALARM_DONE"/>
+                <action android:name="com.google.android.deskclock.ALARM_ALERT"/>
                 <action android:name="com.android.deskclock.ALARM_ALERT"/>
                 <action android:name="com.android.deskclock.ALARM_DISMISS"/>
                 <action android:name="com.android.deskclock.ALARM_SNOOZE"/>
 
                 <!-- Samsung -->
                 <action android:name="com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT"/>
+                <action android:name="com.samsung.sec.android.clockpackage.alarm.ALARM_DONE"/>
 
                 <!-- HTC -->
                 <action android:name="com.htc.android.worldclock.ALARM_ALERT"/>
+                <action android:name="com.htc.android.worldclock.ALARM_DONE"/>
 
                 <!-- SONY -->
                 <action android:name="com.sonyericsson.alarm.ALARM_ALERT"/>
+                <action android:name="com.sonyericsson.alarm.ALARM_DONE"/>
 
                 <!-- ZTE -->
                 <action android:name="zte.com.cn.alarmclock.ALARM_ALERT"/>
 
                 <!-- Motorola -->
                 <action android:name="com.motorola.blur.alarmclock.ALARM_ALERT"/>
+                <action android:name="com.motorola.blur.alarmclock.ALARM_DONE"/>
 
                 <!-- LG -->
                 <action android:name="com.lge.alarm.alarmclocknew.ALARM_ALERT"/>
+                <action android:name="com.lge.clock.ALARM_ALERT"/>
+                <action android:name="com.lge.clock.ALARM_DONE"/>
+
+                <!-- Night Clock -->
+                <action android:name="com.neddashfox.nightclockdonate.ALARM_ALERT"/>
+                <action android:name="com.neddashfox.nightclockdonate.ALARM_DONE"/>
+
             </intent-filter>
         </receiver>
         <receiver android:name=".alarm_clock.sleep_as_android.IntentReceiver">

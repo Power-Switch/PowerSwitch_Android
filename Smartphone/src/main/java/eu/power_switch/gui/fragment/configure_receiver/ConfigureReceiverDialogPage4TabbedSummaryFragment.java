@@ -50,6 +50,7 @@ import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
@@ -58,6 +59,7 @@ import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
@@ -345,7 +347,8 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        Room room = DatabaseHandler.getRoom(currentRoomName);
+        Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+        Room room = apartment.getRoom(currentRoomName);
         String receiverName = currentName;
         String modelName = currentModel;
 
@@ -362,18 +365,20 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
                     dipValues.add(dipSwitch.isChecked());
                 }
 
-                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, dipValues, room.getId());
+                receiver = (Receiver) constructor.newInstance(
+                        getActivity(), currentId, receiverName, dipValues, room.getId());
                 break;
             case MASTER_SLAVE:
-                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentMaster, currentSlave, room
-                        .getId());
+                receiver = (Receiver) constructor.newInstance(
+                        getActivity(), currentId, receiverName, currentMaster, currentSlave, room.getId());
                 break;
             case UNIVERSAL:
-                receiver = new UniversalReceiver(getActivity(), currentId, currentName, currentUniversalButtons,
-                        room.getId());
+                receiver = new UniversalReceiver(
+                        getActivity(), currentId, currentName, currentUniversalButtons,room.getId());
                 break;
             case AUTOPAIR:
-                receiver = (Receiver) constructor.newInstance(getActivity(), currentId, receiverName, currentSeed, room.getId());
+                receiver = (Receiver) constructor.newInstance(
+                        getActivity(), currentId, receiverName, currentSeed, room.getId());
                 break;
         }
 

@@ -23,6 +23,8 @@ import java.util.Set;
 import eu.power_switch.shared.Sets;
 
 /**
+ * Class holding constants related to alarm clock features
+ * <p/>
  * Created by Markus on 20.02.2016.
  */
 public class AlarmClockConstants {
@@ -31,24 +33,58 @@ public class AlarmClockConstants {
     public static final int SAA_TAB_INDEX = 1;
 
     // Stock Android App
+    private static final String STOCK_OLD_TRIGGERED_INTENT = "com.android.alarmclock.ALARM_ALERT";
     private static final String STOCK_TRIGGERED_INTENT = "com.android.deskclock.ALARM_ALERT";
+    private static final String STOCK_ALT_TRIGGERED_INTENT = "com.google.android.deskclock.ALARM_ALERT";
+    private static final String STOCK_ALT_DISMISS_INTENT = "com.google.android.deskclock.ALARM_DONE";
     private static final String STOCK_DISMISS_INTENT = "com.android.deskclock.ALARM_DISMISS";
-    public static final Set<String> ALARM_DISMISSED_INTENTS = Sets.newHashSet(STOCK_DISMISS_INTENT);
+    private static final String STOCK_OLD_DISMISS_INTENT = "com.android.alarmclock.ALARM_DONE";
     private static final String STOCK_SNOOZED_INTENT = "com.android.deskclock.ALARM_SNOOZE";
-    public static final Set<String> ALARM_SNOOZED_INTENTS = Sets.newHashSet(STOCK_SNOOZED_INTENT);
+    public static final Set<String> ALARM_SNOOZED_INTENTS =
+            Sets.newHashSet(STOCK_SNOOZED_INTENT);
     // Samsung
     private static final String SAMSUNG_TRIGGERED_INTENT = "com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT";
+    private static final String SAMSUNG_DISMISS_INTENT = "com.samsung.sec.android.clockpackage.alarm.ALARM_DONE";
     // HTC
     private static final String HTC_TRIGGERED_INTENT = "com.htc.android.worldclock.ALARM_ALERT";
+    private static final String HTC_DISMISS_INTENT = "com.htc.android.worldclock.ALARM_DONE";
     // Sony
     private static final String SONY_TRIGGERED_INTENT = "com.sonyericsson.alarm.ALARM_ALERT";
+    private static final String SONY_DISMISS_INTENT = "com.sonyericsson.alarm.ALARM_DONE";
     // ZTE
     private static final String ZTE_TRIGGERED_INTENT = "zte.com.cn.alarmclock.ALARM_ALERT";
     // Motorola
     private static final String MOTOROLA_TRIGGERED_INTENT = "com.motorola.blur.alarmclock.ALARM_ALERT";
+    private static final String MOTOROLA_DISMISS_INTENT = "com.motorola.blur.alarmclock.ALARM_DONE";
     // LG
-    private static final String LG_TRIGGERED_INTENT = "com.lge.alarm.alarmclocknew.ALARM_ALERT";
-    public static final Set<String> ALARM_TRIGGERED_INTENTS = Sets.newHashSet(STOCK_TRIGGERED_INTENT, SAMSUNG_TRIGGERED_INTENT, HTC_TRIGGERED_INTENT, SONY_TRIGGERED_INTENT, ZTE_TRIGGERED_INTENT, MOTOROLA_TRIGGERED_INTENT, LG_TRIGGERED_INTENT);
+    private static final String LG_OLD_TRIGGERED_INTENT = "com.lge.alarm.alarmclocknew.ALARM_ALERT";
+    private static final String LG_TRIGGERED_INTENT = "com.lge.clock.ALARM_ALERT";
+    private static final String LG_DISMISS_INTENT = "com.lge.clock.ALARM_DONE";
+    // Night Clock
+    private static final String NIGHT_CLOCK_TRIGGERED_INTENT = "com.neddashfox.nightclockdonate.ALARM_ALERT";
+    public static final Set<String> ALARM_TRIGGERED_INTENTS =
+            Sets.newHashSet(STOCK_OLD_TRIGGERED_INTENT,
+                    STOCK_TRIGGERED_INTENT,
+                    STOCK_ALT_TRIGGERED_INTENT,
+                    SAMSUNG_TRIGGERED_INTENT,
+                    HTC_TRIGGERED_INTENT,
+                    SONY_TRIGGERED_INTENT,
+                    ZTE_TRIGGERED_INTENT,
+                    MOTOROLA_TRIGGERED_INTENT,
+                    LG_OLD_TRIGGERED_INTENT,
+                    LG_TRIGGERED_INTENT,
+                    NIGHT_CLOCK_TRIGGERED_INTENT);
+    private static final String NIGHT_CLOCK_DISMISS_INTENT = "com.neddashfox.nightclockdonate.ALARM_DONE";
+    public static final Set<String> ALARM_DISMISSED_INTENTS =
+            Sets.newHashSet(STOCK_DISMISS_INTENT,
+                    STOCK_ALT_DISMISS_INTENT,
+                    STOCK_OLD_DISMISS_INTENT,
+                    SAMSUNG_DISMISS_INTENT,
+                    HTC_DISMISS_INTENT,
+                    SONY_DISMISS_INTENT,
+                    MOTOROLA_DISMISS_INTENT,
+                    LG_DISMISS_INTENT,
+                    NIGHT_CLOCK_DISMISS_INTENT);
 
     /**
      * Private Constructor

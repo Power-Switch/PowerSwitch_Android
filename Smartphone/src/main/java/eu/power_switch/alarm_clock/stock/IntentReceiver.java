@@ -41,7 +41,8 @@ public class IntentReceiver extends BroadcastReceiver {
         Log.d(this, intent);
 
         try {
-            if (AlarmClockConstants.ALARM_TRIGGERED_INTENTS.contains(intent.getAction())) {
+            if (AlarmClockConstants.ALARM_TRIGGERED_INTENTS.contains(intent.getAction()) ||
+                    intent.getAction().toLowerCase().endsWith(".ALARM_ALERT".toLowerCase())) {
                 Log.d("IntentReceiver", "Alarm triggered!");
                 ActionHandler.execute(context, AlarmClockConstants.Event.ALARM_TRIGGERED);
             } else if (AlarmClockConstants.ALARM_SNOOZED_INTENTS.contains(intent.getAction())) {

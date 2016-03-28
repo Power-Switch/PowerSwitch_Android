@@ -25,6 +25,8 @@
 
     <string name="event_type">Event Typ:</string>
 
+    <string name="alarm_clock_hint">Achtung: Da es keine offizielle API zum abfangen von Wecker Events gibt, gibt es keine Garantie, dass die Wecker App deiner Wahl Events auslöst</string>
+
     <string name="stock">System</string>
 
 </resources>

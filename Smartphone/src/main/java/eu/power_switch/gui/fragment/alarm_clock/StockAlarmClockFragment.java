@@ -78,11 +78,9 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateViewEvent(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_sleep_as_android, container, false);
+        rootView = inflater.inflate(R.layout.fragment_stock_alarm_clock, container, false);
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
-            setHasOptionsMenu(true);
-        }
+        setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -242,6 +240,10 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         inflater.inflate(R.menu.sleep_as_android_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+
+        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+            menu.findItem(R.id.add_action).setVisible(false).setEnabled(false);
+        }
     }
 
 
