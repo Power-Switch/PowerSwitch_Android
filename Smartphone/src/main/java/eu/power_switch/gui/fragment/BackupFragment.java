@@ -312,7 +312,7 @@ public class BackupFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             menu.findItem(R.id.create_backup).setVisible(false).setEnabled(false);
         }
     }
@@ -320,7 +320,7 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

@@ -174,7 +174,7 @@ public class ScenesFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_scene).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             menu.findItem(R.id.create_scene).setVisible(false).setEnabled(false);
         }
     }
@@ -182,7 +182,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

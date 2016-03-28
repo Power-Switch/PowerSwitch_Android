@@ -39,7 +39,7 @@ public class SettingsConstants {
     public static final String STARTUP_DEFAULT_TAB_KEY = "startupDefaultTab";
     public static final String SHOW_ROOM_ALL_ON_OFF_KEY = "showRoomAllOnOff";
     public static final String HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY = "highlightLastActivatedButton";
-    public static final String HIDE_ADD_FAB_KEY = "hideAddFAB";
+    public static final String USE_OPTIONS_MENU_INSTEAD_OF_FAB_KEY = "hideAddFAB";
     public static final String AUTO_COLLAPSE_ROOMS_KEY = "autoCollapseRooms";
     public static final String AUTO_COLLAPSE_TIMERS_KEY = "autoCollapseTimers";
     public static final String THEME_KEY = "theme";

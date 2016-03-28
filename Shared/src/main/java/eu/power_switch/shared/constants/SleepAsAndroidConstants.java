@@ -18,6 +18,8 @@
 
 package eu.power_switch.shared.constants;
 
+import java.util.NoSuchElementException;
+
 /**
  * Created by Markus on 20.02.2016.
  */
@@ -58,7 +60,8 @@ public class SleepAsAndroidConstants {
                     return e;
                 }
             }
-            return null;
+
+            throw new NoSuchElementException("No event with id: " + id);
         }
 
         public int getId() {

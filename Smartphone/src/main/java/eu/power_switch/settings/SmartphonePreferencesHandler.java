@@ -42,7 +42,7 @@ public class SmartphonePreferencesHandler {
     private static String backupPathCache;
     private static boolean showRoomAllOnOffCache;
     private static int startupDefaultTabCache;
-    private static boolean hideAddFABCache;
+    private static boolean hideUseOptionsMenuInsteadOfFABCache;
     private static boolean autoCollapseRoomsCache;
     private static boolean autoCollapseTimersCache;
     private static int themeCache;
@@ -88,7 +88,7 @@ public class SmartphonePreferencesHandler {
                         .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
         showRoomAllOnOffCache = sharedPreferences.getBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
         startupDefaultTabCache = sharedPreferences.getInt(SettingsConstants.STARTUP_DEFAULT_TAB_KEY, SettingsConstants.ROOMS_TAB_INDEX);
-        hideAddFABCache = sharedPreferences.getBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, false);
+        hideUseOptionsMenuInsteadOfFABCache = sharedPreferences.getBoolean(SettingsConstants.USE_OPTIONS_MENU_INSTEAD_OF_FAB_KEY, false);
         autoCollapseRoomsCache = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
         autoCollapseTimersCache = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, false);
         themeCache = sharedPreferences.getInt(SettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
@@ -114,7 +114,7 @@ public class SmartphonePreferencesHandler {
         Log.d(SmartphonePreferencesHandler.class, "VibrateOnButtonPress: " + vibrateOnButtonPressCache);
         Log.d(SmartphonePreferencesHandler.class, "VibrationDuration: " + vibrationDurationCache);
         Log.d(SmartphonePreferencesHandler.class, "HighlightLastActivatedButton: " + highlightLastActivatedButtonCache);
-        Log.d(SmartphonePreferencesHandler.class, "HideAddFAB: " + hideAddFABCache);
+        Log.d(SmartphonePreferencesHandler.class, "HideAddFAB: " + hideUseOptionsMenuInsteadOfFABCache);
         Log.d(SmartphonePreferencesHandler.class, "StartupDefaultTab: " + startupDefaultTabCache);
         Log.d(SmartphonePreferencesHandler.class, "UseCompactDrawer: " + useCompactDrawerCache);
         Log.d(SmartphonePreferencesHandler.class, "CurrentApartmentId: " + currentApartmentIdCache);
@@ -338,26 +338,26 @@ public class SmartphonePreferencesHandler {
     }
 
     /**
-     * Retrieves setting for hiding FAB buttons
+     * Retrieves setting for using options menu instead of FAB buttons
      *
      * @return true if enabled
      */
-    public static boolean getHideAddFAB() {
-        return hideAddFABCache;
+    public static boolean getUseOptionsMenuInsteadOfFAB() {
+        return hideUseOptionsMenuInsteadOfFABCache;
     }
 
     /**
-     * Sets setting for hiding FAB buttons
+     * Sets setting for using options menu instead of FAB buttons
      *
-     * @param bool true if enabled
+     * @param bool true if enabled (using options menu)
      */
-    public static void setHideAddFAB(boolean bool) {
-        Log.d(SmartphonePreferencesHandler.class, "setHideAddFAB: " + bool);
+    public static void setUseOptionsMenuInsteadOfFAB(boolean bool) {
+        Log.d(SmartphonePreferencesHandler.class, "setUseOptionsMenuInsteadOfFAB: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.HIDE_ADD_FAB_KEY, bool);
+        editor.putBoolean(SettingsConstants.USE_OPTIONS_MENU_INSTEAD_OF_FAB_KEY, bool);
         editor.apply();
 
-        hideAddFABCache = bool;
+        hideUseOptionsMenuInsteadOfFABCache = bool;
     }
 
     /**

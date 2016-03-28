@@ -27,6 +27,12 @@
 
     <string name="alarm_clock_hint">Warning: Because there is no official API for fetching alarm clock events there is no guarantee that the clock apps of your choice will trigger these actions.</string>
 
+    <string-array name="stock_alarm_clock_event_names">
+        <item>@string/alarm_triggered</item>
+        <!--<item>@string/alarm_snoozed</item>-->
+        <item>@string/alarm_dismissed</item>
+    </string-array>
+
     <string-array name="sleep_as_android_event_names">
         <item>@string/alarm_triggered</item>
         <item>@string/alarm_snoozed</item>

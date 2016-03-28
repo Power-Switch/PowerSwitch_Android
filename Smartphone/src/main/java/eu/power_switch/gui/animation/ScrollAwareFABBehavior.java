@@ -56,7 +56,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      * @param floatingActionButton FAB
      */
     private void animateOut(final FloatingActionButton floatingActionButton) {
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             return;
         }
 
@@ -107,7 +107,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      */
     //
     private void animateIn(FloatingActionButton floatingActionButton) {
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             return;
         }
         floatingActionButton.setVisibility(View.VISIBLE);

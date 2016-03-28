@@ -180,9 +180,8 @@ public class RoomsFragment extends RecyclerViewFragment {
         menu.findItem(R.id.create_receiver).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
         menu.findItem(R.id.reorder_rooms).setIcon(IconicsHelper.getReorderIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             menu.findItem(R.id.create_receiver).setVisible(false).setEnabled(false);
-//            menu.removeItem(R.id.create_receiver);
         }
 
     }
@@ -190,7 +189,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             addReceiverFAB.setVisibility(View.GONE);
         } else {
             addReceiverFAB.setVisibility(View.VISIBLE);

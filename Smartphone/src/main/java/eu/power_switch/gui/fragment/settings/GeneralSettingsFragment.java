@@ -123,7 +123,7 @@ public class GeneralSettingsFragment extends Fragment {
                         SmartphonePreferencesHandler.setShowRoomAllOnOff(isChecked);
                         break;
                     case R.id.checkBox_hideAddFAB:
-                        SmartphonePreferencesHandler.setHideAddFAB(isChecked);
+                        SmartphonePreferencesHandler.setUseOptionsMenuInsteadOfFAB(isChecked);
                         break;
                     case R.id.checkBox_vibrateOnButtonPress:
                         SmartphonePreferencesHandler.setVibrateOnButtonPress(isChecked);
@@ -364,7 +364,7 @@ public class GeneralSettingsFragment extends Fragment {
         autoCollapseRooms.setChecked(SmartphonePreferencesHandler.getAutoCollapseRooms());
         autoCollapseTimers.setChecked(SmartphonePreferencesHandler.getAutoCollapseTimers());
         showRoomAllOnOffButtons.setChecked(SmartphonePreferencesHandler.getShowRoomAllOnOff());
-        hideAddFAB.setChecked(SmartphonePreferencesHandler.getHideAddFAB());
+        hideAddFAB.setChecked(SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB());
         highlightLastActivatedButton.setChecked(SmartphonePreferencesHandler.getHighlightLastActivatedButton());
         vibrateOnButtonPress.setChecked(SmartphonePreferencesHandler.getVibrateOnButtonPress());
         vibrationDuration.setText(String.valueOf(SmartphonePreferencesHandler.getVibrationDuration()));

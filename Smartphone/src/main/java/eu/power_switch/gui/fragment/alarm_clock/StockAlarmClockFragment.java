@@ -86,7 +86,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
 
         spinnerEventType = (Spinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.sleep_as_android_event_names, android.R.layout.simple_spinner_item);
+                R.array.stock_alarm_clock_event_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEventType.setAdapter(adapter);
         SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
@@ -182,7 +182,15 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
     }
 
     private void refreshActions() {
-        currentEventType = Event.getById(spinnerEventType.getSelectedItemPosition());
+        switch (spinnerEventType.getSelectedItemPosition()) {
+            case 0:
+                currentEventType = Event.getById(Event.ALARM_TRIGGERED.getId());
+                break;
+            case 1:
+                currentEventType = Event.getById(Event.ALARM_DISMISSED.getId());
+                break;
+        }
+
         updateListContent();
     }
 
@@ -200,7 +208,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
@@ -241,7 +249,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (SmartphonePreferencesHandler.getHideAddFAB()) {
+        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             menu.findItem(R.id.add_action).setVisible(false).setEnabled(false);
         }
     }

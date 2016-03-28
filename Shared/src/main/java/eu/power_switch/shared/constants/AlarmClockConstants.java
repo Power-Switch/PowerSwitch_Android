@@ -18,6 +18,7 @@
 
 package eu.power_switch.shared.constants;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import eu.power_switch.shared.Sets;
@@ -112,7 +113,7 @@ public class AlarmClockConstants {
                     return e;
                 }
             }
-            return null;
+            throw new NoSuchElementException("No Event with id: " + id);
         }
 
         public int getId() {
