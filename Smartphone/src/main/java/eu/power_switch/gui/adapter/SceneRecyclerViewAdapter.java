@@ -167,8 +167,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                         buttonRow, false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     buttonView.setElevation(0);
+                    buttonView.setStateListAnimator(null);
                 }
-                buttonView.setStateListAnimator(null);
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);
 
