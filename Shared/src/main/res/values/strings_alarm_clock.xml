@@ -42,5 +42,7 @@
     <string name="stock">Stock</string>
     <string name="sleep_as_android">Sleep As Android</string>
 
+    <string name="sleep_as_android_not_installed">Sleep As Android is an advanced Alarm Clock App with sleep monitoring, snoring alarm and more. It is not installed on your device.\nGet it from the Play Store:</string>
+
 
 </resources>

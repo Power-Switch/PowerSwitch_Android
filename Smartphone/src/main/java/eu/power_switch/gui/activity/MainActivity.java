@@ -67,7 +67,6 @@ import java.util.List;
 import java.util.Stack;
 
 import eu.power_switch.R;
-import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHelper;
@@ -488,7 +487,6 @@ public class MainActivity extends AppCompatActivity {
                         .sizeDp(24))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ALARM_CLOCK)
-                .withEnabled(SleepAsAndroidHelper.isInstalled(this))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {

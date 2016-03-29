@@ -29,4 +29,6 @@
 
     <string name="stock">System</string>
 
+    <string name="sleep_as_android_not_installed">Sleep As Android ist eine Wecker App mit mit Schlafaufzeichnung, Schnarchalarm und weiteren Funktionen. Die App ist allerdings nicht auf deinem Gerät installiert.\nDu kannst sie aus dem Play Store herunterladen:</string>
+
 </resources>

@@ -39,13 +39,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
+import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -73,6 +77,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     private ActionRecyclerViewAdapter recyclerViewAdapter;
     private Spinner spinnerEventType;
     private FloatingActionButton addActionFAB;
+    private LinearLayout layout_installed;
+    private LinearLayout layout_not_installed;
 
     @Override
     public void onCreateViewEvent(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,6 +87,17 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
+
+        layout_installed = (LinearLayout) rootView.findViewById(R.id.layout_installed);
+        layout_not_installed = (LinearLayout) rootView.findViewById(R.id.layout_not_installed);
+
+        IconicsImageView getFromPlayStore = (IconicsImageView) rootView.findViewById(R.id.get_from_play_store);
+        getFromPlayStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SleepAsAndroidHelper.openPlayStorePage(getActivity());
+            }
+        });
 
         spinnerEventType = (Spinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -201,6 +218,14 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
+        }
+
+        if (SleepAsAndroidHelper.isInstalled(getActivity())) {
+            layout_installed.setVisibility(View.VISIBLE);
+            layout_not_installed.setVisibility(View.GONE);
+        } else {
+            layout_installed.setVisibility(View.GONE);
+            layout_not_installed.setVisibility(View.VISIBLE);
         }
     }
 
