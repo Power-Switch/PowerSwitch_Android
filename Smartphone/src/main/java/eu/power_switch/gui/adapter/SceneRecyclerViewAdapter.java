@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.adapter;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -81,7 +80,6 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         return new SceneRecyclerViewAdapter.ViewHolder(itemView);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Scene scene = scenes.get(holder.getAdapterPosition());
