@@ -165,12 +165,12 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             for (final Button button : sceneItem.getReceiver().getButtons()) {
                 final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button,
                         buttonRow, false);
-                buttonView.setEnabled(false);
-                buttonView.setStateListAnimator(null);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     buttonView.setElevation(0);
                 }
+                buttonView.setStateListAnimator(null);
                 buttonView.setText(button.getName());
+                buttonView.setEnabled(false);
 
                 final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
                 final int inactiveColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.textColorInactive);
