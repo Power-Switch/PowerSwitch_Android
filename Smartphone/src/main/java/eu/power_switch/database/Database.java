@@ -52,7 +52,7 @@ import eu.power_switch.database.table.timer.TimerWeekdayTable;
 import eu.power_switch.database.table.widget.ReceiverWidgetTable;
 import eu.power_switch.database.table.widget.RoomWidgetTable;
 import eu.power_switch.database.table.widget.SceneWidgetTable;
-import eu.power_switch.shared.log.Log;
+import eu.power_switch.gui.StatusMessageHandler;
 
 /**
  * This Class is responsible for initializing and upgrading all Database tables
@@ -62,8 +62,11 @@ public class Database extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "PSdatabase.db";
     private static final int DATABASE_VERSION = 17;
 
+    private Context context;
+
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     @Override
@@ -113,7 +116,7 @@ public class Database extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            StatusMessageHandler.showErrorMessage(context, e);
         } finally {
             db.endTransaction();
         }
@@ -284,7 +287,7 @@ public class Database extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            StatusMessageHandler.showErrorMessage(context, e);
         } finally {
             db.endTransaction();
         }
