@@ -18,8 +18,9 @@ local.properties
 /Smartphone/*.apk
 /Smartphone/*.zip
 
+
 # Gradle
-gradle
+/gradle/wrapper/gradle-wrapper.jar
 .gradle
 gradlew
 gradlew.bat
