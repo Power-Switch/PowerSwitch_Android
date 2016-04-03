@@ -41,6 +41,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.database.table.alarm_clock.stock.*;
 
 /**
  * Provides database methods for managing Actions
@@ -211,6 +212,8 @@ abstract class ActionHandler {
         // delete from every relational table too
         DatabaseHandler.database.delete(TimerActionTable.TABLE_NAME, TimerActionTable.COLUMN_ACTION_ID +
                 "=" + actionId, null);
+		DatabaseHandler.database.delete(AlarmClockActionTable.TABLE_NAME, AlarmClockActionTable.COLUMN_ACTION_ID + 
+				"=" + actionId, null);
         DatabaseHandler.database.delete(SleepAsAndroidActionTable.TABLE_NAME, SleepAsAndroidActionTable.COLUMN_ACTION_ID +
                 "=" + actionId, null);
         DatabaseHandler.database.delete(GeofenceActionTable.TABLE_NAME, GeofenceActionTable.COLUMN_ACTION_ID +
