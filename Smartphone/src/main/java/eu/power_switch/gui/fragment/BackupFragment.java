@@ -57,6 +57,7 @@ import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -65,6 +66,7 @@ import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -140,6 +142,10 @@ public class BackupFragment extends RecyclerViewFragment {
                                 try {
                                     BackupHandler backupHandler = new BackupHandler(getActivity());
                                     backupHandler.restoreBackup(backup.getName());
+
+                                    DeveloperPreferencesHandler.forceRefresh();
+                                    SmartphonePreferencesHandler.forceRefresh();
+                                    WearablePreferencesHandler.forceRefresh();
 
                                     // restart app to apply
                                     getActivity().finish();
