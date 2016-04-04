@@ -21,7 +21,7 @@
     package="eu.power_switch"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="89"
+    android:versionCode="90"
     android:versionName="@string/app_version">
 
     <!-- Smartphone ONLY Permissions -->
