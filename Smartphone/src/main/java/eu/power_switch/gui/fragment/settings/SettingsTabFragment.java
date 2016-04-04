@@ -95,7 +95,6 @@ public class SettingsTabFragment extends Fragment {
         });
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
-        tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();

@@ -218,7 +218,6 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         tabViewPager.setAdapter(customTabAdapter);
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
 
-        tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
 
         if (getTabAdapter().getCount() == 1) {

@@ -97,6 +97,9 @@
         Hause kommen im Flur und dem Wohnzimmer automatisch einschalten.
     </string>
 
+    <string name="tutorial__phone_call_explanation"></string>
+    <string name="tutorial__phone_sms_explanation"></string>
+
     <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>
 
     <string name="tutorial__first_add_room">Erstelle als erstes einen Raum, um anschließend deine Funksteckdosen einem Raum

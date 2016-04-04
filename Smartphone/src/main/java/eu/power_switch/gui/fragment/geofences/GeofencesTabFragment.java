@@ -98,7 +98,6 @@ public class GeofencesTabFragment extends Fragment {
         skipTutorial = true;
 
         tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
-        tabLayout.setTabsFromPagerAdapter(customTabAdapter);
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();

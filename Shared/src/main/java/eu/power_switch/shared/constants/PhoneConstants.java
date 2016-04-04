@@ -16,39 +16,25 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.tutorial;
-
-import eu.power_switch.shared.constants.TutorialConstants;
+package eu.power_switch.shared.constants;
 
 /**
- * Helper class for Tutorial specific tasks
+ * Class holding constants related to Settings Call and SMS stuff
  * <p/>
- * Created by Markus on 12.12.2015.
+ * Created by Markus on 05.04.2016.
  */
-public class TutorialHelper {
+public class PhoneConstants {
+
+    // Tabs
+    public static final int CALL_TAB_INDEX = 0;
+    public static final int SMS_TAB_INDEX = 1;
 
     /**
      * Private Constructor
      *
      * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
-    private TutorialHelper() {
+    private PhoneConstants() {
         throw new UnsupportedOperationException("This class is non-instantiable");
-    }
-
-    public static String getMainTabKey(String pageTitle) {
-        return TutorialConstants.MAIN_TABS_KEY_PREFIX + pageTitle;
-    }
-
-    public static String getSettingsTabKey(String pageTitle) {
-        return TutorialConstants.SETTINGS_TABS_KEY_PREFIX + pageTitle;
-    }
-
-    public static String getAlarmClockTabKey(String pageTitle) {
-        return TutorialConstants.ALARM_CLOCK_TABS_KEY_PREFIX + pageTitle;
-    }
-
-    public static String getPhoneTabKey(String pageTitle) {
-        return TutorialConstants.PHONE_TABS_KEY_PREFIX + pageTitle;
     }
 }
