@@ -90,7 +90,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
 
         recyclerViewApartments.setAdapter(apartmentArrayAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.apartments_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewApartments.setLayoutManager(layoutManager);
         apartmentArrayAdapter.setOnItemClickListener(new ApartmentRecyclerViewAdapter.OnItemClickListener() {
             @Override
@@ -214,12 +214,17 @@ public class ApartmentFragment extends RecyclerViewFragment {
     }
 
     @Override
+    protected int getSpanCount() {
+        return getResources().getInteger(R.integer.apartments_grid_span_count);
+    }
+
+    @Override
     public List refreshListData() throws Exception {
         apartments.clear();
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            apartments.addAll(playStoreModeDataModel.getApartments());
+            apartments.addAll(PlayStoreModeDataModel.getApartments());
         } else {
             apartments.addAll(DatabaseHandler.getAllApartments());
         }

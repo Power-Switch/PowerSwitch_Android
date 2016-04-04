@@ -182,7 +182,7 @@ public class BackupFragment extends RecyclerViewFragment {
         });
         recyclerViewBackups.setAdapter(backupArrayAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.backup_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewBackups.setLayoutManager(layoutManager);
 
         fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
@@ -358,6 +358,11 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return backupArrayAdapter;
+    }
+
+    @Override
+    protected int getSpanCount() {
+        return getResources().getInteger(R.integer.backup_grid_span_count);
     }
 
     @Override

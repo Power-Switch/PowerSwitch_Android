@@ -19,11 +19,14 @@
 package eu.power_switch.gui.fragment;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,6 +137,24 @@ public abstract class RecyclerViewFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager instanceof StaggeredGridLayoutManager) {
+            ((StaggeredGridLayoutManager) layoutManager).setSpanCount(getSpanCount());
+        } else if (layoutManager instanceof GridLayoutManager) {
+            ((GridLayoutManager) layoutManager).setSpanCount(getSpanCount());
+        }
+    }
+
+    /**
+     * Override this Method to set Span Count should be used for different screen resolutions
+     *
+     * @return span count
+     */
+    protected abstract int getSpanCount();
 
     protected abstract void onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container,
                                               @Nullable Bundle savedInstanceState);

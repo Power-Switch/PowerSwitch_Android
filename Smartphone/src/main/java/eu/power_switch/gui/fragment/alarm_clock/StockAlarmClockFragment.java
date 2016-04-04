@@ -141,7 +141,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         });
         recyclerViewActions.setAdapter(recyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.timer_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);
 
         addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
@@ -260,6 +260,11 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return recyclerViewAdapter;
+    }
+
+    @Override
+    protected int getSpanCount() {
+        return getResources().getInteger(R.integer.action_grid_span_count);
     }
 
     @Override

@@ -128,7 +128,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         });
         recyclerViewGateways.setAdapter(gatewayRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.gateway_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewGateways.setLayoutManager(layoutManager);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
@@ -289,6 +289,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return gatewayRecyclerViewAdapter;
+    }
+
+    @Override
+    protected int getSpanCount() {
+        return getResources().getInteger(R.integer.gateway_grid_span_count);
     }
 
     @Override

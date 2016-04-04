@@ -90,7 +90,7 @@ public class TimersFragment extends RecyclerViewFragment {
         recyclerViewTimers = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerViewTimers.setAdapter(timerRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.timer_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimers.setLayoutManager(layoutManager);
         timerRecyclerViewAdapter.setOnItemLongClickListener(new TimerRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
@@ -210,6 +210,11 @@ public class TimersFragment extends RecyclerViewFragment {
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
         return timerRecyclerViewAdapter;
+    }
+
+    @Override
+    protected int getSpanCount() {
+        return getResources().getInteger(R.integer.timer_grid_span_count);
     }
 
     @Override

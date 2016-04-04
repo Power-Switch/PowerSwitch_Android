@@ -90,7 +90,7 @@ public class ScenesFragment extends RecyclerViewFragment {
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes);
         recyclerViewScenes.setAdapter(sceneRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.scene_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewScenes.setLayoutManager(layoutManager);
 
         final RecyclerViewFragment recyclerViewFragment = this;
@@ -216,12 +216,17 @@ public class ScenesFragment extends RecyclerViewFragment {
     }
 
     @Override
+    protected int getSpanCount() {
+        return getResources().getInteger(R.integer.scene_grid_span_count);
+    }
+
+    @Override
     public List refreshListData() throws Exception {
         scenes.clear();
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            scenes.addAll(playStoreModeDataModel.getActiveApartment().getScenes());
+            scenes.addAll(PlayStoreModeDataModel.getActiveApartment().getScenes());
         } else {
             scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
         }

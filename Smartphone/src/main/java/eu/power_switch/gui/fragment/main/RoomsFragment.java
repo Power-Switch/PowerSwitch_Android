@@ -68,6 +68,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     private FloatingActionButton addReceiverFAB;
     private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
     private RecyclerView recyclerViewRooms;
+    private StaggeredGridLayoutManager layoutManager;
 
     /**
      * Used to notify Room Fragment (this) that Rooms have changed
@@ -92,8 +93,8 @@ public class RoomsFragment extends RecyclerViewFragment {
         recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms);
         recyclerViewRooms.setAdapter(roomsRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.room_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+        layoutManager = new StaggeredGridLayoutManager(
+                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewRooms.setLayoutManager(layoutManager);
 
         addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
@@ -222,12 +223,17 @@ public class RoomsFragment extends RecyclerViewFragment {
     }
 
     @Override
+    protected int getSpanCount() {
+        return getResources().getInteger(R.integer.room_grid_span_count);
+    }
+
+    @Override
     public List refreshListData() throws Exception {
         rooms.clear();
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            rooms.addAll(playStoreModeDataModel.getActiveApartment().getRooms());
+            rooms.addAll(PlayStoreModeDataModel.getActiveApartment().getRooms());
         } else {
             long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
             if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
