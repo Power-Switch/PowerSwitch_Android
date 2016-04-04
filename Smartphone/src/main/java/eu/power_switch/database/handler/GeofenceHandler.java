@@ -22,6 +22,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -29,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
@@ -82,6 +84,7 @@ abstract class GeofenceHandler {
      * @param id ID of Geofence
      * @return Geofence
      */
+    @NonNull
     protected static Geofence get(Long id) throws Exception {
         if (id == null) {
             return null;
@@ -93,6 +96,9 @@ abstract class GeofenceHandler {
 
         if (cursor.moveToFirst()) {
             geofence = dbToGeofence(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
         }
 
         cursor.close();

@@ -20,11 +20,13 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerTable;
@@ -148,6 +150,7 @@ abstract class TimerHandler {
      * @param timerId ID of Timer
      * @return Timer
      */
+    @NonNull
     protected static Timer get(Long timerId) throws Exception {
         Timer timer = null;
         Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS,
@@ -156,6 +159,9 @@ abstract class TimerHandler {
 
         if (cursor.moveToFirst()) {
             timer = dbToTimer(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(String.valueOf(timerId)));
         }
 
         cursor.close();

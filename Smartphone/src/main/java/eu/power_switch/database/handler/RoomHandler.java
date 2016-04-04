@@ -20,10 +20,12 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.Room;
@@ -126,6 +128,7 @@ abstract class RoomHandler {
      * @param name Name of Room
      * @return Room
      */
+    @NonNull
     protected static Room get(String name) throws Exception {
         Room room = null;
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_NAME + "=='" +
@@ -133,6 +136,9 @@ abstract class RoomHandler {
 
         if (cursor.moveToFirst()) {
             room = dbToRoom(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(name);
         }
 
         cursor.close();
@@ -145,6 +151,7 @@ abstract class RoomHandler {
      * @param name Name of Room
      * @return Room
      */
+    @NonNull
     protected static Room getCaseInsensitive(String name) throws Exception {
         Room room = null;
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_NAME + "=='" +
@@ -153,6 +160,9 @@ abstract class RoomHandler {
 
         if (cursor.moveToFirst()) {
             room = dbToRoom(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(name);
         }
 
         cursor.close();
@@ -165,6 +175,7 @@ abstract class RoomHandler {
      * @param id ID of Room
      * @return Room
      */
+    @NonNull
     protected static Room get(Long id) throws Exception {
         Room room = null;
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS,
@@ -173,6 +184,9 @@ abstract class RoomHandler {
         if (cursor.moveToFirst()) {
             room = dbToRoom(cursor);
             room.setCollapsed(SmartphonePreferencesHandler.getAutoCollapseRooms());
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
         }
 
         cursor.close();

@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
@@ -34,6 +35,7 @@ import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
 import eu.power_switch.database.table.action.SceneActionTable;
 import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
+import eu.power_switch.database.table.alarm_clock.stock.AlarmClockActionTable;
 import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
 import eu.power_switch.obj.Room;
@@ -41,7 +43,6 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.database.table.alarm_clock.stock.*;
 
 /**
  * Provides database methods for managing Actions
@@ -115,6 +116,7 @@ abstract class ActionHandler {
      * @param id ID of Action
      * @return Action
      */
+    @NonNull
     protected static Action get(long id) throws Exception {
         Action action = null;
         Cursor cursor = DatabaseHandler.database.query(ActionTable.TABLE_NAME, ActionTable.ALL_COLUMNS,
@@ -122,6 +124,9 @@ abstract class ActionHandler {
 
         if (cursor.moveToFirst()) {
             action = dbToAction(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
         }
 
         cursor.close();

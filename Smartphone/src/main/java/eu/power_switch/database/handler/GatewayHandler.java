@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.gateway.GatewaySsidTable;
@@ -150,6 +151,7 @@ abstract class GatewayHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
+    @NonNull
     protected static Gateway get(Long id) throws Exception {
         Gateway gateway = null;
         Cursor cursor = DatabaseHandler.database.query(GatewayTable.TABLE_NAME, GatewayTable.ALL_COLUMNS, GatewayTable.COLUMN_ID + "=" + id, null, null,
@@ -157,6 +159,9 @@ abstract class GatewayHandler {
 
         if (cursor.moveToFirst()) {
             gateway = dbToGateway(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
         }
 
         cursor.close();

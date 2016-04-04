@@ -20,9 +20,11 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.receiver.ReceiverTable;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
@@ -137,6 +139,7 @@ class ReceiverHandler {
      * @param id ID of Receiver
      * @return Receiver
      */
+    @NonNull
     protected static Receiver get(Long id) throws Exception {
         Receiver receiver = null;
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, ReceiverTable.COLUMN_ID + "="
@@ -144,6 +147,9 @@ class ReceiverHandler {
 
         if (cursor.moveToFirst()) {
             receiver = dbToReceiver(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
         }
 
         cursor.close();

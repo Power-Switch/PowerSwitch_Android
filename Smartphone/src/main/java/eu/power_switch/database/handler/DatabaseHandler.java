@@ -586,7 +586,7 @@ public final class DatabaseHandler {
      * @param name the name of the room
      * @return a room object
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Room getRoomCaseInsensitive(String name) throws Exception {
         openReadable();
@@ -608,7 +608,7 @@ public final class DatabaseHandler {
      * @param id the ID of the room
      * @return a room object
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Room getRoom(Long id) throws Exception {
         openReadable();
@@ -739,7 +739,7 @@ public final class DatabaseHandler {
      * @param id ID of the Receiver
      * @return Receiver, can be null
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Receiver getReceiver(Long id) throws Exception {
         openReadable();
@@ -784,7 +784,7 @@ public final class DatabaseHandler {
      * @param receiverName Name of Receiver
      * @return List of Receivers
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Receiver getReceiverByRoomId(Long roomId, String receiverName) throws Exception {
         openReadable();
@@ -866,7 +866,7 @@ public final class DatabaseHandler {
      * @param id ID of Button
      * @return Button
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Button getButton(Long id) throws Exception {
         openReadable();
@@ -995,7 +995,7 @@ public final class DatabaseHandler {
      * @param name Name of Scene
      * @return Scene
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Scene getScene(String name) throws Exception {
         openReadable();
@@ -1017,7 +1017,7 @@ public final class DatabaseHandler {
      * @param id ID of Scene
      * @return Scene
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Scene getScene(Long id) throws Exception {
         openReadable();
@@ -1194,7 +1194,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Gateway getGateway(Long id) throws Exception {
         openReadable();
@@ -1325,7 +1325,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static ReceiverWidget getReceiverWidget(int id) throws Exception {
         openReadable();
@@ -1384,7 +1384,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static RoomWidget getRoomWidget(int id) throws Exception {
         openReadable();
@@ -1443,7 +1443,7 @@ public final class DatabaseHandler {
      *
      * @param id WidgetId
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static SceneWidget getSceneWidget(int id) throws Exception {
         openWritable();
@@ -1467,7 +1467,7 @@ public final class DatabaseHandler {
      * @param id ID of Timer
      * @return Timer
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Timer getTimer(Long id) throws Exception {
         openReadable();
@@ -1799,7 +1799,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Geofence getGeofence(Long id) throws Exception {
         openReadable();

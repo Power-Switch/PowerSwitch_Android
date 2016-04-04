@@ -20,10 +20,12 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.scene.SceneTable;
 import eu.power_switch.obj.Scene;
@@ -100,6 +102,7 @@ abstract class SceneHandler {
      * @param name Name of Scene
      * @return Scene
      */
+    @NonNull
     protected static Scene get(String name) throws Exception {
         Scene scene = null;
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_NAME + "=='" + name + "'", null,
@@ -107,6 +110,9 @@ abstract class SceneHandler {
 
         if (cursor.moveToFirst()) {
             scene = dbToScene(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(name);
         }
 
         cursor.close();
@@ -119,6 +125,7 @@ abstract class SceneHandler {
      * @param id ID of Scene
      * @return Scene
      */
+    @NonNull
     protected static Scene get(Long id) throws Exception {
         Scene scene = null;
         Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_ID + "==" + id, null, null, null,
@@ -126,6 +133,9 @@ abstract class SceneHandler {
 
         if (cursor.moveToFirst()) {
             scene = dbToScene(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
         }
 
         cursor.close();

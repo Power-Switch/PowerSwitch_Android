@@ -20,10 +20,12 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
@@ -129,6 +131,7 @@ abstract class ApartmentHandler {
      * @param name Name of Apartment
      * @return Apartment
      */
+    @NonNull
     protected static Apartment get(String name) throws Exception {
         Apartment apartment = null;
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
@@ -137,6 +140,9 @@ abstract class ApartmentHandler {
 
         if (cursor.moveToFirst()) {
             apartment = dbToApartment(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(name);
         }
 
         cursor.close();
@@ -149,6 +155,7 @@ abstract class ApartmentHandler {
      * @param name Name of Apartment
      * @return Apartment
      */
+    @NonNull
     protected static Apartment getCaseInsensitive(String name) throws Exception {
         Apartment apartment = null;
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, ApartmentTable.ALL_COLUMNS, ApartmentTable.COLUMN_NAME + "=='" +
@@ -156,7 +163,11 @@ abstract class ApartmentHandler {
 
         if (cursor.moveToFirst()) {
             apartment = dbToApartment(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(name);
         }
+
         cursor.close();
         return apartment;
     }
@@ -167,6 +178,7 @@ abstract class ApartmentHandler {
      * @param id ID of Apartment
      * @return Apartment
      */
+    @NonNull
     protected static Apartment get(Long id) throws Exception {
         Apartment apartment = null;
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
@@ -175,6 +187,9 @@ abstract class ApartmentHandler {
 
         if (cursor.moveToFirst()) {
             apartment = dbToApartment(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
         }
 
         cursor.close();
@@ -217,13 +232,17 @@ abstract class ApartmentHandler {
      * @param apartmentId ID of Apartment
      * @return Name of Apartment, null if not found
      */
-    public static String getName(Long apartmentId) throws Exception {
+    @NonNull
+    protected static String getName(Long apartmentId) throws Exception {
         String[] columns = {ApartmentTable.COLUMN_NAME};
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_ID + "==" + apartmentId, null, null, null, null);
 
         String name = null;
         if (cursor.moveToFirst()) {
             name = cursor.getString(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(apartmentId));
         }
 
         cursor.close();
@@ -236,6 +255,7 @@ abstract class ApartmentHandler {
      * @param name Name of Apartment, ignoring case
      * @return ID of matching Apartment, might be null
      */
+    @NonNull
     public static Long getId(String name) throws Exception {
         String[] columns = {ApartmentTable.COLUMN_ID};
         Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_NAME + "=='" +
@@ -244,6 +264,9 @@ abstract class ApartmentHandler {
         Long id = null;
         if (cursor.moveToFirst()) {
             id = cursor.getLong(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(name);
         }
 
         cursor.close();

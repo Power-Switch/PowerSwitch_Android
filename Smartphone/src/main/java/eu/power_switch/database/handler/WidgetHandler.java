@@ -20,6 +20,9 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+
+import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.widget.ReceiverWidgetTable;
 import eu.power_switch.database.table.widget.RoomWidgetTable;
@@ -115,6 +118,7 @@ abstract class WidgetHandler {
      * @param widgetId
      * @return
      */
+    @NonNull
     protected static ReceiverWidget getReceiverWidget(int widgetId) throws Exception {
         ReceiverWidget receiverWidget = null;
         String[] widgetColumns = {ReceiverWidgetTable.COLUMN_WIDGET_APP_ID, ReceiverWidgetTable.COLUMN_ROOM_ID,
@@ -124,6 +128,9 @@ abstract class WidgetHandler {
 
         if (cursor.moveToFirst()) {
             receiverWidget = dbToReceiverWidgetInfo(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(widgetId));
         }
 
         cursor.close();
@@ -136,6 +143,7 @@ abstract class WidgetHandler {
      * @param widgetId
      * @return
      */
+    @NonNull
     protected static RoomWidget getRoomWidget(int widgetId) throws Exception {
         RoomWidget roomWidget = null;
         String[] widgetColumns = {RoomWidgetTable.COLUMN_WIDGET_APP_ID, RoomWidgetTable.COLUMN_ROOM_ID};
@@ -145,6 +153,9 @@ abstract class WidgetHandler {
 
         if (cursor.moveToFirst()) {
             roomWidget = dbToRoomWidgetInfo(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(widgetId));
         }
 
         cursor.close();
@@ -157,6 +168,7 @@ abstract class WidgetHandler {
      * @param widgetId
      * @return
      */
+    @NonNull
     protected static SceneWidget getSceneWidget(int widgetId) throws Exception {
         SceneWidget sceneWidget = null;
         String[] widgetColumns = {SceneWidgetTable.COLUMN_WIDGET_APP_ID, SceneWidgetTable.COLUMN_SCENE_ID};
@@ -165,7 +177,11 @@ abstract class WidgetHandler {
 
         if (cursor.moveToFirst()) {
             sceneWidget = dbToSceneWidgetInfo(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(widgetId));
         }
+
         cursor.close();
         return sceneWidget;
     }
