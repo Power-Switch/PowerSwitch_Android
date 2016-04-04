@@ -26,4 +26,8 @@ public class CreateBackupException extends Exception {
     public CreateBackupException(Exception e) {
         super("Error creating Backup!", e);
     }
+
+    public CreateBackupException(String description) {
+        super("Error creating Backup: " + description);
+    }
 }

@@ -32,11 +32,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 
-import java.util.Date;
 import java.util.Locale;
 
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
@@ -85,9 +85,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
         forceUnknownExceptionDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(
-                        UnknownErrorDialog.getNewInstanceIntent(new Exception("Unknown error during runtime!"),
-                                new Date().getTime()));
+                StatusMessageHandler.showErrorDialog(getContext(), new Exception("Unknown error during runtime!"));
             }
         });
 

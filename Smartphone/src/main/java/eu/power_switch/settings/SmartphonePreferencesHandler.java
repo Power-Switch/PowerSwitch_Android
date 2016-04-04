@@ -21,6 +21,7 @@ package eu.power_switch.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -52,6 +53,8 @@ public class SmartphonePreferencesHandler {
     private static boolean useCompactDrawerCache;
     private static long currentApartmentIdCache;
     private static int keepHistoryDurationCache;
+    private static boolean sleepAsAndroidEnabledCache;
+    private static boolean stockAlarmClockEnabledCache;
 
     /**
      * Private Constructor
@@ -62,6 +65,13 @@ public class SmartphonePreferencesHandler {
         throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
     }
 
+    /**
+     * Initialize this Handler
+     * <p/>
+     * Only one call per Application launch is needed
+     *
+     * @param context any suitable context
+     */
     public static void init(Context context) {
         if (sharedPreferences != null) {
             forceRefresh();
@@ -97,12 +107,14 @@ public class SmartphonePreferencesHandler {
         highlightLastActivatedButtonCache = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
         useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, false);
         keepHistoryDurationCache = sharedPreferences.getInt(SettingsConstants.KEEP_HISTORY_DURATION, SettingsConstants.KEEP_HISTORY_FOREVER);
+        sleepAsAndroidEnabledCache = sharedPreferences.getBoolean(SettingsConstants.SLEEP_AS_ANDROID_ENABLED_KEY, true);
+        stockAlarmClockEnabledCache = sharedPreferences.getBoolean(SettingsConstants.STOCK_ALARM_CLOCK_ENABLED_KEY, true);
 
         if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
             currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, SettingsConstants.INVALID_APARTMENT_ID);
         } else {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(SmartphonePreferencesHandler.context);
-            currentApartmentIdCache = playStoreModeDataModel.getApartments().get(0).getId();
+            currentApartmentIdCache = PlayStoreModeDataModel.getApartments().get(0).getId();
         }
 
         Log.d(SmartphonePreferencesHandler.class, "AutoDiscover: " + autoDiscoverCache);
@@ -119,6 +131,8 @@ public class SmartphonePreferencesHandler {
         Log.d(SmartphonePreferencesHandler.class, "UseCompactDrawer: " + useCompactDrawerCache);
         Log.d(SmartphonePreferencesHandler.class, "CurrentApartmentId: " + currentApartmentIdCache);
         Log.d(SmartphonePreferencesHandler.class, "KeepHistoryDuration: " + keepHistoryDurationCache);
+        Log.d(SmartphonePreferencesHandler.class, "SleepAsAndroidEnabled: " + sleepAsAndroidEnabledCache);
+        Log.d(SmartphonePreferencesHandler.class, "StockAlarmClockEnabled: " + stockAlarmClockEnabledCache);
     }
 
     /**
@@ -406,12 +420,23 @@ public class SmartphonePreferencesHandler {
         useCompactDrawerCache = useCompactDrawer;
     }
 
+    /**
+     * Get ID of currently active Apartment
+     *
+     * @return ID of apartment, may be {@see SettingsConstants.INVALID_APARTMENT_ID} if none is active
+     */
     public static Long getCurrentApartmentId() {
         return currentApartmentIdCache;
     }
 
+    /**
+     * Set ID of currently active Apartment
+     *
+     * @param apartmentId ID of Apartment
+     */
     public static void setCurrentApartmentId(Long apartmentId) {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            Toast.makeText(context, "PlayStoreMode is active, cant set current apartment ID!", Toast.LENGTH_LONG).show();
             Log.w("PlayStoreMode is active, cant set current apartment ID!");
             return;
         }
@@ -433,6 +458,11 @@ public class SmartphonePreferencesHandler {
         return keepHistoryDurationCache;
     }
 
+    /**
+     * Set duration to keep history elements in preferences
+     *
+     * @param durationSelection
+     */
     public static void setKeepHistoryDuration(int durationSelection) {
         Log.d(SmartphonePreferencesHandler.class, "setKeepHistoryDuration: " + durationSelection);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -440,5 +470,51 @@ public class SmartphonePreferencesHandler {
         editor.apply();
 
         keepHistoryDurationCache = durationSelection;
+    }
+
+    /**
+     * Retrieves setting for stock alarm clock
+     *
+     * @return true if enabled, false otherwise
+     */
+    public static boolean getStockAlarmClockEnabled() {
+        return stockAlarmClockEnabledCache;
+    }
+
+    /**
+     * Set enabled state of stock alarm clock
+     *
+     * @param enabled true if enabled, false otherwise
+     */
+    public static void setStockAlarmClockEnabled(boolean enabled) {
+        Log.d(SmartphonePreferencesHandler.class, "setStockAlarmClockEnabled: " + enabled);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SettingsConstants.STOCK_ALARM_CLOCK_ENABLED_KEY, enabled);
+        editor.apply();
+
+        stockAlarmClockEnabledCache = enabled;
+    }
+
+    /**
+     * Retrieves setting for Sleep As Android alarm clock
+     *
+     * @return true if enabled, false otherwise
+     */
+    public static boolean getSleepAsAndroidEnabled() {
+        return sleepAsAndroidEnabledCache;
+    }
+
+    /**
+     * Set enabled state of Sleep As Android alarm clock
+     *
+     * @param enabled true if enabled, false otherwise
+     */
+    public static void setSleepAsAndroidEnabled(boolean enabled) {
+        Log.d(SmartphonePreferencesHandler.class, "setSleepAsAndroidEnabled: " + enabled);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(SettingsConstants.SLEEP_AS_ANDROID_ENABLED_KEY, enabled);
+        editor.apply();
+
+        sleepAsAndroidEnabledCache = enabled;
     }
 }

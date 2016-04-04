@@ -19,6 +19,8 @@
 
 <resources>
 
+    <string name="activated">Aktiviert</string>
+
     <string name="alarm_triggered">Alarm aktiviert</string>
     <string name="alarm_snoozed">Schlummertaste</string>
     <string name="alarm_dismissed">Alarm ausgeschaltet</string>

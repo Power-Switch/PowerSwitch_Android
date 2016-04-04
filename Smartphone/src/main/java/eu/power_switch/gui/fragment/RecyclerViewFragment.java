@@ -34,7 +34,6 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.UnknownErrorDialog;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy
@@ -131,7 +130,7 @@ public abstract class RecyclerViewFragment extends Fragment {
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(UnknownErrorDialog.getNewInstanceIntent(e, timeInMilliseconds));
+                StatusMessageHandler.showErrorDialog(getContext(), e, timeInMilliseconds);
             }
         });
     }

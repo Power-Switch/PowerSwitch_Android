@@ -116,7 +116,7 @@ public class Database extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            StatusMessageHandler.showErrorDialog(context, e);
         } finally {
             db.endTransaction();
         }
@@ -287,7 +287,7 @@ public class Database extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            StatusMessageHandler.showErrorDialog(context, e);
         } finally {
             db.endTransaction();
         }

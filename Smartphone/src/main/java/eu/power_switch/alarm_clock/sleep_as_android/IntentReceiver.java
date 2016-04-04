@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import eu.power_switch.action.ActionHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -41,6 +42,10 @@ public class IntentReceiver extends BroadcastReceiver {
         Log.d(this, intent);
 
         try {
+            if (!SmartphonePreferencesHandler.getSleepAsAndroidEnabled()) {
+                return;
+            }
+
             if (SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction()
                     .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm triggered!");

@@ -33,7 +33,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
@@ -86,7 +85,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
                     }
                 }
 
-                ApartmentFragment.sendApartmentChangedBroadcast(context);
+                notifyDataSetChanged();
             }
         });
 

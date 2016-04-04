@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import eu.power_switch.action.ActionHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
@@ -41,6 +42,10 @@ public class IntentReceiver extends BroadcastReceiver {
         Log.d(this, intent);
 
         try {
+            if (!SmartphonePreferencesHandler.getStockAlarmClockEnabled()) {
+                return;
+            }
+
             if (AlarmClockConstants.ALARM_TRIGGERED_INTENTS.contains(intent.getAction()) ||
                     intent.getAction().toLowerCase().endsWith(".ALARM_ALERT".toLowerCase())) {
                 Log.d("IntentReceiver", "Alarm triggered!");

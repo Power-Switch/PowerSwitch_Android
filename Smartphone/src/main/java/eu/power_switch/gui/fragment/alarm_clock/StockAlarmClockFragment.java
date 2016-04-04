@@ -39,7 +39,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +76,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
     private Spinner spinnerEventType;
     private FloatingActionButton addActionFAB;
 
+
     @Override
     public void onCreateViewEvent(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stock_alarm_clock, container, false);
@@ -81,6 +84,17 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
+
+        Switch switchOnOff = (Switch) rootView.findViewById(R.id.switch_on_off);
+        switchOnOff.setChecked(SmartphonePreferencesHandler.getStockAlarmClockEnabled());
+        switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isPressed()) {
+                    SmartphonePreferencesHandler.setStockAlarmClockEnabled(isChecked);
+                }
+            }
+        });
 
         spinnerEventType = (Spinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),

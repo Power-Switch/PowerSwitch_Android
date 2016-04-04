@@ -114,15 +114,17 @@ public class BackupHandler {
             File src;
             File dst;
 
-            dst = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator
-                    + name);
+            dst = new File(SmartphonePreferencesHandler.getBackupPath() +
+                    File.separator + name);
             if (!dst.exists()) {
                 dst.mkdirs();
             } else {
                 if (force) {
                     // remove existing backup
                     try {
-                        deleteRecursive(dst);
+                        if (!deleteRecursive(dst)) {
+                            throw new CreateBackupException("Error deleting existing Backup");
+                        }
                     } catch (Exception e) {
                         Log.e(e);
                         throw new CreateBackupException(e);
@@ -270,12 +272,12 @@ public class BackupHandler {
         }
     }
 
-    private void deleteRecursive(@NonNull File fileOrDirectory) throws Exception {
+    private boolean deleteRecursive(@NonNull File fileOrDirectory) throws Exception {
         if (fileOrDirectory.isDirectory()) {
             for (File child : fileOrDirectory.listFiles()) {
                 deleteRecursive(child);
             }
         }
-        fileOrDirectory.delete();
+        return fileOrDirectory.delete();
     }
 }

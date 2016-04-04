@@ -39,8 +39,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
@@ -87,6 +89,17 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
+
+        Switch switchOnOff = (Switch) rootView.findViewById(R.id.switch_on_off);
+        switchOnOff.setChecked(SmartphonePreferencesHandler.getSleepAsAndroidEnabled());
+        switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.isPressed()) {
+                    SmartphonePreferencesHandler.setSleepAsAndroidEnabled(isChecked);
+                }
+            }
+        });
 
         layout_installed = (LinearLayout) rootView.findViewById(R.id.layout_installed);
         layout_not_installed = (LinearLayout) rootView.findViewById(R.id.layout_not_installed);

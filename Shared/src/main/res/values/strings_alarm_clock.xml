@@ -19,6 +19,8 @@
 
 <resources>
 
+    <string name="activated">Activated</string>
+
     <string name="alarm_triggered">Alarm Triggered</string>
     <string name="alarm_snoozed">Alarm Snoozed</string>
     <string name="alarm_dismissed">Alarm Dismissed</string>

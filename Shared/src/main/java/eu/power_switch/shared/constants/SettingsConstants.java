@@ -48,6 +48,8 @@ public class SettingsConstants {
     public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
     public static final String CURRENT_APARTMENT_ID_KEY = "currentApartmentId";
     public static final String KEEP_HISTORY_DURATION = "keepHistoryDuration";
+    public static final String SLEEP_AS_ANDROID_ENABLED_KEY = "SLEEP_AS_ANDROID_ENABLED_KEY";
+    public static final String STOCK_ALARM_CLOCK_ENABLED_KEY = "STOCK_ALARM_CLOCK_ENABLED_KEY";
 
     public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 40;
 

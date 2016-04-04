@@ -31,13 +31,12 @@ import android.support.multidex.MultiDexApplication;
 import org.apache.log4j.LogManager;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.gui.dialog.UnknownErrorDialog;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
@@ -70,18 +69,12 @@ public class PowerSwitch extends MultiDexApplication {
 
                 try {
                     if (isUIThread()) {
-                        startActivity(UnknownErrorDialog.getNewInstanceIntent(
-                                throwable,
-                                new Date().getTime()
-                        ));
+                        StatusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
                     } else {  //handle non UI thread throw uncaught exception
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                startActivity(UnknownErrorDialog.getNewInstanceIntent(
-                                        throwable,
-                                        new Date().getTime()
-                                ));
+                                StatusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
                             }
                         });
                     }

@@ -225,6 +225,27 @@ public class StatusMessageHandler {
     }
 
     /**
+     * Show Error Dialog
+     *
+     * @param context            any suitable context
+     * @param t                  Throwable
+     * @param timeInMilliseconds time when the exception was thrown
+     */
+    public static void showErrorDialog(Context context, Throwable t, long timeInMilliseconds) {
+        context.startActivity(UnknownErrorDialog.getNewInstanceIntent(t, timeInMilliseconds));
+    }
+
+    /**
+     * Show Error Dialog
+     *
+     * @param context any suitable context
+     * @param t       Throwable
+     */
+    public static void showErrorDialog(Context context, Throwable t) {
+        showErrorDialog(context, t, new Date().getTime());
+    }
+
+    /**
      * Shows "No active Gateway" Message
      *
      * @param recyclerViewFragment
@@ -355,8 +376,7 @@ public class StatusMessageHandler {
                 new Runnable() {
                     @Override
                     public void run() {
-                        activity.startActivity(
-                                UnknownErrorDialog.getNewInstanceIntent(e, timeRaised.getTime()));
+                        StatusMessageHandler.showErrorDialog(activity, e, timeRaised.getTime());
                     }
                 }, 15000);
     }

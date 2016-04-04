@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
         applyLocale();
 
         // set Iconics LayoutInflater for XML Icon support
+        // currently disabled because of text font issues
 //        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
 
         activity = this;
@@ -243,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.mainContentFrameLayout, fragment)
                     .commit();
         } catch (Exception e) {
-            Log.e(e);
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         if (SmartphonePreferencesHandler.getAutoDiscover() &&
