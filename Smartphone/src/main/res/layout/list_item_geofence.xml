@@ -79,7 +79,9 @@
                     android:id="@+id/imageView_locationSnapshot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"/>
+                    android:layout_marginTop="4dp"
+                    android:contentDescription="@string/map"
+                    android:adjustViewBounds="true"/>
 
                 <TextView
                     style="@style/sub_header"
