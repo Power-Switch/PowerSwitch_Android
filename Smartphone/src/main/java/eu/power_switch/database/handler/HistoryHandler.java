@@ -35,7 +35,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 08.12.2015.
  */
-class HistoryHandler {
+abstract class HistoryHandler {
 
     /**
      * Private Constructor

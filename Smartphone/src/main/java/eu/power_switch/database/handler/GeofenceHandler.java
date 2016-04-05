@@ -22,7 +22,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -84,7 +84,7 @@ abstract class GeofenceHandler {
      * @param id ID of Geofence
      * @return Geofence
      */
-    @NonNull
+    @Nullable
     protected static Geofence get(Long id) throws Exception {
         if (id == null) {
             return null;

@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.phone.call.Call;
+import eu.power_switch.phone.call.CallEvent;
 
 /**
  * Adapter to visualize Call items in RecyclerView
@@ -36,11 +36,11 @@ import eu.power_switch.phone.call.Call;
  * Created by Markus on 05.04.2016.
  */
 public class CallRecyclerViewAdapter extends RecyclerView.Adapter<CallRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Call> calls;
+    private ArrayList<CallEvent> callEvents;
     private Context context;
 
-    public CallRecyclerViewAdapter(Context context, ArrayList<Call> calls) {
-        this.calls = calls;
+    public CallRecyclerViewAdapter(Context context, ArrayList<CallEvent> callEvents) {
+        this.callEvents = callEvents;
         this.context = context;
     }
 
@@ -52,7 +52,7 @@ public class CallRecyclerViewAdapter extends RecyclerView.Adapter<CallRecyclerVi
 
     @Override
     public void onBindViewHolder(final CallRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Call call = calls.get(holder.getAdapterPosition());
+        final CallEvent callEvent = callEvents.get(holder.getAdapterPosition());
 //        holder.description.setText(call.toString());
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
@@ -65,7 +65,7 @@ public class CallRecyclerViewAdapter extends RecyclerView.Adapter<CallRecyclerVi
     // Return the total count of items
     @Override
     public int getItemCount() {
-        return calls.size();
+        return callEvents.size();
     }
 
     public interface OnItemClickListener {

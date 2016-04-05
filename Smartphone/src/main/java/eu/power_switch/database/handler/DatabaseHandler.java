@@ -1799,7 +1799,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    @NonNull
+    @Nullable
     @WorkerThread
     public static Geofence getGeofence(Long id) throws Exception {
         openReadable();

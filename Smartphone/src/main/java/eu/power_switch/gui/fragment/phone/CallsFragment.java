@@ -49,7 +49,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.CallRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureCallDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.phone.call.Call;
+import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -64,7 +64,7 @@ import eu.power_switch.shared.permission.PermissionHelper;
  */
 public class CallsFragment extends RecyclerViewFragment {
 
-    private ArrayList<Call> calls = new ArrayList<>();
+    private ArrayList<CallEvent> callEvents = new ArrayList<>();
     private CallRecyclerViewAdapter callRecyclerViewAdapter;
     private RecyclerView recyclerViewCalls;
     private BroadcastReceiver broadcastReceiver;
@@ -87,7 +87,7 @@ public class CallsFragment extends RecyclerViewFragment {
         setHasOptionsMenu(true);
 
         recyclerViewCalls = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        callRecyclerViewAdapter = new CallRecyclerViewAdapter(getActivity(), calls);
+        callRecyclerViewAdapter = new CallRecyclerViewAdapter(getActivity(), callEvents);
         recyclerViewCalls.setAdapter(callRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
@@ -246,7 +246,7 @@ public class CallsFragment extends RecyclerViewFragment {
 
     @Override
     public List refreshListData() throws Exception {
-        calls.clear();
+        callEvents.clear();
 
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
@@ -254,6 +254,6 @@ public class CallsFragment extends RecyclerViewFragment {
 //        } else {
 //        calls = DatabaseHandler.getAllCalls();
 
-        return calls;
+        return callEvents;
     }
 }

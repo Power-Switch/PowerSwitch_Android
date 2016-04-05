@@ -37,7 +37,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Provides database methods for managing Receivers of any type
  */
-class ReceiverHandler {
+abstract class ReceiverHandler {
 
     /**
      * Private Constructor
