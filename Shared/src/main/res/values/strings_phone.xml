@@ -23,4 +23,9 @@
     <string name="call">Call</string>
     <string name="sms">SMS</string>
 
+    <string name="contacts">Contacts</string>
+
+    <string name="call_will_be_gone_forever">Call will be gone forever!</string>
+    <string name="call_deleted">Call deleted</string>
+
 </resources>

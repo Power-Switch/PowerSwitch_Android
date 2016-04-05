@@ -60,6 +60,7 @@
     <string name="missing_permission">Fehlende Berechtigung</string>
     <string name="missing_external_storage_permission">Fehlende Berechtigung für den Speicherzugriff</string>
     <string name="missing_location_permission">Fehlende Berechtigung zur Ortsbestimmung</string>
+    <string name="missing_phone_permission">Fehlende Berechtigung für Telefonie</string>
     <string name="permission_granted">Berechtigung erhalten</string>
     <string name="permission_denied">Keine Berechtigung</string>
     <string name="no_active_gateway">Kein aktives Gateway</string>

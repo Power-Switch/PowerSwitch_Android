@@ -72,6 +72,8 @@ public class LocalBroadcastConstants {
     public static final String INTENT_TIMER_ACTION_ADDED = "eu.power_switch.timer_action_added";
     public static final String INTENT_ALARM_EVENT_ACTION_ADDED = "eu.power_switch.alarm_event_action_added";
 
+    public static final String INTENT_CALLS_CHANGED = "eu.power_switch.calls_changed";
+
 
     public static final String INTENT_PERMISSION_CHANGED = "eu.power_switch.permission_changed";
 

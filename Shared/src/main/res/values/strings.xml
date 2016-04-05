@@ -79,6 +79,7 @@
 
     <string name="missing_permission">Missing permission</string>
     <string name="missing_location_permission">Missing location permission</string>
+    <string name="missing_phone_permission">Missing phone permission</string>
     <string name="details">Details</string>
 
     <string name="report">Report</string>

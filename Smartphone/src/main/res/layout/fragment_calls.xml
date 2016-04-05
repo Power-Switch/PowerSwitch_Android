@@ -17,14 +17,11 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <string name="phone">Telefon</string>
-    <string name="call">Anruf</string>
+    <include layout="@layout/recyclerviewfragment"/>
 
-    <string name="contacts">Kontakte</string>
-
-    <string name="call_will_be_gone_forever">Der Anruf wird für immer verloren sein!</string>
-    <string name="call_deleted">Anruf gelöscht</string>
-
-</resources>
+</LinearLayout>

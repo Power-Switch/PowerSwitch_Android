@@ -313,6 +313,10 @@ public class StatusMessageHandler {
                 messageResource = R.string.missing_location_permission;
                 requestCode = PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION;
                 break;
+            case Manifest.permission.READ_PHONE_STATE:
+                messageResource = R.string.missing_phone_permission;
+                requestCode = PermissionConstants.REQUEST_CODE_PHONE_PERMISSION;
+                break;
             default:
                 messageResource = R.string.missing_permission;
                 requestCode = -1;

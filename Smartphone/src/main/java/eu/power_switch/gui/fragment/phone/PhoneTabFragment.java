@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.tutorial.TutorialHelper;
@@ -159,7 +158,7 @@ public class PhoneTabFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case PhoneConstants.CALL_TAB_INDEX:
-                    return new ApartmentGeofencesFragment();
+                    return new CallsFragment();
                 case PhoneConstants.SMS_TAB_INDEX:
                     return new CustomGeofencesFragment();
                 default:

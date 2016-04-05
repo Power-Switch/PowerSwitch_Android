@@ -16,27 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.shared.constants;
+package eu.power_switch.phone.call;
 
 /**
- * Created by Markus on 22.12.2015.
+ * Internal representation of a Call Object
+ * <p/>
+ * Created by Markus on 05.04.2016.
  */
-public class PermissionConstants {
+public class Call {
 
-    public static final String KEY_REQUEST_CODE = "requestCode";
-    public static final String KEY_RESULTS = "results";
-
-    public static final int REQUEST_CODE_STORAGE_PERMISSION = 123;
-    public static final int REQUEST_CODE_LOCATION_PERMISSION = 124;
-    public static final int REQUEST_CODE_PHONE_PERMISSION = 125;
-
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private PermissionConstants() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
-    }
 
 }

@@ -88,4 +88,15 @@ public class PermissionHelper {
         return hasPermission == PackageManager.PERMISSION_GRANTED;
     }
 
+    /**
+     * Check if Phone permission is available
+     *
+     * @param context any suitable context
+     * @return true if phone permission is available, false otherwise
+     */
+    public static boolean checkPhonePermission(@NonNull Context context) {
+        int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
+        return hasPermission == PackageManager.PERMISSION_GRANTED;
+    }
+
 }

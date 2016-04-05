@@ -81,6 +81,7 @@ import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.alarm_clock.AlarmClockTabFragment;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
 import eu.power_switch.gui.fragment.main.RoomSceneTabFragment;
+import eu.power_switch.gui.fragment.phone.PhoneTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int IDENTIFIER_BACKUP_RESTORE = 15;
     public static final int IDENTIFIER_SETTINGS = 16;
     public static final int IDENTIFIER_ABOUT = 17;
+    public static final int IDENTIFIER_PHONE = 18;
 
     public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
@@ -482,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemSleepAsAndroid = new PrimaryDrawerItem().withName(R.string.menu_alarm_clock)
+        final PrimaryDrawerItem itemAlarmClock = new PrimaryDrawerItem().withName(R.string.menu_alarm_clock)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_alarm)
                         .color(tintColor)
                         .sizeDp(24))
@@ -494,6 +496,27 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_ALARM_CLOCK, getString(R.string.menu_alarm_clock),
                                     AlarmClockTabFragment.class.newInstance());
+                            return true;
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
+                        }
+                    }
+                });
+        final PrimaryDrawerItem itemPhone = new PrimaryDrawerItem().withName(R.string.phone)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_phone)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_PHONE)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(IDENTIFIER_PHONE, getString(R.string.phone),
+                                    PhoneTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -743,7 +766,8 @@ public class MainActivity extends AppCompatActivity {
                         itemRoomsScenes,
                         itemTimer,
                         itemGeofences,
-                        itemSleepAsAndroid,
+                        itemPhone,
+                        itemAlarmClock,
                         new DividerDrawerItem(),
                         itemBackupRestore,
                         itemSettings,
