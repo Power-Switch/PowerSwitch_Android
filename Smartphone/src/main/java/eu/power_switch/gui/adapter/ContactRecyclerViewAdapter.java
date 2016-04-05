@@ -31,21 +31,20 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.action.Action;
+import eu.power_switch.phone.Contact;
 
 /**
- * Adapter to visualize Action items in RecyclerView
+ * Adapter to visualize Contact items in RecyclerView
  * <p/>
  * Created by Markus on 04.12.2015.
  */
-public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecyclerViewAdapter.ViewHolder> {
-    private List<Action> actions;
+public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
+    private List<Contact> contacts;
     private Context context;
     private OnItemClickListener onDeleteClickListener;
 
-
-    public ActionRecyclerViewAdapter(Context context, List<Action> actions) {
-        this.actions = actions;
+    public ContactRecyclerViewAdapter(Context context, List<Contact> contacts) {
+        this.contacts = contacts;
         this.context = context;
     }
 
@@ -54,15 +53,16 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     }
 
     @Override
-    public ActionRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_action, parent, false);
-        return new ActionRecyclerViewAdapter.ViewHolder(itemView);
+    public ContactRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_contact, parent, false);
+        return new ContactRecyclerViewAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Action action = actions.get(holder.getAdapterPosition());
-        holder.description.setText(action.toString());
+    public void onBindViewHolder(final ContactRecyclerViewAdapter.ViewHolder holder, int position) {
+        final Contact contact = contacts.get(holder.getAdapterPosition());
+        holder.name.setText(contact.getName());
+        holder.number.setText(contact.getNumber());
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
@@ -74,7 +74,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     // Return the total count of items
     @Override
     public int getItemCount() {
-        return actions.size();
+        return contacts.size();
     }
 
     public interface OnItemClickListener {
@@ -82,13 +82,15 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView description;
+        public TextView name;
+        public TextView number;
         public IconicsImageView delete;
         public LinearLayout footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
+            this.name = (TextView) itemView.findViewById(R.id.txt_name);
+            this.number = (TextView) itemView.findViewById(R.id.txt_number);
             this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 

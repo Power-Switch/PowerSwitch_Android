@@ -22,6 +22,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
+import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -31,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public abstract class Action {
+public abstract class Action implements Serializable {
 
     public static final String ACTION_TYPE_RECEIVER = "action_type_receiver";
     public static final String ACTION_TYPE_ROOM = "action_type_room";

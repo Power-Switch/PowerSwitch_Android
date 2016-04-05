@@ -24,8 +24,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.phone.Contact;
 
 /**
  * Created by Markus on 05.04.2016.
@@ -34,10 +39,15 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
 
     private View rootView;
 
+    private List<Contact> contacts = new ArrayList<>();
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 //        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_page_1, container, false);
+
+
+        ContactRecyclerViewAdapter contactRecyclerViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts);
 
         return rootView;
     }

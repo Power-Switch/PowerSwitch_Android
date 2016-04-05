@@ -33,10 +33,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
@@ -46,6 +42,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddGeofenceEnterActionDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
@@ -56,6 +53,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class ConfigureGeofenceDialogPage2EnterActionsFragment extends ConfigurationDialogFragment {
 
+    // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static ArrayList<Action> currentEnterActions;
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
 
@@ -89,7 +87,6 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_2, container, false);
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -110,8 +107,15 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
         });
 
         currentEnterActions = new ArrayList<>();
-        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter
-                (getActivity(), currentEnterActions);
+        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), currentEnterActions);
+        actionRecyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                currentEnterActions.remove(position);
+                actionRecyclerViewAdapter.notifyDataSetChanged();
+                sendActionsChangedBroadcast(getContext(), currentEnterActions);
+            }
+        });
         RecyclerView recyclerViewTimerActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_actions);
         recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -151,58 +155,4 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
         super.onStop();
     }
 
-    public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecyclerViewAdapter.ViewHolder> {
-        private ArrayList<Action> actions;
-        private Context context;
-
-        public ActionRecyclerViewAdapter(Context context, ArrayList<Action> actions) {
-            this.actions = actions;
-            this.context = context;
-        }
-
-        @Override
-        public ActionRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_action, parent, false);
-            return new ActionRecyclerViewAdapter.ViewHolder(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
-            final Action action = actions.get(position);
-            holder.description.setText(action.toString());
-
-            holder.delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    actions.remove(holder.getAdapterPosition());
-                    notifyDataSetChanged();
-                    sendActionsChangedBroadcast(getContext(), actions);
-                }
-            });
-
-            if (holder.getAdapterPosition() == getItemCount() - 1) {
-                holder.footer.setVisibility(View.VISIBLE);
-            } else {
-                holder.footer.setVisibility(View.GONE);
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            return actions.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView description;
-            public IconicsImageView delete;
-            public LinearLayout footer;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
-                this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
-                this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
-            }
-        }
-    }
 }
