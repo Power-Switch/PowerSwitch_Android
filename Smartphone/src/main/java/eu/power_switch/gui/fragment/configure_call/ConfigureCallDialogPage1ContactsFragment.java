@@ -32,15 +32,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
+import eu.power_switch.gui.adapter.PhoneNumberRecyclerViewAdapter;
+import eu.power_switch.gui.dialog.AddPhoneNumberDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureCallDialog;
-import eu.power_switch.phone.Contact;
 
 /**
  * Created by Markus on 05.04.2016.
@@ -51,8 +50,8 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
 
     private long callId = -1;
 
-    private List<Contact> contacts = new ArrayList<>();
-    private ContactRecyclerViewAdapter contactRecyclerViewAdapter;
+    private ArrayList<String> phoneNumbers = new ArrayList<>();
+    private PhoneNumberRecyclerViewAdapter phoneNumberRecyclerViewAdapter;
     private RecyclerView recyclerViewContacts;
 
     @Nullable
@@ -61,9 +60,9 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_page_1, container, false);
 
         recyclerViewContacts = (RecyclerView) rootView.findViewById(R.id.recyclerView_contacts);
-        contactRecyclerViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts);
-        recyclerViewContacts.setAdapter(contactRecyclerViewAdapter);
-        contactRecyclerViewAdapter.setOnDeleteClickListener(new ContactRecyclerViewAdapter.OnItemClickListener() {
+        phoneNumberRecyclerViewAdapter = new PhoneNumberRecyclerViewAdapter(getActivity(), phoneNumbers);
+        recyclerViewContacts.setAdapter(phoneNumberRecyclerViewAdapter);
+        phoneNumberRecyclerViewAdapter.setOnDeleteClickListener(new PhoneNumberRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int position) {
                 new AlertDialog.Builder(getContext())
@@ -73,8 +72,8 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    contacts.remove(position);
-                                    contactRecyclerViewAdapter.notifyDataSetChanged();
+                                    phoneNumbers.remove(position);
+                                    phoneNumberRecyclerViewAdapter.notifyDataSetChanged();
                                     notifyConfigurationChanged();
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -88,17 +87,15 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewContacts.setLayoutManager(layoutManager);
 
-        FloatingActionButton addContactFAB = (FloatingActionButton) rootView.findViewById(R.id.add_contact_fab);
+        final FloatingActionButton addContactFAB = (FloatingActionButton) rootView.findViewById(R.id.add_contact_fab);
         addContactFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final Fragment fragment = this;
         addContactFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Add Contact Dialog
-
-//                AddCdDialog addSsidDialog = new AddSsidDialog();
-//                addSsidDialog.setTargetFragment(fragment, 0);
-//                addSsidDialog.show(getFragmentManager(), null);
+                AddPhoneNumberDialog addPhoneNumberDialog = new AddPhoneNumberDialog();
+                addPhoneNumberDialog.setTargetFragment(fragment, 0);
+                addPhoneNumberDialog.show(getFragmentManager(), null);
             }
         });
 

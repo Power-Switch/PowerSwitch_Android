@@ -21,7 +21,6 @@ package eu.power_switch.phone.call;
 import java.util.List;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.phone.Contact;
 
 /**
  * Internal representation of a Call Object
@@ -46,9 +45,9 @@ public class CallEvent {
     private String name;
 
     /**
-     * List of contacts
+     * List of phone numbers
      */
-    private List<Contact> contacts;
+    private List<String> phoneNumbers;
 
     /**
      * List of actions
@@ -58,15 +57,15 @@ public class CallEvent {
     /**
      * Constructor
      *
-     * @param id       ID
-     * @param contacts list of contacts
-     * @param actions  list of actions
+     * @param id           ID
+     * @param phoneNumbers list of phone numbers
+     * @param actions      list of actions
      */
-    public CallEvent(long id, boolean active, String name, List<Contact> contacts, List<Action> actions) {
+    public CallEvent(long id, boolean active, String name, List<String> phoneNumbers, List<Action> actions) {
         this.id = id;
         this.active = active;
         this.name = name;
-        this.contacts = contacts;
+        this.phoneNumbers = phoneNumbers;
         this.actions = actions;
     }
 
@@ -98,12 +97,12 @@ public class CallEvent {
     }
 
     /**
-     * Get contacts this CallEvent is associated with
+     * Get phone numbers this CallEvent is associated with
      *
-     * @return list of contacts
+     * @return list of phone numbers
      */
-    public List<Contact> getContacts() {
-        return contacts;
+    public List<String> getPhoneNumbers() {
+        return phoneNumbers;
     }
 
     /**

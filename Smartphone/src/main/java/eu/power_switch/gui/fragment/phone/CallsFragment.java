@@ -103,7 +103,7 @@ public class CallsFragment extends RecyclerViewFragment {
                 if (!PermissionHelper.checkLocationPermission(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_location_permission)
+                            .setMessage(R.string.missing_contacts_permission)
                             .setNeutralButton(R.string.close, null)
                             .show();
                     return;
@@ -162,11 +162,11 @@ public class CallsFragment extends RecyclerViewFragment {
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // For example if the user has previously denied the permission.
-            Log.d("Displaying location permission rationale to provide additional context.");
+            Log.d("Displaying phone permission rationale to provide additional context.");
 
             StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.READ_PHONE_STATE);
         } else {
-            Log.d("Displaying default location permission dialog to request permission");
+            Log.d("Displaying default phone permission dialog to request permission");
             ActivityCompat.requestPermissions(getActivity(), new String[]{
                     Manifest.permission.READ_PHONE_STATE}, PermissionConstants.REQUEST_CODE_PHONE_PERMISSION);
         }

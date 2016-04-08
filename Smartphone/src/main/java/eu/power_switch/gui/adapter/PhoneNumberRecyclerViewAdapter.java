@@ -28,23 +28,22 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.phone.Contact;
 
 /**
- * Adapter to visualize Contact items in RecyclerView
+ * Adapter to visualize Phone number items in RecyclerView
  * <p/>
  * Created by Markus on 04.12.2015.
  */
-public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
-    private List<Contact> contacts;
+public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNumberRecyclerViewAdapter.ViewHolder> {
+    private ArrayList<String> phoneNumbers;
     private Context context;
     private OnItemClickListener onDeleteClickListener;
 
-    public ContactRecyclerViewAdapter(Context context, List<Contact> contacts) {
-        this.contacts = contacts;
+    public PhoneNumberRecyclerViewAdapter(Context context, ArrayList<String> phoneNumbers) {
+        this.phoneNumbers = phoneNumbers;
         this.context = context;
     }
 
@@ -53,21 +52,15 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     }
 
     @Override
-    public ContactRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_contact, parent, false);
-        return new ContactRecyclerViewAdapter.ViewHolder(itemView);
+    public PhoneNumberRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_phone_number, parent, false);
+        return new PhoneNumberRecyclerViewAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final ContactRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Contact contact = contacts.get(holder.getAdapterPosition());
-        holder.name.setText(contact.getName());
-
-        String numbers = "";
-        for (String number : contact.getPhoneNumbers()) {
-            numbers += number + "\n";
-        }
-        holder.number.setText(numbers);
+    public void onBindViewHolder(final PhoneNumberRecyclerViewAdapter.ViewHolder holder, int position) {
+        final String phoneNumber = phoneNumbers.get(holder.getAdapterPosition());
+        holder.phoneNumber.setText(phoneNumber);
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
@@ -79,7 +72,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     // Return the total count of items
     @Override
     public int getItemCount() {
-        return contacts.size();
+        return phoneNumbers.size();
     }
 
     public interface OnItemClickListener {
@@ -87,15 +80,13 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-        public TextView number;
+        public TextView phoneNumber;
         public IconicsImageView delete;
         public LinearLayout footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.name = (TextView) itemView.findViewById(R.id.txt_name);
-            this.number = (TextView) itemView.findViewById(R.id.txt_number);
+            this.phoneNumber = (TextView) itemView.findViewById(R.id.txt_phoneNumber);
             this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 

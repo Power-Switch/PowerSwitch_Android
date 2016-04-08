@@ -18,7 +18,6 @@
 
 package eu.power_switch.nfc;
 
-import android.app.Activity;
 import android.content.Context;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -27,7 +26,8 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 
-import java.io.IOException;
+import eu.power_switch.shared.exception.nfc.NfcTagInsufficientMemoryException;
+import eu.power_switch.shared.exception.nfc.NfcTagNotWritableException;
 
 /**
  * This class is responsible for writing actions to NFC Tags
@@ -64,9 +64,14 @@ public class NfcHandler {
      */
     public static NdefMessage getAsNdef(String content) {
         byte[] textBytes = content.getBytes();
-        NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
-                "application/vnd.facebook.places".getBytes(), new byte[]{}, textBytes);
-        return new NdefMessage(new NdefRecord[]{textRecord});
+        NdefRecord textRecord = new NdefRecord(
+                NdefRecord.TNF_MIME_MEDIA,
+                "application/eu.power_switch".getBytes(),
+                new byte[]{},
+                textBytes);
+        return new NdefMessage(new NdefRecord[]{
+                textRecord,
+                NdefRecord.createApplicationRecord("eu.power_switch")});
     }
 
     /**
@@ -78,30 +83,36 @@ public class NfcHandler {
         if (ndef != null) {
             ndef.connect();
             if (!ndef.isWritable()) {
-                return false;
+                throw new NfcTagNotWritableException();
             }
             if (ndef.getMaxSize() < size) {
-                return false;
+                throw new NfcTagInsufficientMemoryException(ndef.getMaxSize(), size);
             }
             ndef.writeNdefMessage(message);
-            return true;
         } else {
             NdefFormatable format = NdefFormatable.get(tag);
             if (format != null) {
-                try {
-                    format.connect();
-                    format.format(message);
-                    return true;
-                } catch (IOException e) {
-                    return false;
-                }
+                format.connect();
+                format.format(message);
             } else {
-                return false;
+                throw new IllegalArgumentException("Ndef format is NULL");
             }
         }
     }
 
+    /**
+     * Play NFC Tag found notification sound
+     *
+     * @param context any suitable context
+     */
     public static void soundNotify(Context context) {
-
+//        MediaPlayer mp = MediaPlayer.create(context, );
+//        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//            @Override
+//            public void onCompletion(MediaPlayer mp) {
+//                mp.release();
+//            }
+//        });
+//        mp.start();
     }
 }

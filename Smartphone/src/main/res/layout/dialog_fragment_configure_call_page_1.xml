@@ -24,12 +24,11 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView_actions"
         style="@style/sub_header"
         android:layout_marginTop="@dimen/title_margin_top"
         android:paddingLeft="@dimen/dialog_horizontal_margin"
         android:paddingRight="@dimen/dialog_horizontal_margin"
-        android:text="@string/actions"/>
+        android:text="@string/contacts"/>
 
     <android.support.design.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

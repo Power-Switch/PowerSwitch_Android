@@ -44,12 +44,15 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddCallActionDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigureCallDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Created by Markus on 05.04.2016.
  */
 public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialogFragment {
+
+    private long callId = -1;
 
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static List<Action> actions = new ArrayList<>();
@@ -106,6 +109,12 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
         recyclerViewActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);
+
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(ConfigureCallDialog.CALL_ID_KEY)) {
+            callId = args.getLong(ConfigureCallDialog.CALL_ID_KEY);
+            initializeCallData(callId);
+        }
 
         return rootView;
     }

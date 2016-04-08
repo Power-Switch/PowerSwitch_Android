@@ -34,6 +34,7 @@
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
 
@@ -70,8 +71,32 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".gui.dialog.WriteNfcTagDialog"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/write_nfc_tag"
+            android:noHistory="true"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="eu.power_switch.write_nfc_tag_activity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".nfc.HiddenReceiverActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="application/eu.power_switch"/>
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".gui.dialog.UnknownErrorDialog"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:excludeFromRecents="true"
             android:label="@string/unknown_error"
             android:noHistory="true"
             android:process=":UnknownErrorDialog"
@@ -190,16 +215,6 @@
                 <action android:name="de.ressel.powerswitch.action.Room.OFF"/>
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".nfc.IntentReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data
-                    android:scheme="eu.power_switch"/>
-            </intent-filter>
-        </receiver>
         <receiver android:name=".timer.alarm.AlarmIntentReceiver">
             <!-- Timer alarms -->
             <intent-filter>
@@ -276,7 +291,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+                <!--<action android:name="android.intent.action.NEW_OUTGOING_CALL"/>-->
             </intent-filter>
         </receiver>
         <!--

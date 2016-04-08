@@ -18,6 +18,10 @@
 
 package eu.power_switch.phone;
 
+import android.support.annotation.NonNull;
+
+import java.util.List;
+
 /**
  * Created by Markus on 05.04.2016.
  */
@@ -29,19 +33,19 @@ public class Contact {
     private String name;
 
     /**
-     * Phone number of this Contact
+     * Phone number(s) of this Contact
      */
-    private String number;
+    private List<String> phoneNumbers;
 
     /**
      * Constructor
      *
-     * @param name   Name
-     * @param number phone number
+     * @param name         Name
+     * @param phoneNumbers list of phone numbers
      */
-    public Contact(String name, String number) {
+    public Contact(@NonNull String name, @NonNull List<String> phoneNumbers) {
         this.name = name;
-        this.number = number;
+        this.phoneNumbers = phoneNumbers;
     }
 
     /**
@@ -58,7 +62,18 @@ public class Contact {
      *
      * @return phone number as text
      */
-    public String getNumber() {
-        return number;
+    public List<String> getPhoneNumbers() {
+        return phoneNumbers;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder(name);
+        stringBuilder.append(": ");
+        for (String number : phoneNumbers) {
+            stringBuilder.append(number).append(", ");
+        }
+
+        return stringBuilder.toString();
     }
 }
