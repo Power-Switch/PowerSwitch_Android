@@ -77,6 +77,7 @@ import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
+import eu.power_switch.gui.fragment.NfcFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.alarm_clock.AlarmClockTabFragment;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
@@ -114,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int IDENTIFIER_SETTINGS = 16;
     public static final int IDENTIFIER_ABOUT = 17;
     public static final int IDENTIFIER_PHONE = 18;
+    public static final int IDENTIFIER_NFC = 19;
 
     public static boolean appIsInForeground = false;
     private static Stack<Class> lastFragmentClasses = new Stack<>();
@@ -567,6 +569,27 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        final PrimaryDrawerItem itemNfc = new PrimaryDrawerItem().withName(R.string.nfc)
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_nfc)
+                        .color(tintColor)
+                        .sizeDp(24))
+                .withSelectable(true)
+                .withIdentifier(IDENTIFIER_NFC)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        try {
+                            startFragmentTransaction(IDENTIFIER_NFC, getString(R.string.nfc),
+                                    NfcFragment.class.newInstance());
+                            return true;
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            return false;
+                        } finally {
+                            navigationDrawer.closeDrawer();
+                        }
+                    }
+                });
         final PrimaryDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
                         .color(tintColor)
@@ -768,6 +791,7 @@ public class MainActivity extends AppCompatActivity {
                         itemGeofences,
                         itemPhone,
                         itemAlarmClock,
+                        itemNfc,
                         new DividerDrawerItem(),
                         itemBackupRestore,
                         itemSettings,

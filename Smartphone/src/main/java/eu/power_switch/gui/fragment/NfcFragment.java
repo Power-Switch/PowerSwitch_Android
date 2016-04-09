@@ -16,20 +16,15 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.fragment;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -50,7 +45,9 @@ import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.WriteNfcTagDialog;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
+import eu.power_switch.nfc.HiddenReceiverActivity;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -59,11 +56,9 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 
 /**
- * Dialog to select an action configuration
- * <p/>
- * Created by Markus on 28.09.2015.
+ * Created by Markus on 09.04.2016.
  */
-public abstract class AddActionDialog extends DialogFragment {
+public class NfcFragment extends Fragment {
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override
@@ -72,10 +67,8 @@ public abstract class AddActionDialog extends DialogFragment {
         }
     };
 
-    private Dialog dialog;
     private View rootView;
 
-    private int defaultTextColor;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
     private RadioButton radioButtonReceiverAction;
     private RadioButton radioButtonRoomAction;
@@ -109,15 +102,12 @@ public abstract class AddActionDialog extends DialogFragment {
     private ProgressBar progressButton;
     private ProgressBar progressScene;
     private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
+    private android.widget.Button buttonWriteTag;
 
-    @NonNull
+    @Nullable
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_add_action, null);
-        builder.setView(rootView);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_nfc, container, false);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -224,29 +214,40 @@ public abstract class AddActionDialog extends DialogFragment {
         spinner_scene.setOnTouchListener(spinnerInteractionListener7);
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener7);
 
-        updateActionType(Action.ACTION_TYPE_RECEIVER);
-        updateApartmentList();
-
-        builder.setTitle(R.string.add_action);
-        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+        buttonWriteTag = (android.widget.Button) rootView.findViewById(R.id.button_write_nfc_tag);
+        buttonWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                addCurrentSelection();
-                sendDataChangedBroadcast(getContext());
+            public void onClick(View v) {
+                startActivity(WriteNfcTagDialog.getNewInstanceIntent(getNfcActionContent(getCurrentSelection())));
             }
         });
 
-        builder.setNeutralButton(android.R.string.cancel, null);
+        updateActionType(Action.ACTION_TYPE_RECEIVER);
+        updateApartmentList();
 
-        dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        dialog.show();
+        return rootView;
+    }
 
-        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).getTextColors()
-                .getDefaultColor();
+    private String getNfcActionContent(Action action) {
+        switch (action.getActionType()) {
+            case Action.ACTION_TYPE_RECEIVER:
+                ReceiverAction receiverAction = (ReceiverAction) action;
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getName() +
+                        HiddenReceiverActivity.KEY_ROOM + receiverAction.getRoom().getName() +
+                        HiddenReceiverActivity.KEY_RECEIVER + receiverAction.getReceiver().getName() +
+                        HiddenReceiverActivity.KEY_BUTTON + receiverAction.getButton().getName();
+            case Action.ACTION_TYPE_ROOM:
+                RoomAction roomAction = (RoomAction) action;
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getName() +
+                        HiddenReceiverActivity.KEY_ROOM + roomAction.getRoom().getName() +
+                        HiddenReceiverActivity.KEY_BUTTON + roomAction.getButtonName();
+            case Action.ACTION_TYPE_SCENE:
+                SceneAction sceneAction = (SceneAction) action;
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getName() +
+                        HiddenReceiverActivity.KEY_SCENE + sceneAction.getScene().getName();
+        }
 
-        return dialog;
+        return null;
     }
 
     protected void updateLists() {
@@ -564,7 +565,6 @@ public abstract class AddActionDialog extends DialogFragment {
                 Log.d(spinner_receiver.getSelectedItem().toString());
                 Log.d(spinner_button.getSelectedItem().toString());
 
-                Apartment selectedApartment = currentApartment;
                 Room selectedRoom = getSelectedRoom();
                 Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver.getSelectedItem()
                         .toString());
@@ -626,25 +626,11 @@ public abstract class AddActionDialog extends DialogFragment {
         return true;
     }
 
-    protected abstract void addCurrentSelection();
-
-    protected abstract void sendDataChangedBroadcast(Context context);
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updatePositiveButton();
-    }
-
     private void setPositiveButtonVisibility(boolean visibility) {
-        if (dialog != null) {
-            if (visibility) {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(defaultTextColor);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
-            } else {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
-            }
+        if (visibility) {
+            buttonWriteTag.setEnabled(true);
+        } else {
+            buttonWriteTag.setEnabled(false);
         }
     }
 
@@ -660,5 +646,11 @@ public abstract class AddActionDialog extends DialogFragment {
                 setPositiveButtonVisibility(bool);
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updatePositiveButton();
     }
 }
