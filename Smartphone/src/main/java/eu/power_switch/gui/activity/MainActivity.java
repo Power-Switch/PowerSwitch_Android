@@ -86,6 +86,7 @@ import eu.power_switch.gui.fragment.phone.PhoneTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -575,6 +576,7 @@ public class MainActivity extends AppCompatActivity {
                         .sizeDp(24))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_NFC)
+                .withEnabled(NfcHandler.isNfcSupported(this))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -790,7 +792,7 @@ public class MainActivity extends AppCompatActivity {
                         itemTimer,
                         itemGeofences,
                         itemAlarmClock,
-                        itemPhone,
+//                        itemPhone,
                         itemNfc,
                         new DividerDrawerItem(),
                         itemBackupRestore,

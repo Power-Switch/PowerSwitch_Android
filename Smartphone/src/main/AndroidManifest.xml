@@ -21,7 +21,7 @@
     package="eu.power_switch"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="91"
+    android:versionCode="92"
     android:versionName="@string/app_version">
 
     <!-- Smartphone ONLY Permissions -->
@@ -32,8 +32,9 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.NFC"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
+    <!--<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>-->
+    <!--<uses-permission android:name="android.permission.READ_CONTACTS"/>-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
 
