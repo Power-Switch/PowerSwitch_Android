@@ -92,11 +92,11 @@ public class HiddenReceiverActivity extends Activity {
                 int start;
                 int stop;
 
-                start = KEY_APARTMENT.length();
-                stop = content.indexOf(KEY_ROOM);
-                String apartmentName = content.substring(start, stop);
-
                 if (content.contains(KEY_ROOM) && content.contains(KEY_RECEIVER) && content.contains(KEY_BUTTON)) {
+                    start = KEY_APARTMENT.length();
+                    stop = content.indexOf(KEY_ROOM);
+                    String apartmentName = content.substring(start, stop);
+
                     start = stop + KEY_ROOM.length();
                     stop = content.indexOf(KEY_RECEIVER);
                     String roomName = content.substring(start, stop);
@@ -116,6 +116,10 @@ public class HiddenReceiverActivity extends Activity {
 
                     ActionHandler.execute(this, receiver, button);
                 } else if (content.contains(KEY_ROOM) && content.contains(KEY_BUTTON)) {
+                    start = KEY_APARTMENT.length();
+                    stop = content.indexOf(KEY_ROOM);
+                    String apartmentName = content.substring(start, stop);
+
                     start = stop + KEY_ROOM.length();
                     stop = content.indexOf(KEY_BUTTON);
                     String roomName = content.substring(start, stop);
@@ -129,6 +133,10 @@ public class HiddenReceiverActivity extends Activity {
 
                     ActionHandler.execute(this, room, buttonName);
                 } else if (content.contains(KEY_SCENE)) {
+                    start = KEY_APARTMENT.length();
+                    stop = content.indexOf(KEY_SCENE);
+                    String apartmentName = content.substring(start, stop);
+
                     start = stop + KEY_SCENE.length();
                     stop = content.length();
                     String sceneName = content.substring(start, stop);
