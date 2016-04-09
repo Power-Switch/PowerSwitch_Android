@@ -29,7 +29,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -251,13 +250,16 @@ public class GeneralSettingsFragment extends Fragment {
         button_changeBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.checkLocationPermission(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_external_storage_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
-                    return;
+                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                    Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
+                    snackbar.setAction(R.string.grant, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ActivityCompat.requestPermissions(MainActivity.getActivity(), new String[]{
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+                        }
+                    });
+                    snackbar.show();
                 }
 
                 PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
