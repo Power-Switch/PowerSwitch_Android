@@ -232,19 +232,19 @@ public class NfcFragment extends Fragment {
         switch (action.getActionType()) {
             case Action.ACTION_TYPE_RECEIVER:
                 ReceiverAction receiverAction = (ReceiverAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getName() +
-                        HiddenReceiverActivity.KEY_ROOM + receiverAction.getRoom().getName() +
-                        HiddenReceiverActivity.KEY_RECEIVER + receiverAction.getReceiver().getName() +
-                        HiddenReceiverActivity.KEY_BUTTON + receiverAction.getButton().getName();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() +
+                        HiddenReceiverActivity.KEY_ROOM + receiverAction.getRoom().getId() +
+                        HiddenReceiverActivity.KEY_RECEIVER + receiverAction.getReceiver().getId() +
+                        HiddenReceiverActivity.KEY_BUTTON + receiverAction.getButton().getId();
             case Action.ACTION_TYPE_ROOM:
                 RoomAction roomAction = (RoomAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getName() +
-                        HiddenReceiverActivity.KEY_ROOM + roomAction.getRoom().getName() +
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() +
+                        HiddenReceiverActivity.KEY_ROOM + roomAction.getRoom().getId() +
                         HiddenReceiverActivity.KEY_BUTTON + roomAction.getButtonName();
             case Action.ACTION_TYPE_SCENE:
                 SceneAction sceneAction = (SceneAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getName() +
-                        HiddenReceiverActivity.KEY_SCENE + sceneAction.getScene().getName();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() +
+                        HiddenReceiverActivity.KEY_SCENE + sceneAction.getScene().getId();
         }
 
         return null;

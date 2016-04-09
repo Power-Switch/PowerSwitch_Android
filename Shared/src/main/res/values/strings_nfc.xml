@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <resources>
 
     <string name="nfc">NFC</string>
     <string name="write_nfc_tag">Write NFC Tag</string>
+
+    <string name="waiting_for_tag">Waiting for NFC Tag…</string>
+    <string name="tag_discovered_writing_data">NFC Tag discovered, writing data…</string>
+    <string name="tag_written_successfully">NFC Tag written successfully</string>
+    <string name="error_writing_tag_please_try_again">Error writing NFC Tag, please try again</string>
 
 </resources>

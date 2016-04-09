@@ -17,11 +17,12 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layoutLoading"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center">
+<LinearLayout
+    android:id="@+id/layoutLoading"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
 
     <ProgressBar
         android:layout_width="wrap_content"

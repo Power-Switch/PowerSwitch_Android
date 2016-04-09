@@ -95,54 +95,54 @@ public class HiddenReceiverActivity extends Activity {
                 if (content.contains(KEY_ROOM) && content.contains(KEY_RECEIVER) && content.contains(KEY_BUTTON)) {
                     start = KEY_APARTMENT.length();
                     stop = content.indexOf(KEY_ROOM);
-                    String apartmentName = content.substring(start, stop);
+                    Long apartmentId = Long.valueOf(content.substring(start, stop));
 
                     start = stop + KEY_ROOM.length();
                     stop = content.indexOf(KEY_RECEIVER);
-                    String roomName = content.substring(start, stop);
+                    Long roomId = Long.valueOf(content.substring(start, stop));
 
                     start = stop + KEY_RECEIVER.length();
                     stop = content.indexOf(KEY_BUTTON);
-                    String receiverName = content.substring(start, stop);
+                    Long receiverId = Long.valueOf(content.substring(start, stop));
 
                     start = stop + KEY_BUTTON.length();
                     stop = content.length();
-                    String buttonName = content.substring(start, stop);
+                    Long buttonId = Long.valueOf(content.substring(start, stop));
 
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentName);
-                    Room room = apartment.getRoom(roomName);
-                    Receiver receiver = room.getReceiver(receiverName);
-                    Button button = receiver.getButton(buttonName);
+                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                    Room room = apartment.getRoom(roomId);
+                    Receiver receiver = room.getReceiver(receiverId);
+                    Button button = receiver.getButton(buttonId);
 
                     ActionHandler.execute(this, receiver, button);
                 } else if (content.contains(KEY_ROOM) && content.contains(KEY_BUTTON)) {
                     start = KEY_APARTMENT.length();
                     stop = content.indexOf(KEY_ROOM);
-                    String apartmentName = content.substring(start, stop);
+                    Long apartmentId = Long.valueOf(content.substring(start, stop));
 
                     start = stop + KEY_ROOM.length();
                     stop = content.indexOf(KEY_BUTTON);
-                    String roomName = content.substring(start, stop);
+                    Long roomId = Long.valueOf(content.substring(start, stop));
 
                     start = stop + KEY_BUTTON.length();
                     stop = content.length();
                     String buttonName = content.substring(start, stop);
 
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentName);
-                    Room room = apartment.getRoom(roomName);
+                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                    Room room = apartment.getRoom(roomId);
 
                     ActionHandler.execute(this, room, buttonName);
                 } else if (content.contains(KEY_SCENE)) {
                     start = KEY_APARTMENT.length();
                     stop = content.indexOf(KEY_SCENE);
-                    String apartmentName = content.substring(start, stop);
+                    Long apartmentId = Long.valueOf(content.substring(start, stop));
 
                     start = stop + KEY_SCENE.length();
                     stop = content.length();
-                    String sceneName = content.substring(start, stop);
+                    Long sceneId = Long.valueOf(content.substring(start, stop));
 
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentName);
-                    Scene scene = apartment.getScene(sceneName);
+                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                    Scene scene = apartment.getScene(sceneId);
 
                     ActionHandler.execute(this, scene);
                 }

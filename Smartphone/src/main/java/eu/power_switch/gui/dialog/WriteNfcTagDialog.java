@@ -1,3 +1,21 @@
+/*
+ *     PowerSwitch by Max Rosin & Markus Ressel
+ *     Copyright (C) 2015  Markus Ressel
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package eu.power_switch.gui.dialog;
 
 import android.app.PendingIntent;
@@ -6,16 +24,21 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.mikepenz.iconics.view.IconicsImageView;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Created by mre on 08.04.2016.
@@ -26,7 +49,10 @@ public class WriteNfcTagDialog extends AppCompatActivity {
 
     private String content;
     private NfcAdapter nfcAdapter;
-    private TextView textView;
+    private TextView textViewStatus;
+    private LinearLayout layoutLoading;
+    private IconicsImageView successImage;
+    private IconicsImageView errorImage;
 
 
     public static Intent getNewInstanceIntent(String content) {
@@ -56,7 +82,13 @@ public class WriteNfcTagDialog extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        textView = (TextView) findViewById(R.id.textView);
+        textViewStatus = (TextView) findViewById(R.id.txt_nfc_status);
+        textViewStatus.setText(R.string.waiting_for_tag);
+
+        layoutLoading = (LinearLayout) findViewById(R.id.layoutLoading);
+
+        successImage = (IconicsImageView) findViewById(R.id.imageView_success);
+        errorImage = (IconicsImageView) findViewById(R.id.imageView_error);
     }
 
     private void applyLocale() {
@@ -79,20 +111,44 @@ public class WriteNfcTagDialog extends AppCompatActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(final Intent intent) {
         // Tag writing mode
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-            Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            textView.setText("Tag discovered");
+            textViewStatus.setText(R.string.tag_discovered_writing_data);
+            layoutLoading.setVisibility(View.VISIBLE);
+            successImage.setVisibility(View.GONE);
+            errorImage.setVisibility(View.GONE);
 
-            try {
-                NfcHandler.writeTag(NfcHandler.getAsNdef(content), detectedTag);
-                Toast.makeText(this, "Success: Wrote id to nfc tag", Toast.LENGTH_LONG)
-                        .show();
-                NfcHandler.soundNotify(this);
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(this, e);
-            }
+            new AsyncTask<Void, Void, AsyncTaskResult<Void>>() {
+                @Override
+                protected AsyncTaskResult<Void> doInBackground(Void... params) {
+                    try {
+                        Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                        NfcHandler.writeTag(NfcHandler.getAsNdef(content), detectedTag);
+//                        NfcHandler.soundNotify(this);
+
+                        return new AsyncTaskResult<>();
+                    } catch (Exception e) {
+                        return new AsyncTaskResult<>(e);
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(AsyncTaskResult asyncTaskResult) {
+                    if (asyncTaskResult.isSuccess()) {
+                        textViewStatus.setText(R.string.tag_written_successfully);
+                        layoutLoading.setVisibility(View.GONE);
+                        successImage.setVisibility(View.VISIBLE);
+                        errorImage.setVisibility(View.GONE);
+                    } else {
+                        Log.e(asyncTaskResult.getException());
+                        textViewStatus.setText(R.string.error_writing_tag_please_try_again);
+                        layoutLoading.setVisibility(View.GONE);
+                        successImage.setVisibility(View.GONE);
+                        errorImage.setVisibility(View.VISIBLE);
+                    }
+                }
+            }.execute();
         }
     }
 
