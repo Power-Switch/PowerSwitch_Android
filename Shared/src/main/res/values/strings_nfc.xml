@@ -23,8 +23,8 @@
     <string name="write_nfc_tag">Write NFC Tag</string>
 
     <string name="waiting_for_tag">Waiting for NFC Tag…</string>
-    <string name="tag_discovered_writing_data">NFC Tag discovered, writing data…</string>
+    <string name="tag_discovered_writing_data">NFC Tag discovered\nWriting data…</string>
     <string name="tag_written_successfully">NFC Tag written successfully</string>
-    <string name="error_writing_tag_please_try_again">Error writing NFC Tag, please try again</string>
+    <string name="error_writing_tag_please_try_again">Error writing NFC Tag\nPlease try again</string>
 
 </resources>

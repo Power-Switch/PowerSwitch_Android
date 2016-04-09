@@ -22,8 +22,8 @@
     <string name="write_nfc_tag">NFC Tag beschreiben</string>
 
     <string name="waiting_for_tag">Warte auf NFC Tag…</string>
-    <string name="tag_discovered_writing_data">NFC Tag erkannt, schreibe Daten…</string>
+    <string name="tag_discovered_writing_data">NFC Tag erkannt\nSchreibe Daten…</string>
     <string name="tag_written_successfully">NFC Tag erfolgreich beschrieben</string>
-    <string name="error_writing_tag_please_try_again">Fehler beim Beschreiben des NFC Tags, bitte versuche es erneut</string>
+    <string name="error_writing_tag_please_try_again">Fehler beim Beschreiben des NFC Tags\nBitte versuche es erneut</string>
 
 </resources>
