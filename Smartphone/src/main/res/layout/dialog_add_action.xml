@@ -22,6 +22,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="action_selector"/>
+    <include layout="@layout/action_selector"/>
 
 </android.support.v4.widget.NestedScrollView>
