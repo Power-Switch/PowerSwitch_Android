@@ -361,9 +361,9 @@ public class ActionHandler {
             }
         }
 
-        for (Gateway gateway : apartment.getAssociatedGateways()) {
-            if (gateway.isActive()) {
-                for (SceneItem sceneItem : scene.getSceneItems()) {
+        for (SceneItem sceneItem : scene.getSceneItems()) {
+            for (Gateway gateway : apartment.getAssociatedGateways()) {
+                if (gateway.isActive()) {
                     networkPackages.add(getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton()));
 
                     // set on object, as well as in database
