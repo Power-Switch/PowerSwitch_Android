@@ -135,7 +135,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                refreshGateways();
+                updateListContent();
             }
         };
     }
@@ -218,11 +218,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private void refreshGateways() {
-        Log.d("GatewaySettingsFragment", "refreshGateways");
-        updateListContent();
-    }
-
     private void updateUI() {
         if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
             searchGatewayFAB.setVisibility(View.GONE);
@@ -232,7 +227,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
             addGatewayFAB.setVisibility(View.VISIBLE);
         }
 
-        refreshGateways();
+        updateListContent();
     }
 
     @Override

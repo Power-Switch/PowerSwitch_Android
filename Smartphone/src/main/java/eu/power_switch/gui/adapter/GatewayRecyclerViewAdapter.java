@@ -73,6 +73,27 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
     public void onBindViewHolder(GatewayRecyclerViewAdapter.ViewHolder holder, int position) {
         final Gateway gateway = gateways.get(holder.getAdapterPosition());
 
+        holder.gatewaySwitchStatus.setChecked(gateway.isActive());
+        holder.gatewaySwitchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // check if user pressed the button
+                if (buttonView.isPressed()) {
+                    try {
+                        if (isChecked) {
+                            DatabaseHandler.enableGateway(gateway.getId());
+                        } else {
+                            DatabaseHandler.disableGateway(gateway.getId());
+                        }
+                        gateway.setActive(isChecked);
+                    } catch (Exception e) {
+                        Log.e(e);
+                        StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, 5000);
+                    }
+                }
+            }
+        });
+
         boolean isAssociatedWithApartment = true;
         try {
             isAssociatedWithApartment = DatabaseHandler.isAssociatedWithAnyApartment(gateway);
@@ -112,27 +133,6 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
             holder.layoutWanAddress.setVisibility(View.GONE);
         }
         holder.wanAddress.setText(gateway.getWanHost() + ":" + String.valueOf(gateway.getWanPort()));
-
-        holder.gatewaySwitchStatus.setChecked(gateway.isActive());
-        holder.gatewaySwitchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // check if user pressed the button
-                if (buttonView.isPressed()) {
-                    try {
-                        if (isChecked) {
-                            DatabaseHandler.enableGateway(gateway.getId());
-                        } else {
-                            DatabaseHandler.disableGateway(gateway.getId());
-                        }
-                        gateway.setActive(isChecked);
-                    } catch (Exception e) {
-                        Log.e(e);
-                        StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, 5000);
-                    }
-                }
-            }
-        });
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);

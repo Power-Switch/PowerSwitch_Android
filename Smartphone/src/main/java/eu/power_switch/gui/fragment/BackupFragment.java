@@ -144,8 +144,8 @@ public class BackupFragment extends RecyclerViewFragment {
                                     backupHandler.restoreBackup(backup.getName());
 
                                     DeveloperPreferencesHandler.forceRefresh();
-                                    SmartphonePreferencesHandler.forceRefresh();
-                                    WearablePreferencesHandler.forceRefresh();
+                                    SmartphonePreferencesHandler.forceRefresh(getContext());
+                                    WearablePreferencesHandler.forceRefresh(getContext());
 
                                     // restart app to apply
                                     getActivity().finish();

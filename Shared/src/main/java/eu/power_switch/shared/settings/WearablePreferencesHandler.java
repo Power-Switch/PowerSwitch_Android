@@ -61,13 +61,7 @@ public class WearablePreferencesHandler {
      * @param context any suitable context
      */
     public static void init(@NonNull Context context) {
-        if (sharedPreferences != null) {
-            forceRefresh();
-        } else {
-            sharedPreferences = context.getSharedPreferences(
-                    WearableSettingsConstants.WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
-            initCache();
-        }
+        forceRefresh(context);
     }
 
     /**
@@ -92,8 +86,12 @@ public class WearablePreferencesHandler {
 
     /**
      * Forces an update of the cached values
+     *
+     * @param context
      */
-    public static void forceRefresh() {
+    public static void forceRefresh(Context context) {
+        sharedPreferences = context.getSharedPreferences(
+                WearableSettingsConstants.WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         initCache();
     }
 

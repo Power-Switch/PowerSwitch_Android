@@ -74,7 +74,7 @@ public class SmartphonePreferencesHandler {
      */
     public static void init(Context context) {
         if (sharedPreferences != null) {
-            forceRefresh();
+            forceRefresh(context);
             return;
         }
 
@@ -138,7 +138,8 @@ public class SmartphonePreferencesHandler {
     /**
      * Forces an update of the cached values
      */
-    public static void forceRefresh() {
+    public static void forceRefresh(Context context) {
+        sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         initCache();
     }
 
