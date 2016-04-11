@@ -24,6 +24,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.database.table.scene.SceneItemTable;
@@ -81,7 +82,23 @@ abstract class SceneItemHandler {
      * @param receiver Receiver used in Scene(s)
      */
     protected static void update(Receiver receiver) throws Exception {
-        // TODO:
+        Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, SceneItemTable.ALL_COLUMNS,
+                SceneItemTable.COLUMN_RECEIVER_ID + "==" + receiver.getId(), null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            long sceneItemId = cursor.getLong(0);
+            long buttonId = cursor.getLong(3);
+            try {
+                receiver.getButton(buttonId);
+
+                // all is good, dont change sceneItem
+            } catch (NoSuchElementException e) {
+                // sceneItem has reference to missing buttonId, remove sceneItem from scene
+                delete(sceneItemId);
+            }
+        }
+
+        cursor.close();
     }
 
     /**
@@ -113,6 +130,16 @@ abstract class SceneItemHandler {
 
         cursor.close();
         return sceneItems;
+    }
+
+    /**
+     * Deletes a SceneItem
+     *
+     * @param sceneItemId ID of SceneItem
+     */
+    protected static void delete(Long sceneItemId) throws Exception {
+        Log.d(SceneItemHandler.class, "Delete SceneItem by Id: " + sceneItemId);
+        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "=" + sceneItemId, null);
     }
 
     /**
