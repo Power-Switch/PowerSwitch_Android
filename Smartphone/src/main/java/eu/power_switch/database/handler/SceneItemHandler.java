@@ -26,14 +26,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import eu.power_switch.R;
 import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
-import eu.power_switch.obj.UniversalButton;
-import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -79,16 +75,17 @@ abstract class SceneItemHandler {
     /**
      * Update all existing SceneItems related to a specific Receiver
      *
-     * @param receiver Receiver used in Scene(s)
+     * @param receiverId ID of Receiver used in Scene(s)
      */
-    protected static void update(Receiver receiver) throws Exception {
+    protected static void update(Long receiverId) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, SceneItemTable.ALL_COLUMNS,
-                SceneItemTable.COLUMN_RECEIVER_ID + "==" + receiver.getId(), null, null, null, null);
+                SceneItemTable.COLUMN_RECEIVER_ID + "==" + receiverId, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             long sceneItemId = cursor.getLong(0);
             long buttonId = cursor.getLong(3);
             try {
+                Receiver receiver = ReceiverHandler.get(receiverId);
                 receiver.getButton(buttonId);
 
                 // all is good, dont change sceneItem
@@ -96,6 +93,7 @@ abstract class SceneItemHandler {
                 // sceneItem has reference to missing buttonId, remove sceneItem from scene
                 delete(sceneItemId);
             }
+            cursor.moveToNext();
         }
 
         cursor.close();
@@ -107,7 +105,7 @@ abstract class SceneItemHandler {
      * @param scene Scene
      */
     protected static void update(Scene scene) throws Exception {
-        deleteSceneItems(scene.getId());
+        deleteBySceneId(scene.getId());
         add(scene.getId(), scene.getSceneItems());
     }
 
@@ -139,7 +137,7 @@ abstract class SceneItemHandler {
      */
     protected static void delete(Long sceneItemId) throws Exception {
         Log.d(SceneItemHandler.class, "Delete SceneItem by Id: " + sceneItemId);
-        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "=" + sceneItemId, null);
+        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_ID + "=" + sceneItemId, null);
     }
 
     /**
@@ -157,7 +155,7 @@ abstract class SceneItemHandler {
      *
      * @param sceneId ID of Scene
      */
-    protected static void deleteSceneItems(Long sceneId) throws Exception {
+    protected static void deleteBySceneId(Long sceneId) throws Exception {
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null);
     }
 
@@ -171,41 +169,32 @@ abstract class SceneItemHandler {
         long receiverId = c.getLong(2);
         long activeButtonId = c.getLong(3);
 
-        String activeButtonName = getActiveButtonName(activeButtonId);
-
         Receiver receiver = ReceiverHandler.get(receiverId);
 
-        Button activeButton = null;
-        for (Button button : receiver.getButtons()) {
-            if (button.getName().equals(activeButtonName)) {
-                activeButton = button;
-            }
-        }
-
-        SceneItem sceneItem = new SceneItem(receiver, activeButton);
+        SceneItem sceneItem = new SceneItem(receiver, receiver.getButton(activeButtonId));
         return sceneItem;
     }
 
-    /**
-     * Gets name of active Button in SceneItem
-     *
-     * @param buttonId ID of Button
-     * @return Name of active Button
-     */
-    private static String getActiveButtonName(Long buttonId) throws Exception {
-        if (buttonId == DatabaseConstants.BUTTON_ON_ID) {
-            return DatabaseHandler.context.getString(R.string.on);
-        } else if (buttonId == DatabaseConstants.BUTTON_OFF_ID) {
-            return DatabaseHandler.context.getString(R.string.off);
-        } else if (buttonId == DatabaseConstants.BUTTON_UP_ID) {
-            return DatabaseHandler.context.getString(R.string.up);
-        } else if (buttonId == DatabaseConstants.BUTTON_STOP_ID) {
-            return DatabaseHandler.context.getString(R.string.stop);
-        } else if (buttonId == DatabaseConstants.BUTTON_DOWN_ID) {
-            return DatabaseHandler.context.getString(R.string.down);
-        } else {
-            UniversalButton button = UniversalButtonHandler.getUniversalButton(buttonId);
-            return button.getName();
-        }
-    }
+//    /**
+//     * Gets name of active Button in SceneItem
+//     *
+//     * @param buttonId ID of Button
+//     * @return Name of active Button
+//     */
+//    private static String getActiveButtonName(Long buttonId) throws Exception {
+//        if (buttonId == DatabaseConstants.BUTTON_ON_ID) {
+//            return DatabaseHandler.context.getString(R.string.on);
+//        } else if (buttonId == DatabaseConstants.BUTTON_OFF_ID) {
+//            return DatabaseHandler.context.getString(R.string.off);
+//        } else if (buttonId == DatabaseConstants.BUTTON_UP_ID) {
+//            return DatabaseHandler.context.getString(R.string.up);
+//        } else if (buttonId == DatabaseConstants.BUTTON_STOP_ID) {
+//            return DatabaseHandler.context.getString(R.string.stop);
+//        } else if (buttonId == DatabaseConstants.BUTTON_DOWN_ID) {
+//            return DatabaseHandler.context.getString(R.string.down);
+//        } else {
+//            UniversalButton button = UniversalButtonHandler.getUniversalButton(buttonId);
+//            return button.getName();
+//        }
+//    }
 }

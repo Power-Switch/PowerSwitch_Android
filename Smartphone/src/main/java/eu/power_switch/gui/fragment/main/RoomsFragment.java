@@ -55,7 +55,6 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.wear.service.UtilityService;
 
 /**
  * Fragment containing a List of all Rooms and Receivers
@@ -75,12 +74,21 @@ public class RoomsFragment extends RecyclerViewFragment {
      *
      * @param context any suitable context
      */
+    public static void sendRoomChangedBroadcast(Context context) {
+        Log.d("RoomsFragment", "sendRoomChangedBroadcast");
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_CHANGED);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * Used to notify Room Fragment (this) that Receivers have changed
+     *
+     * @param context any suitable context
+     */
     public static void sendReceiverChangedBroadcast(Context context) {
         Log.d("RoomsFragment", "sendReceiverChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
-
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        UtilityService.forceWearDataUpdate(context);
     }
 
     @Override
@@ -202,6 +210,7 @@ public class RoomsFragment extends RecyclerViewFragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }

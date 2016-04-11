@@ -20,47 +20,38 @@ package eu.power_switch.obj.receiver;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
+import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.shared.log.Log;
 
 public class UniversalReceiver extends Receiver {
 
     private static final String MODEL = Receiver.getModelName(UniversalReceiver.class.getCanonicalName());
 
-    private List<UniversalButton> universalButtons = new ArrayList<>();
-
     public UniversalReceiver(Context context, Long id, String name, List<UniversalButton> buttons, Long
             roomId) {
         super(context, id, name, Brand.UNIVERSAL, MODEL, Type.UNIVERSAL, roomId);
-        universalButtons.addAll(buttons);
-        for (UniversalButton universalButton : universalButtons) {
-            this.buttons.add(new Button(universalButton.getId(), universalButton.getName(), universalButton
-                    .getReceiverId()));
-        }
+        this.buttons.addAll(buttons);
     }
 
     @Override
-    public String getSignal(Gateway gateway, String action) {
+    public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         try {
-            for (UniversalButton button : DatabaseHandler.getButtons(id)) {
+            for (Button button : buttons) {
                 if (button.getName().equals(action)) {
-                    return button.getSignal();
+                    return ((UniversalButton) button).getSignal();
                 }
             }
+
+            throw new ActionNotSupportedException();
         } catch (Exception e) {
             Log.e(e);
             return null;
         }
-        return null;
-    }
-
-    public List<UniversalButton> getUniversalButtons() {
-        return universalButtons;
     }
 }

@@ -39,6 +39,7 @@ import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
+import eu.power_switch.wear.service.UtilityService;
 
 /**
  * Dialog to edit a Room
@@ -126,7 +127,11 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
                 DatabaseHandler.setPositionOfRoom(room.getId(), (long) position);
             }
 
-            RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+            // notify rooms fragment
+            RoomsFragment.sendRoomChangedBroadcast(getActivity());
+
+            // update wear data
+            UtilityService.forceWearDataUpdate(getActivity());
 
             StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
                     , R.string.room_saved, Snackbar.LENGTH_LONG);

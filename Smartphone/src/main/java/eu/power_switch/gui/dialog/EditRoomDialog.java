@@ -44,15 +44,13 @@ import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
-import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * Dialog to edit a Room
@@ -195,7 +193,15 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
                 DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
             }
 
-            RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+            RoomsFragment.sendRoomChangedBroadcast(getActivity());
+            // scenes could change too if room was used in a scene
+            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+
+            // update room widgets
+            RoomWidgetProvider.forceWidgetUpdate(getActivity());
+
+            // update wear data
+            UtilityService.forceWearDataUpdate(getActivity());
 
             StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
                     , R.string.room_saved, Snackbar.LENGTH_LONG);
@@ -216,18 +222,15 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
                             DatabaseHandler.deleteRoom(roomId);
 
                             // notify rooms fragment
-                            RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-                            // notify scenes fragment
+                            RoomsFragment.sendRoomChangedBroadcast(getActivity());
+                            // scenes could change too if room was used in a scene
                             ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                            // notify timers fragment
-                            TimersFragment.sendTimersChangedBroadcast(getActivity());
 
-                            // update receiver widgets
-                            ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
                             // update room widgets
                             RoomWidgetProvider.forceWidgetUpdate(getActivity());
-                            // update scene widgets
-                            SceneWidgetProvider.forceWidgetUpdate(getActivity());
+
+                            // update wear data
+                            UtilityService.forceWearDataUpdate(getActivity());
 
                             StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
                                     R.string.room_deleted, Snackbar.LENGTH_LONG);

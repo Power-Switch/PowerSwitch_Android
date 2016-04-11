@@ -21,6 +21,8 @@ package eu.power_switch.database.handler;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.NoSuchElementException;
+
 import eu.power_switch.database.table.receiver.MasterSlaveTable;
 
 /**
@@ -68,11 +70,17 @@ abstract class MasterSlaveReceiverHandler {
      * @return The master channel of the receiver.
      */
     protected static Character getMaster(Long receiverID) throws Exception {
+        Character master;
         String[] columns = {MasterSlaveTable.COLUMN_MASTER};
         Cursor cursor = DatabaseHandler.database.query(MasterSlaveTable.TABLE_NAME, columns,
                 MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);
-        cursor.moveToFirst();
-        Character master = cursor.getString(0).charAt(0);
+        if (cursor.moveToFirst()) {
+            master = cursor.getString(0).charAt(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(receiverID));
+        }
+
         cursor.close();
         return master;
     }
@@ -84,11 +92,17 @@ abstract class MasterSlaveReceiverHandler {
      * @return The slave channel of the receiver.
      */
     protected static int getSlave(Long receiverID) throws Exception {
+        int slave;
         String[] columns = {MasterSlaveTable.COLUMN_SLAVE};
         Cursor cursor = DatabaseHandler.database.query(MasterSlaveTable.TABLE_NAME, columns,
                 MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);
-        cursor.moveToFirst();
-        int slave = cursor.getInt(0);
+        if (cursor.moveToFirst()) {
+            slave = cursor.getInt(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(receiverID));
+        }
+
         cursor.close();
         return slave;
     }

@@ -57,6 +57,7 @@ import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
@@ -396,7 +397,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
     }
 
     private void initData(UniversalReceiver receiver) {
-        for (UniversalButton universalButton : receiver.getUniversalButtons()) {
+        for (Button button : receiver.getButtons()) {
+            UniversalButton universalButton = (UniversalButton) button;
             addUniversalButtonLayoutToDialogView(universalButton.getName(), universalButton.getSignal());
         }
     }

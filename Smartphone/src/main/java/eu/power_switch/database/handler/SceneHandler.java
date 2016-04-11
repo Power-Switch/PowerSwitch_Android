@@ -92,7 +92,7 @@ abstract class SceneHandler {
     protected static void delete(Long id) throws Exception {
         ActionHandler.deleteBySceneId(id);
 
-        SceneItemHandler.deleteSceneItems(id);
+        SceneItemHandler.deleteBySceneId(id);
         DatabaseHandler.database.delete(SceneTable.TABLE_NAME, SceneTable.COLUMN_ID + "=" + id, null);
     }
 

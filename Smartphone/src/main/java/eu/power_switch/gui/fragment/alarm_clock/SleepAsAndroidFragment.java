@@ -218,8 +218,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }

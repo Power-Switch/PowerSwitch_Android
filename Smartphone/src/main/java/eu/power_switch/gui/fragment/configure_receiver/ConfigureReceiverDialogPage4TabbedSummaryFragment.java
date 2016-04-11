@@ -49,9 +49,11 @@ import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
+import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
@@ -60,7 +62,7 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import eu.power_switch.wear.service.UtilityService;
 
 /**
  * "Summary" Fragment used in Configure Receiver Dialog
@@ -80,7 +82,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
     private char currentMaster;
     private int currentSlave;
     private long currentSeed;
-    private List<UniversalButton> currentUniversalButtons;
+    private List<UniversalButton> currentUniversalButtons = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -198,7 +200,10 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
                     currentSlave = ((MasterSlaveReceiver) receiver).getSlave();
                     break;
                 case UNIVERSAL:
-                    currentUniversalButtons = ((UniversalReceiver) receiver).getUniversalButtons();
+                    for (Button button : receiver.getButtons()) {
+                        UniversalButton universalButton = (UniversalButton) button;
+                        currentUniversalButtons.add(universalButton);
+                    }
                     break;
                 case AUTOPAIR:
                     currentSeed = ((AutoPairReceiver) receiver).getSeed();
@@ -250,7 +255,8 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
 
         if (currentUniversalButtons != null) {
             linearLayoutUniversalButtons.removeAllViews();
-            for (UniversalButton universalButton : currentUniversalButtons) {
+            for (Button button : currentUniversalButtons) {
+                UniversalButton universalButton = (UniversalButton) button;
 
                 LinearLayout linearLayout = new LinearLayout(getActivity());
                 AppCompatTextView textView = new AppCompatTextView(getActivity());
@@ -388,9 +394,11 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
         }
 
         RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+        // scenes could change too if room was used in a scene
+        ScenesFragment.sendScenesChangedBroadcast(getActivity());
 
-        // update receiver widgets
-        ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+        // update wear data
+        UtilityService.forceWearDataUpdate(getActivity());
 
         StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
     }

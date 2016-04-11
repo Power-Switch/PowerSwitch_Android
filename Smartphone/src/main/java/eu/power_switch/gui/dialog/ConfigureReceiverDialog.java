@@ -33,7 +33,6 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
@@ -41,6 +40,7 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 
 /**
@@ -106,14 +106,14 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
                                     // notify rooms fragment
                                     RoomsFragment.sendReceiverChangedBroadcast(getActivity());
-
                                     // scenes could change too if receiver was used in a scene
                                     ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                    // same for timers
-                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
 
                                     // update receiver widgets
                                     ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+
+                                    // update wear data
+                                    UtilityService.forceWearDataUpdate(getActivity());
 
                                     StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
                                             R.string.receiver_deleted, Snackbar.LENGTH_LONG);

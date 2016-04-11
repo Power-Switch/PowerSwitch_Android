@@ -185,8 +185,6 @@ public class TimersFragment extends RecyclerViewFragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

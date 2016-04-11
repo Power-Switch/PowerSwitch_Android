@@ -21,6 +21,8 @@ package eu.power_switch.database.handler;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.NoSuchElementException;
+
 import eu.power_switch.database.table.receiver.AutoPairTable;
 
 /**
@@ -68,12 +70,18 @@ abstract class AutoPairHandler {
      * @return The seed of the receiver.
      */
     protected static long getSeed(Long receiverID) throws Exception {
+        long seed;
         String[] columns = {AutoPairTable.COLUMN_SEED};
         Cursor cursor = DatabaseHandler.database.query(AutoPairTable.TABLE_NAME, columns,
                 AutoPairTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);
-        cursor.moveToFirst();
-        long master = cursor.getLong(0);
+        if (cursor.moveToFirst()) {
+            seed = cursor.getLong(0);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(receiverID));
+        }
+
         cursor.close();
-        return master;
+        return seed;
     }
 }

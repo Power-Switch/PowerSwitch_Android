@@ -46,6 +46,7 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.wear.service.UtilityService;
 
 /**
  * Dialog to create a new Room
@@ -110,7 +111,12 @@ public class CreateRoomDialog extends DialogFragment {
                     DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName(), 0, false));
 
                     ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
+
                     RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+
+                    // update wear data
+                    UtilityService.forceWearDataUpdate(getActivity());
+
                     StatusMessageHandler.showInfoMessage(getTargetFragment().getView().findViewById(R.id.listView_rooms), R.string.room_saved, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getTargetFragment().getView().findViewById(R.id.listView_rooms), e);

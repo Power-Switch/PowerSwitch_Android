@@ -33,11 +33,11 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2SetupFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
@@ -107,11 +107,12 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
                                     // notify scenes fragment
                                     ScenesFragment.sendScenesChangedBroadcast(getActivity());
-                                    // notify timers fragment
-                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
 
                                     // update scene widgets
                                     SceneWidgetProvider.forceWidgetUpdate(getActivity());
+
+                                    // update wear data
+                                    UtilityService.forceWearDataUpdate(getActivity());
 
                                     StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
                                             R.string.scene_deleted, Snackbar.LENGTH_LONG);

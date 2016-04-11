@@ -54,7 +54,6 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.wear.service.UtilityService;
 
 /**
  * Fragment containing a List of all Scenes
@@ -75,9 +74,7 @@ public class ScenesFragment extends RecyclerViewFragment {
     public static void sendScenesChangedBroadcast(Context context) {
         Log.d("ScenesFragment", "sendScenesChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        UtilityService.forceWearDataUpdate(context);
     }
 
     @Override
@@ -195,7 +192,6 @@ public class ScenesFragment extends RecyclerViewFragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

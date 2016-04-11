@@ -58,6 +58,7 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
@@ -170,6 +171,9 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
             // update scene widgets
             SceneWidgetProvider.forceWidgetUpdate(getActivity());
+
+            // update wear data
+            UtilityService.forceWearDataUpdate(getActivity());
 
             StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.scene_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {

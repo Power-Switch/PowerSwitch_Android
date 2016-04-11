@@ -390,7 +390,7 @@ public abstract class Receiver {
      * Get a Button of this Receiver by its ID
      *
      * @param id ID of Button
-     * @return Button or null
+     * @return Button
      * @throws NoSuchElementException if no element was not found
      */
     @NonNull

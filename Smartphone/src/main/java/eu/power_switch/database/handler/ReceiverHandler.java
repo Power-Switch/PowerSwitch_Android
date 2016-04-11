@@ -91,7 +91,7 @@ abstract class ReceiverHandler {
                 break;
             case UNIVERSAL:
                 UniversalReceiver receiverAsUniversalReceiver = (UniversalReceiver) receiver;
-                UniversalButtonHandler.addUniversalButtons(receiverId, receiverAsUniversalReceiver.getUniversalButtons());
+                UniversalButtonHandler.addUniversalButtons(receiverId, receiverAsUniversalReceiver.getButtons());
                 break;
             case AUTOPAIR:
                 AutoPairReceiver receiverAsAutoPairReceiver = (AutoPairReceiver) receiver;
@@ -118,7 +118,7 @@ abstract class ReceiverHandler {
         DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
                 ReceiverTable.COLUMN_ID + "=" + receiver.getId(), null);
 
-        SceneItemHandler.update(receiver);
+        SceneItemHandler.update(receiver.getId());
     }
 
     /**
@@ -260,11 +260,16 @@ abstract class ReceiverHandler {
      * @return Type of Receiver
      */
     protected static Receiver.Type getType(Long id) throws Exception {
+        Receiver.Type type;
         String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_TYPE};
         Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID +
                 "=" + id, null, null, null, null);
-        cursor.moveToFirst();
-        Receiver.Type type = Receiver.Type.getEnum(cursor.getString(1));
+        if (cursor.moveToFirst()) {
+            type = Receiver.Type.getEnum(cursor.getString(1));
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
+        }
         cursor.close();
         return type;
     }

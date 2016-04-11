@@ -23,9 +23,11 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.receiver.UniversalButtonTable;
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.button.Button;
 
 /**
  * Provides database methods for managing Universal Buttons (used on Universal Receivers)
@@ -64,9 +66,9 @@ abstract class UniversalButtonHandler {
      * @param receiverId ID of Receiver*
      * @param buttons    List of Buttons
      */
-    protected static void addUniversalButtons(Long receiverId, List<UniversalButton> buttons) throws Exception {
-        for (UniversalButton button : buttons) {
-            addUniversalButton(receiverId, button);
+    protected static void addUniversalButtons(Long receiverId, List<Button> buttons) throws Exception {
+        for (Button button : buttons) {
+            addUniversalButton(receiverId, (UniversalButton) button);
         }
     }
 
@@ -95,10 +97,17 @@ abstract class UniversalButtonHandler {
      * @return Button
      */
     protected static UniversalButton getUniversalButton(Long id) throws Exception {
+        UniversalButton universalButton;
         Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.ALL_COLUMNS, UniversalButtonTable.COLUMN_ID + "=" + id, null, null,
                 null, null);
-        cursor.moveToFirst();
-        UniversalButton universalButton = dbToUniversalButton(cursor);
+
+        if (cursor.moveToFirst()) {
+            universalButton = dbToUniversalButton(cursor);
+        } else {
+            cursor.close();
+            throw new NoSuchElementException(String.valueOf(id));
+        }
+
         cursor.close();
         return universalButton;
     }
