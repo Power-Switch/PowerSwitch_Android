@@ -19,8 +19,10 @@
 package eu.power_switch.phone.call;
 
 import java.util.List;
+import java.util.Map;
 
 import eu.power_switch.action.Action;
+import eu.power_switch.shared.constants.PhoneConstants.Type;
 
 /**
  * Internal representation of a Call Object
@@ -45,28 +47,30 @@ public class CallEvent {
     private String name;
 
     /**
-     * List of phone numbers
+     * Map of phone numbers per EventType
      */
-    private List<String> phoneNumbers;
+    private Map<Type, List<String>> phoneNumbersMap;
 
     /**
-     * List of actions
+     * Map of Actions per EventType
      */
-    private List<Action> actions;
+    private Map<Type, List<Action>> actionsMap;
 
     /**
      * Constructor
      *
-     * @param id           ID
-     * @param phoneNumbers list of phone numbers
-     * @param actions      list of actions
+     * @param id
+     * @param active
+     * @param name
+     * @param phoneNumbersMap
+     * @param actionsMap
      */
-    public CallEvent(long id, boolean active, String name, List<String> phoneNumbers, List<Action> actions) {
+    public CallEvent(long id, boolean active, String name, Map<Type, List<String>> phoneNumbersMap, Map<Type, List<Action>> actionsMap) {
         this.id = id;
         this.active = active;
         this.name = name;
-        this.phoneNumbers = phoneNumbers;
-        this.actions = actions;
+        this.phoneNumbersMap = phoneNumbersMap;
+        this.actionsMap = actionsMap;
     }
 
     /**
@@ -99,18 +103,20 @@ public class CallEvent {
     /**
      * Get phone numbers this CallEvent is associated with
      *
+     * @param type EventType
      * @return list of phone numbers
      */
-    public List<String> getPhoneNumbers() {
-        return phoneNumbers;
+    public List<String> getPhoneNumbers(Type type) {
+        return phoneNumbersMap.get(type);
     }
 
     /**
      * Get list of actions for this CallEvent
      *
+     * @param type EventType
      * @return list of actions
      */
-    public List<Action> getActions() {
-        return actions;
+    public List<Action> getActions(Type type) {
+        return actionsMap.get(type);
     }
 }

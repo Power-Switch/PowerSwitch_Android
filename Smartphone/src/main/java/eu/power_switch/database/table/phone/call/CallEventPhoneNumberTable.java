@@ -27,23 +27,23 @@ import eu.power_switch.database.table.phone.ContactTable;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class CallContactsTable {
+public class CallEventPhoneNumberTable {
 
-    public static final String TABLE_NAME = "call_contacts";
-    public static final String COLUMN_CALL_ID = "call_id";
-    public static final String COLUMN_CONTACT_ID = "contact_id";
-    public static final String COLUMN_EVENT_TYPE = "event_type";
+    public static final String TABLE_NAME = "call_event_phone_numbers";
+    public static final String COLUMN_CALL_EVENT_ID = "call_event_id";
+    public static final String COLUMN_PHONE_NUMBER_ID = "phone_number_id";
+    public static final String COLUMN_EVENT_TYPE_ID = "event_type_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_CALL_ID + " integer not null," +
-            COLUMN_CONTACT_ID + " integer not null," +
-            COLUMN_EVENT_TYPE + " text not null," +
-            "FOREIGN KEY(" + COLUMN_CALL_ID + ") REFERENCES " +
-                CallTable.TABLE_NAME + "(" + CallTable.COLUMN_ID + "), " +
-            "FOREIGN KEY(" + COLUMN_CONTACT_ID+ ") REFERENCES " +
+            COLUMN_CALL_EVENT_ID + " integer not null," +
+            COLUMN_PHONE_NUMBER_ID + " integer not null," +
+            COLUMN_EVENT_TYPE_ID + " text not null," +
+            "FOREIGN KEY(" + COLUMN_CALL_EVENT_ID + ") REFERENCES " +
+                CallEventTable.TABLE_NAME + "(" + CallEventTable.COLUMN_ID + "), " +
+            "FOREIGN KEY(" + COLUMN_PHONE_NUMBER_ID+ ") REFERENCES " +
                 ContactTable.TABLE_NAME + "(" + ContactTable.COLUMN_ID + "), " +
-            "PRIMARY KEY (" + COLUMN_CALL_ID + ", " + COLUMN_CONTACT_ID + ")" +
+            "PRIMARY KEY (" + COLUMN_CALL_EVENT_ID + ", " + COLUMN_PHONE_NUMBER_ID + ")" +
         ");";
     //@formatter:on
 

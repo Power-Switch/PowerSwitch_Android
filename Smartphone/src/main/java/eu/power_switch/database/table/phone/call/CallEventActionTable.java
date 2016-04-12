@@ -20,26 +20,31 @@ package eu.power_switch.database.table.phone.call;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import eu.power_switch.database.table.action.ActionTable;
+
 /**
- * Geofence table description
+ * CallEventAction table description
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class CallTable {
+public class CallEventActionTable {
 
-    public static final String TABLE_NAME = "calls";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ACTIVE = "active";
-    public static final String COLUMN_NAME = "name";
-
-    public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME};
+    public static final String TABLE_NAME = "call_event_actions";
+    public static final String COLUMN_CALL_EVENT_ID = "call_event_id";
+    public static final String COLUMN_ACTION_ID = "action_id";
+    public static final String COLUMN_EVENT_TYPE_ID = "event_type_id";
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTIVE + " integer not null, " +
-            COLUMN_NAME + " text not null " +
-            ");";
+            COLUMN_CALL_EVENT_ID + " integer not null," +
+            COLUMN_ACTION_ID + " integer not null," +
+            COLUMN_EVENT_TYPE_ID + " text not null," +
+            "FOREIGN KEY(" + COLUMN_CALL_EVENT_ID + ") REFERENCES " +
+                CallEventTable.TABLE_NAME + "(" + CallEventTable.COLUMN_ID + "), " +
+            "FOREIGN KEY(" + COLUMN_ACTION_ID+ ") REFERENCES " +
+                ActionTable.TABLE_NAME + "(" + ActionTable.COLUMN_ID + "), " +
+            "PRIMARY KEY (" + COLUMN_CALL_EVENT_ID + ", " + COLUMN_ACTION_ID + ")" +
+        ");";
     //@formatter:on
 
     public static void onCreate(SQLiteDatabase db) {
@@ -68,7 +73,6 @@ public class CallTable {
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
                 break;
-
         }
     }
 }

@@ -41,6 +41,7 @@ import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
@@ -2009,5 +2010,29 @@ public final class DatabaseHandler {
         } finally {
             close();
         }
+    }
+
+    /**
+     * /////////////////////////
+     * //// Phone functions ////
+     * /////////////////////////
+     */
+
+    /**
+     *
+     */
+    @WorkerThread
+    public static List<CallEvent> getAllCallEvents() throws Exception {
+        openReadable();
+        List<CallEvent> callEvents = new ArrayList<>();
+        try {
+            callEvents = CallEventHandler.getAll();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+        return callEvents;
     }
 }

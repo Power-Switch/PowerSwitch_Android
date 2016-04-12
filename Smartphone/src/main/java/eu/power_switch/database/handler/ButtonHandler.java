@@ -32,27 +32,4 @@ abstract class ButtonHandler {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-//    /**
-//     * Gets Button from Database
-//     *
-//     * @param id         ID of Button
-//     * @param receiverId ID of Receiver to find buttonId
-//     * @return Button
-//     */
-//    protected static Button getButton(Long id, Long receiverId) throws Exception {
-//        if (id == DatabaseConstants.BUTTON_ON_ID) {
-//            return new Button(DatabaseConstants.BUTTON_ON_ID, DatabaseHandler.context.getString(R.string.on), receiverId);
-//        } else if (id == DatabaseConstants.BUTTON_OFF_ID) {
-//            return new Button(DatabaseConstants.BUTTON_OFF_ID, DatabaseHandler.context.getString(R.string.off), receiverId);
-//        } else if (id == DatabaseConstants.BUTTON_UP_ID) {
-//            return new Button(DatabaseConstants.BUTTON_UP_ID, DatabaseHandler.context.getString(R.string.up), receiverId);
-//        } else if (id == DatabaseConstants.BUTTON_STOP_ID) {
-//            return new Button(DatabaseConstants.BUTTON_STOP_ID, DatabaseHandler.context.getString(R.string.stop), receiverId);
-//        } else if (id == DatabaseConstants.BUTTON_DOWN_ID) {
-//            return new Button(DatabaseConstants.BUTTON_DOWN_ID, DatabaseHandler.context.getString(R.string.down), receiverId);
-//        } else {
-//            return UniversalButtonHandler.getUniversalButton(id);
-//        }
-//    }
-
 }

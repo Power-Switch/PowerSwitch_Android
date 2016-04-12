@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.CallRecyclerViewAdapter;
@@ -58,13 +59,13 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
- * Fragment holding the Call list
+ * Fragment holding the Call event list
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class CallsFragment extends RecyclerViewFragment {
+public class CallEventsFragment extends RecyclerViewFragment {
 
-    private ArrayList<CallEvent> callEvents = new ArrayList<>();
+    private List<CallEvent> callEvents = new ArrayList<>();
     private CallRecyclerViewAdapter callRecyclerViewAdapter;
     private RecyclerView recyclerViewCalls;
     private BroadcastReceiver broadcastReceiver;
@@ -76,7 +77,7 @@ public class CallsFragment extends RecyclerViewFragment {
      * @param context any suitable context
      */
     public static void sendCallsChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALLS_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -122,7 +123,7 @@ public class CallsFragment extends RecyclerViewFragment {
                 Log.d(this, "received intent: " + intent.getAction());
 
                 switch (intent.getAction()) {
-                    case LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED:
+                    case LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED:
                         refreshCalls();
                         break;
                     case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:
@@ -138,7 +139,7 @@ public class CallsFragment extends RecyclerViewFragment {
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                                         getRecyclerView(),
-                                        Manifest.permission.READ_PHONE_STATE);
+                                        Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS);
                             }
                         }
                         break;
@@ -168,7 +169,7 @@ public class CallsFragment extends RecyclerViewFragment {
         } else {
             Log.d("Displaying default phone permission dialog to request permission");
             ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.READ_PHONE_STATE}, PermissionConstants.REQUEST_CODE_PHONE_PERMISSION);
+                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS}, PermissionConstants.REQUEST_CODE_PHONE_PERMISSION);
         }
     }
 
@@ -209,7 +210,8 @@ public class CallsFragment extends RecyclerViewFragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
 //        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED);
-//        intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -252,7 +254,7 @@ public class CallsFragment extends RecyclerViewFragment {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
 //        } else {
-//        calls = DatabaseHandler.getAllCalls();
+        callEvents = DatabaseHandler.getAllCallEvents();
 
         return callEvents;
     }

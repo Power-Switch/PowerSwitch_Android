@@ -175,26 +175,4 @@ abstract class SceneItemHandler {
         return sceneItem;
     }
 
-//    /**
-//     * Gets name of active Button in SceneItem
-//     *
-//     * @param buttonId ID of Button
-//     * @return Name of active Button
-//     */
-//    private static String getActiveButtonName(Long buttonId) throws Exception {
-//        if (buttonId == DatabaseConstants.BUTTON_ON_ID) {
-//            return DatabaseHandler.context.getString(R.string.on);
-//        } else if (buttonId == DatabaseConstants.BUTTON_OFF_ID) {
-//            return DatabaseHandler.context.getString(R.string.off);
-//        } else if (buttonId == DatabaseConstants.BUTTON_UP_ID) {
-//            return DatabaseHandler.context.getString(R.string.up);
-//        } else if (buttonId == DatabaseConstants.BUTTON_STOP_ID) {
-//            return DatabaseHandler.context.getString(R.string.stop);
-//        } else if (buttonId == DatabaseConstants.BUTTON_DOWN_ID) {
-//            return DatabaseHandler.context.getString(R.string.down);
-//        } else {
-//            UniversalButton button = UniversalButtonHandler.getUniversalButton(buttonId);
-//            return button.getName();
-//        }
-//    }
 }

@@ -158,7 +158,7 @@ public class PhoneTabFragment extends Fragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case PhoneConstants.CALL_TAB_INDEX:
-                    return new CallsFragment();
+                    return new CallEventsFragment();
                 case PhoneConstants.SMS_TAB_INDEX:
                     return new CustomGeofencesFragment();
                 default:

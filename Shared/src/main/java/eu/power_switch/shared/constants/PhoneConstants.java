@@ -18,6 +18,8 @@
 
 package eu.power_switch.shared.constants;
 
+import java.util.NoSuchElementException;
+
 /**
  * Class holding constants related to Settings Call and SMS stuff
  * <p/>
@@ -36,5 +38,29 @@ public class PhoneConstants {
      */
     private PhoneConstants() {
         throw new UnsupportedOperationException("This class is non-instantiable");
+    }
+
+    public enum Type {
+        INCOMING(0),
+        OUTGOING(1);
+
+        private final int id;
+
+        Type(int id) {
+            this.id = id;
+        }
+
+        public static Type getById(int id) {
+            for (Type e : values()) {
+                if (e.getId() == id) {
+                    return e;
+                }
+            }
+            throw new NoSuchElementException("No Event with id: " + id);
+        }
+
+        public int getId() {
+            return id;
+        }
     }
 }

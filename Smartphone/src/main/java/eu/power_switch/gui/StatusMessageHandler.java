@@ -297,14 +297,18 @@ public class StatusMessageHandler {
      *
      * @param activity     activity used for permission changed callbacks
      * @param recyclerView recyclerview to show snackbar on
-     * @param permission   permission constant
+     * @param permissions  permission constant(s)
      */
-    public static void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final String permission) {
+    public static void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final String... permissions) {
+
+        if (permissions.length == 0) {
+            throw new IllegalArgumentException("Missing permission constant(s)");
+        }
 
         int messageResource;
         final int requestCode;
 
-        switch (permission) {
+        switch (permissions[0]) {
             case Manifest.permission.WRITE_EXTERNAL_STORAGE:
                 messageResource = R.string.missing_external_storage_permission;
                 requestCode = PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION;
@@ -322,12 +326,16 @@ public class StatusMessageHandler {
                 requestCode = -1;
         }
 
+        if (permissions.length > 1) {
+//            messageResource = R.string.missing_multiple_permissions;
+        }
+
         Snackbar snackbar = Snackbar.make(recyclerView, messageResource, Snackbar.LENGTH_INDEFINITE);
         if (requestCode != -1) {
             snackbar.setAction(R.string.grant, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+                    ActivityCompat.requestPermissions(activity, permissions, requestCode);
                 }
             });
         } else {
