@@ -18,7 +18,6 @@
 
 package eu.power_switch.obj.gateway;
 
-import java.util.List;
 import java.util.Set;
 
 import eu.power_switch.network.NetworkHandler;
@@ -39,7 +38,7 @@ public class EZControl_XS1 extends Gateway {
     private Set<Communicator> communicators;
     private Set<Sensor> sensors;
 
-    public EZControl_XS1(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, List<String> ssids) {
+    public EZControl_XS1(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, Set<String> ssids) {
         super(id, active, name, MODEL, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
         capabilities.add(Capability.SEND);
         capabilities.add(Capability.RECEIVE);

@@ -44,11 +44,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.CallRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.ConfigureCallDialog;
+import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -76,14 +75,14 @@ public class CallEventsFragment extends RecyclerViewFragment {
      *
      * @param context any suitable context
      */
-    public static void sendCallsChangedBroadcast(Context context) {
+    public static void sendCallEventsChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_calls, container, false);
+        rootView = inflater.inflate(R.layout.fragment_call_events, container, false);
 
         setHasOptionsMenu(true);
 
@@ -101,7 +100,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.checkLocationPermission(getContext())) {
+                if (!PermissionHelper.checkPhonePermission(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
                             .setMessage(R.string.missing_contacts_permission)
@@ -110,9 +109,9 @@ public class CallEventsFragment extends RecyclerViewFragment {
                     return;
                 }
 
-                ConfigureCallDialog configureCallDialog = new ConfigureCallDialog();
-                configureCallDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureCallDialog.show(getFragmentManager(), null);
+                ConfigureCallEventDialog configureCallEventDialog = new ConfigureCallEventDialog();
+                configureCallEventDialog.setTargetFragment(recyclerViewFragment, 0);
+                configureCallEventDialog.show(getFragmentManager(), null);
             }
         });
 
@@ -131,11 +130,16 @@ public class CallEventsFragment extends RecyclerViewFragment {
                         int[] result = intent.getIntArrayExtra(PermissionConstants.KEY_RESULTS);
 
                         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_PHONE_PERMISSION) {
-                            if (result[0] == PackageManager.PERMISSION_GRANTED) {
+                            boolean allGranted = true;
+                            for (int i = 0; i < result.length; i++) {
+                                allGranted &= result[i] == PackageManager.PERMISSION_GRANTED;
+                            }
+
+                            if (allGranted) {
                                 StatusMessageHandler.showInfoMessage(getRecyclerView(),
                                         R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
-                                sendCallsChangedBroadcast(context);
+                                sendCallEventsChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                                         getRecyclerView(),
@@ -150,9 +154,11 @@ public class CallEventsFragment extends RecyclerViewFragment {
 
     @Override
     protected void onInitialized() {
-        if (!PermissionHelper.checkPhonePermission(getContext())) {
+        if (!PermissionHelper.checkPhonePermission(getContext()) || !PermissionHelper.checkContactPermission(getContext())) {
             showEmpty();
-            requestPhonePermission();
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                    getRecyclerView(),
+                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS);
         } else {
             refreshCalls();
         }
@@ -209,7 +215,6 @@ public class CallEventsFragment extends RecyclerViewFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
@@ -254,7 +259,9 @@ public class CallEventsFragment extends RecyclerViewFragment {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
 //        } else {
-        callEvents = DatabaseHandler.getAllCallEvents();
+
+//        callEvents = DatabaseHandler.getAllCallEvents();
+
 
         return callEvents;
     }

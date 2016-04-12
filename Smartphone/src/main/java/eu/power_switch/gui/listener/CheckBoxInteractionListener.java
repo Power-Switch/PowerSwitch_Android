@@ -36,7 +36,7 @@ import android.widget.CompoundButton;
  * }
  * };
  * checkBox.setOnTouchListener(checkboxInteractionListener);
- * checkBox.setOnItemSelectedListener(checkboxInteractionListener);
+ * checkBox.setOnCheckedChangeListener(checkboxInteractionListener);
  * <p/>
  * <p/>
  * Created by Markus on 19.02.2016.

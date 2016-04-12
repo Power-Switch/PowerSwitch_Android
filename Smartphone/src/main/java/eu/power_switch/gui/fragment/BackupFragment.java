@@ -261,7 +261,9 @@ public class BackupFragment extends RecyclerViewFragment {
 
         if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
             showEmpty();
-            requestExternalStoragePermission();
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                    getRecyclerView(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
         } else {
             updateListContent();
         }

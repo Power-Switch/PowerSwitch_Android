@@ -21,6 +21,7 @@
 
     <string name="nfc">NFC</string>
     <string name="write_nfc_tag">Write NFC Tag</string>
+    <string name="write_nfc_tag_image">{gmi-nfc} Write NFC Tag</string>
 
     <string name="waiting_for_tag">Waiting for NFC Tag…</string>
     <string name="tag_discovered_writing_data">NFC Tag discovered\nWriting data…</string>

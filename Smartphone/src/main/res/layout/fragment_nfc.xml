@@ -29,12 +29,12 @@
 
         <include layout="@layout/action_selector"/>
 
-        <Button
+        <com.mikepenz.iconics.view.IconicsButton
             android:id="@+id/button_write_nfc_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/write_nfc_tag"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"/>
 
     </LinearLayout>
 

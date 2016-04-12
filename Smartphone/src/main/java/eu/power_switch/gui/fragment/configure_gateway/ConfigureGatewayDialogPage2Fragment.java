@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -197,11 +198,8 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         }
 
         // as long as one of the address fields is filled in its ok
-        if (TextUtils.isEmpty(currentLocalAddress) && TextUtils.isEmpty(currentWanAddress)) {
-            return false;
-        }
+        return !(TextUtils.isEmpty(currentLocalAddress) && TextUtils.isEmpty(currentWanAddress));
 
-        return true;
     }
 
     @Override
@@ -211,19 +209,19 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
 
             switch (currentModel) {
                 case BrematicGWY433.MODEL:
-                    newGateway = new BrematicGWY433((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, ssids);
+                    newGateway = new BrematicGWY433((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
                     break;
                 case ConnAir.MODEL:
-                    newGateway = new ConnAir((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, ssids);
+                    newGateway = new ConnAir((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
                     break;
                 case EZControl_XS1.MODEL:
-                    newGateway = new EZControl_XS1((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, ssids);
+                    newGateway = new EZControl_XS1((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
                     break;
                 case ITGW433.MODEL:
-                    newGateway = new ITGW433((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, ssids);
+                    newGateway = new ITGW433((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
                     break;
                 case RaspyRFM.MODEL:
-                    newGateway = new RaspyRFM((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, ssids);
+                    newGateway = new RaspyRFM((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
                     break;
                 default:
                     throw new GatewayUnknownException();
@@ -236,7 +234,7 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
                         R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
             }
         } else {
-            DatabaseHandler.updateGateway(gatewayId, currentName, currentModel, currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, ssids);
+            DatabaseHandler.updateGateway(gatewayId, currentName, currentModel, currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
         }
 
         GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());

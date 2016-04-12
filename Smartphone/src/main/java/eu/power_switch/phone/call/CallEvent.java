@@ -20,6 +20,7 @@ package eu.power_switch.phone.call;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.shared.constants.PhoneConstants.Type;
@@ -49,7 +50,7 @@ public class CallEvent {
     /**
      * Map of phone numbers per EventType
      */
-    private Map<Type, List<String>> phoneNumbersMap;
+    private Map<Type, Set<String>> phoneNumbersMap;
 
     /**
      * Map of Actions per EventType
@@ -65,7 +66,7 @@ public class CallEvent {
      * @param phoneNumbersMap
      * @param actionsMap
      */
-    public CallEvent(long id, boolean active, String name, Map<Type, List<String>> phoneNumbersMap, Map<Type, List<Action>> actionsMap) {
+    public CallEvent(long id, boolean active, String name, Map<Type, Set<String>> phoneNumbersMap, Map<Type, List<Action>> actionsMap) {
         this.id = id;
         this.active = active;
         this.name = name;
@@ -106,7 +107,7 @@ public class CallEvent {
      * @param type EventType
      * @return list of phone numbers
      */
-    public List<String> getPhoneNumbers(Type type) {
+    public Set<String> getPhoneNumbers(Type type) {
         return phoneNumbersMap.get(type);
     }
 

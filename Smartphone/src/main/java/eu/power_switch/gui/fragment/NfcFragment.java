@@ -32,6 +32,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import com.mikepenz.iconics.view.IconicsButton;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -102,7 +104,7 @@ public class NfcFragment extends Fragment {
     private ProgressBar progressButton;
     private ProgressBar progressScene;
     private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
-    private android.widget.Button buttonWriteTag;
+    private IconicsButton buttonWriteTag;
 
     @Nullable
     @Override
@@ -216,7 +218,8 @@ public class NfcFragment extends Fragment {
         spinner_scene.setOnTouchListener(spinnerInteractionListener7);
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener7);
 
-        buttonWriteTag = (android.widget.Button) rootView.findViewById(R.id.button_write_nfc_tag);
+        buttonWriteTag = (IconicsButton) rootView.findViewById(R.id.button_write_nfc_tag);
+        buttonWriteTag.setText(R.string.write_nfc_tag_image);
         buttonWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -629,11 +632,13 @@ public class NfcFragment extends Fragment {
     }
 
     private void setPositiveButtonVisibility(boolean visibility) {
-        if (visibility) {
-            buttonWriteTag.setEnabled(true);
-        } else {
-            buttonWriteTag.setEnabled(false);
-        }
+//        if (visibility) {
+        buttonWriteTag.setActivated(visibility);
+        buttonWriteTag.setEnabled(visibility);
+//        } else {
+//            buttonWriteTag.setActivated(visibility);
+//            buttonWriteTag.setEnabled(visibility);
+//        }
     }
 
     private void updatePositiveButton() {

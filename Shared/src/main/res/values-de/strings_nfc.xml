@@ -20,6 +20,7 @@
 <resources>
 
     <string name="write_nfc_tag">NFC Tag beschreiben</string>
+    <string name="write_nfc_tag_image">{gmi-nfc} NFC Tag beschreiben</string>
 
     <string name="waiting_for_tag">Warte auf NFC Tag…</string>
     <string name="tag_discovered_writing_data">NFC Tag erkannt\nSchreibe Daten…</string>

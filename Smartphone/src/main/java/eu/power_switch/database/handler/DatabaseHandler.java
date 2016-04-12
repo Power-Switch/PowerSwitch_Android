@@ -27,6 +27,7 @@ import android.support.annotation.WorkerThread;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -1157,7 +1158,7 @@ public final class DatabaseHandler {
      * @param wanPort      new WAN Port of Gateway
      */
     @WorkerThread
-    public static void updateGateway(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort, List<String> ssids) throws Exception {
+    public static void updateGateway(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort, Set<String> ssids) throws Exception {
         openWritable();
         try {
             GatewayHandler.update(id, name, model, localAddress, localPort, wanAddress, wanPort, ssids);
@@ -2019,7 +2020,31 @@ public final class DatabaseHandler {
      */
 
     /**
+     * Get a CallEvent from Database
      *
+     * @param id ID of Call Event
+     * @return CallEvent
+     */
+    @NonNull
+    @WorkerThread
+    public static CallEvent getCallEvent(long id) throws Exception {
+        openReadable();
+        CallEvent callEvent = null;
+        try {
+            callEvent = CallEventHandler.get(id);
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+        return callEvent;
+    }
+
+    /**
+     * Get all Call Events from Database
+     *
+     * @return List of CallEvents
      */
     @WorkerThread
     public static List<CallEvent> getAllCallEvents() throws Exception {
@@ -2035,4 +2060,24 @@ public final class DatabaseHandler {
         }
         return callEvents;
     }
+
+    /**
+     * Delete Call Event from Database
+     *
+     * @param id ID of Call Event
+     */
+    @WorkerThread
+    public static void deleteCallEvent(Long id) throws Exception {
+        openWritable();
+        try {
+            CallEventHandler.delete(id);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+    }
+
 }

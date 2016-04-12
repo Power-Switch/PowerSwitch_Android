@@ -29,32 +29,34 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage1ContactsFragment;
 import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage2ActionsFragment;
+import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.shared.log.Log;
 
 /**
- * Dialog to create or modify a Call
+ * Dialog to create or modify a Call Event
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallDialog extends ConfigurationDialogTabbed {
+public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
     /**
-     * ID of existing Call to Edit
+     * ID of existing Call Event to Edit
      */
-    public static final String CALL_ID_KEY = "CallId";
+    public static final String CALL_EVENT_ID_KEY = "CallEventId";
 
-    private long callId = -1;
+    private long callEventId = -1;
 
-    public static ConfigureCallDialog newInstance(long callId) {
+    public static ConfigureCallEventDialog newInstance(long callEventId) {
         Bundle args = new Bundle();
-        args.putLong(CALL_ID_KEY, callId);
+        args.putLong(CALL_EVENT_ID_KEY, callEventId);
 
-        ConfigureCallDialog fragment = new ConfigureCallDialog();
+        ConfigureCallEventDialog fragment = new ConfigureCallEventDialog();
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,11 +68,11 @@ public class ConfigureCallDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(CALL_ID_KEY)) {
+        if (arguments != null && arguments.containsKey(CALL_EVENT_ID_KEY)) {
             // init dialog using existing scene
-            callId = arguments.getLong(CALL_ID_KEY);
+            callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), callId));
+                    (RecyclerViewFragment) getTargetFragment(), callEventId));
             return true;
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
@@ -86,23 +88,23 @@ public class ConfigureCallDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        Log.d("Saving call");
+        Log.d(this, "Saving call event");
         super.saveCurrentConfigurationToDatabase();
     }
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .call_will_be_gone_forever)
+                .call_event_will_be_gone_forever)
                 .setPositiveButton
                         (android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-//                                    DatabaseHandler.deleteCall(callId);
+                                    DatabaseHandler.deleteCallEvent(callEventId);
 
                                     // notify scenes fragment
-//                                    CallsFragment.sendCallsChangedBroadcast(getActivity());
+                                    CallEventsFragment.sendCallEventsChangedBroadcast(getActivity());
 
                                     StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
                                             R.string.call_deleted, Snackbar.LENGTH_LONG);
@@ -117,23 +119,22 @@ public class ConfigureCallDialog extends ConfigurationDialogTabbed {
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-
         private Context context;
-        private long callId;
+        private long callEventId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
         private RecyclerViewFragment recyclerViewFragment;
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
             super(fm);
             this.context = context;
-            this.callId = -1;
+            this.callEventId = -1;
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
         public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
             super(fm);
             this.context = context;
-            this.callId = id;
+            this.callEventId = id;
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
@@ -174,9 +175,9 @@ public class ConfigureCallDialog extends ConfigurationDialogTabbed {
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }
 
-            if (fragment != null && callId != -1) {
+            if (fragment != null && callEventId != -1) {
                 Bundle bundle = new Bundle();
-                bundle.putLong(CALL_ID_KEY, callId);
+                bundle.putLong(CALL_EVENT_ID_KEY, callEventId);
                 fragment.setArguments(bundle);
             }
 

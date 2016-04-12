@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Iterator;
 import java.util.List;
 
 import eu.power_switch.R;
@@ -59,11 +60,12 @@ public class CallRecyclerViewAdapter extends RecyclerView.Adapter<CallRecyclerVi
         final CallEvent callEvent = callEvents.get(holder.getAdapterPosition());
 
         String phoneNumbers = "";
-        for (int i = 0; i < callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING).size(); i++) {
-            if (i < callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING).size() - 1) {
-                phoneNumbers += callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING).get(i) + "\n";
-            } else {
-                phoneNumbers += callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING).get(i);
+        Iterator<String> iterator = callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING).iterator();
+        while (iterator.hasNext()) {
+            phoneNumbers += iterator.next();
+
+            if (iterator.hasNext()) {
+                phoneNumbers += "\n";
             }
         }
         holder.phoneNumbers.setText(phoneNumbers);

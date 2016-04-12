@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.phone.call.CallEventTable;
@@ -75,8 +76,7 @@ abstract class CallEventHandler {
      * Get a CallEvent from Database
      *
      * @param id ID of CallEvent
-     * @return
-     * @throws Exception
+     * @return CallEvent
      */
     protected static CallEvent get(Long id) throws Exception {
         CallEvent callEvent = null;
@@ -113,12 +113,21 @@ abstract class CallEventHandler {
         return timers;
     }
 
+    /**
+     * Delete Call Event from Database
+     *
+     * @param id ID of CallEvent
+     */
+    protected static void delete(Long id) throws Exception {
+        // TODO:
+    }
+
     private static CallEvent dbToCallEvent(Cursor c) throws Exception {
         long id = c.getLong(0);
         boolean active = c.getInt(1) > 0;
         String name = c.getString(2);
 
-        HashMap<PhoneConstants.Type, List<String>> phoneNumbersMap = new HashMap<>();
+        HashMap<PhoneConstants.Type, Set<String>> phoneNumbersMap = new HashMap<>();
         for (PhoneConstants.Type type : PhoneConstants.Type.values()) {
             phoneNumbersMap.put(type, CallEventPhoneNumberHandler.get(id, type));
         }
@@ -131,5 +140,4 @@ abstract class CallEventHandler {
         CallEvent callEvent = new CallEvent(id, active, name, phoneNumbersMap, actionsMap);
         return callEvent;
     }
-
 }

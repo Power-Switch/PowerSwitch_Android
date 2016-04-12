@@ -24,7 +24,7 @@
 
     <string name="contacts">Kontakte</string>
 
-    <string name="call_will_be_gone_forever">Der Anruf wird für immer verloren sein!</string>
+    <string name="call_event_will_be_gone_forever">Das Anrufereignis wird für immer verloren sein!</string>
     <string name="call_deleted">Anruf gelöscht</string>
     <string name="add_phone_nummbers">Telefonnummer hinzufügen</string>
 

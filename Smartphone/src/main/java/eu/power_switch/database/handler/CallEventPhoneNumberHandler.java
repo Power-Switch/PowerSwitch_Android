@@ -20,8 +20,8 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import eu.power_switch.database.table.phone.call.CallEventPhoneNumberTable;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -40,7 +40,7 @@ abstract class CallEventPhoneNumberHandler {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-    protected static void add(List<String> phoneNumbers, long callEventId, PhoneConstants.Type eventType) throws Exception {
+    protected static void add(Set<String> phoneNumbers, long callEventId, PhoneConstants.Type eventType) throws Exception {
         for (String phoneNumber : phoneNumbers) {
             long phoneNumberId = PhoneNumberHandler.add(phoneNumber);
 
@@ -53,8 +53,8 @@ abstract class CallEventPhoneNumberHandler {
         }
     }
 
-    protected static List<String> get(long callEventId, PhoneConstants.Type type) throws Exception {
+    protected static Set<String> get(long callEventId, PhoneConstants.Type type) throws Exception {
         // TODO:
-        return new ArrayList<>();
+        return new HashSet<>();
     }
 }

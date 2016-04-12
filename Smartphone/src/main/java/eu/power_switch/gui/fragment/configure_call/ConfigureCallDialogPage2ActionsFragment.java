@@ -39,24 +39,28 @@ import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddCallActionDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
-import eu.power_switch.gui.dialog.ConfigureCallDialog;
+import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
+import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.PhoneConstants;
 
 /**
  * Created by Markus on 05.04.2016.
  */
 public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialogFragment {
 
-    private long callId = -1;
-
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static List<Action> actions = new ArrayList<>();
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
+
+    private long callEventId = -1;
+
     private View rootView;
     private BroadcastReceiver broadcastReceiver;
 
@@ -111,17 +115,20 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
         recyclerViewActions.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureCallDialog.CALL_ID_KEY)) {
-            callId = args.getLong(ConfigureCallDialog.CALL_ID_KEY);
-            initializeCallData(callId);
+        if (args != null && args.containsKey(ConfigureCallEventDialog.CALL_EVENT_ID_KEY)) {
+            callEventId = args.getLong(ConfigureCallEventDialog.CALL_EVENT_ID_KEY);
+            initializeCallData(callEventId);
         }
 
         return rootView;
     }
 
-    private void initializeCallData(long callId) {
+    private void initializeCallData(long callEventId) {
         try {
-//            Call call = DatabaseHandler.getCall(callId);
+            CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
+
+            actions.addAll(callEvent.getActions(PhoneConstants.Type.INCOMING));
+
 
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

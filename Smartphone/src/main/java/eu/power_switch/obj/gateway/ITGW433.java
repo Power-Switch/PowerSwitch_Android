@@ -18,7 +18,7 @@
 
 package eu.power_switch.obj.gateway;
 
-import java.util.List;
+import java.util.Set;
 
 import eu.power_switch.network.NetworkPackage;
 
@@ -32,7 +32,7 @@ public class ITGW433 extends Gateway {
      */
     public static final String MODEL = "ITGW-433";
 
-    public ITGW433(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, List<String> ssids) {
+    public ITGW433(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, Set<String> ssids) {
         super(id, active, name, MODEL, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
         capabilities.add(Capability.SEND);
     }

@@ -23,14 +23,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mikepenz.iconics.view.IconicsImageView;
-
+import java.util.Iterator;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.phone.Contact;
 
 /**
@@ -41,18 +42,20 @@ import eu.power_switch.phone.Contact;
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
     private List<Contact> contacts;
     private Context context;
-    private OnItemClickListener onDeleteClickListener;
+
+    private CheckBoxInteractionListener checkBoxInteractionListener;
 
     public ContactRecyclerViewAdapter(Context context, List<Contact> contacts) {
         this.contacts = contacts;
         this.context = context;
     }
 
-    public void setOnDeleteClickListener(OnItemClickListener onItemClickListener) {
-        this.onDeleteClickListener = onItemClickListener;
+    public void setCheckBoxInteractionListener(CheckBoxInteractionListener checkBoxInteractionListener) {
+        this.checkBoxInteractionListener = checkBoxInteractionListener;
     }
 
     @Override
+
     public ContactRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_contact, parent, false);
         return new ContactRecyclerViewAdapter.ViewHolder(itemView);
@@ -63,11 +66,27 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         final Contact contact = contacts.get(holder.getAdapterPosition());
         holder.name.setText(contact.getName());
 
-        String numbers = "";
-        for (String number : contact.getPhoneNumbers()) {
-            numbers += number + "\n";
+        holder.numbers.removeAllViews();
+        Iterator<String> iterator = contact.getPhoneNumbers().iterator();
+        while (iterator.hasNext()) {
+            final String number = iterator.next();
+
+            LinearLayout linearLayout = new LinearLayout(context);
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            CheckBox checkBox = new CheckBox(context);
+            checkBox.setTag(number);
+
+            checkBox.setOnTouchListener(checkBoxInteractionListener);
+            checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
+
+            TextView phoneNumber = new TextView(context);
+            phoneNumber.setText(number);
+
+            linearLayout.addView(checkBox);
+            linearLayout.addView(phoneNumber);
+
+            holder.numbers.addView(linearLayout);
         }
-        holder.number.setText(numbers);
 
         if (holder.getAdapterPosition() == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
@@ -88,25 +107,14 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
-        public TextView number;
-        public IconicsImageView delete;
+        public LinearLayout numbers;
         public LinearLayout footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.name = (TextView) itemView.findViewById(R.id.txt_name);
-            this.number = (TextView) itemView.findViewById(R.id.txt_number);
-            this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
+            this.numbers = (LinearLayout) itemView.findViewById(R.id.linearLayout_numbers);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
-
-            this.delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onDeleteClickListener != null) {
-                        onDeleteClickListener.onItemClick(delete, getLayoutPosition());
-                    }
-                }
-            });
         }
     }
 }

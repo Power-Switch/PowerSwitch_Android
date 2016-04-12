@@ -99,4 +99,15 @@ public class PermissionHelper {
         return hasPermission == PackageManager.PERMISSION_GRANTED;
     }
 
+    /**
+     * Check if Contact permission is available
+     *
+     * @param context any suitable context
+     * @return true if contact permission is available, false otherwise
+     */
+    public static boolean checkContactPermission(@NonNull Context context) {
+        int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
+        return hasPermission == PackageManager.PERMISSION_GRANTED;
+    }
+
 }

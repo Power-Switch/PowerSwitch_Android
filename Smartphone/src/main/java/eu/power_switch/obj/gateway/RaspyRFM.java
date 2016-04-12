@@ -18,7 +18,7 @@
 
 package eu.power_switch.obj.gateway;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * RaspyRFM represents a RasperyPi ConnAir emulator Gateway
@@ -30,7 +30,7 @@ public class RaspyRFM extends ConnAir {
      */
     public static final String MODEL = "RaspyRFM";
 
-    public RaspyRFM(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, List<String> ssids) {
+    public RaspyRFM(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, Set<String> ssids) {
         super(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
         model = MODEL;
     }

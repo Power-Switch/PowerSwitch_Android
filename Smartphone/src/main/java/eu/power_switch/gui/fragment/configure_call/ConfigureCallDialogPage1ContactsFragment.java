@@ -18,12 +18,17 @@
 
 package eu.power_switch.gui.fragment.configure_call;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -34,12 +39,16 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.PhoneNumberRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddPhoneNumberDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
-import eu.power_switch.gui.dialog.ConfigureCallDialog;
+import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
+import eu.power_switch.phone.call.CallEvent;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.PhoneConstants;
 
 /**
  * Created by Markus on 05.04.2016.
@@ -47,8 +56,9 @@ import eu.power_switch.gui.dialog.ConfigureCallDialog;
 public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialogFragment {
 
     private View rootView;
+    private BroadcastReceiver broadcastReceiver;
 
-    private long callId = -1;
+    private long callEventId = -1;
 
     private ArrayList<String> phoneNumbers = new ArrayList<>();
     private PhoneNumberRecyclerViewAdapter phoneNumberRecyclerViewAdapter;
@@ -58,6 +68,23 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_page_1, container, false);
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (LocalBroadcastConstants.INTENT_CALL_PHONE_NUMBER_ADDED.equals(intent.getAction())) {
+                    ArrayList<String> newPhoneNumbers = intent.getStringArrayListExtra(AddPhoneNumberDialog.KEY_PHONE_NUMBER);
+
+                    for (String number : newPhoneNumbers) {
+                        if (!phoneNumbers.contains(number)) {
+                            phoneNumbers.add(number);
+                        }
+                    }
+
+                    phoneNumberRecyclerViewAdapter.notifyDataSetChanged();
+                }
+            }
+        };
 
         recyclerViewContacts = (RecyclerView) rootView.findViewById(R.id.recyclerView_contacts);
         phoneNumberRecyclerViewAdapter = new PhoneNumberRecyclerViewAdapter(getActivity(), phoneNumbers);
@@ -100,21 +127,37 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
         });
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureCallDialog.CALL_ID_KEY)) {
-            callId = args.getLong(ConfigureCallDialog.CALL_ID_KEY);
-            initializeCallData(callId);
+        if (args != null && args.containsKey(ConfigureCallEventDialog.CALL_EVENT_ID_KEY)) {
+            callEventId = args.getLong(ConfigureCallEventDialog.CALL_EVENT_ID_KEY);
+            initializeCallData(callEventId);
         }
 
         return rootView;
     }
 
-    private void initializeCallData(long callId) {
+    private void initializeCallData(long callEventId) {
         try {
-//            Call call = DatabaseHandler.getCall(callId);
+            CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
+
+            phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING));
 
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_PHONE_NUMBER_ADDED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
     }
 
 }

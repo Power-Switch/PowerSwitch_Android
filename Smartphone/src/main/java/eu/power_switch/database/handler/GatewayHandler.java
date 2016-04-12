@@ -23,8 +23,10 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.gateway.GatewaySsidTable;
@@ -115,7 +117,7 @@ abstract class GatewayHandler {
      * @param wanAddress   new WAN Address (Host)
      * @param wanPort      new WAN Port
      */
-    protected static void update(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort, List<String> ssids) throws Exception {
+    protected static void update(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort, Set<String> ssids) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GatewayTable.COLUMN_NAME, name);
         values.put(GatewayTable.COLUMN_MODEL, model);
@@ -168,7 +170,7 @@ abstract class GatewayHandler {
         return gateway;
     }
 
-    private static void addSSIDs(Long id, List<String> ssids) throws Exception {
+    private static void addSSIDs(Long id, Set<String> ssids) throws Exception {
         for (String ssid : ssids) {
             ContentValues values = new ContentValues();
             values.put(GatewaySsidTable.COLUMN_GATEWAY_ID, id);
@@ -187,8 +189,8 @@ abstract class GatewayHandler {
      * @param id ID of Gateway
      * @return List of SSIDs (as String)
      */
-    private static List<String> getSSIDs(Long id) throws Exception {
-        List<String> ssids = new ArrayList<>();
+    private static Set<String> getSSIDs(Long id) throws Exception {
+        Set<String> ssids = new HashSet<>();
 
         Cursor cursor = DatabaseHandler.database.query(GatewaySsidTable.TABLE_NAME, GatewaySsidTable.ALL_COLUMNS,
                 GatewaySsidTable.COLUMN_GATEWAY_ID + "=" + id, null, null, null, null);
@@ -276,7 +278,7 @@ abstract class GatewayHandler {
         int localPort = c.getInt(6);
         String wanAddress = c.getString(7);
         int wanPort = c.getInt(8);
-        List<String> ssids = getSSIDs(id);
+        Set<String> ssids = getSSIDs(id);
 
         switch (rawModel) {
             case BrematicGWY433.MODEL:

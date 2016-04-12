@@ -32,17 +32,24 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
+import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.phone.Contact;
 import eu.power_switch.phone.ContactHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -54,25 +61,31 @@ public class AddPhoneNumberDialog extends DialogFragment {
 
     public static final String KEY_PHONE_NUMBER = "phoneNumber";
 
+    public static final Comparator<Contact> ALPHABETIC = new Comparator<Contact>() {
+        @Override
+        public int compare(Contact lhs, Contact rhs) {
+            return lhs.getName().compareToIgnoreCase(rhs.getName());
+        }
+    };
+
     private Dialog dialog;
     private int defaultTextColor;
     private View contentView;
-
     private LinearLayout layoutLoading;
     private TextInputEditText editText_phoneNumber;
-
     private ArrayList<Contact> contacts = new ArrayList<>();
     private ContactRecyclerViewAdapter contactRecyclerViewAdapter;
     private RecyclerView recyclerViewContacts;
+    private Set<String> checkedNumbers = new HashSet<>();
 
     /**
      * Used to notify the setup page that some info has changed
      *
      * @param context any suitable context
      */
-    public static void sendPhoneNumbersAddedBroadcast(Context context, ArrayList<String> phoneNumbers) {
+    public static void sendPhoneNumbersAddedBroadcast(Context context, Set<String> phoneNumbers) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_PHONE_NUMBER_ADDED);
-        intent.putStringArrayListExtra(KEY_PHONE_NUMBER, phoneNumbers);
+        intent.putStringArrayListExtra(KEY_PHONE_NUMBER, new ArrayList<>(phoneNumbers));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -105,6 +118,22 @@ public class AddPhoneNumberDialog extends DialogFragment {
 
         recyclerViewContacts = (RecyclerView) contentView.findViewById(R.id.recyclerView_contacts);
         contactRecyclerViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts);
+        contactRecyclerViewAdapter.setCheckBoxInteractionListener(new CheckBoxInteractionListener() {
+            @Override
+            public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
+                String number = (String) buttonView.getTag();
+
+                if (isChecked) {
+                    checkedNumbers.add(number);
+                } else {
+                    if (checkedNumbers.contains(number)) {
+                        checkedNumbers.remove(number);
+                    }
+                }
+
+                checkValidity();
+            }
+        });
         recyclerViewContacts.setAdapter(contactRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewContacts.setLayoutManager(layoutManager);
@@ -144,15 +173,22 @@ public class AddPhoneNumberDialog extends DialogFragment {
         contacts.clear();
         contacts.addAll(ContactHelper.getContacts(getActivity()));
 
+        Collections.sort(contacts, ALPHABETIC);
+
         contactRecyclerViewAdapter.notifyDataSetChanged();
     }
 
-    private ArrayList<String> getSelectedPhoneNumbers() {
-        return new ArrayList<>();
+    private Set<String> getSelectedPhoneNumbers() {
+        if (!TextUtils.isEmpty(editText_phoneNumber.getText().toString().trim())) {
+            checkedNumbers.add(editText_phoneNumber.getText().toString().trim());
+        }
+
+        return checkedNumbers;
     }
 
     private void checkValidity() {
-        if (getSelectedPhoneNumbers().isEmpty()) {
+        if (TextUtils.isEmpty(editText_phoneNumber.getText().toString().trim()) &&
+                checkedNumbers.isEmpty()) {
             setPositiveButtonVisibility(false);
         } else {
             setPositiveButtonVisibility(true);

@@ -19,7 +19,6 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -45,25 +44,14 @@
                 android:layout_height="wrap_content"
                 android:textColor="?android:textColorPrimary"/>
 
-            <TextView
-                android:id="@+id/txt_number"
+            <LinearLayout
+                android:id="@+id/linearLayout_numbers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?android:textColorPrimary"
-                />
+                android:layout_marginLeft="8dp"
+                android:orientation="vertical"/>
 
         </LinearLayout>
-
-        <com.mikepenz.iconics.view.IconicsImageView
-            android:id="@+id/delete"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical|right"
-            android:layout_margin="8dp"
-            android:contentDescription="@string/delete"
-            android:elevation="4dp"
-            app:iiv_color="@color/delete_color"
-            app:iiv_icon="gmi-delete"/>
 
     </LinearLayout>
 

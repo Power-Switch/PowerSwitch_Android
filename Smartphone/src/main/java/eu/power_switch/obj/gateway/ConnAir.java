@@ -20,7 +20,7 @@ package eu.power_switch.obj.gateway;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
+import java.util.Set;
 
 import eu.power_switch.network.NetworkPackage;
 
@@ -34,7 +34,7 @@ public class ConnAir extends Gateway {
      */
     public static final String MODEL = "ConnAir";
 
-    public ConnAir(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, @NonNull List<String> ssids) {
+    public ConnAir(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, @NonNull Set<String> ssids) {
         super(id, active, name, MODEL, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
         capabilities.add(Capability.SEND);
     }
