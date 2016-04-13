@@ -29,9 +29,9 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
-public class AB440SC extends AB440ID implements DipReceiver {
+public class AB440SC extends AB440S implements DipReceiver {
     // dips are 12345 ABCDE
-    // identical to "AB440ID" (but more dips)
+    // identical to "AB440S"
 
     private static final String MODEL = Receiver.getModelName(AB440SC.class.getCanonicalName());
 

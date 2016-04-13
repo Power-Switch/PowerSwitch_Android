@@ -21,6 +21,8 @@ package eu.power_switch.obj.gateways;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Collections;
+
 import eu.power_switch.obj.gateway.ConnAir;
 
 public class ConnAirTest {
@@ -32,7 +34,7 @@ public class ConnAirTest {
      */
     @Test
     public void testGetModelAsString() throws Exception {
-        ConnAir connAir = new ConnAir((long) 0, true, "Gateway", "Firmware", "10.10.10.10", 1234);
+        ConnAir connAir = new ConnAir((long) 0, true, "Gateway", "Firmware", "10.10.10.10", 1234, "wanAddress", 49880, Collections.<String>emptySet());
         String model = connAir.getModel();
         Assert.assertEquals("ConnAir", model);
     }

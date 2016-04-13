@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj;
 
+import java.util.Collections;
+
 import eu.power_switch.ApplicationTest;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -29,9 +31,9 @@ import eu.power_switch.obj.gateway.ITGW433;
  */
 public abstract class ReceiverTest extends ApplicationTest {
 
-    protected static Gateway connAir = new ConnAir((long) 0, true, "Gateway", "v0.1", "address", 0);
-    protected static Gateway itgw = new ITGW433((long) 0, true, "Gateway", "v0.1", "address", 0);
-    protected static Gateway brematicGWY433 = new BrematicGWY433((long) 0, true, "Gateway", "v0.1", "address", 0);
+    protected static Gateway connAir = new ConnAir((long) 0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
+    protected static Gateway itgw = new ITGW433((long) 0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
+    protected static Gateway brematicGWY433 = new BrematicGWY433((long) 0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
 
     protected Gateway[] gateways = new Gateway[]{connAir, itgw, brematicGWY433};
 

@@ -21,6 +21,7 @@ package eu.power_switch.database;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import eu.power_switch.ApplicationTest;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -48,8 +49,8 @@ public class DatabaseTest extends ApplicationTest {
             public void run() {
                 for (int i = 0; i < 200; i++) {
                     try {
-                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "address[" + i + "]",
-                                49880 + i));
+                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "localAddress[" + i + "]",
+                                49880 + i, "wanAddress[" + i + "]", 49880 + i, Collections.<String>emptySet()));
                     } catch (Exception e) {
                         Log.e(e);
                     }
@@ -62,7 +63,8 @@ public class DatabaseTest extends ApplicationTest {
             public void run() {
                 for (int i = 200; i < 400; i++) {
                     try {
-                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "address[" + i + "]", 49880 + i));
+                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "localAddress[" + i + "]",
+                                49880 + i, "wanAddress[" + i + "]", 49880 + i, Collections.<String>emptySet()));
                         DatabaseHandler.getAllGateways();
                         DatabaseHandler.getAllReceivers();
                     } catch (Exception e) {
@@ -88,9 +90,9 @@ public class DatabaseTest extends ApplicationTest {
     public void testPerformanceTest() throws Exception {
         for (int i = 0; i < 200; i++) {
             Log.d("apartment: " + i);
-            long apartmentId = DatabaseHandler.addApartment(new Apartment((long) 0, "Apartment[" + i + "]"));
+            long apartmentId = DatabaseHandler.addApartment(new Apartment((long) 0, true, "Apartment[" + i + "]"));
             for (int j = 0; j < 200; j++) {
-                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]"));
+                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]", 0, false));
                 for (int k = 0; k < 20; k++) {
                     DatabaseHandler.addReceiver(new CMR1000(getContext(), (long) 0, "Receiver[" + k + "]", 'A', 1, roomId));
                 }

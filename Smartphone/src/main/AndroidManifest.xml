@@ -58,7 +58,7 @@
         <!-- Activities -->
         <activity
             android:name=".gui.activity.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="@string/powerswitch_app_name"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -72,7 +72,7 @@
         </activity>
         <activity
             android:name=".gui.dialog.WriteNfcTagDialog"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="@string/write_nfc_tag"
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Dialog"
@@ -95,7 +95,7 @@
         </activity>
         <activity
             android:name=".gui.dialog.UnknownErrorDialog"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:excludeFromRecents="true"
             android:label="@string/unknown_error"
             android:noHistory="true"
@@ -109,7 +109,7 @@
         </activity>
         <activity
             android:name=".widget.activity.ConfigureReceiverWidgetActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
@@ -118,7 +118,7 @@
         </activity>
         <activity
             android:name=".widget.activity.ConfigureRoomWidgetActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
@@ -127,7 +127,7 @@
         </activity>
         <activity
             android:name=".widget.activity.ConfigureSceneWidgetActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
@@ -145,7 +145,7 @@
         -->
         <activity
             android:name=".api.taskerplugin.EditActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true"
             android:icon="@drawable/ic_launcher"
             android:label="@string/powerswitch_plugin_name"
