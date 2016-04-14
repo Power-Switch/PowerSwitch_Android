@@ -140,7 +140,7 @@ public class RMF_Motor extends Receiver implements AutoPairReceiver {
 
             signal += down;
         } else {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {

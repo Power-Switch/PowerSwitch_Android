@@ -102,7 +102,7 @@ public class RCS1000NComfort extends Receiver implements DipReceiver {
             }
         }
         if (!actionSupported) {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         String seq = "";

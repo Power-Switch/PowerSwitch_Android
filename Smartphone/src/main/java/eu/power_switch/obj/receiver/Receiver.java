@@ -470,6 +470,7 @@ public abstract class Receiver {
         POLLIN_ELECTRONIC("Pollin Electronic"),
         REV("REV"),
         ROHRMOTOR24("Rohrmotor 24"),
+        UNITEC("Unitec"),
         UNIVERSAL("Universal"),
         VIVANCO("Vivanco");
 

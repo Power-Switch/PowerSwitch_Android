@@ -103,7 +103,7 @@ public class FSS31000W extends Receiver implements DipReceiver {
             }
         }
         if (!actionSupported) {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         String seq = "";

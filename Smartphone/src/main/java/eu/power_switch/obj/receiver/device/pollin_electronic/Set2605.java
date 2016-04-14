@@ -104,7 +104,7 @@ public class Set2605 extends Receiver implements DipReceiver {
             }
         }
         if (!actionSupported) {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         String seq = "";

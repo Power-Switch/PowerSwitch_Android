@@ -104,7 +104,7 @@ public class m_FS300 extends Receiver implements DipReceiver {
             }
         }
         if (!actionSupported) {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         String seq = "";

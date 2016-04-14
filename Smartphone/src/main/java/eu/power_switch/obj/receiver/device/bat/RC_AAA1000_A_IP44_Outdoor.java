@@ -102,7 +102,7 @@ public class RC_AAA1000_A_IP44_Outdoor extends Receiver implements DipReceiver {
             }
         }
         if (!actionSupported) {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         String seq = "";

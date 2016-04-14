@@ -23,8 +23,8 @@ package eu.power_switch.shared.exception.receiver;
  */
 public class ActionNotSupportedException extends Exception {
 
-    public ActionNotSupportedException() {
-        super("Action not supported by receiver!");
+    public ActionNotSupportedException(String action) {
+        super("Action not supported by receiver: " + action);
     }
 
 }

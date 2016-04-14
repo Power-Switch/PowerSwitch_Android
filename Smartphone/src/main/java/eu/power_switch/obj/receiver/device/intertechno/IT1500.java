@@ -370,7 +370,7 @@ public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveRec
 
             signal += additional;
         } else {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {

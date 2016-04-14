@@ -48,7 +48,7 @@ public class UniversalReceiver extends Receiver {
                 }
             }
 
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         } catch (Exception e) {
             Log.e(e);
             return null;

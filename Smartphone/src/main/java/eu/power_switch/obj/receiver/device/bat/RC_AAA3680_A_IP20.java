@@ -74,7 +74,7 @@ public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
             }
         }
         if (!actionSupported) {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         String lo = "1,";
@@ -107,7 +107,7 @@ public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
         } else if (action.equals(context.getString(R.string.off))) {
             // TODO
         } else {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {

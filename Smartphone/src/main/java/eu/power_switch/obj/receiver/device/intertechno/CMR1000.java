@@ -238,7 +238,7 @@ public class CMR1000 extends Receiver implements MasterSlaveReceiver {
                 String OFF = headConnAir + master + slave + additional + off + tailConnAir;
                 return OFF;
             } else {
-                throw new ActionNotSupportedException();
+                throw new ActionNotSupportedException(action);
             }
         } else if (gateway instanceof BrematicGWY433) {
             if (action.equals(context.getString(R.string.on))) {
@@ -248,7 +248,7 @@ public class CMR1000 extends Receiver implements MasterSlaveReceiver {
                 String OFF = headConnAir + master + slave + additional + off + tailConnAir;
                 return OFF;
             } else {
-                throw new ActionNotSupportedException();
+                throw new ActionNotSupportedException(action);
             }
         } else if (gateway instanceof ITGW433) {
             if (action.equals(context.getString(R.string.on))) {
@@ -258,7 +258,7 @@ public class CMR1000 extends Receiver implements MasterSlaveReceiver {
                 String OFF = headITGW + master + slave + additional + off + tailITGW;
                 return OFF;
             } else {
-                throw new ActionNotSupportedException();
+                throw new ActionNotSupportedException(action);
             }
         } else {
             throw new GatewayNotSupportedException();

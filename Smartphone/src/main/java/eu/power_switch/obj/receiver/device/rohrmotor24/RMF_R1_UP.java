@@ -127,7 +127,7 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
 
             signal += up;
         } else {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {

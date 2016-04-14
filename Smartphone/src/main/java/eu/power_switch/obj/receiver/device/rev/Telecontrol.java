@@ -89,7 +89,7 @@ public class Telecontrol extends Receiver implements MasterSlaveReceiver {
             }
         }
         if (!actionSupported) {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         String lo = "1,";

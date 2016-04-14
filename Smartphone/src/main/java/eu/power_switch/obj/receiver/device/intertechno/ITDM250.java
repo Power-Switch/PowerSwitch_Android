@@ -142,7 +142,7 @@ public class ITDM250 extends Receiver implements AutoPairReceiver {
 
             signal += additional;
         } else {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {

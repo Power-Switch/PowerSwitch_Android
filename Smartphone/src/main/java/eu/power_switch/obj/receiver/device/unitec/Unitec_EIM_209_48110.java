@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj.receiver.device.intertechno;
+package eu.power_switch.obj.receiver.device.unitec;
 
 import android.content.Context;
 
@@ -34,23 +34,22 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
-public class ITLR300 extends Receiver implements AutoPairReceiver {
+/**
+ * Created by Markus on 14.04.2016.
+ */
+public class Unitec_EIM_209_48110 extends Receiver implements AutoPairReceiver {
 
-    private static final Brand BRAND = Brand.INTERTECHNO;
-    private static final String MODEL = Receiver.getModelName(ITLR300.class.getCanonicalName());
-
-    private String headAutoPairConnAir = "TXP:0,0,5,10976,98,66,3,29,";
-    private String headAutoPairITGW = "0,0,5,10976,98,67,0,3,29,";
-
-    private String tailAutoPairConnAir = "3,126";
-    private String tailAutoPairITGW = "3,112,0";
+    private static final Brand BRAND = Brand.UNITEC;
+    private static final String MODEL = Receiver.getModelName(Unitec_EIM_209_48110.class.getCanonicalName());
 
     private long seed = -1;
 
-    public ITLR300(Context context, Long id, String name, long seed, Long roomId) {
+    public Unitec_EIM_209_48110(Context context, Long id, String name, long seed, Long roomId) {
         super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
+
         buttons.add(new OnButton(context, id));
         buttons.add(new OffButton(context, id));
+
         if (seed == -1) {
             // init seed for this receiver instance, to always generate the same codes from now on
             Random ran = new Random();
@@ -62,23 +61,18 @@ public class ITLR300 extends Receiver implements AutoPairReceiver {
 
     @Override
     public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
-        String lo = "3,";
-        String hi = "15,";
-        String seqLo = lo + lo + lo + hi;
-        String seqFl = lo + hi + lo + lo;
-        String h = seqFl;
-        String l = seqLo;
-        String on = seqLo + seqLo + seqFl;
-        String off = seqLo + seqLo + seqLo;
-        String additional = seqLo + seqLo;
+        String lo = "1,";
+        String hi = "2,";
+
+        // unknown diff between on/off
 
         Random ran = new Random(seed);
 
         String signal = "";
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
-            signal += headAutoPairConnAir;
+//            signal += headAutoPairConnAir;
         } else if (gateway instanceof ITGW433) {
-            signal += headAutoPairITGW;
+//            signal += headAutoPairITGW;
         } else {
             throw new GatewayNotSupportedException();
         }
@@ -87,68 +81,18 @@ public class ITLR300 extends Receiver implements AutoPairReceiver {
         // not supported?
         if (action.equals(context.getString(R.string.unpair_all))) {
 
-            for (int i = 0; i < 24; i++) {
-                signal += l;
-            }
-
-            signal += l + l + h + l;
-            signal += l + l + l + l;
-
         } else if (action.equals(context.getString(R.string.on)) || action.equals(context.getString(R.string.pair))) {
-
-            signal += h;
-
-            for (int i = 0; i < 24; i++) {
-                if (ran.nextBoolean()) {
-                    signal += h;
-                } else {
-                    signal += l;
-                }
-            }
-
-            signal += on;
-
-            for (int i = 0; i < 2; i++) {
-                if (ran.nextBoolean()) {
-                    signal += h;
-                } else {
-                    signal += l;
-                }
-            }
-
-            signal += additional;
 
         } else if (action.equals(context.getString(R.string.off)) || action.equals(context.getString(R.string.unpair))) {
 
-            signal += h;
-
-            for (int i = 0; i < 24; i++) {
-                if (ran.nextBoolean()) {
-                    signal += h;
-                } else {
-                    signal += l;
-                }
-            }
-
-            signal += off;
-
-            for (int i = 0; i < 2; i++) {
-                if (ran.nextBoolean()) {
-                    signal += h;
-                } else {
-                    signal += l;
-                }
-            }
-
-            signal += additional;
         } else {
             throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
-            signal += tailAutoPairConnAir;
+//            signal += tailAutoPairConnAir;
         } else if (gateway instanceof ITGW433) {
-            signal += tailAutoPairITGW;
+//            signal += tailAutoPairITGW;
         }
 
         return signal;

@@ -94,7 +94,7 @@ public class Hama extends Receiver implements AutoPairReceiver {
             signal += l + l + h + l;
             signal += l + l + l + l;
 
-        } else if (action.equals(context.getString(R.string.up)) || action.equals(context.getString(R.string.pair))) {
+        } else if (action.equals(context.getString(R.string.on)) || action.equals(context.getString(R.string.pair))) {
 
             signal += h;
 
@@ -118,7 +118,7 @@ public class Hama extends Receiver implements AutoPairReceiver {
 
             signal += additional;
 
-        } else if (action.equals(context.getString(R.string.down)) || action.equals(context.getString(R.string.unpair))) {
+        } else if (action.equals(context.getString(R.string.off)) || action.equals(context.getString(R.string.unpair))) {
 
             signal += h;
 
@@ -142,7 +142,7 @@ public class Hama extends Receiver implements AutoPairReceiver {
 
             signal += additional;
         } else {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {

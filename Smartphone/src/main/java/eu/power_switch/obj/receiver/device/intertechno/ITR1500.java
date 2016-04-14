@@ -371,7 +371,7 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
 
             signal += additional;
         } else {
-            throw new ActionNotSupportedException();
+            throw new ActionNotSupportedException(action);
         }
 
         if (gateway instanceof ConnAir || gateway instanceof BrematicGWY433) {
