@@ -197,7 +197,6 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 }
             default:
                 break;
-
         }
 
         return super.onOptionsItemSelected(menuItem);

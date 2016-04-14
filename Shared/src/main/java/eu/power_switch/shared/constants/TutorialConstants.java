@@ -30,6 +30,8 @@ public class TutorialConstants {
     public static final String TIMERS_KEY = "TIMERS_KEY";
     public static final String APARTMENT_KEY = "APARTMENT_KEY";
     public static final String BACKUP_KEY = "BACKUP_KEY";
+    public static final String NFC_KEY = "NFC_KEY";
+
 
     /**
      * Private Constructor

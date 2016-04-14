@@ -97,6 +97,13 @@
         Hause kommen im Flur und dem Wohnzimmer automatisch einschalten.
     </string>
 
+    <string name="tutorial__nfc_explanation">
+        In diesem Tab kannst du Aktionen auf NFC Tags schreiben.\n
+        \nWähle eine gewünschte Konfiguration aus und drücke dann den \"NFC Tag beschreiben\" Button. Halte deinen NFC Tag an die Rückseite deines Smartphones und du bist fertig!
+        \nUm die Aktion auszuführen halte den Tag einfach an die Rückseite deines Smartphones.\n
+        \nAchtung: Aus Sicherheitsgründen können NFC Tags nur gelesen werden, wenn das Smartphone entsperrt und das Display an ist!
+    </string>
+
     <string name="tutorial__phone_call_explanation"></string>
     <string name="tutorial__phone_sms_explanation"></string>
 

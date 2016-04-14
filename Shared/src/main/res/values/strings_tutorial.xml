@@ -93,6 +93,14 @@
         again.
     </string>
 
+    <string name="tutorial__nfc_explanation">
+        In this tab you can write actions onto a NFC tag.\n
+        \nSelect the desired action from the dropdown menu and press the \"Write NFC Tag\" Button. Hold
+        the NFC tag against the back of your phone and your done!
+        \nTo activate the tag just hold it against the back of your phone.\n
+        \nRemember: For security reasons NFC tags can only be scanned while the device is unlocked and the screen is turned on!
+    </string>
+
     <string name="tutorial__phone_call_explanation"></string>
     <string name="tutorial__phone_sms_explanation"></string>
 

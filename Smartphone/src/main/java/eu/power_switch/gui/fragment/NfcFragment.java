@@ -55,7 +55,9 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.constants.TutorialConstants;
 import eu.power_switch.shared.log.Log;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Created by Markus on 09.04.2016.
@@ -231,6 +233,19 @@ public class NfcFragment extends Fragment {
         updateApartmentList();
 
         return rootView;
+    }
+
+    private void showTutorial() {
+        new MaterialShowcaseView.Builder(getActivity())
+                .setTarget(buttonWriteTag)
+                .setUseAutoRadius(false)
+                .setRadius(64 * 3)
+                .setDismissOnTouch(true)
+                .setDismissText(getString(R.string.tutorial__got_it))
+                .setContentText(getString(R.string.tutorial__nfc_explanation))
+                .singleUse(TutorialConstants.NFC_KEY)
+                .setDelay(500)
+                .show();
     }
 
     private String getNfcActionContent(Action action) {
@@ -658,6 +673,7 @@ public class NfcFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        showTutorial();
         updatePositiveButton();
     }
 }
