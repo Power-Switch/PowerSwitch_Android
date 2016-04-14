@@ -38,10 +38,6 @@ import eu.power_switch.database.table.gateway.GatewayTable;
 import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.geofence.GeofenceTable;
 import eu.power_switch.database.table.history.HistoryTable;
-import eu.power_switch.database.table.phone.PhoneNumberTable;
-import eu.power_switch.database.table.phone.call.CallEventActionTable;
-import eu.power_switch.database.table.phone.call.CallEventPhoneNumberTable;
-import eu.power_switch.database.table.phone.call.CallEventTable;
 import eu.power_switch.database.table.receiver.AutoPairTable;
 import eu.power_switch.database.table.receiver.DipTable;
 import eu.power_switch.database.table.receiver.MasterSlaveTable;
@@ -102,10 +98,10 @@ public class Database extends SQLiteOpenHelper {
             AlarmClockActionTable.onCreate(db);
             SleepAsAndroidActionTable.onCreate(db);
 
-            PhoneNumberTable.onCreate(db);
-            CallEventTable.onCreate(db);
-            CallEventPhoneNumberTable.onCreate(db);
-            CallEventActionTable.onCreate(db);
+//            PhoneNumberTable.onCreate(db);
+//            CallEventTable.onCreate(db);
+//            CallEventPhoneNumberTable.onCreate(db);
+//            CallEventActionTable.onCreate(db);
 
             ActionTable.onCreate(db);
             ReceiverActionTable.onCreate(db);
@@ -178,10 +174,10 @@ public class Database extends SQLiteOpenHelper {
             AlarmClockActionTable.onUpgrade(db, oldVersion, newVersion);
             SleepAsAndroidActionTable.onUpgrade(db, oldVersion, newVersion);
 
-            PhoneNumberTable.onUpgrade(db, oldVersion, newVersion);
-            CallEventTable.onUpgrade(db, oldVersion, newVersion);
-            CallEventPhoneNumberTable.onUpgrade(db, oldVersion, newVersion);
-            CallEventActionTable.onUpgrade(db, oldVersion, newVersion);
+//            PhoneNumberTable.onUpgrade(db, oldVersion, newVersion);
+//            CallEventTable.onUpgrade(db, oldVersion, newVersion);
+//            CallEventPhoneNumberTable.onUpgrade(db, oldVersion, newVersion);
+//            CallEventActionTable.onUpgrade(db, oldVersion, newVersion);
 
             ActionTable.onUpgrade(db, oldVersion, newVersion);
             ReceiverActionTable.onUpgrade(db, oldVersion, newVersion);

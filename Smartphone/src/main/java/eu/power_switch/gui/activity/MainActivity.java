@@ -792,7 +792,7 @@ public class MainActivity extends AppCompatActivity {
                         itemTimer,
                         itemGeofences,
                         itemAlarmClock,
-                        itemPhone,
+//                        itemPhone,
                         itemNfc,
                         new DividerDrawerItem(),
                         itemBackupRestore,
