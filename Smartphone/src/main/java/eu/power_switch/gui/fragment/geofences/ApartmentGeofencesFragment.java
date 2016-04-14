@@ -27,7 +27,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -120,7 +119,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.checkLocationPermission(getContext())) {
+                if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
                             .setMessage(R.string.missing_location_permission)
@@ -176,9 +175,9 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                                         R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                                 sendApartmentGeofencesChangedBroadcast(context);
-                                CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(context);
                             } else {
-                                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                                StatusMessageHandler.showPermissionMissingMessage(
+                                        getActivity(),
                                         getRecyclerView(),
                                         Manifest.permission.ACCESS_FINE_LOCATION);
                             }
@@ -191,9 +190,12 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
     @Override
     protected void onInitialized() {
-        if (!PermissionHelper.checkLocationPermission(getContext())) {
+        if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
             showEmpty();
-            requestLocationPermission();
+            StatusMessageHandler.showPermissionMissingMessage(
+                    getActivity(),
+                    getRecyclerView(),
+                    Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             refreshGeofences();
         }
@@ -204,21 +206,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         updateListContent();
     }
 
-    private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Provide an additional rationale to the user if the permission was not granted
-            // and the user would benefit from additional context for the use of the permission.
-            // For example if the user has previously denied the permission.
-            Log.d("Displaying location permission rationale to provide additional context.");
-
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.ACCESS_FINE_LOCATION);
-        } else {
-            Log.d("Displaying default location permission dialog to request permission");
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
-        }
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (super.onOptionsItemSelected(menuItem)) {
@@ -227,7 +214,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_geofence:
-                if (!PermissionHelper.checkLocationPermission(getContext())) {
+                if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
                             .setMessage(R.string.missing_location_permission)

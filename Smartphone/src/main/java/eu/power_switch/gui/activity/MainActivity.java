@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
             protected Void doInBackground(Context... contexts) {
                 Context context = contexts[0];
 
-                if (!PermissionHelper.checkLocationPermission(context)) {
+                if (!PermissionHelper.isLocationPermissionAvailable(context)) {
                     try {
                         DatabaseHandler.disableGeofences();
                         Log.d("Disabled all Geofences because of missing location permission");

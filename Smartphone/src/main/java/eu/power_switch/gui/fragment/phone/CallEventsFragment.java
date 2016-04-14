@@ -100,7 +100,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.checkPhonePermission(getContext())) {
+                if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
                             .setMessage(R.string.missing_contacts_permission)
@@ -154,7 +154,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
 
     @Override
     protected void onInitialized() {
-        if (!PermissionHelper.checkPhonePermission(getContext()) || !PermissionHelper.checkContactPermission(getContext())) {
+        if (!PermissionHelper.isPhonePermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),

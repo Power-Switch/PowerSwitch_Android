@@ -113,7 +113,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                 }
             }
         });
-        if (!PermissionHelper.checkLocationPermission(context)) {
+        if (!PermissionHelper.isLocationPermissionAvailable(context)) {
             holder.geofenceSwitchActive.setEnabled(false);
         } else {
             holder.geofenceSwitchActive.setEnabled(true);

@@ -97,7 +97,7 @@ public class LogHandler {
      */
     @Nullable
     public static File getLogsAsZip(@NonNull Context context) throws MissingPermissionException {
-        if (!PermissionHelper.checkWriteExternalStoragePermission(context)) {
+        if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 
@@ -211,7 +211,7 @@ public class LogHandler {
     }
 
     public static void sendLogsAsMail(@NonNull Context context) throws Exception {
-        if (!PermissionHelper.checkWriteExternalStoragePermission(context)) {
+        if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 

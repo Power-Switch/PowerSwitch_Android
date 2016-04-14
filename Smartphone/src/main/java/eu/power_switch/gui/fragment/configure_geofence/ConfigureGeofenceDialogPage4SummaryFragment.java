@@ -222,7 +222,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
             actionsMap.put(Geofence.EventType.ENTER, currentEnterActions);
             actionsMap.put(Geofence.EventType.EXIT, currentExitActions);
 
-            boolean isLocationPermissionAvailable = PermissionHelper.checkLocationPermission(getContext());
+            boolean isLocationPermissionAvailable = PermissionHelper.isLocationPermissionAvailable(getContext());
 
             if (apartmentId == -1) {
                 // custom geofence

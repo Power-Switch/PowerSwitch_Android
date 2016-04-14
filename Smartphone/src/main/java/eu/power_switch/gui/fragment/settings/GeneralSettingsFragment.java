@@ -250,7 +250,7 @@ public class GeneralSettingsFragment extends Fragment {
         button_changeBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
                     Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
                     snackbar.setAction(R.string.grant, new View.OnClickListener() {
                         @Override

@@ -66,7 +66,7 @@ public class PermissionHelper {
      * @param context any suitable context
      * @return true if write permission is available, false otherwise
      */
-    public static boolean checkWriteExternalStoragePermission(@NonNull Context context) {
+    public static boolean isWriteExternalStoragePermissionAvailable(@NonNull Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             // Marshmallow+
             int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -83,7 +83,7 @@ public class PermissionHelper {
      * @param context any suitable context
      * @return true if location permission is available, false otherwise
      */
-    public static boolean checkLocationPermission(@NonNull Context context) {
+    public static boolean isLocationPermissionAvailable(@NonNull Context context) {
         int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
         return hasPermission == PackageManager.PERMISSION_GRANTED;
     }
@@ -94,7 +94,7 @@ public class PermissionHelper {
      * @param context any suitable context
      * @return true if phone permission is available, false otherwise
      */
-    public static boolean checkPhonePermission(@NonNull Context context) {
+    public static boolean isPhonePermissionAvailable(@NonNull Context context) {
         int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE);
         return hasPermission == PackageManager.PERMISSION_GRANTED;
     }
@@ -105,7 +105,7 @@ public class PermissionHelper {
      * @param context any suitable context
      * @return true if contact permission is available, false otherwise
      */
-    public static boolean checkContactPermission(@NonNull Context context) {
+    public static boolean isContactPermissionAvailable(@NonNull Context context) {
         int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
         return hasPermission == PackageManager.PERMISSION_GRANTED;
     }

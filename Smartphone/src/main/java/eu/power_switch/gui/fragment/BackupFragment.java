@@ -28,7 +28,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -111,7 +110,7 @@ public class BackupFragment extends RecyclerViewFragment {
         textViewBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
                             .setMessage(R.string.missing_external_storage_permission)
@@ -190,7 +189,7 @@ public class BackupFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
                             .setMessage(R.string.missing_external_storage_permission)
@@ -259,30 +258,13 @@ public class BackupFragment extends RecyclerViewFragment {
     private void updateUI() {
         textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
 
-        if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+        if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
         } else {
             updateListContent();
-        }
-    }
-
-    private void requestExternalStoragePermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            // Provide an additional rationale to the user if the permission was not granted
-            // and the user would benefit from additional context for the use of the permission.
-            // For example if the user has previously denied the permission.
-            Log.d("Displaying storage permission rationale to provide additional context.");
-
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        } else {
-            Log.d("Displaying default storage permission dialog to request permission");
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
         }
     }
 
@@ -294,7 +276,7 @@ public class BackupFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_backup:
-                if (!PermissionHelper.checkWriteExternalStoragePermission(getContext())) {
+                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
                             .setMessage(R.string.missing_external_storage_permission)
