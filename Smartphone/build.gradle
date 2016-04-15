@@ -89,12 +89,6 @@ dependencies {
 //        transitive = true
 //    }
 
-    // Iconics (use SVG resources)
-    compile 'com.mikepenz:iconics-core:2.5.8@aar'
-    // Fonts
-    compile 'com.mikepenz:google-material-typeface:2.2.0.1.original@aar'
-    compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.1@aar'
-
     // PowerSwitch Modules
     compile project(':Shared')
     compile project(':LocaleApi')

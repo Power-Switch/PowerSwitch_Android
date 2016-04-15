@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -55,6 +57,8 @@ public class RoomsActivity extends WearableActivity {
 
     private BroadcastReceiver broadcastReceiver;
     private RelativeLayout relativeLayoutAmbientMode;
+    private LinearLayout layoutLoading;
+    private LinearLayout layoutEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +79,8 @@ public class RoomsActivity extends WearableActivity {
             public void onReceive(Context context, Intent intent) {
                 Log.d("MainActivity", "received intent: " + intent.getAction());
 
-                ArrayList<Room> rooms = (ArrayList<Room>) intent.getSerializableExtra(ListenerService.ROOM_DATA);
-                replaceRoomList(rooms);
+                // set intent on activity
+                setIntent(intent);
 
                 refreshUI();
             }
@@ -84,10 +88,15 @@ public class RoomsActivity extends WearableActivity {
 
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
+
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-
                 relativeLayoutAmbientMode = (RelativeLayout) findViewById(R.id.relativeLayout_ambientMode);
+
+                layoutLoading = (LinearLayout) findViewById(R.id.layoutLoading);
+
+                layoutEmpty = (LinearLayout) findViewById(R.id.layoutEmpty);
+                layoutEmpty.setVisibility(View.GONE);
 
                 roomsRecyclerView = (RecyclerView) findViewById(R.id.rooms_recyclerView);
                 roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(stub.getContext(), roomsRecyclerView,
@@ -97,8 +106,46 @@ public class RoomsActivity extends WearableActivity {
                 SnappingLinearLayoutManager layoutManager = new SnappingLinearLayoutManager(getApplicationContext(),
                         LinearLayoutManager.VERTICAL, false);
                 roomsRecyclerView.setLayoutManager(layoutManager);
+
+                refreshUI();
             }
         });
+    }
+
+    private void refreshUI() {
+        if (!isAmbient()) {
+            layoutEmpty.setVisibility(View.GONE);
+            roomsRecyclerView.setVisibility(View.GONE);
+            layoutLoading.setVisibility(View.VISIBLE);
+        }
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                ArrayList<Room> newRooms = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.ROOM_DATA);
+
+                roomList.clear();
+                roomList.addAll(newRooms);
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                roomsRecyclerViewAdapter.notifyDataSetChanged();
+
+                if (!isAmbient()) {
+                    if (roomList.isEmpty()) {
+                        layoutEmpty.setVisibility(View.VISIBLE);
+                        roomsRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        layoutEmpty.setVisibility(View.GONE);
+                        roomsRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                    layoutLoading.setVisibility(View.GONE);
+                }
+            }
+        }.execute();
     }
 
     @Override
@@ -106,13 +153,6 @@ public class RoomsActivity extends WearableActivity {
         super.onStart();
         if (dataApiHandler != null) {
             dataApiHandler.connect();
-        }
-
-        try {
-            ArrayList<Room> newRooms = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.ROOM_DATA);
-            replaceRoomList(newRooms);
-        } catch (Exception e) {
-            Log.e(e);
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
@@ -133,26 +173,20 @@ public class RoomsActivity extends WearableActivity {
     @Override
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
-        roomsRecyclerView.setVisibility(View.INVISIBLE);
+
+        layoutEmpty.setVisibility(View.GONE);
+        roomsRecyclerView.setVisibility(View.GONE);
         relativeLayoutAmbientMode.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onExitAmbient() {
-        roomsRecyclerView.setVisibility(View.VISIBLE);
+        if (roomList.isEmpty()) {
+            layoutEmpty.setVisibility(View.VISIBLE);
+        } else {
+            roomsRecyclerView.setVisibility(View.VISIBLE);
+        }
         relativeLayoutAmbientMode.setVisibility(View.GONE);
         super.onExitAmbient();
-    }
-
-    private void refreshUI() {
-        if (roomList.isEmpty()) {
-            finish();
-        }
-        roomsRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
-    private void replaceRoomList(ArrayList<Room> list) {
-        roomList.clear();
-        roomList.addAll(list);
     }
 }

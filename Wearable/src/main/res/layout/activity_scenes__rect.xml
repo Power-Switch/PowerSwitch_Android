@@ -23,14 +23,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context=".gui.activity.ScenesActivity"
     tools:deviceIds="wear_square">
 
     <include layout="@layout/ambient_mode"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/scenes_recyclerView"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <include layout="@layout/loading"/>
+
+    <include layout="@layout/empty"/>
 
 </LinearLayout>

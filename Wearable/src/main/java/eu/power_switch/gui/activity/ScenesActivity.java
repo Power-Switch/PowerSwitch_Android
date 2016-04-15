@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -55,6 +57,8 @@ public class ScenesActivity extends WearableActivity {
 
     private BroadcastReceiver broadcastReceiver;
     private RelativeLayout relativeLayoutAmbientMode;
+    private LinearLayout layoutLoading;
+    private LinearLayout layoutEmpty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +79,8 @@ public class ScenesActivity extends WearableActivity {
             public void onReceive(Context context, Intent intent) {
                 Log.d("MainActivity", "received intent: " + intent.getAction());
 
-                ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.SCENE_DATA);
-                replaceSceneList(scenes);
+                // set intent on activity
+                setIntent(intent);
 
                 refreshUI();
             }
@@ -86,8 +90,12 @@ public class ScenesActivity extends WearableActivity {
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-
                 relativeLayoutAmbientMode = (RelativeLayout) findViewById(R.id.relativeLayout_ambientMode);
+
+                layoutLoading = (LinearLayout) findViewById(R.id.layoutLoading);
+
+                layoutEmpty = (LinearLayout) findViewById(R.id.layoutEmpty);
+                layoutEmpty.setVisibility(View.GONE);
 
                 scenesRecyclerView = (RecyclerView) findViewById(R.id.scenes_recyclerView);
                 sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(stub.getContext(), scenesRecyclerView,
@@ -98,8 +106,45 @@ public class ScenesActivity extends WearableActivity {
                         LinearLayoutManager.VERTICAL, false);
                 scenesRecyclerView.setLayoutManager(layoutManager);
 
+                refreshUI();
             }
         });
+    }
+
+    private void refreshUI() {
+        if (!isAmbient()) {
+            layoutEmpty.setVisibility(View.GONE);
+            scenesRecyclerView.setVisibility(View.GONE);
+            layoutLoading.setVisibility(View.VISIBLE);
+        }
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                ArrayList<Scene> newScenes = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.SCENE_DATA);
+
+                sceneList.clear();
+                sceneList.addAll(newScenes);
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                sceneRecyclerViewAdapter.notifyDataSetChanged();
+
+                if (!isAmbient()) {
+                    if (sceneList.isEmpty()) {
+                        layoutEmpty.setVisibility(View.VISIBLE);
+                        scenesRecyclerView.setVisibility(View.GONE);
+                    } else {
+                        layoutEmpty.setVisibility(View.GONE);
+                        scenesRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                    layoutLoading.setVisibility(View.GONE);
+                }
+            }
+        }.execute();
     }
 
     @Override
@@ -107,13 +152,6 @@ public class ScenesActivity extends WearableActivity {
         super.onStart();
         if (dataApiHandler != null) {
             dataApiHandler.connect();
-        }
-
-        try {
-            ArrayList<Scene> newScenes = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.SCENE_DATA);
-            replaceSceneList(newScenes);
-        } catch (Exception e) {
-            Log.e(e);
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
@@ -134,27 +172,20 @@ public class ScenesActivity extends WearableActivity {
     @Override
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
-        scenesRecyclerView.setVisibility(View.INVISIBLE);
+
+        layoutEmpty.setVisibility(View.GONE);
+        scenesRecyclerView.setVisibility(View.GONE);
         relativeLayoutAmbientMode.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onExitAmbient() {
-        scenesRecyclerView.setVisibility(View.VISIBLE);
+        if (sceneList.isEmpty()) {
+            layoutEmpty.setVisibility(View.VISIBLE);
+        } else {
+            scenesRecyclerView.setVisibility(View.VISIBLE);
+        }
         relativeLayoutAmbientMode.setVisibility(View.GONE);
         super.onExitAmbient();
     }
-
-    private void refreshUI() {
-        if (sceneList.isEmpty()) {
-            finish();
-        }
-        sceneRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
-    private void replaceSceneList(ArrayList<Scene> scenes) {
-        sceneList.clear();
-        sceneList.addAll(scenes);
-    }
-
 }
