@@ -51,7 +51,7 @@
         <activity android:name="eu.power_switch.gui.activity.ReceiversActivity"/>
 
         <activity android:name="android.support.wearable.activity.ConfirmationActivity"/>
-        <activity android:name="eu.power_switch.gui.animation.ConfirmationActivity"/>
+        <activity android:name=".gui.animation.ConfirmationActivityClone"/>
 
         <service android:name="eu.power_switch.network.service.ListenerService">
             <intent-filter>

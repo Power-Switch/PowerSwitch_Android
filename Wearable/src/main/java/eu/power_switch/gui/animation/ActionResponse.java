@@ -63,13 +63,21 @@ public abstract class ActionResponse {
      * @param context any suitable context
      */
     public static void showSuccessAnimation(Context context) {
-        Intent intent = new Intent(context, ConfirmationActivity.class);
-        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
-                ConfirmationActivity.SUCCESS_ANIMATION);
+        Intent intent = new Intent(context, ConfirmationActivityClone.class);
+        intent.putExtra(ConfirmationActivityClone.EXTRA_ANIMATION_TYPE,
+                ConfirmationActivityClone.SUCCESS_ANIMATION);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(context, android.R.anim.fade_in, android.R
                 .anim.fade_out);
         context.startActivity(intent, activityOptions.toBundle());
+
+//        Intent intent = new Intent(context, ConfirmationActivity.class);
+//        intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
+//                ConfirmationActivity.SUCCESS_ANIMATION);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(context,
+//                android.R.anim.fade_in, android.R.anim.fade_out);
+//        context.startActivity(intent, activityOptions.toBundle());
     }
 
     /**

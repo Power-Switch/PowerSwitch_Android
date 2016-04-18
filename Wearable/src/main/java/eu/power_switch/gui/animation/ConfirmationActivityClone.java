@@ -23,6 +23,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.wearable.R.drawable;
@@ -40,7 +41,7 @@ import android.widget.TextView;
  * Created by Markus on 25.08.2015.
  */
 @TargetApi(21)
-public class ConfirmationActivity extends Activity {
+public class ConfirmationActivityClone extends Activity {
     public static final String EXTRA_MESSAGE = "message";
     public static final String EXTRA_ANIMATION_TYPE = "animation_type";
     public static final int SUCCESS_ANIMATION = 1;
@@ -51,21 +52,21 @@ public class ConfirmationActivity extends Activity {
     private static final int CONFIRMATION_ANIMATION_DURATION_MS = 1666;
     private ActionPage mActionPage;
 
-    public ConfirmationActivity() {
+    public ConfirmationActivityClone() {
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = this.getIntent();
-        int animationType = intent.getIntExtra("animation_type", 1);
+        int animationType = intent.getIntExtra("animation_type", SUCCESS_ANIMATION);
         String message = intent.getStringExtra("message");
         this.mActionPage = new ActionPage(this);
         long displayDurationMs;
-        if (animationType == 3) {
+        if (animationType == FAILURE_ANIMATION) {
             this.setContentView(layout.error_layout);
             TextView animatedDrawable = (TextView) this.findViewById(id.message);
             animatedDrawable.setText(message);
-            displayDurationMs = 1666L;
+            displayDurationMs = 2000L;
         } else {
             this.mActionPage.setColor(0);
             this.mActionPage.setStateListAnimator(new StateListAnimator());
@@ -77,11 +78,11 @@ public class ConfirmationActivity extends Activity {
 
             Drawable animatedDrawable1;
             switch (animationType) {
-                case 1:
+                case SUCCESS_ANIMATION:
                     animatedDrawable1 = this.getResources().getDrawable(drawable.generic_confirmation_animation);
                     displayDurationMs = 1666L;
                     break;
-                case 2:
+                case OPEN_ON_PHONE_ANIMATION:
                     animatedDrawable1 = this.getResources().getDrawable(drawable.open_on_phone_animation);
                     displayDurationMs = 1666L;
                     break;
@@ -92,16 +93,28 @@ public class ConfirmationActivity extends Activity {
             this.mActionPage.setImageDrawable(animatedDrawable1);
             final ActionLabel label = this.mActionPage.getLabel();
             long fadeDuration = label.animate().getDuration();
+            final long fadeOutDelay = Math.max(0L, displayDurationMs - 2L * (50L + fadeDuration));
             ((Animatable) animatedDrawable1).start();
             label.setAlpha(0.0F);
             label.animate().alpha(1.0F).setStartDelay(50L).withEndAction(new Runnable() {
                 public void run() {
-                    ConfirmationActivity.this.finish();
-                    ConfirmationActivity.this.overridePendingTransition(0, android.R.anim.fade_out);
+                    ConfirmationActivityClone.this.finish();
+                    ConfirmationActivityClone.this.overridePendingTransition(0, android.R.anim.fade_out);
                 }
             });
         }
 
         this.mActionPage.setKeepScreenOn(true);
+    }
+
+    private static long getAnimationDuration(AnimationDrawable animation) {
+        int count = animation.getNumberOfFrames();
+        long duration = 0L;
+
+        for (int i = 0; i < count; ++i) {
+            duration += (long) animation.getDuration(i);
+        }
+
+        return duration;
     }
 }
