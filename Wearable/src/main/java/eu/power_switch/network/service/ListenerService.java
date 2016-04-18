@@ -207,10 +207,17 @@ public class ListenerService extends WearableListenerService {
                         ArrayList<DataMap> settings = dataMapItem.getDataMap()
                                 .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
 
+                        int oldThemeValue = WearablePreferencesHandler.getTheme();
                         extractSettings(settings);
+                        int newThemeValue = WearablePreferencesHandler.getTheme();
 
                         // notify about changes
-                        sendSettingsChangedBroadcast();
+                        if (newThemeValue != oldThemeValue) {
+                            sendThemeChangedBroadcast();
+                        } else {
+                            sendSettingsChangedBroadcast();
+                        }
+
                     }
                 } else if (event.getType() == DataEvent.TYPE_DELETED) {
                     if (WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
@@ -260,6 +267,15 @@ public class ListenerService extends WearableListenerService {
      */
     private void sendSettingsChangedBroadcast() {
         Intent intent = new Intent(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    /**
+     * Sends local Broadcast that underlying settings have changed and UI has to be updated
+     */
+    private void sendThemeChangedBroadcast() {
+        Intent intent = new Intent(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }

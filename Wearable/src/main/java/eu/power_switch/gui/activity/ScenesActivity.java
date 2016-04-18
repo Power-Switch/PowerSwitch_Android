@@ -83,11 +83,19 @@ public class ScenesActivity extends WearableActivity {
                 if (ListenerService.DATA_UPDATED.equals(intent.getAction())) {
                     // set intent on activity
                     setIntent(intent);
-                } else if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
-                    // just UI refresh needed for now
-                }
 
-                refreshUI();
+                    refreshUI();
+                } else if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
+                    refreshUI();
+                } else if (WearableSettingsConstants.WEARABLE_THEME_CHANGED.equals(intent.getAction())) {
+                    finish();
+                    Intent restartActivityIntent = new Intent(getApplicationContext(), ScenesActivity.class);
+                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    // add current extras
+                    restartActivityIntent.putExtras(getIntent().getExtras());
+                    startActivity(restartActivityIntent);
+                }
             }
         };
 
@@ -162,6 +170,7 @@ public class ScenesActivity extends WearableActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ListenerService.DATA_UPDATED);
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
+        intentFilter.addAction(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 

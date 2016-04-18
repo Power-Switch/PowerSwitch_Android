@@ -24,7 +24,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".MainActivity"
+    tools:context=".gui.activity.MainActivity"
     tools:deviceIds="wear_round">
 
     <RelativeLayout

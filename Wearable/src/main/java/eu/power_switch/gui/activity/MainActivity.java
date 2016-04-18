@@ -92,9 +92,17 @@ public class MainActivity extends WearableActivity {
 
                     ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.SCENE_DATA);
                     replaceSceneList(scenes);
-                }
 
-                refreshUI();
+                    refreshUI();
+                } else if (WearableSettingsConstants.WEARABLE_THEME_CHANGED.equals(intent.getAction())) {
+                    finish();
+                    Intent restartActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    restartActivityIntent.putExtra(ListenerService.ROOM_DATA, roomList);
+                    restartActivityIntent.putExtra(ListenerService.SCENE_DATA, sceneList);
+                    startActivity(restartActivityIntent);
+                }
             }
         };
 
@@ -142,8 +150,18 @@ public class MainActivity extends WearableActivity {
                     }
                 });
 
-                // Get Room/Receiver/Button/Scene configuration from Smartphone App
-                new FetchDataAsyncTask().execute();
+                if (getIntent().hasExtra(ListenerService.ROOM_DATA) && getIntent().hasExtra(ListenerService.SCENE_DATA)) {
+                    ArrayList<Room> roomArrayList = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.ROOM_DATA);
+                    replaceRoomList(roomArrayList);
+
+                    ArrayList<Scene> sceneArrayList = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.SCENE_DATA);
+                    replaceSceneList(sceneArrayList);
+
+                    refreshUI();
+                } else {
+                    // Get Room/Receiver/Button/Scene configuration from Smartphone App
+                    new FetchDataAsyncTask().execute();
+                }
             }
         });
 
@@ -206,6 +224,7 @@ public class MainActivity extends WearableActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ListenerService.DATA_UPDATED);
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
+        intentFilter.addAction(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -220,12 +239,14 @@ public class MainActivity extends WearableActivity {
     }
 
     private void refreshUI() {
-        if (roomList.isEmpty()) {
-            textViewStatus.setText(R.string.please_create_receivers_on_your_smartphone_first);
+        if (!isAmbient()) {
+            if (roomList.isEmpty()) {
+                textViewStatus.setText(R.string.please_create_receivers_on_your_smartphone_first);
 
-            relativeLayoutStatus.setVisibility(View.VISIBLE);
-        } else {
-            relativeLayoutStatus.setVisibility(View.GONE);
+                relativeLayoutStatus.setVisibility(View.VISIBLE);
+            } else {
+                relativeLayoutStatus.setVisibility(View.GONE);
+            }
         }
     }
 
