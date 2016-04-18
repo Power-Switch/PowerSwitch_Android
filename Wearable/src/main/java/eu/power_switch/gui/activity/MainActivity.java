@@ -45,6 +45,7 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
@@ -204,6 +205,7 @@ public class MainActivity extends WearableActivity {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ListenerService.DATA_UPDATED);
+        intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -278,7 +280,7 @@ public class MainActivity extends WearableActivity {
             ArrayList<Scene> scenes = dataApiHandler.getSceneData();
 
             // Get Wearable Settings from Smartphone App
-            dataApiHandler.updateSettings(getApplicationContext());
+            dataApiHandler.updateSettings();
 
             ArrayList<Object> result = new ArrayList<>();
             result.add(rooms);

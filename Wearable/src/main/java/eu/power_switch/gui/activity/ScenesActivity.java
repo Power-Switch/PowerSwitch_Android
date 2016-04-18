@@ -42,6 +42,7 @@ import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -77,10 +78,14 @@ public class ScenesActivity extends WearableActivity {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("MainActivity", "received intent: " + intent.getAction());
+                Log.d(this, "received intent: " + intent.getAction());
 
-                // set intent on activity
-                setIntent(intent);
+                if (ListenerService.DATA_UPDATED.equals(intent.getAction())) {
+                    // set intent on activity
+                    setIntent(intent);
+                } else if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
+                    // just UI refresh needed for now
+                }
 
                 refreshUI();
             }
@@ -154,9 +159,10 @@ public class ScenesActivity extends WearableActivity {
             dataApiHandler.connect();
         }
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
-                new IntentFilter(ListenerService.DATA_UPDATED)
-        );
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ListenerService.DATA_UPDATED);
+        intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override

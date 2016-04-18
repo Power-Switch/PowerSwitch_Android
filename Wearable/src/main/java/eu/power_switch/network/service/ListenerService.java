@@ -185,34 +185,39 @@ public class ListenerService extends WearableListenerService {
 
         for (DataEvent event : events) {
             if (event.getDataItem() != null) {
-                if (event.getType() == DataEvent.TYPE_CHANGED
-                        && WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
+                if (event.getType() == DataEvent.TYPE_CHANGED) {
+                    if (WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
+                        DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+                        ArrayList<DataMap> data = dataMapItem.getDataMap()
+                                .getDataMapArrayList(WearableConstants.EXTRA_DATA);
 
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    ArrayList<DataMap> data = dataMapItem.getDataMap()
-                            .getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                        boolean autoCollapseRooms = WearablePreferencesHandler.getAutoCollapseRooms();
 
-                    boolean autoCollapseRooms = WearablePreferencesHandler.getAutoCollapseRooms();
+                        // convert received data to room/receiver/button objects
+                        ArrayList<Room> rooms = extractRoomDataMapItems(data);
+                        for (Room room : rooms) {
+                            room.setCollapsed(autoCollapseRooms);
+                        }
+                        ArrayList<Scene> scenes = extractSceneDataMapItems(data);
 
-                    // convert received data to room/receiver/button objects
-                    ArrayList<Room> rooms = extractRoomDataMapItems(data);
-                    for (Room room : rooms) {
-                        room.setCollapsed(autoCollapseRooms);
+                        // send data to Activity
+                        sendDataUpdatedBroadcast(rooms, scenes);
+                    } else if (WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
+                        DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+                        ArrayList<DataMap> settings = dataMapItem.getDataMap()
+                                .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
+
+                        extractSettings(settings);
+
+                        // notify about changes
+                        sendSettingsChangedBroadcast();
                     }
-                    ArrayList<Scene> scenes = extractSceneDataMapItems(data);
-
-                    // send data to Activity
-                    sendDataUpdatedBroadcast(rooms, scenes);
-                }
-                if (event.getType() == DataEvent.TYPE_CHANGED
-                        && WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
-
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    ArrayList<DataMap> settings = dataMapItem.getDataMap()
-                            .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
-
-                    extractSettings(settings);
-                    // TODO: notify app about changes
+                } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                    if (WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
+                        // send data to Activity
+                        // update with empty lists
+                        sendDataUpdatedBroadcast(new ArrayList<Room>(), new ArrayList<Scene>());
+                    }
                 }
             }
         }
@@ -225,7 +230,8 @@ public class ListenerService extends WearableListenerService {
      */
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Toast.makeText(getApplicationContext(), "Message received: " + convertEventDataToString(messageEvent.getData()), Toast.LENGTH_LONG)
+        Toast.makeText(getApplicationContext(),
+                "Message received: " + convertEventDataToString(messageEvent.getData()), Toast.LENGTH_LONG)
                 .show();
 
         if (messageEvent.getPath().equals(WearableConstants.START_ACTIVITY_PATH)) {
@@ -235,15 +241,25 @@ public class ListenerService extends WearableListenerService {
     }
 
     /**
-     * Sends Broadcast that underlying data has changed and UI has to be updated
+     * Sends local Broadcast that underlying data has changed and UI has to be updated
      *
      * @param rooms
      * @param scenes
      */
+
     private void sendDataUpdatedBroadcast(ArrayList<Room> rooms, ArrayList<Scene> scenes) {
         Intent intent = new Intent(DATA_UPDATED);
         intent.putExtra(ROOM_DATA, rooms);
         intent.putExtra(SCENE_DATA, scenes);
+
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    /**
+     * Sends local Broadcast that underlying settings have changed and UI has to be updated
+     */
+    private void sendSettingsChangedBroadcast() {
+        Intent intent = new Intent(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }

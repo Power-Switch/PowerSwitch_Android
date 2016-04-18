@@ -20,6 +20,7 @@ package eu.power_switch.network;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -57,17 +58,20 @@ public class DataApiHandler {
         initPlayServices();
     }
 
+    @NonNull
     public static String buildReceiverActionString(Room room, Receiver receiver, Button button) {
         return WearableConstants.ROOM_ID_KEY + room.getId() +
                 WearableConstants.RECEIVER_ID_KEY + receiver.getId() +
                 WearableConstants.BUTTON_ID_KEY + button.getId() + ";;";
     }
 
+    @NonNull
     public static String buildRoomActionString(Room room, Long buttonId) {
         return WearableConstants.ROOM_ID_KEY + room.getId() +
                 WearableConstants.BUTTON_ID_KEY + buttonId + ";;";
     }
 
+    @NonNull
     public static String buildSceneActionString(Scene scene) {
         return WearableConstants.SCENE_ID_KEY + scene.getId() + ";;";
     }
@@ -112,8 +116,9 @@ public class DataApiHandler {
                 .SECONDS);
 
         if (!connectionResult.isSuccess() || !googleApiClient.isConnected()) {
-            Log.e("FetchDataAsyncTask", String.format("Failed to connect to GoogleApiClient (error code = %d)",
-                    connectionResult.getErrorCode()));
+            Log.e("FetchDataAsyncTask",
+                    String.format("Failed to connect to GoogleApiClient (error code = %d)",
+                            connectionResult.getErrorCode()));
             return false;
         }
         Log.e("FetchDataAsyncTask", "GoogleApiClient connected using blocking connect method");
@@ -249,7 +254,7 @@ public class DataApiHandler {
     /**
      * Retrieve wear settings from Wear cloud storage
      */
-    public void updateSettings(Context context) {
+    public void updateSettings() {
         if (!googleApiClient.isConnected()) {
             if (!blockingConnect()) {
                 return;

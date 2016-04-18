@@ -19,6 +19,8 @@
 package eu.power_switch.network;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -53,9 +55,9 @@ public class MessageApiHandler {
     /**
      * Send action string to capable node (Smartphone) which will then send the network package to the Gateway
      *
-     * @param actionString Action String containing infromation about what Receiver and Button to act on
+     * @param actionString Action String containing information about what Receiver and Button to act on
      */
-    public void sendAction(final String actionString) {
+    public void sendAction(@NonNull final String actionString) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -146,7 +148,8 @@ public class MessageApiHandler {
         connectedNodes = capabilityInfo.getNodes();
     }
 
-    private String pickBestNode(Set<Node> nodes) {
+    @Nullable
+    private String pickBestNode(@Nullable Set<Node> nodes) {
         String bestNodeId = null;
 
         if (nodes == null) {

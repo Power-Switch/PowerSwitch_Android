@@ -36,6 +36,8 @@ public class WearableSettingsConstants {
     public static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
     public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
 
+    public static final String WEARABLE_SETTINGS_CHANGED = "WEARABLE_SETTINGS_CHANGED";
+
     /**
      * Private Constructor
      *
