@@ -68,13 +68,13 @@ public class WearablePreferencesHandler {
      * First time initialization of cached values
      */
     private static void initCache() {
-        showRoomAllOnOffCache = sharedPreferences.getBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
-        autoCollapseRoomsCache = sharedPreferences.getBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
-        themeCache = sharedPreferences.getInt(WearableSettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
-        vibrateOnButtonPressCache = sharedPreferences.getBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
-        vibrationDurationCache = sharedPreferences.getInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants
+        showRoomAllOnOffCache = sharedPreferences.getBoolean(WearableSettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF, true);
+        autoCollapseRoomsCache = sharedPreferences.getBoolean(WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS, false);
+        themeCache = sharedPreferences.getInt(WearableSettingsConstants.KEY_THEME, SettingsConstants.THEME_DARK_BLUE);
+        vibrateOnButtonPressCache = sharedPreferences.getBoolean(WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS, true);
+        vibrationDurationCache = sharedPreferences.getInt(WearableSettingsConstants.KEY_VIBRATION_DURATION, SettingsConstants
                 .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
-        highlightLastActivatedButtonCache = sharedPreferences.getBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
+        highlightLastActivatedButtonCache = sharedPreferences.getBoolean(WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, false);
 
         Log.d(WearablePreferencesHandler.class, "getShowRoomAllOnOff: " + showRoomAllOnOffCache);
         Log.d(WearablePreferencesHandler.class, "getAutoCollapseRooms: " + autoCollapseRoomsCache);
@@ -112,7 +112,7 @@ public class WearablePreferencesHandler {
     public static void setShowRoomAllOnOff(boolean bool) {
         Log.d(WearablePreferencesHandler.class, "setShowRoomAllOnOff: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF, bool);
         editor.apply();
 
         showRoomAllOnOffCache = bool;
@@ -135,7 +135,7 @@ public class WearablePreferencesHandler {
     public static void setAutoCollapseRooms(boolean bool) {
         Log.d(WearablePreferencesHandler.class, "setAutoCollapseRooms: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS, bool);
         editor.apply();
 
         autoCollapseRoomsCache = bool;
@@ -158,7 +158,7 @@ public class WearablePreferencesHandler {
     public static void setTheme(int theme) {
         Log.d(WearablePreferencesHandler.class, "setTheme: " + theme);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(WearableSettingsConstants.THEME_KEY, theme);
+        editor.putInt(WearableSettingsConstants.KEY_THEME, theme);
         editor.apply();
 
         themeCache = theme;
@@ -181,7 +181,7 @@ public class WearablePreferencesHandler {
     public static void setVibrateOnButtonPress(boolean bool) {
         Log.d(WearablePreferencesHandler.class, "setVibrateOnButtonPress: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS, bool);
         editor.apply();
 
         vibrateOnButtonPressCache = bool;
@@ -204,7 +204,7 @@ public class WearablePreferencesHandler {
     public static void setVibrationDuration(int milliseconds) {
         Log.d(WearablePreferencesHandler.class, "setVibrationDuration: " + milliseconds);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, milliseconds);
+        editor.putInt(WearableSettingsConstants.KEY_VIBRATION_DURATION, milliseconds);
         editor.apply();
 
         vibrationDurationCache = milliseconds;
@@ -227,7 +227,7 @@ public class WearablePreferencesHandler {
     public static void setHighlightLastActivatedButton(boolean bool) {
         Log.d(WearablePreferencesHandler.class, "setHighlightLastActivatedButton: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
+        editor.putBoolean(WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, bool);
         editor.apply();
 
         highlightLastActivatedButtonCache = bool;

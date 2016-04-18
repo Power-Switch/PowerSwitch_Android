@@ -92,26 +92,26 @@ public class SmartphonePreferencesHandler {
      * First time initialization of cached values
      */
     private static void initCache() {
-        autoDiscoverCache = sharedPreferences.getBoolean(SettingsConstants.AUTO_DISCOVER_KEY, true);
-        backupPathCache = sharedPreferences.getString(SettingsConstants.BACKUP_PATH_KEY,
+        autoDiscoverCache = sharedPreferences.getBoolean(SettingsConstants.KEY_AUTO_DISCOVER, true);
+        backupPathCache = sharedPreferences.getString(SettingsConstants.KEY_BACKUP_PATH,
                 Environment.getExternalStorageDirectory()
                         .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME);
-        showRoomAllOnOffCache = sharedPreferences.getBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, true);
-        startupDefaultTabCache = sharedPreferences.getInt(SettingsConstants.STARTUP_DEFAULT_TAB_KEY, SettingsConstants.ROOMS_TAB_INDEX);
-        hideUseOptionsMenuInsteadOfFABCache = sharedPreferences.getBoolean(SettingsConstants.USE_OPTIONS_MENU_INSTEAD_OF_FAB_KEY, false);
-        autoCollapseRoomsCache = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, false);
-        autoCollapseTimersCache = sharedPreferences.getBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, false);
-        themeCache = sharedPreferences.getInt(SettingsConstants.THEME_KEY, SettingsConstants.THEME_DARK_BLUE);
-        vibrateOnButtonPressCache = sharedPreferences.getBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, true);
-        vibrationDurationCache = sharedPreferences.getInt(SettingsConstants.VIBRATION_DURATION_KEY, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
-        highlightLastActivatedButtonCache = sharedPreferences.getBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, false);
-        useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, false);
-        keepHistoryDurationCache = sharedPreferences.getInt(SettingsConstants.KEEP_HISTORY_DURATION, SettingsConstants.KEEP_HISTORY_FOREVER);
-        sleepAsAndroidEnabledCache = sharedPreferences.getBoolean(SettingsConstants.SLEEP_AS_ANDROID_ENABLED_KEY, true);
-        stockAlarmClockEnabledCache = sharedPreferences.getBoolean(SettingsConstants.STOCK_ALARM_CLOCK_ENABLED_KEY, true);
+        showRoomAllOnOffCache = sharedPreferences.getBoolean(SettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF, true);
+        startupDefaultTabCache = sharedPreferences.getInt(SettingsConstants.KEY_STARTUP_DEFAULT_TAB, SettingsConstants.ROOMS_TAB_INDEX);
+        hideUseOptionsMenuInsteadOfFABCache = sharedPreferences.getBoolean(SettingsConstants.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB, false);
+        autoCollapseRoomsCache = sharedPreferences.getBoolean(SettingsConstants.KEY_AUTO_COLLAPSE_ROOMS, false);
+        autoCollapseTimersCache = sharedPreferences.getBoolean(SettingsConstants.KEY_AUTO_COLLAPSE_TIMERS, false);
+        themeCache = sharedPreferences.getInt(SettingsConstants.KEY_THEME, SettingsConstants.THEME_DARK_BLUE);
+        vibrateOnButtonPressCache = sharedPreferences.getBoolean(SettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS, true);
+        vibrationDurationCache = sharedPreferences.getInt(SettingsConstants.KEY_VIBRATION_DURATION, SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK);
+        highlightLastActivatedButtonCache = sharedPreferences.getBoolean(SettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, false);
+        useCompactDrawerCache = sharedPreferences.getBoolean(SettingsConstants.KEY_USE_COMPACT_DRAWER, false);
+        keepHistoryDurationCache = sharedPreferences.getInt(SettingsConstants.KEY_KEEP_HISTORY_DURATION, SettingsConstants.KEEP_HISTORY_FOREVER);
+        sleepAsAndroidEnabledCache = sharedPreferences.getBoolean(SettingsConstants.KEY_SLEEP_AS_ANDROID_ENABLED, true);
+        stockAlarmClockEnabledCache = sharedPreferences.getBoolean(SettingsConstants.KEY_STOCK_ALARM_CLOCK_ENABLED, true);
 
         if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
-            currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, SettingsConstants.INVALID_APARTMENT_ID);
+            currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.KEY_CURRENT_APARTMENT_ID, SettingsConstants.INVALID_APARTMENT_ID);
         } else {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(SmartphonePreferencesHandler.context);
             currentApartmentIdCache = PlayStoreModeDataModel.getApartments().get(0).getId();
@@ -160,7 +160,7 @@ public class SmartphonePreferencesHandler {
     public static void setAutoDiscover(boolean bool) {
         Log.d(SmartphonePreferencesHandler.class, "setAutoDiscover: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.AUTO_DISCOVER_KEY, bool);
+        editor.putBoolean(SettingsConstants.KEY_AUTO_DISCOVER, bool);
         editor.apply();
 
         autoDiscoverCache = bool;
@@ -183,7 +183,7 @@ public class SmartphonePreferencesHandler {
     public static void setBackupPath(String path) {
         Log.d(SmartphonePreferencesHandler.class, "setBackupPath: " + path);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(SettingsConstants.BACKUP_PATH_KEY, path);
+        editor.putString(SettingsConstants.KEY_BACKUP_PATH, path);
         editor.apply();
 
         backupPathCache = path;
@@ -207,7 +207,7 @@ public class SmartphonePreferencesHandler {
     public static void setShowRoomAllOnOff(boolean bool) {
         Log.d(SmartphonePreferencesHandler.class, "setShowRoomAllOnOff: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, bool);
+        editor.putBoolean(SettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF, bool);
         editor.apply();
 
         showRoomAllOnOffCache = bool;
@@ -230,7 +230,7 @@ public class SmartphonePreferencesHandler {
     public static void setAutoCollapseRooms(boolean bool) {
         Log.d(SmartphonePreferencesHandler.class, "setAutoCollapseRooms: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, bool);
+        editor.putBoolean(SettingsConstants.KEY_AUTO_COLLAPSE_ROOMS, bool);
         editor.apply();
 
         autoCollapseRoomsCache = bool;
@@ -253,7 +253,7 @@ public class SmartphonePreferencesHandler {
     public static void setAutoCollapseTimers(boolean bool) {
         Log.d(SmartphonePreferencesHandler.class, "setAutoCollapseTimers: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.AUTO_COLLAPSE_TIMERS_KEY, bool);
+        editor.putBoolean(SettingsConstants.KEY_AUTO_COLLAPSE_TIMERS, bool);
         editor.apply();
 
         autoCollapseTimersCache = bool;
@@ -277,7 +277,7 @@ public class SmartphonePreferencesHandler {
     public static void setTheme(@SettingsConstants.Theme int theme) {
         Log.d(SmartphonePreferencesHandler.class, "setTheme: " + theme);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SettingsConstants.THEME_KEY, theme);
+        editor.putInt(SettingsConstants.KEY_THEME, theme);
         editor.apply();
 
         SmartphonePreferencesHandler.themeCache = theme;
@@ -300,7 +300,7 @@ public class SmartphonePreferencesHandler {
     public static void setVibrateOnButtonPress(boolean bool) {
         Log.d(SmartphonePreferencesHandler.class, "setVibrateOnButtonPress: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, bool);
+        editor.putBoolean(SettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS, bool);
         editor.apply();
 
         vibrateOnButtonPressCache = bool;
@@ -323,7 +323,7 @@ public class SmartphonePreferencesHandler {
     public static void setVibrationDuration(int milliseconds) {
         Log.d(SmartphonePreferencesHandler.class, "setVibrationDuration: " + milliseconds);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SettingsConstants.VIBRATION_DURATION_KEY, milliseconds);
+        editor.putInt(SettingsConstants.KEY_VIBRATION_DURATION, milliseconds);
         editor.apply();
 
         vibrationDurationCache = milliseconds;
@@ -346,7 +346,7 @@ public class SmartphonePreferencesHandler {
     public static void setHighlightLastActivatedButton(boolean bool) {
         Log.d(SmartphonePreferencesHandler.class, "setHighlightLastActivatedButton: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, bool);
+        editor.putBoolean(SettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, bool);
         editor.apply();
 
         highlightLastActivatedButtonCache = bool;
@@ -369,7 +369,7 @@ public class SmartphonePreferencesHandler {
     public static void setUseOptionsMenuInsteadOfFAB(boolean bool) {
         Log.d(SmartphonePreferencesHandler.class, "setUseOptionsMenuInsteadOfFAB: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.USE_OPTIONS_MENU_INSTEAD_OF_FAB_KEY, bool);
+        editor.putBoolean(SettingsConstants.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB, bool);
         editor.apply();
 
         hideUseOptionsMenuInsteadOfFABCache = bool;
@@ -392,7 +392,7 @@ public class SmartphonePreferencesHandler {
     public static void setStartupDefaultTab(int tabIndex) {
         Log.d(SmartphonePreferencesHandler.class, "setStartupDefaultTab: " + tabIndex);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SettingsConstants.STARTUP_DEFAULT_TAB_KEY, tabIndex);
+        editor.putInt(SettingsConstants.KEY_STARTUP_DEFAULT_TAB, tabIndex);
         editor.apply();
 
         startupDefaultTabCache = tabIndex;
@@ -415,7 +415,7 @@ public class SmartphonePreferencesHandler {
     public static void setUseCompactDrawer(boolean useCompactDrawer) {
         Log.d(SmartphonePreferencesHandler.class, "setUseCompactDrawer: " + useCompactDrawer);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.USE_COMPACT_DRAWER_KEY, useCompactDrawer);
+        editor.putBoolean(SettingsConstants.KEY_USE_COMPACT_DRAWER, useCompactDrawer);
         editor.apply();
 
         useCompactDrawerCache = useCompactDrawer;
@@ -444,7 +444,7 @@ public class SmartphonePreferencesHandler {
 
         Log.d(SmartphonePreferencesHandler.class, "setCurrentApartmentId: " + apartmentId);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putLong(SettingsConstants.CURRENT_APARTMENT_ID_KEY, apartmentId);
+        editor.putLong(SettingsConstants.KEY_CURRENT_APARTMENT_ID, apartmentId);
         editor.apply();
 
         currentApartmentIdCache = apartmentId;
@@ -467,7 +467,7 @@ public class SmartphonePreferencesHandler {
     public static void setKeepHistoryDuration(int durationSelection) {
         Log.d(SmartphonePreferencesHandler.class, "setKeepHistoryDuration: " + durationSelection);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SettingsConstants.KEEP_HISTORY_DURATION, durationSelection);
+        editor.putInt(SettingsConstants.KEY_KEEP_HISTORY_DURATION, durationSelection);
         editor.apply();
 
         keepHistoryDurationCache = durationSelection;
@@ -490,7 +490,7 @@ public class SmartphonePreferencesHandler {
     public static void setStockAlarmClockEnabled(boolean enabled) {
         Log.d(SmartphonePreferencesHandler.class, "setStockAlarmClockEnabled: " + enabled);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.STOCK_ALARM_CLOCK_ENABLED_KEY, enabled);
+        editor.putBoolean(SettingsConstants.KEY_STOCK_ALARM_CLOCK_ENABLED, enabled);
         editor.apply();
 
         stockAlarmClockEnabledCache = enabled;
@@ -513,7 +513,7 @@ public class SmartphonePreferencesHandler {
     public static void setSleepAsAndroidEnabled(boolean enabled) {
         Log.d(SmartphonePreferencesHandler.class, "setSleepAsAndroidEnabled: " + enabled);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SettingsConstants.SLEEP_AS_ANDROID_ENABLED_KEY, enabled);
+        editor.putBoolean(SettingsConstants.KEY_SLEEP_AS_ANDROID_ENABLED, enabled);
         editor.apply();
 
         sleepAsAndroidEnabledCache = enabled;

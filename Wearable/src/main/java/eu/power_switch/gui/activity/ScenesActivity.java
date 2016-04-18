@@ -134,7 +134,7 @@ public class ScenesActivity extends WearableActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                ArrayList<Scene> newScenes = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.SCENE_DATA);
+                ArrayList<Scene> newScenes = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.KEY_SCENE_DATA);
 
                 sceneList.clear();
                 sceneList.addAll(newScenes);

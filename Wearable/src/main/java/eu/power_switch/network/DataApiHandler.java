@@ -60,20 +60,20 @@ public class DataApiHandler {
 
     @NonNull
     public static String buildReceiverActionString(Room room, Receiver receiver, Button button) {
-        return WearableConstants.ROOM_ID_KEY + room.getId() +
-                WearableConstants.RECEIVER_ID_KEY + receiver.getId() +
-                WearableConstants.BUTTON_ID_KEY + button.getId() + ";;";
+        return WearableConstants.KEY_ROOM_ID + room.getId() +
+                WearableConstants.KEY_RECEIVER_ID + receiver.getId() +
+                WearableConstants.KEY_BUTTON_ID + button.getId() + ";;";
     }
 
     @NonNull
     public static String buildRoomActionString(Room room, Long buttonId) {
-        return WearableConstants.ROOM_ID_KEY + room.getId() +
-                WearableConstants.BUTTON_ID_KEY + buttonId + ";;";
+        return WearableConstants.KEY_ROOM_ID + room.getId() +
+                WearableConstants.KEY_BUTTON_ID + buttonId + ";;";
     }
 
     @NonNull
     public static String buildSceneActionString(Scene scene) {
-        return WearableConstants.SCENE_ID_KEY + scene.getId() + ";;";
+        return WearableConstants.KEY_SCENE_ID + scene.getId() + ";;";
     }
 
     private void initPlayServices() {
@@ -185,6 +185,33 @@ public class DataApiHandler {
 
     public void disconnect() {
         googleApiClient.disconnect();
+    }
+
+    public String getApartmentName() {
+        String apartmentName = "";
+
+        if (!googleApiClient.isConnected()) {
+            if (!blockingConnect()) {
+                return null;
+            }
+        }
+
+        ArrayList<DataMap> data;
+        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient).await();
+
+        if (dataItemBuffer.getStatus().isSuccess()) {
+            for (DataItem dataItem : dataItemBuffer) {
+                DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
+                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                if (data != null) {
+                    apartmentName = ListenerService.extractApartmentDataMapItems(data);
+                    break;
+                }
+            }
+        }
+        dataItemBuffer.release();
+
+        return apartmentName;
     }
 
     /**

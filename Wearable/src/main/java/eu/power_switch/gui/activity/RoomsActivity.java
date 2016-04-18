@@ -135,7 +135,7 @@ public class RoomsActivity extends WearableActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                ArrayList<Room> newRooms = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.ROOM_DATA);
+                ArrayList<Room> newRooms = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.KEY_ROOM_DATA);
 
                 roomList.clear();
                 roomList.addAll(newRooms);

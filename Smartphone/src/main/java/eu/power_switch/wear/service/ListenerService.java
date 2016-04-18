@@ -77,16 +77,16 @@ public class ListenerService extends WearableListenerService {
             Long receiverId;
             Long buttonId;
 
-            if (messageData.contains(WearableConstants.ROOM_ID_KEY) &&
-                    messageData.contains(WearableConstants.RECEIVER_ID_KEY) &&
-                    messageData.contains(WearableConstants.BUTTON_ID_KEY)) {
-                int start = messageData.indexOf(WearableConstants.ROOM_ID_KEY) + WearableConstants.ROOM_ID_KEY.length();
-                int stop = messageData.indexOf(WearableConstants.RECEIVER_ID_KEY);
+            if (messageData.contains(WearableConstants.KEY_ROOM_ID) &&
+                    messageData.contains(WearableConstants.KEY_RECEIVER_ID) &&
+                    messageData.contains(WearableConstants.KEY_BUTTON_ID)) {
+                int start = messageData.indexOf(WearableConstants.KEY_ROOM_ID) + WearableConstants.KEY_ROOM_ID.length();
+                int stop = messageData.indexOf(WearableConstants.KEY_RECEIVER_ID);
                 roomId = Long.valueOf(messageData.substring(start, stop));
-                start = stop + WearableConstants.RECEIVER_ID_KEY.length();
-                stop = messageData.indexOf(WearableConstants.BUTTON_ID_KEY);
+                start = stop + WearableConstants.KEY_RECEIVER_ID.length();
+                stop = messageData.indexOf(WearableConstants.KEY_BUTTON_ID);
                 receiverId = Long.valueOf(messageData.substring(start, stop));
-                start = stop + WearableConstants.BUTTON_ID_KEY.length();
+                start = stop + WearableConstants.KEY_BUTTON_ID.length();
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
@@ -95,20 +95,20 @@ public class ListenerService extends WearableListenerService {
                 Button button = receiver.getButton(buttonId);
 
                 ActionHandler.execute(getApplicationContext(), receiver, button);
-            } else if (messageData.contains(WearableConstants.ROOM_ID_KEY) &&
-                    messageData.contains(WearableConstants.BUTTON_ID_KEY)) {
-                int start = messageData.indexOf(WearableConstants.ROOM_ID_KEY) + WearableConstants.ROOM_ID_KEY.length();
-                int stop = messageData.indexOf(WearableConstants.BUTTON_ID_KEY);
+            } else if (messageData.contains(WearableConstants.KEY_ROOM_ID) &&
+                    messageData.contains(WearableConstants.KEY_BUTTON_ID)) {
+                int start = messageData.indexOf(WearableConstants.KEY_ROOM_ID) + WearableConstants.KEY_ROOM_ID.length();
+                int stop = messageData.indexOf(WearableConstants.KEY_BUTTON_ID);
                 roomId = Long.valueOf(messageData.substring(start, stop));
-                start = stop + WearableConstants.BUTTON_ID_KEY.length();
+                start = stop + WearableConstants.KEY_BUTTON_ID.length();
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
                 Room room = DatabaseHandler.getRoom(roomId);
 
                 ActionHandler.execute(getApplicationContext(), room, buttonId);
-            } else if (messageData.contains(WearableConstants.SCENE_ID_KEY)) {
-                int start = messageData.indexOf(WearableConstants.SCENE_ID_KEY) + WearableConstants.SCENE_ID_KEY.length();
+            } else if (messageData.contains(WearableConstants.KEY_SCENE_ID)) {
+                int start = messageData.indexOf(WearableConstants.KEY_SCENE_ID) + WearableConstants.KEY_SCENE_ID.length();
                 int stop = messageData.indexOf(";;");
                 Long sceneId = Long.valueOf(messageData.substring(start, stop));
 

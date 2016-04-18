@@ -29,12 +29,12 @@ public class WearableSettingsConstants {
     public static final String WEARABLE_SHARED_PREFS_NAME = "eu.power_switch.wearable.prefs";
 
     // app settings
-    public static final String SHOW_ROOM_ALL_ON_OFF_KEY = "showRoomAllOnOff";
-    public static final String HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY = "highlightLastActivatedButton";
-    public static final String AUTO_COLLAPSE_ROOMS_KEY = "autoCollapseRooms";
-    public static final String THEME_KEY = "theme";
-    public static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
-    public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
+    public static final String KEY_SHOW_ROOM_ALL_ON_OFF = "showRoomAllOnOff";
+    public static final String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = "highlightLastActivatedButton";
+    public static final String KEY_AUTO_COLLAPSE_ROOMS = "autoCollapseRooms";
+    public static final String KEY_THEME = "theme";
+    public static final String KEY_VIBRATE_ON_BUTTON_PRESS = "vibrateOnButtonPress";
+    public static final String KEY_VIBRATION_DURATION = "vibrationDuration";
 
     public static final String WEARABLE_SETTINGS_CHANGED = "WEARABLE_SETTINGS_CHANGED";
     public static final String WEARABLE_THEME_CHANGED = "WEARABLE_THEME_CHANGED";

@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
@@ -88,6 +89,21 @@ public class UtilityService extends IntentService {
     }
 
     /**
+     * Puts a Apartment into a DataMap
+     *
+     * @param apartment Apartment to convert
+     * @return DataMap
+     */
+    private DataMap convertToDataMap(Apartment apartment) {
+        DataMap roomDataMap = new DataMap();
+
+        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_APARTMENT_ID, apartment.getId());
+        roomDataMap.putString(WearableConstants.DATAMAP_KEY_APARTMENT_NAME, apartment.getName());
+
+        return roomDataMap;
+    }
+
+    /**
      * Puts a Room into a DataMap
      *
      * @param room Room to convert
@@ -96,8 +112,9 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Room room) {
         DataMap roomDataMap = new DataMap();
 
-        roomDataMap.putLong(WearableConstants.ROOM_ID_DATAMAP_KEY, room.getId());
-        roomDataMap.putString(WearableConstants.ROOM_NAME_DATAMAP_KEY, room.getName());
+        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_ROOM_ID, room.getId());
+        roomDataMap.putString(WearableConstants.DATAMAP_KEY_ROOM_NAME, room.getName());
+        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_ROOM_APARTMENT_ID, room.getApartmentId());
 
         return roomDataMap;
     }
@@ -111,11 +128,11 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Receiver receiver) {
         DataMap receiverDataMap = new DataMap();
 
-        receiverDataMap.putLong(WearableConstants.RECEIVER_ID_DATAMAP_KEY, receiver.getId());
-        receiverDataMap.putString(WearableConstants.RECEIVER_NAME_DATAMAP_KEY, receiver.getName());
-        receiverDataMap.putLong(WearableConstants.RECEIVER_ROOM_ID_DATAMAP_KEY, receiver.getRoomId());
-        receiverDataMap.putInt(WearableConstants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY, receiver.getPositionInRoom());
-        receiverDataMap.putLong(WearableConstants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY, receiver.getLastActivatedButtonId());
+        receiverDataMap.putLong(WearableConstants.DATAMAP_KEY_RECEIVER_ID, receiver.getId());
+        receiverDataMap.putString(WearableConstants.DATAMAP_KEY_RECEIVER_NAME, receiver.getName());
+        receiverDataMap.putLong(WearableConstants.DATAMAP_KEY_RECEIVER_ROOM_ID, receiver.getRoomId());
+        receiverDataMap.putInt(WearableConstants.DATAMAP_KEY_RECEIVER_POSITION_IN_ROOM, receiver.getPositionInRoom());
+        receiverDataMap.putLong(WearableConstants.DATAMAP_KEY_RECEIVER_LAST_ACTIVATED_BUTTON_ID, receiver.getLastActivatedButtonId());
 
         return receiverDataMap;
     }
@@ -129,9 +146,9 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Button button) {
         DataMap buttonDataMap = new DataMap();
 
-        buttonDataMap.putLong(WearableConstants.BUTTON_ID_DATAMAP_KEY, button.getId());
-        buttonDataMap.putString(WearableConstants.BUTTON_NAME_DATAMAP_KEY, button.getName());
-        buttonDataMap.putLong(WearableConstants.BUTTON_RECEIVER_ID_DATAMAP_KEY, button.getReceiverId());
+        buttonDataMap.putLong(WearableConstants.DATAMAP_KEY_BUTTON_ID, button.getId());
+        buttonDataMap.putString(WearableConstants.DATAMAP_KEY_BUTTON_NAME, button.getName());
+        buttonDataMap.putLong(WearableConstants.DATAMAP_KEY_BUTTON_RECEIVER_ID, button.getReceiverId());
 
         return buttonDataMap;
     }
@@ -145,8 +162,8 @@ public class UtilityService extends IntentService {
     private DataMap convertToDataMap(Scene scene) {
         DataMap roomDataMap = new DataMap();
 
-        roomDataMap.putLong(WearableConstants.SCENE_ID_DATAMAP_KEY, scene.getId());
-        roomDataMap.putString(WearableConstants.SCENE_NAME_DATAMAP_KEY, scene.getName());
+        roomDataMap.putLong(WearableConstants.DATAMAP_KEY_SCENE_ID, scene.getId());
+        roomDataMap.putString(WearableConstants.DATAMAP_KEY_SCENE_NAME, scene.getName());
 
         return roomDataMap;
     }
@@ -160,14 +177,39 @@ public class UtilityService extends IntentService {
     synchronized protected void onHandleIntent(Intent intent) {
         Log.d(this, intent);
 
-        // Get Room/Receiver/Scene Data from Database and send to wearable
-        if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
-            Log.d("Getting Data from Database to send to Wearable...");
+        try {
+            // Get Room/Receiver/Scene Data from Database and send to wearable
+            if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
+                Log.d("Getting Data from Database to send to Wearable...");
 
-            if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
+                if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+                    PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
 
-                List<Room> rooms = PlayStoreModeDataModel.getActiveApartment().getRooms();
+                    List<Apartment> apartments = PlayStoreModeDataModel.getApartments();
+
+                    List<Room> rooms = PlayStoreModeDataModel.getActiveApartment().getRooms();
+                    List<Receiver> receivers = new ArrayList<>();
+                    for (Room room : rooms) {
+                        receivers.addAll(room.getReceivers());
+                    }
+
+                    List<Button> buttons = new ArrayList<>();
+                    for (Receiver receiver : receivers) {
+                        buttons.addAll(receiver.getButtons());
+                    }
+
+                    List<Scene> scenes = PlayStoreModeDataModel.getActiveApartment().getScenes();
+
+                    sendDataToWearable(apartments, rooms, receivers, buttons, scenes);
+                    return;
+                }
+
+                List<Apartment> apartments = DatabaseHandler.getAllApartments();
+
+                Apartment activeApartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+
+                List<Room> rooms = activeApartment.getRooms();
+
                 List<Receiver> receivers = new ArrayList<>();
                 for (Room room : rooms) {
                     receivers.addAll(room.getReceivers());
@@ -177,37 +219,15 @@ public class UtilityService extends IntentService {
                 for (Receiver receiver : receivers) {
                     buttons.addAll(receiver.getButtons());
                 }
+                List<Scene> scenes = activeApartment.getScenes();
 
-                List<Scene> scenes = PlayStoreModeDataModel.getActiveApartment().getScenes();
-
-                sendDataToWearable(rooms, receivers, buttons, scenes);
-                return;
-            }
-
-            try {
-                List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
-
-                List<Receiver> receivers = new ArrayList<>();
-                for (Room room : rooms) {
-                    receivers.addAll(room.getReceivers());
-                }
-
-                List<Button> buttons = new ArrayList<>();
-                for (Receiver receiver : receivers) {
-                    buttons.addAll(receiver.getButtons());
-                }
-                List<Scene> scenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId());
-
-                sendDataToWearable(rooms, receivers, buttons, scenes);
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
-            }
-        } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
-            try {
+                sendDataToWearable(apartments, rooms, receivers, buttons, scenes);
+            } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
                 sendSettingsToWearable();
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
             }
+
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
         }
     }
 
@@ -217,7 +237,7 @@ public class UtilityService extends IntentService {
      * @param rooms     List containing Rooms from Database
      * @param receivers List containing Receivers from Database
      */
-    private void sendDataToWearable(List<Room> rooms, List<Receiver> receivers, List<Button> buttons, List<Scene>
+    private void sendDataToWearable(List<Apartment> apartments, List<Room> rooms, List<Receiver> receivers, List<Button> buttons, List<Scene>
             scenes) {
         Log.d("Sending new Data to Wearable...");
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
@@ -229,6 +249,11 @@ public class UtilityService extends IntentService {
                 SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
         ArrayList<DataMap> data = new ArrayList<>();
+
+
+        for (Apartment apartment : apartments) {
+            data.add(convertToDataMap(apartment));
+        }
 
         for (Room room : rooms) {
             data.add(convertToDataMap(room));
@@ -314,15 +339,15 @@ public class UtilityService extends IntentService {
      */
     private DataMap getSettingsDataMap() {
         DataMap settingsDataMap = new DataMap();
-        settingsDataMap.putBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY, WearablePreferencesHandler
+        settingsDataMap.putBoolean(WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS, WearablePreferencesHandler
                 .getAutoCollapseRooms());
-        settingsDataMap.putBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY, WearablePreferencesHandler
+        settingsDataMap.putBoolean(WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, WearablePreferencesHandler
                 .getHighlightLastActivatedButton());
-        settingsDataMap.putBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY, WearablePreferencesHandler.getShowRoomAllOnOff());
-        settingsDataMap.putInt(WearableSettingsConstants.THEME_KEY, WearablePreferencesHandler.getTheme());
-        settingsDataMap.putBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY, WearablePreferencesHandler
+        settingsDataMap.putBoolean(WearableSettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF, WearablePreferencesHandler.getShowRoomAllOnOff());
+        settingsDataMap.putInt(WearableSettingsConstants.KEY_THEME, WearablePreferencesHandler.getTheme());
+        settingsDataMap.putBoolean(WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS, WearablePreferencesHandler
                 .getVibrateOnButtonPress());
-        settingsDataMap.putInt(WearableSettingsConstants.VIBRATION_DURATION_KEY, WearablePreferencesHandler.getVibrationDuration());
+        settingsDataMap.putInt(WearableSettingsConstants.KEY_VIBRATION_DURATION, WearablePreferencesHandler.getVibrationDuration());
 
         return settingsDataMap;
     }

@@ -34,6 +34,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.WatchViewStub;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -63,6 +64,8 @@ public class MainActivity extends WearableActivity {
 
     private TextView textViewStatus;
     private RelativeLayout relativeLayoutStatus;
+    private TextView textViewApartmet;
+    private LinearLayout contentLayout;
 
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
@@ -87,10 +90,13 @@ public class MainActivity extends WearableActivity {
                 Log.d("MainActivity", "received intent: " + intent.getAction());
 
                 if (ListenerService.DATA_UPDATED.equals(intent.getAction())) {
-                    ArrayList<Room> rooms = (ArrayList<Room>) intent.getSerializableExtra(ListenerService.ROOM_DATA);
+                    String apartmentName = intent.getStringExtra(ListenerService.KEY_APARTMENT_DATA);
+                    textViewApartmet.setText(apartmentName);
+
+                    ArrayList<Room> rooms = (ArrayList<Room>) intent.getSerializableExtra(ListenerService.KEY_ROOM_DATA);
                     replaceRoomList(rooms);
 
-                    ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.SCENE_DATA);
+                    ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.KEY_SCENE_DATA);
                     replaceSceneList(scenes);
 
                     refreshUI();
@@ -99,8 +105,9 @@ public class MainActivity extends WearableActivity {
                     Intent restartActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                     restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    restartActivityIntent.putExtra(ListenerService.ROOM_DATA, roomList);
-                    restartActivityIntent.putExtra(ListenerService.SCENE_DATA, sceneList);
+                    restartActivityIntent.putExtra(ListenerService.KEY_APARTMENT_DATA, textViewApartmet.getText().toString());
+                    restartActivityIntent.putExtra(ListenerService.KEY_ROOM_DATA, roomList);
+                    restartActivityIntent.putExtra(ListenerService.KEY_SCENE_DATA, sceneList);
                     startActivity(restartActivityIntent);
                 }
             }
@@ -127,34 +134,42 @@ public class MainActivity extends WearableActivity {
                 relativeLayoutStatus = (RelativeLayout) findViewById(R.id.relativeLayout_status);
                 textViewStatus = (TextView) findViewById(R.id.textView_Status);
 
+                contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
 
-                Button rooms = (Button) findViewById(R.id.button_rooms);
-                rooms.setOnClickListener(new View.OnClickListener() {
+                textViewApartmet = (TextView) findViewById(R.id.textView_apartment);
+
+                Button buttonRooms = (Button) findViewById(R.id.button_rooms);
+                buttonRooms.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent startIntent = new Intent(getApplicationContext(), RoomsActivity.class);
                         startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startIntent.putExtra(ListenerService.ROOM_DATA, roomList);
+                        startIntent.putExtra(ListenerService.KEY_ROOM_DATA, roomList);
                         startActivity(startIntent);
                     }
                 });
 
-                Button scenes = (Button) findViewById(R.id.button_scenes);
-                scenes.setOnClickListener(new View.OnClickListener() {
+                Button buttonScenes = (Button) findViewById(R.id.button_scenes);
+                buttonScenes.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent startIntent = new Intent(getApplicationContext(), ScenesActivity.class);
                         startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startIntent.putExtra(ListenerService.SCENE_DATA, sceneList);
+                        startIntent.putExtra(ListenerService.KEY_SCENE_DATA, sceneList);
                         startActivity(startIntent);
                     }
                 });
 
-                if (getIntent().hasExtra(ListenerService.ROOM_DATA) && getIntent().hasExtra(ListenerService.SCENE_DATA)) {
-                    ArrayList<Room> roomArrayList = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.ROOM_DATA);
+                if (getIntent().hasExtra(ListenerService.KEY_APARTMENT_DATA) &&
+                        getIntent().hasExtra(ListenerService.KEY_ROOM_DATA) &&
+                        getIntent().hasExtra(ListenerService.KEY_SCENE_DATA)) {
+                    String apartmentName = getIntent().getStringExtra(ListenerService.KEY_APARTMENT_DATA);
+                    textViewApartmet.setText(apartmentName);
+
+                    ArrayList<Room> roomArrayList = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.KEY_ROOM_DATA);
                     replaceRoomList(roomArrayList);
 
-                    ArrayList<Scene> sceneArrayList = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.SCENE_DATA);
+                    ArrayList<Scene> sceneArrayList = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.KEY_SCENE_DATA);
                     replaceSceneList(sceneArrayList);
 
                     refreshUI();
@@ -241,10 +256,12 @@ public class MainActivity extends WearableActivity {
     private void refreshUI() {
         if (!isAmbient()) {
             if (roomList.isEmpty()) {
+                contentLayout.setVisibility(View.GONE);
                 textViewStatus.setText(R.string.please_create_receivers_on_your_smartphone_first);
-
+                textViewStatus.setVisibility(View.VISIBLE);
                 relativeLayoutStatus.setVisibility(View.VISIBLE);
             } else {
+                contentLayout.setVisibility(View.VISIBLE);
                 relativeLayoutStatus.setVisibility(View.GONE);
             }
         }
@@ -266,14 +283,18 @@ public class MainActivity extends WearableActivity {
 
         textViewStatus.setVisibility(View.GONE);
         relativeLayoutStatus.setVisibility(View.VISIBLE);
+        contentLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void onExitAmbient() {
         if (roomList.isEmpty()) {
             relativeLayoutStatus.setVisibility(View.VISIBLE);
+            textViewStatus.setText(R.string.please_create_receivers_on_your_smartphone_first);
             textViewStatus.setVisibility(View.VISIBLE);
+            contentLayout.setVisibility(View.GONE);
         } else {
+            contentLayout.setVisibility(View.VISIBLE);
             relativeLayoutStatus.setVisibility(View.GONE);
         }
 
@@ -290,6 +311,11 @@ public class MainActivity extends WearableActivity {
 
         @Override
         protected ArrayList<Object> doInBackground(Uri... params) {
+            // Get Apartment Data from Smartphone App
+            String apartmentName = dataApiHandler.getApartmentName();
+            ArrayList<String> apartments = new ArrayList<>();
+            apartments.add(apartmentName);
+
             // Get Room Data from Smartphone App
             ArrayList<Room> rooms = dataApiHandler.getRoomData();
             boolean autoCollapseRooms = WearablePreferencesHandler.getAutoCollapseRooms();
@@ -304,6 +330,7 @@ public class MainActivity extends WearableActivity {
             dataApiHandler.updateSettings();
 
             ArrayList<Object> result = new ArrayList<>();
+            result.add(apartments);
             result.add(rooms);
             result.add(scenes);
 
@@ -314,8 +341,9 @@ public class MainActivity extends WearableActivity {
         protected void onPostExecute(ArrayList<Object> result) {
             if (result != null) {
                 // Update UI based on the result of the background processing
-                replaceRoomList((ArrayList<Room>) result.get(0));
-                replaceSceneList((ArrayList<Scene>) result.get(1));
+                textViewApartmet.setText(((ArrayList<String>) result.get(0)).get(0));
+                replaceRoomList((ArrayList<Room>) result.get(1));
+                replaceSceneList((ArrayList<Scene>) result.get(2));
             }
             refreshUI();
         }

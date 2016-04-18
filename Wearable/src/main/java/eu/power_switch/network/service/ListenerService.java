@@ -52,8 +52,36 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
 public class ListenerService extends WearableListenerService {
 
     public static final String DATA_UPDATED = "eu.power_switch.data_updated";
-    public static final String ROOM_DATA = "room_data";
-    public static final String SCENE_DATA = "scene_data";
+    public static final String KEY_APARTMENT_DATA = "apartment_data";
+    public static final String KEY_ROOM_DATA = "room_data";
+    public static final String KEY_SCENE_DATA = "scene_data";
+
+    /**
+     * Extract Apartment info from DataMap Array
+     *
+     * @param dataMapArrayList received data
+     * @return Apartment name
+     */
+    public static String extractApartmentDataMapItems(ArrayList<DataMap> dataMapArrayList) {
+        long apartmentId = -1;
+
+        for (DataMap dataMapItem : dataMapArrayList) {
+            if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_ROOM_APARTMENT_ID)) {
+                apartmentId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_ROOM_APARTMENT_ID);
+                break;
+            }
+        }
+
+        for (DataMap dataMapItem : dataMapArrayList) {
+            if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_APARTMENT_NAME)) {
+                if (apartmentId == dataMapItem.getLong(WearableConstants.DATAMAP_KEY_APARTMENT_ID)) {
+                    return dataMapItem.getString(WearableConstants.DATAMAP_KEY_APARTMENT_NAME);
+                }
+            }
+        }
+
+        return null;
+    }
 
     /**
      * This method converts received data contained in a DataMap Array back to Rooms, Receivers and Buttons.
@@ -65,18 +93,18 @@ public class ListenerService extends WearableListenerService {
         ArrayList<Room> rooms = new ArrayList<>();
 
         for (DataMap dataMapItem : dataMapArrayList) {
-            if (dataMapItem.containsKey(WearableConstants.ROOM_NAME_DATAMAP_KEY)) {
-                long roomId = dataMapItem.getLong(WearableConstants.ROOM_ID_DATAMAP_KEY);
-                String roomName = dataMapItem.getString(WearableConstants.ROOM_NAME_DATAMAP_KEY);
+            if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_ROOM_NAME)) {
+                long roomId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_ROOM_ID);
+                String roomName = dataMapItem.getString(WearableConstants.DATAMAP_KEY_ROOM_NAME);
 
                 rooms.add(new Room(roomId, roomName));
 
-            } else if (dataMapItem.containsKey(WearableConstants.RECEIVER_NAME_DATAMAP_KEY)) {
-                long receiverId = dataMapItem.getLong(WearableConstants.RECEIVER_ID_DATAMAP_KEY);
-                String receiverName = dataMapItem.getString(WearableConstants.RECEIVER_NAME_DATAMAP_KEY);
-                long receiverRoomId = dataMapItem.getLong(WearableConstants.RECEIVER_ROOM_ID_DATAMAP_KEY);
-                int positionInRoom = dataMapItem.getInt(WearableConstants.RECEIVER_POSITION_IN_ROOM_DATAMAP_KEY);
-                long lastActivatedButtonId = dataMapItem.getLong(WearableConstants.RECEIVER_LAST_ACTIVATED_BUTTON_ID_DATAMAP_KEY);
+            } else if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_RECEIVER_NAME)) {
+                long receiverId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_RECEIVER_ID);
+                String receiverName = dataMapItem.getString(WearableConstants.DATAMAP_KEY_RECEIVER_NAME);
+                long receiverRoomId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_RECEIVER_ROOM_ID);
+                int positionInRoom = dataMapItem.getInt(WearableConstants.DATAMAP_KEY_RECEIVER_POSITION_IN_ROOM);
+                long lastActivatedButtonId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_RECEIVER_LAST_ACTIVATED_BUTTON_ID);
 
                 Receiver receiver = new Receiver(receiverId, receiverName, receiverRoomId,
                         lastActivatedButtonId, positionInRoom);
@@ -87,10 +115,10 @@ public class ListenerService extends WearableListenerService {
                         break;
                     }
                 }
-            } else if (dataMapItem.containsKey(WearableConstants.BUTTON_NAME_DATAMAP_KEY)) {
-                long buttonId = dataMapItem.getLong(WearableConstants.BUTTON_ID_DATAMAP_KEY);
-                String buttonName = dataMapItem.getString(WearableConstants.BUTTON_NAME_DATAMAP_KEY);
-                long buttonReceiverId = dataMapItem.getLong(WearableConstants.BUTTON_RECEIVER_ID_DATAMAP_KEY);
+            } else if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_BUTTON_NAME)) {
+                long buttonId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_BUTTON_ID);
+                String buttonName = dataMapItem.getString(WearableConstants.DATAMAP_KEY_BUTTON_NAME);
+                long buttonReceiverId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_BUTTON_RECEIVER_ID);
 
                 Button button = new Button(buttonId, buttonName, buttonReceiverId);
 
@@ -128,9 +156,9 @@ public class ListenerService extends WearableListenerService {
         ArrayList<Scene> scenes = new ArrayList<>();
 
         for (DataMap dataMapItem : dataMapArrayList) {
-            if (dataMapItem.containsKey(WearableConstants.SCENE_NAME_DATAMAP_KEY)) {
-                long sceneId = dataMapItem.getLong(WearableConstants.SCENE_ID_DATAMAP_KEY);
-                String sceneName = dataMapItem.getString(WearableConstants.SCENE_NAME_DATAMAP_KEY);
+            if (dataMapItem.containsKey(WearableConstants.DATAMAP_KEY_SCENE_NAME)) {
+                long sceneId = dataMapItem.getLong(WearableConstants.DATAMAP_KEY_SCENE_ID);
+                String sceneName = dataMapItem.getString(WearableConstants.DATAMAP_KEY_SCENE_NAME);
                 Scene scene = new Scene(sceneId, sceneName);
                 scenes.add(scene);
             }
@@ -147,28 +175,28 @@ public class ListenerService extends WearableListenerService {
     public static void extractSettings(ArrayList<DataMap> settings) {
         // save map values to local preferenceHandler
         for (DataMap dataMapItem : settings) {
-            if (dataMapItem.containsKey(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY)) {
-                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.AUTO_COLLAPSE_ROOMS_KEY);
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS);
                 WearablePreferencesHandler.setAutoCollapseRooms(bool);
             }
-            if (dataMapItem.containsKey(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY)) {
-                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY);
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
                 WearablePreferencesHandler.setHighlightLastActivatedButton(bool);
             }
-            if (dataMapItem.containsKey(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY)) {
-                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.SHOW_ROOM_ALL_ON_OFF_KEY);
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF);
                 WearablePreferencesHandler.setShowRoomAllOnOff(bool);
             }
-            if (dataMapItem.containsKey(WearableSettingsConstants.THEME_KEY)) {
-                int value = dataMapItem.getInt(WearableSettingsConstants.THEME_KEY);
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_THEME)) {
+                int value = dataMapItem.getInt(WearableSettingsConstants.KEY_THEME);
                 WearablePreferencesHandler.setTheme(value);
             }
-            if (dataMapItem.containsKey(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY)) {
-                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.VIBRATE_ON_BUTTON_PRESS_KEY);
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS);
                 WearablePreferencesHandler.setVibrateOnButtonPress(bool);
             }
-            if (dataMapItem.containsKey(WearableSettingsConstants.VIBRATION_DURATION_KEY)) {
-                int value = dataMapItem.getInt(WearableSettingsConstants.VIBRATION_DURATION_KEY);
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_VIBRATION_DURATION)) {
+                int value = dataMapItem.getInt(WearableSettingsConstants.KEY_VIBRATION_DURATION);
                 WearablePreferencesHandler.setVibrationDuration(value);
             }
         }
@@ -193,6 +221,7 @@ public class ListenerService extends WearableListenerService {
 
                         boolean autoCollapseRooms = WearablePreferencesHandler.getAutoCollapseRooms();
 
+                        String apartmentName = extractApartmentDataMapItems(data);
                         // convert received data to room/receiver/button objects
                         ArrayList<Room> rooms = extractRoomDataMapItems(data);
                         for (Room room : rooms) {
@@ -201,7 +230,7 @@ public class ListenerService extends WearableListenerService {
                         ArrayList<Scene> scenes = extractSceneDataMapItems(data);
 
                         // send data to Activity
-                        sendDataUpdatedBroadcast(rooms, scenes);
+                        sendDataUpdatedBroadcast(apartmentName, rooms, scenes);
                     } else if (WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
                         DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                         ArrayList<DataMap> settings = dataMapItem.getDataMap()
@@ -223,7 +252,7 @@ public class ListenerService extends WearableListenerService {
                     if (WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
                         // send data to Activity
                         // update with empty lists
-                        sendDataUpdatedBroadcast(new ArrayList<Room>(), new ArrayList<Scene>());
+                        sendDataUpdatedBroadcast("", new ArrayList<Room>(), new ArrayList<Scene>());
                     }
                 }
             }
@@ -254,10 +283,11 @@ public class ListenerService extends WearableListenerService {
      * @param scenes
      */
 
-    private void sendDataUpdatedBroadcast(ArrayList<Room> rooms, ArrayList<Scene> scenes) {
+    private void sendDataUpdatedBroadcast(String apartmentName, ArrayList<Room> rooms, ArrayList<Scene> scenes) {
         Intent intent = new Intent(DATA_UPDATED);
-        intent.putExtra(ROOM_DATA, rooms);
-        intent.putExtra(SCENE_DATA, scenes);
+        intent.putExtra(KEY_APARTMENT_DATA, apartmentName);
+        intent.putExtra(KEY_ROOM_DATA, rooms);
+        intent.putExtra(KEY_SCENE_DATA, scenes);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
@@ -283,5 +313,4 @@ public class ListenerService extends WearableListenerService {
     private String convertEventDataToString(byte[] data) {
         return new String(data);
     }
-
 }

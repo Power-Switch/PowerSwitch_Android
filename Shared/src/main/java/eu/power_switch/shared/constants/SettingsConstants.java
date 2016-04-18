@@ -34,22 +34,22 @@ public class SettingsConstants {
     public static final String SHARED_PREFS_NAME = "eu.power_switch.prefs";
 
     // app settings
-    public static final String AUTO_DISCOVER_KEY = "autoDiscover";
-    public static final String BACKUP_PATH_KEY = "backupPath";
-    public static final String STARTUP_DEFAULT_TAB_KEY = "startupDefaultTab";
-    public static final String SHOW_ROOM_ALL_ON_OFF_KEY = "showRoomAllOnOff";
-    public static final String HIGHLIGHT_LAST_ACTIVATED_BUTTON_KEY = "highlightLastActivatedButton";
-    public static final String USE_OPTIONS_MENU_INSTEAD_OF_FAB_KEY = "hideAddFAB";
-    public static final String AUTO_COLLAPSE_ROOMS_KEY = "autoCollapseRooms";
-    public static final String AUTO_COLLAPSE_TIMERS_KEY = "autoCollapseTimers";
-    public static final String THEME_KEY = "theme";
-    public static final String USE_COMPACT_DRAWER_KEY = "useCompactDrawer";
-    public static final String VIBRATE_ON_BUTTON_PRESS_KEY = "vibrateOnButtonPress";
-    public static final String VIBRATION_DURATION_KEY = "vibrationDuration";
-    public static final String CURRENT_APARTMENT_ID_KEY = "currentApartmentId";
-    public static final String KEEP_HISTORY_DURATION = "keepHistoryDuration";
-    public static final String SLEEP_AS_ANDROID_ENABLED_KEY = "SLEEP_AS_ANDROID_ENABLED_KEY";
-    public static final String STOCK_ALARM_CLOCK_ENABLED_KEY = "STOCK_ALARM_CLOCK_ENABLED_KEY";
+    public static final String KEY_AUTO_DISCOVER = "autoDiscover";
+    public static final String KEY_BACKUP_PATH = "backupPath";
+    public static final String KEY_STARTUP_DEFAULT_TAB = "startupDefaultTab";
+    public static final String KEY_SHOW_ROOM_ALL_ON_OFF = "showRoomAllOnOff";
+    public static final String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = "highlightLastActivatedButton";
+    public static final String KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB = "hideAddFAB";
+    public static final String KEY_AUTO_COLLAPSE_ROOMS = "autoCollapseRooms";
+    public static final String KEY_AUTO_COLLAPSE_TIMERS = "autoCollapseTimers";
+    public static final String KEY_THEME = "theme";
+    public static final String KEY_USE_COMPACT_DRAWER = "useCompactDrawer";
+    public static final String KEY_VIBRATE_ON_BUTTON_PRESS = "vibrateOnButtonPress";
+    public static final String KEY_VIBRATION_DURATION = "vibrationDuration";
+    public static final String KEY_CURRENT_APARTMENT_ID = "currentApartmentId";
+    public static final String KEY_KEEP_HISTORY_DURATION = "keepHistoryDuration";
+    public static final String KEY_SLEEP_AS_ANDROID_ENABLED = "SLEEP_AS_ANDROID_ENABLED_KEY";
+    public static final String KEY_STOCK_ALARM_CLOCK_ENABLED = "STOCK_ALARM_CLOCK_ENABLED_KEY";
 
     public static final int DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK = 40;
 
