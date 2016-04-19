@@ -40,20 +40,20 @@ abstract class CallEventPhoneNumberHandler {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-    protected static void add(Set<String> phoneNumbers, long callEventId, PhoneConstants.Type eventType) throws Exception {
+    protected static void add(Set<String> phoneNumbers, long callEventId, PhoneConstants.CallType eventCallType) throws Exception {
         for (String phoneNumber : phoneNumbers) {
             long phoneNumberId = PhoneNumberHandler.add(phoneNumber);
 
             // add to relational table
             ContentValues values = new ContentValues();
             values.put(CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID, callEventId);
-            values.put(CallEventPhoneNumberTable.COLUMN_EVENT_TYPE_ID, eventType.getId());
+            values.put(CallEventPhoneNumberTable.COLUMN_EVENT_TYPE_ID, eventCallType.getId());
             values.put(CallEventPhoneNumberTable.COLUMN_PHONE_NUMBER_ID, phoneNumberId);
             DatabaseHandler.database.insert(CallEventPhoneNumberTable.TABLE_NAME, null, values);
         }
     }
 
-    protected static Set<String> get(long callEventId, PhoneConstants.Type type) throws Exception {
+    protected static Set<String> get(long callEventId, PhoneConstants.CallType callType) throws Exception {
         // TODO:
         return new HashSet<>();
     }

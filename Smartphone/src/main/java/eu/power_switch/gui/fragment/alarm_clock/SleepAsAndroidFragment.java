@@ -139,9 +139,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     actions.remove(position);
-                                    DatabaseHandler.setAlarmActions(
-                                            SLEEP_AS_ANDROID_ALARM_EVENT.getById(spinnerEventType
-                                                    .getSelectedItemPosition()), actions);
+                                    DatabaseHandler.setAlarmActions(currentEventType, actions);
                                     StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                             R.string.action_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
@@ -165,9 +163,8 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddSleepAsAndroidAlarmEventActionDialog addAlarmEventActionDialog = AddSleepAsAndroidAlarmEventActionDialog.newInstance(
-                        spinnerEventType
-                                .getSelectedItemPosition());
+                AddSleepAsAndroidAlarmEventActionDialog addAlarmEventActionDialog =
+                        AddSleepAsAndroidAlarmEventActionDialog.newInstance(currentEventType.getId());
                 addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }

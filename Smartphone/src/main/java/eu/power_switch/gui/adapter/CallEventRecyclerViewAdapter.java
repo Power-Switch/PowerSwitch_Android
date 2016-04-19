@@ -40,27 +40,27 @@ import eu.power_switch.shared.constants.PhoneConstants;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class CallRecyclerViewAdapter extends RecyclerView.Adapter<CallRecyclerViewAdapter.ViewHolder> {
+public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEventRecyclerViewAdapter.ViewHolder> {
     private List<CallEvent> callEvents;
     private Context context;
 
-    public CallRecyclerViewAdapter(Context context, List<CallEvent> callEvents) {
+    public CallEventRecyclerViewAdapter(Context context, List<CallEvent> callEvents) {
         this.callEvents = callEvents;
         this.context = context;
     }
 
     @Override
-    public CallRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_call, parent, false);
-        return new CallRecyclerViewAdapter.ViewHolder(itemView);
+    public CallEventRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_call_event, parent, false);
+        return new CallEventRecyclerViewAdapter.ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final CallRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final CallEventRecyclerViewAdapter.ViewHolder holder, int position) {
         final CallEvent callEvent = callEvents.get(holder.getAdapterPosition());
 
         String phoneNumbers = "";
-        Iterator<String> iterator = callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING).iterator();
+        Iterator<String> iterator = callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING).iterator();
         while (iterator.hasNext()) {
             phoneNumbers += iterator.next();
 
@@ -70,7 +70,7 @@ public class CallRecyclerViewAdapter extends RecyclerView.Adapter<CallRecyclerVi
         }
         holder.phoneNumbers.setText(phoneNumbers);
 
-        for (Action action : callEvent.getActions(PhoneConstants.Type.INCOMING)) {
+        for (Action action : callEvent.getActions(PhoneConstants.CallType.INCOMING)) {
             AppCompatTextView textViewActionDescription = new AppCompatTextView(context);
             textViewActionDescription.setText(action.toString());
             textViewActionDescription.setPadding(0, 0, 0, 4);

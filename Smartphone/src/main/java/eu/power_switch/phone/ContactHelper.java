@@ -28,10 +28,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Helper Class for Phone Contacts
+ * <p/>
  * Created by Markus on 06.04.2016.
  */
 public class ContactHelper {
 
+    /**
+     * Get a list of all Contacts on this device
+     *
+     * @param context any suitable context
+     * @return List of Contacts
+     */
     public static List<Contact> getContacts(Context context) {
         List<Contact> contacts = new ArrayList<>();
 

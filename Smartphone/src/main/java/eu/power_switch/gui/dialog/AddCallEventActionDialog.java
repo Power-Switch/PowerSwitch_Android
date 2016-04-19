@@ -30,15 +30,15 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 28.09.2015.
  */
-public class AddCallActionDialog extends AddActionDialog {
+public class AddCallEventActionDialog extends AddActionDialog {
 
     /**
      * Used to notify the setup page that some info has changed
      *
      * @param context any suitable context
      */
-    public static void sendCallActionAddedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_ACTION_ADDED);
+    public static void sendCallEventActionAddedBroadcast(Context context) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -49,6 +49,6 @@ public class AddCallActionDialog extends AddActionDialog {
 
     @Override
     protected void sendDataChangedBroadcast(Context context) {
-        sendCallActionAddedBroadcast(context);
+        sendCallEventActionAddedBroadcast(context);
     }
 }

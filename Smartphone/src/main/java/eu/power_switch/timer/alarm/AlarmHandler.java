@@ -165,7 +165,6 @@ public abstract class AlarmHandler {
      * @param context any suitable context
      * @param timer   Timer that this alarm would activate
      */
-
     public static void cancelAlarm(Context context, Timer timer) {
         Log.d("AlarmHandler", "cancelling alarm of timer: " + timer.getId());
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

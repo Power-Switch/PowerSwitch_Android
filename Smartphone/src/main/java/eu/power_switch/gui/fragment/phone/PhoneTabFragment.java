@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -160,9 +159,9 @@ public class PhoneTabFragment extends Fragment {
                 case PhoneConstants.CALL_TAB_INDEX:
                     return new CallEventsFragment();
                 case PhoneConstants.SMS_TAB_INDEX:
-                    return new CustomGeofencesFragment();
+                    return new SmsEventsFragment();
                 default:
-                    return new CustomGeofencesFragment();
+                    return new SmsEventsFragment();
             }
         }
 

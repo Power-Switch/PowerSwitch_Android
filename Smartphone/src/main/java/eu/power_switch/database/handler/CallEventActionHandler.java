@@ -48,7 +48,7 @@ abstract class CallEventActionHandler {
      * @param actions     list of actions
      * @param callEventId ID of CallEvent
      */
-    protected static void add(List<Action> actions, long callEventId, PhoneConstants.Type type) throws Exception {
+    protected static void add(List<Action> actions, long callEventId, PhoneConstants.CallType callType) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 
@@ -57,7 +57,7 @@ abstract class CallEventActionHandler {
             ContentValues values = new ContentValues();
             values.put(CallEventActionTable.COLUMN_CALL_EVENT_ID, callEventId);
             values.put(CallEventActionTable.COLUMN_ACTION_ID, actionId);
-            values.put(CallEventActionTable.COLUMN_EVENT_TYPE_ID, type.getId());
+            values.put(CallEventActionTable.COLUMN_EVENT_TYPE_ID, callType.getId());
             DatabaseHandler.database.insert(CallEventActionTable.TABLE_NAME, null, values);
         }
     }
@@ -66,11 +66,11 @@ abstract class CallEventActionHandler {
      * Get a list of Actions
      *
      * @param callEventId ID of CallEvent
-     * @param type        Event Type
+     * @param callType        Event Type
      * @return List of Actions
      */
     @NonNull
-    protected static List<Action> get(long callEventId, PhoneConstants.Type type) throws Exception {
+    protected static List<Action> get(long callEventId, PhoneConstants.CallType callType) throws Exception {
         // TODO:
         return new ArrayList<>();
     }

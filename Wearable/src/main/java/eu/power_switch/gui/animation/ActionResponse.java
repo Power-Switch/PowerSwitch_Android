@@ -42,8 +42,8 @@ public abstract class ActionResponse {
                 android.support.wearable.activity.ConfirmationActivity.SUCCESS_ANIMATION);
         intent.putExtra(android.support.wearable.activity.ConfirmationActivity.EXTRA_MESSAGE, message);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(context, android.R.anim.fade_in, android.R
-                .anim.fade_out);
+        ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(
+                context, android.R.anim.fade_in, android.R.anim.fade_out);
         context.startActivity(intent, activityOptions.toBundle());
     }
 
@@ -67,8 +67,8 @@ public abstract class ActionResponse {
         intent.putExtra(ConfirmationActivityClone.EXTRA_ANIMATION_TYPE,
                 ConfirmationActivityClone.SUCCESS_ANIMATION);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(context, android.R.anim.fade_in, android.R
-                .anim.fade_out);
+        ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(
+                context, android.R.anim.fade_in, android.R.anim.fade_out);
         context.startActivity(intent, activityOptions.toBundle());
 
 //        Intent intent = new Intent(context, ConfirmationActivity.class);
@@ -92,8 +92,8 @@ public abstract class ActionResponse {
                 android.support.wearable.activity.ConfirmationActivity.FAILURE_ANIMATION);
         intent.putExtra(android.support.wearable.activity.ConfirmationActivity.EXTRA_MESSAGE, message);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(context, android.R.anim.fade_in, android.R
-                .anim.fade_out);
+        ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(
+                context, android.R.anim.fade_in, android.R.anim.fade_out);
         context.startActivity(intent, activityOptions.toBundle());
     }
 

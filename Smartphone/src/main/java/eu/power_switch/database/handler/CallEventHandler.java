@@ -61,12 +61,12 @@ abstract class CallEventHandler {
 
         long newId = DatabaseHandler.database.insert(CallEventTable.TABLE_NAME, null, values);
 
-        for (PhoneConstants.Type eventType : PhoneConstants.Type.values()) {
-            CallEventPhoneNumberHandler.add(callEvent.getPhoneNumbers(eventType), newId, eventType);
+        for (PhoneConstants.CallType eventCallType : PhoneConstants.CallType.values()) {
+            CallEventPhoneNumberHandler.add(callEvent.getPhoneNumbers(eventCallType), newId, eventCallType);
         }
 
-        for (PhoneConstants.Type eventType : PhoneConstants.Type.values()) {
-            CallEventActionHandler.add(callEvent.getActions(eventType), newId, eventType);
+        for (PhoneConstants.CallType eventCallType : PhoneConstants.CallType.values()) {
+            CallEventActionHandler.add(callEvent.getActions(eventCallType), newId, eventCallType);
         }
 
         return newId;
@@ -127,14 +127,14 @@ abstract class CallEventHandler {
         boolean active = c.getInt(1) > 0;
         String name = c.getString(2);
 
-        HashMap<PhoneConstants.Type, Set<String>> phoneNumbersMap = new HashMap<>();
-        for (PhoneConstants.Type type : PhoneConstants.Type.values()) {
-            phoneNumbersMap.put(type, CallEventPhoneNumberHandler.get(id, type));
+        HashMap<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
+        for (PhoneConstants.CallType callType : PhoneConstants.CallType.values()) {
+            phoneNumbersMap.put(callType, CallEventPhoneNumberHandler.get(id, callType));
         }
 
-        HashMap<PhoneConstants.Type, List<Action>> actionsMap = new HashMap<>();
-        for (PhoneConstants.Type type : PhoneConstants.Type.values()) {
-            actionsMap.put(type, CallEventActionHandler.get(id, type));
+        HashMap<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
+        for (PhoneConstants.CallType callType : PhoneConstants.CallType.values()) {
+            actionsMap.put(callType, CallEventActionHandler.get(id, callType));
         }
 
         CallEvent callEvent = new CallEvent(id, active, name, phoneNumbersMap, actionsMap);

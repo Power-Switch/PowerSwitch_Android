@@ -23,6 +23,8 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 /**
+ * Class representing a Phone Contact
+ * <p/>
  * Created by Markus on 05.04.2016.
  */
 public class Contact {

@@ -43,7 +43,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.AddCallActionDialog;
+import eu.power_switch.gui.dialog.AddCallEventActionDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
 import eu.power_switch.phone.call.CallEvent;
@@ -81,7 +81,7 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_CALL_ACTION_ADDED.equals(intent.getAction())) {
+                if (LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED.equals(intent.getAction())) {
 //                    actions.add((Action) intent.getSerializableExtra("action"));
                     sendActionsChangedBroadcast(getContext(), actions);
                 }
@@ -94,9 +94,9 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddCallActionDialog addCallActionDialog = new AddCallActionDialog();
-                addCallActionDialog.setTargetFragment(fragment, 0);
-                addCallActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                AddCallEventActionDialog addCallEventActionDialog = new AddCallEventActionDialog();
+                addCallEventActionDialog.setTargetFragment(fragment, 0);
+                addCallEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
 
@@ -127,7 +127,7 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
         try {
             CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
 
-            actions.addAll(callEvent.getActions(PhoneConstants.Type.INCOMING));
+            actions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));
 
 
         } catch (Exception e) {
@@ -139,7 +139,7 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_ACTION_ADDED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

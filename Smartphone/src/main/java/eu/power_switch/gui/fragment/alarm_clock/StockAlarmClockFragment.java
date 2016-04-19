@@ -122,9 +122,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     actions.remove(position);
-                                    DatabaseHandler.setAlarmActions(
-                                            Event.getById(spinnerEventType
-                                                    .getSelectedItemPosition()), actions);
+                                    DatabaseHandler.setAlarmActions(currentEventType, actions);
                                     StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                             R.string.action_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
@@ -148,8 +146,6 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 AddStockAlarmClockEventActionDialog addStockAlarmClockEventActionDialog =
                         AddStockAlarmClockEventActionDialog.newInstance(currentEventType.getId());
                 addStockAlarmClockEventActionDialog.setTargetFragment(recyclerViewFragment, 0);

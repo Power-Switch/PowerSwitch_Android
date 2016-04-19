@@ -72,7 +72,7 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_CALL_PHONE_NUMBER_ADDED.equals(intent.getAction())) {
+                if (LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED.equals(intent.getAction())) {
                     ArrayList<String> newPhoneNumbers = intent.getStringArrayListExtra(AddPhoneNumberDialog.KEY_PHONE_NUMBER);
 
                     for (String number : newPhoneNumbers) {
@@ -139,7 +139,7 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
         try {
             CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
 
-            phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.Type.INCOMING));
+            phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
 
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -150,7 +150,7 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_PHONE_NUMBER_ADDED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

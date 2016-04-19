@@ -46,10 +46,9 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.adapter.CallEventRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
+import eu.power_switch.gui.adapter.SmsEventRecyclerViewAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.phone.call.CallEvent;
+import eu.power_switch.phone.sms.SmsEvent;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -58,15 +57,15 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
- * Fragment holding the Call event list
+ * Fragment holding the Sms Event list
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class CallEventsFragment extends RecyclerViewFragment {
+public class SmsEventsFragment extends RecyclerViewFragment {
 
-    private List<CallEvent> callEvents = new ArrayList<>();
-    private CallEventRecyclerViewAdapter callEventRecyclerViewAdapter;
-    private RecyclerView recyclerViewCalls;
+    private List<SmsEvent> smsEvents = new ArrayList<>();
+    private SmsEventRecyclerViewAdapter smsEventRecyclerViewAdapter;
+    private RecyclerView recyclerViewSmsEvents;
     private BroadcastReceiver broadcastReceiver;
     private FloatingActionButton fab;
 
@@ -76,22 +75,22 @@ public class CallEventsFragment extends RecyclerViewFragment {
      * @param context any suitable context
      */
     public static void sendCallEventsChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     @Override
     public void onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_call_events, container, false);
+        rootView = inflater.inflate(R.layout.fragment_sms_events, container, false);
 
         setHasOptionsMenu(true);
 
-        recyclerViewCalls = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        callEventRecyclerViewAdapter = new CallEventRecyclerViewAdapter(getActivity(), callEvents);
-        recyclerViewCalls.setAdapter(callEventRecyclerViewAdapter);
+        recyclerViewSmsEvents = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        smsEventRecyclerViewAdapter = new SmsEventRecyclerViewAdapter(getActivity(), smsEvents);
+        recyclerViewSmsEvents.setAdapter(smsEventRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewCalls.setLayoutManager(layoutManager);
+        recyclerViewSmsEvents.setLayoutManager(layoutManager);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
@@ -109,9 +108,10 @@ public class CallEventsFragment extends RecyclerViewFragment {
                     return;
                 }
 
-                ConfigureCallEventDialog configureCallEventDialog = new ConfigureCallEventDialog();
-                configureCallEventDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureCallEventDialog.show(getFragmentManager(), null);
+                // TODO:
+//                ConfigureCallEventDialog configureCallEventDialog = new ConfigureCallEventDialog();
+//                configureCallEventDialog.setTargetFragment(recyclerViewFragment, 0);
+//                configureCallEventDialog.show(getFragmentManager(), null);
             }
         });
 
@@ -122,7 +122,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
                 Log.d(this, "received intent: " + intent.getAction());
 
                 switch (intent.getAction()) {
-                    case LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED:
+                    case LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED:
                         refreshCalls();
                         break;
                     case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:
@@ -180,7 +180,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
     }
 
     private void refreshCalls() {
-        Log.d(this, "refreshCallEvents");
+        Log.d(this, "refreshSmsEvents");
         updateListContent();
     }
 
@@ -215,7 +215,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -238,12 +238,12 @@ public class CallEventsFragment extends RecyclerViewFragment {
 
     @Override
     public RecyclerView getRecyclerView() {
-        return recyclerViewCalls;
+        return recyclerViewSmsEvents;
     }
 
     @Override
     public RecyclerView.Adapter getRecyclerViewAdapter() {
-        return callEventRecyclerViewAdapter;
+        return smsEventRecyclerViewAdapter;
     }
 
     @Override
@@ -253,7 +253,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
 
     @Override
     public List refreshListData() throws Exception {
-        callEvents.clear();
+        smsEvents.clear();
 
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
@@ -263,6 +263,6 @@ public class CallEventsFragment extends RecyclerViewFragment {
 //        callEvents = DatabaseHandler.getAllCallEvents();
 
 
-        return callEvents;
+        return smsEvents;
     }
 }

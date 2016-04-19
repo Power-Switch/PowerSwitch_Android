@@ -16,75 +16,66 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.phone.call;
+package eu.power_switch.phone.sms;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.shared.constants.PhoneConstants.CallType;
+import eu.power_switch.shared.constants.PhoneConstants;
 
 /**
- * Internal representation of a Call Object
- * <p/>
- * Created by Markus on 05.04.2016.
+ * Created by Markus on 19.04.2016.
  */
-public class CallEvent {
+public class SmsEvent {
 
     /**
-     * ID of this CallEvent
+     * ID of this SmsEvent
      */
     private long id;
 
     /**
-     * Active state of this CallEvent
+     * Active state of this SmsEvent
      */
     private boolean active;
 
     /**
-     * Name of this CallEvent
-     */
-    private String name;
-
-    /**
      * Map of phone numbers per EventType
      */
-    private Map<CallType, Set<String>> phoneNumbersMap;
+    private Map<PhoneConstants.SmsType, Set<String>> phoneNumbersMap;
 
     /**
      * Map of Actions per EventType
      */
-    private Map<CallType, List<Action>> actionsMap;
+    private Map<PhoneConstants.SmsType, List<Action>> actionsMap;
 
     /**
      * Constructor
      *
      * @param id              ID
-     * @param active          active state
-     * @param name            name
+     * @param isActive        Active state
      * @param phoneNumbersMap phone numbers per EventType
      * @param actionsMap      actions per EventType
      */
-    public CallEvent(long id, boolean active, String name, Map<CallType, Set<String>> phoneNumbersMap, Map<CallType, List<Action>> actionsMap) {
+    public SmsEvent(long id, boolean isActive, Map<PhoneConstants.SmsType, Set<String>> phoneNumbersMap, Map<PhoneConstants.SmsType, List<Action>> actionsMap) {
         this.id = id;
-        this.active = active;
-        this.name = name;
+        this.active = isActive;
         this.phoneNumbersMap = phoneNumbersMap;
         this.actionsMap = actionsMap;
     }
 
     /**
-     * Get ID of this CallEvent
+     * Get ID of this SmsEvent
      *
-     * @return id of this CallEvent
+     * @return ID of this SmsEvent
      */
     public long getId() {
         return id;
     }
 
     /**
-     * Get active state of this CallEvent
+     * Get active state of this SmsEvent
      *
      * @return true if active, false otherwise
      */
@@ -93,31 +84,22 @@ public class CallEvent {
     }
 
     /**
-     * Get name of this CallEvent
+     * Get phone numbers this SmsEvent is associated with
      *
-     * @return name of this CallEvent
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get phone numbers this CallEvent is associated with
-     *
-     * @param callType EventType
+     * @param type EventType
      * @return list of phone numbers
      */
-    public Set<String> getPhoneNumbers(CallType callType) {
-        return phoneNumbersMap.get(callType);
+    public Set<String> getPhoneNumbers(PhoneConstants.SmsType type) {
+        return phoneNumbersMap.get(type);
     }
 
     /**
-     * Get list of actions for this CallEvent
+     * Get list of actions for this SmsEvent
      *
-     * @param callType EventType
+     * @param type EventType
      * @return list of actions
      */
-    public List<Action> getActions(CallType callType) {
-        return actionsMap.get(callType);
+    public List<Action> getActions(PhoneConstants.SmsType type) {
+        return actionsMap.get(type);
     }
 }

@@ -40,23 +40,47 @@ public class PhoneConstants {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-    public enum Type {
+    public enum CallType {
         INCOMING(0),
         OUTGOING(1);
 
         private final int id;
 
-        Type(int id) {
+        CallType(int id) {
             this.id = id;
         }
 
-        public static Type getById(int id) {
-            for (Type e : values()) {
+        public static CallType getById(int id) {
+            for (CallType e : values()) {
                 if (e.getId() == id) {
                     return e;
                 }
             }
-            throw new NoSuchElementException("No Event with id: " + id);
+            throw new NoSuchElementException("No CallType with id: " + id);
+        }
+
+        public int getId() {
+            return id;
+        }
+    }
+
+    public enum SmsType {
+        INCOMING(0),
+        OUTGOING(1);
+
+        private final int id;
+
+        SmsType(int id) {
+            this.id = id;
+        }
+
+        public static SmsType getById(int id) {
+            for (SmsType e : values()) {
+                if (e.getId() == id) {
+                    return e;
+                }
+            }
+            throw new NoSuchElementException("No SmsType with id: " + id);
         }
 
         public int getId() {

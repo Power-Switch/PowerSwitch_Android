@@ -84,7 +84,7 @@ public class AddPhoneNumberDialog extends DialogFragment {
      * @param context any suitable context
      */
     public static void sendPhoneNumbersAddedBroadcast(Context context, Set<String> phoneNumbers) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_PHONE_NUMBER_ADDED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED);
         intent.putStringArrayListExtra(KEY_PHONE_NUMBER, new ArrayList<>(phoneNumbers));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
