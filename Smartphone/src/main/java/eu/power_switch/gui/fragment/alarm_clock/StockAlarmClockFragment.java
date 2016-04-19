@@ -76,7 +76,6 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
     private Spinner spinnerEventType;
     private FloatingActionButton addActionFAB;
 
-
     @Override
     public void onCreateViewEvent(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_stock_alarm_clock, container, false);
@@ -149,10 +148,12 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddStockAlarmClockEventActionDialog addAlarmEventActionDialog =
-                        AddStockAlarmClockEventActionDialog.newInstance(spinnerEventType.getSelectedItemPosition());
-                addAlarmEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
-                addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
+
+
+                AddStockAlarmClockEventActionDialog addStockAlarmClockEventActionDialog =
+                        AddStockAlarmClockEventActionDialog.newInstance(currentEventType.getId());
+                addStockAlarmClockEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
+                addStockAlarmClockEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
 
