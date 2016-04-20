@@ -204,24 +204,26 @@ public class UtilityService extends IntentService {
                     return;
                 }
 
-                List<Apartment> apartments = DatabaseHandler.getAllApartments();
+                if (SmartphonePreferencesHandler.getCurrentApartmentId() != SettingsConstants.INVALID_APARTMENT_ID) {
+                    List<Apartment> apartments = DatabaseHandler.getAllApartments();
 
-                Apartment activeApartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+                    Apartment activeApartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
 
-                List<Room> rooms = activeApartment.getRooms();
+                    List<Room> rooms = activeApartment.getRooms();
 
-                List<Receiver> receivers = new ArrayList<>();
-                for (Room room : rooms) {
-                    receivers.addAll(room.getReceivers());
+                    List<Receiver> receivers = new ArrayList<>();
+                    for (Room room : rooms) {
+                        receivers.addAll(room.getReceivers());
+                    }
+
+                    List<Button> buttons = new ArrayList<>();
+                    for (Receiver receiver : receivers) {
+                        buttons.addAll(receiver.getButtons());
+                    }
+                    List<Scene> scenes = activeApartment.getScenes();
+
+                    sendDataToWearable(apartments, rooms, receivers, buttons, scenes);
                 }
-
-                List<Button> buttons = new ArrayList<>();
-                for (Receiver receiver : receivers) {
-                    buttons.addAll(receiver.getButtons());
-                }
-                List<Scene> scenes = activeApartment.getScenes();
-
-                sendDataToWearable(apartments, rooms, receivers, buttons, scenes);
             } else if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
                 sendSettingsToWearable();
             }
