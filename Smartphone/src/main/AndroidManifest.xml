@@ -317,7 +317,13 @@
         <service android:name=".google_play_services.geofence.GeofenceIntentService"/>
         <service android:name=".wear.service.ListenerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED"/>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/prefix"
+                    android:scheme="wear"/>
             </intent-filter>
         </service>
         <service android:name=".wear.service.UtilityService">

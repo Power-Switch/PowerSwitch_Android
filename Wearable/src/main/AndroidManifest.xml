@@ -18,8 +18,8 @@
   -->
 
 <manifest
-    package="eu.power_switch"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="eu.power_switch">
 
     <uses-feature android:name="android.hardware.type.watch"/>
 
@@ -55,7 +55,13 @@
 
         <service android:name="eu.power_switch.network.service.ListenerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED"/>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+
+                <data
+                    android:host="*"
+                    android:pathPrefix="/prefix"
+                    android:scheme="wear"/>
             </intent-filter>
         </service>
     </application>
