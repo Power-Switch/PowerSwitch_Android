@@ -60,7 +60,6 @@
 
                 <data
                     android:host="*"
-                    android:pathPrefix="/prefix"
                     android:scheme="wear"/>
             </intent-filter>
         </service>
