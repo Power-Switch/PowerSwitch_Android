@@ -38,7 +38,7 @@ public class GeofenceIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogHandler.configureLogger();
+        LogHandler.configureLogger(context);
 
         try {
             String log = "onReceive: Action: ";

@@ -314,7 +314,7 @@ public class GeneralSettingsFragment extends Fragment {
                     @Override
                     protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
                         try {
-                            LogHandler.sendLogsAsMail(getContext());
+                            LogHandler.sendLogsAsMail(getActivity());
                             return new AsyncTaskResult<>(true);
                         } catch (Exception e) {
                             return new AsyncTaskResult<>(e);

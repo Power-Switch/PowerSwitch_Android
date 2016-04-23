@@ -152,7 +152,7 @@ public class PowerSwitch extends MultiDexApplication {
         super.onCreate();
 
         // Configure Log4J Logger
-        LogHandler.configureLogger();
+        LogHandler.configureLogger(getApplicationContext());
 
         Log.d("Application init...");
         Log.d("App version: " + getAppVersionDescription(this));

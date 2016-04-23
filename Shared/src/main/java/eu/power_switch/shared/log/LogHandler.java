@@ -19,6 +19,7 @@
 package eu.power_switch.shared.log;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,6 +29,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -35,6 +41,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,6 +50,7 @@ import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import de.mindpipe.android.logging.log4j.LogConfigurator;
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.permission.PermissionHelper;
@@ -55,9 +63,22 @@ import eu.power_switch.shared.permission.PermissionHelper;
 public class LogHandler {
 
     /**
-     * Folder name in which logs are saved
+     * Folder name in which logs are saved on external storage (if available)
      */
-    public static final String LOG_FOLDER = "PowerSwitch_Logs";
+    public static final String LOG_FOLDER_NAME_EXTERNAL = "PowerSwitch_Logs";
+
+    /**
+     * Folder name in which logs are saved on internal storage
+     */
+    public static final String LOG_FOLDER_NAME_INTERNAL = "logs";
+
+    /**
+     * Duration in days to keep log files (file creation date)
+     */
+    private static final int KEEP_LOGS_DAY_COUNT = 14;
+
+    private static Context context;
+    private static LogConfigurator externalLogConfigurator;
 
     /**
      * Private Constructor
@@ -68,21 +89,104 @@ public class LogHandler {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-    public static void configureLogger() {
-        Log4JConfiguration.configure();
+    public static void configureLogger(Context context) {
+        LogHandler.context = context;
+        configureInternalLogger();
+        configureExternalLogger();
+    }
+
+    private static void configureInternalLogger() {
+        LogConfigurator internalLogConfigurator = new LogConfigurator();
+        internalLogConfigurator.setFileName(context.getFilesDir().getParent() + File.separator +
+                LOG_FOLDER_NAME_INTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
+        String filePattern = "%d{dd-MM-yyyy HH:mm:ss,SSS} [%-5p] %m%n";
+        internalLogConfigurator.setFilePattern(filePattern);
+        String logCatPattern = "[%-5p] %m%n";
+        internalLogConfigurator.setLogCatPattern(logCatPattern);
+        internalLogConfigurator.setRootLevel(Level.ALL);
+        internalLogConfigurator.setImmediateFlush(true);
+        internalLogConfigurator.setUseLogCatAppender(true);
+        internalLogConfigurator.setUseFileAppender(true);
+        internalLogConfigurator.setMaxFileSize(10 * 1024 * 1024); // 10 MB
+        try {
+            internalLogConfigurator.configure();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            LogHandler.removeOldInternalLogs();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                Log.e(e);
+            } catch (Exception e1) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void configureExternalLogger() {
+        if (LogHandler.isExternalStorageReadable() &&
+                LogHandler.isExternalStorageWritable() &&
+                LogHandler.createExternalLogDirectory()) {
+            FileAppender fileAppender = new FileAppender();
+            fileAppender.setName("ExternalStorageAppender");
+            fileAppender.setFile(Environment.getExternalStorageDirectory() + File.separator +
+                    LOG_FOLDER_NAME_EXTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
+            String filePattern = "%d{dd-MM-yyyy HH:mm:ss,SSS} [%-5p] %m%n";
+            fileAppender.setLayout(new PatternLayout(filePattern));
+            fileAppender.setThreshold(Level.ALL);
+            fileAppender.setAppend(true);
+            fileAppender.setImmediateFlush(true);
+            fileAppender.activateOptions();
+
+            Logger.getRootLogger().addAppender(fileAppender);
+
+            try {
+                LogHandler.removeOldExternalLogs();
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    Log.e(e);
+                } catch (Exception e1) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            return;
+        }
     }
 
     /**
-     * Delete Logs older than 14 days
+     * Delete internal Logs older than 14 days
      */
-    public static void removeOldLogs() {
-        for (File logFile : getLogFiles()) {
+    private static void removeOldInternalLogs() {
+        for (File logFile : getInternalLogFiles()) {
             Calendar lastEdited = Calendar.getInstance();
             lastEdited.setTime(new Date(logFile.lastModified()));
 
             Calendar limit = Calendar.getInstance();
             limit.setTime(new Date());
-            limit.add(Calendar.DAY_OF_YEAR, -14);
+            limit.add(Calendar.DAY_OF_YEAR, -KEEP_LOGS_DAY_COUNT);
+
+            if (lastEdited.before(limit)) {
+                logFile.delete();
+            }
+        }
+    }
+
+    /**
+     * Delete external Logs older than 14 days
+     */
+    public static void removeOldExternalLogs() {
+        for (File logFile : getExternalLogFiles()) {
+            Calendar lastEdited = Calendar.getInstance();
+            lastEdited.setTime(new Date(logFile.lastModified()));
+
+            Calendar limit = Calendar.getInstance();
+            limit.setTime(new Date());
+            limit.add(Calendar.DAY_OF_YEAR, -KEEP_LOGS_DAY_COUNT);
 
             if (lastEdited.before(limit)) {
                 logFile.delete();
@@ -96,17 +200,18 @@ public class LogHandler {
      * @return Zip file containing log files
      */
     @Nullable
-    public static File getLogsAsZip(@NonNull Context context) throws MissingPermissionException {
+    public static File getLogsAsZip() throws MissingPermissionException {
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
 
         String tempZipFileName = "logs.zip";
+        String tempZipFilePath = Environment.getExternalStorageDirectory() + File.separator +
+                LOG_FOLDER_NAME_EXTERNAL + File.separator + tempZipFileName;
         int bufferSize = 1024;
 
         // delete previous temp zip file
-        File zipFile = new File(Environment.getExternalStorageDirectory()
-                .getPath() + File.separator + LOG_FOLDER + File.separator + tempZipFileName);
+        File zipFile = new File(tempZipFilePath);
         if (zipFile.exists()) {
             zipFile.delete();
         }
@@ -114,12 +219,11 @@ public class LogHandler {
         BufferedInputStream origin = null;
         FileOutputStream dest = null;
         try {
-            dest = new FileOutputStream(Environment.getExternalStorageDirectory()
-                    .getPath() + File.separator + LOG_FOLDER + File.separator + tempZipFileName);
+            dest = new FileOutputStream(tempZipFilePath);
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
             byte data[] = new byte[bufferSize];
 
-            for (File logFile : getLogFiles()) {
+            for (File logFile : getInternalLogFiles()) {
                 FileInputStream fi = new FileInputStream(logFile);
                 origin = new BufferedInputStream(fi, bufferSize);
 
@@ -180,9 +284,9 @@ public class LogHandler {
      *
      * @return true if directory exists or was successfully created
      */
-    public static boolean createLogDirectory() {
+    public static boolean createExternalLogDirectory() {
         File dst = new File(Environment.getExternalStorageDirectory()
-                .getPath() + File.separator + LOG_FOLDER);
+                .getPath() + File.separator + LOG_FOLDER_NAME_EXTERNAL);
         if (!dst.exists()) {
             return dst.mkdirs();
         }
@@ -190,19 +294,18 @@ public class LogHandler {
     }
 
     /**
-     * Get a list of all log files
+     * Get a list of all external log files
      *
      * @return list of log files
      */
     @NonNull
-    private static List<File> getLogFiles() {
-        File logFolder = new File(Environment.getExternalStorageDirectory()
-                .getPath() + File.separator + LOG_FOLDER);
+    private static List<File> getExternalLogFiles() {
+        File logFolder = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + LOG_FOLDER_NAME_EXTERNAL);
         File[] logFiles = logFolder.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                return dir.getPath()
-                        .equals(Environment.getExternalStorageDirectory().getPath() + File.separator + LOG_FOLDER) &&
+                return dir.getPath().equals(
+                        Environment.getExternalStorageDirectory().getPath() + File.separator + LOG_FOLDER_NAME_EXTERNAL) &&
                         filename.endsWith(".log");
             }
         });
@@ -210,7 +313,30 @@ public class LogHandler {
         return Arrays.asList(logFiles);
     }
 
-    public static void sendLogsAsMail(@NonNull Context context) throws Exception {
+    /**
+     * Get a list of all internal log files
+     *
+     * @return list of log files
+     */
+    @NonNull
+    private static List<File> getInternalLogFiles() {
+        File logFolder = new File(context.getFilesDir().getParent() + File.separator + LOG_FOLDER_NAME_INTERNAL);
+        File[] logFiles = logFolder.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String filename) {
+                return dir.getPath().equals(
+                        context.getFilesDir().getParent() + File.separator + LOG_FOLDER_NAME_INTERNAL) &&
+                        filename.endsWith(".log");
+            }
+        });
+
+        return Arrays.asList(logFiles);
+    }
+
+    /**
+     * Send Logs to an Email App via Intent
+     */
+    public static void sendLogsAsMail(Activity activity) throws Exception {
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -222,9 +348,9 @@ public class LogHandler {
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "PowerSwitch Logs");
         emailIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.send_logs_template));
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(context)));
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
 
-        context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.send_to)));
+        activity.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.send_to)));
     }
 
     /**
@@ -281,5 +407,10 @@ public class LogHandler {
         scanner.close();
 
         return stringBuilder.toString();
+    }
+
+    private static String getHumanReadableDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        return simpleDateFormat.format(new Date());
     }
 }

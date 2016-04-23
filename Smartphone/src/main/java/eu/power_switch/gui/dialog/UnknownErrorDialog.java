@@ -149,7 +149,7 @@ public class UnknownErrorDialog extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
                 ": " + throwable.getMessage());
         emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip(this)));
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
 
         startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
     }

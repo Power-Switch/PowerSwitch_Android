@@ -34,7 +34,8 @@ import org.apache.log4j.Logger;
  * Created by Markus on 11.08.2015.
  */
 public class Log {
-    private static final Logger log = Logger.getLogger("Log");
+
+    public static final Logger LOGGER = Logger.getLogger("Log");
 
     /**
      * Private Constructor
@@ -51,7 +52,7 @@ public class Log {
      * @param message any text message
      */
     public static void d(@Nullable String message) {
-        log.debug(message);
+        LOGGER.debug(message);
     }
 
     /**
@@ -72,7 +73,7 @@ public class Log {
         } else {
             logMessage.append(source.getClass());
         }
-        log.debug(logMessage);
+        LOGGER.debug(logMessage);
     }
 
     /**
@@ -109,7 +110,7 @@ public class Log {
             logMessage.append(String.valueOf(message));
         }
 
-        log.debug(logMessage);
+        LOGGER.debug(logMessage);
     }
 
     private static String getIntentDescription(Intent intent) {
@@ -140,7 +141,7 @@ public class Log {
      * @param message any text message
      */
     public static void e(@Nullable String message) {
-        log.error(message);
+        LOGGER.error(message);
     }
 
     /**
@@ -150,7 +151,7 @@ public class Log {
      */
     public static void e(@Nullable Throwable throwable) {
         if (throwable != null) {
-            log.error("Error", throwable);
+            LOGGER.error("Error", throwable);
         }
     }
 
@@ -180,7 +181,7 @@ public class Log {
         }
 
         logMessage.append(message);
-        log.error(logMessage);
+        LOGGER.error(logMessage);
     }
 
     /**
@@ -208,7 +209,7 @@ public class Log {
             logMessage.append("} ");
         }
 
-        log.error(logMessage, throwable);
+        LOGGER.error(logMessage, throwable);
     }
 
     /**
@@ -219,9 +220,9 @@ public class Log {
      */
     public static void e(@Nullable String message, @Nullable Throwable throwable) {
         if (throwable != null) {
-            log.error(message, throwable);
+            LOGGER.error(message, throwable);
         } else {
-            log.error(message);
+            LOGGER.error(message);
         }
     }
 
@@ -231,7 +232,7 @@ public class Log {
      * @param message any text message
      */
     public static void w(@Nullable String message) {
-        log.warn(message);
+        LOGGER.warn(message);
     }
 
     /**

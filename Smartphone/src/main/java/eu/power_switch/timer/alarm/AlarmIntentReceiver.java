@@ -45,7 +45,7 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogHandler.configureLogger();
+        LogHandler.configureLogger(context);
 
         Log.d(this, intent);
 
