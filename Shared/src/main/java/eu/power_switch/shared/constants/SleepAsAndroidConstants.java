@@ -41,7 +41,7 @@ public class SleepAsAndroidConstants {
     }
 
     // Sleep As Android
-    public enum SLEEP_AS_ANDROID_ALARM_EVENT {
+    public enum Event {
         ALARM_TRIGGERED(0, ALARM_TRIGGERED_INTENT),
         ALARM_SNOOZED(1, ALARM_SNOOZED_INTENT),
         ALARM_DISMISSED(2, ALARM_DISMISSED_INTENT);
@@ -49,13 +49,13 @@ public class SleepAsAndroidConstants {
         private final int id;
         private final String intentAction;
 
-        SLEEP_AS_ANDROID_ALARM_EVENT(int id, String intentAction) {
+        Event(int id, String intentAction) {
             this.id = id;
             this.intentAction = intentAction;
         }
 
-        public static SLEEP_AS_ANDROID_ALARM_EVENT getById(int id) {
-            for (SLEEP_AS_ANDROID_ALARM_EVENT e : values()) {
+        public static Event getById(int id) {
+            for (Event e : values()) {
                 if (e.getId() == id) {
                     return e;
                 }

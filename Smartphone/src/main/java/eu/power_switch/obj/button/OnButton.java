@@ -29,12 +29,17 @@ import eu.power_switch.shared.constants.DatabaseConstants;
 public class OnButton extends Button {
 
     /**
+     * ID of this Button
+     */
+    public static final long ID = DatabaseConstants.BUTTON_ON_ID;
+
+    /**
      * Constructor
      *
      * @param context    any suitable context
      * @param receiverId ID of Receiver that this Button is associated with
      */
     public OnButton(Context context, Long receiverId) {
-        super(DatabaseConstants.BUTTON_ON_ID, context.getString(R.string.on), receiverId);
+        super(ID, context.getString(R.string.on), receiverId);
     }
 }

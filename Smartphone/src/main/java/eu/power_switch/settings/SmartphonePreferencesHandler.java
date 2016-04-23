@@ -114,7 +114,7 @@ public class SmartphonePreferencesHandler {
             currentApartmentIdCache = sharedPreferences.getLong(SettingsConstants.KEY_CURRENT_APARTMENT_ID, SettingsConstants.INVALID_APARTMENT_ID);
         } else {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(SmartphonePreferencesHandler.context);
-            currentApartmentIdCache = PlayStoreModeDataModel.getApartments().get(0).getId();
+            currentApartmentIdCache = playStoreModeDataModel.getApartments().get(0).getId();
         }
 
         Log.d(SmartphonePreferencesHandler.class, "AutoDiscover: " + autoDiscoverCache);

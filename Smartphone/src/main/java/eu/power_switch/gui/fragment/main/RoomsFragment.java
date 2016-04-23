@@ -242,7 +242,7 @@ public class RoomsFragment extends RecyclerViewFragment {
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            rooms.addAll(PlayStoreModeDataModel.getActiveApartment().getRooms());
+            rooms.addAll(playStoreModeDataModel.getActiveApartment().getRooms());
         } else {
             long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
             if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {

@@ -223,7 +223,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            apartments.addAll(PlayStoreModeDataModel.getApartments());
+            apartments.addAll(playStoreModeDataModel.getApartments());
         } else {
             apartments.addAll(DatabaseHandler.getAllApartments());
         }

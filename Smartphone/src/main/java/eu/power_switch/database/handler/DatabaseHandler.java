@@ -1692,7 +1692,7 @@ public final class DatabaseHandler {
      */
     @NonNull
     @WorkerThread
-    public static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    public static List<Action> getAlarmActions(SleepAsAndroidConstants.Event event) throws Exception {
         openReadable();
         List<Action> actions = new ArrayList<>();
         try {
@@ -1713,7 +1713,7 @@ public final class DatabaseHandler {
      * @param actions List of Actions
      */
     @WorkerThread
-    public static void setAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    public static void setAlarmActions(SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
         openWritable();
         try {
             SleepAsAndroidHandler.setAlarmActions(event, actions);

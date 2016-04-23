@@ -45,8 +45,8 @@ public class AddSleepAsAndroidAlarmEventActionDialog extends AddActionDialog {
 
     public static final String EVENT_ID_KEY = "eventId";
 
-    SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT currentEventType =
-            SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
+    SleepAsAndroidConstants.Event currentEventType =
+            SleepAsAndroidConstants.Event.ALARM_TRIGGERED;
 
     public static AddSleepAsAndroidAlarmEventActionDialog newInstance(int eventId) {
         Bundle args = new Bundle();
@@ -73,7 +73,7 @@ public class AddSleepAsAndroidAlarmEventActionDialog extends AddActionDialog {
         Bundle args = getArguments();
         if (args != null && args.containsKey(EVENT_ID_KEY)) {
             int eventId = args.getInt(EVENT_ID_KEY);
-            currentEventType = SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.getById(eventId);
+            currentEventType = SleepAsAndroidConstants.Event.getById(eventId);
         }
 
         return super.onCreateDialog(savedInstanceState);

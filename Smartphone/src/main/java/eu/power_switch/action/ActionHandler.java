@@ -412,7 +412,7 @@ public class ActionHandler {
      * @param context any suitable context
      * @param event   event type
      */
-    public static void execute(@NonNull Context context, @NonNull SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) {
+    public static void execute(@NonNull Context context, @NonNull SleepAsAndroidConstants.Event event) {
         try {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(context, actions);

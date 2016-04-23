@@ -99,7 +99,7 @@ public class SelectApartmentDialog extends DialogFragment {
         try {
             if (DeveloperPreferencesHandler.getPlayStoreMode()) {
                 PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-                for (Apartment apartment : PlayStoreModeDataModel.getApartments()) {
+                for (Apartment apartment : playStoreModeDataModel.getApartments()) {
                     apartmentNames.add(apartment.getName());
                 }
             } else {

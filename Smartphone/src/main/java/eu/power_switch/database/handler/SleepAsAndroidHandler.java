@@ -44,7 +44,7 @@ abstract class SleepAsAndroidHandler {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-    protected static List<Action> getAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    protected static List<Action> getAlarmActions(SleepAsAndroidConstants.Event event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
@@ -63,12 +63,12 @@ abstract class SleepAsAndroidHandler {
         return actions;
     }
 
-    protected static void setAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    protected static void setAlarmActions(SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
         deleteAlarmActions(event);
         addAlarmActions(event, actions);
     }
 
-    private static void addAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event, ArrayList<Action> actions) throws Exception {
+    private static void addAlarmActions(SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 
@@ -81,7 +81,7 @@ abstract class SleepAsAndroidHandler {
         }
     }
 
-    private static void deleteAlarmActions(SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT event) throws Exception {
+    private static void deleteAlarmActions(SleepAsAndroidConstants.Event event) throws Exception {
         for (Action action : getAlarmActions(event)) {
             ActionHandler.delete(action.getId());
         }

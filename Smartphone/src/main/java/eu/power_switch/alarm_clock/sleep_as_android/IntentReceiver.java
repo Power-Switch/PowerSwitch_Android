@@ -46,20 +46,20 @@ public class IntentReceiver extends BroadcastReceiver {
                 return;
             }
 
-            if (SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getIntentAction()
+            if (SleepAsAndroidConstants.Event.ALARM_TRIGGERED.getIntentAction()
                     .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm triggered!");
-                ActionHandler.execute(context, SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED);
+                ActionHandler.execute(context, SleepAsAndroidConstants.Event.ALARM_TRIGGERED);
 
-            } else if (SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED.getIntentAction()
+            } else if (SleepAsAndroidConstants.Event.ALARM_SNOOZED.getIntentAction()
                     .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm snoozed...");
-                ActionHandler.execute(context, SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED);
+                ActionHandler.execute(context, SleepAsAndroidConstants.Event.ALARM_SNOOZED);
 
-            } else if (SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED.getIntentAction()
+            } else if (SleepAsAndroidConstants.Event.ALARM_DISMISSED.getIntentAction()
                     .equals(intent.getAction())) {
                 Log.d("IntentReceiver", "Alarm dismissed...");
-                ActionHandler.execute(context, SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED);
+                ActionHandler.execute(context, SleepAsAndroidConstants.Event.ALARM_DISMISSED);
 
             } else {
                 Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());

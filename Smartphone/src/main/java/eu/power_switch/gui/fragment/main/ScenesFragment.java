@@ -222,7 +222,7 @@ public class ScenesFragment extends RecyclerViewFragment {
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            scenes.addAll(PlayStoreModeDataModel.getActiveApartment().getScenes());
+            scenes.addAll(playStoreModeDataModel.getActiveApartment().getScenes());
         } else {
             scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId()));
         }

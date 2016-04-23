@@ -53,16 +53,18 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSleepAsAndroidAlarmEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.SleepAsAndroidConstants.SLEEP_AS_ANDROID_ALARM_EVENT;
+import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -72,7 +74,7 @@ import eu.power_switch.shared.log.Log;
  */
 public class SleepAsAndroidFragment extends RecyclerViewFragment {
 
-    private static SLEEP_AS_ANDROID_ALARM_EVENT currentEventType = SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED;
+    private static Event currentEventType = Event.ALARM_TRIGGERED;
     private BroadcastReceiver broadcastReceiver;
     private ArrayList<Action> actions = new ArrayList<>();
     private RecyclerView recyclerViewActions;
@@ -197,13 +199,13 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     private void refreshActions() {
         switch (spinnerEventType.getSelectedItemPosition()) {
             case 0:
-                currentEventType = SLEEP_AS_ANDROID_ALARM_EVENT.getById(SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_TRIGGERED.getId());
+                currentEventType = Event.getById(Event.ALARM_TRIGGERED.getId());
                 break;
             case 1:
-                currentEventType = SLEEP_AS_ANDROID_ALARM_EVENT.getById(SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_SNOOZED.getId());
+                currentEventType = Event.getById(Event.ALARM_SNOOZED.getId());
                 break;
             case 2:
-                currentEventType = SLEEP_AS_ANDROID_ALARM_EVENT.getById(SLEEP_AS_ANDROID_ALARM_EVENT.ALARM_DISMISSED.getId());
+                currentEventType = Event.getById(Event.ALARM_DISMISSED.getId());
                 break;
         }
 
@@ -294,7 +296,13 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
     @Override
     public List refreshListData() throws Exception {
         actions.clear();
-        actions.addAll(DatabaseHandler.getAlarmActions(currentEventType));
+
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
+            actions.addAll(playStoreModeDataModel.getAlarmActions(currentEventType));
+        } else {
+            actions.addAll(DatabaseHandler.getAlarmActions(currentEventType));
+        }
 
         return actions;
     }

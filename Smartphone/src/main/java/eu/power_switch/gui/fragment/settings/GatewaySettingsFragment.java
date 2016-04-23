@@ -296,7 +296,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         gateways.clear();
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            gateways.addAll(PlayStoreModeDataModel.getGateways());
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
+            gateways.addAll(playStoreModeDataModel.getGateways());
         } else {
             gateways.addAll(DatabaseHandler.getAllGateways());
         }

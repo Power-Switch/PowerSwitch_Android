@@ -151,7 +151,7 @@ public class RoomSceneTabFragment extends Fragment {
             if (DeveloperPreferencesHandler.getPlayStoreMode()) {
                 PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
                 textView_currentApartmentInfo.setText(
-                        PlayStoreModeDataModel.getApartments().get(0).getName());
+                        playStoreModeDataModel.getApartments().get(0).getName());
             } else {
                 long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
                 if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
