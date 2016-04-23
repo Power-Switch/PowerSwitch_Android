@@ -97,10 +97,6 @@ import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
-import eu.power_switch.wear.service.UtilityService;
-import eu.power_switch.widget.provider.ReceiverWidgetProvider;
-import eu.power_switch.widget.provider.RoomWidgetProvider;
-import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * Main entry Activity for the app
@@ -252,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
+        // start automatic gateway discovery (if enabled)
         if (SmartphonePreferencesHandler.getAutoDiscover() &&
                 (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected())) {
             new AsyncTask<Context, Void, AsyncTaskResult<Gateway>>() {
@@ -312,34 +309,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
         }
-
-        new AsyncTask<Context, Void, Void>() {
-            @Override
-            protected Void doInBackground(Context... contexts) {
-                Context context = contexts[0];
-
-                if (!PermissionHelper.isLocationPermissionAvailable(context)) {
-                    try {
-                        DatabaseHandler.disableGeofences();
-                        Log.d("Disabled all Geofences because of missing location permission");
-                    } catch (Exception e) {
-                        Log.e(e);
-                    }
-                }
-
-                // update wear data
-                UtilityService.forceWearDataUpdate(context);
-                UtilityService.forceWearSettingsUpdate(context);
-
-                // update receiver widgets
-                ReceiverWidgetProvider.forceWidgetUpdate(context);
-                // update room widgets
-                RoomWidgetProvider.forceWidgetUpdate(context);
-                // update scene widgets
-                SceneWidgetProvider.forceWidgetUpdate(context);
-                return null;
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
     private void applyLocale() {

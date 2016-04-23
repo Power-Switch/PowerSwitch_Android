@@ -21,6 +21,7 @@ package eu.power_switch.application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,8 +45,13 @@ import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.timer.Timer;
+import eu.power_switch.wear.service.UtilityService;
+import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import eu.power_switch.widget.provider.RoomWidgetProvider;
+import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * Entry Point for the Application
@@ -169,12 +175,39 @@ public class PowerSwitch extends MultiDexApplication {
 
         DeveloperPreferencesHandler.init(this);
 
-        new Thread(new Runnable() {
+        // Log configuration and update widgets, wear, etc.
+        new AsyncTask<Void, Void, Void>() {
             @Override
-            public void run() {
-                Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+            protected Void doInBackground(Void... params) {
                 try {
                     // wait some time for application to finish loading
+                    Thread.sleep(5000);
+
+                    if (!PermissionHelper.isLocationPermissionAvailable(getApplicationContext())) {
+                        try {
+                            DatabaseHandler.disableGeofences();
+                            Log.d("Disabled all Geofences because of missing location permission");
+                        } catch (Exception e) {
+                            Log.e(e);
+                        }
+                    }
+
+                    // update wear data
+                    UtilityService.forceWearDataUpdate(getApplicationContext());
+                    UtilityService.forceWearSettingsUpdate(getApplicationContext());
+
+                    // update receiver widgets
+                    ReceiverWidgetProvider.forceWidgetUpdate(getApplicationContext());
+                    // update room widgets
+                    RoomWidgetProvider.forceWidgetUpdate(getApplicationContext());
+                    // update scene widgets
+                    SceneWidgetProvider.forceWidgetUpdate(getApplicationContext());
+                } catch (Exception e) {
+                    Log.e(e);
+                }
+
+                try {
+                    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
                     Thread.sleep(5000);
 
                     for (Apartment apartment : DatabaseHandler.getAllApartments()) {
@@ -195,8 +228,10 @@ public class PowerSwitch extends MultiDexApplication {
                 } catch (Exception e) {
                     Log.e(e);
                 }
+
+                return null;
             }
-        }).start();
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override

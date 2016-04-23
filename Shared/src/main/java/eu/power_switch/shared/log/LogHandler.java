@@ -78,7 +78,6 @@ public class LogHandler {
     private static final int KEEP_LOGS_DAY_COUNT = 14;
 
     private static Context context;
-    private static LogConfigurator externalLogConfigurator;
 
     /**
      * Private Constructor
