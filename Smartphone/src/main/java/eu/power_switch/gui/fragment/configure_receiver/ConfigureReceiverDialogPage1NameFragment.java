@@ -63,6 +63,9 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_NAME = "name";
+    public static final String KEY_ROOM_NAME = "roomName";
+
     private View rootView;
 
     private TextInputLayout floatingName;
@@ -85,8 +88,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
      */
     public static void sendNameRoomChangedBroadcast(Context context, String name, String roomName) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
-        intent.putExtra("name", name);
-        intent.putExtra("roomName", roomName);
+        intent.putExtra(KEY_NAME, name);
+        intent.putExtra(KEY_ROOM_NAME, roomName);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

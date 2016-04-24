@@ -50,6 +50,9 @@ import static eu.power_switch.obj.receiver.Receiver.Brand;
  */
 public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_BRAND = "brand";
+    public static final String KEY_MODEL = "model";
+
     private View rootView;
 
     private ListView brandListView;
@@ -69,8 +72,8 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
      */
     public static void sendBrandModelChangedBroadcast(Context context, String brand, String model) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED);
-        intent.putExtra("brand", brand);
-        intent.putExtra("model", model);
+        intent.putExtra(KEY_BRAND, brand);
+        intent.putExtra(KEY_MODEL, model);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -87,7 +90,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
         brandListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                updateModelList((String) brandNamesAdapter.getItem(position));
+                updateModelList(brandNamesAdapter.getItem(position));
                 sendBrandModelChangedBroadcast(getActivity(), getSelectedBrand(), getSelectedModel());
             }
         });

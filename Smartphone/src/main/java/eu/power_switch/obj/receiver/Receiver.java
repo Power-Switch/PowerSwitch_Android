@@ -165,7 +165,7 @@ public abstract class Receiver {
     /**
      * Amount of repeats for sending Network Signals
      */
-    protected int repeatAmount = 1;
+    protected int repeatAmount;
 
     /**
      * List of Gateways this Receiver is associated with

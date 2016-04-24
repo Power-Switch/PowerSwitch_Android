@@ -69,6 +69,7 @@ public abstract class ReceiverReflectionMagic {
         }
 
         Long lastActivatedButtonId = cursor.getLong(7);
+        int repeatAmount = cursor.getInt(8);
         List<Gateway> associatedGateways = ReceiverHandler.getAssociatedGateways(id);
 
         Receiver receiver = null;
@@ -94,6 +95,8 @@ public abstract class ReceiverReflectionMagic {
                 receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId, associatedGateways);
                 break;
         }
+
+        receiver.setRepeatAmount(repeatAmount);
 
         receiver.setPositionInRoom(positionInRoom);
         receiver.setLastActivatedButtonId(lastActivatedButtonId);

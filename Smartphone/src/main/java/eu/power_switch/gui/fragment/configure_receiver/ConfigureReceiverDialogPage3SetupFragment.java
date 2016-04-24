@@ -75,6 +75,12 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_CHANNEL_MASTER = "channelMaster";
+    public static final String KEY_CHANNEL_SLAVE = "channelSlave";
+    public static final String KEY_DIPS = "dips";
+    public static final String KEY_SEED = "seed";
+    public static final String KEY_UNIVERSAL_BUTTONS = "universalButtons";
+
     private View rootView;
 
     private ListView channelMasterListView;
@@ -109,11 +115,11 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                                                           ArrayList<DipSwitch> dips, long seed,
                                                           ArrayList<UniversalButton> universalButtons) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED);
-        intent.putExtra("channelMaster", channelMaster);
-        intent.putExtra("channelSlave", channelSlave);
-        intent.putExtra("dips", dips);
-        intent.putExtra("seed", seed);
-        intent.putExtra("universalButtons", universalButtons);
+        intent.putExtra(KEY_CHANNEL_MASTER, channelMaster);
+        intent.putExtra(KEY_CHANNEL_SLAVE, channelSlave);
+        intent.putExtra(KEY_DIPS, dips);
+        intent.putExtra(KEY_SEED, seed);
+        intent.putExtra(KEY_UNIVERSAL_BUTTONS, universalButtons);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -128,7 +134,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
-                    String model = intent.getStringExtra("model");
+                    String model = intent.getStringExtra(ConfigureReceiverDialogPage2TypeFragment.KEY_MODEL);
 
                     try {
                         Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));

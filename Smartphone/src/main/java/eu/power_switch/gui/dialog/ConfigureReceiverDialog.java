@@ -36,7 +36,8 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4TabbedSummaryFragment;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4GatewayFragment;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage5TabbedSummaryFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.log.Log;
@@ -163,6 +164,8 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                 case 2:
                     return context.getString(R.string.setup);
                 case 3:
+                    return context.getString(R.string.gateways);
+                case 4:
                     return context.getString(R.string.summary);
             }
 
@@ -184,7 +187,10 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                     fragment = new ConfigureReceiverDialogPage3SetupFragment();
                     break;
                 case 3:
-                    fragment = new ConfigureReceiverDialogPage4TabbedSummaryFragment();
+                    fragment = new ConfigureReceiverDialogPage4GatewayFragment();
+                    break;
+                case 4:
+                    fragment = new ConfigureReceiverDialogPage5TabbedSummaryFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
@@ -207,7 +213,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
          */
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
     }
 

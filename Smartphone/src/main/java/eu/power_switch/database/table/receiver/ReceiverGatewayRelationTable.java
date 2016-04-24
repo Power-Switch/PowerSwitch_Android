@@ -24,6 +24,8 @@ import eu.power_switch.database.table.gateway.GatewayTable;
 
 /**
  * Receiver Gateway relation table description
+ * <p/>
+ * Created by Markus on 24.04.2016.
  */
 public class ReceiverGatewayRelationTable {
 

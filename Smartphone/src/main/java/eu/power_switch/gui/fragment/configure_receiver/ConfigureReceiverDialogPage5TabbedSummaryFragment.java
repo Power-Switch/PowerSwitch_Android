@@ -70,7 +70,7 @@ import eu.power_switch.wear.service.UtilityService;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private View rootView;
     private long currentId = -1;
@@ -84,6 +84,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
     private int currentSlave;
     private long currentSeed;
     private List<UniversalButton> currentUniversalButtons = new ArrayList<>();
+    private int currentRepeatAmount;
     private List<Gateway> currentAssociatedGateways = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
@@ -105,15 +106,15 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_4_summary, container, false);
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_5_summary, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
-                    String brand = intent.getStringExtra("brand");
-                    String model = intent.getStringExtra("model");
+                    String brand = intent.getStringExtra(ConfigureReceiverDialogPage2TypeFragment.KEY_BRAND);
+                    String model = intent.getStringExtra(ConfigureReceiverDialogPage2TypeFragment.KEY_MODEL);
 
                     currentBrand = Receiver.Brand.getEnum(brand);
                     currentModel = model;
@@ -125,26 +126,32 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
                         StatusMessageHandler.showErrorMessage(getActivity(), e);
                     }
                 } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED)) {
-                    String name = intent.getStringExtra("name");
-                    String roomName = intent.getStringExtra("roomName");
+                    String name = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_NAME);
+                    String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME);
 
                     currentName = name;
                     currentRoomName = roomName;
                 } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED)) {
-                    char channelMaster = intent.getCharExtra("channelMaster", 'A');
-                    int channelSlave = intent.getIntExtra("channelSlave", 0);
-                    ArrayList<DipSwitch> dips = (ArrayList<DipSwitch>) intent.getSerializableExtra("dips");
+                    char channelMaster = intent.getCharExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_CHANNEL_MASTER, 'A');
+                    int channelSlave = intent.getIntExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_CHANNEL_SLAVE, 0);
+                    ArrayList<DipSwitch> dips = (ArrayList<DipSwitch>) intent.getSerializableExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_DIPS);
 
-                    long seed = intent.getLongExtra("seed", -1);
+                    long seed = intent.getLongExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_SEED, -1);
 
                     ArrayList<UniversalButton> universalButtons =
-                            (ArrayList<UniversalButton>) intent.getSerializableExtra("universalButtons");
+                            (ArrayList<UniversalButton>) intent.getSerializableExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_UNIVERSAL_BUTTONS);
 
                     currentMaster = channelMaster;
                     currentSlave = channelSlave;
                     currentDips = dips;
                     currentSeed = seed;
                     currentUniversalButtons = universalButtons;
+                } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_GATEWAY_DETAILS_CHANGED)) {
+                    int repeatAmount = intent.getIntExtra(ConfigureReceiverDialogPage4GatewayFragment.KEY_REPEAT_AMOUNT, 0);
+                    ArrayList<Gateway> associatedGateways = (ArrayList<Gateway>) intent.getSerializableExtra(ConfigureReceiverDialogPage4GatewayFragment.KEY_ASSOCIATED_GATEWAYS);
+
+                    currentRepeatAmount = repeatAmount;
+                    currentAssociatedGateways = associatedGateways;
                 }
 
                 updateUi();
@@ -389,6 +396,9 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
                 break;
         }
 
+        receiver.setRepeatAmount(currentRepeatAmount);
+
+
         if (currentId == -1) {
             DatabaseHandler.addReceiver(receiver);
         } else {
@@ -412,6 +422,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
         intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_DETAILS_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

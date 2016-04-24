@@ -128,7 +128,11 @@ public class ActionHandler {
 
         for (Gateway gateway : gateways) {
             if (gateway.isActive()) {
-                networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
+                NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, receiver, button);
+
+                for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                    networkPackages.add(networkPackage);
+                }
             }
         }
 
@@ -238,7 +242,11 @@ public class ActionHandler {
                 for (Gateway gateway : associatedGateways) {
                     if (gateway.isActive()) {
                         try {
-                            networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
+                            NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, receiver, button);
+
+                            for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                                networkPackages.add(networkPackage);
+                            }
 
                             // set on object, as well as in database
                             receiver.setLastActivatedButtonId(button.getId());
@@ -321,7 +329,10 @@ public class ActionHandler {
                 for (Gateway gateway : associatedGateways) {
                     if (gateway.isActive()) {
                         try {
-                            networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
+                            NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, receiver, button);
+                            for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                                networkPackages.add(networkPackage);
+                            }
                         } catch (ActionNotSupportedException e) {
                             Log.e("Action not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context,
@@ -423,7 +434,11 @@ public class ActionHandler {
 
             for (Gateway gateway : gateways) {
                 if (gateway.isActive()) {
-                    networkPackages.add(getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton()));
+                    NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton());
+
+                    for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                        networkPackages.add(networkPackage);
+                    }
 
                     // set on object, as well as in database
                     sceneItem.getReceiver().setLastActivatedButtonId(sceneItem.getActiveButton().getId());
