@@ -24,6 +24,7 @@ import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -162,17 +163,23 @@ public abstract class Receiver {
     protected Long lastActivatedButtonId = (long) -1;
 
     /**
+     * List of Gateways this Receiver is associated with
+     */
+    protected List<Gateway> associatedGateways;
+
+    /**
      * Constructor
      *
-     * @param context any suitable context
-     * @param id      ID of this Receiver
-     * @param name    Name of this Receiver
-     * @param brand   Brand of this Receiver
-     * @param model   Model of this Receiver
-     * @param type    Type of this Receiver {@see TYPE}
-     * @param roomId  Room ID of this Receiver
+     * @param context            any suitable context
+     * @param id                 ID of this Receiver
+     * @param name               Name of this Receiver
+     * @param brand              Brand of this Receiver
+     * @param model              Model of this Receiver
+     * @param type               Type of this Receiver {@see TYPE}
+     * @param roomId             Room ID of this Receiver
+     * @param associatedGateways List of associated Gateways
      */
-    public Receiver(Context context, Long id, String name, Brand brand, String model, Type type, Long roomId) {
+    public Receiver(Context context, Long id, String name, Brand brand, String model, Type type, Long roomId, @NonNull List<Gateway> associatedGateways) {
         this.context = context;
         this.id = id;
         this.name = name;
@@ -181,6 +188,7 @@ public abstract class Receiver {
         this.buttons = new LinkedList<>();
         this.type = type;
         this.roomId = roomId;
+        this.associatedGateways = associatedGateways;
     }
 
     /**
@@ -309,6 +317,16 @@ public abstract class Receiver {
      */
     public void setLastActivatedButtonId(Long lastActivatedButtonId) {
         this.lastActivatedButtonId = lastActivatedButtonId;
+    }
+
+    /**
+     * Get a list of Gateways this Receiver is associated with
+     *
+     * @return List of Gateways
+     */
+    @NonNull
+    public List<Gateway> getAssociatedGateways() {
+        return associatedGateways;
     }
 
     /**

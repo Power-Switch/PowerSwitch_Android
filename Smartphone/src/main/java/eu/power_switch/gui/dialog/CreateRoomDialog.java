@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 
@@ -108,7 +110,7 @@ public class CreateRoomDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName(), 0, false));
+                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName(), 0, false, new ArrayList<Gateway>()));
 
                     ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
 

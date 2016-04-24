@@ -20,6 +20,7 @@ package eu.power_switch.obj.receiver.device.bat;
 
 import android.content.Context;
 
+import java.util.List;
 import java.util.Random;
 
 import eu.power_switch.R;
@@ -51,8 +52,8 @@ public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
 
     private long seed = -1;
 
-    public RC_AAA3680_A_IP20(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
+    public RC_AAA3680_A_IP20(Context context, Long id, String name, long seed, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId, associatedGateways);
         buttons.add(new OnButton(context, id));
         buttons.add(new OffButton(context, id));
         if (seed == -1) {

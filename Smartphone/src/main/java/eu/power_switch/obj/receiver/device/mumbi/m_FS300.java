@@ -54,8 +54,8 @@ public class m_FS300 extends Receiver implements DipReceiver {
 
     private LinkedList<DipSwitch> dipList;
 
-    public m_FS300(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId);
+    public m_FS300(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId, associatedGateways);
         dipList = new LinkedList<>();
 
         if (dips != null && dips.size() == 10) {

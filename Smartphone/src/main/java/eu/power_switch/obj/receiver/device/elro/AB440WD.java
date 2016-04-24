@@ -55,8 +55,8 @@ public class AB440WD extends Receiver implements DipReceiver {
     private String headITGW = "0,0,10,11200,350,26,0,";
     private String tailITGW = tx433version + sSpeedITGW + "0";
 
-    public AB440WD(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId);
+    public AB440WD(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId, associatedGateways);
         dipList = new LinkedList<>();
 
         if (dips != null && dips.size() == 10) {

@@ -21,6 +21,7 @@ package eu.power_switch.obj.receiver.device.elro;
 import android.content.Context;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.DipReceiver;
@@ -35,8 +36,8 @@ public class AB440IS extends AB440ID implements DipReceiver {
 
     private static final String MODEL = Receiver.getModelName(AB440IS.class.getCanonicalName());
 
-    public AB440IS(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, dips, roomId);
+    public AB440IS(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, dips, roomId, associatedGateways);
         dipList = new LinkedList<>();
 
         if (dips != null && dips.size() == 8) {

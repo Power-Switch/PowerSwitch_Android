@@ -54,6 +54,7 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
@@ -83,6 +84,7 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
     private int currentSlave;
     private long currentSeed;
     private List<UniversalButton> currentUniversalButtons = new ArrayList<>();
+    private List<Gateway> currentAssociatedGateways = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -371,19 +373,19 @@ public class ConfigureReceiverDialogPage4TabbedSummaryFragment extends Configura
                 }
 
                 receiver = (Receiver) constructor.newInstance(
-                        getActivity(), currentId, receiverName, dipValues, room.getId());
+                        getActivity(), currentId, receiverName, dipValues, room.getId(), currentAssociatedGateways);
                 break;
             case MASTER_SLAVE:
                 receiver = (Receiver) constructor.newInstance(
-                        getActivity(), currentId, receiverName, currentMaster, currentSlave, room.getId());
+                        getActivity(), currentId, receiverName, currentMaster, currentSlave, room.getId(), currentAssociatedGateways);
                 break;
             case UNIVERSAL:
                 receiver = new UniversalReceiver(
-                        getActivity(), currentId, currentName, currentUniversalButtons, room.getId());
+                        getActivity(), currentId, currentName, currentUniversalButtons, room.getId(), currentAssociatedGateways);
                 break;
             case AUTOPAIR:
                 receiver = (Receiver) constructor.newInstance(
-                        getActivity(), currentId, receiverName, currentSeed, room.getId());
+                        getActivity(), currentId, receiverName, currentSeed, room.getId(), currentAssociatedGateways);
                 break;
         }
 

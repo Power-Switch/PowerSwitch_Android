@@ -21,6 +21,7 @@ package eu.power_switch.obj.receiver.device.intertechno;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import eu.power_switch.R;
@@ -60,16 +61,16 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
 
     private long seed = -1;
 
-    public ITR1500(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.MASTER_SLAVE, roomId);
+    public ITR1500(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.MASTER_SLAVE, roomId, associatedGateways);
         buttons.add(new OnButton(context, id));
         buttons.add(new OffButton(context, id));
         this.channelMaster = channelMaster;
         this.channelSlave = channelSlave;
     }
 
-    public ITR1500(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
+    public ITR1500(Context context, Long id, String name, long seed, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId, associatedGateways);
         buttons.add(new OnButton(context, id));
         buttons.add(new OffButton(context, id));
         if (seed == -1) {

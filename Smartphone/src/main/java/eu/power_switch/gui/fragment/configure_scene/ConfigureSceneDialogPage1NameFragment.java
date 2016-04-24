@@ -262,7 +262,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
                     // copy room
                     room = new Room(originalRoom.getId(), originalRoom.getApartmentId(),
                             originalRoom.getName(), originalRoom.getPositionInApartment(),
-                            originalRoom.isCollapsed());
+                            originalRoom.isCollapsed(), originalRoom.getAssociatedGateways());
                     // add room to list
                     checkedReceivers.add(room);
                 }

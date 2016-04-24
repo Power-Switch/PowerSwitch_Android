@@ -20,6 +20,7 @@ package eu.power_switch.obj.receiver.device.rohrmotor24;
 
 import android.content.Context;
 
+import java.util.List;
 import java.util.Random;
 
 import eu.power_switch.R;
@@ -49,8 +50,8 @@ public class RMF_R1_UP extends Receiver implements AutoPairReceiver {
 
     private long seed = -1;
 
-    public RMF_R1_UP(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
+    public RMF_R1_UP(Context context, Long id, String name, long seed, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId, associatedGateways);
         buttons.add(new UpButton(context, id));
         if (seed == -1) {
             // init seed for this receiver instance, to always generate the same codes from now on

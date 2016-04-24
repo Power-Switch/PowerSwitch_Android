@@ -21,7 +21,9 @@ package eu.power_switch.obj.receiver.device.intertek;
 import android.content.Context;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.device.elro.AB440SC;
@@ -31,8 +33,8 @@ public class Model_1919361 extends AB440SC implements DipReceiver {
     private static final Brand BRAND = Brand.INTERTEK;
     private static final String MODEL = Receiver.getModelName(Model_1919361.class.getCanonicalName());
 
-    public Model_1919361(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, dips, roomId);
+    public Model_1919361(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, dips, roomId, associatedGateways);
         brand = BRAND;
         model = MODEL;
     }

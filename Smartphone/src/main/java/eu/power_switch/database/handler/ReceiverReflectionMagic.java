@@ -22,10 +22,12 @@ import android.content.Context;
 import android.database.Cursor;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
@@ -67,6 +69,7 @@ public abstract class ReceiverReflectionMagic {
         }
 
         Long lastActivatedButtonId = cursor.getLong(7);
+        List<Gateway> associatedGateways = new ArrayList<>();
 
         Receiver receiver = null;
 
@@ -76,19 +79,19 @@ public abstract class ReceiverReflectionMagic {
             case MASTER_SLAVE:
                 Character channelMaster = MasterSlaveReceiverHandler.getMaster(id);
                 int channelSlave = MasterSlaveReceiverHandler.getSlave(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId);
+                receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId, associatedGateways);
                 break;
             case DIPS:
                 LinkedList<Boolean> dips = DipHandler.getDips(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId);
+                receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId, associatedGateways);
                 break;
             case UNIVERSAL:
                 List<UniversalButton> buttons = UniversalButtonHandler.getUniversalButtons(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId);
+                receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId, associatedGateways);
                 break;
             case AUTOPAIR:
                 long seed = AutoPairHandler.getSeed(id);
-                receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId);
+                receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId, associatedGateways);
                 break;
         }
 
@@ -114,14 +117,14 @@ public abstract class ReceiverReflectionMagic {
 
         switch (type) {
             case DIPS:
-                return myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
+                return myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class, List.class);
             case MASTER_SLAVE:
                 return myClass.getConstructor(Context.class, Long.class, String.class, char.class, int.class,
-                        Long.class);
+                        Long.class, List.class);
             case UNIVERSAL:
-                return myClass.getConstructor(Context.class, Long.class, String.class, List.class, Long.class);
+                return myClass.getConstructor(Context.class, Long.class, String.class, List.class, Long.class, List.class);
             case AUTOPAIR:
-                return myClass.getConstructor(Context.class, Long.class, String.class, long.class, Long.class);
+                return myClass.getConstructor(Context.class, Long.class, String.class, long.class, Long.class, List.class);
             default:
                 throw new ClassNotFoundException("Unknown type " + type.toString());
         }
@@ -171,24 +174,24 @@ public abstract class ReceiverReflectionMagic {
         for (Class<?> someClass : implementedInterfaces) {
             if (someClass.equals(MasterSlaveReceiver.class)) {
                 Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, char
-                        .class, int.class, Long.class);
+                        .class, int.class, Long.class, List.class);
                 return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, 'A', 0,
-                        null);
+                        null, new ArrayList<Gateway>());
             } else if (someClass.equals(DipReceiver.class)) {
                 Constructor<?> constructor;
-                constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class);
+                constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class, List.class);
                 return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, new
-                        LinkedList<Boolean>(), null);
+                        LinkedList<Boolean>(), null, new ArrayList<Gateway>());
             } else if (someClass.equals(AutoPairReceiver.class)) {
                 Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, long
-                        .class, Long.class);
-                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, -1, null);
+                        .class, Long.class, List.class);
+                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, -1, null, new ArrayList<Gateway>());
             }
         }
 
         if (myClass.equals(UniversalReceiver.class)) {
             return new UniversalReceiver(context, dummyReceiverId, dummyReceiverName, new
-                    LinkedList<UniversalButton>(), null);
+                    LinkedList<UniversalButton>(), null, new ArrayList<Gateway>());
         }
 
         throw new RuntimeException("Unknown Receiver");

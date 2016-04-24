@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.LogHandler;
 
@@ -64,19 +65,25 @@ public class Room {
     private boolean collapsed;
 
     /**
+     * List of Gateways this Room is associated with
+     */
+    private List<Gateway> associatedGateways;
+
+    /**
      * Constructor
      *
      * @param id          ID of this Room
      * @param apartmentId ID of Apartment
      * @param name        Name of this Room
      */
-    public Room(Long id, Long apartmentId, String name, int positionInApartment, boolean isCollapsed) {
+    public Room(Long id, Long apartmentId, String name, int positionInApartment, boolean isCollapsed, List<Gateway> associatedGateways) {
         this.id = id;
         this.apartmentId = apartmentId;
         this.name = name;
         this.receivers = new LinkedList<>();
         this.positionInApartment = positionInApartment;
         this.collapsed = isCollapsed;
+        this.associatedGateways = associatedGateways;
     }
 
     /**
@@ -167,6 +174,16 @@ public class Room {
      */
     public void setCollapsed(boolean collapsed) {
         this.collapsed = collapsed;
+    }
+
+    /**
+     * Get a list of Gateways this Room is associated with
+     *
+     * @return List of Gateways
+     */
+    @NonNull
+    public List<Gateway> getAssociatedGateways() {
+        return associatedGateways;
     }
 
     /**

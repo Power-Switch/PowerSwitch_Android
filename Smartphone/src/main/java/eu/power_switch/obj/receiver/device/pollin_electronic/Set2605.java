@@ -54,8 +54,8 @@ public class Set2605 extends Receiver implements DipReceiver {
 
     private LinkedList<DipSwitch> dipList;
 
-    public Set2605(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId);
+    public Set2605(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.DIPS, roomId, associatedGateways);
         dipList = new LinkedList<>();
 
         if (dips != null && dips.size() == 10) {

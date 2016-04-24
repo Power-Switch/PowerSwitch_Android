@@ -29,6 +29,7 @@ import java.util.NoSuchElementException;
 
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.Room;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
@@ -272,8 +273,9 @@ abstract class RoomHandler {
         String name = c.getString(2);
         int position = c.getInt(3);
         boolean isCollapsed = c.getInt(4) > 0;
+        List<Gateway> associatedGateways = new ArrayList<>();
 
-        Room room = new Room(id, apartmentId, name, position, isCollapsed);
+        Room room = new Room(id, apartmentId, name, position, isCollapsed, associatedGateways);
         room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
         return room;
     }

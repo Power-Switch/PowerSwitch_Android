@@ -20,6 +20,8 @@ package eu.power_switch.obj.receiver.device.intertechno;
 
 import android.content.Context;
 
+import java.util.List;
+
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
@@ -30,8 +32,8 @@ public class GRR300 extends CMR1000 implements MasterSlaveReceiver {
 
     private static final String MODEL = Receiver.getModelName(GRR300.class.getCanonicalName());
 
-    public GRR300(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId) {
-        super(context, id, name, channelMaster, channelSlave, roomId);
+    public GRR300(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, channelMaster, channelSlave, roomId, associatedGateways);
         model = MODEL;
     }
 

@@ -20,6 +20,7 @@ package eu.power_switch.obj.receiver.device.intertechno;
 
 import android.content.Context;
 
+import java.util.List;
 import java.util.Random;
 
 import eu.power_switch.R;
@@ -47,8 +48,8 @@ public class ITL500 extends Receiver implements AutoPairReceiver {
 
     private long seed = -1;
 
-    public ITL500(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
+    public ITL500(Context context, Long id, String name, long seed, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId, associatedGateways);
         buttons.add(new Button(DatabaseConstants.BUTTON_UP_ID, context.getString(R.string.up), id));
         buttons.add(new Button(DatabaseConstants.BUTTON_DOWN_ID, context.getString(R.string.down), id));
         if (seed == -1) {

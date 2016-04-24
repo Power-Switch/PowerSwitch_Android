@@ -20,6 +20,7 @@ package eu.power_switch.obj.receiver.device.rohrmotor24;
 
 import android.content.Context;
 
+import java.util.List;
 import java.util.Random;
 
 import eu.power_switch.R;
@@ -51,8 +52,8 @@ public class RMF_Motor extends Receiver implements AutoPairReceiver {
 
     private long seed = -1;
 
-    public RMF_Motor(Context context, Long id, String name, long seed, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId);
+    public RMF_Motor(Context context, Long id, String name, long seed, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.AUTOPAIR, roomId, associatedGateways);
         buttons.add(new UpButton(context, id));
         buttons.add(new StopButton(context, id));
         buttons.add(new DownButton(context, id));

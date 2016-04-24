@@ -21,6 +21,7 @@ package eu.power_switch.obj.receiver.device.vivanco;
 import android.content.Context;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.DipReceiver;
@@ -33,8 +34,8 @@ public class FSS33600W extends FSS31000W implements DipReceiver {
 
     private static final String MODEL = Receiver.getModelName(FSS33600W.class.getCanonicalName());
 
-    public FSS33600W(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId) {
-        super(context, id, name, dips, roomId);
+    public FSS33600W(Context context, Long id, String name, LinkedList<Boolean> dips, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, dips, roomId, associatedGateways);
         model = MODEL;
     }
 

@@ -73,11 +73,11 @@ public class PlayStoreModeDataModel {
     private static Scene SCENE_ABENDESSEN = new Scene((long) 1, (long) 0, "Abendessen");
     private static Scene SCENE_FEIER = new Scene((long) 2, (long) 0, "Feier");
     // Rooms
-    private static Room ROOM_WOHNZIMMER = new Room((long) 0, (long) 0, "Wohnzimmer", 0, false);
-    private static Room ROOM_SCHLAFZIMMER = new Room((long) 1, (long) 0, "Schlafzimmer", 0, false);
-    private static Room ROOM_KUECHE = new Room((long) 2, (long) 0, "Küche", 0, false);
-    private static Room ROOM_KINDERZIMMER = new Room((long) 3, (long) 0, "Kinderzimmer", 0, false);
-    private static Room ROOM_GARTEN = new Room((long) 4, (long) 0, "Garten", 0, false);
+    private static Room ROOM_WOHNZIMMER = new Room((long) 0, (long) 0, "Wohnzimmer", 0, false, new ArrayList<Gateway>());
+    private static Room ROOM_SCHLAFZIMMER = new Room((long) 1, (long) 0, "Schlafzimmer", 0, false, new ArrayList<Gateway>());
+    private static Room ROOM_KUECHE = new Room((long) 2, (long) 0, "Küche", 0, false, new ArrayList<Gateway>());
+    private static Room ROOM_KINDERZIMMER = new Room((long) 3, (long) 0, "Kinderzimmer", 0, false, new ArrayList<Gateway>());
+    private static Room ROOM_GARTEN = new Room((long) 4, (long) 0, "Garten", 0, false, new ArrayList<Gateway>());
     // Receiver
     private static Receiver RECEIVER_SOFA_WOHNZIMMER;
     private static Receiver RECEIVER_ECKLAMPE_WOHNZIMMER;
@@ -131,22 +131,22 @@ public class PlayStoreModeDataModel {
     }
 
     private static void initReceivers(Context context) {
-        RECEIVER_SOFA_WOHNZIMMER = new CMR1000(context, (long) 0, "Sofa", 'E', 1, ROOM_WOHNZIMMER.getId());
-        RECEIVER_ECKLAMPE_WOHNZIMMER = new CMR1000(context, (long) 1, "Ecklampe", 'E', 1, ROOM_WOHNZIMMER.getId());
-        RECEIVER_VERSTAERKER_WOHNZIMMER = new CMR1000(context, (long) 2, "Verstärker", 'E', 1, ROOM_WOHNZIMMER.getId());
-        RECEIVER_DECKE_SCHLAFZIMMER = new CMR1000(context, (long) 3, "Decke", 'E', 1, ROOM_SCHLAFZIMMER.getId());
-        RECEIVER_FENSTER_SCHLAFZIMMER = new CMR1000(context, (long) 4, "Fenster", 'E', 1, ROOM_SCHLAFZIMMER.getId());
-        RECEIVER_NACHTTISCHE_SCHLAFZIMMER = new CMR1000(context, (long) 5, "Nachttische", 'E', 1, ROOM_SCHLAFZIMMER.getId());
-        RECEIVER_ABZUGSHAUBE_KUECHE = new CMR1000(context, (long) 6, "Abzugshaube", 'E', 1, ROOM_KUECHE.getId());
-        RECEIVER_ESSTISCH_KUECHE = new CMR1000(context, (long) 7, "Esstisch", 'E', 1, ROOM_KUECHE.getId());
-        RECEIVER_ARBEITSFLAECHE_KUECHE = new CMR1000(context, (long) 8, "Arbeitsfläche", 'E', 1, ROOM_KUECHE.getId());
-        RECEIVER_KAFFEEMASCHINE_KUECHE = new CMR1000(context, (long) 9, "Kaffeemaschine", 'E', 1, ROOM_KUECHE.getId());
-        RECEIVER_DECKE_KINDERZIMMER = new CMR1000(context, (long) 10, "Decke", 'E', 1, ROOM_KINDERZIMMER.getId());
-        RECEIVER_NACHTLICHT_KINDERZIMMER = new CMR1000(context, (long) 11, "Nachtlicht", 'E', 1, ROOM_KINDERZIMMER.getId());
-        RECEIVER_TERRASSE_GARTEN = new CMR1000(context, (long) 12, "Terrasse", 'E', 1, ROOM_GARTEN.getId());
-        RECEIVER_WEGBELEUCHTUNG_GARTEN = new CMR1000(context, (long) 13, "Wegbeleuchtung", 'E', 1, ROOM_GARTEN.getId());
-        RECEIVER_HINTERHAUS_GARTEN = new CMR1000(context, (long) 14, "Hinterhaus", 'E', 1, ROOM_GARTEN.getId());
-        RECEIVER_WEIHNACHTSDEKO_GARTEN = new CMR1000(context, (long) 15, "Weihnachtsdeko", 'E', 1, ROOM_GARTEN.getId());
+        RECEIVER_SOFA_WOHNZIMMER = new CMR1000(context, (long) 0, "Sofa", 'E', 1, ROOM_WOHNZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_ECKLAMPE_WOHNZIMMER = new CMR1000(context, (long) 1, "Ecklampe", 'E', 1, ROOM_WOHNZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_VERSTAERKER_WOHNZIMMER = new CMR1000(context, (long) 2, "Verstärker", 'E', 1, ROOM_WOHNZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_DECKE_SCHLAFZIMMER = new CMR1000(context, (long) 3, "Decke", 'E', 1, ROOM_SCHLAFZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_FENSTER_SCHLAFZIMMER = new CMR1000(context, (long) 4, "Fenster", 'E', 1, ROOM_SCHLAFZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_NACHTTISCHE_SCHLAFZIMMER = new CMR1000(context, (long) 5, "Nachttische", 'E', 1, ROOM_SCHLAFZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_ABZUGSHAUBE_KUECHE = new CMR1000(context, (long) 6, "Abzugshaube", 'E', 1, ROOM_KUECHE.getId(), new ArrayList<Gateway>());
+        RECEIVER_ESSTISCH_KUECHE = new CMR1000(context, (long) 7, "Esstisch", 'E', 1, ROOM_KUECHE.getId(), new ArrayList<Gateway>());
+        RECEIVER_ARBEITSFLAECHE_KUECHE = new CMR1000(context, (long) 8, "Arbeitsfläche", 'E', 1, ROOM_KUECHE.getId(), new ArrayList<Gateway>());
+        RECEIVER_KAFFEEMASCHINE_KUECHE = new CMR1000(context, (long) 9, "Kaffeemaschine", 'E', 1, ROOM_KUECHE.getId(), new ArrayList<Gateway>());
+        RECEIVER_DECKE_KINDERZIMMER = new CMR1000(context, (long) 10, "Decke", 'E', 1, ROOM_KINDERZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_NACHTLICHT_KINDERZIMMER = new CMR1000(context, (long) 11, "Nachtlicht", 'E', 1, ROOM_KINDERZIMMER.getId(), new ArrayList<Gateway>());
+        RECEIVER_TERRASSE_GARTEN = new CMR1000(context, (long) 12, "Terrasse", 'E', 1, ROOM_GARTEN.getId(), new ArrayList<Gateway>());
+        RECEIVER_WEGBELEUCHTUNG_GARTEN = new CMR1000(context, (long) 13, "Wegbeleuchtung", 'E', 1, ROOM_GARTEN.getId(), new ArrayList<Gateway>());
+        RECEIVER_HINTERHAUS_GARTEN = new CMR1000(context, (long) 14, "Hinterhaus", 'E', 1, ROOM_GARTEN.getId(), new ArrayList<Gateway>());
+        RECEIVER_WEIHNACHTSDEKO_GARTEN = new CMR1000(context, (long) 15, "Weihnachtsdeko", 'E', 1, ROOM_GARTEN.getId(), new ArrayList<Gateway>());
     }
 
     private static void initScenes() {

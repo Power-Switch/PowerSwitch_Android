@@ -21,6 +21,7 @@ package eu.power_switch.obj.receiver.device.intertechno;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.obj.button.OffButton;
@@ -53,8 +54,8 @@ public class CMR1000 extends Receiver implements MasterSlaveReceiver {
     private Character channelMaster;
     private int channelSlave;
 
-    public CMR1000(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId) {
-        super(context, id, name, BRAND, MODEL, Type.MASTER_SLAVE, roomId);
+    public CMR1000(Context context, Long id, String name, char channelMaster, int channelSlave, Long roomId, List<Gateway> associatedGateways) {
+        super(context, id, name, BRAND, MODEL, Type.MASTER_SLAVE, roomId, associatedGateways);
         buttons.add(new OnButton(context, id));
         buttons.add(new OffButton(context, id));
         this.channelMaster = channelMaster;
