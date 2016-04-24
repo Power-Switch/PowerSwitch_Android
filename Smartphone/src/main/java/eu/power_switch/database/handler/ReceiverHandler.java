@@ -26,7 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import eu.power_switch.database.table.receiver.ReceiverGatewayRelationTable;
 import eu.power_switch.database.table.receiver.ReceiverTable;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
@@ -62,12 +64,13 @@ abstract class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_TYPE, receiver.getType().toString());
         values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, RoomHandler.get(receiver.getRoomId()).getReceivers().size());
 
-        Long dbInsertReturnValue = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
+        Long receiverId = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
 
-        if (dbInsertReturnValue > -1) {
-            insertDetails(receiver, dbInsertReturnValue);
+        if (receiverId > -1) {
+            insertDetails(receiver, receiverId);
+            addAssociatedGateways(receiverId, receiver.getAssociatedGateways());
         } else {
-            throw new Exception("invalid database.insert() return value: " + dbInsertReturnValue);
+            throw new Exception("invalid database.insert() return value: " + receiverId);
         }
     }
 
@@ -117,6 +120,10 @@ abstract class ReceiverHandler {
 
         DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
                 ReceiverTable.COLUMN_ID + "=" + receiver.getId(), null);
+
+        // update associated Gateways
+        removeAssociatedGateways(receiver.getId());
+        addAssociatedGateways(receiver.getId(), receiver.getAssociatedGateways());
 
         SceneItemHandler.update(receiver.getId());
     }
@@ -274,27 +281,6 @@ abstract class ReceiverHandler {
         return type;
     }
 
-//    /**
-//     * Gets ID of last activated Button of a Receiver
-//     *
-//     * @param id ID of Receiver
-//     * @return ID of last activated Button, -1 if not set
-//     */
-//    protected static long getLastActivatedButtonId(Long id) {
-//        String[] columns = {ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID};
-//        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
-//                + id, null, null, null, null);
-//        cursor.moveToFirst();
-//
-//        long buttonId = -1;
-//        if (!cursor.isNull(0)) {
-//            buttonId = cursor.getLong(0);
-//        }
-//
-//        cursor.close();
-//        return buttonId;
-//    }
-
     /**
      * Sets ID of last activated Button of a Receiver
      *
@@ -309,27 +295,6 @@ abstract class ReceiverHandler {
                 ReceiverTable.COLUMN_ID + "=" + receiverId, null);
     }
 
-//    /**
-//     * Gets position in a Room of a Receiver
-//     *
-//     * @param id ID of Receiver
-//     * @return Position in Room
-//     */
-//    protected static Long getPositionInRoom(Long id) {
-//        String[] columns = {ReceiverTable.COLUMN_POSITION_IN_ROOM};
-//        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "="
-//                + id, null, null, null, null);
-//        cursor.moveToFirst();
-//
-//        long positionInRoom = -1;
-//        if (!cursor.isNull(0)) {
-//            positionInRoom = cursor.getLong(0);
-//        }
-//
-//        cursor.close();
-//        return positionInRoom;
-//    }
-
     /**
      * Sets position in a Room of a Receiver
      *
@@ -342,6 +307,58 @@ abstract class ReceiverHandler {
 
         DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
                 ReceiverTable.COLUMN_ID + "=" + receiverId, null);
+    }
+
+    /**
+     * Add relation info about associated Gateways to Database
+     *
+     * @param receiverId         ID of Room
+     * @param associatedGateways List of Gateways
+     */
+    private static void addAssociatedGateways(Long receiverId, List<Gateway> associatedGateways) throws Exception {
+        // add current
+        for (Gateway gateway : associatedGateways) {
+            ContentValues gatewayRelationValues = new ContentValues();
+            gatewayRelationValues.put(ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID, receiverId);
+            gatewayRelationValues.put(ReceiverGatewayRelationTable.COLUMN_GATEWAY_ID, gateway.getId());
+            DatabaseHandler.database.insert(ReceiverGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
+        }
+    }
+
+    /**
+     * Remove all current associated Gateways
+     *
+     * @param receiverId ID of Room
+     */
+    private static void removeAssociatedGateways(Long receiverId) throws Exception {
+        // delete old associated gateways
+        DatabaseHandler.database.delete(ReceiverGatewayRelationTable.TABLE_NAME,
+                ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID + "==" + receiverId, null);
+    }
+
+    /**
+     * Get Gateways that are associated with a Receiver
+     *
+     * @param receiverId ID of Receiver
+     * @return List of Gateways
+     */
+    @NonNull
+    protected static List<Gateway> getAssociatedGateways(long receiverId) throws Exception {
+        List<Gateway> associatedGateways = new ArrayList<>();
+
+        Cursor cursor = DatabaseHandler.database.query(ReceiverGatewayRelationTable.TABLE_NAME, ReceiverGatewayRelationTable.ALL_COLUMNS,
+                ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID + "==" + receiverId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long gatewayId = cursor.getLong(1);
+            Gateway gateway = GatewayHandler.get(gatewayId);
+            associatedGateways.add(gateway);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return associatedGateways;
     }
 
     /**

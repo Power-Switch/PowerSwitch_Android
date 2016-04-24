@@ -41,8 +41,10 @@ import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.database.table.receiver.AutoPairTable;
 import eu.power_switch.database.table.receiver.DipTable;
 import eu.power_switch.database.table.receiver.MasterSlaveTable;
+import eu.power_switch.database.table.receiver.ReceiverGatewayRelationTable;
 import eu.power_switch.database.table.receiver.ReceiverTable;
 import eu.power_switch.database.table.receiver.UniversalButtonTable;
+import eu.power_switch.database.table.room.RoomGatewayRelationTable;
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.database.table.scene.SceneTable;
@@ -60,7 +62,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
     private Context context;
 
@@ -82,8 +84,10 @@ public class Database extends SQLiteOpenHelper {
             DipTable.onCreate(db);
             AutoPairTable.onCreate(db);
             UniversalButtonTable.onCreate(db);
+            ReceiverGatewayRelationTable.onCreate(db);
 
             RoomTable.onCreate(db);
+            RoomGatewayRelationTable.onCreate(db);
 
             SceneTable.onCreate(db);
             SceneItemTable.onCreate(db);
@@ -150,6 +154,7 @@ public class Database extends SQLiteOpenHelper {
             ApartmentGeofenceRelationTable.onUpgrade(db, oldVersion, newVersion);
 
             RoomTable.onUpgrade(db, oldVersion, newVersion);
+            RoomGatewayRelationTable.onUpgrade(db, oldVersion, newVersion);
 
             SceneTable.onUpgrade(db, oldVersion, newVersion);
             SceneItemTable.onUpgrade(db, oldVersion, newVersion);
@@ -159,6 +164,7 @@ public class Database extends SQLiteOpenHelper {
             DipTable.onUpgrade(db, oldVersion, newVersion);
             AutoPairTable.onUpgrade(db, oldVersion, newVersion);
             UniversalButtonTable.onUpgrade(db, oldVersion, newVersion);
+            ReceiverGatewayRelationTable.onUpgrade(db, oldVersion, newVersion);
 
             ReceiverWidgetTable.onUpgrade(db, oldVersion, newVersion);
             RoomWidgetTable.onUpgrade(db, oldVersion, newVersion);

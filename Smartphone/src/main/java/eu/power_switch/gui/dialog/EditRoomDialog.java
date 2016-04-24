@@ -47,6 +47,7 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
@@ -185,7 +186,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
     @Override
     protected void saveCurrentConfigurationToDatabase() {
         try {
-            DatabaseHandler.updateRoom(roomId, getCurrentRoomName());
+            DatabaseHandler.updateRoom(roomId, getCurrentRoomName(), new ArrayList<Gateway>());
 
             // save receiver order
             for (int position = 0; position < receivers.size(); position++) {

@@ -69,7 +69,7 @@ public abstract class ReceiverReflectionMagic {
         }
 
         Long lastActivatedButtonId = cursor.getLong(7);
-        List<Gateway> associatedGateways = new ArrayList<>();
+        List<Gateway> associatedGateways = ReceiverHandler.getAssociatedGateways(id);
 
         Receiver receiver = null;
 

@@ -488,10 +488,10 @@ public final class DatabaseHandler {
      * @param newName the new Name
      */
     @WorkerThread
-    public static void updateRoom(Long id, String newName) throws Exception {
+    public static void updateRoom(Long id, String newName, List<Gateway> associatedGateways) throws Exception {
         openWritable();
         try {
-            RoomHandler.update(id, newName);
+            RoomHandler.update(id, newName, associatedGateways);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Log.e(e);

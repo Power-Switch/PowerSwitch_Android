@@ -163,6 +163,11 @@ public abstract class Receiver {
     protected Long lastActivatedButtonId = (long) -1;
 
     /**
+     * Amount of repeats for sending Network Signals
+     */
+    protected int repeatAmount = 1;
+
+    /**
      * List of Gateways this Receiver is associated with
      */
     protected List<Gateway> associatedGateways;
@@ -320,6 +325,24 @@ public abstract class Receiver {
     }
 
     /**
+     * Get amount of repeats for sending network signals
+     *
+     * @return amount of repeats
+     */
+    public int getRepeatAmount() {
+        return repeatAmount;
+    }
+
+    /**
+     * Set amount of repeats for sending network signals
+     *
+     * @param repeatAmount amount of repeats
+     */
+    public void setRepeatAmount(int repeatAmount) {
+        this.repeatAmount = repeatAmount;
+    }
+
+    /**
      * Get a list of Gateways this Receiver is associated with
      *
      * @return List of Gateways
@@ -367,7 +390,6 @@ public abstract class Receiver {
      * @throws GatewayNotSupportedException thrown if this Receiver doesn't support the given Gateway
      * @throws ActionNotSupportedException  thrown if this Receiver doesn't support the given Action
      */
-
     public abstract String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException;
 
     /**

@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import eu.power_switch.database.table.room.RoomGatewayRelationTable;
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
@@ -57,7 +58,11 @@ abstract class RoomHandler {
         values.put(RoomTable.COLUMN_NAME, room.getName());
         values.put(RoomTable.COLUMN_APARTMENT_ID, room.getApartmentId());
         values.put(RoomTable.COLUMN_COLLAPSED, room.isCollapsed());
-        return DatabaseHandler.database.insert(RoomTable.TABLE_NAME, null, values);
+        long roomId = DatabaseHandler.database.insert(RoomTable.TABLE_NAME, null, values);
+
+        addAssociatedGateways(roomId, room.getAssociatedGateways());
+
+        return roomId;
     }
 
     /**
@@ -66,10 +71,14 @@ abstract class RoomHandler {
      * @param id      ID of Room
      * @param newName new Room name
      */
-    protected static void update(Long id, String newName) throws Exception {
+    protected static void update(Long id, String newName, List<Gateway> associatedGateways) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, newName);
         DatabaseHandler.database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
+
+        // update associated Gateways
+        removeAssociatedGateways(id);
+        addAssociatedGateways(id, associatedGateways);
     }
 
     /**
@@ -262,6 +271,62 @@ abstract class RoomHandler {
     }
 
     /**
+     * Add relation info about associated Gateways to Database
+     *
+     * @param roomId             ID of Room
+     * @param associatedGateways List of Gateways
+     */
+    private static void addAssociatedGateways(Long roomId, List<Gateway> associatedGateways) throws Exception {
+        // add current
+        for (Gateway gateway : associatedGateways) {
+            ContentValues gatewayRelationValues = new ContentValues();
+            gatewayRelationValues.put(RoomGatewayRelationTable.COLUMN_ROOM_ID, roomId);
+            gatewayRelationValues.put(RoomGatewayRelationTable.COLUMN_GATEWAY_ID, gateway.getId());
+            DatabaseHandler.database.insert(RoomGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
+        }
+    }
+
+    /**
+     * Remove all current associated Gateways
+     *
+     * @param roomId ID of Room
+     */
+    private static void removeAssociatedGateways(Long roomId) throws Exception {
+        // delete old associated gateways
+        DatabaseHandler.database.delete(RoomGatewayRelationTable.TABLE_NAME,
+                RoomGatewayRelationTable.COLUMN_ROOM_ID + "==" + roomId, null);
+    }
+
+    /**
+     * Get Gateways that are associated with a Room
+     *
+     * @param roomId ID of Room
+     * @return List of Gateways
+     */
+    @NonNull
+    private static List<Gateway> getAssociatedGateways(long roomId) throws Exception {
+        List<Gateway> associatedGateways = new ArrayList<>();
+
+        String[] columns = {
+                RoomGatewayRelationTable.COLUMN_ROOM_ID,
+                RoomGatewayRelationTable.COLUMN_GATEWAY_ID
+        };
+        Cursor cursor = DatabaseHandler.database.query(RoomGatewayRelationTable.TABLE_NAME, columns,
+                RoomGatewayRelationTable.COLUMN_ROOM_ID + "==" + roomId, null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long gatewayId = cursor.getLong(1);
+            Gateway gateway = GatewayHandler.get(gatewayId);
+            associatedGateways.add(gateway);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return associatedGateways;
+    }
+
+    /**
      * Creates a Room Object out of Database information
      *
      * @param c cursor pointing to a Room database entry
@@ -273,7 +338,7 @@ abstract class RoomHandler {
         String name = c.getString(2);
         int position = c.getInt(3);
         boolean isCollapsed = c.getInt(4) > 0;
-        List<Gateway> associatedGateways = new ArrayList<>();
+        List<Gateway> associatedGateways = getAssociatedGateways(id);
 
         Room room = new Room(id, apartmentId, name, position, isCollapsed, associatedGateways);
         room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
