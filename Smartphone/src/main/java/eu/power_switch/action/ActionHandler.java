@@ -92,29 +92,41 @@ public class ActionHandler {
     private static void executeReceiverAction(@NonNull Context context, @NonNull Receiver receiver, @NonNull Button button) throws Exception {
         NetworkHandler.init(context);
 
-        List<NetworkPackage> networkPackages = new ArrayList<>();
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
+        Room room = apartment.getRoom(receiver.getRoomId());
 
-        if (apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
-                    Snackbar.LENGTH_LONG);
-            return;
+        List<NetworkPackage> networkPackages = new ArrayList<>();
+        List<Gateway> gateways;
+        if (!receiver.getAssociatedGateways().isEmpty()) {
+            gateways = receiver.getAssociatedGateways();
         } else {
-            boolean hasActiveGateway = false;
-            for (Gateway gateway : apartment.getAssociatedGateways()) {
-                if (gateway.isActive()) {
-                    hasActiveGateway = true;
-                    break;
-                }
-            }
-
-            if (!hasActiveGateway) {
-                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
-                return;
+            if (room.getAssociatedGateways().isEmpty()) {
+                gateways = apartment.getAssociatedGateways();
+            } else {
+                gateways = room.getAssociatedGateways();
             }
         }
 
-        for (Gateway gateway : apartment.getAssociatedGateways()) {
+        if (gateways.isEmpty() && apartment.getAssociatedGateways().isEmpty()) {
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
+                    Snackbar.LENGTH_LONG);
+            return;
+        }
+
+        boolean hasActiveGateway = false;
+        for (Gateway gateway : gateways) {
+            if (gateway.isActive()) {
+                hasActiveGateway = true;
+                break;
+            }
+        }
+
+        if (!hasActiveGateway) {
+            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            return;
+        }
+
+        for (Gateway gateway : gateways) {
             if (gateway.isActive()) {
                 networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
             }
@@ -184,30 +196,46 @@ public class ActionHandler {
         NetworkHandler.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
-        if (apartment.getAssociatedGateways().isEmpty()) {
+
+        List<Gateway> gateways;
+        if (!room.getAssociatedGateways().isEmpty()) {
+            gateways = room.getAssociatedGateways();
+        } else {
+            gateways = apartment.getAssociatedGateways();
+        }
+
+        if (gateways.isEmpty() && apartment.getAssociatedGateways().isEmpty()) {
             StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
-        } else {
-            boolean hasActiveGateway = false;
-            for (Gateway gateway : apartment.getAssociatedGateways()) {
-                if (gateway.isActive()) {
-                    hasActiveGateway = true;
-                    break;
-                }
-            }
+        }
 
-            if (!hasActiveGateway) {
-                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
-                return;
+        boolean hasActiveGateway = false;
+        for (Gateway gateway : apartment.getAssociatedGateways()) {
+            if (gateway.isActive()) {
+                hasActiveGateway = true;
+                break;
             }
+        }
+
+        if (!hasActiveGateway) {
+            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            return;
         }
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
             try {
                 Button button = receiver.getButtonCaseInsensitive(buttonName);
-                for (Gateway gateway : apartment.getAssociatedGateways()) {
+
+                List<Gateway> associatedGateways;
+                if (!receiver.getAssociatedGateways().isEmpty()) {
+                    associatedGateways = receiver.getAssociatedGateways();
+                } else {
+                    associatedGateways = gateways;
+                }
+
+                for (Gateway gateway : associatedGateways) {
                     if (gateway.isActive()) {
                         try {
                             networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
@@ -251,30 +279,46 @@ public class ActionHandler {
         NetworkHandler.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
-        if (apartment.getAssociatedGateways().isEmpty()) {
+
+        List<Gateway> gateways;
+        if (!room.getAssociatedGateways().isEmpty()) {
+            gateways = room.getAssociatedGateways();
+        } else {
+            gateways = apartment.getAssociatedGateways();
+        }
+
+        if (gateways.isEmpty() && apartment.getAssociatedGateways().isEmpty()) {
             StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
                     Snackbar.LENGTH_LONG);
             return;
-        } else {
-            boolean hasActiveGateway = false;
-            for (Gateway gateway : apartment.getAssociatedGateways()) {
-                if (gateway.isActive()) {
-                    hasActiveGateway = true;
-                    break;
-                }
-            }
+        }
 
-            if (!hasActiveGateway) {
-                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
-                return;
+        boolean hasActiveGateway = false;
+        for (Gateway gateway : apartment.getAssociatedGateways()) {
+            if (gateway.isActive()) {
+                hasActiveGateway = true;
+                break;
             }
+        }
+
+        if (!hasActiveGateway) {
+            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            return;
         }
 
         List<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
             try {
                 Button button = receiver.getButton(buttonId);
-                for (Gateway gateway : apartment.getAssociatedGateways()) {
+
+                List<Gateway> associatedGateways;
+                if (!receiver.getAssociatedGateways().isEmpty()) {
+                    associatedGateways = receiver.getAssociatedGateways();
+                } else {
+                    associatedGateways = gateways;
+                }
+
+                for (Gateway gateway : associatedGateways) {
                     if (gateway.isActive()) {
                         try {
                             networkPackages.add(getNetworkPackage(apartment, gateway, receiver, button));
@@ -339,30 +383,45 @@ public class ActionHandler {
     private static void executeScene(@NonNull Context context, @NonNull Scene scene) throws Exception {
         NetworkHandler.init(context);
 
-        List<NetworkPackage> networkPackages = new ArrayList<>();
 
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
+
         if (apartment.getAssociatedGateways().isEmpty()) {
             StatusMessageHandler.showInfoMessage(context,
                     R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
-        } else {
-            boolean hasActiveGateway = false;
-            for (Gateway gateway : apartment.getAssociatedGateways()) {
-                if (gateway.isActive()) {
-                    hasActiveGateway = true;
-                    break;
-                }
-            }
+        }
 
-            if (!hasActiveGateway) {
-                StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
-                return;
+        boolean hasActiveGateway = false;
+        for (Gateway gateway : apartment.getAssociatedGateways()) {
+            if (gateway.isActive()) {
+                hasActiveGateway = true;
+                break;
             }
         }
 
+        if (!hasActiveGateway) {
+            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            return;
+        }
+
+        List<NetworkPackage> networkPackages = new ArrayList<>();
         for (SceneItem sceneItem : scene.getSceneItems()) {
-            for (Gateway gateway : apartment.getAssociatedGateways()) {
+            Room room = DatabaseHandler.getRoom(sceneItem.getReceiver().getRoomId());
+            Receiver receiver = sceneItem.getReceiver();
+
+            List<Gateway> gateways;
+            if (!receiver.getAssociatedGateways().isEmpty()) {
+                gateways = receiver.getAssociatedGateways();
+            } else {
+                if (!room.getAssociatedGateways().isEmpty()) {
+                    gateways = room.getAssociatedGateways();
+                } else {
+                    gateways = apartment.getAssociatedGateways();
+                }
+            }
+
+            for (Gateway gateway : gateways) {
                 if (gateway.isActive()) {
                     networkPackages.add(getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton()));
 
