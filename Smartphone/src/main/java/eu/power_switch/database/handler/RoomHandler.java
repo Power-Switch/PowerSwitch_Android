@@ -117,6 +117,8 @@ abstract class RoomHandler {
         ActionHandler.deleteByRoomId(id);
 
         deleteReceiversOfRoom(id);
+
+        removeAssociatedGateways(id);
         DatabaseHandler.database.delete(RoomTable.TABLE_NAME, RoomTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -292,7 +294,6 @@ abstract class RoomHandler {
      * @param roomId ID of Room
      */
     private static void removeAssociatedGateways(Long roomId) throws Exception {
-        // delete old associated gateways
         DatabaseHandler.database.delete(RoomGatewayRelationTable.TABLE_NAME,
                 RoomGatewayRelationTable.COLUMN_ROOM_ID + "==" + roomId, null);
     }

@@ -187,6 +187,22 @@ public class Room {
     }
 
     /**
+     * Checks if this Room is associated with the given Gateway
+     *
+     * @param gateway Gateway to check
+     * @return true if this room is associated with the given Gateway, false otherwise
+     */
+    public boolean isAssociatedWith(Gateway gateway) {
+        for (Gateway associatedGateway : getAssociatedGateways()) {
+            if (associatedGateway.getId().equals(gateway.getId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Gets a specific Receiver in this Room
      *
      * @param name Name of Receiver

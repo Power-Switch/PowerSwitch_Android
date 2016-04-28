@@ -20,36 +20,36 @@ package eu.power_switch.gui.fragment.configure_receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.adapter.GatewayNameRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
+import eu.power_switch.gui.listener.CheckBoxInteractionListener;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -71,8 +71,18 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
     private TextView textView_repeatAmount;
     private Button buttonPlus;
     private Button buttonMinus;
-    private RecyclerView recyclerViewGateways;
-    private GatewayNameRecyclerViewAdapter gatewayNameRecyclerViewAdapter;
+    private LinearLayout linearLayoutOfApartmentGateways;
+    private LinearLayout linearLayoutOfRoomGateways;
+    private LinearLayout linearLayoutOfOtherGateways;
+
+    private Collection<CheckBox> gatewayCheckboxList = new ArrayList<>();
+    private Apartment apartment;
+    private Room room;
+    private long receiverId;
+    private LinearLayout apartmentGateways;
+    private LinearLayout roomGateways;
+    private LinearLayout otherGateways;
+    private CheckBox checkBoxUseCustomGatewaySelection;
 
 
     /**
@@ -103,8 +113,11 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 if (LocalBroadcastConstants.INTENT_GATEWAY_ADDED.equals(intent.getAction())) {
 //                    ArrayList<Gateway> newGateways = intent.getStringArrayListExtra(AddGatewayDialog.KEY_SSID);
 //                    gateways.addAll(newGateways);
-                    gatewayNameRecyclerViewAdapter.notifyDataSetChanged();
+//                    gatewayInfoRecyclerViewAdapter.notifyDataSetChanged();
                     sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, gateways);
+                } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
+                    room = apartment.getRoom(intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME));
+                    updateGatewayViews(true);
                 }
             }
         };
@@ -125,7 +138,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                     buttonPlus.setEnabled(false);
                 }
 
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, gateways);
+                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
             }
         });
 
@@ -142,55 +155,50 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                     buttonMinus.setEnabled(false);
                 }
 
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, gateways);
+                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
             }
         });
 
-        recyclerViewGateways = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        gatewayNameRecyclerViewAdapter = new GatewayNameRecyclerViewAdapter(getActivity(), gateways);
-        recyclerViewGateways.setAdapter(gatewayNameRecyclerViewAdapter);
-        gatewayNameRecyclerViewAdapter.setOnDeleteClickListener(new GatewayNameRecyclerViewAdapter.OnItemClickListener() {
+        checkBoxUseCustomGatewaySelection = (CheckBox) rootView.findViewById(R.id.checkbox_use_custom_gateway_selection);
+        CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
             @Override
-            public void onItemClick(View itemView, final int position) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle(R.string.delete)
-                        .setMessage(R.string.are_you_sure)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    gateways.remove(position);
-                                    gatewayNameRecyclerViewAdapter.notifyDataSetChanged();
-                                    notifyConfigurationChanged();
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
-                                }
-                            }
-                        })
-                        .setNeutralButton(android.R.string.cancel, null)
-                        .show();
-            }
-        });
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewGateways.setLayoutManager(layoutManager);
+            public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
+                updateCustomGatewaySelectionVisibility();
 
-        FloatingActionButton addGatewayFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
-        addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        final Fragment fragment = this;
-        addGatewayFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                AddSsidDialog addSsidDialog = new AddSsidDialog();
-//                addSsidDialog.setTargetFragment(fragment, 0);
-//                addSsidDialog.show(getFragmentManager(), null);
+                if (isChecked) {
+                    sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                } else {
+                    // send with empty gateway list
+                    sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, new ArrayList<Gateway>());
+                }
             }
-        });
+        };
+        checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
+        checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
+
+        apartmentGateways = (LinearLayout) rootView.findViewById(R.id.apartmentGateways);
+        roomGateways = (LinearLayout) rootView.findViewById(R.id.roomGateways);
+        otherGateways = (LinearLayout) rootView.findViewById(R.id.otherGateways);
+
+        linearLayoutOfApartmentGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfApartmentGateways);
+        linearLayoutOfRoomGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfRoomGateways);
+        linearLayoutOfOtherGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfOtherGateways);
+
+        try {
+            apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
+        }
+
+        updateGatewayViews(false);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
-            long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
+            receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
             initializeReceiverData(receiverId);
         }
+
+        updateCustomGatewaySelectionVisibility();
 
         return rootView;
     }
@@ -201,11 +209,164 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             repeatAmount = receiver.getRepeatAmount();
             textView_repeatAmount.setText(String.valueOf(repeatAmount));
 
-            gateways = receiver.getAssociatedGateways();
-            gatewayNameRecyclerViewAdapter.notifyDataSetChanged();
+            if (!receiver.getAssociatedGateways().isEmpty()) {
+                checkBoxUseCustomGatewaySelection.setChecked(true);
+            }
+
+            for (Gateway gateway : receiver.getAssociatedGateways()) {
+                for (CheckBox checkBox : gatewayCheckboxList) {
+                    Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
+                    if (gateway.getId().equals(checkBoxGateway.getId())) {
+                        checkBox.setChecked(true);
+                    }
+                }
+            }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
+    }
+
+    private void updateGatewayViews(boolean keepCheckedItems) {
+        try {
+            List<Gateway> previouslyCheckedGateways = new ArrayList<>();
+            if (keepCheckedItems) {
+                previouslyCheckedGateways.addAll(getCheckedGateways());
+            }
+
+            gateways = DatabaseHandler.getAllGateways();
+
+            String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+
+            // clear previous items
+            linearLayoutOfApartmentGateways.removeAllViews();
+            linearLayoutOfRoomGateways.removeAllViews();
+            linearLayoutOfOtherGateways.removeAllViews();
+            gatewayCheckboxList.clear();
+            for (Gateway gateway : gateways) {
+                LinearLayout gatewayLayout;
+                // room association is more important than apartment, so it is checked first!
+                if (room != null && room.isAssociatedWith(gateway)) {
+                    gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfRoomGateways, false);
+                    linearLayoutOfRoomGateways.addView(gatewayLayout);
+                } else if (apartment != null && apartment.isAssociatedWith(gateway)) {
+                    gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfApartmentGateways, false);
+                    linearLayoutOfApartmentGateways.addView(gatewayLayout);
+                } else {
+                    gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfOtherGateways, false);
+                    linearLayoutOfOtherGateways.addView(gatewayLayout);
+                }
+
+                final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
+                checkBox.setTag(R.string.gateways, gateway);
+                CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
+                    @Override
+                    public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
+                        sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                    }
+                };
+                checkBox.setOnTouchListener(checkBoxInteractionListener);
+                checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
+                if (keepCheckedItems && !previouslyCheckedGateways.isEmpty()) {
+                    for (Gateway previousGateway : previouslyCheckedGateways) {
+                        if (previousGateway.getId().equals(gateway.getId())) {
+                            checkBox.setChecked(true);
+                            break;
+                        }
+                    }
+                }
+                gatewayCheckboxList.add(checkBox);
+
+                gatewayLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkBox.setChecked(!checkBox.isChecked());
+
+                        updateCustomGatewaySelectionVisibility();
+
+                        if (checkBox.isChecked()) {
+                            sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                        } else {
+                            // send with empty gateway list
+                            sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, new ArrayList<Gateway>());
+                        }
+                    }
+                });
+
+                TextView gatewayName = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayName);
+                gatewayName.setText(gateway.getName());
+
+                TextView gatewayType = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayType);
+                gatewayType.setText(gateway.getModel());
+
+                TextView gatewayHost = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayHost);
+                gatewayHost.setText(String.format(Locale.getDefault(), "%s:%d", gateway.getLocalHost(), gateway.getLocalPort()));
+
+                TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
+                if (gateway.isActive()) {
+                    gatewayDisabled.setVisibility(View.GONE);
+                } else {
+                    gatewayDisabled.setVisibility(View.VISIBLE);
+                }
+            }
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(getActivity(), e);
+        }
+    }
+
+    private void updateCustomGatewaySelectionVisibility() {
+        if (checkBoxUseCustomGatewaySelection.isChecked()) {
+            // hide sections if empty
+            if (linearLayoutOfApartmentGateways.getChildCount() == 0) {
+                apartmentGateways.setVisibility(View.GONE);
+            } else {
+                apartmentGateways.setVisibility(View.VISIBLE);
+            }
+            if (linearLayoutOfRoomGateways.getChildCount() == 0) {
+                roomGateways.setVisibility(View.GONE);
+            } else {
+                roomGateways.setVisibility(View.VISIBLE);
+            }
+            if (linearLayoutOfOtherGateways.getChildCount() == 0) {
+                otherGateways.setVisibility(View.GONE);
+            } else {
+                otherGateways.setVisibility(View.VISIBLE);
+            }
+        } else {
+            if (linearLayoutOfApartmentGateways.getChildCount() == 0) {
+                apartmentGateways.setVisibility(View.GONE);
+            } else {
+                apartmentGateways.setVisibility(View.INVISIBLE);
+            }
+            if (linearLayoutOfRoomGateways.getChildCount() == 0) {
+                roomGateways.setVisibility(View.GONE);
+            } else {
+                roomGateways.setVisibility(View.INVISIBLE);
+            }
+            if (linearLayoutOfOtherGateways.getChildCount() == 0) {
+                otherGateways.setVisibility(View.GONE);
+            } else {
+                otherGateways.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    /**
+     * Get selected Gateways
+     *
+     * @return List of Gateways
+     */
+    private ArrayList<Gateway> getCheckedGateways() {
+        ArrayList<Gateway> checkedGateways = new ArrayList<>();
+
+        for (CheckBox checkBox : gatewayCheckboxList) {
+            if (checkBox.isChecked()) {
+                Gateway gateway = (Gateway) checkBox.getTag(R.string.gateways);
+                checkedGateways.add(gateway);
+            }
+        }
+
+        return checkedGateways;
     }
 
     @Override
@@ -213,6 +374,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_ADDED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

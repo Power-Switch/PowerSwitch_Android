@@ -31,6 +31,8 @@ import java.util.Set;
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.gateway.GatewaySsidTable;
 import eu.power_switch.database.table.gateway.GatewayTable;
+import eu.power_switch.database.table.receiver.ReceiverGatewayRelationTable;
+import eu.power_switch.database.table.room.RoomGatewayRelationTable;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.EZControl_XS1;
@@ -139,9 +141,19 @@ abstract class GatewayHandler {
      * @param id ID of Gateway
      */
     protected static void delete(Long id) throws Exception {
+        // delete from relational tables first
         // delete from associations with apartments
         DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME, ApartmentGatewayRelationTable
                 .COLUMN_GATEWAY_ID + "=" + id, null);
+
+        // delete from associations with rooms
+        DatabaseHandler.database.delete(RoomGatewayRelationTable.TABLE_NAME, RoomGatewayRelationTable
+                .COLUMN_GATEWAY_ID + "=" + id, null);
+
+        // delete from associations with receivers
+        DatabaseHandler.database.delete(ReceiverGatewayRelationTable.TABLE_NAME, ReceiverGatewayRelationTable
+                .COLUMN_GATEWAY_ID + "=" + id, null);
+
 
         deleteSSIDs(id);
         DatabaseHandler.database.delete(GatewayTable.TABLE_NAME, GatewayTable.COLUMN_ID + "=" + id, null);

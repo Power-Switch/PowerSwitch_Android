@@ -237,6 +237,7 @@ abstract class ReceiverHandler {
         ActionHandler.deleteByReceiverId(id);
 
         deleteDetails(id);
+        removeAssociatedGateways(id);
         DatabaseHandler.database.delete(ReceiverTable.TABLE_NAME, ReceiverTable.COLUMN_ID + "=" + id, null);
     }
 

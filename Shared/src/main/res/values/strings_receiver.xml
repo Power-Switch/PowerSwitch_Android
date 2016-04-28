@@ -19,11 +19,15 @@
 
 <resources>
 
+    <string name="receivers">Receivers</string>
+
     <!-- Configure Receiver Dialog -->
     <string name="configure_receiver">Configure Receiver</string>
     <string name="name">Name</string>
     <string name="type">Type</string>
     <string name="setup">Setup</string>
+    <string name="channel">Channel</string>
+    <string name="network">Network</string>
     <string name="summary">Summary</string>
     <string name="receiver_saved">Receiver saved</string>
 

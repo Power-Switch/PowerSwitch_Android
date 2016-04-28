@@ -166,6 +166,22 @@ public class Apartment {
     }
 
     /**
+     * Checks if this Apartment is associated with the given Gateway
+     *
+     * @param gateway Gateway to check
+     * @return true if this apartment is associated with the given Gateway, false otherwise
+     */
+    public boolean isAssociatedWith(Gateway gateway) {
+        for (Gateway associatedGateway : getAssociatedGateways()) {
+            if (associatedGateway.getId().equals(gateway.getId())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get active state of this apartment
      *
      * @return true if the apartment is currently active in gui, false otherwise

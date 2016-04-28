@@ -32,7 +32,8 @@
         android:layout_marginBottom="8dp"
         android:scrollbars="horizontal"
         app:layout_scrollFlags="scroll|enterAlways"
-        app:tabGravity="fill"/>
+        app:tabGravity="fill"
+        app:tabMode="scrollable"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/tabHost"

@@ -19,11 +19,15 @@
 
 <resources>
 
+    <string name="receivers">Empfänger</string>
+
     <!-- Configure Receiver Dialog -->
     <string name="configure_receiver">Empfänger einrichten</string>
     <string name="name">Name</string>
     <string name="type">Typ</string>
     <string name="setup">Setup</string>
+    <string name="channel">Kanal</string>
+    <string name="network">Netzwerk</string>
     <string name="summary">Übersicht</string>
     <string name="receiver_saved">Empfänger gespeichert</string>
 

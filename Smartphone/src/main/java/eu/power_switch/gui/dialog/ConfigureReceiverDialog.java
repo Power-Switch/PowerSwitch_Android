@@ -162,9 +162,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                 case 1:
                     return context.getString(R.string.type);
                 case 2:
-                    return context.getString(R.string.setup);
+                    return context.getString(R.string.channel);
                 case 3:
-                    return context.getString(R.string.gateways);
+                    return context.getString(R.string.network);
                 case 4:
                     return context.getString(R.string.summary);
             }

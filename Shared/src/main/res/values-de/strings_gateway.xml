@@ -41,6 +41,14 @@
     <string name="manual">Manuell</string>
     <string name="available_networks">Verfügbare Netzwerke</string>
 
+    <string name="add_gateway">Gateway hinzufügen</string>
+    <string name="apartment_gateways">Wohnungs-Gateways</string>
+    <string name="room_gateways">Raum Gateways</string>
+    <string name="other_gateways">Andere Gateways</string>
+
+    <string name="associated_gateways_for_receiver_description">Optional: Wähle Gateways aus, die bei diesem Empfänger immer verwendet werden sollen. Wenn du nichts auswählst wird die Konfiguration vom Raum verwendet. Hat auch der Raum keine verknüpften Gateways wird die Konfiguration der Wohnung verwendet.</string>
+    <string name="use_custom_gateway_selection">Manuelle Gateway Auswahl nutzen</string>
+
     <string name="gateway_saved">Gateway gespeichert</string>
     <string name="gateway_found">Gateway gefunden</string>
     <string name="gateway_already_exists_it_has_been_enabled">Gateway existiert bereits. Es wurde aktiviert.</string>

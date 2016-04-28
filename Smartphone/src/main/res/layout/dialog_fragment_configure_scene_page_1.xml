@@ -45,6 +45,12 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            style="@style/sub_header"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:gravity="bottom"
+            android:text="@string/receivers"/>
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -55,7 +61,8 @@
                 android:id="@+id/linearLayout_selectableReceivers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="8dp">
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
