@@ -27,8 +27,9 @@
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout_configure_dialog"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp"
         android:scrollbars="horizontal"
         app:layout_scrollFlags="scroll|enterAlways"
