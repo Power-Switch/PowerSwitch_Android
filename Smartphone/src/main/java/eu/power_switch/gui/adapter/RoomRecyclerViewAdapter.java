@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
-import eu.power_switch.gui.dialog.EditRoomDialog;
+import eu.power_switch.gui.dialog.ConfigureRoomDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
@@ -100,9 +100,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.roomName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                EditRoomDialog editRoomDialog = EditRoomDialog.newInstance(room.getId());
-                editRoomDialog.setTargetFragment(recyclerViewFragment, 0);
-                editRoomDialog.show(fragmentActivity.getSupportFragmentManager(), null);
+                ConfigureRoomDialog configureRoomDialog = ConfigureRoomDialog.newInstance(room.getId());
+                configureRoomDialog.setTargetFragment(recyclerViewFragment, 0);
+                configureRoomDialog.show(fragmentActivity.getSupportFragmentManager(), null);
                 return true;
             }
         });

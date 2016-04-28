@@ -16,22 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.adapter;
 
 /**
- * Created by Markus on 29.01.2016.
+ * Created by Markus on 28.04.2016.
  */
-public interface ConfigurationDialogTabbedSummaryFragment {
-
+public interface OnItemMovedListener {
     /**
-     * This method is called when the current configuration of a ConfigurationDialog shall be saved to database
-     */
-    void saveCurrentConfigurationToDatabase() throws Exception;
-
-    /**
-     * Checks the Setup page for validity
+     * Called when an item was moved in a sortable list
      *
-     * @return true if valid, false otherwise
+     * @param fromPosition position the item was moved from
+     * @param toPosition   position the item was moved to
      */
-    boolean checkSetupValidity() throws Exception;
+    void onItemMoved(int fromPosition, int toPosition);
 }

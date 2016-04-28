@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.configure_receiver;
+package eu.power_switch.gui.fragment.configure_room;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,11 +24,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -42,7 +43,11 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
-import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
+import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.ConfigureRoomDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.gui.fragment.main.RoomsFragment;
+import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -50,113 +55,50 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
+import eu.power_switch.wear.service.UtilityService;
+import eu.power_switch.widget.provider.RoomWidgetProvider;
 
 /**
- * "Gateway"/"Network" Fragment used in Configure Receiver Dialog
- * <p/>
- * Created by Markus on 24.04.2016.
+ * Dialog to edit a Room
  */
-public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDialogFragment {
-
-    public static final String KEY_REPEAT_AMOUNT = "repeatAmount";
-    public static final String KEY_ASSOCIATED_GATEWAYS = "associatedGateways";
+public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private View rootView;
 
-    private int repeatAmount = 0;
-    private List<Gateway> gateways = new ArrayList<>();
+    private long roomId;
 
-    private BroadcastReceiver broadcastReceiver;
-    private TextView textView_repeatAmount;
-    private Button buttonPlus;
-    private Button buttonMinus;
+    private String currentRoomName;
+    private ArrayList<Receiver> currentReceivers;
+
+    private CheckBox checkBoxUseCustomGatewaySelection;
+    private LinearLayout apartmentGateways;
+    private LinearLayout otherGateways;
     private LinearLayout linearLayoutOfApartmentGateways;
-    private LinearLayout linearLayoutOfRoomGateways;
     private LinearLayout linearLayoutOfOtherGateways;
 
-    private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
     private Apartment apartment;
-    private Room room;
-    private long receiverId;
-    private LinearLayout apartmentGateways;
-    private LinearLayout roomGateways;
-    private LinearLayout otherGateways;
-    private CheckBox checkBoxUseCustomGatewaySelection;
-
-
-    /**
-     * Used to notify the summary page that some info has changed
-     *
-     * @param context      any suitable context
-     * @param repeatAmount repeat amount
-     * @param gateways     list of gateways
-     */
-    public static void sendGatewayDetailsChangedBroadcast(Context context, Integer repeatAmount,
-                                                          List<Gateway> gateways) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_DETAILS_CHANGED);
-        intent.putExtra(KEY_REPEAT_AMOUNT, repeatAmount);
-        intent.putExtra(KEY_ASSOCIATED_GATEWAYS, new ArrayList<>(gateways));
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-    }
+    private List<Gateway> gateways = new ArrayList<>();
+    private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
+    private BroadcastReceiver broadcastReceiver;
 
     @Nullable
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_4, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_room_page_2, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_GATEWAY_ADDED.equals(intent.getAction())) {
-//                    ArrayList<Gateway> newGateways = intent.getStringArrayListExtra(AddGatewayDialog.KEY_SSID);
-//                    gateways.addAll(newGateways);
-//                    gatewayInfoRecyclerViewAdapter.notifyDataSetChanged();
-                    sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, gateways);
-                } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
-                    room = apartment.getRoom(intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME));
-                    updateGatewayViews(true);
+                if (LocalBroadcastConstants.INTENT_ROOM_NAME_CHANGED.equals(intent.getAction())) {
+                    currentRoomName = intent.getStringExtra(ConfigureRoomDialogPage1Fragment.KEY_NAME);
+                    currentReceivers = (ArrayList<Receiver>) intent.getSerializableExtra(ConfigureRoomDialogPage1Fragment.KEY_RECEIVERS);
                 }
+
+                notifyConfigurationChanged();
             }
         };
-
-        textView_repeatAmount = (TextView) rootView.findViewById(R.id.textView_repeatAmount);
-        textView_repeatAmount.setText(String.valueOf(repeatAmount));
-
-        buttonPlus = (Button) rootView.findViewById(R.id.button_plus);
-        buttonPlus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                repeatAmount++;
-                textView_repeatAmount.setText(String.valueOf(repeatAmount));
-
-                buttonMinus.setEnabled(true);
-
-                if (repeatAmount >= 3) {
-                    buttonPlus.setEnabled(false);
-                }
-
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
-            }
-        });
-
-        buttonMinus = (Button) rootView.findViewById(R.id.button_minus);
-        buttonMinus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                repeatAmount--;
-                textView_repeatAmount.setText(String.valueOf(repeatAmount));
-
-                buttonPlus.setEnabled(true);
-
-                if (repeatAmount <= 0) {
-                    buttonMinus.setEnabled(false);
-                }
-
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
-            }
-        });
 
         checkBoxUseCustomGatewaySelection = (CheckBox) rootView.findViewById(R.id.checkbox_use_custom_gateway_selection);
         CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
@@ -164,18 +106,16 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
                 updateCustomGatewaySelectionVisibility();
 
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                notifyConfigurationChanged();
             }
         };
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
         apartmentGateways = (LinearLayout) rootView.findViewById(R.id.apartmentGateways);
-        roomGateways = (LinearLayout) rootView.findViewById(R.id.roomGateways);
         otherGateways = (LinearLayout) rootView.findViewById(R.id.otherGateways);
 
         linearLayoutOfApartmentGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfApartmentGateways);
-        linearLayoutOfRoomGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfRoomGateways);
         linearLayoutOfOtherGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfOtherGateways);
 
         try {
@@ -188,9 +128,9 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         updateGatewayViews(false);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
-            receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
-            initializeReceiverData(receiverId);
+        if (args != null && args.containsKey(ConfigureRoomDialog.ROOM_ID_KEY)) {
+            roomId = args.getLong(ConfigureRoomDialog.ROOM_ID_KEY);
+            initExistingData(roomId);
         }
 
         updateCustomGatewaySelectionVisibility();
@@ -198,17 +138,18 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         return rootView;
     }
 
-    private void initializeReceiverData(long receiverId) {
+    private void initExistingData(long roomId) {
         try {
-            Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-            repeatAmount = receiver.getRepeatAmount();
-            textView_repeatAmount.setText(String.valueOf(repeatAmount));
+            Room room = DatabaseHandler.getRoom(roomId);
 
-            if (!receiver.getAssociatedGateways().isEmpty()) {
+            currentRoomName = room.getName();
+            currentReceivers = room.getReceivers();
+
+            if (!room.getAssociatedGateways().isEmpty()) {
                 checkBoxUseCustomGatewaySelection.setChecked(true);
             }
 
-            for (Gateway gateway : receiver.getAssociatedGateways()) {
+            for (Gateway gateway : room.getAssociatedGateways()) {
                 for (CheckBox checkBox : gatewayCheckboxList) {
                     Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
                     if (gateway.getId().equals(checkBoxGateway.getId())) {
@@ -217,7 +158,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            Log.e(e);
         }
     }
 
@@ -228,21 +169,18 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 previouslyCheckedGateways.addAll(getCheckedGateways());
             }
 
+            gateways = DatabaseHandler.getAllGateways();
+
             String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
             // clear previous items
             linearLayoutOfApartmentGateways.removeAllViews();
-            linearLayoutOfRoomGateways.removeAllViews();
             linearLayoutOfOtherGateways.removeAllViews();
             gatewayCheckboxList.clear();
             for (Gateway gateway : gateways) {
                 LinearLayout gatewayLayout;
-                // room association is more important than apartment, so it is checked first!
-                if (room != null && room.isAssociatedWith(gateway)) {
-                    gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfRoomGateways, false);
-                    linearLayoutOfRoomGateways.addView(gatewayLayout);
-                } else if (apartment != null && apartment.isAssociatedWith(gateway)) {
+                if (apartment != null && apartment.isAssociatedWith(gateway)) {
                     gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfApartmentGateways, false);
                     linearLayoutOfApartmentGateways.addView(gatewayLayout);
                 } else {
@@ -255,7 +193,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
-                        sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                        notifyConfigurationChanged();
                     }
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
@@ -277,7 +215,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 
                         updateCustomGatewaySelectionVisibility();
 
-                        sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                        notifyConfigurationChanged();
                     }
                 });
 
@@ -310,11 +248,6 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             } else {
                 apartmentGateways.setVisibility(View.VISIBLE);
             }
-            if (linearLayoutOfRoomGateways.getChildCount() == 0) {
-                roomGateways.setVisibility(View.GONE);
-            } else {
-                roomGateways.setVisibility(View.VISIBLE);
-            }
             if (linearLayoutOfOtherGateways.getChildCount() == 0) {
                 otherGateways.setVisibility(View.GONE);
             } else {
@@ -325,11 +258,6 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 apartmentGateways.setVisibility(View.GONE);
             } else {
                 apartmentGateways.setVisibility(View.INVISIBLE);
-            }
-            if (linearLayoutOfRoomGateways.getChildCount() == 0) {
-                roomGateways.setVisibility(View.GONE);
-            } else {
-                roomGateways.setVisibility(View.INVISIBLE);
             }
             if (linearLayoutOfOtherGateways.getChildCount() == 0) {
                 otherGateways.setVisibility(View.GONE);
@@ -361,12 +289,56 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         return checkedGateways;
     }
 
+    /**
+     * Checks the Setup page for validity
+     *
+     * @return true if valid, false otherwise
+     */
+    @Override
+    public boolean checkSetupValidity() {
+
+        if (TextUtils.isEmpty(currentRoomName)) {
+            return false;
+        }
+
+        if (currentReceivers == null) {
+            return false;
+        }
+
+        return getCheckedGateways() != null;
+
+    }
+
+    @Override
+    public void saveCurrentConfigurationToDatabase() throws Exception {
+
+        DatabaseHandler.updateRoom(roomId, currentRoomName, getCheckedGateways());
+
+        // save receiver order
+        for (int position = 0; position < currentReceivers.size(); position++) {
+            Receiver receiver = currentReceivers.get(position);
+            DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
+        }
+
+        RoomsFragment.sendRoomChangedBroadcast(getActivity());
+        // scenes could change too if room was used in a scene
+        ScenesFragment.sendScenesChangedBroadcast(getActivity());
+
+        // update room widgets
+        RoomWidgetProvider.forceWidgetUpdate(getActivity());
+
+        // update wear data
+        UtilityService.forceWearDataUpdate(getActivity());
+
+        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                , R.string.room_saved, Snackbar.LENGTH_LONG);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_ADDED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_NAME_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 
@@ -375,5 +347,4 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
-
 }

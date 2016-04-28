@@ -21,7 +21,7 @@ package eu.power_switch.obj;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -52,7 +52,7 @@ public class Room {
     /**
      * List of all receivers that this room contains
      */
-    private LinkedList<Receiver> receivers;
+    private ArrayList<Receiver> receivers;
 
     /**
      * Position in apartment (list) of this Room
@@ -80,7 +80,7 @@ public class Room {
         this.id = id;
         this.apartmentId = apartmentId;
         this.name = name;
-        this.receivers = new LinkedList<>();
+        this.receivers = new ArrayList<>();
         this.positionInApartment = positionInApartment;
         this.collapsed = isCollapsed;
         this.associatedGateways = associatedGateways;
@@ -91,7 +91,7 @@ public class Room {
      *
      * @return Receiver list
      */
-    public LinkedList<Receiver> getReceivers() {
+    public ArrayList<Receiver> getReceivers() {
         return receivers;
     }
 

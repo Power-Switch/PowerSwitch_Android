@@ -48,11 +48,16 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
     private ArrayList<Receiver> receivers;
     private Context context;
     private OnStartDragListener onStartDragListener;
+    private OnItemMovedListener onItemMovedListener;
 
     public ReceiverNameRecyclerViewAdapter(Context context, ArrayList<Receiver> receivers, OnStartDragListener onStartDragListener) {
         this.receivers = receivers;
         this.context = context;
         this.onStartDragListener = onStartDragListener;
+    }
+
+    public void setOnItemMovedListener(OnItemMovedListener onItemMovedListener) {
+        this.onItemMovedListener = onItemMovedListener;
     }
 
     @Override
@@ -97,6 +102,9 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
         }
 
         notifyItemMoved(fromPosition, toPosition);
+        if (onItemMovedListener != null) {
+            onItemMovedListener.onItemMoved(fromPosition, toPosition);
+        }
     }
 
     @Override

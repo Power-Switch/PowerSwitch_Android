@@ -102,7 +102,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
      */
     public static void sendRoomAddedBroadcast(Context context, String newRoomName) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_ADDED);
-        intent.putExtra("newRoomName", newRoomName);
+        intent.putExtra(KEY_ROOM_NAME, newRoomName);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -118,8 +118,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             public void onReceive(Context context, Intent intent) {
                 updateRoomNamesList();
 
-                if (intent.hasExtra("newRoomName")) {
-                    String newRoomName = intent.getStringExtra("newRoomName");
+                if (intent.hasExtra(KEY_ROOM_NAME)) {
+                    String newRoomName = intent.getStringExtra(KEY_ROOM_NAME);
                     roomsListView.setItemChecked(roomNamesAdapter.getPosition(newRoomName), true);
                 }
             }

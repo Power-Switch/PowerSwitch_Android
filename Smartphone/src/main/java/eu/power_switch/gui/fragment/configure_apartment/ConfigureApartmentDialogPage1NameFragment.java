@@ -36,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,7 +68,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
     private String originalName;
     private LinearLayout linearLayoutSelectableGateways;
 
-    private Collection<CheckBox> gatewayCheckboxList = new ArrayList<>();
+    private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
     private long apartmentId = -1;
     private boolean isInitialized;

@@ -16,13 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.fragment.configure_room;
 
-import android.content.DialogInterface;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -40,28 +41,24 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.adapter.OnItemMovedListener;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.fragment.main.RoomsFragment;
-import eu.power_switch.gui.fragment.main.ScenesFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigureRoomDialog;
 import eu.power_switch.obj.Room;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.wear.service.UtilityService;
-import eu.power_switch.widget.provider.RoomWidgetProvider;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Dialog to edit a Room
  */
-public class EditRoomDialog extends ConfigurationDialog implements OnStartDragListener {
+public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragment implements OnStartDragListener {
 
-    /**
-     * ID of existing Room to Edit
-     */
-    public static final String ROOM_ID_KEY = "RoomId";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_RECEIVERS = "receivers";
 
     private View rootView;
     private String originalName;
@@ -71,24 +68,31 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
     private Room currentRoom;
     private LinkedList<String> roomNames;
     private ItemTouchHelper itemTouchHelper;
-    private long roomId;
 
     private ArrayList<Receiver> receivers;
     private ReceiverNameRecyclerViewAdapter receiverNameRecyclerViewAdapter;
     private RecyclerView listOfReceivers;
 
-    public static EditRoomDialog newInstance(long roomId) {
-        Bundle args = new Bundle();
-        args.putLong(ROOM_ID_KEY, roomId);
+    /**
+     * Used to notify the summary page that some info has changed
+     *
+     * @param context   any suitable context
+     * @param name      name of room
+     * @param receivers list of receivers (with changed order)
+     */
+    public static void sendGatewayDetailsChangedBroadcast(Context context, String name,
+                                                          ArrayList<Receiver> receivers) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_NAME_CHANGED);
+        intent.putExtra(KEY_NAME, name);
+        intent.putExtra(KEY_RECEIVERS, receivers);
 
-        EditRoomDialog fragment = new EditRoomDialog();
-        fragment.setArguments(args);
-        return fragment;
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
+    @Nullable
     @Override
-    protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_edit_room_content, container);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_room_page_1, container, false);
 
         // restore name
         floatingName = (TextInputLayout) rootView.findViewById(R.id.room_name_text_input_layout);
@@ -105,13 +109,19 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
 
             @Override
             public void afterTextChanged(Editable s) {
-                notifyConfigurationChanged();
+                sendGatewayDetailsChangedBroadcast(getContext(), getCurrentRoomName(), receivers);
             }
         });
 
         receivers = new ArrayList<>();
         listOfReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
         receiverNameRecyclerViewAdapter = new ReceiverNameRecyclerViewAdapter(getContext(), receivers, this);
+        receiverNameRecyclerViewAdapter.setOnItemMovedListener(new OnItemMovedListener() {
+            @Override
+            public void onItemMoved(int fromPosition, int toPosition) {
+                sendGatewayDetailsChangedBroadcast(getContext(), getCurrentRoomName(), receivers);
+            }
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         listOfReceivers.setLayoutManager(linearLayoutManager);
         listOfReceivers.setAdapter(receiverNameRecyclerViewAdapter);
@@ -120,12 +130,16 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listOfReceivers);
 
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(ConfigureRoomDialog.ROOM_ID_KEY)) {
+            long roomId = args.getLong(ConfigureRoomDialog.ROOM_ID_KEY);
+            initExistingData(roomId);
+        }
+
         return rootView;
     }
 
-    @Override
-    protected boolean initExistingData(Bundle arguments) {
-        roomId = arguments.getLong(ROOM_ID_KEY);
+    private boolean initExistingData(long roomId) {
 
         try {
             currentRoom = DatabaseHandler.getRoom(roomId);
@@ -147,13 +161,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
         return true;
     }
 
-    @Override
-    protected int getDialogTitle() {
-        return R.string.configure_room;
-    }
-
-    @Override
-    protected boolean isValid() {
+    private boolean isValid() {
         if (getCurrentRoomName().equals(originalName)) {
             floatingName.setError(null);
             floatingName.setErrorEnabled(false);
@@ -184,70 +192,7 @@ public class EditRoomDialog extends ConfigurationDialog implements OnStartDragLi
     }
 
     @Override
-    protected void saveCurrentConfigurationToDatabase() {
-        try {
-            DatabaseHandler.updateRoom(roomId, getCurrentRoomName(), new ArrayList<Gateway>());
-
-            // save receiver order
-            for (int position = 0; position < receivers.size(); position++) {
-                Receiver receiver = receivers.get(position);
-                DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
-            }
-
-            RoomsFragment.sendRoomChangedBroadcast(getActivity());
-            // scenes could change too if room was used in a scene
-            ScenesFragment.sendScenesChangedBroadcast(getActivity());
-
-            // update room widgets
-            RoomWidgetProvider.forceWidgetUpdate(getActivity());
-
-            // update wear data
-            UtilityService.forceWearDataUpdate(getActivity());
-
-            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
-                    , R.string.room_saved, Snackbar.LENGTH_LONG);
-            getDialog().dismiss();
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
-        }
-    }
-
-    @Override
-    protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .room_will_be_gone_forever)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            DatabaseHandler.deleteRoom(roomId);
-
-                            // notify rooms fragment
-                            RoomsFragment.sendRoomChangedBroadcast(getActivity());
-                            // scenes could change too if room was used in a scene
-                            ScenesFragment.sendScenesChangedBroadcast(getActivity());
-
-                            // update room widgets
-                            RoomWidgetProvider.forceWidgetUpdate(getActivity());
-
-                            // update wear data
-                            UtilityService.forceWearDataUpdate(getActivity());
-
-                            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
-                                    R.string.room_deleted, Snackbar.LENGTH_LONG);
-                        } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
-                        }
-
-                        // close dialog
-                        getDialog().dismiss();
-                    }
-                }).setNeutralButton(android.R.string.cancel, null).show();
-    }
-
-    @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        setModified(true);
         itemTouchHelper.startDrag(viewHolder);
     }
 
