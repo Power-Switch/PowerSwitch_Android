@@ -81,6 +81,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
     private List<Gateway> gateways = new ArrayList<>();
     private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
     private BroadcastReceiver broadcastReceiver;
+    private TextView textViewCustomSelectionDescription;
 
     @Nullable
     @Override
@@ -112,6 +113,8 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
+        textViewCustomSelectionDescription = (TextView) rootView.findViewById(R.id.textView_custom_selection_description);
+
         apartmentGateways = (LinearLayout) rootView.findViewById(R.id.apartmentGateways);
         otherGateways = (LinearLayout) rootView.findViewById(R.id.otherGateways);
 
@@ -124,6 +127,8 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
+        
+        updateGatewayViews();
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureRoomDialog.ROOM_ID_KEY)) {
@@ -131,7 +136,6 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             initExistingData(roomId);
         }
 
-        updateGatewayViews(false);
         updateCustomGatewaySelectionVisibility();
 
         return rootView;
@@ -161,12 +165,10 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         }
     }
 
-    private void updateGatewayViews(boolean keepCheckedItems) {
+    private void updateGatewayViews() {
         try {
             List<Gateway> previouslyCheckedGateways = new ArrayList<>();
-            if (keepCheckedItems) {
-                previouslyCheckedGateways.addAll(getCheckedGateways());
-            }
+            previouslyCheckedGateways.addAll(getCheckedGateways());
 
             gateways = DatabaseHandler.getAllGateways();
 
@@ -197,7 +199,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
                 checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
-                if (keepCheckedItems && !previouslyCheckedGateways.isEmpty()) {
+                if (!previouslyCheckedGateways.isEmpty()) {
                     for (Gateway previousGateway : previouslyCheckedGateways) {
                         if (previousGateway.getId().equals(gateway.getId())) {
                             checkBox.setChecked(true);
@@ -241,6 +243,8 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
 
     private void updateCustomGatewaySelectionVisibility() {
         if (checkBoxUseCustomGatewaySelection.isChecked()) {
+            textViewCustomSelectionDescription.setVisibility(View.GONE);
+
             // hide sections if empty
             if (linearLayoutOfApartmentGateways.getChildCount() == 0) {
                 apartmentGateways.setVisibility(View.GONE);
@@ -253,6 +257,8 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
                 otherGateways.setVisibility(View.VISIBLE);
             }
         } else {
+            textViewCustomSelectionDescription.setVisibility(View.VISIBLE);
+
             if (linearLayoutOfApartmentGateways.getChildCount() == 0) {
                 apartmentGateways.setVisibility(View.GONE);
             } else {

@@ -22,21 +22,22 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        android:text="@string/associated_gateways_for_receiver_description"/>
-
     <CheckBox
         android:id="@+id/checkbox_use_custom_gateway_selection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:text="@string/use_custom_gateway_selection"/>
+
+    <TextView
+        android:id="@+id/textView_custom_selection_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        android:text="@string/associated_gateways_for_room_description"/>
 
     <LinearLayout
         android:id="@+id/apartmentGateways"

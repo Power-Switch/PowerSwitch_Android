@@ -47,6 +47,7 @@
     <string name="other_gateways">Andere Gateways</string>
 
     <string name="associated_gateways_for_receiver_description">Optional: Wähle Gateways aus, die bei diesem Empfänger immer verwendet werden sollen. Wenn du nichts auswählst wird die Konfiguration vom Raum verwendet. Hat auch der Raum keine verknüpften Gateways wird die Konfiguration der Wohnung verwendet.</string>
+    <string name="associated_gateways_for_room_description">Optional: Wähle Gateways aus, die für alle Empfänger dieses Raums immer verwendet werden sollen. Wenn du nichts auswählst wird die Konfiguration der Wohnung verwendet.</string>
     <string name="use_custom_gateway_selection">Manuelle Gateway Auswahl nutzen</string>
 
     <string name="gateway_saved">Gateway gespeichert</string>

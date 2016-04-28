@@ -82,6 +82,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
     private LinearLayout roomGateways;
     private LinearLayout otherGateways;
     private CheckBox checkBoxUseCustomGatewaySelection;
+    private TextView textViewCustomSelectionDescription;
 
 
     /**
@@ -116,7 +117,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                     sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, gateways);
                 } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
                     room = apartment.getRoom(intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME));
-                    updateGatewayViews(true);
+                    updateGatewayViews();
                 }
             }
         };
@@ -170,6 +171,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
+        textViewCustomSelectionDescription = (TextView) rootView.findViewById(R.id.textView_custom_selection_description);
+
         apartmentGateways = (LinearLayout) rootView.findViewById(R.id.apartmentGateways);
         roomGateways = (LinearLayout) rootView.findViewById(R.id.roomGateways);
         otherGateways = (LinearLayout) rootView.findViewById(R.id.otherGateways);
@@ -185,13 +188,14 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
+        updateGatewayViews();
+
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
             receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
             initializeReceiverData(receiverId);
         }
 
-        updateGatewayViews(false);
         updateCustomGatewaySelectionVisibility();
 
         return rootView;
@@ -222,12 +226,10 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         }
     }
 
-    private void updateGatewayViews(boolean keepCheckedItems) {
+    private void updateGatewayViews() {
         try {
             List<Gateway> previouslyCheckedGateways = new ArrayList<>();
-            if (keepCheckedItems) {
-                previouslyCheckedGateways.addAll(getCheckedGateways());
-            }
+            previouslyCheckedGateways.addAll(getCheckedGateways());
 
             String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
             LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
@@ -261,12 +263,10 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
                 checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
-                if (keepCheckedItems && !previouslyCheckedGateways.isEmpty()) {
-                    for (Gateway previousGateway : previouslyCheckedGateways) {
-                        if (previousGateway.getId().equals(gateway.getId())) {
-                            checkBox.setChecked(true);
-                            break;
-                        }
+                for (Gateway previousGateway : previouslyCheckedGateways) {
+                    if (previousGateway.getId().equals(gateway.getId())) {
+                        checkBox.setChecked(true);
+                        break;
                     }
                 }
                 gatewayCheckboxList.add(checkBox);
@@ -305,6 +305,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 
     private void updateCustomGatewaySelectionVisibility() {
         if (checkBoxUseCustomGatewaySelection.isChecked()) {
+            textViewCustomSelectionDescription.setVisibility(View.GONE);
+
             // hide sections if empty
             if (linearLayoutOfApartmentGateways.getChildCount() == 0) {
                 apartmentGateways.setVisibility(View.GONE);
@@ -322,6 +324,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 otherGateways.setVisibility(View.VISIBLE);
             }
         } else {
+            textViewCustomSelectionDescription.setVisibility(View.VISIBLE);
+
             if (linearLayoutOfApartmentGateways.getChildCount() == 0) {
                 apartmentGateways.setVisibility(View.GONE);
             } else {
