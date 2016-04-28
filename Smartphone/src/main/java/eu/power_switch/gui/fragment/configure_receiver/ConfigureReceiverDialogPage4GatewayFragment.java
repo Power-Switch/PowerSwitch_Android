@@ -185,14 +185,13 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
-        updateGatewayViews(false);
-
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
             receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
             initializeReceiverData(receiverId);
         }
 
+        updateGatewayViews(false);
         updateCustomGatewaySelectionVisibility();
 
         return rootView;
@@ -203,6 +202,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
             repeatAmount = receiver.getRepeatAmount();
             textView_repeatAmount.setText(String.valueOf(repeatAmount));
+
+            room = DatabaseHandler.getRoom(receiver.getRoomId());
 
             if (!receiver.getAssociatedGateways().isEmpty()) {
                 checkBoxUseCustomGatewaySelection.setChecked(true);

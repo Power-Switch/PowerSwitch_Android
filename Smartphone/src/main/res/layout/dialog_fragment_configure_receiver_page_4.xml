@@ -80,28 +80,6 @@
             android:text="@string/use_custom_gateway_selection"/>
 
         <LinearLayout
-            android:id="@+id/apartmentGateways"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/sub_header"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:gravity="bottom"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/apartment_gateways"/>
-
-            <LinearLayout
-                android:id="@+id/linearLayoutOfApartmentGateways"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="4dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/roomGateways"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -116,6 +94,28 @@
 
             <LinearLayout
                 android:id="@+id/linearLayoutOfRoomGateways"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="4dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/apartmentGateways"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:gravity="bottom"
+                android:paddingLeft="@dimen/dialog_horizontal_margin"
+                android:text="@string/apartment_gateways"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutOfApartmentGateways"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

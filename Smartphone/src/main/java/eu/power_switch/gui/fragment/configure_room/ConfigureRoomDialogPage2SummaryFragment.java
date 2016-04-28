@@ -125,14 +125,13 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
-        updateGatewayViews(false);
-
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureRoomDialog.ROOM_ID_KEY)) {
             roomId = args.getLong(ConfigureRoomDialog.ROOM_ID_KEY);
             initExistingData(roomId);
         }
 
+        updateGatewayViews(false);
         updateCustomGatewaySelectionVisibility();
 
         return rootView;
