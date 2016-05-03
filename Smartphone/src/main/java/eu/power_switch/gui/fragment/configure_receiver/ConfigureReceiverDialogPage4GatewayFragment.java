@@ -134,7 +134,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 
                 buttonMinus.setEnabled(true);
 
-                if (repetitionAmount >= 3) {
+                if (repetitionAmount >= Receiver.MAX_REPETITIONS) {
                     buttonPlus.setEnabled(false);
                 }
 
@@ -151,7 +151,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 
                 buttonPlus.setEnabled(true);
 
-                if (repetitionAmount <= 1) {
+                if (repetitionAmount <= Receiver.MIN_REPETITIONS) {
                     buttonMinus.setEnabled(false);
                 }
 
@@ -206,6 +206,13 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
             repetitionAmount = receiver.getRepetitionAmount();
             textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
+            if (repetitionAmount >= Receiver.MAX_REPETITIONS) {
+                buttonPlus.setEnabled(false);
+            }
+            if (repetitionAmount <= Receiver.MIN_REPETITIONS) {
+                buttonMinus.setEnabled(false);
+            }
+
 
             room = DatabaseHandler.getRoom(receiver.getRoomId());
 

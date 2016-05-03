@@ -122,6 +122,16 @@ public abstract class Receiver {
         }
     };
 
+    /**
+     * Maximum value for network signal repetitions
+     */
+    public static final int MAX_REPETITIONS = 3;
+
+    /**
+     * Minimum value for network signal repetitions
+     */
+    public static final int MIN_REPETITIONS = 1;
+
     protected Context context;
     /**
      * ID of this Receiver
