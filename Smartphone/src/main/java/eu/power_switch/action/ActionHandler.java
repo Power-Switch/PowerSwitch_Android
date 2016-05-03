@@ -130,7 +130,7 @@ public class ActionHandler {
             if (gateway.isActive()) {
                 NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, receiver, button);
 
-                for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                for (int i = 0; i < receiver.getRepetitionAmount(); i++) {
                     networkPackages.add(networkPackage);
                 }
             }
@@ -244,7 +244,7 @@ public class ActionHandler {
                         try {
                             NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, receiver, button);
 
-                            for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                            for (int i = 0; i < receiver.getRepetitionAmount(); i++) {
                                 networkPackages.add(networkPackage);
                             }
 
@@ -330,7 +330,7 @@ public class ActionHandler {
                     if (gateway.isActive()) {
                         try {
                             NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, receiver, button);
-                            for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                            for (int i = 0; i < receiver.getRepetitionAmount(); i++) {
                                 networkPackages.add(networkPackage);
                             }
                         } catch (ActionNotSupportedException e) {
@@ -436,7 +436,7 @@ public class ActionHandler {
                 if (gateway.isActive()) {
                     NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton());
 
-                    for (int i = 0; i < receiver.getRepeatAmount() + 1; i++) {
+                    for (int i = 0; i < receiver.getRepetitionAmount(); i++) {
                         networkPackages.add(networkPackage);
                     }
 

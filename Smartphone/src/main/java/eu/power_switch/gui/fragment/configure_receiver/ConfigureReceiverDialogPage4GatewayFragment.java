@@ -58,16 +58,16 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDialogFragment {
 
-    public static final String KEY_REPEAT_AMOUNT = "repeatAmount";
+    public static final String KEY_REPEAT_AMOUNT = "repetitionAmount";
     public static final String KEY_ASSOCIATED_GATEWAYS = "associatedGateways";
 
     private View rootView;
 
-    private int repeatAmount = 0;
+    private int repetitionAmount = 0;
     private List<Gateway> gateways = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
-    private TextView textView_repeatAmount;
+    private TextView textView_repetitionAmount;
     private Button buttonPlus;
     private Button buttonMinus;
     private LinearLayout linearLayoutOfApartmentGateways;
@@ -114,7 +114,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 //                    ArrayList<Gateway> newGateways = intent.getStringArrayListExtra(AddGatewayDialog.KEY_SSID);
 //                    gateways.addAll(newGateways);
 //                    gatewayInfoRecyclerViewAdapter.notifyDataSetChanged();
-                    sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, gateways);
+                    sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, gateways);
                 } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
                     room = apartment.getRoom(intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME));
                     updateGatewayViews();
@@ -122,23 +122,23 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             }
         };
 
-        textView_repeatAmount = (TextView) rootView.findViewById(R.id.textView_repeatAmount);
-        textView_repeatAmount.setText(String.valueOf(repeatAmount));
+        textView_repetitionAmount = (TextView) rootView.findViewById(R.id.textView_repeatAmount);
+        textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
         buttonPlus = (Button) rootView.findViewById(R.id.button_plus);
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                repeatAmount++;
-                textView_repeatAmount.setText(String.valueOf(repeatAmount));
+                repetitionAmount++;
+                textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
                 buttonMinus.setEnabled(true);
 
-                if (repeatAmount >= 3) {
+                if (repetitionAmount >= 3) {
                     buttonPlus.setEnabled(false);
                 }
 
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
             }
         });
 
@@ -146,16 +146,16 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                repeatAmount--;
-                textView_repeatAmount.setText(String.valueOf(repeatAmount));
+                repetitionAmount--;
+                textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
                 buttonPlus.setEnabled(true);
 
-                if (repeatAmount <= 0) {
+                if (repetitionAmount <= 1) {
                     buttonMinus.setEnabled(false);
                 }
 
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
             }
         });
 
@@ -165,7 +165,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
                 updateCustomGatewaySelectionVisibility();
 
-                sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
             }
         };
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
@@ -204,8 +204,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
     private void initializeReceiverData(long receiverId) {
         try {
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-            repeatAmount = receiver.getRepeatAmount();
-            textView_repeatAmount.setText(String.valueOf(repeatAmount));
+            repetitionAmount = receiver.getRepetitionAmount();
+            textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
             room = DatabaseHandler.getRoom(receiver.getRoomId());
 
@@ -258,7 +258,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
-                        sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                        sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
                     }
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
@@ -278,7 +278,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 
                         updateCustomGatewaySelectionVisibility();
 
-                        sendGatewayDetailsChangedBroadcast(getContext(), repeatAmount, getCheckedGateways());
+                        sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
                     }
                 });
 

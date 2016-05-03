@@ -40,11 +40,11 @@ public class ReceiverTable {
     public static final String COLUMN_ROOM_ID = "room";
     public static final String COLUMN_POSITION_IN_ROOM = "positionInRoom";
     public static final String COLUMN_LAST_ACTIVATED_BUTTON_ID = "lastActivatedButton";
-    public static final String COLUMN_REPEAT_AMOUNT = "repeatAmount";
+    public static final String COLUMN_REPETITION_AMOUNT = "repetitionAmount";
 
     public static final String[] ALL_COLUMNS = {
             COLUMN_ID, COLUMN_NAME, COLUMN_MODEL, COLUMN_TYPE, COLUMN_CLASSNAME, COLUMN_ROOM_ID,
-            COLUMN_POSITION_IN_ROOM, COLUMN_LAST_ACTIVATED_BUTTON_ID, COLUMN_REPEAT_AMOUNT};
+            COLUMN_POSITION_IN_ROOM, COLUMN_LAST_ACTIVATED_BUTTON_ID, COLUMN_REPETITION_AMOUNT};
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
@@ -56,7 +56,7 @@ public class ReceiverTable {
             COLUMN_ROOM_ID + " integer not null," +
             COLUMN_POSITION_IN_ROOM + " integer," +
             COLUMN_LAST_ACTIVATED_BUTTON_ID + " integer," +
-            COLUMN_REPEAT_AMOUNT + " integer not null," +
+            COLUMN_REPETITION_AMOUNT + " integer not null," +
                 "FOREIGN KEY(" + COLUMN_ROOM_ID + ") REFERENCES " +
                 RoomTable.TABLE_NAME + "(" + RoomTable.COLUMN_ID +
             ")" +
@@ -119,7 +119,7 @@ public class ReceiverTable {
             case 15:
             case 16:
             case 17:
-                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_REPEAT_AMOUNT + " int not null DEFAULT 0;");
+                db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_REPETITION_AMOUNT + " int not null DEFAULT 1;");
         }
     }
 }

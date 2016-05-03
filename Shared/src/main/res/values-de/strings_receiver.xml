@@ -63,7 +63,7 @@
 
     <string name="button">Button</string>
 
-    <string name="repeat_amount">Wiederholungen</string>
+    <string name="amount_of_repetition_of_network_signals">Anzahl der Signalwiederholungen</string>
 
     <string name="action_not_supported_by_receiver">Der Empfänger unterstützt diese Aktion nicht!</string>
     <string name="gateway_not_supported_by_receiver">Der Empfänger unterstützt dieses Gateway nicht!</string>

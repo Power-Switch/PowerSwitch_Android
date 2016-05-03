@@ -163,9 +163,9 @@ public abstract class Receiver {
     protected Long lastActivatedButtonId = (long) -1;
 
     /**
-     * Amount of repeats for sending Network Signals
+     * Amount of repetitions for sending Network Signals
      */
-    protected int repeatAmount;
+    protected int repetitionAmount;
 
     /**
      * List of Gateways this Receiver is associated with
@@ -325,21 +325,21 @@ public abstract class Receiver {
     }
 
     /**
-     * Get amount of repeats for sending network signals
+     * Get amount of repetitions for sending network signals
      *
-     * @return amount of repeats
+     * @return amount of repetitions
      */
-    public int getRepeatAmount() {
-        return repeatAmount;
+    public int getRepetitionAmount() {
+        return repetitionAmount;
     }
 
     /**
-     * Set amount of repeats for sending network signals
+     * Set amount of repetitions for sending network signals
      *
-     * @param repeatAmount amount of repeats
+     * @param repetitionAmount amount of repetitions
      */
-    public void setRepeatAmount(int repeatAmount) {
-        this.repeatAmount = repeatAmount;
+    public void setRepetitionAmount(int repetitionAmount) {
+        this.repetitionAmount = repetitionAmount;
     }
 
     /**

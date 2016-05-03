@@ -63,7 +63,7 @@ abstract class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_CLASSNAME, receiver.getClass().getName());
         values.put(ReceiverTable.COLUMN_TYPE, receiver.getType().toString());
         values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, RoomHandler.get(receiver.getRoomId()).getReceivers().size());
-        values.put(ReceiverTable.COLUMN_REPEAT_AMOUNT, receiver.getRepeatAmount());
+        values.put(ReceiverTable.COLUMN_REPETITION_AMOUNT, receiver.getRepetitionAmount());
 
         Long receiverId = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
 
@@ -118,7 +118,7 @@ abstract class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_MODEL, receiver.getModel());
         values.put(ReceiverTable.COLUMN_CLASSNAME, receiver.getClass().getName());
         values.put(ReceiverTable.COLUMN_TYPE, receiver.getType().toString());
-        values.put(ReceiverTable.COLUMN_REPEAT_AMOUNT, receiver.getRepeatAmount());
+        values.put(ReceiverTable.COLUMN_REPETITION_AMOUNT, receiver.getRepetitionAmount());
 
         DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
                 ReceiverTable.COLUMN_ID + "=" + receiver.getId(), null);

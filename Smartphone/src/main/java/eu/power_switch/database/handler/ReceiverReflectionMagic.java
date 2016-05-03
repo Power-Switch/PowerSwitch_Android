@@ -96,7 +96,7 @@ public abstract class ReceiverReflectionMagic {
                 break;
         }
 
-        receiver.setRepeatAmount(repeatAmount);
+        receiver.setRepetitionAmount(repeatAmount);
 
         receiver.setPositionInRoom(positionInRoom);
         receiver.setLastActivatedButtonId(lastActivatedButtonId);

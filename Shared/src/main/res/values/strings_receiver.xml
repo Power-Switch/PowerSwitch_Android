@@ -67,7 +67,7 @@
 
     <string name="button">Button</string>
 
-    <string name="repeat_amount">Repeat Amount</string>
+    <string name="amount_of_repetition_of_network_signals">Repetition Amount of Network Signal</string>
 
     <string name="action_not_supported_by_receiver">Action not supported by Receiver!</string>
     <string name="gateway_not_supported_by_receiver">Gateway not supported by Receiver!</string>

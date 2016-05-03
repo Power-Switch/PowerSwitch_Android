@@ -84,7 +84,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
     private int currentSlave;
     private long currentSeed;
     private List<UniversalButton> currentUniversalButtons = new ArrayList<>();
-    private int currentRepeatAmount;
+    private int currentRepetitionAmount;
     private List<Gateway> currentAssociatedGateways = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
@@ -150,7 +150,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
                     int repeatAmount = intent.getIntExtra(ConfigureReceiverDialogPage4GatewayFragment.KEY_REPEAT_AMOUNT, 0);
                     ArrayList<Gateway> associatedGateways = (ArrayList<Gateway>) intent.getSerializableExtra(ConfigureReceiverDialogPage4GatewayFragment.KEY_ASSOCIATED_GATEWAYS);
 
-                    currentRepeatAmount = repeatAmount;
+                    currentRepetitionAmount = repeatAmount;
                     currentAssociatedGateways = associatedGateways;
                 }
 
@@ -396,7 +396,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
                 break;
         }
 
-        receiver.setRepeatAmount(currentRepeatAmount);
+        receiver.setRepetitionAmount(currentRepetitionAmount);
 
 
         if (currentId == -1) {
