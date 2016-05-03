@@ -37,11 +37,12 @@
             android:text="@string/repeat_amount"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="@dimen/dialog_horizontal_margin"
             android:orientation="horizontal"
-            android:paddingLeft="16dp"
-            android:paddingTop="8dp">
+            android:layout_marginTop="8dp">
 
             <Button
                 android:id="@+id/button_minus"
@@ -63,86 +64,105 @@
 
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/checkbox_use_custom_gateway_selection"
+        <TextView
+            style="@style/sub_header"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:gravity="bottom"
+            android:paddingLeft="@dimen/dialog_horizontal_margin"
+            android:paddingTop="8dp"
+            android:text="@string/associated_gateways"/>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="@string/use_custom_gateway_selection"/>
+            android:layout_marginRight="16dp"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
 
-        <TextView
-            android:id="@+id/textView_custom_selection_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp"
-            android:text="@string/associated_gateways_for_receiver_description"/>
-
-        <LinearLayout
-            android:id="@+id/roomGateways"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkbox_use_custom_gateway_selection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/use_custom_gateway_selection"
+                android:layout_marginLeft="8dp"/>
 
             <TextView
-                style="@style/sub_header"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:gravity="bottom"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/room_gateways"/>
+                android:id="@+id/textView_custom_selection_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="@string/associated_gateways_for_receiver_description"/>
 
             <LinearLayout
-                android:id="@+id/linearLayoutOfRoomGateways"
-                android:layout_width="match_parent"
+                android:id="@+id/roomGateways"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="4dp"/>
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:gravity="bottom"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/room_gateways"
+                    android:textColor="?android:attr/textColorPrimary"/>
 
-        <LinearLayout
-            android:id="@+id/apartmentGateways"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/linearLayoutOfRoomGateways"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="4dp"/>
 
-            <TextView
-                style="@style/sub_header"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:gravity="bottom"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/apartment_gateways"/>
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayoutOfApartmentGateways"
-                android:layout_width="match_parent"
+                android:id="@+id/apartmentGateways"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="4dp"/>
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:gravity="bottom"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/apartment_gateways"
+                    android:textColor="?android:attr/textColorPrimary"/>
 
-        <LinearLayout
-            android:id="@+id/otherGateways"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <LinearLayout
+                    android:id="@+id/linearLayoutOfApartmentGateways"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="4dp"/>
 
-            <TextView
-                style="@style/sub_header"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:gravity="bottom"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/other_gateways"/>
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayoutOfOtherGateways"
-                android:layout_width="match_parent"
+                android:id="@+id/otherGateways"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="4dp"/>
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:gravity="bottom"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/other_gateways"
+                    android:textColor="?android:attr/textColorPrimary"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutOfOtherGateways"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="4dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
