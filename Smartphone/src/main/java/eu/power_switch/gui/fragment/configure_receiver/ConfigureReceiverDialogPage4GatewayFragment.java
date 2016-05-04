@@ -116,7 +116,12 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 //                    gatewayInfoRecyclerViewAdapter.notifyDataSetChanged();
                     sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, gateways);
                 } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
-                    room = apartment.getRoom(intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME));
+                    String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME);
+                    if (roomName != null) {
+                        room = apartment.getRoom(roomName);
+                    } else {
+                        room = null;
+                    }
                     updateGatewayViews();
                 }
             }
