@@ -50,6 +50,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * "Gateway"/"Network" Fragment used in Configure Receiver Dialog
@@ -118,7 +119,13 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
                     String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME);
                     if (roomName != null) {
-                        room = apartment.getRoom(roomName);
+                        try {
+                            // dont use apartment.getRoom(roomName) because existing rooms might have changed (and apartment object is not updated)
+                            room = DatabaseHandler.getRoom(roomName);
+                        } catch (Exception e) {
+                            Log.e(e);
+                            room = null;
+                        }
                     } else {
                         room = null;
                     }
