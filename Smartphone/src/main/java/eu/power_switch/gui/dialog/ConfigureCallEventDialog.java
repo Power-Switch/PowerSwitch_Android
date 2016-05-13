@@ -35,6 +35,7 @@ import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage1ContactsFragment;
 import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage2ActionsFragment;
+import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage3SummaryFragment;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.shared.log.Log;
 
@@ -169,7 +170,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                     fragment = new ConfigureCallDialogPage2ActionsFragment();
                     break;
                 case 2:
-//                    fragment = new ConfigureCallDialogPage3SummaryFragment();
+                    fragment = new ConfigureCallDialogPage3SummaryFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

@@ -53,6 +53,8 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class ConfigureGeofenceDialogPage2EnterActionsFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_ACTIONS = "actions";
+
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static ArrayList<Action> currentEnterActions;
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
@@ -67,7 +69,7 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
      */
     public static void sendActionsChangedBroadcast(Context context, ArrayList<Action> actions) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED);
-        intent.putExtra("actions", actions);
+        intent.putExtra(KEY_ACTIONS, actions);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

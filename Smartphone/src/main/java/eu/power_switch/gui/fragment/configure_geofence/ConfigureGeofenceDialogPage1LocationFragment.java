@@ -69,9 +69,14 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationDialogFragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
+    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_LONGITUDE = "longitude";
+    public static final String KEY_RADIUS = "radius";
+    public static final String KEY_SNAPSHOT = "snapshot";
+
     private long geofenceId = -1;
 
-    private String name = "NAME";
+    private String name = "";
     private View rootView;
     private MapViewHandler mapViewHandler;
     private eu.power_switch.gui.map.Geofence geofenceView;
@@ -97,10 +102,10 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
             geofenceRadius, Bitmap snapShot) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
         intent.putExtra("name", name);
-        intent.putExtra("latitude", location.latitude);
-        intent.putExtra("longitude", location.longitude);
-        intent.putExtra("geofenceRadius", geofenceRadius);
-        intent.putExtra("snapshot", snapShot);
+        intent.putExtra(KEY_LATITUDE, location.latitude);
+        intent.putExtra(KEY_LONGITUDE, location.longitude);
+        intent.putExtra(KEY_RADIUS, geofenceRadius);
+        intent.putExtra(KEY_SNAPSHOT, snapShot);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

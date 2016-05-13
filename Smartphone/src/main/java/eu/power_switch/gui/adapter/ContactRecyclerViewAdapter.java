@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -40,14 +41,16 @@ import eu.power_switch.phone.Contact;
  * Created by Markus on 04.12.2015.
  */
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
-    private List<Contact> contacts;
     private Context context;
+    private List<Contact> contacts;
+    private Set<String> checkedNumbers;
 
     private CheckBoxInteractionListener checkBoxInteractionListener;
 
-    public ContactRecyclerViewAdapter(Context context, List<Contact> contacts) {
-        this.contacts = contacts;
+    public ContactRecyclerViewAdapter(Context context, List<Contact> contacts, Set<String> checkedNumbers) {
         this.context = context;
+        this.contacts = contacts;
+        this.checkedNumbers = checkedNumbers;
     }
 
     public void setCheckBoxInteractionListener(CheckBoxInteractionListener checkBoxInteractionListener) {
@@ -75,6 +78,11 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             CheckBox checkBox = new CheckBox(context);
             checkBox.setTag(number);
+            if (checkedNumbers.contains(number)) {
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
 
             checkBox.setOnTouchListener(checkBoxInteractionListener);
             checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);

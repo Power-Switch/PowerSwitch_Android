@@ -83,7 +83,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_4, container, false);
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_4_summary, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -92,19 +92,19 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
                 if (LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED.equals(intent.getAction())) {
                     currentName = intent.getStringExtra("name");
 
-                    double latitude = intent.getDoubleExtra("latitude", Geofence.INVALID_LAT);
-                    double longitude = intent.getDoubleExtra("longitude", Geofence.INVALID_LON);
+                    double latitude = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_LATITUDE, Geofence.INVALID_LAT);
+                    double longitude = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_LONGITUDE, Geofence.INVALID_LON);
                     currentLocation = new LatLng(latitude, longitude);
 
-                    currentGeofenceRadius = intent.getDoubleExtra("geofenceRadius", -1);
+                    currentGeofenceRadius = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_RADIUS, -1);
 
-                    currentSnapshot = intent.getParcelableExtra("snapshot");
+                    currentSnapshot = intent.getParcelableExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_SNAPSHOT);
 
                 } else if (LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentEnterActions = (ArrayList<Action>) intent.getSerializableExtra("actions");
+                    currentEnterActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage2EnterActionsFragment.KEY_ACTIONS);
 
                 } else if (LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentExitActions = (ArrayList<Action>) intent.getSerializableExtra("actions");
+                    currentExitActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage3ExitActionsFragment.KEY_ACTIONS);
 
                 }
 

@@ -35,7 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
@@ -55,8 +54,10 @@ import eu.power_switch.shared.constants.PhoneConstants;
  */
 public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_ACTIONS = "actions";
+
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
-    private static List<Action> actions = new ArrayList<>();
+    private static ArrayList<Action> actions = new ArrayList<>();
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
 
     private long callEventId = -1;
@@ -64,8 +65,16 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
     private View rootView;
     private BroadcastReceiver broadcastReceiver;
 
-    private static void sendActionsChangedBroadcast(Context context, List<Action> actions) {
-        // TODO:
+    /**
+     * Used to notify the setup page that some info has changed
+     *
+     * @param context any suitable context
+     */
+    public static void sendActionsChangedBroadcast(Context context, ArrayList<Action> actions) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED);
+        intent.putExtra(KEY_ACTIONS, actions);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     public static void addAction(Action action) {
@@ -76,7 +85,7 @@ public class ConfigureCallDialogPage2ActionsFragment extends ConfigurationDialog
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_page_2, container, false);
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_event_page_2, container, false);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override

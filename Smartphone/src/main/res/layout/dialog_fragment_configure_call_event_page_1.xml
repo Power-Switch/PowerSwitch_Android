@@ -37,7 +37,7 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView_contacts"
+            android:id="@+id/recyclerView_phoneNumbers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -51,7 +51,7 @@
             app:borderWidth="0dp"
             app:elevation="8dp"
             app:fabSize="normal"
-            app:layout_anchor="@id/recyclerView_contacts"
+            app:layout_anchor="@id/recyclerView_phoneNumbers"
             app:layout_anchorGravity="bottom|right|end"/>
 
     </android.support.design.widget.CoordinatorLayout>

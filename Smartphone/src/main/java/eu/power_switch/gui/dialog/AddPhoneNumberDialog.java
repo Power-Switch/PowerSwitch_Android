@@ -59,7 +59,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class AddPhoneNumberDialog extends DialogFragment {
 
-    public static final String KEY_PHONE_NUMBER = "phoneNumber";
+    public static final String KEY_PHONE_NUMBERS = "phoneNumbers";
 
     public static final Comparator<Contact> ALPHABETIC = new Comparator<Contact>() {
         @Override
@@ -78,6 +78,15 @@ public class AddPhoneNumberDialog extends DialogFragment {
     private RecyclerView recyclerViewContacts;
     private Set<String> checkedNumbers = new HashSet<>();
 
+    public static AddPhoneNumberDialog newInstance(ArrayList<String> phoneNumbers) {
+        Bundle args = new Bundle();
+        args.putStringArrayList(KEY_PHONE_NUMBERS, phoneNumbers);
+
+        AddPhoneNumberDialog fragment = new AddPhoneNumberDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     /**
      * Used to notify the setup page that some info has changed
      *
@@ -85,7 +94,7 @@ public class AddPhoneNumberDialog extends DialogFragment {
      */
     public static void sendPhoneNumbersAddedBroadcast(Context context, Set<String> phoneNumbers) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED);
-        intent.putStringArrayListExtra(KEY_PHONE_NUMBER, new ArrayList<>(phoneNumbers));
+        intent.putStringArrayListExtra(KEY_PHONE_NUMBERS, new ArrayList<>(phoneNumbers));
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
@@ -116,8 +125,8 @@ public class AddPhoneNumberDialog extends DialogFragment {
 
         layoutLoading = (LinearLayout) contentView.findViewById(R.id.layoutLoading);
 
-        recyclerViewContacts = (RecyclerView) contentView.findViewById(R.id.recyclerView_contacts);
-        contactRecyclerViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts);
+        recyclerViewContacts = (RecyclerView) contentView.findViewById(R.id.recyclerView_phoneNumbers);
+        contactRecyclerViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts, checkedNumbers);
         contactRecyclerViewAdapter.setCheckBoxInteractionListener(new CheckBoxInteractionListener() {
             @Override
             public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
@@ -163,6 +172,12 @@ public class AddPhoneNumberDialog extends DialogFragment {
                 .getDefaultColor();
 
         checkValidity();
+
+        Bundle args = getArguments();
+
+        if (args != null && args.containsKey(KEY_PHONE_NUMBERS) && args.getStringArrayList(KEY_PHONE_NUMBERS) != null) {
+            checkedNumbers.addAll(args.getStringArrayList(KEY_PHONE_NUMBERS));
+        }
 
         refreshContacts();
 

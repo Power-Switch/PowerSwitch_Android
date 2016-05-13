@@ -55,6 +55,8 @@ import eu.power_switch.shared.constants.PhoneConstants;
  */
 public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_PHONE_NUMBERS = "phone_numbers";
+
     private View rootView;
     private BroadcastReceiver broadcastReceiver;
 
@@ -64,16 +66,20 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
     private PhoneNumberRecyclerViewAdapter phoneNumberRecyclerViewAdapter;
     private RecyclerView recyclerViewContacts;
 
+    private static void sendPhoneNumbersChangedBroadcast(Context context, ArrayList<String> phoneNumbers) {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_page_1, container, false);
+        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_event_page_1, container, false);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED.equals(intent.getAction())) {
-                    ArrayList<String> newPhoneNumbers = intent.getStringArrayListExtra(AddPhoneNumberDialog.KEY_PHONE_NUMBER);
+                    ArrayList<String> newPhoneNumbers = intent.getStringArrayListExtra(AddPhoneNumberDialog.KEY_PHONE_NUMBERS);
 
                     for (String number : newPhoneNumbers) {
                         if (!phoneNumbers.contains(number)) {
@@ -86,7 +92,7 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
             }
         };
 
-        recyclerViewContacts = (RecyclerView) rootView.findViewById(R.id.recyclerView_contacts);
+        recyclerViewContacts = (RecyclerView) rootView.findViewById(R.id.recyclerView_phoneNumbers);
         phoneNumberRecyclerViewAdapter = new PhoneNumberRecyclerViewAdapter(getActivity(), phoneNumbers);
         recyclerViewContacts.setAdapter(phoneNumberRecyclerViewAdapter);
         phoneNumberRecyclerViewAdapter.setOnDeleteClickListener(new PhoneNumberRecyclerViewAdapter.OnItemClickListener() {
@@ -120,7 +126,7 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
         addContactFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddPhoneNumberDialog addPhoneNumberDialog = new AddPhoneNumberDialog();
+                AddPhoneNumberDialog addPhoneNumberDialog = AddPhoneNumberDialog.newInstance(phoneNumbers);
                 addPhoneNumberDialog.setTargetFragment(fragment, 0);
                 addPhoneNumberDialog.show(getFragmentManager(), null);
             }

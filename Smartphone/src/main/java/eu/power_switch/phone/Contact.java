@@ -60,9 +60,9 @@ public class Contact {
     }
 
     /**
-     * Get phone number of this contact
+     * Get a list of phone numbers of this contact
      *
-     * @return phone number as text
+     * @return list of phone number (as text)
      */
     public List<String> getPhoneNumbers() {
         return phoneNumbers;

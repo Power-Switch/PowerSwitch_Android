@@ -130,6 +130,7 @@ public class EditActivity extends AbstractPluginActivity {
             setPositiveButtonVisibility(checkValidity());
         }
     };
+    private String[] relevantVariables;
 
 
     @Override
@@ -371,6 +372,10 @@ public class EditActivity extends AbstractPluginActivity {
 
 
         updateLists();
+
+        if (TaskerPlugin.hostSupportsRelevantVariables(getIntent().getExtras())) {
+            relevantVariables = TaskerPlugin.getRelevantVariableList(getIntent().getExtras());
+        }
 
         BundleScrubber.scrub(getIntent());
         final Bundle localeBundle = getIntent().getBundleExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE);
@@ -836,6 +841,11 @@ public class EditActivity extends AbstractPluginActivity {
                 resultBundle.putString(ApiConstants.KEY_SCENE, getSceneName());
                 blurb += getSceneName();
             }
+
+//            if ( TaskerPlugin.hostSupportsRelevantVariables( getIntent().getExtras() ) )
+//                TaskerPlugin.addRelevantVariableList( resultIntent, new String [] {
+//                        "%pcolour\nPet Colour\nThe colour of the pet <B>last bought</B>"
+//                } );
 
             if (TaskerPlugin.Setting.hostSupportsOnFireVariableReplacement(this)) {
                 TaskerPlugin.Setting.setVariableReplaceKeys(resultBundle,

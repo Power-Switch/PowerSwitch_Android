@@ -78,7 +78,9 @@ public class LocalBroadcastConstants {
 
     public static final String INTENT_CALL_EVENTS_CHANGED = "eu.power_switch.call_events_changed";
     public static final String INTENT_CALL_EVENT_PHONE_NUMBER_ADDED = "eu.power_switch.call_event_phone_number_added";
+    public static final String INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED = "eu.power_switch.call_event_phone_numbers_changed";
     public static final String INTENT_CALL_EVENT_ACTION_ADDED = "eu.power_switch.call_event_action_added";
+    public static final String INTENT_CALL_EVENT_ACTIONS_CHANGED = "eu.power_switch.call_event_actions_changed";
 
     public static final String INTENT_SMS_EVENTS_CHANGED = "eu.power_switch.sms_events_changed";
     public static final String INTENT_SMS_EVENT_PHONE_NUMBER_ADDED = "eu.power_switch.sms_event_phone_number_added";
