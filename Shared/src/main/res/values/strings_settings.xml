@@ -31,6 +31,7 @@
     <string name="auto_collapse_rooms">Automatically collapse Rooms</string>
     <string name="auto_collapse_timers">Automatically collapse Timers</string>
     <string name="show_room_all_on_off_buttons">Show On/Off buttons for Room</string>
+    <string name="use_menu_instead_of_FABs">Use option menu instead of Floating Action Buttons</string>
 
     <!-- History -->
     <string name="selection_forever">ever</string>
@@ -54,12 +55,15 @@
     <string name="create_gateway">Add Gateway</string>
     <string name="search_gateway">Search Gateway</string>
     <string name="draw_room_buttons">Show Room On/Off Buttons</string>
-    <string name="use_menu_instead_of_FABs">Use option menu instead of Floating Action Buttons</string>
+
     <string name="vibrate_on_button_press">Vibrate on touch</string>
     <string name="duration_title">Duration:</string>
     <string name="haptic_feedback_duration_hint">80</string>
     <string name="highlight_last_activated_button">Highlight last activated Button</string>
     <string name="gateways">Gateways</string>
+
+    <string name="tutorial">Tutorial</string>
+    <string name="reset_tutorial">Reset Tutorial</string>
 
     <string name="autodiscover_response_message">New: %1$d, Existing: %2$d, Unknown: %3$d</string>
 

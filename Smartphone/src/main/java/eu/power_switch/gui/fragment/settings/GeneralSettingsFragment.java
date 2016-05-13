@@ -63,6 +63,7 @@ import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
  * Fragment containing all settings related to Smartphone app
@@ -95,6 +96,7 @@ public class GeneralSettingsFragment extends Fragment {
     private TextView textView_backupPath;
     private Spinner keepHistoryDuration;
     private ProgressBar sendLogsProgress;
+    private Button resetTutorial;
     private Button sendLogs;
 
 
@@ -346,6 +348,14 @@ public class GeneralSettingsFragment extends Fragment {
                         sendLogsProgress.setVisibility(View.GONE);
                     }
                 }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+
+        resetTutorial = (Button) rootView.findViewById(R.id.button_resetTutorial);
+        resetTutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MaterialShowcaseView.resetAll(getContext());
             }
         });
 

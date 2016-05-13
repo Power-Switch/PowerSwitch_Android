@@ -251,6 +251,16 @@
 
             <TextView
                 style="@style/header_settings"
+                android:text="@string/tutorial"/>
+
+            <Button
+                android:id="@+id/button_resetTutorial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reset_tutorial"/>
+
+            <TextView
+                style="@style/header_settings"
                 android:text="Logging"/>
 
             <LinearLayout

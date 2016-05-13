@@ -35,7 +35,7 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.log.Log;
 
 /**
- * Hidden Activity to receiver NFC Tag messages without displaying any user interface
+ * Hidden Activity to receive NFC Tag messages without displaying any user interface
  * <p/>
  * Created by Markus on 09.04.2016.
  */
@@ -60,8 +60,10 @@ public class HiddenReceiverActivity extends Activity {
 //            Uri uri = intent.getData();
 //            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-            Log.d("NFC Data: " + readNfcTagPayload(intent));
-            executeAction(readNfcTagPayload(intent));
+            String payload = readNfcTagPayload(intent);
+
+            Log.d("NFC Data: " + payload);
+            executeAction(payload);
         }
 
         // close hidden activity afterwards
