@@ -49,7 +49,7 @@
             android:id="@+id/textView_actions_title"
             style="@style/sub_header"
             android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/brand"/>
+            android:text="@string/actions"/>
 
         <TextView
             android:id="@+id/textView_actions"

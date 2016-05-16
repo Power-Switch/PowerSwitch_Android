@@ -321,13 +321,17 @@ public class StatusMessageHandler {
                 messageResource = R.string.missing_phone_permission;
                 requestCode = PermissionConstants.REQUEST_CODE_PHONE_PERMISSION;
                 break;
+            case Manifest.permission.RECEIVE_SMS:
+                messageResource = R.string.missing_sms_permission;
+                requestCode = PermissionConstants.REQUEST_CODE_SMS_PERMISSION;
+                break;
             default:
                 messageResource = R.string.missing_permission;
                 requestCode = -1;
         }
 
         if (permissions.length > 1) {
-//            messageResource = R.string.missing_multiple_permissions;
+            messageResource = R.string.missing_multiple_permissions;
         }
 
         Snackbar snackbar = Snackbar.make(recyclerView, messageResource, Snackbar.LENGTH_INDEFINITE);

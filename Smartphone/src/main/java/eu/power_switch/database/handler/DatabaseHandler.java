@@ -2062,6 +2062,28 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Add CallEvent to Database
+     *
+     * @param callEvent new Call Event
+     * @return ID of saved Database entry
+     */
+    @WorkerThread
+    public static long addCallEvent(CallEvent callEvent) throws Exception {
+        openWritable();
+        long id;
+        try {
+            id = CallEventHandler.add(callEvent);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+        return id;
+    }
+
+    /**
      * Delete Call Event from Database
      *
      * @param id ID of Call Event
@@ -2080,4 +2102,22 @@ public final class DatabaseHandler {
         }
     }
 
+    /**
+     * Update existing CallEvent in Database
+     *
+     * @param callEvent updated CallEvent
+     */
+    @WorkerThread
+    public static void updateCallEvent(CallEvent callEvent) throws Exception {
+        openWritable();
+        try {
+            CallEventHandler.update(callEvent);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+    }
 }

@@ -17,18 +17,12 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <string name="phone">Phone</string>
-    <string name="call">Call</string>
-    <string name="sms">SMS</string>
+    <item
+        android:id="@+id/create_call_event"
+        android:title="@string/create_call_event"
+        app:showAsAction="ifRoom"/>
 
-    <string name="contacts">Contacts</string>
-
-    <string name="call_event_will_be_gone_forever">Call event will be gone forever!</string>
-    <string name="call_deleted">Call deleted</string>
-    <string name="add_phone_nummbers">Add phone number</string>
-
-    <string name="create_call_event">Create Call Event</string>
-
-</resources>
+</menu>

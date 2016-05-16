@@ -61,6 +61,8 @@
     <string name="missing_external_storage_permission">Fehlende Berechtigung für den Speicherzugriff</string>
     <string name="missing_location_permission">Fehlende Berechtigung zur Ortsbestimmung</string>
     <string name="missing_phone_permission">Fehlende Berechtigung für Telefonie</string>
+    <string name="missing_sms_permission">Fehlende Berechtigung für SMS</string>
+    <string name="missing_multiple_permissions">Mehrere fehlende Berechtigungen</string>
     <string name="missing_contacts_permission">Fehlende Berechtigung für Kontakte</string>
     <string name="permission_granted">Berechtigung erhalten</string>
     <string name="permission_denied">Keine Berechtigung</string>

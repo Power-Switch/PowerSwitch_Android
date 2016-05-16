@@ -28,4 +28,6 @@
     <string name="call_deleted">Anruf gelöscht</string>
     <string name="add_phone_nummbers">Telefonnummer hinzufügen</string>
 
+    <string name="create_call_event">Anrufereignis erstellen</string>
+
 </resources>

@@ -31,6 +31,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
@@ -103,8 +109,34 @@ public class ConfigureCallDialogPage3SummaryFragment extends ConfigurationDialog
     }
 
     private void updateUi() {
+        String phoneNumbers = "";
 
+        Iterator<String> iterator = currentPhoneNumbers.iterator();
+        while (iterator.hasNext()) {
+            String phoneNumber = iterator.next();
 
+            if (iterator.hasNext()) {
+                phoneNumbers += phoneNumber + "\n";
+            } else {
+                phoneNumbers += phoneNumber;
+            }
+        }
+        textViewContacts.setText(phoneNumbers);
+
+        String actions = "";
+
+        Iterator<Action> iterator1 = currentActions.iterator();
+        while (iterator1.hasNext()) {
+            Action action = iterator1.next();
+
+            if (iterator1.hasNext()) {
+                actions += action.toString() + "\n";
+            } else {
+                actions += action.toString();
+            }
+        }
+
+        textViewActions.setText(actions);
     }
 
     @Override
@@ -124,6 +156,25 @@ public class ConfigureCallDialogPage3SummaryFragment extends ConfigurationDialog
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
         // TODO: Save CallEvent to Database
+        if (callEventId == -1) {
+            // create new call event
+            Map<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
+            phoneNumbersMap.put(PhoneConstants.CallType.INCOMING, new HashSet<>(currentPhoneNumbers));
+
+            Map<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
+            actionsMap.put(PhoneConstants.CallType.INCOMING, currentActions);
+
+            CallEvent newCallEvent = new CallEvent(-1, true, "", phoneNumbersMap, actionsMap);
+            DatabaseHandler.addCallEvent(newCallEvent);
+        } else {
+            // modify existing call event
+            CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
+
+            callEvent.setPhoneNumbers(PhoneConstants.CallType.INCOMING, new HashSet<>(currentPhoneNumbers));
+            callEvent.setActions(PhoneConstants.CallType.INCOMING, currentActions);
+
+            DatabaseHandler.updateCallEvent(callEvent);
+        }
     }
 
     @Override

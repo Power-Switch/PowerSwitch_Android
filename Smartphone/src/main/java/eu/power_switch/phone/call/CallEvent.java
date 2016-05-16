@@ -105,10 +105,20 @@ public class CallEvent {
      * Get phone numbers this CallEvent is associated with
      *
      * @param callType EventType
-     * @return list of phone numbers
+     * @return Set of phone numbers
      */
     public Set<String> getPhoneNumbers(CallType callType) {
         return phoneNumbersMap.get(callType);
+    }
+
+    /**
+     * Set phone numbers this CallEvent is associated with
+     *
+     * @param callType     EventType
+     * @param phoneNumbers Set of phone numbers
+     */
+    public void setPhoneNumbers(CallType callType, Set<String> phoneNumbers) {
+        phoneNumbersMap.put(callType, phoneNumbers);
     }
 
     /**
@@ -119,5 +129,15 @@ public class CallEvent {
      */
     public List<Action> getActions(CallType callType) {
         return actionsMap.get(callType);
+    }
+
+    /**
+     * Set list of actions for this CallEvent
+     *
+     * @param callType EventType
+     * @param actions  list of actions
+     */
+    public void setActions(CallType callType, List<Action> actions) {
+        actionsMap.put(callType, actions);
     }
 }

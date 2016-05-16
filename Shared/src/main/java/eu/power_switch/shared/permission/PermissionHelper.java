@@ -100,6 +100,17 @@ public class PermissionHelper {
     }
 
     /**
+     * Check if SMS permission is available
+     *
+     * @param context any suitable context
+     * @return true if SMS permission is available, false otherwise
+     */
+    public static boolean isSmsPermissionAvailable(@NonNull Context context) {
+        int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
+        return hasPermission == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
      * Check if Contact permission is available
      *
      * @param context any suitable context

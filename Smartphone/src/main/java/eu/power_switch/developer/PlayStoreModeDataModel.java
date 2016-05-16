@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
@@ -44,7 +46,9 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
+import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
+import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -320,5 +324,27 @@ public class PlayStoreModeDataModel {
         }
 
         return actions;
+    }
+
+    public List<CallEvent> getCallEvents() {
+        List<CallEvent> callEvents = new ArrayList<>();
+
+        Map<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
+        Set<String> phoneNumbers = new HashSet<>();
+        phoneNumbers.add("0174 37 97 508");
+        phoneNumbersMap.put(PhoneConstants.CallType.INCOMING, phoneNumbers);
+
+        List<Action> actions = new ArrayList<>();
+        actions.add(new ReceiverAction(-1, APARTMENT_HEIMAT.getName(), ROOM_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER, RECEIVER_NACHTTISCHE_SCHLAFZIMMER.getButton(OnButton.ID)));
+
+        Map<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
+        actionsMap.put(PhoneConstants.CallType.INCOMING, actions);
+
+        CallEvent callEvent = new CallEvent(0, true, "Call Event 1", phoneNumbersMap, actionsMap);
+
+
+        callEvents.add(callEvent);
+
+        return callEvents;
     }
 }

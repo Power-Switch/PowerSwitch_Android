@@ -29,6 +29,7 @@ public class PermissionConstants {
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 123;
     public static final int REQUEST_CODE_LOCATION_PERMISSION = 124;
     public static final int REQUEST_CODE_PHONE_PERMISSION = 125;
+    public static final int REQUEST_CODE_SMS_PERMISSION = 126;
 
     /**
      * Private Constructor

@@ -66,8 +66,17 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
     private PhoneNumberRecyclerViewAdapter phoneNumberRecyclerViewAdapter;
     private RecyclerView recyclerViewContacts;
 
-    private static void sendPhoneNumbersChangedBroadcast(Context context, ArrayList<String> phoneNumbers) {
+    /**
+     * Used to notify the summary page that some info has changed
+     *
+     * @param context      any suitable context
+     * @param phoneNumbers list of phone numbers
+     */
+    public static void sendPhoneNumbersChangedBroadcast(Context context, ArrayList<String> phoneNumbers) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED);
+        intent.putExtra(KEY_PHONE_NUMBERS, phoneNumbers);
 
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     @Nullable
@@ -88,6 +97,7 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
                     }
 
                     phoneNumberRecyclerViewAdapter.notifyDataSetChanged();
+                    sendPhoneNumbersChangedBroadcast(getContext(), phoneNumbers);
                 }
             }
         };
@@ -107,7 +117,8 @@ public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialo
                                 try {
                                     phoneNumbers.remove(position);
                                     phoneNumberRecyclerViewAdapter.notifyDataSetChanged();
-                                    notifyConfigurationChanged();
+
+                                    sendPhoneNumbersChangedBroadcast(getContext(), phoneNumbers);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }

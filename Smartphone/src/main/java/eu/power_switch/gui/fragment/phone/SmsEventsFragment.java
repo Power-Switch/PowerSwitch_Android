@@ -27,7 +27,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -129,7 +128,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
                         int permissionRequestCode = intent.getIntExtra(PermissionConstants.KEY_REQUEST_CODE, 0);
                         int[] result = intent.getIntArrayExtra(PermissionConstants.KEY_RESULTS);
 
-                        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_PHONE_PERMISSION) {
+                        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_SMS_PERMISSION) {
                             boolean allGranted = true;
                             for (int i = 0; i < result.length; i++) {
                                 allGranted &= result[i] == PackageManager.PERMISSION_GRANTED;
@@ -143,7 +142,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                                         getRecyclerView(),
-                                        Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS);
+                                        Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
                             }
                         }
                         break;
@@ -154,28 +153,13 @@ public class SmsEventsFragment extends RecyclerViewFragment {
 
     @Override
     protected void onInitialized() {
-        if (!PermissionHelper.isPhonePermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
+        if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
-                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS);
+                    Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
         } else {
             refreshCalls();
-        }
-    }
-
-    private void requestPhonePermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_PHONE_STATE)) {
-            // Provide an additional rationale to the user if the permission was not granted
-            // and the user would benefit from additional context for the use of the permission.
-            // For example if the user has previously denied the permission.
-            Log.d("Displaying phone permission rationale to provide additional context.");
-
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.READ_PHONE_STATE);
-        } else {
-            Log.d("Displaying default phone permission dialog to request permission");
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS}, PermissionConstants.REQUEST_CODE_PHONE_PERMISSION);
         }
     }
 

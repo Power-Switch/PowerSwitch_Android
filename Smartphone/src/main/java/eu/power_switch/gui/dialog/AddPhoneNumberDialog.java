@@ -78,9 +78,9 @@ public class AddPhoneNumberDialog extends DialogFragment {
     private RecyclerView recyclerViewContacts;
     private Set<String> checkedNumbers = new HashSet<>();
 
-    public static AddPhoneNumberDialog newInstance(ArrayList<String> phoneNumbers) {
+    public static AddPhoneNumberDialog newInstance(ArrayList<String> preselectedPhoneNumbers) {
         Bundle args = new Bundle();
-        args.putStringArrayList(KEY_PHONE_NUMBERS, phoneNumbers);
+        args.putStringArrayList(KEY_PHONE_NUMBERS, preselectedPhoneNumbers);
 
         AddPhoneNumberDialog fragment = new AddPhoneNumberDialog();
         fragment.setArguments(args);

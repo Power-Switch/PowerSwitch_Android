@@ -27,7 +27,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -44,12 +43,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.CallEventRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.phone.call.CallEvent;
+import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -103,7 +104,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
                 if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
                     new AlertDialog.Builder(getContext())
                             .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_contacts_permission)
+                            .setMessage(R.string.missing_phone_permission)
                             .setNeutralButton(R.string.close, null)
                             .show();
                     return;
@@ -115,7 +116,6 @@ public class CallEventsFragment extends RecyclerViewFragment {
             }
         });
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -164,21 +164,6 @@ public class CallEventsFragment extends RecyclerViewFragment {
         }
     }
 
-    private void requestPhonePermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_PHONE_STATE)) {
-            // Provide an additional rationale to the user if the permission was not granted
-            // and the user would benefit from additional context for the use of the permission.
-            // For example if the user has previously denied the permission.
-            Log.d("Displaying phone permission rationale to provide additional context.");
-
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), Manifest.permission.READ_PHONE_STATE);
-        } else {
-            Log.d("Displaying default phone permission dialog to request permission");
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS}, PermissionConstants.REQUEST_CODE_PHONE_PERMISSION);
-        }
-    }
-
     private void refreshCalls() {
         Log.d(this, "refreshCallEvents");
         updateListContent();
@@ -191,7 +176,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
         }
 
         switch (menuItem.getItemId()) {
-            case R.id.create_geofence:
+            case R.id.create_call_event:
                 break;
             default:
                 break;
@@ -202,12 +187,12 @@ public class CallEventsFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.apartment_geofences_fragment_menu, menu);
+        inflater.inflate(R.menu.call_event_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_call_event).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
-            menu.findItem(R.id.create_geofence).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_call_event).setVisible(false).setEnabled(false);
         }
     }
 
@@ -255,13 +240,12 @@ public class CallEventsFragment extends RecyclerViewFragment {
     public List refreshListData() throws Exception {
         callEvents.clear();
 
-//        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
-//            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-//            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
-//        } else {
-
+        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
+            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+            callEvents.addAll(playStoreModeDataModel.getCallEvents());
+        } else {
 //        callEvents = DatabaseHandler.getAllCallEvents();
-
+        }
 
         return callEvents;
     }

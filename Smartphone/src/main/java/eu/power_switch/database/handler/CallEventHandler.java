@@ -114,6 +114,13 @@ abstract class CallEventHandler {
     }
 
     /**
+     * @param callEvent
+     */
+    protected static void update(CallEvent callEvent) {
+        // TODO:
+    }
+
+    /**
      * Delete Call Event from Database
      *
      * @param id ID of CallEvent
