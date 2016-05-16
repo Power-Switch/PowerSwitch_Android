@@ -19,6 +19,7 @@
 package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +55,20 @@ abstract class CallEventPhoneNumberHandler {
     }
 
     protected static Set<String> get(long callEventId, PhoneConstants.CallType callType) throws Exception {
-        // TODO:
-        return new HashSet<>();
+        Set<String> phoneNumbers = new HashSet<>();
+
+        Cursor cursor = DatabaseHandler.database.query(CallEventPhoneNumberTable.TABLE_NAME, CallEventPhoneNumberTable.ALL_COLUMNS,
+                CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID + "==" + callEventId + " AND " + CallEventPhoneNumberTable.COLUMN_EVENT_TYPE_ID + "==" + callType.getId(),
+                null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long phoneNumberId = cursor.getLong(2);
+            phoneNumbers.add(PhoneNumberHandler.get(phoneNumberId));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return phoneNumbers;
     }
 }

@@ -19,6 +19,7 @@
 package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -66,12 +67,25 @@ abstract class CallEventActionHandler {
      * Get a list of Actions
      *
      * @param callEventId ID of CallEvent
-     * @param callType        Event Type
+     * @param callType    Event Type
      * @return List of Actions
      */
     @NonNull
     protected static List<Action> get(long callEventId, PhoneConstants.CallType callType) throws Exception {
-        // TODO:
-        return new ArrayList<>();
+        List<Action> actions = new ArrayList<>();
+
+        Cursor cursor = DatabaseHandler.database.query(CallEventActionTable.TABLE_NAME, CallEventActionTable.ALL_COLUMNS,
+                CallEventActionTable.COLUMN_CALL_EVENT_ID + "==" + callEventId + " AND " + CallEventActionTable.COLUMN_EVENT_TYPE_ID + "==" + callType.getId(),
+                null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long actionId = cursor.getLong(2);
+            actions.add(ActionHandler.get(actionId));
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return actions;
     }
 }

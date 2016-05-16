@@ -34,6 +34,8 @@ public class CallEventActionTable {
     public static final String COLUMN_ACTION_ID = "action_id";
     public static final String COLUMN_EVENT_TYPE_ID = "event_type_id";
 
+    public static final String[] ALL_COLUMNS = {COLUMN_CALL_EVENT_ID, COLUMN_EVENT_TYPE_ID, COLUMN_ACTION_ID};
+
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_CALL_EVENT_ID + " integer not null," +
