@@ -22,10 +22,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import eu.power_switch.R;
 import eu.power_switch.obj.ReceiverTest;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.device.bat.RC3500_A_IP44_DE;
 
 /**
@@ -50,7 +52,7 @@ public class RC3500_A_IP44_DE_Test extends ReceiverTest {
         dips.add(false); // D
         dips.add(false); // E
 
-        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);
         method.setAccessible(true);
@@ -84,7 +86,7 @@ public class RC3500_A_IP44_DE_Test extends ReceiverTest {
         dips.add(false); // D
         dips.add(false); // E
 
-        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
@@ -119,7 +121,7 @@ public class RC3500_A_IP44_DE_Test extends ReceiverTest {
         dips.add(false); // D
         dips.add(false); // E
 
-        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
@@ -154,7 +156,7 @@ public class RC3500_A_IP44_DE_Test extends ReceiverTest {
         dips.add(true); // D
         dips.add(true); // E
 
-        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new RC3500_A_IP44_DE(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);

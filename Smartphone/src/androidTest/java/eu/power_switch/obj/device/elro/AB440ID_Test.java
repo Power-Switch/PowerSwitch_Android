@@ -22,10 +22,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import eu.power_switch.R;
 import eu.power_switch.obj.ReceiverTest;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.device.elro.AB440ID;
 
 /**
@@ -48,7 +50,7 @@ public class AB440ID_Test extends ReceiverTest {
         dips.add(false); // 7
         dips.add(false); // 8
 
-        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);
         method.setAccessible(true);
@@ -81,7 +83,7 @@ public class AB440ID_Test extends ReceiverTest {
         dips.add(false); // 7
         dips.add(false); // 8
 
-        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
@@ -114,7 +116,7 @@ public class AB440ID_Test extends ReceiverTest {
         dips.add(false); // 7
         dips.add(false); // 8
 
-        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
@@ -147,7 +149,7 @@ public class AB440ID_Test extends ReceiverTest {
         dips.add(true); // 7
         dips.add(true); // 8
 
-        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0);
+        receiver = new AB440ID(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);

@@ -22,9 +22,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.obj.ReceiverTest;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.device.intertechno.ITR300;
 
 /**
@@ -36,7 +38,7 @@ public class ITR300_Test extends ReceiverTest {
 
     @Test
     public void testCodeGenerationA1() throws Exception {
-        receiver = new ITR300(getContext(), (long) 0, "Name", 'A', 1, (long) 0);
+        receiver = new ITR300(getContext(), (long) 0, "Name", 'A', 1, (long) 0, new ArrayList<Gateway>());
 
         Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);
         method.setAccessible(true);
@@ -59,7 +61,7 @@ public class ITR300_Test extends ReceiverTest {
 
     @Test
     public void testCodeGenerationA5() throws Exception {
-        receiver = new ITR300(getContext(), (long) 0, "Name", 'A', 5, (long) 0);
+        receiver = new ITR300(getContext(), (long) 0, "Name", 'A', 5, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
@@ -81,7 +83,7 @@ public class ITR300_Test extends ReceiverTest {
 
     @Test
     public void testCodeGenerationE1() throws Exception {
-        receiver = new ITR300(getContext(), (long) 0, "Name", 'E', 1, (long) 0);
+        receiver = new ITR300(getContext(), (long) 0, "Name", 'E', 1, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
@@ -103,7 +105,7 @@ public class ITR300_Test extends ReceiverTest {
 
     @Test
     public void testCodeGenerationP16() throws Exception {
-        receiver = new ITR300(getContext(), (long) 0, "Name", 'P', 16, (long) 0);
+        receiver = new ITR300(getContext(), (long) 0, "Name", 'P', 16, (long) 0, new ArrayList<Gateway>());
 
         String methodName = "getSignal";
         Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);

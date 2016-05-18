@@ -20,6 +20,7 @@ package eu.power_switch.database;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -28,6 +29,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.ConnAir;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
 import eu.power_switch.shared.log.Log;
 
@@ -92,9 +94,9 @@ public class DatabaseTest extends ApplicationTest {
             Log.d("apartment: " + i);
             long apartmentId = DatabaseHandler.addApartment(new Apartment((long) 0, true, "Apartment[" + i + "]"));
             for (int j = 0; j < 200; j++) {
-                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]", 0, false));
+                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]", 0, false, new ArrayList<Gateway>()));
                 for (int k = 0; k < 20; k++) {
-                    DatabaseHandler.addReceiver(new CMR1000(getContext(), (long) 0, "Receiver[" + k + "]", 'A', 1, roomId));
+                    DatabaseHandler.addReceiver(new CMR1000(getContext(), (long) 0, "Receiver[" + k + "]", 'A', 1, roomId, new ArrayList<Gateway>()));
                 }
             }
         }
