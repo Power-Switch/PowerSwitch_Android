@@ -93,7 +93,7 @@ abstract class CallEventPhoneNumberHandler {
      */
     protected static void deleteByCallEvent(Long callEventId) throws Exception {
         Cursor cursor = DatabaseHandler.database.query(CallEventPhoneNumberTable.TABLE_NAME, CallEventPhoneNumberTable.ALL_COLUMNS,
-                CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID + "==",
+                CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID + "==" + callEventId,
                 null, null, null, null);
         cursor.moveToFirst();
 
