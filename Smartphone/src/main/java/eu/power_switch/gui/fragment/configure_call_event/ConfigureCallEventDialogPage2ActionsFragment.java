@@ -87,6 +87,7 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_event_page_2, container, false);
 
+        actions.clear();
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -136,7 +137,7 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
         try {
             CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
 
-            actions.clear();
+
             actions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));
 
         } catch (Exception e) {
