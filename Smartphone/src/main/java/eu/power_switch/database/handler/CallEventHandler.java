@@ -20,6 +20,8 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.telephony.PhoneNumberUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import eu.power_switch.action.Action;
+import eu.power_switch.database.table.phone.PhoneNumberTable;
+import eu.power_switch.database.table.phone.call.CallEventPhoneNumberTable;
 import eu.power_switch.database.table.phone.call.CallEventTable;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -96,21 +100,52 @@ abstract class CallEventHandler {
     }
 
     /**
+     * Get all CallEvents that are associated with the specified phoneNumber
+     *
+     * @param phoneNumber phone number used in CallEvents
+     * @return List of CallEvents, may be empty but never null
+     */
+    @NonNull
+    protected static List<CallEvent> get(String phoneNumber) throws Exception {
+        List<CallEvent> callEvents = new ArrayList<>();
+
+        Cursor cursor = DatabaseHandler.database.query(PhoneNumberTable.TABLE_NAME, PhoneNumberTable.ALL_COLUMNS, null, null, null, null, null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            long phoneNumberId = cursor.getLong(0);
+
+            if (PhoneNumberUtils.compare(phoneNumber, cursor.getString(1))) {
+                Cursor cursor1 = DatabaseHandler.database.query(CallEventPhoneNumberTable.TABLE_NAME, CallEventPhoneNumberTable.ALL_COLUMNS, CallEventPhoneNumberTable.COLUMN_PHONE_NUMBER_ID + "=" + phoneNumberId, null, null, null, null);
+                cursor1.moveToFirst();
+                long callEventId = cursor.getLong(0);
+                callEvents.add(get(callEventId));
+                cursor1.close();
+            }
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return callEvents;
+    }
+
+    /**
      * Get all CallEvents from Database
      *
      * @return List of CallEvents
      */
+    @NonNull
     protected static List<CallEvent> getAll() throws Exception {
-        List<CallEvent> timers = new ArrayList<>();
+        List<CallEvent> callEvents = new ArrayList<>();
         Cursor cursor = DatabaseHandler.database.query(CallEventTable.TABLE_NAME, CallEventTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            timers.add(dbToCallEvent(cursor));
+            callEvents.add(dbToCallEvent(cursor));
             cursor.moveToNext();
         }
         cursor.close();
-        return timers;
+        return callEvents;
     }
 
     /**

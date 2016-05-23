@@ -33,9 +33,9 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage1ContactsFragment;
-import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage2ActionsFragment;
-import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage3SummaryFragment;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1ContactsFragment;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2ActionsFragment;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3SummaryFragment;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.shared.log.Log;
 
@@ -108,7 +108,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                                     CallEventsFragment.sendCallEventsChangedBroadcast(getActivity());
 
                                     StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
-                                            R.string.call_deleted, Snackbar.LENGTH_LONG);
+                                            R.string.call_event_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }
@@ -164,13 +164,13 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureCallDialogPage1ContactsFragment();
+                    fragment = new ConfigureCallEventDialogPage1ContactsFragment();
                     break;
                 case 1:
-                    fragment = new ConfigureCallDialogPage2ActionsFragment();
+                    fragment = new ConfigureCallEventDialogPage2ActionsFragment();
                     break;
                 case 2:
-                    fragment = new ConfigureCallDialogPage3SummaryFragment();
+                    fragment = new ConfigureCallEventDialogPage3SummaryFragment();
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

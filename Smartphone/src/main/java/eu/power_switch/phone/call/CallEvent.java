@@ -140,4 +140,5 @@ public class CallEvent {
     public void setActions(CallType callType, List<Action> actions) {
         actionsMap.put(callType, actions);
     }
+
 }

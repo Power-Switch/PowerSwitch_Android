@@ -25,9 +25,12 @@
 
     <string name="contacts">Contacts</string>
 
+    <string name="phone_numbers">Phone Numbers</string>
+
+    <string name="call_event_saved">Call event saved</string>
     <string name="call_event_will_be_gone_forever">Call event will be gone forever!</string>
-    <string name="call_deleted">Call deleted</string>
-    <string name="add_phone_nummbers">Add phone number</string>
+    <string name="call_event_deleted">Call event deleted</string>
+    <string name="add_phone_numbers">Add phone number</string>
 
     <string name="create_call_event">Create Call Event</string>
 

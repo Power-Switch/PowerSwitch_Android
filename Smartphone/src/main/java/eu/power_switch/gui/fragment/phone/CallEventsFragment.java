@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -177,6 +178,18 @@ public class CallEventsFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_call_event:
+                if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(R.string.missing_permission)
+                            .setMessage(R.string.missing_phone_permission)
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                    break;
+                }
+
+                ConfigureCallEventDialog configureCallEventDialog = new ConfigureCallEventDialog();
+                configureCallEventDialog.setTargetFragment(this, 0);
+                configureCallEventDialog.show(getFragmentManager(), null);
                 break;
             default:
                 break;
@@ -244,7 +257,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             callEvents.addAll(playStoreModeDataModel.getCallEvents());
         } else {
-//        callEvents = DatabaseHandler.getAllCallEvents();
+            callEvents.addAll(DatabaseHandler.getAllCallEvents());
         }
 
         return callEvents;

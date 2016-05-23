@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import eu.power_switch.gui.fragment.configure_call.ConfigureCallDialogPage2ActionsFragment;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2ActionsFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -44,7 +44,7 @@ public class AddCallEventActionDialog extends AddActionDialog {
 
     @Override
     protected void addCurrentSelection() {
-        ConfigureCallDialogPage2ActionsFragment.addAction(getCurrentSelection());
+        ConfigureCallEventDialogPage2ActionsFragment.addAction(getCurrentSelection());
     }
 
     @Override

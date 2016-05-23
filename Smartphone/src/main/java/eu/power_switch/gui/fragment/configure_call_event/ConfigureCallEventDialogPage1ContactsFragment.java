@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.configure_call;
+package eu.power_switch.gui.fragment.configure_call_event;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -53,7 +53,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
 /**
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallDialogPage1ContactsFragment extends ConfigurationDialogFragment {
+public class ConfigureCallEventDialogPage1ContactsFragment extends ConfigurationDialogFragment {
 
     public static final String KEY_PHONE_NUMBERS = "phone_numbers";
 

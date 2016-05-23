@@ -51,7 +51,6 @@ public abstract class RecyclerViewFragment extends Fragment {
     private LinearLayout layoutLoading;
     private LinearLayout layoutEmpty;
     private LinearLayout layoutError;
-    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -62,7 +61,6 @@ public abstract class RecyclerViewFragment extends Fragment {
         layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
         layoutEmpty = (LinearLayout) rootView.findViewById(R.id.layoutEmpty);
         layoutError = (LinearLayout) rootView.findViewById(R.id.layoutError);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
 
         onInitialized();
 
@@ -107,28 +105,28 @@ public abstract class RecyclerViewFragment extends Fragment {
         layoutEmpty.setVisibility(View.GONE);
         layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+        getRecyclerView().setVisibility(View.GONE);
     }
 
     protected void showList() {
         layoutEmpty.setVisibility(View.GONE);
         layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+        getRecyclerView().setVisibility(View.VISIBLE);
     }
 
     protected void showEmpty() {
         layoutEmpty.setVisibility(View.VISIBLE);
         layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.GONE);
+        getRecyclerView().setVisibility(View.GONE);
     }
 
     protected void showError(final Exception e, final long timeInMilliseconds) {
         layoutEmpty.setVisibility(View.GONE);
         layoutError.setVisibility(View.VISIBLE);
         layoutLoading.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.GONE);
+        getRecyclerView().setVisibility(View.GONE);
 
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +139,7 @@ public abstract class RecyclerViewFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        RecyclerView.LayoutManager layoutManager = getRecyclerView().getLayoutManager();
         if (layoutManager instanceof StaggeredGridLayoutManager) {
             ((StaggeredGridLayoutManager) layoutManager).setSpanCount(getSpanCount());
         } else if (layoutManager instanceof GridLayoutManager) {

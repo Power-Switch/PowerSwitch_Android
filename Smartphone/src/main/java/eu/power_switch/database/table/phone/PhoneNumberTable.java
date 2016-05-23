@@ -63,6 +63,7 @@ public class PhoneNumberTable {
             case 15:
             case 16:
             case 17:
+            case 18:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
                 break;

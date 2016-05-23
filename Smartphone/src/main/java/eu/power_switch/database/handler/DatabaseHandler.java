@@ -2042,6 +2042,26 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Get all CallEvents that react to the specified phone number
+     *
+     * @param phoneNumber phone number used in the Call Event
+     * @return List of CallEvents
+     */
+    public static List<CallEvent> getCallEvents(String phoneNumber) throws Exception {
+        openReadable();
+        List<CallEvent> callEvents = new ArrayList<>();
+        try {
+            callEvents = CallEventHandler.get(phoneNumber);
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+        return callEvents;
+    }
+
+    /**
      * Get all Call Events from Database
      *
      * @return List of CallEvents

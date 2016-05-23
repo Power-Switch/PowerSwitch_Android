@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
@@ -44,11 +45,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
+import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.phone.Contact;
 import eu.power_switch.phone.ContactHelper;
@@ -147,7 +150,7 @@ public class AddPhoneNumberDialog extends DialogFragment {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewContacts.setLayoutManager(layoutManager);
 
-        builder.setTitle(R.string.add_phone_nummbers);
+        builder.setTitle(R.string.add_phone_numbers);
         builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -185,12 +188,41 @@ public class AddPhoneNumberDialog extends DialogFragment {
     }
 
     private void refreshContacts() {
+        layoutLoading.setVisibility(View.VISIBLE);
+        recyclerViewContacts.setVisibility(View.GONE);
+
         contacts.clear();
-        contacts.addAll(ContactHelper.getContacts(getActivity()));
+        new AsyncTask<Void, Void, AsyncTaskResult<Contact>>() {
 
-        Collections.sort(contacts, ALPHABETIC);
+            @Override
+            protected AsyncTaskResult<Contact> doInBackground(Void... params) {
+                try {
+                    List<Contact> contactsList = ContactHelper.getContacts(getActivity());
 
-        contactRecyclerViewAdapter.notifyDataSetChanged();
+                    Contact[] contactsArray = new Contact[contactsList.size()];
+                    contactsList.toArray(contactsArray);
+
+                    return new AsyncTaskResult<>(contactsArray);
+                } catch (Exception e) {
+                    return new AsyncTaskResult<>(e);
+                }
+            }
+
+            @Override
+            protected void onPostExecute(AsyncTaskResult<Contact> asyncTaskResult) {
+                if (asyncTaskResult.isSuccess()) {
+                    contacts.addAll(asyncTaskResult.getResult());
+                    Collections.sort(contacts, ALPHABETIC);
+                } else {
+                    StatusMessageHandler.showErrorMessage(getActivity(), asyncTaskResult.getException());
+                }
+
+                contactRecyclerViewAdapter.notifyDataSetChanged();
+
+                layoutLoading.setVisibility(View.GONE);
+                recyclerViewContacts.setVisibility(View.VISIBLE);
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private Set<String> getSelectedPhoneNumbers() {

@@ -24,9 +24,12 @@
 
     <string name="contacts">Kontakte</string>
 
+    <string name="phone_numbers">Telefonnummern</string>
+
+    <string name="call_event_saved">Anrufereignis gespeichert</string>
     <string name="call_event_will_be_gone_forever">Das Anrufereignis wird für immer verloren sein!</string>
-    <string name="call_deleted">Anruf gelöscht</string>
-    <string name="add_phone_nummbers">Telefonnummer hinzufügen</string>
+    <string name="call_event_deleted">Anrufereignis gelöscht</string>
+    <string name="add_phone_numbers">Telefonnummer hinzufügen</string>
 
     <string name="create_call_event">Anrufereignis erstellen</string>
 

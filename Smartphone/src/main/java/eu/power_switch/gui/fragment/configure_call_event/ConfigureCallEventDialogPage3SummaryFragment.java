@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.configure_call;
+package eu.power_switch.gui.fragment.configure_call_event;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,8 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
+import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -52,7 +55,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
 /**
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallDialogPage3SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
     private long callEventId = -1;
 
@@ -73,9 +76,9 @@ public class ConfigureCallDialogPage3SummaryFragment extends ConfigurationDialog
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED.equals(intent.getAction())) {
-                    currentPhoneNumbers = intent.getStringArrayListExtra(ConfigureCallDialogPage1ContactsFragment.KEY_PHONE_NUMBERS);
+                    currentPhoneNumbers = intent.getStringArrayListExtra(ConfigureCallEventDialogPage1ContactsFragment.KEY_PHONE_NUMBERS);
                 } else if (LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureCallDialogPage2ActionsFragment.KEY_ACTIONS);
+                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureCallEventDialogPage2ActionsFragment.KEY_ACTIONS);
                 }
 
                 updateUi();
@@ -146,11 +149,8 @@ public class ConfigureCallDialogPage3SummaryFragment extends ConfigurationDialog
             return false;
         }
 
-        if (currentActions == null || currentActions.isEmpty()) {
-            return false;
-        }
+        return !(currentActions == null || currentActions.isEmpty());
 
-        return true;
     }
 
     @Override
@@ -175,6 +175,9 @@ public class ConfigureCallDialogPage3SummaryFragment extends ConfigurationDialog
 
             DatabaseHandler.updateCallEvent(callEvent);
         }
+
+        CallEventsFragment.sendCallEventsChangedBroadcast(getContext());
+        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

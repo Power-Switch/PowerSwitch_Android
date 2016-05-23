@@ -26,6 +26,7 @@ import java.util.Set;
 
 import eu.power_switch.database.table.phone.call.CallEventPhoneNumberTable;
 import eu.power_switch.shared.constants.PhoneConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 12.04.2016.
@@ -42,6 +43,11 @@ abstract class CallEventPhoneNumberHandler {
     }
 
     protected static void add(Set<String> phoneNumbers, long callEventId, PhoneConstants.CallType eventCallType) throws Exception {
+        if (phoneNumbers == null) {
+            Log.w("phoneNumbers was null! nothing added to database");
+            return;
+        }
+
         for (String phoneNumber : phoneNumbers) {
             long phoneNumberId = PhoneNumberHandler.add(phoneNumber);
 
@@ -54,6 +60,13 @@ abstract class CallEventPhoneNumberHandler {
         }
     }
 
+    /**
+     * Get list of phone numbers
+     *
+     * @param callEventId ID of call event
+     * @param callType    type
+     * @return Set of phone numbers
+     */
     protected static Set<String> get(long callEventId, PhoneConstants.CallType callType) throws Exception {
         Set<String> phoneNumbers = new HashSet<>();
 

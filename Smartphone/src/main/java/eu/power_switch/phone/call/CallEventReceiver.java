@@ -25,6 +25,12 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import java.util.List;
+
+import eu.power_switch.action.Action;
+import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -32,13 +38,18 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class IncomingCallReceiver extends BroadcastReceiver {
+public class CallEventReceiver extends BroadcastReceiver {
 
     private Context mContext;
     private Intent mIntent;
     private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
+            if (incomingNumber == null) {
+                Log.w("Missing phone number in Arguments, not executing any actions");
+                return;
+            }
+
             String callState = "UNKNOWN";
             switch (state) {
                 case TelephonyManager.CALL_STATE_IDLE:
@@ -53,6 +64,8 @@ public class IncomingCallReceiver extends BroadcastReceiver {
                         Toast.makeText(mContext, "Local Call - " + incomingNumber, Toast.LENGTH_LONG).show();
                         callState = "Local - Ringing (" + incomingNumber + ")";
                     }
+
+                    executeCallEvents(incomingNumber);
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     String dialingNumber = mIntent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
@@ -68,6 +81,25 @@ public class IncomingCallReceiver extends BroadcastReceiver {
             Log.d(">>>Broadcast", "onCallStateChanged " + callState);
         }
     };
+
+    private void executeCallEvents(String incomingNumber) {
+        try {
+            List<CallEvent> callEvents = DatabaseHandler.getCallEvents(incomingNumber);
+
+            if (callEvents.isEmpty()) {
+                Log.w("List of CallEvents was empty for phone number: " + incomingNumber);
+            }
+
+            Log.d("Executing CallEvents...");
+            for (CallEvent callEvent : callEvents) {
+                for (Action action : callEvent.getActions(PhoneConstants.CallType.INCOMING)) {
+                    action.execute(mContext);
+                }
+            }
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorDialog(mContext, e);
+        }
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
