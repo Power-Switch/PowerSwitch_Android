@@ -157,7 +157,6 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
             CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
 
             phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
-
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

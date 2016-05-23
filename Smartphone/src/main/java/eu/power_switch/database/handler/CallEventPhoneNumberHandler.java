@@ -24,6 +24,7 @@ import android.database.Cursor;
 import java.util.HashSet;
 import java.util.Set;
 
+import eu.power_switch.database.table.phone.PhoneNumberTable;
 import eu.power_switch.database.table.phone.call.CallEventPhoneNumberTable;
 import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.log.Log;
@@ -83,5 +84,26 @@ abstract class CallEventPhoneNumberHandler {
 
         cursor.close();
         return phoneNumbers;
+    }
+
+    /**
+     * Delete phone numbers associated with a specific CallEvent
+     *
+     * @param callEventId ID of CallEvent
+     */
+    protected static void deleteByCallEvent(Long callEventId) throws Exception {
+        Cursor cursor = DatabaseHandler.database.query(CallEventPhoneNumberTable.TABLE_NAME, CallEventPhoneNumberTable.ALL_COLUMNS,
+                CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID + "==",
+                null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            long phoneNumberId = cursor.getLong(2);
+            DatabaseHandler.database.delete(PhoneNumberTable.TABLE_NAME, PhoneNumberTable.COLUMN_ID + "==" + phoneNumberId, null);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        DatabaseHandler.database.delete(CallEventPhoneNumberTable.TABLE_NAME, CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID + "==" + callEventId, null);
     }
 }

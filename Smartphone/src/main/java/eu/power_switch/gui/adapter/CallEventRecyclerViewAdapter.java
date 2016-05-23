@@ -43,10 +43,20 @@ import eu.power_switch.shared.constants.PhoneConstants;
 public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEventRecyclerViewAdapter.ViewHolder> {
     private List<CallEvent> callEvents;
     private Context context;
+    private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener onItemLongClickListener;
 
     public CallEventRecyclerViewAdapter(Context context, List<CallEvent> callEvents) {
         this.callEvents = callEvents;
         this.context = context;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
     }
 
     @Override
@@ -94,16 +104,38 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
         void onItemClick(View itemView, int position);
     }
 
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View itemView, int position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout footer;
         public TextView phoneNumbers;
         public LinearLayout linearLayoutActions;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             this.phoneNumbers = (TextView) itemView.findViewById(R.id.txt_phoneNumbers);
             this.linearLayoutActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_actions);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                    }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onItemLongClickListener != null) {
+                        onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
+                    }
+                    return true;
+                }
+            });
         }
     }
 }

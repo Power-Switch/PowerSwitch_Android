@@ -94,4 +94,24 @@ abstract class CallEventActionHandler {
         cursor.close();
         return actions;
     }
+
+    /**
+     * Delete all actions of a specific CallEvent
+     *
+     * @param callEventId ID of CallEvent
+     */
+    protected static void deleteByCallEvent(Long callEventId) throws Exception {
+        Cursor cursor = DatabaseHandler.database.query(CallEventActionTable.TABLE_NAME, CallEventActionTable.ALL_COLUMNS,
+                CallEventActionTable.COLUMN_CALL_EVENT_ID + "==" + callEventId,
+                null, null, null, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Long actionId = cursor.getLong(2);
+            ActionHandler.delete(actionId);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+    }
 }

@@ -136,8 +136,8 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
         try {
             CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
 
+            actions.clear();
             actions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));
-
 
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

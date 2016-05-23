@@ -161,7 +161,10 @@ abstract class CallEventHandler {
      * @param id ID of CallEvent
      */
     protected static void delete(Long id) throws Exception {
-        // TODO:
+        CallEventPhoneNumberHandler.deleteByCallEvent(id);
+        CallEventActionHandler.deleteByCallEvent(id);
+
+        DatabaseHandler.database.delete(CallEventTable.TABLE_NAME, CallEventTable.COLUMN_ID + "=" + id, null);
     }
 
     private static CallEvent dbToCallEvent(Cursor c) throws Exception {

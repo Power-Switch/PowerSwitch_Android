@@ -106,6 +106,7 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
             currentPhoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
             currentActions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));
 
+            updateUi();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
@@ -155,7 +156,6 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        // TODO: Save CallEvent to Database
         if (callEventId == -1) {
             // create new call event
             Map<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();

@@ -84,7 +84,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected int getDialogTitle() {
-        return R.string.configure_scene;
+        return R.string.configure_call_event;
     }
 
     @Override
