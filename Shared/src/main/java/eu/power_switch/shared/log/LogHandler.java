@@ -116,7 +116,6 @@ public class LogHandler {
         try {
             LogHandler.removeOldInternalLogs();
         } catch (Exception e) {
-            e.printStackTrace();
             try {
                 Log.e(e);
             } catch (Exception e1) {
@@ -145,15 +144,12 @@ public class LogHandler {
             try {
                 LogHandler.removeOldExternalLogs();
             } catch (Exception e) {
-                e.printStackTrace();
                 try {
                     Log.e(e);
                 } catch (Exception e1) {
                     e.printStackTrace();
                 }
             }
-        } else {
-            return;
         }
     }
 

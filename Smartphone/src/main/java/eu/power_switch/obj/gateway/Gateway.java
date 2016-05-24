@@ -25,6 +25,7 @@ import java.util.Set;
 
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.shared.constants.DatabaseConstants;
+import eu.power_switch.shared.log.LogHandler;
 
 /**
  * Represents a Gateway that can receive network packages from the app and convert them for the actual wireless devices
@@ -244,7 +245,18 @@ public abstract class Gateway {
     @NonNull
     @Override
     public String toString() {
-        return "Gateway: " + name + " (" + model + ", firmware: " + firmware + "): " + localHost + ":" + localPort;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Gateway: ").append(name)
+                .append(" (").append(model).append(", firmware: ").append(firmware).append("): \n");
+
+        if (hasValidLocalAddress()) {
+            stringBuilder.append(LogHandler.addIndentation("Local: " + localHost + ":" + localPort)).append("\n");
+        }
+        if (hasValidWanAddress()) {
+            stringBuilder.append(LogHandler.addIndentation("WAN: " + wanHost + ":" + wanPort)).append("\n");
+        }
+
+        return stringBuilder.toString();
     }
 
     /**

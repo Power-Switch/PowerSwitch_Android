@@ -156,7 +156,7 @@
 // added Setting.getHintTimeoutMS()
 // added Host.addHintTimeoutMS()
 
-package eu.power_switch.api.taskerplugin;
+package eu.power_switch.api.taskerplugin.tasker_api;
 
 import android.app.Activity;
 import android.content.Context;

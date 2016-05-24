@@ -88,6 +88,12 @@
                     android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
+                    android:id="@+id/imageButton_apartmentVariablePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+                <ImageButton
                     android:id="@+id/imageButton_switchApartment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -125,6 +131,12 @@
                     android:layout_weight="1"
                     android:text="@string/room"
                     android:textColor="?attr/colorAccent"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_roomVariablePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
                 <ImageButton
                     android:id="@+id/imageButton_switchRoom"
@@ -166,6 +178,12 @@
                     android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
+                    android:id="@+id/imageButton_receiverVariablePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+                <ImageButton
                     android:id="@+id/imageButton_switchReceiver"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -205,6 +223,12 @@
                     android:textColor="?attr/colorAccent"/>
 
                 <ImageButton
+                    android:id="@+id/imageButton_buttonVariablePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+                <ImageButton
                     android:id="@+id/imageButton_switchButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -214,7 +238,8 @@
             <Spinner
                 android:id="@+id/spinner_button"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/action_spinner_height"/>
+                android:layout_height="@dimen/action_spinner_height"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/editText_button"
@@ -242,6 +267,12 @@
                     android:layout_weight="1"
                     android:text="@string/scene"
                     android:textColor="?attr/colorAccent"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_sceneVariablePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
 
                 <ImageButton
                     android:id="@+id/imageButton_switchScene"

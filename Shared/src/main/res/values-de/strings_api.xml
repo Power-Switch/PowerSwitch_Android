@@ -19,6 +19,7 @@
 
 <resources>
 
+    <string name="select_variable">Variable auswählen</string>
     <string name="invalid_arguments">Ungültige Argumente</string>
     <string name="error_executing_action_template">Fehler beim Ausführen der Aktion: %1$s</string>
 

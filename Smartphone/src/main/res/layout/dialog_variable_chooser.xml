@@ -17,10 +17,19 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/dialog_horizontal_margin"
+    android:layout_marginRight="@dimen/dialog_horizontal_margin"
+    android:layout_marginTop="@dimen/dialog_margin_top"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <string name="select_variable">Select Variable</string>
-    <string name="invalid_arguments">Invalid arguments</string>
-    <string name="error_executing_action_template">Error executing Action: %1$s</string>
+    <ListView
+        android:id="@+id/listview_variable_names"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-</resources>
+</LinearLayout>

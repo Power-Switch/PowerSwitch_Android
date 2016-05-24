@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.api.taskerplugin;
+package eu.power_switch.api.taskerplugin.gui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

@@ -87,6 +87,8 @@ public class LocalBroadcastConstants {
     public static final String INTENT_SMS_EVENT_ACTION_ADDED = "eu.power_switch.sms_event_action_added";
 
 
+    public static final String INTENT_VARIABLE_SELECTED = "eu.power_switch.variable_selected";
+
     public static final String INTENT_PERMISSION_CHANGED = "eu.power_switch.permission_changed";
 
 

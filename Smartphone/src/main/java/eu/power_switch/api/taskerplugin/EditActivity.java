@@ -18,9 +18,13 @@
 
 package eu.power_switch.api.taskerplugin;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -38,14 +42,19 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.api.taskerplugin.bundle.BundleScrubber;
 import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
+import eu.power_switch.api.taskerplugin.gui.AbstractPluginActivity;
+import eu.power_switch.api.taskerplugin.gui.SelectVariableDialog;
+import eu.power_switch.api.taskerplugin.tasker_api.TaskerPlugin;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -55,10 +64,16 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ApiConstants;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Tasker Plugin Configuration Activity
+ * <p/>
+ * This class <b>MAY NOT</b> be refactored to another package or classname!
+ * If the classpath of this class changes Tasker will not identify this as the same Plugin as before
+ * and therefore tell existing users that the plugin is missing for their (existing) configuration.
+ * <p/>
  * Created by Markus on 22.02.2016.
  */
 public class EditActivity extends AbstractPluginActivity {
@@ -69,51 +84,40 @@ public class EditActivity extends AbstractPluginActivity {
             return lhs.compareToIgnoreCase(rhs);
         }
     };
-
+    private BroadcastReceiver broadcastReceiver;
     private RadioButton radioButtonReceiverAction;
     private RadioButton radioButtonRoomAction;
     private RadioButton radioButtonSceneAction;
-
     private ArrayList<String> apartmentNames = new ArrayList<>();
     private ArrayList<String> roomNames = new ArrayList<>();
     private ArrayList<String> receiverNames = new ArrayList<>();
     private ArrayList<String> buttonNames = new ArrayList<>();
     private ArrayList<String> sceneNames = new ArrayList<>();
-
     private Spinner spinner_apartment;
     private EditText editText_apartment;
-
     private LinearLayout linearLayoutRoom;
     private LinearLayout linearLayoutReceiver;
     private LinearLayout linearLayoutButton;
     private LinearLayout linearLayoutScene;
-
     private Spinner spinner_room;
     private EditText editText_room;
-
     private Spinner spinner_receiver;
     private EditText editText_receiver;
-
     private Spinner spinner_button;
     private EditText editText_button;
-
     private Spinner spinner_scene;
     private EditText editText_scene;
-
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
     private ArrayAdapter<String> receiverSpinnerArrayAdapter;
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
-
     private Apartment currentApartment;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
-
     private boolean useManualApartmentInput = false;
     private boolean useManualRoomInput = false;
     private boolean useManualReceiverInput = false;
     private boolean useManualButtonInput = false;
     private boolean useManualSceneInput = false;
-
     private final TextWatcher editTextTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -130,13 +134,45 @@ public class EditActivity extends AbstractPluginActivity {
             setPositiveButtonVisibility(checkValidity());
         }
     };
-    private String[] relevantVariables;
-
+    private List<String> relevantVariables = new ArrayList<>();
+    private ImageButton imageButtonApartmentVariablePicker;
+    private ImageButton imageButtonReceiverVariablePicker;
+    private ImageButton imageButtonRoomVariablePicker;
+    private ImageButton imageButtonButtonVariablePicker;
+    private ImageButton imageButtonSceneVariablePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasker_plugin);
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (LocalBroadcastConstants.INTENT_VARIABLE_SELECTED.equals(intent.getAction())) {
+                    Field field = Field.valueOf(intent.getStringExtra(SelectVariableDialog.KEY_FIELD));
+                    String selectedVariable = intent.getStringExtra(SelectVariableDialog.KEY_SELECTED_VARIABLE);
+
+                    switch (field) {
+                        case Apartment:
+                            editText_apartment.setText(selectedVariable);
+                            break;
+                        case Room:
+                            editText_room.setText(selectedVariable);
+                            break;
+                        case Receiver:
+                            editText_receiver.setText(selectedVariable);
+                            break;
+                        case Button:
+                            editText_button.setText(selectedVariable);
+                            break;
+                        case Scene:
+                            editText_scene.setText(selectedVariable);
+                            break;
+                    }
+                }
+            }
+        };
 
         View.OnClickListener actionTypeOnClickListener = new View.OnClickListener() {
             @Override
@@ -172,6 +208,18 @@ public class EditActivity extends AbstractPluginActivity {
             StatusMessageHandler.showErrorMessage(this, e);
         }
 
+        imageButtonApartmentVariablePicker = (ImageButton) findViewById(R.id.imageButton_apartmentVariablePicker);
+        imageButtonApartmentVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonApartmentVariablePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Apartment);
+                selectVariableDialog.show(getFragmentManager(), null);
+            }
+        });
+
         ImageButton imageButtonSwitchApartment = (ImageButton) findViewById(R.id.imageButton_switchApartment);
         imageButtonSwitchApartment.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
                 .sizeDp(24)
@@ -181,8 +229,10 @@ public class EditActivity extends AbstractPluginActivity {
             public void onClick(View v) {
                 if (useManualApartmentInput) {
                     setApartmentInputType(InputType.LIST);
+
                 } else {
                     setApartmentInputType(InputType.MANUAL);
+                    imageButtonApartmentVariablePicker.setVisibility(View.VISIBLE);
                 }
 
                 setPositiveButtonVisibility(checkValidity());
@@ -216,6 +266,18 @@ public class EditActivity extends AbstractPluginActivity {
         linearLayoutButton = (LinearLayout) findViewById(R.id.linearLayout_button);
         linearLayoutScene = (LinearLayout) findViewById(R.id.linearLayout_scene);
 
+        imageButtonRoomVariablePicker = (ImageButton) findViewById(R.id.imageButton_roomVariablePicker);
+        imageButtonRoomVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonRoomVariablePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Room);
+                selectVariableDialog.show(getFragmentManager(), null);
+            }
+        });
+
         ImageButton imageButtonSwitchRoom = (ImageButton) findViewById(R.id.imageButton_switchRoom);
         imageButtonSwitchRoom.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
                 .sizeDp(24)
@@ -225,8 +287,10 @@ public class EditActivity extends AbstractPluginActivity {
             public void onClick(View v) {
                 if (useManualRoomInput) {
                     setRoomInputType(InputType.LIST);
+                    imageButtonRoomVariablePicker.setVisibility(View.GONE);
                 } else {
                     setRoomInputType(InputType.MANUAL);
+                    imageButtonRoomVariablePicker.setVisibility(View.VISIBLE);
                 }
 
                 setPositiveButtonVisibility(checkValidity());
@@ -255,6 +319,18 @@ public class EditActivity extends AbstractPluginActivity {
         editText_room = (EditText) findViewById(R.id.editText_room);
         editText_room.addTextChangedListener(editTextTextWatcher);
 
+        imageButtonReceiverVariablePicker = (ImageButton) findViewById(R.id.imageButton_receiverVariablePicker);
+        imageButtonReceiverVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonReceiverVariablePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Receiver);
+                selectVariableDialog.show(getFragmentManager(), null);
+            }
+        });
+
         ImageButton imageButtonSwitchReceiver = (ImageButton) findViewById(R.id.imageButton_switchReceiver);
         imageButtonSwitchReceiver.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
                 .sizeDp(24)
@@ -264,8 +340,10 @@ public class EditActivity extends AbstractPluginActivity {
             public void onClick(View v) {
                 if (useManualReceiverInput) {
                     setReceiverInputType(InputType.LIST);
+                    imageButtonReceiverVariablePicker.setVisibility(View.GONE);
                 } else {
                     setReceiverInputType(InputType.MANUAL);
+                    imageButtonReceiverVariablePicker.setVisibility(View.VISIBLE);
                 }
 
                 setPositiveButtonVisibility(checkValidity());
@@ -294,6 +372,18 @@ public class EditActivity extends AbstractPluginActivity {
         editText_receiver = (EditText) findViewById(R.id.editText_receiver);
         editText_receiver.addTextChangedListener(editTextTextWatcher);
 
+        imageButtonButtonVariablePicker = (ImageButton) findViewById(R.id.imageButton_buttonVariablePicker);
+        imageButtonButtonVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonButtonVariablePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Button);
+                selectVariableDialog.show(getFragmentManager(), null);
+            }
+        });
+
         ImageButton imageButtonSwitchButton = (ImageButton) findViewById(R.id.imageButton_switchButton);
         imageButtonSwitchButton.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
                 .sizeDp(24)
@@ -303,8 +393,10 @@ public class EditActivity extends AbstractPluginActivity {
             public void onClick(View v) {
                 if (useManualButtonInput) {
                     setButtonInputType(InputType.LIST);
+                    imageButtonButtonVariablePicker.setVisibility(View.GONE);
                 } else {
                     setButtonInputType(InputType.MANUAL);
+                    imageButtonButtonVariablePicker.setVisibility(View.VISIBLE);
                 }
 
                 setPositiveButtonVisibility(checkValidity());
@@ -332,6 +424,18 @@ public class EditActivity extends AbstractPluginActivity {
         editText_button = (EditText) findViewById(R.id.editText_button);
         editText_button.addTextChangedListener(editTextTextWatcher);
 
+        imageButtonSceneVariablePicker = (ImageButton) findViewById(R.id.imageButton_sceneVariablePicker);
+        imageButtonSceneVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
+                .sizeDp(24)
+                .color(ContextCompat.getColor(this, android.R.color.white)));
+        imageButtonSceneVariablePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Scene);
+                selectVariableDialog.show(getFragmentManager(), null);
+            }
+        });
+
         ImageButton imageButtonSwitchScene = (ImageButton) findViewById(R.id.imageButton_switchScene);
         imageButtonSwitchScene.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
                 .sizeDp(24)
@@ -341,8 +445,10 @@ public class EditActivity extends AbstractPluginActivity {
             public void onClick(View v) {
                 if (useManualSceneInput) {
                     setSceneInputType(InputType.LIST);
+                    imageButtonSceneVariablePicker.setVisibility(View.GONE);
                 } else {
                     setSceneInputType(InputType.MANUAL);
+                    imageButtonSceneVariablePicker.setVisibility(View.VISIBLE);
                 }
 
                 setPositiveButtonVisibility(checkValidity());
@@ -373,13 +479,14 @@ public class EditActivity extends AbstractPluginActivity {
 
         updateLists();
 
-        if (TaskerPlugin.hostSupportsRelevantVariables(getIntent().getExtras())) {
-            relevantVariables = TaskerPlugin.getRelevantVariableList(getIntent().getExtras());
-        }
-
         BundleScrubber.scrub(getIntent());
         final Bundle localeBundle = getIntent().getBundleExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE);
         BundleScrubber.scrub(localeBundle);
+
+        if (TaskerPlugin.hostSupportsRelevantVariables(getIntent().getExtras())) {
+            relevantVariables.clear();
+            relevantVariables.addAll(Arrays.asList(TaskerPlugin.getRelevantVariableList(getIntent().getExtras())));
+        }
 
         if (null == savedInstanceState && PluginBundleManager.isBundleValid(this, localeBundle)) {
             initData(localeBundle);
@@ -461,9 +568,11 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualApartmentInput) {
             spinner_apartment.setVisibility(View.GONE);
             editText_apartment.setVisibility(View.VISIBLE);
+            imageButtonApartmentVariablePicker.setVisibility(View.VISIBLE);
         } else {
             spinner_apartment.setVisibility(View.VISIBLE);
             editText_apartment.setVisibility(View.GONE);
+            imageButtonApartmentVariablePicker.setVisibility(View.GONE);
         }
     }
 
@@ -473,9 +582,11 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualRoomInput) {
             spinner_room.setVisibility(View.GONE);
             editText_room.setVisibility(View.VISIBLE);
+            imageButtonRoomVariablePicker.setVisibility(View.VISIBLE);
         } else {
             spinner_room.setVisibility(View.VISIBLE);
             editText_room.setVisibility(View.GONE);
+            imageButtonRoomVariablePicker.setVisibility(View.GONE);
         }
     }
 
@@ -485,9 +596,11 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualReceiverInput) {
             spinner_receiver.setVisibility(View.GONE);
             editText_receiver.setVisibility(View.VISIBLE);
+            imageButtonReceiverVariablePicker.setVisibility(View.VISIBLE);
         } else {
             spinner_receiver.setVisibility(View.VISIBLE);
             editText_receiver.setVisibility(View.GONE);
+            imageButtonReceiverVariablePicker.setVisibility(View.GONE);
         }
     }
 
@@ -497,9 +610,11 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualButtonInput) {
             spinner_button.setVisibility(View.GONE);
             editText_button.setVisibility(View.VISIBLE);
+            imageButtonButtonVariablePicker.setVisibility(View.VISIBLE);
         } else {
             spinner_button.setVisibility(View.VISIBLE);
             editText_button.setVisibility(View.GONE);
+            imageButtonButtonVariablePicker.setVisibility(View.GONE);
         }
     }
 
@@ -509,9 +624,11 @@ public class EditActivity extends AbstractPluginActivity {
         if (useManualSceneInput) {
             spinner_scene.setVisibility(View.GONE);
             editText_scene.setVisibility(View.VISIBLE);
+            imageButtonSceneVariablePicker.setVisibility(View.VISIBLE);
         } else {
             spinner_scene.setVisibility(View.VISIBLE);
             editText_scene.setVisibility(View.GONE);
+            imageButtonSceneVariablePicker.setVisibility(View.GONE);
         }
     }
 
@@ -864,6 +981,28 @@ public class EditActivity extends AbstractPluginActivity {
         }
 
         super.finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_VARIABLE_SELECTED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        super.onStop();
+    }
+
+    public enum Field {
+        Apartment,
+        Room,
+        Receiver,
+        Button,
+        Scene
     }
 
     private enum InputType {

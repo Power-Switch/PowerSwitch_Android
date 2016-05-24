@@ -25,9 +25,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
+import android.widget.Toast;
 
 import org.apache.log4j.LogManager;
 
@@ -62,6 +64,7 @@ public class PowerSwitch extends MultiDexApplication {
 
     // Default System Handler for uncaught Exceptions
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
+    private Handler mHandler;
 
     public PowerSwitch() {
         // save original uncaught exception handler
@@ -175,13 +178,30 @@ public class PowerSwitch extends MultiDexApplication {
 
         DeveloperPreferencesHandler.init(this);
 
+
+        // This is where you do your work in the UI thread.
+// Your worker tells you in the message what to do.
+        mHandler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message message) {
+                // This is where you do your work in the UI thread.
+                // Your worker tells you in the message what to do.
+                Toast.makeText(getApplicationContext(), message.obj.toString(), Toast.LENGTH_SHORT).show();
+            }
+        };
+
+
         // Log configuration and update widgets, wear, etc.
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
+//                    mHandler.obtainMessage(0, "Wait...").sendToTarget();
+
                     // wait some time for application to finish loading
                     Thread.sleep(5000);
+//                    mHandler.obtainMessage(0, "Working...").sendToTarget();
+
 
                     if (!PermissionHelper.isLocationPermissionAvailable(getApplicationContext())) {
                         try {
@@ -208,7 +228,10 @@ public class PowerSwitch extends MultiDexApplication {
 
                 try {
                     Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+
+//                    mHandler.obtainMessage(0, "Wait...").sendToTarget();
                     Thread.sleep(5000);
+//                    mHandler.obtainMessage(0, "Logging database...").sendToTarget();
 
                     for (Apartment apartment : DatabaseHandler.getAllApartments()) {
                         Log.d(apartment.toString());
