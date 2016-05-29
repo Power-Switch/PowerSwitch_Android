@@ -16,21 +16,26 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.0'
-        classpath 'com.google.gms:google-services:3.0.0'
-    }
-}
+package eu.power_switch.phone;
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
+/**
+ * Helper class for Phone related stuff
+ * <p/>
+ * Created by Markus on 29.05.2016.
+ */
+public class PhoneHelper {
+
+    /**
+     * Check if the device is able to receive calls
+     *
+     * @param context any suitable context
+     * @return true if calls are supported, false otherwise
+     */
+    public static boolean isCallingSupported(Context context) {
+        return ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
     }
+
 }

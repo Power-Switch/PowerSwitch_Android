@@ -88,6 +88,7 @@ import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.phone.PhoneHelper;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
@@ -482,6 +483,7 @@ public class MainActivity extends AppCompatActivity {
                         .color(tintColor)
                         .sizeDp(24))
                 .withSelectable(true)
+                .withEnabled(PhoneHelper.isCallingSupported(this))
                 .withIdentifier(IDENTIFIER_PHONE)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override

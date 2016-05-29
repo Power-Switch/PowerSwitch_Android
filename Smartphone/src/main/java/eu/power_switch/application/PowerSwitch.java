@@ -31,6 +31,8 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+
 import org.apache.log4j.LogManager;
 
 import java.text.SimpleDateFormat;
@@ -169,6 +171,9 @@ public class PowerSwitch extends MultiDexApplication {
         Log.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
         Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
         Log.d("Device brand/model: " + LogHandler.getDeviceName());
+
+        // Initialize Firebase
+        Firebase.setAndroidContext(this);
 
         // Onetime initialization of handlers for static access
         DatabaseHandler.init(this);
