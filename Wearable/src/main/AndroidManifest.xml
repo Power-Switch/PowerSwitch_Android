@@ -46,9 +46,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="eu.power_switch.gui.activity.RoomsActivity"/>
-        <activity android:name="eu.power_switch.gui.activity.ScenesActivity"/>
-        <activity android:name="eu.power_switch.gui.activity.ReceiversActivity"/>
 
         <activity android:name="android.support.wearable.activity.ConfirmationActivity"/>
         <activity android:name=".gui.animation.ConfirmationActivityClone"/>

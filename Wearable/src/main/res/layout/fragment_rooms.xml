@@ -23,7 +23,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".gui.activity.RoomsActivity"
     tools:deviceIds="wear_square">
 
     <include layout="@layout/ambient_mode"/>

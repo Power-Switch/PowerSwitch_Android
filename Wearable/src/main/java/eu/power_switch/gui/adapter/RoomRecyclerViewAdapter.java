@@ -67,7 +67,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     @Override
     public RoomRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_room__round, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_room, parent, false);
         // Return a new holder instance
         return new RoomRecyclerViewAdapter.ViewHolder(itemView);
     }

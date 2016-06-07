@@ -27,14 +27,18 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.wearable.activity.WearableActivity;
-import android.support.wearable.view.WatchViewStub;
+import android.support.wearable.view.drawer.WearableActionDrawer;
+import android.support.wearable.view.drawer.WearableDrawerLayout;
+import android.support.wearable.view.drawer.WearableNavigationDrawer;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -42,6 +46,9 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.ThemeHelper;
+import eu.power_switch.gui.adapter.NavigationDrawerAdapter;
+import eu.power_switch.gui.fragment.RoomsFragment;
+import eu.power_switch.gui.fragment.ScenesFragment;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
@@ -53,19 +60,24 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
 /**
  * Main Activity holding all app related views
  */
-public class MainActivity extends WearableActivity {
+public class MainActivity extends WearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
-    private ArrayList<Room> roomList = new ArrayList<>();
-    private ArrayList<Scene> sceneList = new ArrayList<>();
+
+    public static String apartmentName = "";
+    public static ArrayList<Room> roomList = new ArrayList<>();
+    public static ArrayList<Scene> sceneList = new ArrayList<>();
 
     private DataApiHandler dataApiHandler;
     private BroadcastReceiver broadcastReceiver;
 
+    private WearableDrawerLayout mWearableDrawerLayout;
+    private WearableNavigationDrawer mWearableNavigationDrawer;
+    private WearableActionDrawer mWearableActionDrawer;
+
     private TextView textViewStatus;
     private RelativeLayout relativeLayoutStatus;
-    private TextView textViewApartmet;
-    private LinearLayout contentLayout;
+    private FrameLayout contentFrameLayout;
 
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
@@ -90,24 +102,24 @@ public class MainActivity extends WearableActivity {
                 Log.d("MainActivity", "received intent: " + intent.getAction());
 
                 if (ListenerService.DATA_UPDATED.equals(intent.getAction())) {
-                    String apartmentName = intent.getStringExtra(ListenerService.KEY_APARTMENT_DATA);
-                    textViewApartmet.setText(apartmentName);
+                    apartmentName = intent.getStringExtra(ListenerService.KEY_APARTMENT_DATA);
 
                     ArrayList<Room> rooms = (ArrayList<Room>) intent.getSerializableExtra(ListenerService.KEY_ROOM_DATA);
-                    replaceRoomList(rooms);
+                    roomList.clear();
+                    roomList.addAll(rooms);
+
+                    RoomsFragment.notifyDataChanged(getApplicationContext());
 
                     ArrayList<Scene> scenes = (ArrayList<Scene>) intent.getSerializableExtra(ListenerService.KEY_SCENE_DATA);
-                    replaceSceneList(scenes);
+                    sceneList.clear();
+                    sceneList.addAll(scenes);
 
-                    refreshUI();
+                    ScenesFragment.notifyDataChanged(getApplicationContext());
                 } else if (WearableSettingsConstants.WEARABLE_THEME_CHANGED.equals(intent.getAction())) {
                     finish();
                     Intent restartActivityIntent = new Intent(getApplicationContext(), MainActivity.class);
                     restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    restartActivityIntent.putExtra(ListenerService.KEY_APARTMENT_DATA, textViewApartmet.getText().toString());
-                    restartActivityIntent.putExtra(ListenerService.KEY_ROOM_DATA, roomList);
-                    restartActivityIntent.putExtra(ListenerService.KEY_SCENE_DATA, sceneList);
                     startActivity(restartActivityIntent);
                 }
             }
@@ -125,60 +137,42 @@ public class MainActivity extends WearableActivity {
 //            }
 //        });
 
-        final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
-        stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
-            @Override
-            public void onLayoutInflated(WatchViewStub stub) {
+        // Main Wearable Drawer Layout that wraps all content
+        mWearableDrawerLayout = (WearableDrawerLayout) findViewById(R.id.drawer_layout);
+        contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
 
-                // Status layout
-                relativeLayoutStatus = (RelativeLayout) findViewById(R.id.relativeLayout_status);
-                textViewStatus = (TextView) findViewById(R.id.textView_Status);
+        // Initialize content to first planet.
+        RoomsFragment roomsFragment = new RoomsFragment();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.content_frame, roomsFragment)
+                .commit();
 
-                contentLayout = (LinearLayout) findViewById(R.id.contentLayout);
+        // Top Navigation Drawer
+        mWearableNavigationDrawer = (WearableNavigationDrawer) findViewById(R.id.top_navigation_drawer);
+        mWearableNavigationDrawer.setAdapter(new NavigationDrawerAdapter(this));
 
-                textViewApartmet = (TextView) findViewById(R.id.textView_apartment);
+        // Peeks Navigation drawer on the top.
+        mWearableDrawerLayout.peekDrawer(Gravity.TOP);
 
-                Button buttonRooms = (Button) findViewById(R.id.button_rooms);
-                buttonRooms.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent startIntent = new Intent(getApplicationContext(), RoomsActivity.class);
-                        startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startIntent.putExtra(ListenerService.KEY_ROOM_DATA, roomList);
-                        startActivity(startIntent);
-                    }
-                });
+//        // Bottom Action Drawer
+//        mWearableActionDrawer = (WearableActionDrawer) findViewById(R.id.bottom_action_drawer);
 
-                Button buttonScenes = (Button) findViewById(R.id.button_scenes);
-                buttonScenes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent startIntent = new Intent(getApplicationContext(), ScenesActivity.class);
-                        startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startIntent.putExtra(ListenerService.KEY_SCENE_DATA, sceneList);
-                        startActivity(startIntent);
-                    }
-                });
+//        // Populate Action Drawer Menu
+//        Menu menu = mWearableActionDrawer.getMenu();
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.action_drawer_menu, menu);
+//        mWearableActionDrawer.setOnMenuItemClickListener(this);
 
-                if (getIntent().hasExtra(ListenerService.KEY_APARTMENT_DATA) &&
-                        getIntent().hasExtra(ListenerService.KEY_ROOM_DATA) &&
-                        getIntent().hasExtra(ListenerService.KEY_SCENE_DATA)) {
-                    String apartmentName = getIntent().getStringExtra(ListenerService.KEY_APARTMENT_DATA);
-                    textViewApartmet.setText(apartmentName);
+//        // Peeks action drawer on the bottom.
+//        mWearableDrawerLayout.peekDrawer(Gravity.BOTTOM);
 
-                    ArrayList<Room> roomArrayList = (ArrayList<Room>) getIntent().getSerializableExtra(ListenerService.KEY_ROOM_DATA);
-                    replaceRoomList(roomArrayList);
+        // Status layout
+        relativeLayoutStatus = (RelativeLayout) findViewById(R.id.relativeLayout_status);
+        textViewStatus = (TextView) findViewById(R.id.textView_Status);
 
-                    ArrayList<Scene> sceneArrayList = (ArrayList<Scene>) getIntent().getSerializableExtra(ListenerService.KEY_SCENE_DATA);
-                    replaceSceneList(sceneArrayList);
-
-                    refreshUI();
-                } else {
-                    // Get Room/Receiver/Button/Scene configuration from Smartphone App
-                    new FetchDataAsyncTask().execute();
-                }
-            }
-        });
+        // Get Room/Receiver/Button/Scene configuration from Smartphone App
+        new FetchDataAsyncTask().execute();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -202,7 +196,7 @@ public class MainActivity extends WearableActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
@@ -253,52 +247,38 @@ public class MainActivity extends WearableActivity {
         super.onStop();
     }
 
-    private void refreshUI() {
-        if (!isAmbient()) {
-            if (roomList.isEmpty()) {
-                contentLayout.setVisibility(View.GONE);
-                textViewStatus.setText(R.string.please_create_receivers_on_your_smartphone_first);
-                textViewStatus.setVisibility(View.VISIBLE);
-                relativeLayoutStatus.setVisibility(View.VISIBLE);
-            } else {
-                contentLayout.setVisibility(View.VISIBLE);
-                relativeLayoutStatus.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void replaceRoomList(ArrayList<Room> list) {
-        roomList.clear();
-        roomList.addAll(list);
-    }
-
-    private void replaceSceneList(ArrayList<Scene> scenes) {
-        sceneList.clear();
-        sceneList.addAll(scenes);
-    }
-
     @Override
     public void onEnterAmbient(Bundle ambientDetails) {
         super.onEnterAmbient(ambientDetails);
 
-        textViewStatus.setVisibility(View.GONE);
+        contentFrameLayout.setVisibility(View.GONE);
         relativeLayoutStatus.setVisibility(View.VISIBLE);
-        contentLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void onExitAmbient() {
-        if (roomList.isEmpty()) {
-            relativeLayoutStatus.setVisibility(View.VISIBLE);
-            textViewStatus.setText(R.string.please_create_receivers_on_your_smartphone_first);
-            textViewStatus.setVisibility(View.VISIBLE);
-            contentLayout.setVisibility(View.GONE);
-        } else {
-            contentLayout.setVisibility(View.VISIBLE);
-            relativeLayoutStatus.setVisibility(View.GONE);
-        }
+        contentFrameLayout.setVisibility(View.VISIBLE);
+        relativeLayoutStatus.setVisibility(View.GONE);
 
         super.onExitAmbient();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        final int itemId = menuItem.getItemId();
+
+        switch (itemId) {
+//            case R.id.menu_planet_name:
+//                toastMessage = mSolarSystem.get(mSelectedPlanet).getName();
+//                break;
+//            case R.id.menu_surface_area:
+//                toastMessage = mSolarSystem.get(mSelectedPlanet).getSurfaceArea();
+//                break;
+        }
+
+        mWearableDrawerLayout.closeDrawer(mWearableActionDrawer);
+
+        return false;
     }
 
     /**
@@ -341,11 +321,26 @@ public class MainActivity extends WearableActivity {
         protected void onPostExecute(ArrayList<Object> result) {
             if (result != null) {
                 // Update UI based on the result of the background processing
-                textViewApartmet.setText(((ArrayList<String>) result.get(0)).get(0));
-                replaceRoomList((ArrayList<Room>) result.get(1));
-                replaceSceneList((ArrayList<Scene>) result.get(2));
+//                textViewApartmet.setText(((ArrayList<String>) result.get(0)).get(0));
+
+                apartmentName = ((ArrayList<String>) result.get(0)).get(0);
+
+                roomList.clear();
+                roomList.addAll((ArrayList<Room>) result.get(1));
+
+                RoomsFragment.notifyDataChanged(getApplicationContext());
+
+                sceneList.clear();
+                sceneList.addAll((ArrayList<Scene>) result.get(2));
+
+                ScenesFragment.notifyDataChanged(getApplicationContext());
+
+                textViewStatus.setVisibility(View.GONE);
+                if (!isAmbient()) {
+                    contentFrameLayout.setVisibility(View.VISIBLE);
+                    relativeLayoutStatus.setVisibility(View.GONE);
+                }
             }
-            refreshUI();
         }
     }
 }

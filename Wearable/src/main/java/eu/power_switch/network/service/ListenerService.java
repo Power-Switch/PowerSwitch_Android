@@ -18,6 +18,7 @@
 
 package eu.power_switch.network.service;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
@@ -203,6 +204,21 @@ public class ListenerService extends WearableListenerService {
     }
 
     /**
+     * Sends local Broadcast that underlying data has changed and UI has to be updated
+     *
+     * @param rooms
+     * @param scenes
+     */
+    public static void sendDataUpdatedBroadcast(Context context, String apartmentName, ArrayList<Room> rooms, ArrayList<Scene> scenes) {
+        Intent intent = new Intent(DATA_UPDATED);
+        intent.putExtra(KEY_APARTMENT_DATA, apartmentName);
+        intent.putExtra(KEY_ROOM_DATA, rooms);
+        intent.putExtra(KEY_SCENE_DATA, scenes);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
      * Reacts to DataChanged Events from DataApi
      *
      * @param dataEvents
@@ -230,7 +246,7 @@ public class ListenerService extends WearableListenerService {
                         ArrayList<Scene> scenes = extractSceneDataMapItems(data);
 
                         // send data to Activity
-                        sendDataUpdatedBroadcast(apartmentName, rooms, scenes);
+                        sendDataUpdatedBroadcast(this, apartmentName, rooms, scenes);
                     } else if (WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
                         DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                         ArrayList<DataMap> settings = dataMapItem.getDataMap()
@@ -252,7 +268,7 @@ public class ListenerService extends WearableListenerService {
                     if (WearableConstants.DATA_PATH.equals(event.getDataItem().getUri().getPath())) {
                         // send data to Activity
                         // update with empty lists
-                        sendDataUpdatedBroadcast("", new ArrayList<Room>(), new ArrayList<Scene>());
+                        sendDataUpdatedBroadcast(this, "", new ArrayList<Room>(), new ArrayList<Scene>());
                     }
                 }
             }
@@ -274,22 +290,6 @@ public class ListenerService extends WearableListenerService {
             // TODO: Launch Wearable App
             // is this even possible?
         }
-    }
-
-    /**
-     * Sends local Broadcast that underlying data has changed and UI has to be updated
-     *
-     * @param rooms
-     * @param scenes
-     */
-
-    private void sendDataUpdatedBroadcast(String apartmentName, ArrayList<Room> rooms, ArrayList<Scene> scenes) {
-        Intent intent = new Intent(DATA_UPDATED);
-        intent.putExtra(KEY_APARTMENT_DATA, apartmentName);
-        intent.putExtra(KEY_ROOM_DATA, rooms);
-        intent.putExtra(KEY_SCENE_DATA, scenes);
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     /**

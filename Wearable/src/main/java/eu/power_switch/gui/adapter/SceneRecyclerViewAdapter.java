@@ -59,7 +59,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     public SceneRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_scene__round, parent, false);
+                .inflate(R.layout.list_item_scene, parent, false);
         // Return a new holder instance
         return new SceneRecyclerViewAdapter.ViewHolder(itemView);
     }

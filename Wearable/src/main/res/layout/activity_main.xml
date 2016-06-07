@@ -17,26 +17,81 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout
+<android.support.wearable.view.drawer.WearableDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".gui.activity.MainActivity"
+    tools:deviceIds="wear">
 
-    <!-- other views go here -->
-    <android.support.wearable.view.WatchViewStub
-        android:id="@+id/watch_view_stub"
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:rectLayout="@layout/activity_main__rect"
-        app:roundLayout="@layout/activity_main__round"
-        tools:context=".MainActivity"
-        tools:deviceIds="wear"/>
+        android:visibility="gone"/>
 
-    <android.support.wearable.view.DismissOverlayView
-        android:id="@+id/dismiss_overlay"
+    <RelativeLayout
+        android:id="@+id/relativeLayout_status"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/wearable_ic_launcher"/>
+
+        <TextView
+            android:id="@+id/textView_Status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@string/loading"
+            android:visibility="visible"/>
+
+    </RelativeLayout>
+
+    <android.support.wearable.view.drawer.WearableNavigationDrawer
+        android:id="@+id/top_navigation_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_grey"/>
+
+    <!--<android.support.wearable.view.drawer.WearableActionDrawer-->
+    <!--android:id="@+id/bottom_action_drawer"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="@color/grey"/>-->
+
+</android.support.wearable.view.drawer.WearableDrawerLayout>
+
+    <!--<FrameLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--&lt;!&ndash; other views go here &ndash;&gt;-->
+    <!--<android.support.wearable.view.WatchViewStub-->
+    <!--android:id="@+id/watch_view_stub"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:rectLayout="@layout/activity_main__rect"-->
+    <!--app:roundLayout="@layout/activity_main__round"-->
+    <!--tools:context=".MainActivity"-->
+    <!--tools:deviceIds="wear"/>-->
+
+    <!--<android.support.wearable.view.DismissOverlayView-->
+    <!--android:id="@+id/dismiss_overlay"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+
+    <!--</FrameLayout>-->
