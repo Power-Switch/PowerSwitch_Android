@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "679232125592",
+    "firebase_url": "https://powerswitch-1195.firebaseio.com",
+    "project_id": "powerswitch-1195",
+    "storage_bucket": "powerswitch-1195.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679232125592:android:17df450e2441dcc8",
+        "android_client_info": {
+          "package_name": "eu.power_switch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679232125592-058afi6kudm60j48ujlgac2nfdo0sbjf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6dyaPH17DlqJG-UT68RKwV2hEtoEvC8o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
