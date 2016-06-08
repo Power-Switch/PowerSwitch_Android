@@ -32,7 +32,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
@@ -56,7 +55,6 @@ public class ScenesFragment extends Fragment {
     private DataApiHandler dataApiHandler;
 
     private BroadcastReceiver broadcastReceiver;
-    private RelativeLayout relativeLayoutAmbientMode;
     private LinearLayout layoutLoading;
     private LinearLayout layoutEmpty;
 
@@ -76,6 +74,8 @@ public class ScenesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
 
+        dataApiHandler = new DataApiHandler(getActivity());
+
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -86,19 +86,9 @@ public class ScenesFragment extends Fragment {
                     refreshUI();
                 } else if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
                     refreshUI();
-                } else if (WearableSettingsConstants.WEARABLE_THEME_CHANGED.equals(intent.getAction())) {
-//                    finish();
-//                    Intent restartActivityIntent = new Intent(getApplicationContext(), RoomsActivity.class);
-//                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    restartActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                     add current extras
-//                    restartActivityIntent.putExtras(getArguments());
-//                    startActivity(restartActivityIntent);
                 }
             }
         };
-
-        relativeLayoutAmbientMode = (RelativeLayout) rootView.findViewById(R.id.relativeLayout_ambientMode);
 
         layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
 
@@ -142,7 +132,6 @@ public class ScenesFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(REFRESH_VIEW);
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
-        intentFilter.addAction(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

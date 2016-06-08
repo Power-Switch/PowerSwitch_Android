@@ -17,22 +17,11 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.wearable.view.WearableListView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/wearable_List"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:deviceIds="wear_square">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rooms_recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
-
-    <include layout="@layout/loading"/>
-
-    <include layout="@layout/empty"/>
-
-</LinearLayout>
+    android:dividerHeight="0dp"
+    android:scrollbars="none">
+</android.support.wearable.view.WearableListView>

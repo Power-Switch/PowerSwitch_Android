@@ -27,6 +27,7 @@ import android.support.wearable.view.drawer.WearableNavigationDrawer;
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
+import eu.power_switch.gui.fragment.SettingsFragment;
 
 /**
  * Navigation Drawer implementation
@@ -48,6 +49,8 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
                 return activity.getString(R.string.rooms);
             case 1:
                 return activity.getString(R.string.scenes);
+            case 2:
+                return activity.getString(R.string.settings);
             default:
                 return "";
         }
@@ -57,9 +60,8 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
     public Drawable getItemDrawable(int i) {
         switch (i) {
             case 0:
-                return activity.getResources().getDrawable(R.drawable.wearable_ic_launcher);
             case 1:
-                return activity.getResources().getDrawable(R.drawable.wearable_ic_launcher);
+            case 2:
             default:
                 return activity.getResources().getDrawable(R.drawable.wearable_ic_launcher);
         }
@@ -76,6 +78,9 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
             case 1:
                 fragment = new ScenesFragment();
                 break;
+            case 2:
+                fragment = new SettingsFragment();
+                break;
             default:
                 fragment = new RoomsFragment();
                 break;
@@ -87,6 +92,6 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

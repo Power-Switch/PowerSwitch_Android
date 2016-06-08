@@ -233,4 +233,48 @@ public class WearablePreferencesHandler {
         highlightLastActivatedButtonCache = bool;
     }
 
+    /**
+     * Get a settings value by key
+     *
+     * @param settingsKey  Key of setting
+     * @param defaultValue default value, if no value can be found in settings
+     * @param <T>
+     * @return
+     */
+    public static <T> T get(String settingsKey, T defaultValue) {
+        Object value = sharedPreferences.getAll().get(settingsKey);
+
+        if (value == null) {
+            return defaultValue;
+        } else {
+            return (T) value;
+        }
+    }
+
+    /**
+     * Set a settings value by key
+     *
+     * @param settingsKey Key of setting
+     * @param newValue    new value
+     * @param <T>
+     */
+    public static <T> void set(String settingsKey, T newValue) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (newValue instanceof Boolean) {
+            editor.putBoolean(settingsKey, (Boolean) newValue);
+        } else if (newValue instanceof String) {
+            editor.putString(settingsKey, (String) newValue);
+        } else if (newValue instanceof Integer) {
+            editor.putInt(settingsKey, (Integer) newValue);
+        } else if (newValue instanceof Float) {
+            editor.putFloat(settingsKey, (Float) newValue);
+        } else if (newValue instanceof Long) {
+            editor.putLong(settingsKey, (Long) newValue);
+        } else {
+            throw new IllegalArgumentException("Cant save objects of type " + newValue.getClass());
+        }
+
+        editor.apply();
+    }
 }

@@ -21,4 +21,6 @@
 
     <string name="error_executing_wear_action">Error while executing Wear action</string>
 
+    <string name="settings">Settings</string>
+
 </resources>
