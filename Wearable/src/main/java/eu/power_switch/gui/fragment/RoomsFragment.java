@@ -104,7 +104,9 @@ public class RoomsFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false);
         roomsRecyclerView.setLayoutManager(layoutManager);
 
-        refreshUI();
+        if (MainActivity.isInitialized()) {
+            refreshUI();
+        }
 
         return rootView;
     }

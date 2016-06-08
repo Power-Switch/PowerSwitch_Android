@@ -104,7 +104,9 @@ public class ScenesFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false);
         scenesRecyclerView.setLayoutManager(layoutManager);
 
-        refreshUI();
+        if (MainActivity.isInitialized()) {
+            refreshUI();
+        }
 
         return rootView;
     }

@@ -41,6 +41,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -63,11 +64,10 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
 public class MainActivity extends WearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
-
     public static String apartmentName = "";
     public static ArrayList<Room> roomList = new ArrayList<>();
     public static ArrayList<Scene> sceneList = new ArrayList<>();
-
+    private static boolean isInitialized = false;
     private DataApiHandler dataApiHandler;
     private BroadcastReceiver broadcastReceiver;
 
@@ -81,6 +81,10 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
+
+    public static boolean isInitialized() {
+        return isInitialized;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -340,6 +344,11 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
                     contentFrameLayout.setVisibility(View.VISIBLE);
                     relativeLayoutStatus.setVisibility(View.GONE);
                 }
+
+                isInitialized = true;
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG).show();
+                isInitialized = true;
             }
         }
     }

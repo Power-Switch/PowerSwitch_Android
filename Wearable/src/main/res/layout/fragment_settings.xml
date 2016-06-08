@@ -23,5 +23,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:dividerHeight="0dp"
-    android:scrollbars="none">
-</android.support.wearable.view.WearableListView>
+    android:scrollbars="vertical"/>
