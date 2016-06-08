@@ -58,7 +58,7 @@ public class SettingsListAdapter extends WearableListView.Adapter {
 
         itemViewHolder.icon.setImageDrawable(settingsItem.getIcon());
         itemViewHolder.description.setText(settingsItem.getDescription() + ":");
-        itemViewHolder.value.setText(String.valueOf(settingsItem.getValue()));
+        itemViewHolder.value.setText(settingsItem.getValueDescription());
     }
 
     @Override

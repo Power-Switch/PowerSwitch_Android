@@ -20,29 +20,24 @@ package eu.power_switch.settings;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
+
+import com.mikepenz.iconics.IconicsDrawable;
 
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Created by Markus on 08.06.2016.
  */
-public class SettingsItem<T> {
+public abstract class SettingsItem<T> {
 
-    private Context context;
+    protected Context context;
     private String description;
-    private Drawable icon;
+    private IconicsDrawable icon;
     private String settingsKey;
     private T defaultValue;
 
-    public SettingsItem(Context context, @DrawableRes int iconDrawableRes, @StringRes int descriptionRes, String settingsKey, T defaultValue) {
-        this(context, ContextCompat.getDrawable(context, iconDrawableRes),
-                descriptionRes, settingsKey, defaultValue);
-    }
-
-    public SettingsItem(Context context, Drawable iconDrawable, @StringRes int description, String settingsKey, T defaultValue) {
+    public SettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey, T defaultValue) {
         this.context = context;
         this.icon = iconDrawable;
         this.description = context.getString(description);
@@ -66,4 +61,6 @@ public class SettingsItem<T> {
         WearablePreferencesHandler.set(settingsKey, newValue);
         WearablePreferencesHandler.forceRefresh(context);
     }
+
+    public abstract String getValueDescription();
 }

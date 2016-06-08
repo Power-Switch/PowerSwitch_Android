@@ -29,6 +29,51 @@ import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 public class IconicsHelper {
 
     /**
+     * Get "Rooms" icon
+     *
+     * @param context any suitable context
+     * @return "Rooms" icon
+     */
+    public static IconicsDrawable getRoomsIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_view_dashboard)
+                .sizeDp(64)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Scenes" icon
+     *
+     * @param context any suitable context
+     * @return "Scenes" icon
+     */
+    public static IconicsDrawable getScenesIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_brightness_setting)
+                .sizeDp(64)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Settings" icon
+     *
+     * @param context any suitable context
+     * @return "Settings" icon
+     */
+    public static IconicsDrawable getSettingsIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_settings)
+                .sizeDp(64)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
      * Get "Close rooms" icon
      *
      * @param context any suitable context

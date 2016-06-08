@@ -25,6 +25,7 @@ import android.graphics.drawable.Drawable;
 import android.support.wearable.view.drawer.WearableNavigationDrawer;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
 import eu.power_switch.gui.fragment.SettingsFragment;
@@ -36,6 +37,10 @@ import eu.power_switch.gui.fragment.SettingsFragment;
  */
 public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNavigationDrawerAdapter {
 
+    private static final int INDEX_ROOMS = 0;
+    private static final int INDEX_SCENES = 1;
+    private static final int INDEX_SETTINGS = 2;
+
     private final Activity activity;
 
     public NavigationDrawerAdapter(Activity activity) {
@@ -45,11 +50,11 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
     @Override
     public String getItemText(int i) {
         switch (i) {
-            case 0:
+            case INDEX_ROOMS:
                 return activity.getString(R.string.rooms);
-            case 1:
+            case INDEX_SCENES:
                 return activity.getString(R.string.scenes);
-            case 2:
+            case INDEX_SETTINGS:
                 return activity.getString(R.string.settings);
             default:
                 return "";
@@ -59,9 +64,12 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
     @Override
     public Drawable getItemDrawable(int i) {
         switch (i) {
-            case 0:
-            case 1:
-            case 2:
+            case INDEX_ROOMS:
+                return IconicsHelper.getRoomsIcon(activity);
+            case INDEX_SCENES:
+                return IconicsHelper.getScenesIcon(activity);
+            case INDEX_SETTINGS:
+                return IconicsHelper.getSettingsIcon(activity);
             default:
                 return activity.getResources().getDrawable(R.drawable.wearable_ic_launcher);
         }
@@ -72,13 +80,13 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
         Fragment fragment;
 
         switch (i) {
-            case 0:
+            case INDEX_ROOMS:
                 fragment = new RoomsFragment();
                 break;
-            case 1:
+            case INDEX_SCENES:
                 fragment = new ScenesFragment();
                 break;
-            case 2:
+            case INDEX_SETTINGS:
                 fragment = new SettingsFragment();
                 break;
             default:

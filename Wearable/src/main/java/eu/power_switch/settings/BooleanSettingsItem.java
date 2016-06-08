@@ -19,21 +19,28 @@
 package eu.power_switch.settings;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+
+import com.mikepenz.iconics.IconicsDrawable;
+
+import eu.power_switch.R;
 
 /**
  * Created by Markus on 08.06.2016.
  */
 public class BooleanSettingsItem extends SettingsItem<Boolean> {
 
-    public BooleanSettingsItem(Context context, @DrawableRes int iconDrawable, @StringRes int description, String settingsKey, Boolean defaultValue) {
+    public BooleanSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey, Boolean defaultValue) {
         super(context, iconDrawable, description, settingsKey, defaultValue);
     }
 
-    public BooleanSettingsItem(Context context, Drawable iconDrawable, @StringRes int description, String settingsKey, Boolean defaultValue) {
-        super(context, iconDrawable, description, settingsKey, defaultValue);
+    @Override
+    public String getValueDescription() {
+        if (getValue()) {
+            return context.getString(R.string.on);
+        } else {
+            return context.getString(R.string.off);
+        }
     }
 
     /**
