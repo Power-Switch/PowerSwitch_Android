@@ -228,12 +228,23 @@ public class ListenerService extends WearableListenerService {
     }
 
     /**
+     * Sends local Broadcast that app theme has changed and app has to be restarted
+     */
+    public static void sendThemeChangedBroadcast(Context context) {
+        Intent intent = new Intent(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
      * Reacts to DataChanged Events from DataApi
      *
      * @param dataEvents
      */
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
+        super.onDataChanged(dataEvents);
+
         final List<DataEvent> events = FreezableUtils.freezeIterable(dataEvents);
 
         for (DataEvent event : events) {
@@ -267,7 +278,7 @@ public class ListenerService extends WearableListenerService {
 
                         // notify about changes
                         if (newThemeValue != oldThemeValue) {
-                            sendThemeChangedBroadcast();
+                            sendThemeChangedBroadcast(this);
                         } else {
                             sendSettingsChangedBroadcast(this);
                         }
@@ -299,15 +310,6 @@ public class ListenerService extends WearableListenerService {
             // TODO: Launch Wearable App
             // is this even possible?
         }
-    }
-
-    /**
-     * Sends local Broadcast that underlying settings have changed and UI has to be updated
-     */
-    private void sendThemeChangedBroadcast() {
-        Intent intent = new Intent(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private String convertEventDataToString(byte[] data) {

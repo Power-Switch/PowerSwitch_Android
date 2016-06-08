@@ -18,8 +18,13 @@
 
 package eu.power_switch.gui.fragment.settings;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -32,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import eu.power_switch.R;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
@@ -53,6 +59,18 @@ public class WearableSettingsFragment extends Fragment {
 
     private RadioButton radioButtonDarkBlue;
     private RadioButton radioButtonLightBlue;
+    private BroadcastReceiver broadcastReceiver;
+
+    /**
+     * Used to notify this Fragment that Wearable settings have been changed (from/on the wearable device itself)
+     *
+     * @param context any suitable context
+     */
+    public static void notifySettingsChanged(Context context) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_WEARABLE_SETTINGS_CHANGED);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -143,6 +161,14 @@ public class WearableSettingsFragment extends Fragment {
         radioButtonLightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_lightBlue);
         radioButtonLightBlue.setOnClickListener(onClickListener);
 
+        // BroadcastReceiver to get notifications from background service if data has changed
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateUI();
+            }
+        };
+
         return rootView;
     }
 
@@ -178,4 +204,20 @@ public class WearableSettingsFragment extends Fragment {
         super.onResume();
         updateUI();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_WEARABLE_SETTINGS_CHANGED);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        super.onStop();
+    }
 }
+
+

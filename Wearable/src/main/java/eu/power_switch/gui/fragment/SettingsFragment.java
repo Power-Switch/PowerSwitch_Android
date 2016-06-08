@@ -38,6 +38,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SettingsListAdapter;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
+import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.BooleanSettingsItem;
 import eu.power_switch.settings.SettingsItem;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
@@ -54,6 +55,7 @@ public class SettingsFragment extends Fragment {
     private DataApiHandler dataApiHandler;
 
     private ArrayList<SettingsItem> settings = new ArrayList<>();
+    private SettingsListAdapter settingsListAdapter;
 
     @Nullable
     @Override
@@ -98,7 +100,8 @@ public class SettingsFragment extends Fragment {
         settings.add(item3);
 
         final WearableListView wearableListView = (WearableListView) rootView.findViewById(R.id.wearable_List);
-        wearableListView.setAdapter(new SettingsListAdapter(getActivity(), settings));
+        settingsListAdapter = new SettingsListAdapter(getActivity(), settings);
+        wearableListView.setAdapter(settingsListAdapter);
         wearableListView.setClickListener(new WearableListView.ClickListener() {
             @Override
             public void onClick(WearableListView.ViewHolder viewHolder) {
@@ -110,6 +113,8 @@ public class SettingsFragment extends Fragment {
 
                 ListenerService.sendSettingsChangedBroadcast(getActivity());
                 wearableListView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
+
+                UtilityService.forceWearSettingsUpdate(getActivity());
             }
 
             @Override
@@ -146,6 +151,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void refreshUI() {
+        settingsListAdapter.notifyDataSetChanged();
     }
 
     @Override

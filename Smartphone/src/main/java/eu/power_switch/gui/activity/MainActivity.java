@@ -360,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
-        final int tintColor = ThemeHelper.getThemeAttrColor(this, android.R.attr.textColorPrimary);
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back)
@@ -395,9 +394,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemRoomsScenes = new PrimaryDrawerItem().withName(R.string.menu_rooms_scenes)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_lamp)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getRoomsScenesIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ROOMS_SCENES)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -416,9 +413,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemApartments = new PrimaryDrawerItem().withName(R.string.menu_apartments)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_home)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getApartmentsIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_APARTMENTS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -437,9 +432,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemGeofences = new PrimaryDrawerItem().withName(R.string.menu_geofences)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_gps_dot)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getGeofencesIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_GEOFENCES)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -458,9 +451,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemAlarmClock = new PrimaryDrawerItem().withName(R.string.menu_alarm_clock)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_alarm)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getAlarmClockIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ALARM_CLOCK)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -479,9 +470,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemPhone = new PrimaryDrawerItem().withName(R.string.phone)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_phone)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getPhoneIcon(this))
                 .withSelectable(true)
                 .withEnabled(PhoneHelper.isCallingSupported(this))
                 .withIdentifier(IDENTIFIER_PHONE)
@@ -502,9 +491,7 @@ public class MainActivity extends AppCompatActivity {
                 });
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final PrimaryDrawerItem itemTimer = new PrimaryDrawerItem().withName(R.string.timers)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getTimerIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_TIMERS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -523,9 +510,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemHistory = new PrimaryDrawerItem().withName(R.string.history)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getHistoryIcon(this))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -542,9 +527,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemNfc = new PrimaryDrawerItem().withName(R.string.nfc)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_nfc)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getNfcIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_NFC)
                 .withEnabled(NfcHandler.isNfcSupported(this))
@@ -564,9 +547,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_time_restore)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getBackupRestoreIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_BACKUP_RESTORE)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -585,9 +566,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final PrimaryDrawerItem itemSettings = new PrimaryDrawerItem().withName(R.string.menu_settings)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_settings)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getSettingsIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_SETTINGS)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -606,9 +585,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final SecondaryDrawerItem itemHelp = new SecondaryDrawerItem().withName(R.string.menu_help)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_help)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getHelpIcon(this))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -626,9 +603,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final SecondaryDrawerItem itemDonate = new SecondaryDrawerItem().withName(R.string.donate)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_money)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getDonateIcon(this))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -647,9 +622,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         final SecondaryDrawerItem itemAbout = new SecondaryDrawerItem().withName(R.string.menu_about)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_info)
-                        .color(tintColor)
-                        .sizeDp(24))
+                .withIcon(IconicsHelper.getAboutIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ABOUT)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {

@@ -55,6 +55,202 @@ public class IconicsHelper {
     }
 
     /**
+     * Get "History" icon
+     *
+     * @param context any suitable context
+     * @return "History" icon
+     */
+    public static IconicsDrawable getHistoryIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_time_restore)
+                .sizeDp(24)
+                .iconOffsetXDp(-1)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Timer" icon
+     *
+     * @param context any suitable context
+     * @return "Timer" icon
+     */
+    public static IconicsDrawable getTimerIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_time)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Phone" icon
+     *
+     * @param context any suitable context
+     * @return "Phone" icon
+     */
+    public static IconicsDrawable getPhoneIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_phone)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "AlarmClock" icon
+     *
+     * @param context any suitable context
+     * @return "AlarmClock" icon
+     */
+    public static IconicsDrawable getAlarmClockIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_alarm)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "NFC" icon
+     *
+     * @param context any suitable context
+     * @return "NFC" icon
+     */
+    public static IconicsDrawable getNfcIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_nfc)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Settings" icon
+     *
+     * @param context any suitable context
+     * @return "Settings" icon
+     */
+    public static IconicsDrawable getSettingsIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_settings)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Help" icon
+     *
+     * @param context any suitable context
+     * @return "Help" icon
+     */
+    public static IconicsDrawable getHelpIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_help)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Donate" icon
+     *
+     * @param context any suitable context
+     * @return "Donate" icon
+     */
+    public static IconicsDrawable getDonateIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_money)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "About" icon
+     *
+     * @param context any suitable context
+     * @return "About" icon
+     */
+    public static IconicsDrawable getAboutIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_info)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Backup/Restore" icon
+     *
+     * @param context any suitable context
+     * @return "Backup/Restore" icon
+     */
+    public static IconicsDrawable getBackupRestoreIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_time_restore)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Geofences" icon
+     *
+     * @param context any suitable context
+     * @return "Geofences" icon
+     */
+    public static IconicsDrawable getGeofencesIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_gps_dot)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Apartments" icon
+     *
+     * @param context any suitable context
+     * @return "Apartments" icon
+     */
+    public static IconicsDrawable getApartmentsIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_home)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Rooms/Scenes" icon
+     *
+     * @param context any suitable context
+     * @return "Rooms/Scenes" icon
+     */
+    public static IconicsDrawable getRoomsScenesIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_lamp)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
      * Get "Add" icon
      *
      * @param context any suitable context

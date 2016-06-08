@@ -20,20 +20,31 @@ package eu.power_switch.wear.service;
 
 import android.support.design.widget.Snackbar;
 
+import com.google.android.gms.common.data.FreezableUtils;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.settings.WearableSettingsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.WearableConstants;
+import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * A Wear listener service, used to receive inbound messages from
@@ -42,6 +53,41 @@ import eu.power_switch.shared.log.LogHandler;
  * Created by Markus on 04.06.2015.
  */
 public class ListenerService extends WearableListenerService {
+
+    /**
+     * This method extracts settings data contained in a DataMap Array and saves it into the local PreferenceHandler.
+     *
+     * @param settings received settings data
+     */
+    public static void extractSettings(ArrayList<DataMap> settings) {
+        // save map values to local preferenceHandler
+        for (DataMap dataMapItem : settings) {
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS);
+                WearablePreferencesHandler.setAutoCollapseRooms(bool);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+                WearablePreferencesHandler.setHighlightLastActivatedButton(bool);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_SHOW_ROOM_ALL_ON_OFF);
+                WearablePreferencesHandler.setShowRoomAllOnOff(bool);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_THEME)) {
+                int value = dataMapItem.getInt(WearableSettingsConstants.KEY_THEME);
+                WearablePreferencesHandler.setTheme(value);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                boolean bool = dataMapItem.getBoolean(WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS);
+                WearablePreferencesHandler.setVibrateOnButtonPress(bool);
+            }
+            if (dataMapItem.containsKey(WearableSettingsConstants.KEY_VIBRATION_DURATION)) {
+                int value = dataMapItem.getInt(WearableSettingsConstants.KEY_VIBRATION_DURATION);
+                WearablePreferencesHandler.setVibrationDuration(value);
+            }
+        }
+    }
 
     /**
      * This method is called when a message from a wearable device is received
@@ -120,6 +166,32 @@ public class ListenerService extends WearableListenerService {
             Log.e("parseMessage", e);
             StatusMessageHandler.showInfoMessage(getApplicationContext(),
                     R.string.error_executing_wear_action, Snackbar.LENGTH_LONG);
+        }
+    }
+
+    /**
+     * Reacts to DataChanged Events from DataApi
+     *
+     * @param dataEvents
+     */
+    @Override
+    public void onDataChanged(DataEventBuffer dataEvents) {
+        super.onDataChanged(dataEvents);
+
+        List<DataEvent> events = FreezableUtils.freezeIterable(dataEvents);
+
+        for (DataEvent event : events) {
+            if (event.getDataItem() != null) {
+                if (event.getType() == DataEvent.TYPE_CHANGED) {
+                    if (WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
+                        DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+                        ArrayList<DataMap> settings = dataMapItem.getDataMap()
+                                .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
+                        extractSettings(settings);
+                        WearableSettingsFragment.notifySettingsChanged(this);
+                    }
+                }
+            }
         }
     }
 }
