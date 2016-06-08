@@ -44,8 +44,7 @@ public class SettingsListAdapter extends WearableListView.Adapter {
     }
 
     @Override
-    public WearableListView.ViewHolder onCreateViewHolder(
-            ViewGroup viewGroup, int i) {
+    public WearableListView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return new ItemViewHolder(mInflater.inflate(R.layout.list_item_setting, null));
     }
 
@@ -74,8 +73,7 @@ public class SettingsListAdapter extends WearableListView.Adapter {
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            mCircledImageView = (CircledImageView)
-                    itemView.findViewById(R.id.circle);
+            mCircledImageView = (CircledImageView) itemView.findViewById(R.id.circle);
             mItemTextView = (TextView) itemView.findViewById(R.id.name);
         }
     }

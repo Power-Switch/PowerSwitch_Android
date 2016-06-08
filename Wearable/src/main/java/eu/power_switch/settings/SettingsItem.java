@@ -31,12 +31,14 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class SettingsItem<T> {
 
+    private Context context;
     private String description;
     private Drawable icon;
     private String settingsKey;
     private T defaultValue;
 
     public SettingsItem(Context context, @DrawableRes int iconDrawable, @StringRes int description, String settingsKey, T defaultValue) {
+        this.context = context;
         this.icon = ContextCompat.getDrawable(context, iconDrawable);
         this.description = context.getString(description);
         this.settingsKey = settingsKey;
@@ -57,5 +59,6 @@ public class SettingsItem<T> {
 
     public void setValue(T newValue) {
         WearablePreferencesHandler.set(settingsKey, newValue);
+        WearablePreferencesHandler.forceRefresh(context);
     }
 }
