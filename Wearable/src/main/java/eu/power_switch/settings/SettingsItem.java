@@ -37,9 +37,14 @@ public class SettingsItem<T> {
     private String settingsKey;
     private T defaultValue;
 
-    public SettingsItem(Context context, @DrawableRes int iconDrawable, @StringRes int description, String settingsKey, T defaultValue) {
+    public SettingsItem(Context context, @DrawableRes int iconDrawableRes, @StringRes int descriptionRes, String settingsKey, T defaultValue) {
+        this(context, ContextCompat.getDrawable(context, iconDrawableRes),
+                descriptionRes, settingsKey, defaultValue);
+    }
+
+    public SettingsItem(Context context, Drawable iconDrawable, @StringRes int description, String settingsKey, T defaultValue) {
         this.context = context;
-        this.icon = ContextCompat.getDrawable(context, iconDrawable);
+        this.icon = iconDrawable;
         this.description = context.getString(description);
         this.settingsKey = settingsKey;
         this.defaultValue = defaultValue;

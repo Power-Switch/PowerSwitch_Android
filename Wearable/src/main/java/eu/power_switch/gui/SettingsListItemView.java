@@ -34,26 +34,29 @@ import eu.power_switch.R;
 /**
  * Created by Markus on 08.06.2016.
  */
-public class SettingsListItemLayout extends LinearLayout implements WearableListView.OnCenterProximityListener {
+public class SettingsListItemView extends LinearLayout implements WearableListView.OnCenterProximityListener {
 
     private static final float NO_ALPHA = 1f, PARTIAL_ALPHA = 0.40f;
     private static final float NO_X_TRANSLATION = 0f, X_TRANSLATION = 20f;
+    private static final int ANIMATION_DURATION = 250;
     private final int mUnselectedCircleColor, mSelectedCircleColor;
     private final int mUnselectedCircleBorderColor, mSelectedCircleBorderColor;
     private CircledImageView mCircle;
     private float mBigCircleRadius;
     private float mSmallCircleRadius;
     private boolean isCentered = false;
+    private boolean initialSetup = true;
+    private int currentCircleBorderColor;
 
-    public SettingsListItemLayout(Context context) {
+    public SettingsListItemView(Context context) {
         this(context, null);
     }
 
-    public SettingsListItemLayout(Context context, AttributeSet attrs) {
+    public SettingsListItemView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SettingsListItemLayout(Context context, AttributeSet attrs, int defStyle) {
+    public SettingsListItemView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         mUnselectedCircleColor = Color.parseColor("#434343");
@@ -67,40 +70,64 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        initialSetup = true;
+
         mCircle = (CircledImageView) findViewById(R.id.circle);
-        if (isCentered) {
-            onCenterPosition(true);
-        }
+
+//        if (isCentered) {
+//            onCenterPosition(true);
+//        } else {
+//            onNonCenterPosition(true);
+//        }
     }
 
     @Override
     public void onCenterPosition(boolean animate) {
-        if (animate && !isCentered) {
-            animateCircleSelected();
-        }
+        if (!isCentered || initialSetup) {
+            if (animate) {
+                animateCenterPosition();
+            } else {
+                setAlpha(NO_ALPHA);
+                setCircleBorderColor(mSelectedCircleBorderColor);
+                mCircle.setCircleRadius(mBigCircleRadius);
+            }
 
-        mCircle.setCircleColor(mSelectedCircleColor);
-        isCentered = true;
+            mCircle.setCircleColor(mSelectedCircleColor);
+
+            isCentered = true;
+            initialSetup = false;
+        }
     }
 
-    private void animateCircleSelected() {
-        animate().alpha(NO_ALPHA)
-                //.translationX(X_TRANSLATION)
-                .start();
+    private void setCircleBorderColor(int color) {
+        currentCircleBorderColor = color;
+        mCircle.setCircleBorderColor(color);
+    }
+
+    private void animateCenterPosition() {
+        ValueAnimator alphaAnimation = ValueAnimator.ofObject(
+                new FloatEvaluator(), getAlpha(), NO_ALPHA);
+        alphaAnimation.setDuration(ANIMATION_DURATION);
+        alphaAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                setAlpha((float) animation.getAnimatedValue());
+            }
+        });
 
         ValueAnimator colorAnimation = ValueAnimator.ofObject(
-                new ArgbEvaluator(), mUnselectedCircleBorderColor, mSelectedCircleBorderColor);
-        colorAnimation.setDuration(250);
+                new ArgbEvaluator(), currentCircleBorderColor, mSelectedCircleBorderColor);
+        colorAnimation.setDuration(ANIMATION_DURATION);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                mCircle.setCircleBorderColor((int) animation.getAnimatedValue());
+                setCircleBorderColor((int) animation.getAnimatedValue());
             }
         });
 
         ValueAnimator radiusAnimator = ValueAnimator.ofObject(
-                new FloatEvaluator(), mSmallCircleRadius, mBigCircleRadius);
-        radiusAnimator.setDuration(250);
+                new FloatEvaluator(), mCircle.getCircleRadius(), mBigCircleRadius);
+        radiusAnimator.setDuration(ANIMATION_DURATION);
         radiusAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -108,38 +135,53 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
             }
         });
 
+        alphaAnimation.start();
         colorAnimation.start();
         radiusAnimator.start();
     }
 
     @Override
     public void onNonCenterPosition(boolean animate) {
-        if (animate && isCentered) {
-            animateCircleUnselected();
-        }
+        if (isCentered || initialSetup) {
+            if (animate) {
+                animateNonCenterPosition();
+            } else {
+                setAlpha(PARTIAL_ALPHA);
+                setCircleBorderColor(mUnselectedCircleBorderColor);
+                mCircle.setCircleRadius(mSmallCircleRadius);
+            }
 
-        mCircle.setCircleColor(mUnselectedCircleColor);
-        isCentered = false;
+            mCircle.setCircleColor(mUnselectedCircleColor);
+
+            isCentered = false;
+            initialSetup = false;
+        }
     }
 
-    private void animateCircleUnselected() {
-        animate().alpha(PARTIAL_ALPHA)
-                //.translationX(NO_X_TRANSLATION)
-                .start();
+    private void animateNonCenterPosition() {
+        ValueAnimator alphaAnimation = ValueAnimator.ofObject(
+                new FloatEvaluator(), getAlpha(), PARTIAL_ALPHA);
+        alphaAnimation.setDuration(ANIMATION_DURATION);
+        alphaAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                setAlpha((float) animation.getAnimatedValue());
+            }
+        });
 
         ValueAnimator colorAnimation = ValueAnimator.ofObject(
-                new ArgbEvaluator(), mSelectedCircleBorderColor, mUnselectedCircleBorderColor);
-        colorAnimation.setDuration(250);
+                new ArgbEvaluator(), currentCircleBorderColor, mUnselectedCircleBorderColor);
+        colorAnimation.setDuration(ANIMATION_DURATION);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                mCircle.setCircleBorderColor((int) animation.getAnimatedValue());
+                setCircleBorderColor((int) animation.getAnimatedValue());
             }
         });
 
         ValueAnimator radiusAnimator = ValueAnimator.ofObject(
-                new FloatEvaluator(), mBigCircleRadius, mSmallCircleRadius);
-        radiusAnimator.setDuration(250);
+                new FloatEvaluator(), mCircle.getCircleRadius(), mSmallCircleRadius);
+        radiusAnimator.setDuration(ANIMATION_DURATION);
         radiusAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -147,6 +189,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
             }
         });
 
+        alphaAnimation.start();
         radiusAnimator.start();
         colorAnimation.start();
     }

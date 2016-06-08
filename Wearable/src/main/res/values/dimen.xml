@@ -32,6 +32,6 @@
     <dimen name="font_title_size">24sp</dimen>
 
     <dimen name="small_circle_radius">20dp</dimen>
-    <dimen name="big_circle_radius">24dp</dimen>
+    <dimen name="big_circle_radius">26dp</dimen>
 
 </resources>

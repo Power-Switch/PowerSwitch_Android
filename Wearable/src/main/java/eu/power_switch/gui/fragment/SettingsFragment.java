@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.adapter.SettingsListAdapter;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
@@ -75,19 +76,19 @@ public class SettingsFragment extends Fragment {
 
         SettingsItem item1 = new BooleanSettingsItem(
                 getActivity(),
-                R.drawable.wearable_ic_launcher,
+                IconicsHelper.getCloseRoomsIcon(getActivity()),
                 R.string.auto_collapse_rooms,
                 WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS,
                 false);
         SettingsItem item2 = new BooleanSettingsItem(
                 getActivity(),
-                R.drawable.open_on_phone,
+                IconicsHelper.getHistoryIcon(getActivity()),
                 R.string.highlight_last_activated_button,
                 WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
                 false);
         SettingsItem item3 = new BooleanSettingsItem(
                 getActivity(),
-                R.drawable.common_plus_signin_btn_icon_light,
+                IconicsHelper.getVibrationIcon(getActivity()),
                 R.string.vibrate_on_button_press,
                 WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS,
                 false);

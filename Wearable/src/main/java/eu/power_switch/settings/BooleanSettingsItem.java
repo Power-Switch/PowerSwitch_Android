@@ -19,6 +19,7 @@
 package eu.power_switch.settings;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 
@@ -28,6 +29,10 @@ import android.support.annotation.StringRes;
 public class BooleanSettingsItem extends SettingsItem<Boolean> {
 
     public BooleanSettingsItem(Context context, @DrawableRes int iconDrawable, @StringRes int description, String settingsKey, Boolean defaultValue) {
+        super(context, iconDrawable, description, settingsKey, defaultValue);
+    }
+
+    public BooleanSettingsItem(Context context, Drawable iconDrawable, @StringRes int description, String settingsKey, Boolean defaultValue) {
         super(context, iconDrawable, description, settingsKey, defaultValue);
     }
 

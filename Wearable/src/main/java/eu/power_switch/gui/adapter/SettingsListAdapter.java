@@ -36,9 +36,11 @@ import eu.power_switch.settings.SettingsItem;
  */
 public class SettingsListAdapter extends WearableListView.Adapter {
     private final LayoutInflater mInflater;
+    private Context context;
     private ArrayList<SettingsItem> settings;
 
     public SettingsListAdapter(Context context, ArrayList<SettingsItem> settings) {
+        this.context = context;
         mInflater = LayoutInflater.from(context);
         this.settings = settings;
     }
@@ -49,17 +51,14 @@ public class SettingsListAdapter extends WearableListView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(WearableListView.ViewHolder viewHolder,
-                                 int position) {
+    public void onBindViewHolder(WearableListView.ViewHolder viewHolder, int position) {
         SettingsItem settingsItem = settings.get(position);
 
         ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
 
-        CircledImageView circledView = itemViewHolder.mCircledImageView;
-        circledView.setImageDrawable(settingsItem.getIcon());
-
-        TextView textView = itemViewHolder.mItemTextView;
-        textView.setText(settingsItem.getDescription() + ": " + String.valueOf(settingsItem.getValue()));
+        itemViewHolder.icon.setImageDrawable(settingsItem.getIcon());
+        itemViewHolder.description.setText(settingsItem.getDescription() + ":");
+        itemViewHolder.value.setText(String.valueOf(settingsItem.getValue()));
     }
 
     @Override
@@ -67,14 +66,16 @@ public class SettingsListAdapter extends WearableListView.Adapter {
         return settings.size();
     }
 
-    public static class ItemViewHolder extends WearableListView.ViewHolder {
-        private CircledImageView mCircledImageView;
-        private TextView mItemTextView;
+    private static class ItemViewHolder extends WearableListView.ViewHolder {
+        private CircledImageView icon;
+        private TextView description;
+        private TextView value;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            mCircledImageView = (CircledImageView) itemView.findViewById(R.id.circle);
-            mItemTextView = (TextView) itemView.findViewById(R.id.name);
+            icon = (CircledImageView) itemView.findViewById(R.id.circle);
+            description = (TextView) itemView.findViewById(R.id.description);
+            value = (TextView) itemView.findViewById(R.id.value);
         }
     }
 }
