@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
@@ -76,9 +77,9 @@ public class WearableSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wear_settings, container, false);
 
-        CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+        CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
                 switch (buttonView.getId()) {
                     case R.id.checkBox_autoCollapseRooms:
                         WearablePreferencesHandler.setAutoCollapseRooms(isChecked);
@@ -104,13 +105,16 @@ public class WearableSettingsFragment extends Fragment {
         };
 
         autoCollapseRooms = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
-        autoCollapseRooms.setOnCheckedChangeListener(onCheckedChangeListener);
+        autoCollapseRooms.setOnCheckedChangeListener(checkBoxInteractionListener);
+        autoCollapseRooms.setOnTouchListener(checkBoxInteractionListener);
 
         highlightLastActivatedButton = (CheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
-        highlightLastActivatedButton.setOnCheckedChangeListener(onCheckedChangeListener);
+        highlightLastActivatedButton.setOnCheckedChangeListener(checkBoxInteractionListener);
+        highlightLastActivatedButton.setOnTouchListener(checkBoxInteractionListener);
 
         vibrateOnButtonPress = (CheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
-        vibrateOnButtonPress.setOnCheckedChangeListener(onCheckedChangeListener);
+        vibrateOnButtonPress.setOnCheckedChangeListener(checkBoxInteractionListener);
+        vibrateOnButtonPress.setOnTouchListener(checkBoxInteractionListener);
 
         vibrationDurationLayout = (LinearLayout) rootView.findViewById(R.id.linearLayout_vibrationDuration);
         vibrationDuration = (EditText) rootView.findViewById(R.id.editText_vibrationDuration);
@@ -150,8 +154,6 @@ public class WearableSettingsFragment extends Fragment {
                 }
 
                 UtilityService.forceWearSettingsUpdate(getContext());
-
-                // TODO: restart wear app
             }
         };
 

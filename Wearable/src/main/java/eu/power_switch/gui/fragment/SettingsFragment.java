@@ -56,6 +56,7 @@ public class SettingsFragment extends Fragment {
 
     private ArrayList<SettingsItem> settings = new ArrayList<>();
     private SettingsListAdapter settingsListAdapter;
+    private boolean ownModification = false;
 
     @Nullable
     @Override
@@ -71,7 +72,11 @@ public class SettingsFragment extends Fragment {
                 Log.d(this, "received intent: " + intent.getAction());
 
                 if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
-                    refreshUI();
+                    if (!ownModification) {
+                        refreshUI();
+                    } else {
+                        ownModification = false;
+                    }
                 }
             }
         };
@@ -105,41 +110,27 @@ public class SettingsFragment extends Fragment {
         wearableListView.setClickListener(new WearableListView.ClickListener() {
             @Override
             public void onClick(WearableListView.ViewHolder viewHolder) {
+                if (viewHolder.getAdapterPosition() == -1) {
+                    return; // ignore click while adapter is refreshing data
+                }
+
+                SettingsListAdapter.ItemViewHolder holder = (SettingsListAdapter.ItemViewHolder) viewHolder;
+
                 SettingsItem settingsItem = settings.get(viewHolder.getAdapterPosition());
                 if (settingsItem instanceof BooleanSettingsItem) {
                     BooleanSettingsItem booleanSettingsItem = (BooleanSettingsItem) settingsItem;
                     booleanSettingsItem.toggle();
+
                 }
 
-                ListenerService.sendSettingsChangedBroadcast(getActivity());
-                wearableListView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
+                holder.value.setText(settingsItem.getValueDescription());
+                ownModification = true;
 
                 UtilityService.forceWearSettingsUpdate(getActivity());
             }
 
             @Override
             public void onTopEmptyRegionClick() {
-
-            }
-        });
-        wearableListView.addOnScrollListener(new WearableListView.OnScrollListener() {
-            @Override
-            public void onScroll(int i) {
-
-            }
-
-            @Override
-            public void onAbsoluteScrollChange(int i) {
-
-            }
-
-            @Override
-            public void onScrollStateChanged(int i) {
-
-            }
-
-            @Override
-            public void onCentralPositionChanged(int i) {
 
             }
         });
@@ -171,6 +162,8 @@ public class SettingsFragment extends Fragment {
         if (dataApiHandler != null) {
             dataApiHandler.disconnect();
         }
+
+        ListenerService.sendSettingsChangedBroadcast(getActivity());
 
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onStop();

@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui;
+package eu.power_switch.gui.view;
 
 
 import android.animation.ArgbEvaluator;
@@ -30,6 +30,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.ThemeHelper;
 
 /**
  * Created by Markus on 08.06.2016.
@@ -73,18 +74,12 @@ public class SettingsListItemView extends LinearLayout implements WearableListVi
         initialSetup = true;
 
         mCircle = (CircledImageView) findViewById(R.id.circle);
-
-//        if (isCentered) {
-//            onCenterPosition(true);
-//        } else {
-//            onNonCenterPosition(true);
-//        }
     }
 
     @Override
     public void onCenterPosition(boolean animate) {
         if (!isCentered || initialSetup) {
-            if (animate) {
+            if (animate && !initialSetup) {
                 animateCenterPosition();
             } else {
                 setAlpha(NO_ALPHA);
@@ -143,7 +138,7 @@ public class SettingsListItemView extends LinearLayout implements WearableListVi
     @Override
     public void onNonCenterPosition(boolean animate) {
         if (isCentered || initialSetup) {
-            if (animate) {
+            if (animate && !initialSetup) {
                 animateNonCenterPosition();
             } else {
                 setAlpha(PARTIAL_ALPHA);

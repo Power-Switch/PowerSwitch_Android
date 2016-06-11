@@ -236,7 +236,6 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ListenerService.DATA_UPDATED);
-        intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
     }

@@ -66,10 +66,10 @@ public class SettingsListAdapter extends WearableListView.Adapter {
         return settings.size();
     }
 
-    private static class ItemViewHolder extends WearableListView.ViewHolder {
-        private CircledImageView icon;
-        private TextView description;
-        private TextView value;
+    public static class ItemViewHolder extends WearableListView.ViewHolder {
+        public CircledImageView icon;
+        public TextView description;
+        public TextView value;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
