@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
 
         final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
         // if you want to update the items at a later time it is recommended to keep it in a variable
-        final PrimaryDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
+        final IDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
                 .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back)
                         .color(accentColor)
                         .sizeDp(24))
@@ -393,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemRoomsScenes = new PrimaryDrawerItem().withName(R.string.menu_rooms_scenes)
+        final IDrawerItem itemRoomsScenes = new PrimaryDrawerItem().withName(R.string.menu_rooms_scenes)
                 .withIcon(IconicsHelper.getRoomsScenesIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ROOMS_SCENES)
@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemApartments = new PrimaryDrawerItem().withName(R.string.menu_apartments)
+        final IDrawerItem itemApartments = new PrimaryDrawerItem().withName(R.string.menu_apartments)
                 .withIcon(IconicsHelper.getApartmentsIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_APARTMENTS)
@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemGeofences = new PrimaryDrawerItem().withName(R.string.menu_geofences)
+        final IDrawerItem itemGeofences = new PrimaryDrawerItem().withName(R.string.menu_geofences)
                 .withIcon(IconicsHelper.getGeofencesIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_GEOFENCES)
@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemAlarmClock = new PrimaryDrawerItem().withName(R.string.menu_alarm_clock)
+        final IDrawerItem itemAlarmClock = new PrimaryDrawerItem().withName(R.string.menu_alarm_clock)
                 .withIcon(IconicsHelper.getAlarmClockIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ALARM_CLOCK)
@@ -469,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemPhone = new PrimaryDrawerItem().withName(R.string.phone)
+        final IDrawerItem itemPhone = new PrimaryDrawerItem().withName(R.string.phone)
                 .withIcon(IconicsHelper.getPhoneIcon(this))
                 .withSelectable(true)
                 .withEnabled(PhoneHelper.isCallingSupported(this))
@@ -490,7 +490,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         // if you want to update the items at a later time it is recommended to keep it in a variable
-        final PrimaryDrawerItem itemTimer = new PrimaryDrawerItem().withName(R.string.timers)
+        final IDrawerItem itemTimer = new PrimaryDrawerItem().withName(R.string.timers)
                 .withIcon(IconicsHelper.getTimerIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_TIMERS)
@@ -509,7 +509,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemHistory = new PrimaryDrawerItem().withName(R.string.history)
+        final IDrawerItem itemHistory = new PrimaryDrawerItem().withName(R.string.history)
                 .withIcon(IconicsHelper.getHistoryIcon(this))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -526,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemNfc = new PrimaryDrawerItem().withName(R.string.nfc)
+        final IDrawerItem itemNfc = new PrimaryDrawerItem().withName(R.string.nfc)
                 .withIcon(IconicsHelper.getNfcIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_NFC)
@@ -546,7 +546,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
+        final IDrawerItem itemBackupRestore = new PrimaryDrawerItem().withName(R.string.menu_backup_restore)
                 .withIcon(IconicsHelper.getBackupRestoreIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_BACKUP_RESTORE)
@@ -565,7 +565,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final PrimaryDrawerItem itemSettings = new PrimaryDrawerItem().withName(R.string.menu_settings)
+        final IDrawerItem itemSettings = new PrimaryDrawerItem().withName(R.string.menu_settings)
                 .withIcon(IconicsHelper.getSettingsIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_SETTINGS)
@@ -584,7 +584,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final SecondaryDrawerItem itemHelp = new SecondaryDrawerItem().withName(R.string.menu_help)
+        final IDrawerItem itemHelp = new SecondaryDrawerItem().withName(R.string.menu_help)
                 .withIcon(IconicsHelper.getHelpIcon(this))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -602,7 +602,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final SecondaryDrawerItem itemDonate = new SecondaryDrawerItem().withName(R.string.donate)
+        final IDrawerItem itemDonate = new SecondaryDrawerItem().withName(R.string.donate)
                 .withIcon(IconicsHelper.getDonateIcon(this))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -621,7 +621,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-        final SecondaryDrawerItem itemAbout = new SecondaryDrawerItem().withName(R.string.menu_about)
+        final IDrawerItem itemAbout = new SecondaryDrawerItem().withName(R.string.menu_about)
                 .withIcon(IconicsHelper.getAboutIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_ABOUT)

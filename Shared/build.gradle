@@ -50,7 +50,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
 
     // Iconics (use SVG resources)
-    compile 'com.mikepenz:iconics-core:2.5.8@aar'
+    compile 'com.mikepenz:iconics-core:2.6.5@aar'
     // Fonts
     compile 'com.mikepenz:google-material-typeface:2.2.0.1.original@aar'
     compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.1@aar'

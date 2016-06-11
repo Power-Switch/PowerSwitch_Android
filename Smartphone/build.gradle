@@ -81,12 +81,12 @@ dependencies {
     compile project(':library')
 
     // AboutLibraries
-    compile('com.mikepenz:aboutlibraries:5.5.7@aar') {
+    compile('com.mikepenz:aboutlibraries:5.6.7@aar') {
         transitive = true
     }
 
     // MaterialDrawer
-    compile('com.mikepenz:materialdrawer:5.1.2@aar') {
+    compile('com.mikepenz:materialdrawer:5.3.0@aar') {
         transitive = true
     }
 
