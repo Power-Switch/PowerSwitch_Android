@@ -43,6 +43,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
@@ -111,7 +112,8 @@ public class RoomsFragment extends RecyclerViewFragment {
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AnimationHandler.checkTargetApi()) {
+                try {
+                    if (AnimationHandler.checkTargetApi()) {
 //                    Intent intent = new Intent();
 //
 //                    ActivityOptionsCompat options =
@@ -120,21 +122,24 @@ public class RoomsFragment extends RecyclerViewFragment {
 //                                    "configureReceiverTransition"    // The transitionName of the view we’re transitioning to
 //                            );
 //                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-                } else {
+                    } else {
 
+                    }
+
+                    if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
+                        new AlertDialog.Builder(getContext())
+                                .setMessage(R.string.please_create_or_activate_apartment_first)
+                                .setNeutralButton(android.R.string.ok, null)
+                                .show();
+                        return;
+                    }
+
+                    ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
+                    configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
+                    configureReceiverDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
-
-                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
-                    new AlertDialog.Builder(getContext())
-                            .setMessage(R.string.please_create_or_activate_apartment_first)
-                            .setNeutralButton(android.R.string.ok, null)
-                            .show();
-                    return;
-                }
-
-                ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
-                configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureReceiverDialog.show(getFragmentManager(), null);
             }
         });
 
@@ -165,6 +170,14 @@ public class RoomsFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_receiver:
+                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
+                    new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.please_create_or_activate_apartment_first)
+                            .setNeutralButton(android.R.string.ok, null)
+                            .show();
+                    return true;
+                }
+
                 ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
                 configureReceiverDialog.setTargetFragment(this, 0);
                 configureReceiverDialog.show(getFragmentManager(), null);

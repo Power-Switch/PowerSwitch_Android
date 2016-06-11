@@ -42,6 +42,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -95,11 +96,15 @@ public class TimersFragment extends RecyclerViewFragment {
         timerRecyclerViewAdapter.setOnItemLongClickListener(new TimerRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
-                final Timer timer = timers.get(position);
+                try {
+                    final Timer timer = timers.get(position);
 
-                ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer.getId());
-                configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureTimerDialog.show(getFragmentManager(), null);
+                    ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer.getId());
+                    configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
+                    configureTimerDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
 
@@ -108,9 +113,13 @@ public class TimersFragment extends RecyclerViewFragment {
         addTimerFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
-                configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureTimerDialog.show(getFragmentManager(), null);
+                try {
+                    ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
+                    configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
+                    configureTimerDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
 
@@ -158,9 +167,13 @@ public class TimersFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_timer:
-                ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
-                configureTimerDialog.setTargetFragment(this, 0);
-                configureTimerDialog.show(getFragmentManager(), null);
+                try {
+                    ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
+                    configureTimerDialog.setTargetFragment(this, 0);
+                    configureTimerDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             default:
                 break;
 

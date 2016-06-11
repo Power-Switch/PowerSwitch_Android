@@ -112,18 +112,22 @@ public class BackupFragment extends RecyclerViewFragment {
         textViewBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_external_storage_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
-                    return;
-                }
+                try {
+                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(R.string.missing_permission)
+                                .setMessage(R.string.missing_external_storage_permission)
+                                .setNeutralButton(R.string.close, null)
+                                .show();
+                        return;
+                    }
 
-                PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
-                pathChooserDialog.setTargetFragment(recyclerViewFragment, 0);
-                pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
+                    PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
+                    pathChooserDialog.setTargetFragment(recyclerViewFragment, 0);
+                    pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
 
@@ -132,53 +136,61 @@ public class BackupFragment extends RecyclerViewFragment {
         backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                final Backup backup = backups.get(position);
+                try {
+                    final Backup backup = backups.get(position);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setPositiveButton(getActivity().getString(R.string.restore),
-                        new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setPositiveButton(getActivity().getString(R.string.restore),
+                            new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    BackupHandler backupHandler = new BackupHandler(getActivity());
-                                    backupHandler.restoreBackup(backup.getName());
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    try {
+                                        BackupHandler backupHandler = new BackupHandler(getActivity());
+                                        backupHandler.restoreBackup(backup.getName());
 
-                                    DeveloperPreferencesHandler.forceRefresh();
-                                    SmartphonePreferencesHandler.forceRefresh(getContext());
-                                    WearablePreferencesHandler.forceRefresh(getContext());
+                                        DeveloperPreferencesHandler.forceRefresh();
+                                        SmartphonePreferencesHandler.forceRefresh(getContext());
+                                        WearablePreferencesHandler.forceRefresh(getContext());
 
-                                    // restart app to apply
-                                    getActivity().finish();
-                                    Intent intent = new Intent(getContext(), MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                } catch (BackupNotFoundException e) {
-                                    Log.e(e);
-                                    StatusMessageHandler.showInfoMessage(
-                                            recyclerViewFragment.getRecyclerView(),
-                                            R.string.backup_not_found, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(
-                                            recyclerViewFragment.getRecyclerView(), e);
+                                        // restart app to apply
+                                        getActivity().finish();
+                                        Intent intent = new Intent(getContext(), MainActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                    } catch (BackupNotFoundException e) {
+                                        Log.e(e);
+                                        StatusMessageHandler.showInfoMessage(
+                                                recyclerViewFragment.getRecyclerView(),
+                                                R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                                    } catch (Exception e) {
+                                        StatusMessageHandler.showErrorMessage(
+                                                recyclerViewFragment.getRecyclerView(), e);
+                                    }
                                 }
-                            }
-                        }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
-                        .setTitle(getActivity().getString(R.string.are_you_sure))
-                        .setMessage(R.string.restore_backup_message);
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                            }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
+                            .setTitle(getActivity().getString(R.string.are_you_sure))
+                            .setMessage(R.string.restore_backup_message);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
         backupArrayAdapter.setOnItemLongClickListener(new BackupRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
-                final Backup backup = backups.get(position);
+                try {
+                    final Backup backup = backups.get(position);
 
-                EditBackupDialog editBackupDialog = EditBackupDialog.newInstance(backup.getName());
-                editBackupDialog.setTargetFragment(recyclerViewFragment, 0);
-                editBackupDialog.show(getActivity().getSupportFragmentManager(), null);
+                    EditBackupDialog editBackupDialog = EditBackupDialog.newInstance(backup.getName());
+                    editBackupDialog.setTargetFragment(recyclerViewFragment, 0);
+                    editBackupDialog.show(getActivity().getSupportFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
         recyclerViewBackups.setAdapter(backupArrayAdapter);
@@ -191,18 +203,22 @@ public class BackupFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_external_storage_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
-                    return;
-                }
+                try {
+                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(R.string.missing_permission)
+                                .setMessage(R.string.missing_external_storage_permission)
+                                .setNeutralButton(R.string.close, null)
+                                .show();
+                        return;
+                    }
 
-                CreateBackupDialog createBackupDialog = new CreateBackupDialog();
-                createBackupDialog.setTargetFragment(recyclerViewFragment, 0);
-                createBackupDialog.show(getFragmentManager(), null);
+                    CreateBackupDialog createBackupDialog = new CreateBackupDialog();
+                    createBackupDialog.setTargetFragment(recyclerViewFragment, 0);
+                    createBackupDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
 
@@ -281,18 +297,22 @@ public class BackupFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_backup:
-                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_external_storage_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
-                    break;
-                }
+                try {
+                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                        new AlertDialog.Builder(getContext())
+                                .setTitle(R.string.missing_permission)
+                                .setMessage(R.string.missing_external_storage_permission)
+                                .setNeutralButton(R.string.close, null)
+                                .show();
+                        break;
+                    }
 
-                CreateBackupDialog createBackupDialog = new CreateBackupDialog();
-                createBackupDialog.setTargetFragment(this, 0);
-                createBackupDialog.show(getFragmentManager(), null);
+                    CreateBackupDialog createBackupDialog = new CreateBackupDialog();
+                    createBackupDialog.setTargetFragment(this, 0);
+                    createBackupDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             default:
                 break;
 

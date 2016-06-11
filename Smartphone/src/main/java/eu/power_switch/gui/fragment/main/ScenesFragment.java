@@ -115,14 +115,14 @@ public class ScenesFragment extends RecyclerViewFragment {
                                 .show();
                         return;
                     }
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
-                    return;
-                }
 
-                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureSceneDialog.show(getFragmentManager(), null);
+
+                    ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
+                    configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
+                    configureSceneDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
 
@@ -154,6 +154,14 @@ public class ScenesFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_scene:
+                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
+                    new AlertDialog.Builder(getContext())
+                            .setMessage(R.string.please_create_or_activate_apartment_first)
+                            .setNeutralButton(android.R.string.ok, null)
+                            .show();
+                    return true;
+                }
+
                 ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
                 configureSceneDialog.setTargetFragment(this, 0);
                 configureSceneDialog.show(getFragmentManager(), null);

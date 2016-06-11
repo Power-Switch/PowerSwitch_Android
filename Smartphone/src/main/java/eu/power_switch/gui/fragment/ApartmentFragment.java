@@ -95,30 +95,38 @@ public class ApartmentFragment extends RecyclerViewFragment {
         apartmentArrayAdapter.setOnItemClickListener(new ApartmentRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                final Apartment apartment = apartments.get(position);
+                try {
+                    final Apartment apartment = apartments.get(position);
 
-                SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
+                    SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
 
-                for (Apartment currentApartment : apartments) {
-                    if (currentApartment.getId().equals(apartment.getId())) {
-                        currentApartment.setActive(true);
-                    } else {
-                        currentApartment.setActive(false);
+                    for (Apartment currentApartment : apartments) {
+                        if (currentApartment.getId().equals(apartment.getId())) {
+                            currentApartment.setActive(true);
+                        } else {
+                            currentApartment.setActive(false);
+                        }
                     }
-                }
 
-                apartmentArrayAdapter.notifyDataSetChanged();
+                    apartmentArrayAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
         apartmentArrayAdapter.setOnItemLongClickListener(new ApartmentRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, final int position) {
-                Apartment apartment = apartments.get(position);
+                try {
+                    Apartment apartment = apartments.get(position);
 
-                ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(
-                        apartment.getId());
-                configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
-                configureApartmentDialog.show(getFragmentManager(), null);
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(
+                            apartment.getId());
+                    configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
+                    configureApartmentDialog.show(getFragmentManager(), null);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                }
             }
         });
 
@@ -132,7 +140,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                     configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -193,7 +201,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                     configureApartmentDialog.setTargetFragment(this, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             default:
                 break;
