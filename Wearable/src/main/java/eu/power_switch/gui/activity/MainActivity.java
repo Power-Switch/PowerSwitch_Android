@@ -50,6 +50,7 @@ import eu.power_switch.gui.ThemeHelper;
 import eu.power_switch.gui.adapter.NavigationDrawerAdapter;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
+import eu.power_switch.gui.view.PageIndicatorView;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
@@ -154,7 +155,9 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
         // Top Navigation Drawer
         mWearableNavigationDrawer = (WearableNavigationDrawer) findViewById(R.id.top_navigation_drawer);
-        mWearableNavigationDrawer.setAdapter(new NavigationDrawerAdapter(this));
+        PageIndicatorView pageIndicatorView = (PageIndicatorView) findViewById(R.id.pageIndicator);
+        NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this, pageIndicatorView);
+        mWearableNavigationDrawer.setAdapter(navigationDrawerAdapter);
 
         // Peeks Navigation drawer on the top.
         mWearableDrawerLayout.peekDrawer(Gravity.TOP);

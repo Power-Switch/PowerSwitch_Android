@@ -19,6 +19,7 @@
 
 <android.support.wearable.view.drawer.WearableDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
@@ -62,7 +63,20 @@
         android:id="@+id/top_navigation_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark_grey"/>
+        android:background="@color/dark_grey">
+
+        <eu.power_switch.gui.view.PageIndicatorView
+            android:id="@+id/pageIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="16dp"
+            app:indicatorGap="10dp"
+            app:indicatorSize="10dp"
+            app:initialPageIndex="0"
+            app:pageCount="3"/>
+
+    </android.support.wearable.view.drawer.WearableNavigationDrawer>
 
     <!--<android.support.wearable.view.drawer.WearableActionDrawer-->
     <!--android:id="@+id/bottom_action_drawer"-->
