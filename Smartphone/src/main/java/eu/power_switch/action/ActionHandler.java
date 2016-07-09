@@ -42,8 +42,10 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;
+import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
@@ -145,7 +147,7 @@ public class ActionHandler {
         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -278,7 +280,7 @@ public class ActionHandler {
         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -364,7 +366,7 @@ public class ActionHandler {
         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -453,7 +455,7 @@ public class ActionHandler {
         if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
-        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             UtilityService.forceWearDataUpdate(context);
         }
     }
@@ -549,6 +551,30 @@ public class ActionHandler {
                         context.getString(R.string.geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
             }
 
+            HistoryHelper.add(context, historyItem);
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(context, e);
+            try {
+                HistoryHelper.add(context, e);
+            } catch (Exception e1) {
+                Log.e(e1);
+            }
+        }
+    }
+
+    /**
+     * Execute CallEvent actions
+     *
+     * @param context
+     * @param callEvent
+     * @param callType
+     */
+    public static void execute(Context context, CallEvent callEvent, @NonNull PhoneConstants.CallType callType) {
+        try {
+            executeActions(context, callEvent.getActions(callType));
+
+            HistoryItem historyItem = new HistoryItem((long) -1, Calendar.getInstance(),
+                    context.getString(R.string.geofence_enter_action_history_text, callEvent.getName()));
             HistoryHelper.add(context, historyItem);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);

@@ -27,6 +27,8 @@ import com.mikepenz.iconics.IconicsDrawable;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
+ * Settings item used for settings list view
+ *
  * Created by Markus on 08.06.2016.
  */
 public abstract class SettingsItem<T> {
@@ -35,14 +37,20 @@ public abstract class SettingsItem<T> {
     private String description;
     private IconicsDrawable icon;
     private String settingsKey;
-    private T defaultValue;
 
-    public SettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey, T defaultValue) {
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param iconDrawable
+     * @param description
+     * @param settingsKey
+     */
+    public SettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey) {
         this.context = context;
         this.icon = iconDrawable;
         this.description = context.getString(description);
         this.settingsKey = settingsKey;
-        this.defaultValue = defaultValue;
     }
 
     public String getDescription() {
@@ -54,12 +62,11 @@ public abstract class SettingsItem<T> {
     }
 
     public T getValue() {
-        return WearablePreferencesHandler.get(settingsKey, defaultValue);
+        return WearablePreferencesHandler.get(settingsKey);
     }
 
     public void setValue(T newValue) {
         WearablePreferencesHandler.set(settingsKey, newValue);
-        WearablePreferencesHandler.forceRefresh(context);
     }
 
     public abstract String getValueDescription();

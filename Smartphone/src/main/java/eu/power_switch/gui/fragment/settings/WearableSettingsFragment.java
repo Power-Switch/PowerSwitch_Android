@@ -82,10 +82,10 @@ public class WearableSettingsFragment extends Fragment {
             public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
                 switch (buttonView.getId()) {
                     case R.id.checkBox_autoCollapseRooms:
-                        WearablePreferencesHandler.setAutoCollapseRooms(isChecked);
+                        WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS, isChecked);
                         break;
                     case R.id.checkBox_vibrateOnButtonPress:
-                        WearablePreferencesHandler.setVibrateOnButtonPress(isChecked);
+                        WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS, isChecked);
                         if (isChecked) {
                             vibrationDurationLayout.setVisibility(View.VISIBLE);
                         } else {
@@ -93,7 +93,7 @@ public class WearableSettingsFragment extends Fragment {
                         }
                         break;
                     case R.id.checkBox_highlightLastActivatedButton:
-                        WearablePreferencesHandler.setHighlightLastActivatedButton(isChecked);
+                        WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, isChecked);
                         break;
                     default:
                         break;
@@ -130,7 +130,7 @@ public class WearableSettingsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s != null && s.length() > 0) {
-                    WearablePreferencesHandler.setVibrationDuration(Integer.valueOf(s.toString()));
+                    WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_VIBRATION_DURATION, Integer.valueOf(s.toString()));
                     UtilityService.forceWearSettingsUpdate(getContext());
                 }
             }
@@ -142,11 +142,11 @@ public class WearableSettingsFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.radioButton_darkBlue:
-                        WearablePreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
+                        WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_THEME, SettingsConstants.THEME_DARK_BLUE);
                         radioButtonLightBlue.setChecked(false);
                         break;
                     case R.id.radioButton_lightBlue:
-                        WearablePreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
+                        WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_THEME, SettingsConstants.THEME_LIGHT_BLUE);
                         radioButtonDarkBlue.setChecked(false);
                         break;
                     default:
@@ -175,17 +175,17 @@ public class WearableSettingsFragment extends Fragment {
     }
 
     private void updateUI() {
-        autoCollapseRooms.setChecked(WearablePreferencesHandler.getAutoCollapseRooms());
-        highlightLastActivatedButton.setChecked(WearablePreferencesHandler.getHighlightLastActivatedButton());
-        vibrateOnButtonPress.setChecked(WearablePreferencesHandler.getVibrateOnButtonPress());
-        vibrationDuration.setText(String.valueOf(WearablePreferencesHandler.getVibrationDuration()));
-        if (!WearablePreferencesHandler.getVibrateOnButtonPress()) {
+        autoCollapseRooms.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
+        highlightLastActivatedButton.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
+        vibrateOnButtonPress.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS));
+        vibrationDuration.setText(String.valueOf(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION)));
+        if (!WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {
             vibrationDurationLayout.setVisibility(View.VISIBLE);
         }
 
-        switch (WearablePreferencesHandler.getTheme()) {
+        switch (WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME)) {
             case SettingsConstants.THEME_DARK_BLUE:
                 radioButtonDarkBlue.setChecked(true);
                 break;

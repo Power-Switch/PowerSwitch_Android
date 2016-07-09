@@ -30,8 +30,8 @@ import eu.power_switch.R;
  */
 public class BooleanSettingsItem extends SettingsItem<Boolean> {
 
-    public BooleanSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey, Boolean defaultValue) {
-        super(context, iconDrawable, description, settingsKey, defaultValue);
+    public BooleanSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey) {
+        super(context, iconDrawable, description, settingsKey);
     }
 
     @Override

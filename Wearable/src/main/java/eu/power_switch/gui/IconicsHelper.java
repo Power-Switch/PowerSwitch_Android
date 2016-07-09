@@ -79,7 +79,7 @@ public class IconicsHelper {
      * @param context any suitable context
      * @return "Close rooms" icon
      */
-    public static IconicsDrawable getCloseRoomsIcon(Context context) {
+    public static IconicsDrawable getAutocollapseRoomsIcon(Context context) {
         final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_photo_size_select_small)
                 .sizeDp(24)

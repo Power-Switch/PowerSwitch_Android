@@ -27,9 +27,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import eu.power_switch.action.Action;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -50,54 +49,54 @@ public class CallEventReceiver extends BroadcastReceiver {
                 return;
             }
 
-            String callState = "UNKNOWN";
-            switch (state) {
-                case TelephonyManager.CALL_STATE_IDLE:
-                    callState = "IDLE";
-                    break;
-                case TelephonyManager.CALL_STATE_RINGING:
-                    // -- check international call or not.
-                    if (incomingNumber.startsWith("00")) {
-                        Toast.makeText(mContext, "International Call- " + incomingNumber, Toast.LENGTH_LONG).show();
-                        callState = "International - Ringing (" + incomingNumber + ")";
-                    } else {
-                        Toast.makeText(mContext, "Local Call - " + incomingNumber, Toast.LENGTH_LONG).show();
-                        callState = "Local - Ringing (" + incomingNumber + ")";
-                    }
+            try {
+                String callState = "UNKNOWN";
+                switch (state) {
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        callState = "IDLE";
+                        break;
+                    case TelephonyManager.CALL_STATE_RINGING:
+                        // -- check international call or not.
+                        if (incomingNumber.startsWith("00")) {
+                            Toast.makeText(mContext, "International Call- " + incomingNumber, Toast.LENGTH_LONG).show();
+                            callState = "International - Ringing (" + incomingNumber + ")";
+                        } else {
+                            Toast.makeText(mContext, "Local Call - " + incomingNumber, Toast.LENGTH_LONG).show();
+                            callState = "Local - Ringing (" + incomingNumber + ")";
+                        }
 
-                    executeCallEvents(incomingNumber);
-                    break;
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    String dialingNumber = mIntent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
-                    if (dialingNumber.startsWith("00")) {
-                        Toast.makeText(mContext, "International - " + dialingNumber, Toast.LENGTH_LONG).show();
-                        callState = "International - Dialing (" + dialingNumber + ")";
-                    } else {
-                        Toast.makeText(mContext, "Local Call - " + dialingNumber, Toast.LENGTH_LONG).show();
-                        callState = "Local - Dialing (" + dialingNumber + ")";
-                    }
-                    break;
+                        executeCallEvents(incomingNumber);
+                        break;
+                    case TelephonyManager.CALL_STATE_OFFHOOK:
+                        String dialingNumber = mIntent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+                        if (dialingNumber.startsWith("00")) {
+                            Toast.makeText(mContext, "International - " + dialingNumber, Toast.LENGTH_LONG).show();
+                            callState = "International - Dialing (" + dialingNumber + ")";
+                        } else {
+                            Toast.makeText(mContext, "Local Call - " + dialingNumber, Toast.LENGTH_LONG).show();
+                            callState = "Local - Dialing (" + dialingNumber + ")";
+                        }
+                        break;
+                }
+                Log.d(">>>Broadcast", "onCallStateChanged " + callState);
+
+            } catch (Exception e) {
+                Log.e("Error receiving call event", e);
             }
-            Log.d(">>>Broadcast", "onCallStateChanged " + callState);
         }
     };
 
-    private void executeCallEvents(String incomingNumber) {
-        try {
-            List<CallEvent> callEvents = DatabaseHandler.getCallEvents(incomingNumber);
+    private void executeCallEvents(String incomingNumber) throws Exception {
+        List<CallEvent> callEvents = DatabaseHandler.getCallEvents(incomingNumber);
 
-            if (callEvents.isEmpty()) {
-                Log.w("List of CallEvents was empty for phone number: " + incomingNumber);
-            }
+        if (callEvents.isEmpty()) {
+            Log.w("List of CallEvents was empty for phone number: " + incomingNumber);
+            return;
+        }
 
-            Log.d("Executing CallEvents...");
-            for (CallEvent callEvent : callEvents) {
-                for (Action action : callEvent.getActions(PhoneConstants.CallType.INCOMING)) {
-                    action.execute(mContext);
-                }
-            }
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorDialog(mContext, e);
+        Log.d("Executing CallEvents...");
+        for (CallEvent callEvent : callEvents) {
+            ActionHandler.execute(mContext, callEvent, PhoneConstants.CallType.INCOMING);
         }
     }
 

@@ -41,8 +41,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.storage.FirebaseStorage;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -151,7 +149,7 @@ public class BackupFragment extends RecyclerViewFragment {
 
                                         DeveloperPreferencesHandler.forceRefresh();
                                         SmartphonePreferencesHandler.forceRefresh(getContext());
-                                        WearablePreferencesHandler.forceRefresh(getContext());
+                                        WearablePreferencesHandler.forceRefresh();
 
                                         // restart app to apply
                                         getActivity().finish();
@@ -254,7 +252,8 @@ public class BackupFragment extends RecyclerViewFragment {
             }
         };
 
-        FirebaseStorage storage = FirebaseStorage.getInstance();
+        // TODO: Cloud Backups
+        //FirebaseStorage storage = FirebaseStorage.getInstance();
 
     }
 

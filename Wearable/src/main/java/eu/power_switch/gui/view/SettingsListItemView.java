@@ -33,12 +33,15 @@ import eu.power_switch.R;
 import eu.power_switch.gui.ThemeHelper;
 
 /**
+ * Settings Item View
+ * <p/>
+ * Used in Settings List to visualize a single setting
+ * <p/>
  * Created by Markus on 08.06.2016.
  */
 public class SettingsListItemView extends LinearLayout implements WearableListView.OnCenterProximityListener {
 
     private static final float NO_ALPHA = 1f, PARTIAL_ALPHA = 0.40f;
-    private static final float NO_X_TRANSLATION = 0f, X_TRANSLATION = 20f;
     private static final int ANIMATION_DURATION = 250;
     private final int mUnselectedCircleColor, mSelectedCircleColor;
     private final int mUnselectedCircleBorderColor, mSelectedCircleBorderColor;

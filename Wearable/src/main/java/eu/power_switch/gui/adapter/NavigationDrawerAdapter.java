@@ -29,7 +29,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
 import eu.power_switch.gui.fragment.SettingsFragment;
-import eu.power_switch.gui.view.PageIndicatorView;
+import eu.power_switch.shared.gui.view.PageIndicatorView;
 
 /**
  * Navigation Drawer implementation

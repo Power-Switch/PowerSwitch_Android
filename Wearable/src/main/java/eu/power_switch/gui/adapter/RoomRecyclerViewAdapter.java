@@ -113,8 +113,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             @Override
             public void onClick(View v) {
                 // Vibration Feedback
-                if (WearablePreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(context, WearablePreferencesHandler.getVibrationDuration());
+                if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    VibrationHandler.vibrate(context, WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
                 }
 
                 android.widget.Button button = (android.widget.Button) v;
@@ -140,7 +140,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     }
                 }
 
-                if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                     notifyDataSetChanged();
                 }
             }
@@ -180,7 +180,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 final int accentColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
 
                 if (button.getId() == receiver.getLastActivatedButtonId()
-                        && WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                        && WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                     buttonView.setTextColor(accentColor);
                 }
 
@@ -188,8 +188,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     @Override
                     public void onClick(View v) {
                         // Vibration Feedback
-                        if (WearablePreferencesHandler.getVibrateOnButtonPress()) {
-                            VibrationHandler.vibrate(context, WearablePreferencesHandler.getVibrationDuration());
+                        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                            VibrationHandler.vibrate(context, WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
                         }
 
                         // Send Action to Smartphone app
@@ -198,7 +198,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                         dataApiHandler.sendReceiverActionTrigger(actionString);
 
                         receiver.setLastActivatedButtonId(button.getId());
-                        if (WearablePreferencesHandler.getHighlightLastActivatedButton()) {
+                        if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                             for (android.widget.Button button : buttonViews) {
                                 if (button != v) {
                                     button.setTextColor(defaultTextColor);

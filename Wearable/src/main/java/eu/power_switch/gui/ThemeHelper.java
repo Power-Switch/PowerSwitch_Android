@@ -62,7 +62,7 @@ public class ThemeHelper {
      * @param activity Activity to apply theme on
      */
     public static void applyTheme(Activity activity) {
-        switch (WearablePreferencesHandler.getTheme()) {
+        switch (WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME)) {
             case SettingsConstants.THEME_DARK_BLUE:
                 activity.setTheme(R.style.PowerSwitchWearTheme_Dark_Blue);
                 break;

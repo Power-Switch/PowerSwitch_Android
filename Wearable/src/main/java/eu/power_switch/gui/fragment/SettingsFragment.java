@@ -43,6 +43,7 @@ import eu.power_switch.settings.BooleanSettingsItem;
 import eu.power_switch.settings.SettingsItem;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Fragment holding settings related to wearable
@@ -83,22 +84,19 @@ public class SettingsFragment extends Fragment {
 
         SettingsItem item1 = new BooleanSettingsItem(
                 getActivity(),
-                IconicsHelper.getCloseRoomsIcon(getActivity()),
+                IconicsHelper.getAutocollapseRoomsIcon(getActivity()),
                 R.string.auto_collapse_rooms,
-                WearableSettingsConstants.KEY_AUTO_COLLAPSE_ROOMS,
-                false);
+                WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
         SettingsItem item2 = new BooleanSettingsItem(
                 getActivity(),
                 IconicsHelper.getHistoryIcon(getActivity()),
                 R.string.highlight_last_activated_button,
-                WearableSettingsConstants.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
-                false);
+                WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
         SettingsItem item3 = new BooleanSettingsItem(
                 getActivity(),
                 IconicsHelper.getVibrationIcon(getActivity()),
                 R.string.vibrate_on_button_press,
-                WearableSettingsConstants.KEY_VIBRATE_ON_BUTTON_PRESS,
-                false);
+                WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
 
         settings.add(item1);
         settings.add(item2);
