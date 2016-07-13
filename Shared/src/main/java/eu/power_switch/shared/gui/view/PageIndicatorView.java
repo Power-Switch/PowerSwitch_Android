@@ -18,14 +18,18 @@
 
 package eu.power_switch.shared.gui.view;
 
+import android.animation.ArgbEvaluator;
+import android.animation.FloatEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 import eu.power_switch.shared.R;
 
@@ -36,16 +40,21 @@ import eu.power_switch.shared.R;
  * <p/>
  * Created by Markus on 06.07.2016.
  */
-public class PageIndicatorView extends View {
+public class PageIndicatorView extends LinearLayout {
+
+    private static final int ANIMATION_DURATION = 250;
 
     private int currentPage;
     private int pageCount;
-    private int indicatorSize;
+    private int activeIndicatorSize;
+    private int inactiveIndicatorSize;
     private int indicatorGap;
-    private int activeIndicatorColor;
-    private int inactiveIndicatorColor;
-    private Paint inactiveCirclePaint;
-    private Paint activeCirclePaint;
+    private int activeIndicatorFillColor;
+    private int activeIndicatorStrokeColor;
+    private int inactiveIndicatorFillColor;
+    private int inactiveIndicatorStrokeColor;
+
+    private ArrayList<CircleIndicatorView> indicatorViews = new ArrayList<>();
 
     public PageIndicatorView(Context context) {
         this(context, null);
@@ -58,6 +67,17 @@ public class PageIndicatorView extends View {
     public PageIndicatorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
+        init(context, attrs);
+    }
+
+    @TargetApi(21)
+    public PageIndicatorView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+
+        init(context, attrs);
+    }
+
+    private void readArguments(Context context, AttributeSet attrs) {
         // read XML attributes
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
@@ -67,66 +87,144 @@ public class PageIndicatorView extends View {
         try {
             currentPage = a.getInt(R.styleable.PageIndicatorView_initialPageIndex, 0);
             pageCount = a.getInt(R.styleable.PageIndicatorView_pageCount, 0);
-            indicatorSize = a.getDimensionPixelSize(R.styleable.PageIndicatorView_indicatorSize, 5);
+            activeIndicatorSize = a.getDimensionPixelSize(R.styleable.PageIndicatorView_activeIndicatorSize, 7);
+            inactiveIndicatorSize = a.getDimensionPixelSize(R.styleable.PageIndicatorView_inactiveIndicatorSize, 5);
             indicatorGap = a.getDimensionPixelSize(R.styleable.PageIndicatorView_indicatorGap, 5);
-            activeIndicatorColor = a.getColor(R.styleable.PageIndicatorView_activeIndicatorColor, Color.WHITE);
-            inactiveIndicatorColor = a.getColor(R.styleable.PageIndicatorView_inactiveIndicatorColor, Color.WHITE);
+            activeIndicatorFillColor = a.getColor(R.styleable.PageIndicatorView_activeIndicatorColorFill, Color.WHITE);
+            activeIndicatorStrokeColor = a.getColor(R.styleable.PageIndicatorView_activeIndicatorColorStroke, Color.WHITE);
+            inactiveIndicatorFillColor = a.getColor(R.styleable.PageIndicatorView_inactiveIndicatorColorFill, Color.WHITE);
+            inactiveIndicatorStrokeColor = a.getColor(R.styleable.PageIndicatorView_inactiveIndicatorColorStroke, Color.WHITE);
         } finally {
             a.recycle();
         }
-
-        init();
     }
 
-    @TargetApi(21)
-    public PageIndicatorView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+    private void init(Context context, AttributeSet attrs) {
+        readArguments(context, attrs);
+
+        createIndicators();
+        setGravity(Gravity.CENTER);
     }
 
-    private void init() {
-        inactiveCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        inactiveCirclePaint.setStyle(Paint.Style.STROKE);
-        inactiveCirclePaint.setColor(inactiveIndicatorColor);
-
-        activeCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        activeCirclePaint.setStyle(Paint.Style.FILL);
-        activeCirclePaint.setColor(activeIndicatorColor);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //Get the width measurement
-        int widthSize = View.resolveSize(getDesiredWidth(), widthMeasureSpec);
-
-        //Get the height measurement
-        int heightSize = View.resolveSize(getDesiredHeight(), heightMeasureSpec);
-
-        //MUST call this to store the measurements
-        setMeasuredDimension(widthSize, heightSize);
-    }
-
-    private int getDesiredWidth() {
-        return pageCount * (indicatorSize + indicatorGap) - indicatorGap;
-    }
-
-    private int getDesiredHeight() {
-        return indicatorSize;
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    private void createIndicators() {
+        removeAllViews();
+        indicatorViews.clear();
 
         for (int i = 0; i < pageCount; i++) {
-            int x = (indicatorSize / 2) + (i * (indicatorSize + indicatorGap));
-            int y = getHeight() / 2;
-
             if (i == currentPage) {
-                canvas.drawCircle(x, y, indicatorSize / 2, activeCirclePaint);
+                addActiveIndicator();
             } else {
-                canvas.drawCircle(x, y, indicatorSize / 2, inactiveCirclePaint);
+                addInactiveIndicator();
             }
         }
+    }
+
+    private void addActiveIndicator() {
+        CircleIndicatorView activeCircleIndicator = new CircleIndicatorView(getContext());
+        activeCircleIndicator.setDiameter(activeIndicatorSize);
+        activeCircleIndicator.setFillColor(activeIndicatorFillColor);
+        activeCircleIndicator.setStrokeColor(activeIndicatorStrokeColor);
+
+        addView(activeCircleIndicator, activeIndicatorSize + 1, activeIndicatorSize + 1);
+
+        LayoutParams lp = (LayoutParams) activeCircleIndicator.getLayoutParams();
+        lp.leftMargin = indicatorGap / 2;
+        lp.rightMargin = indicatorGap / 2;
+        activeCircleIndicator.setLayoutParams(lp);
+
+        indicatorViews.add(activeCircleIndicator);
+    }
+
+    private void addInactiveIndicator() {
+        CircleIndicatorView inactiveCircleIndicator = new CircleIndicatorView(getContext());
+        inactiveCircleIndicator.setDiameter(inactiveIndicatorSize);
+        inactiveCircleIndicator.setFillColor(inactiveIndicatorFillColor);
+        inactiveCircleIndicator.setStrokeColor(inactiveIndicatorStrokeColor);
+
+        addView(inactiveCircleIndicator, activeIndicatorSize + 1, activeIndicatorSize + 1);
+
+        LayoutParams lp = (LayoutParams) inactiveCircleIndicator.getLayoutParams();
+        lp.leftMargin = indicatorGap / 2;
+        lp.rightMargin = indicatorGap / 2;
+        inactiveCircleIndicator.setLayoutParams(lp);
+
+        indicatorViews.add(inactiveCircleIndicator);
+    }
+
+    private void animateToActiveIndicator(int index) {
+        final CircleIndicatorView indicatorView = indicatorViews.get(index);
+
+        ValueAnimator sizeAnimator = ValueAnimator.ofObject(
+                new FloatEvaluator(), indicatorView.getDiameter(), activeIndicatorSize);
+        sizeAnimator.setDuration(ANIMATION_DURATION);
+        sizeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                indicatorView.setDiameter((float) animation.getAnimatedValue());
+            }
+        });
+
+        ValueAnimator fillColorAnimator = ValueAnimator.ofObject(
+                new ArgbEvaluator(), indicatorView.getFillColor(), activeIndicatorFillColor);
+        fillColorAnimator.setDuration(ANIMATION_DURATION);
+        fillColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                indicatorView.setFillColor((int) animation.getAnimatedValue());
+            }
+        });
+
+        ValueAnimator strokeColorAnimator = ValueAnimator.ofObject(
+                new ArgbEvaluator(), indicatorView.getStrokeColor(), activeIndicatorStrokeColor);
+        strokeColorAnimator.setDuration(ANIMATION_DURATION);
+        strokeColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                indicatorView.setStrokeColor((int) animation.getAnimatedValue());
+            }
+        });
+
+        sizeAnimator.start();
+        fillColorAnimator.start();
+        strokeColorAnimator.start();
+    }
+
+    private void animateToInactiveIndicator(int index) {
+        final CircleIndicatorView indicatorView = indicatorViews.get(index);
+
+        ValueAnimator sizeAnimator = ValueAnimator.ofObject(
+                new FloatEvaluator(), indicatorView.getDiameter(), inactiveIndicatorSize);
+        sizeAnimator.setDuration(ANIMATION_DURATION);
+        sizeAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                indicatorView.setDiameter((float) animation.getAnimatedValue());
+            }
+        });
+
+        ValueAnimator fillColorAnimator = ValueAnimator.ofObject(
+                new ArgbEvaluator(), indicatorView.getFillColor(), inactiveIndicatorFillColor);
+        fillColorAnimator.setDuration(ANIMATION_DURATION);
+        fillColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                indicatorView.setFillColor((int) animation.getAnimatedValue());
+            }
+        });
+
+        ValueAnimator strokeColorAnimator = ValueAnimator.ofObject(
+                new ArgbEvaluator(), indicatorView.getStrokeColor(), inactiveIndicatorStrokeColor);
+        strokeColorAnimator.setDuration(ANIMATION_DURATION);
+        strokeColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                indicatorView.setStrokeColor((int) animation.getAnimatedValue());
+            }
+        });
+
+        sizeAnimator.start();
+        fillColorAnimator.start();
+        strokeColorAnimator.start();
     }
 
     /**
@@ -144,7 +242,7 @@ public class PageIndicatorView extends View {
      * @param pageCount amount of pages
      */
     public void setPageCount(int pageCount) {
-        this.pageCount = this.pageCount;
+        this.pageCount = pageCount;
         invalidate();
         requestLayout();
     }
@@ -164,7 +262,10 @@ public class PageIndicatorView extends View {
      * @param index Index of current page
      */
     public void setCurrentPage(int index) {
+        animateToInactiveIndicator(currentPage);
+        animateToActiveIndicator(index);
         currentPage = index;
+
         invalidate();
         requestLayout();
     }

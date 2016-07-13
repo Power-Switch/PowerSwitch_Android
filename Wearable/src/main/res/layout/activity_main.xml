@@ -71,8 +71,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_marginBottom="38dp"
+            app:activeIndicatorColorFill="?attr/colorAccent"
+            app:activeIndicatorColorStroke="?attr/colorAccent"
+            app:activeIndicatorSize="10dp"
+            app:inactiveIndicatorColorFill="@color/inactive_gray"
+            app:inactiveIndicatorColorStroke="@color/inactive_gray"
+            app:inactiveIndicatorSize="7dp"
             app:indicatorGap="10dp"
-            app:indicatorSize="10dp"
             app:initialPageIndex="0"
             app:pageCount="3"/>
 
