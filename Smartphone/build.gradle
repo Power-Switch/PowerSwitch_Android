@@ -64,9 +64,9 @@ dependencies {
     compile 'com.google.android.support:wearable:1.4.0'
 
     // Google Play Services
-    compile 'com.google.android.gms:play-services-maps:9.2.0'
-    compile 'com.google.android.gms:play-services-location:9.2.0'
-    compile 'com.google.android.gms:play-services-wearable:9.2.0'
+    compile 'com.google.android.gms:play-services-maps:9.2.1'
+    compile 'com.google.android.gms:play-services-location:9.2.1'
+    compile 'com.google.android.gms:play-services-wearable:9.2.1'
 
     // Firebase
     compile 'com.firebase:firebase-client-android:2.5.2'

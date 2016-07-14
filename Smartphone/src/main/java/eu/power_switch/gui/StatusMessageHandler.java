@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
@@ -38,9 +37,9 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
-import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * This is a helper Class to create and show status messages depending on the app state
@@ -294,45 +293,20 @@ public class StatusMessageHandler {
 
     /**
      * Show missing permission message with "Grant" button to trigger permission request dialog
+     * <p/>
+     * See {Manifest.permission} constants for more info about permission strings
      *
      * @param activity     activity used for permission changed callbacks
      * @param recyclerView recyclerview to show snackbar on
      * @param permissions  permission constant(s)
      */
     public static void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final String... permissions) {
-
         if (permissions.length == 0) {
             throw new IllegalArgumentException("Missing permission constant(s)");
         }
 
-        int messageResource;
-        final int requestCode;
-
-        switch (permissions[0]) {
-            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
-                messageResource = R.string.missing_external_storage_permission;
-                requestCode = PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION;
-                break;
-            case Manifest.permission.ACCESS_FINE_LOCATION:
-                messageResource = R.string.missing_location_permission;
-                requestCode = PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION;
-                break;
-            case Manifest.permission.READ_PHONE_STATE:
-                messageResource = R.string.missing_phone_permission;
-                requestCode = PermissionConstants.REQUEST_CODE_PHONE_PERMISSION;
-                break;
-            case Manifest.permission.RECEIVE_SMS:
-                messageResource = R.string.missing_sms_permission;
-                requestCode = PermissionConstants.REQUEST_CODE_SMS_PERMISSION;
-                break;
-            default:
-                messageResource = R.string.missing_permission;
-                requestCode = -1;
-        }
-
-        if (permissions.length > 1) {
-            messageResource = R.string.missing_multiple_permissions;
-        }
+        final int requestCode = PermissionHelper.getPermissionRequestCode(permissions);
+        int messageResource = PermissionHelper.getPermissionMessage(permissions);
 
         Snackbar snackbar = Snackbar.make(recyclerView, messageResource, Snackbar.LENGTH_INDEFINITE);
         if (requestCode != -1) {

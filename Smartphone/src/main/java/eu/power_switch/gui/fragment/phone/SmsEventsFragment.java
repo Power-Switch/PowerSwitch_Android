@@ -29,7 +29,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -61,6 +60,11 @@ import eu.power_switch.shared.permission.PermissionHelper;
  * Created by Markus on 05.04.2016.
  */
 public class SmsEventsFragment extends RecyclerViewFragment {
+
+    private static final String[] NEEDED_PERMISSIONS = {
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.READ_CONTACTS
+    };
 
     private List<SmsEvent> smsEvents = new ArrayList<>();
     private SmsEventRecyclerViewAdapter smsEventRecyclerViewAdapter;
@@ -98,12 +102,8 @@ public class SmsEventsFragment extends RecyclerViewFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_contacts_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
+                if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -122,7 +122,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
 
                 switch (intent.getAction()) {
                     case LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED:
-                        refreshCalls();
+                        refreshSmsEvents();
                         break;
                     case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:
                         int permissionRequestCode = intent.getIntExtra(PermissionConstants.KEY_REQUEST_CODE, 0);
@@ -141,8 +141,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
                                 sendCallEventsChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(),
-                                        Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
+                                        getRecyclerView(), NEEDED_PERMISSIONS);
                             }
                         }
                         break;
@@ -159,11 +158,11 @@ public class SmsEventsFragment extends RecyclerViewFragment {
                     getRecyclerView(),
                     Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
         } else {
-            refreshCalls();
+            refreshSmsEvents();
         }
     }
 
-    private void refreshCalls() {
+    private void refreshSmsEvents() {
         Log.d(this, "refreshSmsEvents");
         updateListContent();
     }
@@ -175,7 +174,11 @@ public class SmsEventsFragment extends RecyclerViewFragment {
         }
 
         switch (menuItem.getItemId()) {
-            case R.id.create_geofence:
+            case R.id.create_sms_event:
+                if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
+                    break;
+                }
                 break;
             default:
                 break;
@@ -186,12 +189,12 @@ public class SmsEventsFragment extends RecyclerViewFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.apartment_geofences_fragment_menu, menu);
+        inflater.inflate(R.menu.sms_event_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_sms_event).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
-            menu.findItem(R.id.create_geofence).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_sms_event).setVisible(false).setEnabled(false);
         }
     }
 

@@ -24,6 +24,7 @@ package eu.power_switch.shared.constants;
 public class PermissionConstants {
 
     public static final String KEY_REQUEST_CODE = "requestCode";
+    public static final String KEY_PERMISSIONS = "permissions";
     public static final String KEY_RESULTS = "results";
 
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 123;

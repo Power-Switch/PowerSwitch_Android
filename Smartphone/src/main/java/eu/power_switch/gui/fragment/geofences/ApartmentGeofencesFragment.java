@@ -68,6 +68,10 @@ import eu.power_switch.shared.permission.PermissionHelper;
  */
 public class ApartmentGeofencesFragment extends RecyclerViewFragment {
 
+    private static final String[] NEEDED_PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
     private HashMap<Long, Apartment> geofenceIdApartmentMap = new HashMap<>();
     private ArrayList<Geofence> geofences = new ArrayList<>();
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
@@ -122,11 +126,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_location_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -217,11 +217,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         switch (menuItem.getItemId()) {
             case R.id.create_geofence:
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_location_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
                     break;
                 }
 

@@ -34,4 +34,6 @@
 
     <string name="create_call_event">Anrufereignis erstellen</string>
 
+    <string name="create_sms_event">SMS Ereignis</string>
+
 </resources>

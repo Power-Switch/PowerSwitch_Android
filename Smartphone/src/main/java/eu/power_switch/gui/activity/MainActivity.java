@@ -848,7 +848,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // send permission change to possible listeners via local broadcast
-        PermissionHelper.sendPermissionChangedBroadcast(this, requestCode, grantResults);
+        PermissionHelper.sendPermissionChangedBroadcast(this, requestCode, permissions, grantResults);
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }

@@ -29,7 +29,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -65,6 +64,11 @@ import eu.power_switch.shared.permission.PermissionHelper;
  * Created by Markus on 05.04.2016.
  */
 public class CallEventsFragment extends RecyclerViewFragment {
+
+    private static final String[] NEEDED_PERMISSIONS = {
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_CONTACTS
+    };
 
     private List<CallEvent> callEvents = new ArrayList<>();
     private CallEventRecyclerViewAdapter callEventRecyclerViewAdapter;
@@ -114,11 +118,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_phone_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -154,8 +154,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
                                 sendCallEventsChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(),
-                                        Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS);
+                                        getRecyclerView(), NEEDED_PERMISSIONS);
                             }
                         }
                         break;
@@ -169,8 +168,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
         if (!PermissionHelper.isPhonePermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                    getRecyclerView(),
-                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS);
+                    getRecyclerView(), NEEDED_PERMISSIONS);
         } else {
             refreshCalls();
         }
@@ -190,11 +188,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
         switch (menuItem.getItemId()) {
             case R.id.create_call_event:
                 if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.missing_permission)
-                            .setMessage(R.string.missing_phone_permission)
-                            .setNeutralButton(R.string.close, null)
-                            .show();
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
                     break;
                 }
 
