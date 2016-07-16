@@ -118,7 +118,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -154,7 +154,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
                                 sendCallEventsChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(), NEEDED_PERMISSIONS);
+                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
                             }
                         }
                         break;
@@ -168,7 +168,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
         if (!PermissionHelper.isPhonePermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                    getRecyclerView(), NEEDED_PERMISSIONS);
+                    getRecyclerView(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
         } else {
             refreshCalls();
         }
@@ -188,7 +188,7 @@ public class CallEventsFragment extends RecyclerViewFragment {
         switch (menuItem.getItemId()) {
             case R.id.create_call_event:
                 if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
                     break;
                 }
 

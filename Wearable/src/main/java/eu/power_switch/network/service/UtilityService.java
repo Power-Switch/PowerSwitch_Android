@@ -126,6 +126,8 @@ public class UtilityService extends IntentService {
      */
     private DataMap getSettingsDataMap() {
         DataMap settingsDataMap = new DataMap();
+        settingsDataMap.putInt(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
+                WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
         settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS,
                 WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
         settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,

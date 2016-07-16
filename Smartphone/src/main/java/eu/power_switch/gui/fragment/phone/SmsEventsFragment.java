@@ -103,7 +103,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_SMS_PERMISSION, NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -141,7 +141,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
                                 sendCallEventsChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(), NEEDED_PERMISSIONS);
+                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_SMS_PERMISSION, NEEDED_PERMISSIONS);
                             }
                         }
                         break;
@@ -156,6 +156,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
+                    PermissionConstants.REQUEST_CODE_SMS_PERMISSION,
                     Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
         } else {
             refreshSmsEvents();
@@ -176,7 +177,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
         switch (menuItem.getItemId()) {
             case R.id.create_sms_event:
                 if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_SMS_PERMISSION, NEEDED_PERMISSIONS);
                     break;
                 }
                 break;

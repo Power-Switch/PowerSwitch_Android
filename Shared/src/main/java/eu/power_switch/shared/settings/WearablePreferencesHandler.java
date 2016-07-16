@@ -48,6 +48,7 @@ public class WearablePreferencesHandler {
     public static final String KEY_SHOW_ROOM_ALL_ON_OFF = "showRoomAllOnOff";
     public static final String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = "highlightLastActivatedButton";
     public static final String KEY_AUTO_COLLAPSE_ROOMS = "autoCollapseRooms";
+    public static final String KEY_STARTUP_DEFAULT_TAB = "startupDefaultTab";
     public static final String KEY_THEME = "theme";
     public static final String KEY_VIBRATE_ON_BUTTON_PRESS = "vibrateOnButtonPress";
     public static final String KEY_VIBRATION_DURATION = "vibrationDuration";
@@ -60,6 +61,7 @@ public class WearablePreferencesHandler {
     private static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
     private static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants
             .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
+    private static final int DEFAULT_VALUE_STARTUP_TAB = 0;
 
     private static SharedPreferences sharedPreferences;
     private static Map<String, ?> cachedValues;
@@ -75,6 +77,7 @@ public class WearablePreferencesHandler {
         defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
         defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
         defaultValueMap.put(KEY_VIBRATION_DURATION, DEFAULT_VALUE_VIBRATION_DURATION);
+        defaultValueMap.put(KEY_STARTUP_DEFAULT_TAB, DEFAULT_VALUE_STARTUP_TAB);
     }
 
     /**
@@ -170,7 +173,8 @@ public class WearablePreferencesHandler {
             KEY_AUTO_COLLAPSE_ROOMS,
             KEY_THEME,
             KEY_VIBRATE_ON_BUTTON_PRESS,
-            KEY_VIBRATION_DURATION})
+            KEY_VIBRATION_DURATION,
+            KEY_STARTUP_DEFAULT_TAB})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Key {
     }

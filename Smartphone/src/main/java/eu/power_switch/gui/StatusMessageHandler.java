@@ -300,12 +300,11 @@ public class StatusMessageHandler {
      * @param recyclerView recyclerview to show snackbar on
      * @param permissions  permission constant(s)
      */
-    public static void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final String... permissions) {
+    public static void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final int requestCode, final String... permissions) {
         if (permissions.length == 0) {
             throw new IllegalArgumentException("Missing permission constant(s)");
         }
 
-        final int requestCode = PermissionHelper.getPermissionRequestCode(permissions);
         int messageResource = PermissionHelper.getPermissionMessage(permissions);
 
         Snackbar snackbar = Snackbar.make(recyclerView, messageResource, Snackbar.LENGTH_INDEFINITE);

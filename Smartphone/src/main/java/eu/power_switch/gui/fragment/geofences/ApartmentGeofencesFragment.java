@@ -126,7 +126,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION, NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -180,7 +180,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(
                                         getActivity(),
-                                        getRecyclerView(),
+                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                                         Manifest.permission.ACCESS_FINE_LOCATION);
                             }
                         }
@@ -196,7 +196,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(
                     getActivity(),
-                    getRecyclerView(),
+                    getRecyclerView(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                     Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             refreshGeofences();
@@ -217,7 +217,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         switch (menuItem.getItemId()) {
             case R.id.create_geofence:
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION, NEEDED_PERMISSIONS);
                     break;
                 }
 

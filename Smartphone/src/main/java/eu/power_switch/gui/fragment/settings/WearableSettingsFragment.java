@@ -30,11 +30,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -52,6 +55,7 @@ public class WearableSettingsFragment extends Fragment {
 
     private View rootView;
 
+    private Spinner startupDefaultTab;
     private CheckBox autoCollapseRooms;
     private LinearLayout vibrationDurationLayout;
     private CheckBox vibrateOnButtonPress;
@@ -103,6 +107,25 @@ public class WearableSettingsFragment extends Fragment {
                 UtilityService.forceWearSettingsUpdate(getContext());
             }
         };
+
+        startupDefaultTab = (Spinner) rootView.findViewById(R.id.spinner_startupDefaultTab);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.wear_tab_names, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        startupDefaultTab.setAdapter(adapter);
+        startupDefaultTab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB, position);
+
+                // sync settings with wearable app
+                UtilityService.forceWearSettingsUpdate(getContext());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         autoCollapseRooms = (CheckBox) rootView.findViewById(R.id.checkBox_autoCollapseRooms);
         autoCollapseRooms.setOnCheckedChangeListener(checkBoxInteractionListener);
@@ -175,6 +198,7 @@ public class WearableSettingsFragment extends Fragment {
     }
 
     private void updateUI() {
+        startupDefaultTab.setSelection(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
         autoCollapseRooms.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
         highlightLastActivatedButton.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
         vibrateOnButtonPress.setChecked(WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS));

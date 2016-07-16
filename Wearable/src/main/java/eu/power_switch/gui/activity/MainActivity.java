@@ -146,18 +146,14 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
         mWearableDrawerLayout = (WearableDrawerLayout) findViewById(R.id.drawer_layout);
         contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
 
-        // Initialize content to first planet.
-        RoomsFragment roomsFragment = new RoomsFragment();
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.content_frame, roomsFragment)
-                .commit();
-
         // Top Navigation Drawer
         mWearableNavigationDrawer = (WearableNavigationDrawer) findViewById(R.id.top_navigation_drawer);
         PageIndicatorView pageIndicatorView = (PageIndicatorView) findViewById(R.id.pageIndicator);
         NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this, pageIndicatorView);
         mWearableNavigationDrawer.setAdapter(navigationDrawerAdapter);
+
+        // load first fragment
+        navigationDrawerAdapter.onItemSelected(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
 
         // Peeks Navigation drawer on the top.
         mWearableDrawerLayout.peekDrawer(Gravity.TOP);

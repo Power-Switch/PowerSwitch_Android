@@ -72,12 +72,10 @@ public class PermissionHelper {
      * @param activity    activity used as context
      * @param permissions array of missing permissions
      */
-    public static void showMissingPermissionDialog(final Activity activity, final String[] permissions) {
+    public static void showMissingPermissionDialog(final Activity activity, final int requestCode, final String... permissions) {
         if (permissions.length == 0) {
             throw new IllegalArgumentException("Missing permission constant(s)");
         }
-
-        final int requestCode = getPermissionRequestCode(permissions);
 
         new AlertDialog.Builder(activity)
                 .setTitle(R.string.missing_permission)
@@ -151,21 +149,6 @@ public class PermissionHelper {
     public static boolean isContactPermissionAvailable(@NonNull Context context) {
         int hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS);
         return hasPermission == PackageManager.PERMISSION_GRANTED;
-    }
-
-    public static int getPermissionRequestCode(String[] permissions) {
-        switch (permissions[0]) {
-            case Manifest.permission.WRITE_EXTERNAL_STORAGE:
-                return PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION;
-            case Manifest.permission.ACCESS_FINE_LOCATION:
-                return PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION;
-            case Manifest.permission.READ_PHONE_STATE:
-                return PermissionConstants.REQUEST_CODE_PHONE_PERMISSION;
-            case Manifest.permission.RECEIVE_SMS:
-                return PermissionConstants.REQUEST_CODE_SMS_PERMISSION;
-            default:
-                return -1;
-        }
     }
 
     public static int getPermissionMessage(String[] permissions) {

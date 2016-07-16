@@ -73,7 +73,11 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  */
 public class BackupFragment extends RecyclerViewFragment {
 
-    private static final Comparator<Backup> backupsComparator = new Comparator<Backup>() {
+    private static final String[] NEEDED_PERMISSIONS = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    private static final Comparator<Backup> BACKUP_COMPARATOR = new Comparator<Backup>() {
         @Override
         public int compare(Backup lhs, Backup rhs) {
             return lhs.compareDate(rhs);
@@ -203,6 +207,7 @@ public class BackupFragment extends RecyclerViewFragment {
             public void onClick(View v) {
                 try {
                     if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                        PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
                         new AlertDialog.Builder(getContext())
                                 .setTitle(R.string.missing_permission)
                                 .setMessage(R.string.missing_external_storage_permission)
@@ -240,8 +245,8 @@ public class BackupFragment extends RecyclerViewFragment {
                             } else {
                                 // Permission Denied
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(),
-                                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                                        NEEDED_PERMISSIONS);
                             }
                         }
 
@@ -281,8 +286,8 @@ public class BackupFragment extends RecyclerViewFragment {
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                    getRecyclerView(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                    NEEDED_PERMISSIONS);
         } else {
             updateListContent();
         }
@@ -382,7 +387,7 @@ public class BackupFragment extends RecyclerViewFragment {
             backups.add(backup);
         }
 
-        Collections.sort(backups, backupsComparator);
+        Collections.sort(backups, BACKUP_COMPARATOR);
 
         return backups;
     }
