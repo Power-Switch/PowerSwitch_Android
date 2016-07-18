@@ -45,7 +45,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
     private static final int ANIMATION_DURATION = 250;
     private final int mUnselectedCircleColor, mSelectedCircleColor;
     private final int mUnselectedCircleBorderColor, mSelectedCircleBorderColor;
-    private CircledImageView mCircle;
+    protected CircledImageView mCircle;
     private float mBigCircleRadius;
     private float mSmallCircleRadius;
     private boolean isCentered = false;

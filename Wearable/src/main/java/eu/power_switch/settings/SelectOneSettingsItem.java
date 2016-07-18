@@ -26,6 +26,7 @@ import android.support.annotation.StringRes;
 import com.mikepenz.iconics.IconicsDrawable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import eu.power_switch.gui.activity.ValueSelectorActivity;
 
@@ -34,34 +35,41 @@ import eu.power_switch.gui.activity.ValueSelectorActivity;
  * <p/>
  * Created by Markus on 08.06.2016.
  */
-public abstract class SelectOneSettingsItem extends SettingsItem<String> {
+public abstract class SelectOneSettingsItem extends SettingsItem<Integer> {
 
-    private final int[] values;
+    private final ArrayList<String> values;
 
     public SelectOneSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey, @ArrayRes int values) {
         super(context, iconDrawable, description, settingsKey);
-        this.values = context.getResources().getIntArray(values);
-    }
-
-    /**
-     * Get a list of all possible values
-     *
-     * @return
-     */
-    public int[] getValues() {
-        return values;
+        String[] valuesArray = context.getResources().getStringArray(values);
+        ArrayList<String> valuesList = new ArrayList<>();
+        Collections.addAll(valuesList, valuesArray);
+        this.values = valuesList;
     }
 
     @NonNull
     @Override
-    public String getValueDescription() {
-        return getValue();
+    public String getCurrentValueDescription() {
+        return getValueDescription(getValue());
+    }
+
+    @Override
+    public String getValueDescription(Integer value) {
+        return values.get(value);
     }
 
     /**
      * Opens GUI to select a new value from all possible values
      */
     public void showValueSelector() {
-        ValueSelectorActivity.<Integer>newInstance(context, new ArrayList<Integer>(getValues()), getValue());
+        ValueSelectorActivity.newInstance(context, getAllValues(), getValue());
+    }
+
+    public ArrayList<Integer> getAllValues() {
+        ArrayList<Integer> values = new ArrayList<>();
+        for (int i = 0; i < this.values.size(); i++) {
+            values.add(i);
+        }
+        return values;
     }
 }

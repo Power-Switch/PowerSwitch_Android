@@ -17,7 +17,7 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<eu.power_switch.gui.activity.ValueSelectorActivity.ValueSelectorListItemLayout
+<eu.power_switch.gui.view.ValueSelectorListItemLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -36,9 +36,9 @@
         app:circle_color="#c1c1c1"/>
 
     <TextView
-        android:id="@+id/valueTextView"
+        android:id="@+id/value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"/>
 
-</eu.power_switch.gui.activity.ValueSelectorActivity.ValueSelectorListItemLayout>
+</eu.power_switch.gui.view.ValueSelectorListItemLayout>

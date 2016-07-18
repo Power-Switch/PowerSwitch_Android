@@ -61,6 +61,10 @@ public class ListenerService extends WearableListenerService {
     public static void extractSettings(ArrayList<DataMap> settings) {
         // save map values to local preferenceHandler
         for (DataMap dataMapItem : settings) {
+            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)) {
+                int value = dataMapItem.getInt(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
+                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB, value);
+            }
             if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS)) {
                 boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
                 WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS, bool);

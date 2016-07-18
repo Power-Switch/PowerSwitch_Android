@@ -47,6 +47,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".gui.activity.ValueSelectorActivity"/>
         <activity android:name="android.support.wearable.activity.ConfirmationActivity"/>
         <activity android:name=".gui.animation.ConfirmationActivityClone"/>
 

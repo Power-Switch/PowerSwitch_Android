@@ -97,6 +97,15 @@ public abstract class SettingsItem<T> {
      *
      * @return value description
      */
-    @NonNull
-    public abstract String getValueDescription();
+    public abstract String getCurrentValueDescription();
+
+    /**
+     * Get a description for the passed value
+     * <p/>
+     * This method should always return something
+     *
+     * @param value value to get description for
+     * @return value description
+     */
+    public abstract String getValueDescription(T value);
 }

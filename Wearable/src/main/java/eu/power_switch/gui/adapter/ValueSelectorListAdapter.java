@@ -29,6 +29,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
+import eu.power_switch.settings.SelectOneSettingsItem;
 
 /**
  * Created by Markus on 08.06.2016.
@@ -36,12 +38,14 @@ import eu.power_switch.R;
 public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
     private final LayoutInflater mInflater;
     private Context context;
-    private ArrayList<T> values;
+    private ArrayList<Integer> values;
+    private SelectOneSettingsItem settingsItem;
 
-    public ValueSelectorListAdapter(Context context, ArrayList<T> values) {
+    public ValueSelectorListAdapter(Context context, SelectOneSettingsItem settingsItem) {
         this.context = context;
         mInflater = LayoutInflater.from(context);
-        this.values = values;
+        this.values = settingsItem.getAllValues();
+        this.settingsItem = settingsItem;
     }
 
     @Override
@@ -51,11 +55,17 @@ public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
 
     @Override
     public void onBindViewHolder(WearableListView.ViewHolder viewHolder, int position) {
-        Object value = values.get(position);
+        Integer value = values.get(position);
 
         ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
 
-        itemViewHolder.value.setText(String.valueOf(value));
+        if (value.equals(settingsItem.getValue())) {
+            itemViewHolder.checkmark.setImageDrawable(IconicsHelper.getCheckmarkIcon(context));
+        } else {
+            itemViewHolder.checkmark.setImageDrawable(null);
+        }
+
+        itemViewHolder.value.setText(settingsItem.getValueDescription(value));
     }
 
     @Override
@@ -64,14 +74,12 @@ public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
     }
 
     public static class ItemViewHolder extends WearableListView.ViewHolder {
-        public CircledImageView icon;
-        public TextView description;
+        public CircledImageView checkmark;
         public TextView value;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            icon = (CircledImageView) itemView.findViewById(R.id.circle);
-            description = (TextView) itemView.findViewById(R.id.description);
+            checkmark = (CircledImageView) itemView.findViewById(R.id.circle);
             value = (TextView) itemView.findViewById(R.id.value);
         }
     }

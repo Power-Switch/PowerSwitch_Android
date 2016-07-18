@@ -84,7 +84,7 @@ public class SettingsFragment extends Fragment {
         };
 
         SelectOneSettingsItem item0 = new SelectOneSettingsItem(getActivity(),
-                IconicsHelper.getRoomsIcon(getActivity()),
+                IconicsHelper.getTabsIcon(getActivity()),
                 R.string.startup_default_tab,
                 WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
                 R.array.wear_tab_names) {
@@ -134,7 +134,7 @@ public class SettingsFragment extends Fragment {
                     selectOneSettingsItem.showValueSelector();
                 }
 
-                holder.value.setText(settingsItem.getValueDescription());
+                holder.value.setText(settingsItem.getCurrentValueDescription());
                 ownModification = true;
 
                 UtilityService.forceWearSettingsUpdate(getActivity());

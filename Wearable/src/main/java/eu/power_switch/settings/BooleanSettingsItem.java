@@ -37,8 +37,13 @@ public class BooleanSettingsItem extends SettingsItem<Boolean> {
     }
 
     @Override
-    public String getValueDescription() {
-        if (getValue()) {
+    public String getCurrentValueDescription() {
+        return getValueDescription(getValue());
+    }
+
+    @Override
+    public String getValueDescription(Boolean value) {
+        if (value) {
             return context.getString(R.string.on);
         } else {
             return context.getString(R.string.off);

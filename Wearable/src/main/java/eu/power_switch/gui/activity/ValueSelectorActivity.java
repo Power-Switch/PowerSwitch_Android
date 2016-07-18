@@ -18,19 +18,12 @@
 
 package eu.power_switch.gui.activity;
 
-import android.animation.ArgbEvaluator;
-import android.animation.FloatEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.wearable.activity.WearableActivity;
-import android.support.wearable.view.CircledImageView;
 import android.support.wearable.view.WearableListView;
-import android.util.AttributeSet;
-import android.widget.LinearLayout;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,7 +32,10 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.ThemeHelper;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
+import eu.power_switch.network.service.UtilityService;
+import eu.power_switch.settings.SelectOneSettingsItem;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
 /**
  * Activity used to select a value out of a collection of values
@@ -61,7 +57,7 @@ public class ValueSelectorActivity<T> extends WearableActivity {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
         ThemeHelper.applyTheme(this);
 
@@ -71,12 +67,17 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         // allow always-on screen
         setAmbientEnabled();
 
-        getIntent().getExtras().get(KEY_VALUES);
-
-        values = new ArrayList<>();
+        values = (ArrayList<T>) getIntent().getExtras().get(KEY_VALUES);
+        T selectedValue = (T) getIntent().getExtras().get(KEY_SELECTED_VALUE);
 
         WearableListView wearableListView = (WearableListView) findViewById(R.id.listView);
-        ValueSelectorListAdapter<T> listAdapter = new ValueSelectorListAdapter<>(this, values);
+        final SelectOneSettingsItem selectOneSettingsItem = new SelectOneSettingsItem(this,
+                IconicsHelper.getTabsIcon(this),
+                R.string.startup_default_tab,
+                WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
+                R.array.wear_tab_names) {
+        };
+        final ValueSelectorListAdapter<T> listAdapter = new ValueSelectorListAdapter<>(this, selectOneSettingsItem);
         wearableListView.setAdapter(listAdapter);
         wearableListView.setClickListener(new WearableListView.ClickListener() {
             @Override
@@ -87,7 +88,12 @@ public class ValueSelectorActivity<T> extends WearableActivity {
 
                 ValueSelectorListAdapter.ItemViewHolder holder = (ValueSelectorListAdapter.ItemViewHolder) viewHolder;
                 T value = values.get(viewHolder.getAdapterPosition());
+
+                selectOneSettingsItem.setValue(holder.getAdapterPosition());
                 Log.d("selected value: " + value);
+
+                listAdapter.notifyDataSetChanged();
+                UtilityService.forceWearSettingsUpdate(getApplicationContext());
             }
 
             @Override
@@ -102,177 +108,6 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         super.onStop();
 
         // TODO: send selected value as a result
-    }
-
-    private class ValueSelectorListItemLayout
-            extends LinearLayout implements WearableListView.OnCenterProximityListener {
-
-        private static final float NO_ALPHA = 1f, PARTIAL_ALPHA = 0.40f;
-        private static final int ANIMATION_DURATION = 250;
-        private final int mUnselectedCircleColor, mSelectedCircleColor;
-        private final int mUnselectedCircleBorderColor, mSelectedCircleBorderColor;
-        private CircledImageView mCircle;
-        private float mBigCircleRadius;
-        private float mSmallCircleRadius;
-        private boolean isCentered = false;
-        private boolean isChecked = false;
-        private boolean initialSetup = true;
-        private int currentCircleBorderColor;
-
-        public ValueSelectorListItemLayout(Context context) {
-            this(context, null);
-        }
-
-        public ValueSelectorListItemLayout(Context context, AttributeSet attrs) {
-            this(context, attrs, 0);
-        }
-
-        public ValueSelectorListItemLayout(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-
-            mUnselectedCircleColor = Color.parseColor("#434343");
-            mSelectedCircleColor = Color.parseColor("#434343");
-            mUnselectedCircleBorderColor = Color.parseColor("#FFFFFFFF");
-            mSelectedCircleBorderColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
-            mSmallCircleRadius = getResources().getDimensionPixelSize(R.dimen.small_circle_radius);
-            mBigCircleRadius = getResources().getDimensionPixelSize(R.dimen.big_circle_radius);
-        }
-
-        @Override
-        protected void onFinishInflate() {
-            super.onFinishInflate();
-            initialSetup = true;
-
-            mCircle = (CircledImageView) findViewById(R.id.circle);
-            mCircle.setImageDrawable(IconicsHelper.getCheckmarkIcon(getContext()));
-
-            if (isChecked) {
-                mCircle.setImageTint(Color.BLACK);
-            }
-        }
-
-        @Override
-        public void onCenterPosition(boolean animate) {
-            if (!isCentered || initialSetup) {
-                if (animate && !initialSetup) {
-                    animateCenterPosition();
-                } else {
-                    setAlpha(NO_ALPHA);
-                    setCircleBorderColor(mSelectedCircleBorderColor);
-                    mCircle.setCircleRadius(mBigCircleRadius);
-                }
-
-                mCircle.setCircleColor(mSelectedCircleColor);
-
-                isCentered = true;
-                initialSetup = false;
-            }
-        }
-
-        private void setCircleBorderColor(int color) {
-            currentCircleBorderColor = color;
-            mCircle.setCircleBorderColor(color);
-        }
-
-        private void animateCenterPosition() {
-            ValueAnimator alphaAnimation = ValueAnimator.ofObject(
-                    new FloatEvaluator(), getAlpha(), NO_ALPHA);
-            alphaAnimation.setDuration(ANIMATION_DURATION);
-            alphaAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    setAlpha((float) animation.getAnimatedValue());
-                }
-            });
-
-            ValueAnimator colorAnimation = ValueAnimator.ofObject(
-                    new ArgbEvaluator(), currentCircleBorderColor, mSelectedCircleBorderColor);
-            colorAnimation.setDuration(ANIMATION_DURATION);
-            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    setCircleBorderColor((int) animation.getAnimatedValue());
-                }
-            });
-
-            ValueAnimator radiusAnimator = ValueAnimator.ofObject(
-                    new FloatEvaluator(), mCircle.getCircleRadius(), mBigCircleRadius);
-            radiusAnimator.setDuration(ANIMATION_DURATION);
-            radiusAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mCircle.setCircleRadius((float) animation.getAnimatedValue());
-                }
-            });
-
-            alphaAnimation.start();
-            colorAnimation.start();
-            radiusAnimator.start();
-        }
-
-        @Override
-        public void onNonCenterPosition(boolean animate) {
-            if (isCentered || initialSetup) {
-                if (animate && !initialSetup) {
-                    animateNonCenterPosition();
-                } else {
-                    setAlpha(PARTIAL_ALPHA);
-                    setCircleBorderColor(mUnselectedCircleBorderColor);
-                    mCircle.setCircleRadius(mSmallCircleRadius);
-                }
-
-                mCircle.setCircleColor(mUnselectedCircleColor);
-
-                isCentered = false;
-                initialSetup = false;
-            }
-        }
-
-        private void animateNonCenterPosition() {
-            ValueAnimator alphaAnimation = ValueAnimator.ofObject(
-                    new FloatEvaluator(), getAlpha(), PARTIAL_ALPHA);
-            alphaAnimation.setDuration(ANIMATION_DURATION);
-            alphaAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    setAlpha((float) animation.getAnimatedValue());
-                }
-            });
-
-            ValueAnimator colorAnimation = ValueAnimator.ofObject(
-                    new ArgbEvaluator(), currentCircleBorderColor, mUnselectedCircleBorderColor);
-            colorAnimation.setDuration(ANIMATION_DURATION);
-            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    setCircleBorderColor((int) animation.getAnimatedValue());
-                }
-            });
-
-            ValueAnimator radiusAnimator = ValueAnimator.ofObject(
-                    new FloatEvaluator(), mCircle.getCircleRadius(), mSmallCircleRadius);
-            radiusAnimator.setDuration(ANIMATION_DURATION);
-            radiusAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mCircle.setCircleRadius((float) animation.getAnimatedValue());
-                }
-            });
-
-            alphaAnimation.start();
-            radiusAnimator.start();
-            colorAnimation.start();
-        }
-
-        public boolean isChecked() {
-            return isChecked;
-        }
-
-        public void setChecked(boolean checked) {
-            isChecked = checked;
-            invalidate();
-            requestLayout();
-        }
     }
 
 }

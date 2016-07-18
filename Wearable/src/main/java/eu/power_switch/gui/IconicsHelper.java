@@ -89,6 +89,21 @@ public class IconicsHelper {
     }
 
     /**
+     * Get "Tabs" icon
+     *
+     * @param context any suitable context
+     * @return "Tabs" icon
+     */
+    public static IconicsDrawable getTabsIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_tab)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
      * Get "History" icon
      *
      * @param context any suitable context
