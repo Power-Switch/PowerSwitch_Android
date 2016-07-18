@@ -48,7 +48,7 @@
             android:alpha="0.9"
             android:fontFamily="sans-serif-condensed-light"
             android:gravity="center_vertical"
-            android:textColor="@color/white"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"/>
 
         <TextView
@@ -58,7 +58,7 @@
             android:alpha="0.7"
             android:fontFamily="sans-serif-condensed-light"
             android:gravity="center_vertical"
-            android:textColor="@color/white"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"/>
 
     </LinearLayout>

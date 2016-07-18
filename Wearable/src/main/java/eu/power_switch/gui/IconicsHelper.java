@@ -19,6 +19,7 @@
 package eu.power_switch.gui;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
@@ -35,7 +36,8 @@ public class IconicsHelper {
      * @return "Rooms" icon
      */
     public static IconicsDrawable getRoomsIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_view_dashboard)
                 .sizeDp(64)
                 .color(color);
@@ -50,7 +52,8 @@ public class IconicsHelper {
      * @return "Scenes" icon
      */
     public static IconicsDrawable getScenesIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_brightness_setting)
                 .sizeDp(64)
                 .color(color);
@@ -65,7 +68,8 @@ public class IconicsHelper {
      * @return "Settings" icon
      */
     public static IconicsDrawable getSettingsIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_settings)
                 .sizeDp(64)
                 .color(color);
@@ -80,7 +84,8 @@ public class IconicsHelper {
      * @return "Close rooms" icon
      */
     public static IconicsDrawable getAutocollapseRoomsIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_photo_size_select_small)
                 .sizeDp(24)
                 .color(color);
@@ -95,7 +100,8 @@ public class IconicsHelper {
      * @return "Tabs" icon
      */
     public static IconicsDrawable getTabsIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_tab)
                 .sizeDp(24)
                 .color(color);
@@ -110,7 +116,8 @@ public class IconicsHelper {
      * @return "History" icon
      */
     public static IconicsDrawable getHistoryIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_time_restore)
                 .sizeDp(24)
                 .iconOffsetXDp(-2)
@@ -126,7 +133,8 @@ public class IconicsHelper {
      * @return "Vibration" icon
      */
     public static IconicsDrawable getVibrationIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_vibration)
                 .sizeDp(24)
                 .color(color);
@@ -141,7 +149,8 @@ public class IconicsHelper {
      * @return "Checkmark" icon
      */
     public static IconicsDrawable getCheckmarkIcon(Context context) {
-        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+//        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        final int color = Color.WHITE;
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_check)
                 .sizeDp(24)
                 .color(color);
