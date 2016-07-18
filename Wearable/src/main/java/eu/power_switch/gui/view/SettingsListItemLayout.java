@@ -39,7 +39,7 @@ import eu.power_switch.gui.ThemeHelper;
  * <p/>
  * Created by Markus on 08.06.2016.
  */
-public class SettingsListItemView extends LinearLayout implements WearableListView.OnCenterProximityListener {
+public class SettingsListItemLayout extends LinearLayout implements WearableListView.OnCenterProximityListener {
 
     private static final float NO_ALPHA = 1f, PARTIAL_ALPHA = 0.40f;
     private static final int ANIMATION_DURATION = 250;
@@ -52,15 +52,15 @@ public class SettingsListItemView extends LinearLayout implements WearableListVi
     private boolean initialSetup = true;
     private int currentCircleBorderColor;
 
-    public SettingsListItemView(Context context) {
+    public SettingsListItemLayout(Context context) {
         this(context, null);
     }
 
-    public SettingsListItemView(Context context, AttributeSet attrs) {
+    public SettingsListItemLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SettingsListItemView(Context context, AttributeSet attrs, int defStyle) {
+    public SettingsListItemLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         mUnselectedCircleColor = Color.parseColor("#434343");

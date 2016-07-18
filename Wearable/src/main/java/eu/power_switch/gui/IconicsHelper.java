@@ -119,5 +119,18 @@ public class IconicsHelper {
         return iconicsDrawable;
     }
 
+    /**
+     * Get "Checkmark" icon
+     *
+     * @param context any suitable context
+     * @return "Checkmark" icon
+     */
+    public static IconicsDrawable getCheckmarkIcon(Context context) {
+        final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_check)
+                .sizeDp(24)
+                .color(color);
 
+        return iconicsDrawable;
+    }
 }

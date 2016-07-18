@@ -40,6 +40,7 @@ import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.BooleanSettingsItem;
+import eu.power_switch.settings.SelectOneSettingsItem;
 import eu.power_switch.settings.SettingsItem;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.log.Log;
@@ -82,6 +83,14 @@ public class SettingsFragment extends Fragment {
             }
         };
 
+        SelectOneSettingsItem item0 = new SelectOneSettingsItem(getActivity(),
+                IconicsHelper.getRoomsIcon(getActivity()),
+                R.string.startup_default_tab,
+                WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
+                R.array.wear_tab_names) {
+
+        };
+
         SettingsItem item1 = new BooleanSettingsItem(
                 getActivity(),
                 IconicsHelper.getAutocollapseRoomsIcon(getActivity()),
@@ -98,6 +107,7 @@ public class SettingsFragment extends Fragment {
                 R.string.vibrate_on_button_press,
                 WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
 
+        settings.add(item0);
         settings.add(item1);
         settings.add(item2);
         settings.add(item3);
@@ -119,6 +129,9 @@ public class SettingsFragment extends Fragment {
                     BooleanSettingsItem booleanSettingsItem = (BooleanSettingsItem) settingsItem;
                     booleanSettingsItem.toggle();
 
+                } else if (settingsItem instanceof SelectOneSettingsItem) {
+                    SelectOneSettingsItem selectOneSettingsItem = (SelectOneSettingsItem) settingsItem;
+                    selectOneSettingsItem.showValueSelector();
                 }
 
                 holder.value.setText(settingsItem.getValueDescription());

@@ -19,36 +19,49 @@
 package eu.power_switch.settings;
 
 import android.content.Context;
+import android.support.annotation.ArrayRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
 import com.mikepenz.iconics.IconicsDrawable;
 
-import eu.power_switch.R;
+import java.util.ArrayList;
+
+import eu.power_switch.gui.activity.ValueSelectorActivity;
 
 /**
  * SettingsItem for boolean type settings
  * <p/>
  * Created by Markus on 08.06.2016.
  */
-public class BooleanSettingsItem extends SettingsItem<Boolean> {
+public abstract class SelectOneSettingsItem extends SettingsItem<String> {
 
-    public BooleanSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey) {
+    private final int[] values;
+
+    public SelectOneSettingsItem(Context context, IconicsDrawable iconDrawable, @StringRes int description, String settingsKey, @ArrayRes int values) {
         super(context, iconDrawable, description, settingsKey);
-    }
-
-    @Override
-    public String getValueDescription() {
-        if (getValue()) {
-            return context.getString(R.string.on);
-        } else {
-            return context.getString(R.string.off);
-        }
+        this.values = context.getResources().getIntArray(values);
     }
 
     /**
-     * Toggle state of this setting
+     * Get a list of all possible values
+     *
+     * @return
      */
-    public void toggle() {
-        setValue(!getValue());
+    public int[] getValues() {
+        return values;
+    }
+
+    @NonNull
+    @Override
+    public String getValueDescription() {
+        return getValue();
+    }
+
+    /**
+     * Opens GUI to select a new value from all possible values
+     */
+    public void showValueSelector() {
+        ValueSelectorActivity.<Integer>newInstance(context, new ArrayList<Integer>(getValues()), getValue());
     }
 }
