@@ -68,11 +68,16 @@ public class AB440D_200W_Test extends ReceiverTest {
         // ITGW
 
         // ON
-        expectedMessage = "0,0,10,11200,350,26,0,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,32,0";
+        expectedMessage = "0,0,10,11200,350,26,0,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,125,0";
+
+        generatedMessage = invokeGetSignal(itgw, getContext().getString(R.string.on));
+        Assert.assertEquals(expectedMessage, generatedMessage);
 
         // OFF
-        expectedMessage = "0,0,10,11200,350,26,0,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,32,0";
+        expectedMessage = "0,0,10,11200,350,26,0,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,125,0";
 
+        generatedMessage = invokeGetSignal(itgw, getContext().getString(R.string.off));
+        Assert.assertEquals(expectedMessage, generatedMessage);
     }
 
     @Test

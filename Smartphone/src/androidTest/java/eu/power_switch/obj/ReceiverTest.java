@@ -33,15 +33,14 @@ import eu.power_switch.obj.receiver.Receiver;
  */
 public abstract class ReceiverTest extends ApplicationTest {
 
-    protected static Gateway connAir = new ConnAir((long) 0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
-    protected static Gateway itgw = new ITGW433((long) 0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
-    protected static Gateway brematicGWY433 = new BrematicGWY433((long) 0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
-
+    protected static Gateway connAir = new ConnAir(0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
+    protected static Gateway itgw = new ITGW433(0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
+    protected static Gateway brematicGWY433 = new BrematicGWY433(0, true, "Gateway", "v0.1", "localAddress", 49880, "wanAddress", 49880, Collections.<String>emptySet());
     protected Gateway[] gateways = new Gateway[]{connAir, itgw, brematicGWY433};
 
-    protected Class<?>[] argClassesGetSignal = new Class[]{Gateway.class, String.class};
-
     protected Receiver receiver;
+
+    private Class<?>[] argClassesGetSignal = new Class[]{Gateway.class, String.class};
 
     protected String invokeGetSignal(Gateway gateway, String action) throws Exception {
         Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);

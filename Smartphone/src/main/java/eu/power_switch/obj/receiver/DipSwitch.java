@@ -62,4 +62,13 @@ public class DipSwitch {
         return state;
     }
 
+    /**
+     * Set state of Dip
+     *
+     * @param checked checked state
+     */
+    public void setChecked(boolean checked) {
+        this.state = checked;
+    }
+
 }

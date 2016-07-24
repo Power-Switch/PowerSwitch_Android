@@ -18,25 +18,14 @@
 
 package eu.power_switch.obj.gateways;
 
-import org.junit.Assert;
-import org.junit.Test;
+import eu.power_switch.ApplicationTest;
+import eu.power_switch.obj.gateway.Gateway;
 
-import java.util.Collections;
+/**
+ * Created by Markus on 24.07.2016.
+ */
+public class GatewayTest extends ApplicationTest {
 
-import eu.power_switch.obj.gateway.ConnAir;
+    protected Gateway gateway;
 
-public class ConnAirTest extends GatewayTest {
-
-    /***
-     * This test is not really useful because it test a constant.
-     * But we use it to test if our testframework works.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testGetModelAsString() throws Exception {
-        gateway = new ConnAir((long) 0, true, "Gateway", "Firmware", "10.10.10.10", 1234, "wanAddress", 49880, Collections.<String>emptySet());
-        String model = gateway.getModel();
-        Assert.assertEquals("ConnAir", model);
-    }
 }
