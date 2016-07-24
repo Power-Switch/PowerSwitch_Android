@@ -98,6 +98,23 @@ public abstract class Gateway {
     }
 
     /**
+     * Constructor
+     *
+     * Variant allowing an Integer as an ID (used for testing)
+     *
+     * @param id        ID of this Gateway
+     * @param active    true if this gateway is used to send network signals
+     * @param name      name of this gateway
+     * @param model     model of this gateway
+     * @param firmware  firmware version of this gateway
+     * @param localHost localHost address of this gateway
+     * @param localPort localPort of this gateway
+     */
+    public Gateway(int id, boolean active, @NonNull String name, @NonNull String model, @NonNull String firmware, @NonNull String localHost, @NonNull Integer localPort, @NonNull String wanHost, @NonNull Integer wanPort, @NonNull Set<String> ssids) {
+        this((long) id, active, name, model, firmware, localHost, localPort, wanHost, wanPort, ssids);
+    }
+
+    /**
      * Returns the time to wait between sending NetworkPackages to not overwhelm the Gateway
      *
      * @return time in milliseconds

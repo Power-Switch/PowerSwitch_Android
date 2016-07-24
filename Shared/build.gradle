@@ -20,7 +20,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    buildToolsVersion '24.0.1'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
@@ -47,7 +47,7 @@ android {
 dependencies {
     compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
     compile fileTree(include: ['*.jar'], dir: 'libraries')
-    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:appcompat-v7:24.1.1'
 
     // Iconics (use SVG resources)
     compile 'com.mikepenz:iconics-core:2.6.5@aar'

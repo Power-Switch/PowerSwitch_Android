@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj.gateway;
 
+import android.support.annotation.NonNull;
+
 import java.util.Set;
 
 /**
@@ -33,6 +35,10 @@ public class RaspyRFM extends ConnAir {
     public RaspyRFM(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, Set<String> ssids) {
         super(id, active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
         model = MODEL;
+    }
+
+    public RaspyRFM(Integer id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, @NonNull Set<String> ssids) {
+        this(id.longValue(), active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
     }
 
 }

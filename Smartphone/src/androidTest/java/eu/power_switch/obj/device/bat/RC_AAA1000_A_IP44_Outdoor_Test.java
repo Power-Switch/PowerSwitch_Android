@@ -21,7 +21,6 @@ package eu.power_switch.obj.device.bat;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -34,8 +33,6 @@ import eu.power_switch.obj.receiver.device.bat.RC_AAA1000_A_IP44_Outdoor;
  * Created by Markus on 08.08.2015.
  */
 public class RC_AAA1000_A_IP44_Outdoor_Test extends ReceiverTest {
-
-    private static RC_AAA1000_A_IP44_Outdoor receiver;
 
     @Test
     public void testCodeGeneration0000000000() throws Exception {
@@ -54,18 +51,13 @@ public class RC_AAA1000_A_IP44_Outdoor_Test extends ReceiverTest {
 
         receiver = new RC_AAA1000_A_IP44_Outdoor(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
-        Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);
-        method.setAccessible(true);
-
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,10,5600,350,25,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,14;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,10,5600,350,25,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,14;";
@@ -89,18 +81,13 @@ public class RC_AAA1000_A_IP44_Outdoor_Test extends ReceiverTest {
 
         receiver = new RC_AAA1000_A_IP44_Outdoor(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,14;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,14;";
@@ -124,18 +111,13 @@ public class RC_AAA1000_A_IP44_Outdoor_Test extends ReceiverTest {
 
         receiver = new RC_AAA1000_A_IP44_Outdoor(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,14;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,14;";
@@ -159,18 +141,13 @@ public class RC_AAA1000_A_IP44_Outdoor_Test extends ReceiverTest {
 
         receiver = new RC_AAA1000_A_IP44_Outdoor(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,3,1,1,14;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,1,3,3,1,1,3,1,3,1,14;";

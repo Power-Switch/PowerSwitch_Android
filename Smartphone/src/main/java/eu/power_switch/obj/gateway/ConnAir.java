@@ -39,6 +39,10 @@ public class ConnAir extends Gateway {
         capabilities.add(Capability.SEND);
     }
 
+    public ConnAir(Integer id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, @NonNull Set<String> ssids) {
+        this(id.longValue(), active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
+    }
+
     @Override
     public int getTimeout() {
         return 0;

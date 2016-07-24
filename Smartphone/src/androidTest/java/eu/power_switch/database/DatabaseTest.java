@@ -18,20 +18,8 @@
 
 package eu.power_switch.database;
 
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-
 import eu.power_switch.ApplicationTest;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.gateway.ConnAir;
-import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 21.08.2015.
@@ -43,62 +31,62 @@ public class DatabaseTest extends ApplicationTest {
         DatabaseHandler.init(getContext());
     }
 
-    @Test
-    public void testParallelWriteAccess() throws Exception {
-
-        Thread thread1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 200; i++) {
-                    try {
-                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "localAddress[" + i + "]",
-                                49880 + i, "wanAddress[" + i + "]", 49880 + i, Collections.<String>emptySet()));
-                    } catch (Exception e) {
-                        Log.e(e);
-                    }
-                }
-            }
-        });
-
-        Thread thread2 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 200; i < 400; i++) {
-                    try {
-                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "localAddress[" + i + "]",
-                                49880 + i, "wanAddress[" + i + "]", 49880 + i, Collections.<String>emptySet()));
-                        DatabaseHandler.getAllGateways();
-                        DatabaseHandler.getAllReceivers();
-                    } catch (Exception e) {
-                        Log.e(e);
-                    }
-
-                    try {
-                        Log.d(Arrays.toString(DatabaseHandler.getAllGateways().toArray()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        thread1.start();
-        thread2.start();
-        thread1.join();
-        thread2.join();
-    }
-
-    @Test
-    public void testPerformanceTest() throws Exception {
-        for (int i = 0; i < 200; i++) {
-            Log.d("apartment: " + i);
-            long apartmentId = DatabaseHandler.addApartment(new Apartment((long) 0, true, "Apartment[" + i + "]"));
-            for (int j = 0; j < 200; j++) {
-                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]", 0, false, new ArrayList<Gateway>()));
-                for (int k = 0; k < 20; k++) {
-                    DatabaseHandler.addReceiver(new CMR1000(getContext(), (long) 0, "Receiver[" + k + "]", 'A', 1, roomId, new ArrayList<Gateway>()));
-                }
-            }
-        }
-    }
+//    @Test
+//    public void testParallelWriteAccess() throws Exception {
+//
+//        Thread thread1 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 200; i++) {
+//                    try {
+//                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "localAddress[" + i + "]",
+//                                49880 + i, "wanAddress[" + i + "]", 49880 + i, Collections.<String>emptySet()));
+//                    } catch (Exception e) {
+//                        Log.e(e);
+//                    }
+//                }
+//            }
+//        });
+//
+//        Thread thread2 = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 200; i < 400; i++) {
+//                    try {
+//                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "localAddress[" + i + "]",
+//                                49880 + i, "wanAddress[" + i + "]", 49880 + i, Collections.<String>emptySet()));
+//                        DatabaseHandler.getAllGateways();
+//                        DatabaseHandler.getAllReceivers();
+//                    } catch (Exception e) {
+//                        Log.e(e);
+//                    }
+//
+//                    try {
+//                        Log.d(Arrays.toString(DatabaseHandler.getAllGateways().toArray()));
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        });
+//
+//        thread1.start();
+//        thread2.start();
+//        thread1.join();
+//        thread2.join();
+//    }
+//
+//    @Test
+//    public void testPerformanceTest() throws Exception {
+//        for (int i = 0; i < 200; i++) {
+//            Log.d("apartment: " + i);
+//            long apartmentId = DatabaseHandler.addApartment(new Apartment((long) 0, true, "Apartment[" + i + "]"));
+//            for (int j = 0; j < 200; j++) {
+//                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]", 0, false, new ArrayList<Gateway>()));
+//                for (int k = 0; k < 20; k++) {
+//                    DatabaseHandler.addReceiver(new CMR1000(getContext(), (long) 0, "Receiver[" + k + "]", 'A', 1, roomId, new ArrayList<Gateway>()));
+//                }
+//            }
+//        }
+//    }
 }

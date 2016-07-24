@@ -21,7 +21,6 @@ package eu.power_switch.obj.device.hama;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
@@ -34,25 +33,18 @@ import eu.power_switch.obj.receiver.device.hama.Hama;
  */
 public class Hama_Test extends ReceiverTest {
 
-    private static Hama receiver;
-
     @Test
     public void testCodeGeneration0() throws Exception {
         long seed = 0;
         receiver = new Hama(getContext(), (long) 0, "Name", seed, (long) 0, new ArrayList<Gateway>());
 
-        Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);
-        method.setAccessible(true);
-
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "";
@@ -64,18 +56,13 @@ public class Hama_Test extends ReceiverTest {
         long seed = 100;
         receiver = new Hama(getContext(), (long) 0, "Name", seed, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "";

@@ -18,10 +18,9 @@
   -->
 
 <android.support.wearable.view.drawer.WearableDrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".gui.activity.MainActivity"
@@ -65,21 +64,21 @@
         android:layout_height="match_parent"
         android:background="@color/dark_grey">
 
-        <eu.power_switch.shared.gui.view.PageIndicatorView
-            android:id="@+id/pageIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginBottom="38dp"
-            app:activeIndicatorColorFill="?attr/colorAccent"
-            app:activeIndicatorColorStroke="?attr/colorAccent"
-            app:activeIndicatorSize="10dp"
-            app:inactiveIndicatorColorFill="@color/inactive_gray"
-            app:inactiveIndicatorColorStroke="@color/inactive_gray"
-            app:inactiveIndicatorSize="7dp"
-            app:indicatorGap="10dp"
-            app:initialPageIndex="0"
-            app:pageCount="3"/>
+        <!--<eu.power_switch.shared.gui.view.PageIndicatorView-->
+        <!--android:id="@+id/pageIndicator"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal|bottom"-->
+        <!--android:layout_marginBottom="38dp"-->
+        <!--app:activeIndicatorColorFill="?attr/colorAccent"-->
+        <!--app:activeIndicatorColorStroke="?attr/colorAccent"-->
+        <!--app:activeIndicatorSize="10dp"-->
+        <!--app:inactiveIndicatorColorFill="@color/inactive_gray"-->
+        <!--app:inactiveIndicatorColorStroke="@color/inactive_gray"-->
+        <!--app:inactiveIndicatorSize="7dp"-->
+        <!--app:indicatorGap="10dp"-->
+        <!--app:initialPageIndex="0"-->
+        <!--app:pageCount="3"/>-->
 
     </android.support.wearable.view.drawer.WearableNavigationDrawer>
 

@@ -18,6 +18,7 @@
 
 package eu.power_switch.obj;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 
 import eu.power_switch.ApplicationTest;
@@ -25,6 +26,7 @@ import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.obj.receiver.Receiver;
 
 /**
  * Created by Markus on 07.03.2016.
@@ -39,4 +41,14 @@ public abstract class ReceiverTest extends ApplicationTest {
 
     protected Class<?>[] argClassesGetSignal = new Class[]{Gateway.class, String.class};
 
+    protected Receiver receiver;
+
+    protected String invokeGetSignal(Gateway gateway, String action) throws Exception {
+        Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);
+        method.setAccessible(true);
+        Object[] argObjects = new Object[]{gateway, action};
+        String generatedMessage = (String) method.invoke(receiver, argObjects);
+
+        return generatedMessage;
+    }
 }

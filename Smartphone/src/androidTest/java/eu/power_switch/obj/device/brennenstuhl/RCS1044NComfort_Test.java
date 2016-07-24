@@ -21,7 +21,6 @@ package eu.power_switch.obj.device.brennenstuhl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -50,20 +49,15 @@ public class RCS1044NComfort_Test extends ReceiverTest {
         dips.add(false); // D
         dips.add(false); // E
 
-        RCS1044NComfort receiver = new RCS1044NComfort(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
+        receiver = new RCS1044NComfort(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
-        Method method = RCS1044NComfort.class.getDeclaredMethod("getSignal", argClassesGetSignal);
-        method.setAccessible(true);
-
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,10,5600,350,25,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,14;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,10,5600,350,25,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,14;";
@@ -85,20 +79,15 @@ public class RCS1044NComfort_Test extends ReceiverTest {
         dips.add(false); // D
         dips.add(false); // E
 
-        RCS1044NComfort receiver = new RCS1044NComfort(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
+        receiver = new RCS1044NComfort(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = RCS1044NComfort.class.getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,14;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,14;";
@@ -120,20 +109,15 @@ public class RCS1044NComfort_Test extends ReceiverTest {
         dips.add(false); // D
         dips.add(false); // E
 
-        RCS1044NComfort receiver = new RCS1044NComfort(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
+        receiver = new RCS1044NComfort(getContext(), (long) 0, "Name", dips, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = RCS1044NComfort.class.getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,14;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,10,5600,350,25,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,3,1,1,3,1,3,1,14;";

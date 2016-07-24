@@ -21,7 +21,6 @@ package eu.power_switch.obj.device.intertechno;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
@@ -34,25 +33,18 @@ import eu.power_switch.obj.receiver.device.intertechno.CMR500;
  */
 public class CMR500_Test extends ReceiverTest {
 
-    private CMR500 receiver;
-
     @Test
     public void testCodeGenerationA1() throws Exception {
         receiver = new CMR500(getContext(), (long) 0, "Name", 'A', 1, (long) 0, new ArrayList<Gateway>());
 
-        Method method = receiver.getClass().getDeclaredMethod("getSignal", argClassesGetSignal);
-        method.setAccessible(true);
-
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,6,11125,89,25,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,12,4,4,12,12,4,4,12,12,4,1,140;";
 
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,6,11125,89,25,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,12,4,4,12,12,4,4,12,4,12,1,140;";
@@ -63,18 +55,13 @@ public class CMR500_Test extends ReceiverTest {
     public void testCodeGenerationA5() throws Exception {
         receiver = new CMR500(getContext(), (long) 0, "Name", 'A', 5, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,6,11125,89,25,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,12,4,4,12,4,12,4,12,4,12,4,12,12,4,4,12,12,4,4,12,12,4,1,140;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,6,11125,89,25,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,12,4,4,12,4,12,4,12,4,12,4,12,12,4,4,12,12,4,4,12,4,12,1,140;";
@@ -85,18 +72,13 @@ public class CMR500_Test extends ReceiverTest {
     public void testCodeGenerationE1() throws Exception {
         receiver = new CMR500(getContext(), (long) 0, "Name", 'E', 1, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,6,11125,89,25,4,12,4,12,4,12,4,12,4,12,12,4,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,12,4,4,12,12,4,4,12,12,4,1,140;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,6,11125,89,25,4,12,4,12,4,12,4,12,4,12,12,4,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,4,12,12,4,4,12,12,4,4,12,4,12,1,140;";
@@ -107,18 +89,13 @@ public class CMR500_Test extends ReceiverTest {
     public void testCodeGenerationP16() throws Exception {
         receiver = new CMR500(getContext(), (long) 0, "Name", 'P', 16, (long) 0, new ArrayList<Gateway>());
 
-        String methodName = "getSignal";
-        Method method = receiver.getClass().getDeclaredMethod(methodName, argClassesGetSignal);
-        method.setAccessible(true);
-        Object[] argObjects = new Object[]{connAir, getContext().getString(R.string.on)};
-        String generatedMessage = (String) method.invoke(receiver, argObjects);
+        String generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.on));
 
         // ON
         String expectedMessage = "TXP:0,0,6,11125,89,25,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,4,12,4,12,12,4,4,12,12,4,4,12,12,4,1,140;";
         Assert.assertEquals(expectedMessage, generatedMessage);
 
-        argObjects = new Object[]{connAir, getContext().getString(R.string.off)};
-        generatedMessage = (String) method.invoke(receiver, argObjects);
+        generatedMessage = invokeGetSignal(connAir, getContext().getString(R.string.off));
 
         // OFF
         expectedMessage = "TXP:0,0,6,11125,89,25,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,12,4,4,12,4,12,4,12,12,4,4,12,12,4,4,12,4,12,1,140;";

@@ -18,6 +18,8 @@
 
 package eu.power_switch.obj.gateway;
 
+import android.support.annotation.NonNull;
+
 import java.util.Set;
 
 import eu.power_switch.network.NetworkPackage;
@@ -35,6 +37,10 @@ public class ITGW433 extends Gateway {
     public ITGW433(Long id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, Set<String> ssids) {
         super(id, active, name, MODEL, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
         capabilities.add(Capability.SEND);
+    }
+
+    public ITGW433(Integer id, boolean active, String name, String firmware, String localAddress, int localPort, String wanAddress, int wanPort, @NonNull Set<String> ssids) {
+        this(id.longValue(), active, name, firmware, localAddress, localPort, wanAddress, wanPort, ssids);
     }
 
     @Override
