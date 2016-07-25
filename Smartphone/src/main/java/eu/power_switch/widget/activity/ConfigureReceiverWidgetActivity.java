@@ -75,6 +75,8 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(this);
+        // set Theme before anything else in onCreate();
+        // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.widget_dialog_configure_receiver);

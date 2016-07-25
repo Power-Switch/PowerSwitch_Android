@@ -19,11 +19,6 @@
 package eu.power_switch.gui;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -32,29 +27,7 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
 /**
  * Created by Markus on 07.03.2016.
  */
-public class ThemeHelper {
-
-    /**
-     * Get Color from Theme attribute
-     *
-     * @param context Activity context
-     * @param attr    Attribute ressource ID
-     * @return Color as Int
-     */
-    @ColorInt
-    public static int getThemeAttrColor(Context context, @AttrRes int attr) {
-        TypedValue typedValue = new TypedValue();
-        if (context.getTheme().resolveAttribute(attr, typedValue, true)) {
-            if (typedValue.type >= TypedValue.TYPE_FIRST_INT
-                    && typedValue.type <= TypedValue.TYPE_LAST_INT) {
-                return typedValue.data;
-            } else if (typedValue.type == TypedValue.TYPE_STRING) {
-                return ContextCompat.getColor(context, typedValue.resourceId);
-            }
-        }
-
-        return 0;
-    }
+public class WearableThemeHelper {
 
     /**
      * Apply a Theme to an Activity

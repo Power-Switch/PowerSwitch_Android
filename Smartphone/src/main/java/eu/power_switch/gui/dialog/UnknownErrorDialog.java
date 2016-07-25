@@ -73,7 +73,7 @@ public class UnknownErrorDialog extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate();
-//        applyTheme(); // not yet ready, missing theme definitions for dialogs
+        // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
         // apply forced locale (if set in developer options)
         applyLocale();
 

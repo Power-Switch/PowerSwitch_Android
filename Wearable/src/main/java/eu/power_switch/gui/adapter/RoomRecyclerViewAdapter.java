@@ -34,11 +34,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.ThemeHelper;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.obj.Button;
 import eu.power_switch.obj.Receiver;
 import eu.power_switch.obj.Room;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;

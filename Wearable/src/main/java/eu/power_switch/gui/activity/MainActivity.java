@@ -47,7 +47,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.ThemeHelper;
+import eu.power_switch.gui.WearableThemeHelper;
 import eu.power_switch.gui.adapter.NavigationDrawerAdapter;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
@@ -90,7 +90,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        ThemeHelper.applyTheme(this);
+        WearableThemeHelper.applyTheme(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

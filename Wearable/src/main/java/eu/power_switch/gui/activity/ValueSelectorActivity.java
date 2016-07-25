@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.ThemeHelper;
+import eu.power_switch.gui.WearableThemeHelper;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.SelectOneSettingsItem;
@@ -59,7 +59,7 @@ public class ValueSelectorActivity<T> extends WearableActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // set Theme before anything else in onCreate
-        ThemeHelper.applyTheme(this);
+        WearableThemeHelper.applyTheme(this);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value_selector);

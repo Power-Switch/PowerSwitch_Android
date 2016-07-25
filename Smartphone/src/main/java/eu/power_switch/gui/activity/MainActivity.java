@@ -34,7 +34,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -199,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate();
-        applyTheme();
+        SmartphoneThemeHelper.applyTheme(this);
 
         // apply forced locale (if set in developer options)
         applyLocale();
@@ -320,36 +319,6 @@ public class MainActivity extends AppCompatActivity {
             android.content.res.Configuration conf = res.getConfiguration();
             conf.locale = DeveloperPreferencesHandler.getLocale();
             res.updateConfiguration(conf, dm);
-        }
-    }
-
-    private void applyTheme() {
-        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
-            case SettingsConstants.THEME_DARK_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                break;
-            case SettingsConstants.THEME_DARK_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
-                setTheme(R.style.PowerSwitchTheme_Dark_Red);
-                break;
-            case SettingsConstants.THEME_LIGHT_BLUE:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Blue);
-                setTheme(R.style.PowerSwitchTheme_Light_Blue);
-                break;
-            case SettingsConstants.THEME_LIGHT_RED:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
-                setTheme(R.style.PowerSwitchTheme_Light_Red);
-                break;
-            case SettingsConstants.THEME_DAY_NIGHT_BLUE:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
-
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
-                setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
-            default:
-                getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                setTheme(R.style.PowerSwitchTheme_Dark_Blue);
-                break;
         }
     }
 

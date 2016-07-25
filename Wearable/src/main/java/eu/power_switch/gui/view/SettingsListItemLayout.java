@@ -30,7 +30,7 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.ThemeHelper;
+import eu.power_switch.shared.ThemeHelper;
 
 /**
  * Settings Item View
