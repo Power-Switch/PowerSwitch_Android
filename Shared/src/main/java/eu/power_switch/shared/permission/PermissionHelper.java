@@ -24,8 +24,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.PermissionGroupInfo;
+import android.content.pm.PermissionInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -77,9 +80,20 @@ public class PermissionHelper {
             throw new IllegalArgumentException("Missing permission constant(s)");
         }
 
+        String message = activity.getString(getPermissionMessage(permissions));
+        if (permissions.length > 1) {
+            message += ":\n\n";
+            for (int i = 0; i < permissions.length; i++) {
+                message += getPermissionName(activity, permissions[i]);
+                if (i < permissions.length) {
+                    message += "\n";
+                }
+            }
+        }
+
         new AlertDialog.Builder(activity)
                 .setTitle(R.string.missing_permission)
-                .setMessage(getPermissionMessage(permissions))
+                .setMessage(message)
                 .setPositiveButton(R.string.grant, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -88,6 +102,25 @@ public class PermissionHelper {
                 })
                 .setNeutralButton(R.string.close, null)
                 .show();
+    }
+
+    /**
+     * Get human readable name for permission constant (if possible)
+     *
+     * @param context    any suitable context
+     * @param permission permission constant string
+     * @return Name of permission, permission constant if no matching permission was found
+     */
+    public static String getPermissionName(@NonNull Context context, @NonNull String permission) {
+        PackageManager packageManager = context.getPackageManager();
+
+        try {
+            PermissionInfo permissionInfo = packageManager.getPermissionInfo(permission, PackageManager.GET_META_DATA);
+            PermissionGroupInfo permissionGroupInfo = packageManager.getPermissionGroupInfo(permissionInfo.group, PackageManager.GET_META_DATA);
+            return String.valueOf(permissionGroupInfo.loadLabel(packageManager));
+        } catch (Exception e) {
+            return permission;
+        }
     }
 
     /**
@@ -151,6 +184,13 @@ public class PermissionHelper {
         return hasPermission == PackageManager.PERMISSION_GRANTED;
     }
 
+    /**
+     * Get "missing permission" message
+     *
+     * @param permissions permission constant(s)
+     * @return string resource
+     */
+    @StringRes
     public static int getPermissionMessage(String[] permissions) {
         if (permissions.length > 1) {
             return R.string.missing_multiple_permissions;

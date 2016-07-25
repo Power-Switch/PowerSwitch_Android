@@ -116,11 +116,8 @@ public class BackupFragment extends RecyclerViewFragment {
             public void onClick(View v) {
                 try {
                     if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle(R.string.missing_permission)
-                                .setMessage(R.string.missing_external_storage_permission)
-                                .setNeutralButton(R.string.close, null)
-                                .show();
+                        PermissionHelper.showMissingPermissionDialog(getActivity(),
+                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
                         return;
                     }
 
@@ -207,12 +204,8 @@ public class BackupFragment extends RecyclerViewFragment {
             public void onClick(View v) {
                 try {
                     if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
-                        PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
-                        new AlertDialog.Builder(getContext())
-                                .setTitle(R.string.missing_permission)
-                                .setMessage(R.string.missing_external_storage_permission)
-                                .setNeutralButton(R.string.close, null)
-                                .show();
+                        PermissionHelper.showMissingPermissionDialog(getActivity(),
+                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
                         return;
                     }
 
@@ -303,11 +296,8 @@ public class BackupFragment extends RecyclerViewFragment {
             case R.id.create_backup:
                 try {
                     if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
-                        new AlertDialog.Builder(getContext())
-                                .setTitle(R.string.missing_permission)
-                                .setMessage(R.string.missing_external_storage_permission)
-                                .setNeutralButton(R.string.close, null)
-                                .show();
+                        PermissionHelper.showMissingPermissionDialog(getActivity(),
+                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
                         break;
                     }
 

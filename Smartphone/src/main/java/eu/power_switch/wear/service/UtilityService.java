@@ -47,7 +47,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.wearable.CommunicationHelper;
 
 /**
  * Created by Markus on 06.06.2015.
@@ -308,7 +308,7 @@ public class UtilityService extends IntentService {
                 SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
         ArrayList<DataMap> settings = new ArrayList<>();
-        DataMap settingsDataMap = getSettingsDataMap();
+        DataMap settingsDataMap = CommunicationHelper.getSettingsDataMap();
         settings.add(settingsDataMap);
 
         if (connectionResult.isSuccess() && googleApiClient.isConnected()) {
@@ -331,30 +331,5 @@ public class UtilityService extends IntentService {
             // GoogleApiClient connection error
             Log.e("Error connecting GoogleApiClient");
         }
-    }
-
-    /**
-     * Get Wearable settings and put them into a DataMap
-     *
-     * @return DataMap containing all Wearable settings
-     */
-    private DataMap getSettingsDataMap() {
-        DataMap settingsDataMap = new DataMap();
-        settingsDataMap.putInt(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
-                WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF));
-        settingsDataMap.putInt(WearablePreferencesHandler.KEY_THEME,
-                WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME));
-        settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS,
-                WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS));
-        settingsDataMap.putInt(WearablePreferencesHandler.KEY_VIBRATION_DURATION,
-                WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
-
-        return settingsDataMap;
     }
 }
