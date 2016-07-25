@@ -37,6 +37,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
+import eu.power_switch.wear.service.WearableHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -194,7 +195,11 @@ public class SettingsTabFragment extends Fragment {
          */
         @Override
         public int getCount() {
-            return 3;
+            if (WearableHelper.isAndroidWearInstalled(context)) {
+                return 3;
+            } else {
+                return 2;
+            }
         }
 
         @Override

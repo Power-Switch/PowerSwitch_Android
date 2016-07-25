@@ -25,6 +25,8 @@ package eu.power_switch.shared.constants;
  */
 public class WearableConstants {
 
+    public static final String ANDROID_WEAR_PACKAGE_NAME = "com.google.android.wearable.app";
+
     // Wear DataApi
     public static final String START_ACTIVITY_PATH = "/start_activity";
     public static final String RECEIVER_ACTION_TRIGGER_PATH = "/receiver_action_trigger";
