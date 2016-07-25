@@ -153,6 +153,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
         // load first fragment
         navigationDrawerAdapter.onItemSelected(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+        // TODO: Refresh Navigation drawer
 
         // Peeks Navigation drawer on the top.
         mWearableDrawerLayout.peekDrawer(Gravity.TOP);
