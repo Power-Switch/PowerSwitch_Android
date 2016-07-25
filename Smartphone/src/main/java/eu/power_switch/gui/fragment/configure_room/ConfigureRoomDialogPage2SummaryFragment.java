@@ -122,7 +122,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         linearLayoutOfOtherGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfOtherGateways);
 
         try {
-            apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+            apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             gateways = DatabaseHandler.getAllGateways();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

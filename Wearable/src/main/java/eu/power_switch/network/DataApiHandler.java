@@ -42,6 +42,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.wearable.CommunicationHelper;
 
 /**
  * Created by Markus on 03.06.2015.
@@ -296,7 +297,7 @@ public class DataApiHandler {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
                 data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
                 if (data != null) {
-                    ListenerService.extractSettings(data);
+                    CommunicationHelper.extractSettings(data);
                     break;
                 }
             }

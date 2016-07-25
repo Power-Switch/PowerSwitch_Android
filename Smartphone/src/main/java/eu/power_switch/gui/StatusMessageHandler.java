@@ -37,6 +37,7 @@ import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
@@ -407,6 +408,11 @@ public class StatusMessageHandler {
      * @param duration duration of toast
      */
     private static void showInfoToast(final Context context, final String message, final int duration) {
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND)) {
+            Log.w("Toast suppressed (disabled): " + message);
+            return;
+        }
+
         Log.d("Status Toast: " + message);
 
         Handler handler = new Handler(Looper.getMainLooper());

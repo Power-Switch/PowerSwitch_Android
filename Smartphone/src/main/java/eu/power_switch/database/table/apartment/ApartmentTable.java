@@ -59,7 +59,7 @@ public class ApartmentTable {
             values.put(COLUMN_POSITION, 0);
             db.insert(TABLE_NAME, null, values);
 
-            SmartphonePreferencesHandler.setCurrentApartmentId((long) 0);
+            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, (long) 0);
         }
     }
 }

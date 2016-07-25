@@ -123,7 +123,7 @@ public class TimersFragment extends RecyclerViewFragment {
             }
         });
 
-        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addTimerFAB.setVisibility(View.GONE);
         }
 
@@ -188,7 +188,7 @@ public class TimersFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_timer).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_timer).setVisible(false).setEnabled(false);
         }
     }

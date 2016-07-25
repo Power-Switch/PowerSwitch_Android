@@ -104,15 +104,15 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (SmartphonePreferencesHandler.getCurrentApartmentId().equals(apartmentId)) {
+                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId)) {
                                 DatabaseHandler.deleteApartment(apartmentId);
 
                                 // update current Apartment selection
                                 List<Apartment> apartments = DatabaseHandler.getAllApartments();
                                 if (apartments.isEmpty()) {
-                                    SmartphonePreferencesHandler.setCurrentApartmentId(SettingsConstants.INVALID_APARTMENT_ID);
+                                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, SettingsConstants.INVALID_APARTMENT_ID);
                                 } else {
-                                    SmartphonePreferencesHandler.setCurrentApartmentId(apartments.get(0).getId());
+                                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartments.get(0).getId());
                                 }
                             } else {
                                 DatabaseHandler.deleteApartment(apartmentId);

@@ -232,11 +232,11 @@ public class MainActivity extends AppCompatActivity {
         // Load first Fragment
         try {
             Fragment fragment;
-            if (SmartphonePreferencesHandler.getCurrentApartmentId() == SettingsConstants.INVALID_APARTMENT_ID) {
+            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) == SettingsConstants.INVALID_APARTMENT_ID) {
                 fragment = ApartmentFragment.class.newInstance();
                 drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
-                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.getStartupDefaultTab());
+                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
             navigationDrawer.setSelection(drawerPositionStack.peek());
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // start automatic gateway discovery (if enabled)
-        if (SmartphonePreferencesHandler.getAutoDiscover() &&
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) &&
                 (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected())) {
             new AsyncTask<Context, Void, AsyncTaskResult<Gateway>>() {
 
@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyTheme() {
-        switch (SmartphonePreferencesHandler.getTheme()) {
+        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
             case SettingsConstants.THEME_DARK_BLUE:
                 getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 setTheme(R.style.PowerSwitchTheme_Dark_Blue);

@@ -20,12 +20,14 @@ package eu.power_switch.google_play_services.geofence;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,28 +82,31 @@ public class Geofence {
     @State
     private String state;
 
-    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, List<Action> enterActions, List<Action> exitActions, @State String state) {
+    public Geofence(@NonNull Long id, boolean active, @NonNull String name, @NonNull LatLng centerLocation, double radius, @Nullable Bitmap snapshot, @Nullable List<Action> enterActions, @Nullable List<Action> exitActions, @NonNull @State String state) {
         this.id = id;
         this.active = active;
         this.name = name;
         this.centerLocation = centerLocation;
         this.radius = radius;
         this.snapshot = snapshot;
+
         this.actionsMap = new HashMap<>();
-        actionsMap.put(EventType.ENTER, enterActions);
-        actionsMap.put(EventType.EXIT, exitActions);
+        if (enterActions != null) {
+            actionsMap.put(EventType.ENTER, enterActions);
+        } else {
+            actionsMap.put(EventType.ENTER, new ArrayList<Action>());
+        }
+        if (exitActions != null) {
+            actionsMap.put(EventType.EXIT, exitActions);
+        } else {
+            actionsMap.put(EventType.EXIT, new ArrayList<Action>());
+        }
+
         this.state = state;
     }
 
-    public Geofence(Long id, boolean active, String name, LatLng centerLocation, double radius, Bitmap snapshot, Map<EventType, List<Action>> actionsMap, @State String state) {
-        this.id = id;
-        this.active = active;
-        this.name = name;
-        this.centerLocation = centerLocation;
-        this.radius = radius;
-        this.snapshot = snapshot;
-        this.actionsMap = actionsMap;
-        this.state = state;
+    public Geofence(@NonNull Long id, boolean active, @NonNull String name, @NonNull LatLng centerLocation, double radius, @Nullable Bitmap snapshot, @NonNull Map<EventType, List<Action>> actionsMap, @NonNull @State String state) {
+        this(id, active, name, centerLocation, radius, snapshot, actionsMap.get(EventType.ENTER), actionsMap.get(EventType.EXIT), state);
     }
 
     /**

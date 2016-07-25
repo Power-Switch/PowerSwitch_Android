@@ -219,7 +219,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             searchGatewayFAB.setVisibility(View.GONE);
             addGatewayFAB.setVisibility(View.GONE);
         } else {
@@ -257,7 +257,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
         menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
         menu.findItem(R.id.search_gateways).setIcon(IconicsHelper.getRefreshIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_gateway).setVisible(false).setEnabled(false);
         }
     }

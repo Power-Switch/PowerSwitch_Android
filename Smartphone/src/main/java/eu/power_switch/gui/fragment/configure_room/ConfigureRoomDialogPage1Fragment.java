@@ -149,7 +149,7 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
             receivers.addAll(currentRoom.getReceivers());
             receiverNameRecyclerViewAdapter.notifyDataSetChanged();
 
-            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             roomNames = new LinkedList<>();
             for (Room room : rooms) {
                 roomNames.add(room.getName());

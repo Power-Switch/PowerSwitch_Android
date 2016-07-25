@@ -195,7 +195,7 @@ abstract class RoomHandler {
 
         if (cursor.moveToFirst()) {
             room = dbToRoom(cursor);
-            room.setCollapsed(SmartphonePreferencesHandler.getAutoCollapseRooms());
+            room.setCollapsed(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(id));
@@ -218,7 +218,7 @@ abstract class RoomHandler {
                 null, null, null, RoomTable.COLUMN_POSITION + " ASC");
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
+        boolean autoCollapseRooms = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(cursor);
@@ -260,7 +260,7 @@ abstract class RoomHandler {
         Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
-        boolean autoCollapseRooms = SmartphonePreferencesHandler.getAutoCollapseRooms();
+        boolean autoCollapseRooms = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
             Room room = dbToRoom(cursor);

@@ -203,10 +203,10 @@ public class UtilityService extends IntentService {
                     return;
                 }
 
-                if (SmartphonePreferencesHandler.getCurrentApartmentId() != SettingsConstants.INVALID_APARTMENT_ID) {
+                if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) != SettingsConstants.INVALID_APARTMENT_ID) {
                     List<Apartment> apartments = DatabaseHandler.getAllApartments();
 
-                    Apartment activeApartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+                    Apartment activeApartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
 
                     List<Room> rooms = activeApartment.getRooms();
 

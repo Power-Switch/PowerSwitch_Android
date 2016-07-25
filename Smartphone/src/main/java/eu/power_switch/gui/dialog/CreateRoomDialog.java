@@ -72,7 +72,7 @@ public class CreateRoomDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         try {
-            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             roomNames = new LinkedList<>();
             for (Room room : rooms) {
                 roomNames.add(room.getName());
@@ -110,7 +110,7 @@ public class CreateRoomDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.getCurrentApartmentId(), getRoomName(), 0, false, new ArrayList<Gateway>()));
+                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID), getRoomName(), 0, false, new ArrayList<Gateway>()));
 
                     ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
 

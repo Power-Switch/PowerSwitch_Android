@@ -118,7 +118,7 @@ public class SelectApartmentDialog extends DialogFragment {
      * @param apartmentId the selected Apartment
      */
     protected void onApartmentClicked(Long apartmentId) {
-        SmartphonePreferencesHandler.setCurrentApartmentId(apartmentId);
+        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartmentId);
         ApartmentFragment.sendApartmentChangedBroadcast(getContext());
         dismiss();
     }

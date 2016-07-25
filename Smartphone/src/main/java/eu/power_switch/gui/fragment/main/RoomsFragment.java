@@ -126,7 +126,7 @@ public class RoomsFragment extends RecyclerViewFragment {
 
                     }
 
-                    if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
+                    if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
                         new AlertDialog.Builder(getContext())
                                 .setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
@@ -170,7 +170,7 @@ public class RoomsFragment extends RecyclerViewFragment {
 
         switch (menuItem.getItemId()) {
             case R.id.create_receiver:
-                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.getCurrentApartmentId()) {
+                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
                     new AlertDialog.Builder(getContext())
                             .setMessage(R.string.please_create_or_activate_apartment_first)
                             .setNeutralButton(android.R.string.ok, null)
@@ -183,7 +183,7 @@ public class RoomsFragment extends RecyclerViewFragment {
                 configureReceiverDialog.show(getFragmentManager(), null);
                 break;
             case R.id.reorder_rooms:
-                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(SmartphonePreferencesHandler.getCurrentApartmentId());
+                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
                 editRoomOrderDialog.setTargetFragment(this, 0);
                 editRoomOrderDialog.show(getFragmentManager(), null);
                 break;
@@ -202,7 +202,7 @@ public class RoomsFragment extends RecyclerViewFragment {
         menu.findItem(R.id.create_receiver).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
         menu.findItem(R.id.reorder_rooms).setIcon(IconicsHelper.getReorderIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_receiver).setVisible(false).setEnabled(false);
         }
 
@@ -211,7 +211,7 @@ public class RoomsFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addReceiverFAB.setVisibility(View.GONE);
         } else {
             addReceiverFAB.setVisibility(View.VISIBLE);
@@ -257,7 +257,7 @@ public class RoomsFragment extends RecyclerViewFragment {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             rooms.addAll(playStoreModeDataModel.getActiveApartment().getRooms());
         } else {
-            long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
+            long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
                 // Get Rooms and Receivers
                 rooms.addAll(DatabaseHandler.getRooms(currentApartmentId));

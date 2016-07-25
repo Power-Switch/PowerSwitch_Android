@@ -109,7 +109,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
         });
 
         try {
-            existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.getCurrentApartmentId());
+            existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
@@ -133,7 +133,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId())) {
+            for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID))) {
                 LinearLayout roomLayout = new LinearLayout(getActivity());
                 roomLayout.setOrientation(LinearLayout.VERTICAL);
                 roomLayout.setPadding(0, 8, 0, 8);

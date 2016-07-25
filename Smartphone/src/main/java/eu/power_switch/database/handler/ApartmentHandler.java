@@ -399,7 +399,7 @@ abstract class ApartmentHandler {
 
         Geofence geofence = GeofenceHandler.get(getAssociatedGeofenceId(apartmentId));
 
-        boolean isActive = SmartphonePreferencesHandler.getCurrentApartmentId().equals(apartmentId);
+        boolean isActive = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId);
 
         Apartment apartment = new Apartment(apartmentId, isActive, name, rooms, scenes, gateways, geofence);
         return apartment;

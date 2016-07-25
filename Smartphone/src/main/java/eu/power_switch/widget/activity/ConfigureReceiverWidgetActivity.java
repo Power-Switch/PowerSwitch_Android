@@ -241,7 +241,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                     s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
                     buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                    if (SmartphonePreferencesHandler.getHighlightLastActivatedButton() &&
+                    if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) &&
                             selectedReceiver.getLastActivatedButtonId().equals(button.getId())) {
                         buttonView.setTextColor(R.id.button_widget_universal,
                                 ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));

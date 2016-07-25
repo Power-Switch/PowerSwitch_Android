@@ -111,6 +111,14 @@
                     android:text="@string/highlight_last_activated_button"/>
 
                 <CheckBox
+                    android:id="@+id/checkBox_showToast"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="4dp"
+                    android:checked="false"
+                    android:text="@string/show_toast_when_not_in_foreground"/>
+
+                <CheckBox
                     android:id="@+id/checkBox_vibrateOnButtonPress"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"

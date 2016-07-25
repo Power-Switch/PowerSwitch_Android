@@ -42,7 +42,7 @@ public class IntentReceiver extends BroadcastReceiver {
         Log.d(this, intent);
 
         try {
-            if (!SmartphonePreferencesHandler.getSleepAsAndroidEnabled()) {
+            if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED)) {
                 return;
             }
 

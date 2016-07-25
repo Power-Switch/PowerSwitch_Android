@@ -361,7 +361,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.getCurrentApartmentId());
+        Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         Room room = apartment.getRoom(currentRoomName);
         String receiverName = currentName;
         String modelName = currentModel;

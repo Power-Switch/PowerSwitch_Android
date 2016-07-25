@@ -84,7 +84,7 @@ abstract class HistoryHandler {
     private static void deleteOldEntries() throws Exception {
         Calendar calendar = Calendar.getInstance();
 
-        switch (SmartphonePreferencesHandler.getKeepHistoryDuration()) {
+        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)) {
             case SettingsConstants.KEEP_HISTORY_FOREVER:
                 // dont delete anything
                 return;

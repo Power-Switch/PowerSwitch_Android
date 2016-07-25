@@ -208,7 +208,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         try {
             // Get Rooms
             roomList.clear();
-            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.getCurrentApartmentId());
+            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             for (Room room : rooms) {
                 roomList.add(room.getName());
             }

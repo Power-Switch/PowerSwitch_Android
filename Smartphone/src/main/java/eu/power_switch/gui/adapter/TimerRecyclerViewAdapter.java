@@ -163,7 +163,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         }
 
         // collapse timer
-        if (SmartphonePreferencesHandler.getAutoCollapseTimers()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS)) {
             linearLayoutDescription.setVisibility(View.GONE);
         }
 

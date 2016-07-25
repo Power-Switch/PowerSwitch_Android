@@ -73,7 +73,7 @@ public class BackupHandler {
     @NonNull
     public ArrayList<Backup> getBackups() {
         ArrayList<Backup> backups = new ArrayList<>();
-        File backupDir = new File(SmartphonePreferencesHandler.getBackupPath());
+        File backupDir = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
 
         FileFilter backupFileFilter = new FileFilter() {
             @Override
@@ -114,7 +114,7 @@ public class BackupHandler {
             File src;
             File dst;
 
-            dst = new File(SmartphonePreferencesHandler.getBackupPath() +
+            dst = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) +
                     File.separator + name);
             if (!dst.exists()) {
                 dst.mkdirs();
@@ -138,7 +138,7 @@ public class BackupHandler {
             try {
                 // copy database
                 src = new File(context.getFilesDir().getParent() + File.separator + "databases");
-                dst = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator
+                dst = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator
                         + name + File.separator + "databases");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -146,7 +146,7 @@ public class BackupHandler {
 
                 // copy preferences
                 src = new File(context.getFilesDir().getParent() + File.separator + "shared_prefs");
-                dst = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator
+                dst = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator
                         + name + File.separator + "shared_prefs");
                 if (src.exists()) {
                     copyDirectory(src, dst);
@@ -167,7 +167,7 @@ public class BackupHandler {
      */
     public void removeBackup(@NonNull String name) throws BackupNotFoundException, RemoveBackupException {
         try {
-            File backupFolder = new File(SmartphonePreferencesHandler.getBackupPath()
+            File backupFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
                     + File.separator + name);
             if (!backupFolder.exists()) {
                 throw new BackupNotFoundException();
@@ -188,9 +188,9 @@ public class BackupHandler {
      * @throws BackupAlreadyExistsException
      */
     public void renameBackup(@NonNull String oldName, @NonNull String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
-        File oldFolder = new File(SmartphonePreferencesHandler.getBackupPath()
+        File oldFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
                 + File.separator + oldName);
-        File newFolder = new File(SmartphonePreferencesHandler.getBackupPath()
+        File newFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
                 + File.separator + newName);
 
         if (!oldFolder.exists()) {
@@ -211,7 +211,7 @@ public class BackupHandler {
      */
     public void restoreBackup(@NonNull String name) throws BackupNotFoundException, RestoreBackupException {
         // create source path object
-        File src = new File(SmartphonePreferencesHandler.getBackupPath() + File.separator + name);
+        File src = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name);
         if (src.exists()) {
             try {
                 // create destination path object

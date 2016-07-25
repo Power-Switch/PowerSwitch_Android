@@ -156,7 +156,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
     @Override
     public void saveCurrentConfigurationToDatabase() {
-        Scene newScene = new Scene(currentId, SmartphonePreferencesHandler.getCurrentApartmentId(), currentName);
+        Scene newScene = new Scene(currentId, SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID), currentName);
         newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
 
         try {

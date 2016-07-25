@@ -144,7 +144,7 @@ public class ActionHandler {
         receiver.setLastActivatedButtonId(button.getId());
         DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
 
-        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -277,7 +277,7 @@ public class ActionHandler {
             NetworkHandler.send(networkPackages);
         }
 
-        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -363,7 +363,7 @@ public class ActionHandler {
             NetworkHandler.send(networkPackages);
         }
 
-        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -452,7 +452,7 @@ public class ActionHandler {
 
         NetworkHandler.send(networkPackages);
 
-        if (SmartphonePreferencesHandler.getHighlightLastActivatedButton()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {

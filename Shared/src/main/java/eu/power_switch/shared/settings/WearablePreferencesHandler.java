@@ -99,12 +99,9 @@ public class WearablePreferencesHandler {
                 WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         forceRefresh();
 
-        Log.d(WearablePreferencesHandler.class, "getShowRoomAllOnOff: " + get(KEY_SHOW_ROOM_ALL_ON_OFF));
-        Log.d(WearablePreferencesHandler.class, "getAutoCollapseRooms: " + get(KEY_AUTO_COLLAPSE_ROOMS));
-        Log.d(WearablePreferencesHandler.class, "getTheme: " + get(KEY_THEME));
-        Log.d(WearablePreferencesHandler.class, "getVibrateOnButtonPress: " + get(KEY_VIBRATE_ON_BUTTON_PRESS));
-        Log.d(WearablePreferencesHandler.class, "getVibrationDuration: " + get(KEY_VIBRATION_DURATION));
-        Log.d(WearablePreferencesHandler.class, "getHighlightLastActivatedButton: " + get(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
+        for (String key : cachedValues.keySet()) {
+            Log.d(WearablePreferencesHandler.class, key + ": " + get(key));
+        }
     }
 
     /**

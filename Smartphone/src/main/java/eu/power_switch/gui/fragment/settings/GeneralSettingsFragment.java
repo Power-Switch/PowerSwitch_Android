@@ -80,6 +80,7 @@ public class GeneralSettingsFragment extends Fragment {
     private CheckBox showRoomAllOnOffButtons;
     private CheckBox hideAddFAB;
     private CheckBox highlightLastActivatedButton;
+    private CheckBox showToastInBackground;
 
     private LinearLayout vibrationDurationLayout;
     private CheckBox vibrateOnButtonPress;
@@ -112,22 +113,25 @@ public class GeneralSettingsFragment extends Fragment {
 
                 switch (buttonView.getId()) {
                     case R.id.checkBox_autoDiscover:
-                        SmartphonePreferencesHandler.setAutoDiscover(isChecked);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER, isChecked);
                         break;
                     case R.id.checkBox_autoCollapseRooms:
-                        SmartphonePreferencesHandler.setAutoCollapseRooms(isChecked);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS, isChecked);
                         break;
                     case R.id.checkBox_autoCollapseTimers:
-                        SmartphonePreferencesHandler.setAutoCollapseTimers(isChecked);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS, isChecked);
                         break;
                     case R.id.checkBox_showRoomAllOnOffButtons:
-                        SmartphonePreferencesHandler.setShowRoomAllOnOff(isChecked);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF, isChecked);
                         break;
                     case R.id.checkBox_hideAddFAB:
-                        SmartphonePreferencesHandler.setUseOptionsMenuInsteadOfFAB(isChecked);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB, isChecked);
+                        break;
+                    case R.id.checkBox_showToast:
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND, isChecked);
                         break;
                     case R.id.checkBox_vibrateOnButtonPress:
-                        SmartphonePreferencesHandler.setVibrateOnButtonPress(isChecked);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS, isChecked);
                         if (isChecked) {
                             vibrationDurationLayout.setVisibility(View.VISIBLE);
                         } else {
@@ -135,7 +139,7 @@ public class GeneralSettingsFragment extends Fragment {
                         }
                         break;
                     case R.id.checkBox_highlightLastActivatedButton:
-                        SmartphonePreferencesHandler.setHighlightLastActivatedButton(isChecked);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, isChecked);
                         // force receiver widget update
                         ReceiverWidgetProvider.forceWidgetUpdate(getContext());
                         break;
@@ -182,7 +186,7 @@ public class GeneralSettingsFragment extends Fragment {
         startupDefaultTab.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SmartphonePreferencesHandler.setStartupDefaultTab(position);
+                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB, position);
             }
 
             @Override
@@ -208,6 +212,9 @@ public class GeneralSettingsFragment extends Fragment {
         highlightLastActivatedButton = (CheckBox) rootView.findViewById(R.id.checkBox_highlightLastActivatedButton);
         highlightLastActivatedButton.setOnCheckedChangeListener(onCheckedChangeListener);
 
+        showToastInBackground = (CheckBox) rootView.findViewById(R.id.checkBox_showToast);
+        showToastInBackground.setOnCheckedChangeListener(onCheckedChangeListener);
+
         vibrateOnButtonPress = (CheckBox) rootView.findViewById(R.id.checkBox_vibrateOnButtonPress);
         vibrateOnButtonPress.setOnCheckedChangeListener(onCheckedChangeListener);
 
@@ -225,7 +232,7 @@ public class GeneralSettingsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s != null && s.length() > 0) {
-                    SmartphonePreferencesHandler.setVibrationDuration(Integer.valueOf(s.toString()));
+                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION, Integer.valueOf(s.toString()));
                 }
             }
         });
@@ -238,7 +245,7 @@ public class GeneralSettingsFragment extends Fragment {
         keepHistoryDuration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SmartphonePreferencesHandler.setKeepHistoryDuration(position);
+                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION, position);
             }
 
             @Override
@@ -275,13 +282,13 @@ public class GeneralSettingsFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.radioButton_darkBlue:
-                        SmartphonePreferencesHandler.setTheme(SettingsConstants.THEME_DARK_BLUE);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_THEME, SettingsConstants.THEME_DARK_BLUE);
                         break;
                     case R.id.radioButton_lightBlue:
-                        SmartphonePreferencesHandler.setTheme(SettingsConstants.THEME_LIGHT_BLUE);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_THEME, SettingsConstants.THEME_LIGHT_BLUE);
                         break;
                     case R.id.radioButton_dayNight_blue:
-                        SmartphonePreferencesHandler.setTheme(SettingsConstants.THEME_DAY_NIGHT_BLUE);
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_THEME, SettingsConstants.THEME_DAY_NIGHT_BLUE);
                         break;
                     default:
                         break;
@@ -371,25 +378,26 @@ public class GeneralSettingsFragment extends Fragment {
     }
 
     private void updateUI() {
-        startupDefaultTab.setSelection(SmartphonePreferencesHandler.getStartupDefaultTab());
-        autoDiscover.setChecked(SmartphonePreferencesHandler.getAutoDiscover());
-        autoCollapseRooms.setChecked(SmartphonePreferencesHandler.getAutoCollapseRooms());
-        autoCollapseTimers.setChecked(SmartphonePreferencesHandler.getAutoCollapseTimers());
-        showRoomAllOnOffButtons.setChecked(SmartphonePreferencesHandler.getShowRoomAllOnOff());
-        hideAddFAB.setChecked(SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB());
-        highlightLastActivatedButton.setChecked(SmartphonePreferencesHandler.getHighlightLastActivatedButton());
-        vibrateOnButtonPress.setChecked(SmartphonePreferencesHandler.getVibrateOnButtonPress());
-        vibrationDuration.setText(String.valueOf(SmartphonePreferencesHandler.getVibrationDuration()));
-        keepHistoryDuration.setSelection(SmartphonePreferencesHandler.getKeepHistoryDuration());
-        if (!SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
+        startupDefaultTab.setSelection(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+        autoDiscover.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER));
+        autoCollapseRooms.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
+        autoCollapseTimers.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS));
+        showRoomAllOnOffButtons.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF));
+        hideAddFAB.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB));
+        highlightLastActivatedButton.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
+        showToastInBackground.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND));
+        vibrateOnButtonPress.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS));
+        vibrationDuration.setText(String.valueOf(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION)));
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
             vibrationDurationLayout.setVisibility(View.GONE);
         } else {
             vibrationDurationLayout.setVisibility(View.VISIBLE);
         }
+        keepHistoryDuration.setSelection(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION));
 
-        textView_backupPath.setText(SmartphonePreferencesHandler.getBackupPath());
+        textView_backupPath.setText(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
 
-        switch (SmartphonePreferencesHandler.getTheme()) {
+        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
             case SettingsConstants.THEME_DARK_BLUE:
                 radioButtonDarkBlue.setChecked(true);
                 break;

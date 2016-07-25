@@ -152,7 +152,7 @@ public class BackupFragment extends RecyclerViewFragment {
                                         backupHandler.restoreBackup(backup.getName());
 
                                         DeveloperPreferencesHandler.forceRefresh();
-                                        SmartphonePreferencesHandler.forceRefresh(getContext());
+                                        SmartphonePreferencesHandler.forceRefresh();
                                         WearablePreferencesHandler.forceRefresh();
 
                                         // restart app to apply
@@ -281,7 +281,7 @@ public class BackupFragment extends RecyclerViewFragment {
     }
 
     private void updateUI() {
-        textViewBackupPath.setText(SmartphonePreferencesHandler.getBackupPath());
+        textViewBackupPath.setText(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
 
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
             showEmpty();
@@ -331,7 +331,7 @@ public class BackupFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_backup).setVisible(false).setEnabled(false);
         }
     }
@@ -339,7 +339,7 @@ public class BackupFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

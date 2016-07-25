@@ -128,8 +128,8 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
         try {
             if (intent.getAction().equals(WidgetConstants.WIDGET_ACTION_INTENT)) {
                 // vibrate
-                if (SmartphonePreferencesHandler.getVibrateOnButtonPress()) {
-                    VibrationHandler.vibrate(context, SmartphonePreferencesHandler.getVibrationDuration());
+                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    VibrationHandler.vibrate(context, SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                 }
 
                 parseWidgetActionIntent(context, intent);

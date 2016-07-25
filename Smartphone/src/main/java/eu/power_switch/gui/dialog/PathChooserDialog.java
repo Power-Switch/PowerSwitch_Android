@@ -65,7 +65,7 @@ public class PathChooserDialog extends ConfigurationDialog {
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_path_chooser, container);
 
-        currentPath = SmartphonePreferencesHandler.getBackupPath();
+        currentPath = SmartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
         folders = getSubFolders(currentPath);
 
         textViewCurrentPath = (TextView) rootView.findViewById(R.id.textView_currentPath);
@@ -156,7 +156,7 @@ public class PathChooserDialog extends ConfigurationDialog {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        SmartphonePreferencesHandler.setBackupPath(currentPath);
+        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_BACKUP_PATH, currentPath);
 
         BackupFragment.sendBackupsChangedBroadcast(getContext());
     }

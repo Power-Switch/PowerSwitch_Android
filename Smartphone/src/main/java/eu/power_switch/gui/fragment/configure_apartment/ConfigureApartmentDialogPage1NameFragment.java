@@ -281,7 +281,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
             long newId = DatabaseHandler.addApartment(newApartment);
             // set new apartment as active if it is the first and only one
             if (isActive) {
-                SmartphonePreferencesHandler.setCurrentApartmentId(newId);
+                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
             }
         } else {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);

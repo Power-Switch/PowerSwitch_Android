@@ -75,7 +75,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         holder.active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
+                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                 for (Apartment currentApartment : apartments) {
                     if (currentApartment.getId().equals(apartment.getId())) {

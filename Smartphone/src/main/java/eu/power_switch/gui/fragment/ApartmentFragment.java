@@ -98,7 +98,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
                 try {
                     final Apartment apartment = apartments.get(position);
 
-                    SmartphonePreferencesHandler.setCurrentApartmentId(apartment.getId());
+                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                     for (Apartment currentApartment : apartments) {
                         if (currentApartment.getId().equals(apartment.getId())) {
@@ -183,7 +183,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.create_apartment).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_apartment).setVisible(false).setEnabled(false);
         }
     }
@@ -242,7 +242,7 @@ public class ApartmentFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

@@ -29,7 +29,6 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.fragment.RoomsFragment;
 import eu.power_switch.gui.fragment.ScenesFragment;
 import eu.power_switch.gui.fragment.SettingsFragment;
-import eu.power_switch.shared.gui.view.PageIndicatorView;
 
 /**
  * Navigation Drawer implementation
@@ -43,11 +42,9 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
     private static final int INDEX_SETTINGS = 2;
 
     private final Activity activity;
-    private final PageIndicatorView pageIndicatorView;
 
-    public NavigationDrawerAdapter(Activity activity, PageIndicatorView pageIndicatorView) {
+    public NavigationDrawerAdapter(Activity activity) {
         this.activity = activity;
-        this.pageIndicatorView = pageIndicatorView;
     }
 
     @Override
@@ -81,8 +78,6 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
     @Override
     public void onItemSelected(int i) {
         Fragment fragment;
-
-        pageIndicatorView.setCurrentPage(i);
 
         switch (i) {
             case INDEX_ROOMS:

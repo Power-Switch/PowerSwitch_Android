@@ -43,6 +43,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.WearableConstants;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import eu.power_switch.shared.wearable.CommunicationHelper;
 
 /**
  * Created by Markus on 05.06.2015.
@@ -169,45 +170,6 @@ public class ListenerService extends WearableListenerService {
     }
 
     /**
-     * This method extracts settings data contained in a DataMap Array and saves it into the local PreferenceHandler.
-     *
-     * @param settings received settings data
-     */
-    public static void extractSettings(ArrayList<DataMap> settings) {
-        // save map values to local preferenceHandler
-        for (DataMap dataMapItem : settings) {
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)) {
-                int value = dataMapItem.getInt(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB, value);
-            }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS, bool);
-            }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, bool);
-            }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF, bool);
-            }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_THEME)) {
-                int value = dataMapItem.getInt(WearablePreferencesHandler.KEY_THEME);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_THEME, value);
-            }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                boolean bool = dataMapItem.getBoolean(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS, bool);
-            }
-            if (dataMapItem.containsKey(WearablePreferencesHandler.KEY_VIBRATION_DURATION)) {
-                int value = dataMapItem.getInt(WearablePreferencesHandler.KEY_VIBRATION_DURATION);
-                WearablePreferencesHandler.set(WearablePreferencesHandler.KEY_VIBRATION_DURATION, value);
-            }
-        }
-    }
-
-    /**
      * Sends local Broadcast that underlying data has changed and UI has to be updated
      *
      * @param rooms
@@ -277,7 +239,7 @@ public class ListenerService extends WearableListenerService {
                                 .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
 
                         int oldThemeValue = WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME);
-                        extractSettings(settings);
+                        CommunicationHelper.extractSettings(settings);
                         int newThemeValue = WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME);
 
                         // notify about changes

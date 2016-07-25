@@ -87,12 +87,12 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         final RecyclerViewFragment recyclerViewFragment = this;
 
         Switch switchOnOff = (Switch) rootView.findViewById(R.id.switch_on_off);
-        switchOnOff.setChecked(SmartphonePreferencesHandler.getStockAlarmClockEnabled());
+        switchOnOff.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED));
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    SmartphonePreferencesHandler.setStockAlarmClockEnabled(isChecked);
+                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED, isChecked);
                 }
             }
         });
@@ -204,7 +204,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
@@ -243,7 +243,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
         menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.getUseOptionsMenuInsteadOfFAB()) {
+        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.add_action).setVisible(false).setEnabled(false);
         }
     }

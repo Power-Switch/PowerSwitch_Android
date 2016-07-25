@@ -115,12 +115,16 @@ public class PlayStoreModeDataModel {
 
     private static void initApartments() {
         APARTMENTS.clear();
+
+        HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
+        actionsMap.put(Geofence.EventType.ENTER, new ArrayList<Action>());
+
         APARTMENT_HEIMAT = new Apartment((long) 0, true, "Heimat", ROOMS_HEIMAT, SCENES_HEIMAT, GATEWAYS,
                 new Geofence((long) 0, true, "Heimat", new LatLng(52.437418, 13.373122), 100,
-                        null, new HashMap<Geofence.EventType, List<Action>>(), Geofence.STATE_NONE));
+                        null, actionsMap, Geofence.STATE_NONE));
         APARTMENT_ELTERN = new Apartment((long) 0, false, "Eltern", ROOMS_HEIMAT, SCENES_HEIMAT, GATEWAYS,
                 new Geofence((long) 0, true, "Eltern", new LatLng(52.437418, 13.573122), 500,
-                        null, new HashMap<Geofence.EventType, List<Action>>(), Geofence.STATE_NONE));
+                        null, actionsMap, Geofence.STATE_NONE));
         APARTMENTS.add(APARTMENT_HEIMAT);
         APARTMENTS.add(APARTMENT_ELTERN);
     }

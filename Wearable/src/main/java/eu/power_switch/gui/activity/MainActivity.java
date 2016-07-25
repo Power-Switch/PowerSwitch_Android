@@ -56,7 +56,6 @@ import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.gui.view.PageIndicatorView;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 
@@ -149,8 +148,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
         // Top Navigation Drawer
         mWearableNavigationDrawer = (WearableNavigationDrawer) findViewById(R.id.top_navigation_drawer);
-        PageIndicatorView pageIndicatorView = (PageIndicatorView) findViewById(R.id.pageIndicator);
-        NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this, pageIndicatorView);
+        NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this);
         mWearableNavigationDrawer.setAdapter(navigationDrawerAdapter);
 
         // load first fragment

@@ -153,7 +153,7 @@ public class RoomSceneTabFragment extends Fragment {
                 textView_currentApartmentInfo.setText(
                         playStoreModeDataModel.getApartments().get(0).getName());
             } else {
-                long currentApartmentId = SmartphonePreferencesHandler.getCurrentApartmentId();
+                long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
                 if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                     textView_currentApartmentInfo.setText(" - ");
                 } else {

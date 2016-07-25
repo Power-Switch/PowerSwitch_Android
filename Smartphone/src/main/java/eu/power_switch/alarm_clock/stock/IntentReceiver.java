@@ -42,7 +42,7 @@ public class IntentReceiver extends BroadcastReceiver {
         Log.d(this, intent);
 
         try {
-            if (!SmartphonePreferencesHandler.getStockAlarmClockEnabled()) {
+            if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED)) {
                 return;
             }
 
