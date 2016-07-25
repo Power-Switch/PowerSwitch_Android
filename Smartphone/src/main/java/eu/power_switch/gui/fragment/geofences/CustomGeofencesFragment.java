@@ -192,6 +192,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
             case R.id.create_geofence:
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
                     PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION, NEEDED_PERMISSIONS);
+                    break;
                 }
 
                 ConfigureGeofenceDialog configureGeofenceDialog = new ConfigureGeofenceDialog();
