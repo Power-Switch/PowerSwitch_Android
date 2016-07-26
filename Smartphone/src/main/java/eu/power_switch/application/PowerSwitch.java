@@ -31,6 +31,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.firebase.client.Firebase;
 
 import org.apache.log4j.LogManager;
@@ -56,6 +57,7 @@ import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Entry Point for the Application
@@ -164,6 +166,9 @@ public class PowerSwitch extends MultiDexApplication {
 
         // Configure Log4J Logger
         LogHandler.configureLogger(getApplicationContext());
+
+        // Configure Fabric/Crashlytics
+        Fabric.with(this, new Crashlytics());
 
         Log.d("Application init...");
         Log.d("App version: " + getAppVersionDescription(this));

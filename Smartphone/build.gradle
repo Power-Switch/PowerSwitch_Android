@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 /*
  *     PowerSwitch by Max Rosin & Markus Ressel
  *     Copyright (C) 2015  Markus Ressel
@@ -17,6 +26,12 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileOptions {
@@ -96,6 +111,10 @@ dependencies {
 //        transitive = true
 //    }
 
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+        transitive = true;
+    }
+
     // PowerSwitch Modules
     compile project(':Shared')
     compile project(':LocaleApi')
@@ -112,6 +131,7 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
     // Set this dependency to build and run UI Automator tests
     //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+
 }
 
 // ignore tests on compile (because they are broken atm)
