@@ -21,6 +21,7 @@ package eu.power_switch.application;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
@@ -60,7 +61,10 @@ public class PowerSwitchWear extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Fabric.with(this, new Crashlytics());
+        Fabric.with(this,
+                new Crashlytics(),
+                new Answers()
+        );
 
         // One time initialization of handlers for static access
         WearablePreferencesHandler.init(this);
