@@ -1,12 +1,3 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
 /*
  *     PowerSwitch by Max Rosin & Markus Ressel
  *     Copyright (C) 2015  Markus Ressel
@@ -27,11 +18,6 @@ buildscript {
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
 
 android {
     compileOptions {
@@ -110,10 +96,6 @@ dependencies {
 //    compile('com.mikepenz:crossfader:1.3.2@aar') {
 //        transitive = true
 //    }
-
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
-        transitive = true;
-    }
 
     // PowerSwitch Modules
     compile project(':Shared')

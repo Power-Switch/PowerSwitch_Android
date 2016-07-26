@@ -20,8 +20,11 @@ package eu.power_switch.application;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
+
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Entry point for the Wearable application
@@ -43,7 +46,6 @@ public class PowerSwitchWear extends Application {
             public void uncaughtException(Thread thread, final Throwable throwable) {
                 Log.e("FATAL EXCEPTION", throwable);
 
-                // not possible without killing all app processes, including the UnkownErrorDialog!?
                 if (originalUncaughtExceptionHandler != null) {
                     //Delegates to Android's error handling
                     originalUncaughtExceptionHandler.uncaughtException(thread, throwable);
@@ -57,6 +59,8 @@ public class PowerSwitchWear extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Fabric.with(this, new Crashlytics());
 
         // One time initialization of handlers for static access
         WearablePreferencesHandler.init(this);
