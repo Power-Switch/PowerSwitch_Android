@@ -20,6 +20,7 @@ package eu.power_switch.gui.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
@@ -725,29 +726,39 @@ public class MainActivity extends AppCompatActivity {
         clearHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AsyncTask<Void, Void, Exception>() {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.clear)
+                        .setMessage(R.string.clear)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new AsyncTask<Void, Void, Exception>() {
 
-                    @Override
-                    protected Exception doInBackground(Void... params) {
-                        try {
-                            DatabaseHandler.clearHistory();
-                        } catch (Exception e) {
-                            return e;
-                        }
+                                    @Override
+                                    protected Exception doInBackground(Void... params) {
+                                        try {
+                                            DatabaseHandler.clearHistory();
+                                        } catch (Exception e) {
+                                            return e;
+                                        }
 
-                        return null;
-                    }
+                                        return null;
+                                    }
 
-                    @Override
-                    protected void onPostExecute(Exception exception) {
-                        updateHistory();
+                                    @Override
+                                    protected void onPostExecute(Exception exception) {
+                                        updateHistory();
 
-                        if (exception != null) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                        }
+                                        if (exception != null) {
+                                            StatusMessageHandler.showErrorMessage(getActivity(), exception);
+                                        }
 
-                    }
-                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                    }
+                                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        })
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .show();
             }
         });
 
