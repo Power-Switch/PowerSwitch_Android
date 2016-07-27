@@ -22,7 +22,9 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.core.CrashlyticsCore;
 
+import eu.power_switch.BuildConfig;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import io.fabric.sdk.android.Fabric;
@@ -61,8 +63,13 @@ public class PowerSwitchWear extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // Configure Fabric
         Fabric.with(this,
-                new Crashlytics(),
+                new Crashlytics.Builder().core(
+                        new CrashlyticsCore.Builder()
+                                .disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds
+                                .build())
+                        .build(),
                 new Answers()
         );
 
