@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.firebase.client.Firebase;
 
 import org.apache.log4j.LogManager;
@@ -42,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import eu.power_switch.BuildConfig;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -171,7 +173,11 @@ public class PowerSwitch extends MultiDexApplication {
 
         // Configure Fabric
         Fabric.with(this,
-                new Crashlytics(),
+                new Crashlytics.Builder().core(
+                        new CrashlyticsCore.Builder()
+                                .disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds
+                                .build())
+                        .build(),
                 new Answers()
         );
 

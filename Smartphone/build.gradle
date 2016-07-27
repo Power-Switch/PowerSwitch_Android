@@ -121,7 +121,7 @@ sourceSets {
     main {
         java {
             srcDir 'src'
-            exclude '**/test/**'
+            //exclude '**/test/**'
         }
     }
 }
