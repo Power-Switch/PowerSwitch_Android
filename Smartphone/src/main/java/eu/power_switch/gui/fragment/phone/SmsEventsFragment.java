@@ -59,7 +59,7 @@ import eu.power_switch.shared.permission.PermissionHelper;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class SmsEventsFragment extends RecyclerViewFragment {
+public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
 
     private static final String[] NEEDED_PERMISSIONS = {
             Manifest.permission.RECEIVE_SMS,
@@ -240,9 +240,7 @@ public class SmsEventsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        smsEvents.clear();
-
+    public List<SmsEvent> loadListData() throws Exception {
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
@@ -250,7 +248,12 @@ public class SmsEventsFragment extends RecyclerViewFragment {
 
 //        callEvents = DatabaseHandler.getAllCallEvents();
 
+        return new ArrayList<>();
+    }
 
-        return smsEvents;
+    @Override
+    protected void onListDataChanged(List<SmsEvent> list) {
+        smsEvents.clear();
+        smsEvents.addAll(list);
     }
 }

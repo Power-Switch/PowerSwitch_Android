@@ -23,17 +23,17 @@ import java.util.List;
 /**
  * Created by Markus on 19.03.2016.
  */
-public class RecyclerViewUpdateResult {
+public class RecyclerViewUpdateResult<T> {
 
     private Exception exception;
-    private List elements;
+    private List<T> elements;
 
     public RecyclerViewUpdateResult(Exception e) {
         this.exception = e;
         this.elements = null;
     }
 
-    public RecyclerViewUpdateResult(List elements) {
+    public RecyclerViewUpdateResult(List<T> elements) {
         this.exception = null;
         this.elements = elements;
     }
@@ -46,7 +46,7 @@ public class RecyclerViewUpdateResult {
         return exception;
     }
 
-    public List getElements() {
+    public List<T> getElements() {
         return elements;
     }
 }

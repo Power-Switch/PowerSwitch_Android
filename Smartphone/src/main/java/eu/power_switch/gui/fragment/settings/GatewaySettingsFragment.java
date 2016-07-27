@@ -63,7 +63,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 30.08.2015.
  */
-public class GatewaySettingsFragment extends RecyclerViewFragment {
+public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
     private BroadcastReceiver broadcastReceiver;
 
@@ -292,16 +292,18 @@ public class GatewaySettingsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        gateways.clear();
-
+    public List<Gateway> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-            gateways.addAll(playStoreModeDataModel.getGateways());
+            return playStoreModeDataModel.getGateways();
         } else {
-            gateways.addAll(DatabaseHandler.getAllGateways());
+            return DatabaseHandler.getAllGateways();
         }
+    }
 
-        return gateways;
+    @Override
+    protected void onListDataChanged(List<Gateway> list) {
+        gateways.clear();
+        gateways.addAll(list);
     }
 }

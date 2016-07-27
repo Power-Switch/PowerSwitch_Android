@@ -71,7 +71,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Fragment holding a list of all Backups
  */
-public class BackupFragment extends RecyclerViewFragment {
+public class BackupFragment extends RecyclerViewFragment<Backup> {
 
     private static final String[] NEEDED_PERMISSIONS = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -369,8 +369,8 @@ public class BackupFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        backups.clear();
+    public List<Backup> loadListData() throws Exception {
+        ArrayList<Backup> backups = new ArrayList<>();
 
         BackupHandler backupHandler = new BackupHandler(getActivity());
         for (Backup backup : backupHandler.getBackups()) {
@@ -380,5 +380,11 @@ public class BackupFragment extends RecyclerViewFragment {
         Collections.sort(backups, BACKUP_COMPARATOR);
 
         return backups;
+    }
+
+    @Override
+    protected void onListDataChanged(List<Backup> list) {
+        backups.clear();
+        backups.addAll(list);
     }
 }

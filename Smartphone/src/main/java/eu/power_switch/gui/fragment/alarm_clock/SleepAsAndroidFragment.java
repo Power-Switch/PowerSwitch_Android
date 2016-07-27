@@ -72,7 +72,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 08.10.2015.
  */
-public class SleepAsAndroidFragment extends RecyclerViewFragment {
+public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
 
     private static Event currentEventType = Event.ALARM_TRIGGERED;
     private BroadcastReceiver broadcastReceiver;
@@ -293,17 +293,24 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment {
         return getResources().getInteger(R.integer.action_grid_span_count);
     }
 
-    @Override
-    public List refreshListData() throws Exception {
-        actions.clear();
+//    @Override
+//    protected int getLoaderId() {
+//        return 0;
+//    }
 
+    @Override
+    public List<Action> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-            actions.addAll(playStoreModeDataModel.getAlarmActions(currentEventType));
+            return playStoreModeDataModel.getAlarmActions(currentEventType);
         } else {
-            actions.addAll(DatabaseHandler.getAlarmActions(currentEventType));
+            return DatabaseHandler.getAlarmActions(currentEventType);
         }
+    }
 
-        return actions;
+    @Override
+    protected void onListDataChanged(List<Action> list) {
+        actions.clear();
+        actions.addAll(list);
     }
 }

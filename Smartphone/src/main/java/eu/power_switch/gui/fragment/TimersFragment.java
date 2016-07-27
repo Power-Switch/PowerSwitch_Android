@@ -59,7 +59,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  * <p/>
  * Created by Markus on 12.09.2015.
  */
-public class TimersFragment extends RecyclerViewFragment {
+public class TimersFragment extends RecyclerViewFragment<Timer> {
 
     private ArrayList<Timer> timers = new ArrayList<>();
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
@@ -229,16 +229,18 @@ public class TimersFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        timers.clear();
-
+    public List<Timer> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            timers.addAll(playStoreModeDataModel.getTimers());
+            return playStoreModeDataModel.getTimers();
         } else {
-            timers.addAll(DatabaseHandler.getAllTimers());
+            return DatabaseHandler.getAllTimers();
         }
+    }
 
-        return timers;
+    @Override
+    protected void onListDataChanged(List<Timer> list) {
+        timers.clear();
+        timers.addAll(list);
     }
 }

@@ -58,7 +58,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Created by Markus on 25.12.2015.
  */
-public class ApartmentFragment extends RecyclerViewFragment {
+public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
 
     private RecyclerView recyclerViewApartments;
     private ApartmentRecyclerViewAdapter apartmentArrayAdapter;
@@ -226,17 +226,19 @@ public class ApartmentFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        apartments.clear();
-
+    public List<Apartment> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            apartments.addAll(playStoreModeDataModel.getApartments());
+            return playStoreModeDataModel.getApartments();
         } else {
-            apartments.addAll(DatabaseHandler.getAllApartments());
+            return DatabaseHandler.getAllApartments();
         }
+    }
 
-        return apartments;
+    @Override
+    protected void onListDataChanged(List<Apartment> list) {
+        apartments.clear();
+        apartments.addAll(list);
     }
 
     @Override

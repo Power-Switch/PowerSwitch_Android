@@ -63,7 +63,7 @@ import eu.power_switch.shared.permission.PermissionHelper;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class CallEventsFragment extends RecyclerViewFragment {
+public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
 
     private static final String[] NEEDED_PERMISSIONS = {
             Manifest.permission.READ_PHONE_STATE,
@@ -255,16 +255,18 @@ public class CallEventsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        callEvents.clear();
-
+    public List<CallEvent> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            callEvents.addAll(playStoreModeDataModel.getCallEvents());
+            return playStoreModeDataModel.getCallEvents();
         } else {
-            callEvents.addAll(DatabaseHandler.getAllCallEvents());
+            return DatabaseHandler.getAllCallEvents();
         }
+    }
 
-        return callEvents;
+    @Override
+    protected void onListDataChanged(List<CallEvent> list) {
+        callEvents.clear();
+        callEvents.addAll(list);
     }
 }

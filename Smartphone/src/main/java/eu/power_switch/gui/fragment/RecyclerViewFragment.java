@@ -18,12 +18,13 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.content.Context;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -45,12 +46,16 @@ import eu.power_switch.gui.StatusMessageHandler;
  * <p/>
  * Created by Markus on 25.11.2015.
  */
-public abstract class RecyclerViewFragment extends Fragment {
+public abstract class RecyclerViewFragment<T> extends Fragment implements LoaderManager.LoaderCallbacks<RecyclerViewUpdateResult<T>> {
 
     protected View rootView;
     private LinearLayout layoutLoading;
     private LinearLayout layoutEmpty;
     private LinearLayout layoutError;
+
+    private Loader dataLoader;
+    private RecyclerViewUpdateResult<T> cachedListData;
+    private boolean contentChanged = false;
 
     @Nullable
     @Override
@@ -62,6 +67,9 @@ public abstract class RecyclerViewFragment extends Fragment {
         layoutEmpty = (LinearLayout) rootView.findViewById(R.id.layoutEmpty);
         layoutError = (LinearLayout) rootView.findViewById(R.id.layoutError);
 
+        // use loaderManager of fragment, so unique ID across app is not required (only across this fragment)
+        dataLoader = getLoaderManager().initLoader(0, null, this);
+
         onInitialized();
 
         return rootView;
@@ -69,36 +77,78 @@ public abstract class RecyclerViewFragment extends Fragment {
 
     protected abstract void onInitialized();
 
+    //protected abstract int getLoaderId();
+
+    @Override
+    public Loader<RecyclerViewUpdateResult<T>> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<RecyclerViewUpdateResult<T>>(getContext()) {
+
+            @Override
+            protected void onStartLoading() {
+                if (!contentChanged && cachedListData != null) {
+                    // Use cached data
+                    deliverResult(cachedListData);
+                } else {
+                    // We have no data, so kick off loading it
+                    forceLoad();
+                }
+            }
+
+            @Override
+            public RecyclerViewUpdateResult<T> loadInBackground() {
+                try {
+                    return new RecyclerViewUpdateResult<>(loadListData());
+                } catch (Exception e) {
+                    return new RecyclerViewUpdateResult<>(e);
+                }
+            }
+
+            @Override
+            public void deliverResult(RecyclerViewUpdateResult<T> result) {
+                // We’ll save the data for later retrieval
+                cachedListData = result;
+
+                super.deliverResult(result);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<RecyclerViewUpdateResult<T>> loader, RecyclerViewUpdateResult<T> result) {
+        getRecyclerViewAdapter().notifyDataSetChanged();
+
+        if (result.isSuccess()) {
+            contentChanged = false;
+
+            if (result.getElements().size() == 0) {
+                showEmpty();
+            } else {
+                onListDataChanged(result.getElements());
+                showList();
+            }
+        } else {
+            showError(result.getException(), Calendar.getInstance().getTimeInMillis());
+            StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
+        }
+    }
+
+    /**
+     * This method is called after loader has finished loading data and the result is ready to be delivered
+     *
+     * @param list loader data result
+     */
+    protected abstract void onListDataChanged(List<T> list);
+
+    @Override
+    public void onLoaderReset(Loader<RecyclerViewUpdateResult<T>> loader) {
+
+    }
+
+
     public void updateListContent() {
         showLoadingAnimation();
-
-        new AsyncTask<Context, Void, RecyclerViewUpdateResult>() {
-
-            @Override
-            protected RecyclerViewUpdateResult doInBackground(Context... contexts) {
-                try {
-                    return new RecyclerViewUpdateResult(refreshListData());
-                } catch (Exception e) {
-                    return new RecyclerViewUpdateResult(e);
-                }
-            }
-
-            @Override
-            protected void onPostExecute(RecyclerViewUpdateResult result) {
-                getRecyclerViewAdapter().notifyDataSetChanged();
-
-                if (result.isSuccess()) {
-                    if (result.getElements().size() == 0) {
-                        showEmpty();
-                    } else {
-                        showList();
-                    }
-                } else {
-                    showError(result.getException(), Calendar.getInstance().getTimeInMillis());
-                    StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
-                }
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getContext());
+        contentChanged = true;
+        dataLoader.forceLoad();
     }
 
     protected void showLoadingAnimation() {
@@ -161,6 +211,6 @@ public abstract class RecyclerViewFragment extends Fragment {
 
     public abstract RecyclerView.Adapter getRecyclerViewAdapter();
 
-    public abstract List refreshListData() throws Exception;
+    public abstract List<T> loadListData() throws Exception;
 
 }

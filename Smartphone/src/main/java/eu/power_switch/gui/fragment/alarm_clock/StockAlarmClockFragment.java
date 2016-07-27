@@ -68,7 +68,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.03.2016.
  */
-public class StockAlarmClockFragment extends RecyclerViewFragment {
+public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
     private static Event currentEventType = Event.ALARM_TRIGGERED;
     private BroadcastReceiver broadcastReceiver;
@@ -264,16 +264,18 @@ public class StockAlarmClockFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        actions.clear();
-
+    public List<Action> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-            actions.addAll(playStoreModeDataModel.getAlarmActions(currentEventType));
+            return playStoreModeDataModel.getAlarmActions(currentEventType);
         } else {
-            actions.addAll(DatabaseHandler.getAlarmActions(currentEventType));
+            return DatabaseHandler.getAlarmActions(currentEventType);
         }
+    }
 
-        return actions;
+    @Override
+    protected void onListDataChanged(List<Action> list) {
+        actions.clear();
+        actions.addAll(list);
     }
 }

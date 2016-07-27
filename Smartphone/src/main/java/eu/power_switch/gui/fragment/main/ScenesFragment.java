@@ -58,7 +58,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Fragment containing a List of all Scenes
  */
-public class ScenesFragment extends RecyclerViewFragment {
+public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
     private ArrayList<Scene> scenes = new ArrayList<>();
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
@@ -225,16 +225,18 @@ public class ScenesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        scenes.clear();
-
+    public List<Scene> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            scenes.addAll(playStoreModeDataModel.getActiveApartment().getScenes());
+            return playStoreModeDataModel.getActiveApartment().getScenes();
         } else {
-            scenes.addAll(DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)));
+            return DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         }
+    }
 
-        return scenes;
+    @Override
+    protected void onListDataChanged(List<Scene> list) {
+        scenes.clear();
+        scenes.addAll(list);
     }
 }

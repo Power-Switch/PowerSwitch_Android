@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -241,7 +242,7 @@ public class PowerSwitch extends MultiDexApplication {
                 }
 
                 try {
-                    Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+                    android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND + Process.THREAD_PRIORITY_LESS_FAVORABLE);
 
 //                    mHandler.obtainMessage(0, "Wait...").sendToTarget();
                     Thread.sleep(5000);

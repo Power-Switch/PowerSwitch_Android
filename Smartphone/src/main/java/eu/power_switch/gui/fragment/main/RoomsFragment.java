@@ -60,7 +60,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Fragment containing a List of all Rooms and Receivers
  */
-public class RoomsFragment extends RecyclerViewFragment {
+public class RoomsFragment extends RecyclerViewFragment<Room> {
 
     private ArrayList<Room> rooms;
 
@@ -250,20 +250,24 @@ public class RoomsFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        rooms.clear();
-
+    public List<Room> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            rooms.addAll(playStoreModeDataModel.getActiveApartment().getRooms());
+            return playStoreModeDataModel.getActiveApartment().getRooms();
         } else {
             long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
                 // Get Rooms and Receivers
-                rooms.addAll(DatabaseHandler.getRooms(currentApartmentId));
+                return DatabaseHandler.getRooms(currentApartmentId);
+            } else {
+                return new ArrayList<>();
             }
         }
+    }
 
-        return rooms;
+    @Override
+    protected void onListDataChanged(List<Room> list) {
+        rooms.clear();
+        rooms.addAll(list);
     }
 }

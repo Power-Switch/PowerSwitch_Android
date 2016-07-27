@@ -66,7 +66,7 @@ import eu.power_switch.shared.permission.PermissionHelper;
 /**
  * Fragment containing a List of all Apartment related Geofences
  */
-public class ApartmentGeofencesFragment extends RecyclerViewFragment {
+public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
     private static final String[] NEEDED_PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -299,9 +299,11 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        geofences.clear();
+    public List<Geofence> loadListData() throws Exception {
         geofenceIdApartmentMap.clear();
+
+        ArrayList<Geofence> geofences = new ArrayList<>();
+        List<Apartment> apartments;
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
@@ -319,5 +321,11 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment {
         }
 
         return geofences;
+    }
+
+    @Override
+    protected void onListDataChanged(List<Geofence> list) {
+        geofences.clear();
+        geofences.addAll(list);
     }
 }

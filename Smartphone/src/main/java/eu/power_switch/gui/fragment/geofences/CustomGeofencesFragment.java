@@ -61,7 +61,7 @@ import eu.power_switch.shared.permission.PermissionHelper;
 /**
  * Fragment containing a List of all custom Geofences created by the user
  */
-public class CustomGeofencesFragment extends RecyclerViewFragment {
+public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
     private static final String[] NEEDED_PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -259,16 +259,18 @@ public class CustomGeofencesFragment extends RecyclerViewFragment {
     }
 
     @Override
-    public List refreshListData() throws Exception {
-        geofences.clear();
-
+    public List<Geofence> loadListData() throws Exception {
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getScenes());
 //        } else {
-        geofences.addAll(DatabaseHandler.getCustomGeofences());
+        return DatabaseHandler.getCustomGeofences();
 //        }
+    }
 
-        return geofences;
+    @Override
+    protected void onListDataChanged(List<Geofence> list) {
+        geofences.clear();
+        geofences.addAll(list);
     }
 }
