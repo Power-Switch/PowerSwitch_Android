@@ -19,7 +19,6 @@
 package eu.power_switch.gui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -398,10 +397,55 @@ public class IconicsHelper {
      * @param context any suitable context
      * @return "Up" icon
      */
-    public static Drawable getUpIcon(Context context) {
+    public static IconicsDrawable getUpIcon(Context context) {
         final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
         IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_arrow_upward)
                 .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Folder" icon
+     *
+     * @param context any suitable context
+     * @return "Folder" icon
+     */
+    public static IconicsDrawable getFolderIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_folder)
+                .sizeDp(24)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Keyboard Arrow Right" icon
+     *
+     * @param context any suitable context
+     * @return "Keyboard Arrow Right" icon
+     */
+    public static IconicsDrawable getKbArrowRightIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_keyboard_arrow_right)
+                .sizeDp(16)
+                .color(color);
+
+        return iconicsDrawable;
+    }
+
+    /**
+     * Get "Keyboard Arrow Down" icon
+     *
+     * @param context any suitable context
+     * @return "Keyboard Arrow Down" icon
+     */
+    public static IconicsDrawable getKbArrowDownIcon(Context context) {
+        final int color = ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, GoogleMaterial.Icon.gmd_keyboard_arrow_down)
+                .sizeDp(16)
                 .color(color);
 
         return iconicsDrawable;

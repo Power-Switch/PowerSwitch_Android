@@ -19,18 +19,30 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:autofit="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="@dimen/cardview_padding">
 
-    <TextView
+    <me.grantland.widget.AutofitTextView
         android:id="@+id/txt_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textColor="?android:textColorPrimary"/>
+        android:maxLines="2"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="20sp"
+        autofit:minTextSize="16sp"/>
+
+    <!--<TextView-->
+    <!--android:id="@+id/txt_name"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:textColor="?android:textColorPrimary"/>-->
 
     <TableLayout
         android:id="@+id/buttonLayout"

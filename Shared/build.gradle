@@ -56,6 +56,9 @@ dependencies {
     compile 'com.mikepenz:google-material-typeface:2.2.0.1.original@aar'
     compile 'com.mikepenz:material-design-iconic-typeface:2.2.0.1@aar'
 
+    // TextView with dynamic textsize based on available space
+    compile 'me.grantland:autofittextview:0.2.+'
+
     // Fabric
     compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
         transitive = true;
