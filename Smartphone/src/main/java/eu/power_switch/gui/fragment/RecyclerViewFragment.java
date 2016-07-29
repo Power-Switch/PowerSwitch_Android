@@ -82,10 +82,6 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
         return new AsyncTaskLoader<RecyclerViewUpdateResult<T>>(getContext()) {
 
             @Override
-            protected void onStartLoading() {
-            }
-
-            @Override
             public RecyclerViewUpdateResult<T> loadInBackground() {
                 try {
                     return new RecyclerViewUpdateResult<>(loadListData());
