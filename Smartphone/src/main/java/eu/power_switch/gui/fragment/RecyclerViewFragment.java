@@ -75,8 +75,6 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
     protected abstract void onInitialized();
 
-    //protected abstract int getLoaderId();
-
     @Override
     public Loader<RecyclerViewUpdateResult<T>> onCreateLoader(int id, Bundle args) {
         return new AsyncTaskLoader<RecyclerViewUpdateResult<T>>(getContext()) {
@@ -92,7 +90,7 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
             @Override
             public void deliverResult(RecyclerViewUpdateResult<T> result) {
-                super.deliverResult(result);
+                onLoadFinished(this, result);
             }
 
             @Override
@@ -109,13 +107,12 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
     @Override
     public void onLoadFinished(Loader<RecyclerViewUpdateResult<T>> loader, RecyclerViewUpdateResult<T> result) {
-        getRecyclerViewAdapter().notifyDataSetChanged();
-
         if (result.isSuccess()) {
             if (result.getElements().size() == 0) {
                 showEmpty();
             } else {
                 onListDataChanged(result.getElements());
+                getRecyclerViewAdapter().notifyDataSetChanged();
                 showList();
             }
         } else {
