@@ -110,6 +110,16 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
                 super.deliverResult(result);
             }
+
+            @Override
+            protected void onStopLoading() {
+                cancelLoad();
+            }
+
+            @Override
+            protected void onReset() {
+                onStopLoading();
+            }
         };
     }
 

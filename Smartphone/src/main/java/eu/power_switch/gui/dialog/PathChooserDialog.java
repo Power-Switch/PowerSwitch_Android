@@ -18,13 +18,14 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,7 +40,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.treeview.FolderTreeNode;
 import eu.power_switch.gui.treeview.FolderTreeNodeViewHolder;
@@ -51,7 +51,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  * <p/>
  * Created by Markus on 22.11.2015.
  */
-public class PathChooserDialog extends ConfigurationDialog {
+public class PathChooserDialog extends ConfigurationDialog implements LoaderManager.LoaderCallbacks<View> {
 
     private String currentPath = "";
 
@@ -70,59 +70,20 @@ public class PathChooserDialog extends ConfigurationDialog {
 
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.dialog_path_chooser2, container);
+        View rootView = inflater.inflate(R.layout.dialog_path_chooser, container);
 
         currentPath = SmartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
 
         textViewCurrentPath = (TextView) rootView.findViewById(R.id.textView_currentPath);
         textViewCurrentPath.setText(currentPath);
 
-        final ImageView imageViewUp = (ImageView) rootView.findViewById(R.id.imageView_up);
-        imageViewUp.setImageDrawable(IconicsHelper.getUpIcon(getContext()));
-        imageViewUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                File currentFolder = new File(currentPath);
-                File parentFolder = currentFolder.getParentFile();
-                if (parentFolder != null) {
-                    if (!currentFolder.getAbsolutePath().equals(Environment.getExternalStorageDirectory().getPath())) {
-                        currentPath = parentFolder.getAbsolutePath();
-                        notifyConfigurationChanged();
-                    }
-                }
-
-                updateUI();
-            }
-        });
-
         containerView = (LinearLayout) rootView.findViewById(R.id.containerView);
 
         loadingLayout = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
 
-        new AsyncTask<Void, Void, View>() {
-
-            @Override
-            protected void onPreExecute() {
-                loadingLayout.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected View doInBackground(Void... voids) {
-                return getFolderStructure();
-            }
-
-            @Override
-            protected void onPostExecute(View view) {
-                containerView.addView(view);
-                loadingLayout.setVisibility(View.GONE);
-            }
-        }.execute();
+        getLoaderManager().initLoader(0, null, this);
 
         return rootView;
-    }
-
-    private void updateUI() {
-        textViewCurrentPath.setText(currentPath);
     }
 
     private ArrayList<File> getVisibleSubFolders(String currentPath) {
@@ -196,10 +157,6 @@ public class PathChooserDialog extends ConfigurationDialog {
                 if (value instanceof TreeItemFolder) {
                     TreeItemFolder treeItemFolder = (TreeItemFolder) value;
 
-//                    SmartphonePreferencesHandler.set(
-//                            SmartphonePreferencesHandler.KEY_BACKUP_PATH,
-//                            value.getPath());
-
                     currentPath = treeItemFolder.getPath();
                     textViewCurrentPath.setText(currentPath);
 
@@ -219,11 +176,14 @@ public class PathChooserDialog extends ConfigurationDialog {
             TreeItemFolder treeItemFolder = new TreeItemFolder(getActivity(), folder.getName(), path);
             FolderTreeNode folderNode = new FolderTreeNode(treeItemFolder);
 
-            if (currentPath.startsWith(path + "/" + folder.getName())) {
+            // expand path to currently set directory
+            if (currentPath.contains(path + "/" + folder.getName())) {
                 folderNode.setExpanded(true);
             }
 
+            // highlight currently set directory
             if (currentPath.equals(path + "/" + folder.getName())) {
+                folderNode.setExpanded(false);
                 folderNode.setSelected(true);
             }
 
@@ -231,6 +191,44 @@ public class PathChooserDialog extends ConfigurationDialog {
 
             parentFolderNode.addChild(folderNode);
         }
+    }
+
+    @Override
+    public Loader<View> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<View>(getActivity()) {
+
+            @Override
+            protected void onStartLoading() {
+                loadingLayout.setVisibility(View.VISIBLE);
+                forceLoad();
+            }
+
+            @Override
+            public View loadInBackground() {
+                return getFolderStructure();
+            }
+
+            @Override
+            protected void onStopLoading() {
+                cancelLoad();
+            }
+
+            @Override
+            protected void onReset() {
+                onStopLoading();
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<View> loader, View view) {
+        containerView.addView(view);
+        loadingLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<View> loader) {
+
     }
 
 }
