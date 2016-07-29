@@ -54,8 +54,6 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
     private LinearLayout layoutError;
 
     private Loader dataLoader;
-    private RecyclerViewUpdateResult<T> cachedListData;
-    private boolean contentChanged = false;
 
     @Nullable
     @Override
@@ -85,13 +83,6 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
             @Override
             protected void onStartLoading() {
-                if (!contentChanged && cachedListData != null) {
-                    // Use cached data
-                    deliverResult(cachedListData);
-                } else {
-                    // We have no data, so kick off loading it
-                    forceLoad();
-                }
             }
 
             @Override
@@ -105,9 +96,6 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
             @Override
             public void deliverResult(RecyclerViewUpdateResult<T> result) {
-                // We’ll save the data for later retrieval
-                cachedListData = result;
-
                 super.deliverResult(result);
             }
 
@@ -128,8 +116,6 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
         getRecyclerViewAdapter().notifyDataSetChanged();
 
         if (result.isSuccess()) {
-            contentChanged = false;
-
             if (result.getElements().size() == 0) {
                 showEmpty();
             } else {
@@ -154,10 +140,8 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
     }
 
-
     public void updateListContent() {
         showLoadingAnimation();
-        contentChanged = true;
         dataLoader.forceLoad();
     }
 
