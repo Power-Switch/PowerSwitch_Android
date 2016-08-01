@@ -48,33 +48,7 @@ public class SliderPreference extends DialogPreference {
         return super.persistInt(value);
     }
 
-    @Override
-    protected int getPersistedInt(int defaultReturnValue) {
-        return super.getPersistedInt(defaultReturnValue);
-    }
-
-    @Override
-    public void setDefaultValue(Object defaultValue) {
-        super.setDefaultValue(defaultValue);
-    }
-
-    @Override
-    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
-        super.onSetInitialValue(restorePersistedValue, defaultValue);
-    }
-
     public int getProgress() {
         return getPersistedInt(40);
     }
-
-    @Override
-    public int getDialogLayoutResource() {
-        return super.getDialogLayoutResource();
-    }
-
-    @Override
-    public void setDependency(String dependencyKey) {
-        super.setDependency(dependencyKey);
-    }
-
 }

@@ -706,7 +706,7 @@ public class MainActivity extends AppCompatActivity {
                         itemTimer,
                         itemGeofences,
                         itemAlarmClock,
-                        itemPhone,
+//                        itemPhone,
                         itemNfc,
                         new DividerDrawerItem(),
                         itemBackupRestore,
@@ -847,12 +847,17 @@ public class MainActivity extends AppCompatActivity {
 
         super.onBackPressed();
 
-        lastFragmentClasses.pop();
-        lastFragmentTitles.pop();
-        drawerPositionStack.pop();
-        if (!lastFragmentTitles.isEmpty()) {
-            setTitle(lastFragmentTitles.peek());
-            navigationDrawer.setSelection(drawerPositionStack.peek(), false);
+        try {
+            lastFragmentClasses.pop();
+            lastFragmentTitles.pop();
+            drawerPositionStack.pop();
+
+            if (!lastFragmentTitles.isEmpty()) {
+                setTitle(lastFragmentTitles.peek());
+                navigationDrawer.setSelection(drawerPositionStack.peek(), false);
+            }
+        } catch (Exception e) {
+            Log.e(this, e);
         }
     }
 

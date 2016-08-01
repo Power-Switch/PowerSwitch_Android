@@ -26,11 +26,11 @@
     <string name="summary_autodiscover_enabled">Suche beim Start nach Gateways</string>
     <string name="summary_autodiscover_disabled">Suche beim Start NICHT nach Gateways</string>
 
-    <string name="title_autoCollapseRooms">Räume automatisch zusammenklappen</string>
+    <string name="title_autoCollapseRooms">Räume automatisch zuklappen</string>
     <string name="summary_autoCollapseRooms_enabled">Räume werden automatisch zusammengeklappt</string>
     <string name="summary_autoCollapseRooms_disabled">Räume werden NICHT automatisch zusammengeklappt</string>
 
-    <string name="title_autoCollapseTimers">Timer automatisch zusammenklappen</string>
+    <string name="title_autoCollapseTimers">Timer automatisch zuklappen</string>
     <string name="summary_autoCollapseTimers_enabled">Timer werden automatisch zusammengeklappt</string>
     <string name="summary_autoCollapseTimers_disabled">Timer werden NICHT automatisch zusammengeklappt</string>
 
@@ -39,16 +39,16 @@
     <string name="summary_showRoomAllOnOff_disabled">An &amp; Aus Buttons werden NICHT angezeigt</string>
 
     <string name="title_useOptionsMenuInsteadOfFab">Verstecke FABs</string>
-    <string name="summary_useOptionsMenuInsteadOfFab_enabled">FABs werden verstecke</string>
-    <string name="summary_useOptionsMenuInsteadOfFab_disabled">FABs werden angezeigt</string>
+    <string name="summary_useOptionsMenuInsteadOfFab_enabled">Runde Plus-Buttons in Listen werden versteckt</string>
+    <string name="summary_useOptionsMenuInsteadOfFab_disabled">Runde Plus-Buttons in Listen werden angezeigt</string>
 
     <string name="title_highlightLastActivatedButton">Aktuellen Status hervorheben</string>
-    <string name="summary_highlightLastActivatedButton_enabled">Der aktuelle Status wird bei Empfängern angezeigt</string>
-    <string name="summary_highlightLastActivatedButton_disabled">Der aktuelle Status wird NICHT angezeigt</string>
+    <string name="summary_highlightLastActivatedButton_enabled">Der aktuelle Status von Empfängern wird farblich hervorgehoben</string>
+    <string name="summary_highlightLastActivatedButton_disabled">Der aktuelle Status von Empfängern wird NICHT farblich hervorgehobent</string>
 
     <string name="title_showBackgroundActionToast">Hintergrundbenachrichtigungen</string>
-    <string name="summary_showBackgroundActionToast_enabled">Aktionen während die App im Hintergrund ist werden per Benachrichtung anzeigt</string>
-    <string name="summary_showBackgroundActionToast_disabled">Aktionen während die App im Hintergrund ist werden NICHT anzeigt</string>
+    <string name="summary_showBackgroundActionToast_enabled">Aktionen werden per Benachrichtung angezeigt, wenn die App im Hintergrund ist</string>
+    <string name="summary_showBackgroundActionToast_disabled">Aktionen werden NICHT per Benachrichtung angezeigt, wenn die App im Hintergrund ist</string>
 
     <string name="title_useCompactDrawer">Mini drawer</string>
     <string name="summary_useCompactDrawer_enabled">Show mini version of navigation drawer</string>

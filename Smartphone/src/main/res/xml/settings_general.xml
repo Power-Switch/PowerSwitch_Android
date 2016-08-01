@@ -63,7 +63,6 @@
             android:title="@string/title_vibrateOnButtonPress"/>
 
         <eu.power_switch.settings.SliderPreference
-            android:dependency="@string/key_vibrateOnButtonPress"
             android:key="@string/key_vibrationDuration"
             android:title="@string/title_vibrationDuration"/>
 

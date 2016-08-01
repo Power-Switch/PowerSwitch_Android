@@ -135,6 +135,8 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
             theme.setSummary(themeNames[sharedPreferences.getInt(WearablePreferencesHandler.KEY_THEME, WearablePreferencesHandler.DEFAULT_VALUE_THEME)]);
         }
 
+        WearablePreferencesHandler.forceRefresh();
+
         // sync settings with wearable app
         UtilityService.forceWearSettingsUpdate(getContext());
     }

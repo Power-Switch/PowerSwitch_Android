@@ -34,12 +34,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.preference.PreferenceScreen;
 import android.view.View;
 
+import java.util.Calendar;
+
+import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.settings.IntListPreference;
@@ -79,6 +85,8 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
     private BroadcastReceiver broadcastReceiver;
 
+    private Calendar devMenuFirstClickTime;
+    private int devMenuClickCounter;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -261,24 +269,66 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
             }
         });
 
+        if (BuildConfig.DEBUG) {
+            PreferenceScreen preferenceScreen = getPreferenceScreen();
+
+            PreferenceCategory developerCategory = new PreferenceCategory(getPreferenceManagerContext());
+            developerCategory.setTitle("Developer Options");
+            // add category to parent first, then add items to category!
+            preferenceScreen.addPreference(developerCategory);
+
+            Preference developerOptionsPreference = new Preference(getPreferenceManagerContext());
+            developerOptionsPreference.setTitle("Developer Options");
+            developerOptionsPreference.setSummary("CAUTION! Using options in this menu can IRREVERSIBLY corrupt your app!");
+            developerOptionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Calendar currentTime = Calendar.getInstance();
+                    if (devMenuFirstClickTime != null) {
+                        Calendar latestTime = Calendar.getInstance();
+                        latestTime.setTime(devMenuFirstClickTime.getTime());
+                        latestTime.add(Calendar.SECOND, 5);
+                        if (currentTime.after(latestTime)) {
+                            devMenuClickCounter = 0;
+                        }
+                    }
+
+                    devMenuClickCounter++;
+                    if (devMenuClickCounter == 1) {
+                        devMenuFirstClickTime = currentTime;
+                    }
+                    if (devMenuClickCounter >= 5) {
+                        devMenuClickCounter = 0;
+
+                        DeveloperOptionsDialog developerOptionsDialog = new DeveloperOptionsDialog();
+                        developerOptionsDialog.show(getActivity().getSupportFragmentManager(), null);
+                    }
+                    return true;
+                }
+            });
+
+            developerCategory.addPreference(developerOptionsPreference);
+        }
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION.equals(key)) {
             String[] historyValues = getResources().getStringArray(R.array.entryValues_history);
-            keepHistoryDuration.setSummary(historyValues[sharedPreferences.getInt(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION, SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION)]);
+            keepHistoryDuration.setSummary(historyValues[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION)]);
         } else if (SmartphonePreferencesHandler.KEY_BACKUP_PATH.equals(key)) {
-            backupPath.setSummary(sharedPreferences.getString(SmartphonePreferencesHandler.KEY_BACKUP_PATH, SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH));
+            backupPath.setSummary(sharedPreferences.getString(key, SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH));
         } else if (SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB.equals(key)) {
             String[] mainTabNames = getResources().getStringArray(R.array.main_tab_names);
-            startupDefaultTab.setSummary(mainTabNames[sharedPreferences.getInt(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)]);
+            startupDefaultTab.setSummary(mainTabNames[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)]);
         } else if (SmartphonePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
-            vibrationDuration.setSummary(sharedPreferences.getInt(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION, SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
+            vibrationDuration.setSummary(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
         } else if (SmartphonePreferencesHandler.KEY_THEME.equals(key)) {
             String[] themeNames = getResources().getStringArray(R.array.theme_names);
-            theme.setSummary(themeNames[sharedPreferences.getInt(SmartphonePreferencesHandler.KEY_THEME, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)]);
+            theme.setSummary(themeNames[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)]);
         }
+
+        SmartphonePreferencesHandler.forceRefresh();
     }
 
     @Override
@@ -310,5 +360,10 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
 
         super.onPause();
+    }
+
+    private Context getPreferenceManagerContext() {
+        // use this Context to correctly inflate new Preferences added in code
+        return getPreferenceManager().getContext();
     }
 }

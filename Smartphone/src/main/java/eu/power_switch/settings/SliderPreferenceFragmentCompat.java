@@ -91,7 +91,9 @@ public class SliderPreferenceFragmentCompat extends PreferenceDialogFragmentComp
         SliderPreference sliderPreference = getSliderPreference();
 
         if (positiveResult) {
-            sliderPreference.persistInt(seekBar.getProgress());
+            if (sliderPreference.isPersistent()) {
+                sliderPreference.persistInt(seekBar.getProgress());
+            }
             sliderPreference.setSummary(seekBar.getProgress() + " ms");
         }
     }
