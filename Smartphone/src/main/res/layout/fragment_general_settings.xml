@@ -271,6 +271,14 @@
                 style="@style/header_settings"
                 android:text="Logging"/>
 
+            <CheckBox
+                android:id="@+id/checkBox_sendAnonymousCrashData"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:checked="false"
+                android:text="@string/send_anonymous_crash_data"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -75,6 +75,9 @@
             @color/material_drawer_dark_header_selection_text
         </item>
 
+        <!-- Preferences -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
     </style>
 
     <!-- Base Light Theme -->
@@ -130,6 +133,10 @@
         <item name="material_drawer_header_selection_text">
             @color/material_drawer_header_selection_text
         </item>
+
+        <!-- Preferences -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
     </style>
 
     <!-- Base DayNight Theme -->
@@ -185,6 +192,10 @@
         <item name="material_drawer_header_selection_text">
             @color/material_drawer_header_selection_text
         </item>
+
+        <!-- Preferences -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+
     </style>
 
     <!-- Base Dark Blue -->

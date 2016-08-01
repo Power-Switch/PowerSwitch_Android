@@ -171,25 +171,12 @@ public class PowerSwitch extends MultiDexApplication {
         // Configure Log4J Logger
         LogHandler.configureLogger(getApplicationContext());
 
-        // Configure Fabric
-        Fabric.with(this,
-                new Crashlytics.Builder().core(
-                        new CrashlyticsCore.Builder()
-                                .disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds
-                                .build())
-                        .build(),
-                new Answers()
-        );
-
         Log.d("Application init...");
         Log.d("App version: " + getAppVersionDescription(this));
         Log.d("App build time: " + getAppBuildTime(this));
         Log.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
         Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
         Log.d("Device brand/model: " + LogHandler.getDeviceName());
-
-        // Initialize Firebase
-        Firebase.setAndroidContext(this);
 
         // Onetime initialization of handlers for static access
         DatabaseHandler.init(this);
@@ -198,6 +185,23 @@ public class PowerSwitch extends MultiDexApplication {
         WearablePreferencesHandler.init(this);
 
         DeveloperPreferencesHandler.init(this);
+
+        // Configure Fabric
+        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
+
+        if (enableFabric) {
+            Fabric.with(this,
+                    new Crashlytics.Builder().core(
+                            new CrashlyticsCore.Builder()
+                                    .disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds
+                                    .build())
+                            .build(),
+                    new Answers()
+            );
+        }
+
+        // Initialize Firebase
+        Firebase.setAndroidContext(this);
 
 
         // This is where you do your work in the UI thread.

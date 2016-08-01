@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+
+    <string-array name="main_tab_names">
+        <item>@string/rooms</item>
+        <item>@string/scenes</item>
+    </string-array>
+
+    <string-array name="main_tab_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="locales">
+        <item>en</item>
+        <item>de</item>
+    </string-array>
+
+    <!-- General -->
+    <string name="key_startupDefaultTab">startupDefaultTab</string>
+    <string name="title_startupDefaultTab">@string/startup_default_tab</string>
+
+    <string name="key_autodiscover">autoDiscover</string>
+    <string name="title_autodiscover">@string/autodiscover</string>
+    <string name="summary_autodiscover_enabled">Search Gateways on startup</string>
+    <string name="summary_autodiscover_disabled">Do NOT search Gateways on startup</string>
+
+    <string name="key_autoCollapseRooms">autoCollapseRooms</string>
+    <string name="title_autoCollapseRooms">Autocollapse Rooms</string>
+    <string name="summary_autoCollapseRooms_enabled">Collapse Rooms automatically</string>
+    <string name="summary_autoCollapseRooms_disabled">Do NOT collapse Rooms automatically</string>
+
+    <string name="key_autoCollapseTimers">autoCollapseTimers</string>
+    <string name="title_autoCollapseTimers">Autocollapse Timers</string>
+    <string name="summary_autoCollapseTimers_enabled">Collapse Timers automatically</string>
+    <string name="summary_autoCollapseTimers_disabled">Do NOT collapse Timers automatically</string>
+
+    <string name="key_showRoomAllOnOff">showRoomAllOnOff</string>
+    <string name="title_showRoomAllOnOff">Room On/Off</string>
+    <string name="summary_showRoomAllOnOff_enabled">Show On &amp; Off buttons for Rooms</string>
+    <string name="summary_showRoomAllOnOff_disabled">Do NOT show On &amp; Off buttons for Rooms</string>
+
+    <string name="key_useOptionsMenuInsteadOfFab">hideAddFAB</string>
+    <string name="title_useOptionsMenuInsteadOfFab">Hide FABs</string>
+    <string name="summary_useOptionsMenuInsteadOfFab_enabled">Only use options menu</string>
+    <string name="summary_useOptionsMenuInsteadOfFab_disabled">Use both circle buttons and options menu</string>
+
+    <string name="key_highlightLastActivatedButton">highlightLastActivatedButton</string>
+    <string name="title_highlightLastActivatedButton">Indicate current state</string>
+    <string name="summary_highlightLastActivatedButton_enabled">Highlight last activated button</string>
+    <string name="summary_highlightLastActivatedButton_disabled">Do NOT highlight last activated button</string>
+
+    <string name="key_showBackgroundActionToast">showBackgroundActionToast</string>
+    <string name="title_showBackgroundActionToast">Show background notifications</string>
+    <string name="summary_showBackgroundActionToast_enabled">Show toast messages when executing actions in background</string>
+    <string name="summary_showBackgroundActionToast_disabled">Do NOT show toast messages when executing actions in background</string>
+
+    <string name="key_useCompactDrawer">useCompactDrawer</string>
+    <string name="title_useCompactDrawer">Use mini drawer</string>
+    <string name="summary_useCompactDrawer_enabled">Show mini version of navigation drawer</string>
+    <string name="summary_useCompactDrawer_disabled">Show full navigation drawer</string>
+
+    <string name="key_vibrateOnButtonPress">vibrateOnButtonPress</string>
+    <string name="title_vibrateOnButtonPress">Vibrate on button press</string>
+    <string name="summary_vibrateOnButtonPress_enabled">Vibrate</string>
+    <string name="summary_vibrateOnButtonPress_disabled">Do NOT vibrate</string>
+
+    <string name="key_vibrationDuration">vibrationDuration</string>
+    <string name="title_vibrationDuration">Vibration duration</string>
+
+    <!-- History -->
+    <string name="selection_forever">forever</string>
+    <string name="selection_1_year">1 year</string>
+    <string name="selection_6_months">6 months</string>
+    <string name="selection_1_month">1 month</string>
+    <string name="selection_14_days">14 days</string>
+
+    <string-array name="entries_history">
+        <item>@string/selection_forever</item>
+        <item>@string/selection_1_year</item>
+        <item>@string/selection_6_months</item>
+        <item>@string/selection_1_month</item>
+        <item>@string/selection_14_days</item>
+    </string-array>
+
+    <string-array name="entryValues_history">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string name="key_keepHistoryDuration">keepHistoryDuration</string>
+    <string name="title_keepHistoryDuration">Duration to keep history</string>
+
+    <!-- Backup -->
+    <string name="key_backupPath">backupPath</string>
+    <string name="title_backupPath">Backup Path</string>
+
+    <!-- Theme -->
+    <string-array name="theme_names">
+        <item>@string/theme_dark_blue</item>
+        <item>@string/theme_light_blue</item>
+        <item>@string/theme_dayNight_blue</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string name="key_theme">theme</string>
+    <string name="title_theme">Theme</string>
+
+    <!-- Tutorial -->
+    <string name="key_resetTutorial">resetTutorial</string>
+    <string name="title_resetTutorial">@string/reset_tutorial</string>
+    <string name="tutorial_was_reset">Tutorial was reset</string>
+
+    <!-- Logs -->
+    <string name="key_sendAnonymousCrashData">sendAnonymousCrashData</string>
+    <string name="title_sendAnonymousCrashData">Automatic Crash Reporting</string>
+    <string name="summary_sendAnonymousCrashData_enabled">Send anonymous crash data</string>
+    <string name="summary_sendAnonymousCrashData_disabled">Do NOT send anonymous crash data</string>
+
+    <string name="key_sendLogsEmail">sendLogsEmail</string>
+    <string name="title_sendLogsEmail">@string/send_via_mail</string>
+
+</resources>

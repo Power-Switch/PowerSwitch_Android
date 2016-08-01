@@ -18,11 +18,14 @@
 
 package eu.power_switch.gui.dialog;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,11 +43,12 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.gui.treeview.FolderTreeNode;
 import eu.power_switch.gui.treeview.FolderTreeNodeViewHolder;
 import eu.power_switch.gui.treeview.TreeItemFolder;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog used to select a Path on SDCard
@@ -66,6 +70,18 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
         PathChooserDialog fragment = new PathChooserDialog();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    /**
+     * Used to notify Backup Fragment (this) that Backups have changed
+     *
+     * @param context any suitable context
+     */
+    public static void sendBackupPathChangedBroadcast(Context context) {
+        Log.d(PathChooserDialog.class, "sendBackupPathChangedBroadcast");
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     @Override
@@ -130,7 +146,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
     protected void saveCurrentConfigurationToDatabase() {
         SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_BACKUP_PATH, currentPath);
 
-        BackupFragment.sendBackupsChangedBroadcast(getContext());
+        sendBackupPathChangedBroadcast(getContext());
     }
 
     @Override

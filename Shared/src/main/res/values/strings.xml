@@ -93,25 +93,6 @@
     <string name="unknown_error_info">An Exception was raised during the operation of PowerSwitch.
         Use the buttons below to share it with the developer and help improve the App.</string>
 
-
-    <string-array name="main_tab_names">
-        <item>@string/rooms</item>
-        <item>@string/scenes</item>
-    </string-array>
-
-    <string-array name="keep_history_selection_names">
-        <item>@string/selection_forever</item>
-        <item>@string/selection_1_year</item>
-        <item>@string/selection_6_months</item>
-        <item>@string/selection_1_month</item>
-        <item>@string/selection_14_days</item>
-    </string-array>
-
-    <string-array name="locales">
-        <item>en</item>
-        <item>de</item>
-    </string-array>
-
     <!-- supported gateways, brands and models -->
     <string-array name="gateway_array">
         <item>Brematic GWY433</item>

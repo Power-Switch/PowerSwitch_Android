@@ -18,7 +18,12 @@
 
 package eu.power_switch.tutorial;
 
+import android.content.Context;
+import android.view.View;
+
+import eu.power_switch.R;
 import eu.power_switch.shared.constants.TutorialConstants;
+import it.sephiroth.android.library.tooltip.Tooltip;
 
 /**
  * Helper class for Tutorial specific tasks
@@ -50,5 +55,24 @@ public class TutorialHelper {
 
     public static String getPhoneTabKey(String pageTitle) {
         return TutorialConstants.PHONE_TABS_KEY_PREFIX + pageTitle;
+    }
+
+    public static void getTutorialToast(Context context, View anchor) {
+        Tooltip.make(context,
+                new Tooltip.Builder(101)
+                        .anchor(anchor, Tooltip.Gravity.BOTTOM)
+                        .closePolicy(new Tooltip.ClosePolicy()
+                                .insidePolicy(true, false)
+                                .outsidePolicy(true, false), 3000)
+                        .activateDelay(800)
+                        .showDelay(300)
+                        .text(context.getResources(), R.string.tutorial__got_it)
+                        .maxWidth(500)
+                        .withArrow(true)
+                        .withOverlay(true)
+//                        .typeface(mYourCustomFont)
+                        .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
+                        .build()
+        ).show();
     }
 }

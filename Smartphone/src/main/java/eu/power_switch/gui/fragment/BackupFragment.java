@@ -115,7 +115,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             @Override
             public void onClick(View v) {
                 try {
-                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
                         PermissionHelper.showMissingPermissionDialog(getActivity(),
                                 PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
                         return;
@@ -154,7 +154,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
                                         // restart app to apply
                                         getActivity().finish();
-                                        Intent intent = new Intent(getContext(), MainActivity.class);
+                                        Intent intent = new Intent(getActivity(), MainActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
@@ -203,7 +203,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             @Override
             public void onClick(View v) {
                 try {
-                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
                         PermissionHelper.showMissingPermissionDialog(getActivity(),
                                 PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
                         return;
@@ -276,7 +276,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     private void updateUI() {
         textViewBackupPath.setText(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
 
-        if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+        if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
@@ -295,7 +295,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         switch (menuItem.getItemId()) {
             case R.id.create_backup:
                 try {
-                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                    if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
                         PermissionHelper.showMissingPermissionDialog(getActivity(),
                                 PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
                         break;

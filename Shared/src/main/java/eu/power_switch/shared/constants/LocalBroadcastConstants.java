@@ -43,6 +43,7 @@ public class LocalBroadcastConstants {
     public static final String INTENT_APARTMENT_GEOFENCE_CHANGED = "eu.power_switch.apartment_geofence_changed";
     public static final String INTENT_CUSTOM_GEOFENCE_CHANGED = "eu.power_switch.custom_geofence_changed";
     public static final String INTENT_BACKUP_CHANGED = "eu.power_switch.backup_changed";
+    public static final String INTENT_BACKUP_PATH_CHANGED = "eu.power_switch.backup_path_changed";
     public static final String INTENT_HISTORY_CHANGED = "eu.power_switch.history_changed";
 
     public static final String INTENT_SETUP_APARTMENT_CHANGED = "eu.power_switch.setup_apartment_changed";

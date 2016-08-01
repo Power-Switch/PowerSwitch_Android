@@ -32,6 +32,7 @@
     <string name="show_room_all_on_off_buttons">An/Aus Buttons für Räume anzeigen</string>
     <string name="use_menu_instead_of_FABs">Nutze Optionsmenü anstelle von Floating Action Buttons</string>
     <string name="change_backup_path">Pfad ändern</string>
+    <string name="send_anonymous_crash_data">Anonyme Crash Daten senden</string>
 
     <!-- History -->
     <string name="selection_forever">Immer</string>

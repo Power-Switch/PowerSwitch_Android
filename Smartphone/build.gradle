@@ -60,6 +60,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.1.1'
     compile 'com.android.support:gridlayout-v7:24.1.1'
     compile 'com.android.support:support-v4:24.1.1'
+    compile 'com.android.support:preference-v14:24.1.1'
     compile 'com.android.support:design:24.1.1'
     compile 'com.android.support:support-annotations:24.1.1'
     compile 'com.google.android.support:wearable:2.0.0-alpha2'
@@ -80,7 +81,7 @@ dependencies {
 
     // External Libraries
 //    compile 'com.github.deano2390:MaterialShowcaseView:1.0.5'
-    compile project(':library')
+    compile project(':ShowcaseViewLibrary')
 
     // AboutLibraries
     compile('com.mikepenz:aboutlibraries:5.7.1@aar') {
@@ -99,6 +100,7 @@ dependencies {
 
     // Toast like tooltips
     compile 'it.sephiroth.android.library.targettooltip:target-tooltip-library:1.3.15'
+    // compile project(':TargetTooltipLibrary')
 
     // TreeNode library
     compile 'com.github.bmelnychuk:atv:1.2.+'

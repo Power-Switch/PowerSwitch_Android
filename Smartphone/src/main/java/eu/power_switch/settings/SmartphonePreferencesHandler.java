@@ -21,14 +21,13 @@ package eu.power_switch.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
-import android.support.annotation.StringDef;
+import android.support.annotation.Nullable;
 
 import java.io.File;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -39,48 +38,50 @@ import eu.power_switch.shared.log.Log;
  */
 public class SmartphonePreferencesHandler {
 
-    // setting keys
-    public static final String KEY_AUTO_DISCOVER = "autoDiscover";
-    public static final String KEY_BACKUP_PATH = "backupPath";
-    public static final String KEY_STARTUP_DEFAULT_TAB = "startupDefaultTab";
-    public static final String KEY_SHOW_ROOM_ALL_ON_OFF = "showRoomAllOnOff";
-    public static final String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = "highlightLastActivatedButton";
-    public static final String KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB = "hideAddFAB";
-    public static final String KEY_AUTO_COLLAPSE_ROOMS = "autoCollapseRooms";
-    public static final String KEY_AUTO_COLLAPSE_TIMERS = "autoCollapseTimers";
-    public static final String KEY_THEME = "theme";
-    public static final String KEY_USE_COMPACT_DRAWER = "useCompactDrawer";
-    public static final String KEY_VIBRATE_ON_BUTTON_PRESS = "vibrateOnButtonPress";
-    public static final String KEY_VIBRATION_DURATION = "vibrationDuration";
-    public static final String KEY_CURRENT_APARTMENT_ID = "currentApartmentId";
-    public static final String KEY_KEEP_HISTORY_DURATION = "keepHistoryDuration";
-    public static final String KEY_SLEEP_AS_ANDROID_ENABLED = "SLEEP_AS_ANDROID_ENABLED_KEY";
-    public static final String KEY_STOCK_ALARM_CLOCK_ENABLED = "STOCK_ALARM_CLOCK_ENABLED_KEY";
-    public static final String KEY_SHOW_TOAST_IN_BACKGROUND = "KEY_SHOW_TOAST_IN_BACKGROUND";
-
     // default values
-    private static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
-    private static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
-    private static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
-    private static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
-    private static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
-    private static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants
+    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
+    public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
+    public static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
+    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
+    public static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants
             .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
-    private static final int DEFAULT_VALUE_STARTUP_TAB = SettingsConstants.ROOMS_TAB_INDEX;
-    private static final boolean DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED = true;
-    private static final boolean DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED = true;
-    private static final int DEFAULT_VALUE_KEEP_HISTORY_DURATION = SettingsConstants.KEEP_HISTORY_FOREVER;
-    private static final long DEFAULT_VALUE_CURRENT_APARTMENT_ID = SettingsConstants.INVALID_APARTMENT_ID;
-    private static final boolean DEFAULT_VALUE_USE_COMPACT_DRAWER = false;
-    private static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS = false;
-    private static final boolean DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB = false;
-    private static final String DEFAULT_VALUE_BACKUP_PATH = Environment.getExternalStorageDirectory()
+    public static final int DEFAULT_VALUE_STARTUP_TAB = SettingsConstants.ROOMS_TAB_INDEX;
+    public static final boolean DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED = true;
+    public static final boolean DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED = true;
+    public static final int DEFAULT_VALUE_KEEP_HISTORY_DURATION = SettingsConstants.KEEP_HISTORY_FOREVER;
+    public static final long DEFAULT_VALUE_CURRENT_APARTMENT_ID = SettingsConstants.INVALID_APARTMENT_ID;
+    public static final boolean DEFAULT_VALUE_USE_COMPACT_DRAWER = false;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS = false;
+    public static final boolean DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB = false;
+    public static final String DEFAULT_VALUE_BACKUP_PATH = Environment.getExternalStorageDirectory()
             .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME;
-    private static final boolean DEFAULT_VALUE_AUTO_DISCOVER = true;
-    private static final boolean DEFAULT_VALUE_TOAST_IN_BACKGROUND = true;
+    public static final boolean DEFAULT_VALUE_AUTO_DISCOVER = true;
+    public static final boolean DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND = true;
+    public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA = true;
 
+    public static String KEY_AUTO_DISCOVER;
+    public static String KEY_BACKUP_PATH;
+    public static String KEY_STARTUP_DEFAULT_TAB;
+    public static String KEY_SHOW_ROOM_ALL_ON_OFF;
+    public static String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+    public static String KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
+    public static String KEY_AUTO_COLLAPSE_ROOMS;
+    public static String KEY_AUTO_COLLAPSE_TIMERS;
+    public static String KEY_THEME;
+    public static String KEY_USE_COMPACT_DRAWER;
+    public static String KEY_VIBRATE_ON_BUTTON_PRESS;
+    public static String KEY_VIBRATION_DURATION;
+    public static String KEY_CURRENT_APARTMENT_ID;
+    public static String KEY_KEEP_HISTORY_DURATION;
+    public static String KEY_SLEEP_AS_ANDROID_ENABLED;
+    public static String KEY_STOCK_ALARM_CLOCK_ENABLED;
+    public static String KEY_SHOW_TOAST_IN_BACKGROUND;
+    public static String KEY_SEND_ANONYMOUS_CRASH_DATA;
 
     private static Context context;
+
+    // setting keys
     private static SharedPreferences sharedPreferences;
     private static Map<String, ?> cachedValues;
 
@@ -106,7 +107,8 @@ public class SmartphonePreferencesHandler {
         defaultValueMap.put(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB, DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         defaultValueMap.put(KEY_BACKUP_PATH, DEFAULT_VALUE_BACKUP_PATH);
         defaultValueMap.put(KEY_AUTO_DISCOVER, DEFAULT_VALUE_AUTO_DISCOVER);
-        defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_TOAST_IN_BACKGROUND);
+        defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
+        defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
     }
 
     /**
@@ -131,9 +133,56 @@ public class SmartphonePreferencesHandler {
                 SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         forceRefresh();
 
+        initializePublicKeys();
+        initializeDefaultValueMap();
+
         for (String key : cachedValues.keySet()) {
             Log.d(SmartphonePreferencesHandler.class, key + ": " + get(key));
         }
+    }
+
+    private static void initializePublicKeys() {
+        KEY_AUTO_DISCOVER = context.getString(R.string.key_autodiscover);
+        KEY_BACKUP_PATH = context.getString(R.string.key_backupPath);
+        KEY_STARTUP_DEFAULT_TAB = context.getString(R.string.key_startupDefaultTab);
+        KEY_SHOW_ROOM_ALL_ON_OFF = context.getString(R.string.key_showRoomAllOnOff);
+        KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = context.getString(R.string.key_highlightLastActivatedButton);
+        KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB = context.getString(R.string.key_useOptionsMenuInsteadOfFab);
+        KEY_AUTO_COLLAPSE_ROOMS = context.getString(R.string.key_autoCollapseRooms);
+        KEY_AUTO_COLLAPSE_TIMERS = context.getString(R.string.key_autoCollapseTimers);
+        KEY_THEME = context.getString(R.string.key_theme);
+        KEY_USE_COMPACT_DRAWER = context.getString(R.string.key_useCompactDrawer);
+        KEY_VIBRATE_ON_BUTTON_PRESS = context.getString(R.string.key_vibrateOnButtonPress);
+        KEY_VIBRATION_DURATION = context.getString(R.string.key_vibrationDuration);
+        KEY_CURRENT_APARTMENT_ID = "currentApartmentId";
+        KEY_KEEP_HISTORY_DURATION = context.getString(R.string.key_keepHistoryDuration);
+        KEY_SLEEP_AS_ANDROID_ENABLED = "SLEEP_AS_ANDROID_ENABLED_KEY";
+        KEY_STOCK_ALARM_CLOCK_ENABLED = "STOCK_ALARM_CLOCK_ENABLED_KEY";
+        KEY_SHOW_TOAST_IN_BACKGROUND = context.getString(R.string.key_showBackgroundActionToast);
+        KEY_SEND_ANONYMOUS_CRASH_DATA = context.getString(R.string.key_sendAnonymousCrashData);
+    }
+
+    private static void initializeDefaultValueMap() {
+        defaultValueMap = new HashMap<>();
+        defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
+        defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        defaultValueMap.put(KEY_AUTO_COLLAPSE_ROOMS, DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
+        defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
+        defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
+        defaultValueMap.put(KEY_VIBRATION_DURATION, DEFAULT_VALUE_VIBRATION_DURATION);
+        defaultValueMap.put(KEY_STARTUP_DEFAULT_TAB, DEFAULT_VALUE_STARTUP_TAB);
+
+        defaultValueMap.put(KEY_STOCK_ALARM_CLOCK_ENABLED, DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED);
+        defaultValueMap.put(KEY_SLEEP_AS_ANDROID_ENABLED, DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED);
+        defaultValueMap.put(KEY_KEEP_HISTORY_DURATION, DEFAULT_VALUE_KEEP_HISTORY_DURATION);
+        defaultValueMap.put(KEY_CURRENT_APARTMENT_ID, DEFAULT_VALUE_CURRENT_APARTMENT_ID);
+        defaultValueMap.put(KEY_USE_COMPACT_DRAWER, DEFAULT_VALUE_USE_COMPACT_DRAWER);
+        defaultValueMap.put(KEY_AUTO_COLLAPSE_TIMERS, DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS);
+        defaultValueMap.put(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB, DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        defaultValueMap.put(KEY_BACKUP_PATH, DEFAULT_VALUE_BACKUP_PATH);
+        defaultValueMap.put(KEY_AUTO_DISCOVER, DEFAULT_VALUE_AUTO_DISCOVER);
+        defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
+        defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
     }
 
     /**
@@ -153,10 +202,14 @@ public class SmartphonePreferencesHandler {
      *
      * @param settingsKey Key of setting
      * @param <T>         type of expected return value
-     * @return
+     * @return settings value
      */
-    public static <T> T get(@Key String settingsKey) throws ClassCastException {
+    public static <T> T get(String settingsKey) throws ClassCastException {
         // Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
+
+        if (!defaultValueMap.containsKey(settingsKey)) {
+            Log.w("Setting \"" + settingsKey + "\" has no associated default value");
+        }
 
         Object value = cachedValues.get(settingsKey);
 
@@ -177,7 +230,8 @@ public class SmartphonePreferencesHandler {
         }
     }
 
-    private static Object getDefaultValue(@Key String settingsKey) {
+    @Nullable
+    private static Object getDefaultValue(String settingsKey) {
         return defaultValueMap.get(settingsKey);
     }
 
@@ -188,7 +242,7 @@ public class SmartphonePreferencesHandler {
      * @param newValue    new value
      * @param <T>
      */
-    public static <T> void set(@Key String settingsKey, T newValue) {
+    public static <T> void set(String settingsKey, T newValue) {
         Log.d(SmartphonePreferencesHandler.class, "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -212,24 +266,4 @@ public class SmartphonePreferencesHandler {
         forceRefresh();
     }
 
-    @StringDef({KEY_SHOW_ROOM_ALL_ON_OFF,
-            KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
-            KEY_AUTO_COLLAPSE_ROOMS,
-            KEY_THEME,
-            KEY_VIBRATE_ON_BUTTON_PRESS,
-            KEY_VIBRATION_DURATION,
-            KEY_STARTUP_DEFAULT_TAB,
-            KEY_STOCK_ALARM_CLOCK_ENABLED,
-            KEY_SLEEP_AS_ANDROID_ENABLED,
-            KEY_KEEP_HISTORY_DURATION,
-            KEY_CURRENT_APARTMENT_ID,
-            KEY_USE_COMPACT_DRAWER,
-            KEY_AUTO_COLLAPSE_TIMERS,
-            KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB,
-            KEY_BACKUP_PATH,
-            KEY_AUTO_DISCOVER,
-            KEY_SHOW_TOAST_IN_BACKGROUND})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Key {
-    }
 }

@@ -81,6 +81,7 @@ public class GeneralSettingsFragment extends Fragment {
     private CheckBox hideAddFAB;
     private CheckBox highlightLastActivatedButton;
     private CheckBox showToastInBackground;
+    private CheckBox sendAnonymousCrashData;
 
     private LinearLayout vibrationDurationLayout;
     private CheckBox vibrateOnButtonPress;
@@ -141,7 +142,12 @@ public class GeneralSettingsFragment extends Fragment {
                     case R.id.checkBox_highlightLastActivatedButton:
                         SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, isChecked);
                         // force receiver widget update
-                        ReceiverWidgetProvider.forceWidgetUpdate(getContext());
+                        ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+                        break;
+                    case R.id.checkBox_sendAnonymousCrashData:
+                        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, isChecked);
+
+                        // TODO: Disable Fabric at RUNTIME, currently not possible :(
                         break;
                     default:
                         break;
@@ -179,7 +185,7 @@ public class GeneralSettingsFragment extends Fragment {
 
 
         startupDefaultTab = (Spinner) rootView.findViewById(R.id.spinner_startupDefaultTab);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.main_tab_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startupDefaultTab.setAdapter(adapter);
@@ -238,8 +244,8 @@ public class GeneralSettingsFragment extends Fragment {
         });
 
         keepHistoryDuration = (Spinner) rootView.findViewById(R.id.spinner_keep_history);
-        ArrayAdapter<CharSequence> adapterHistory = ArrayAdapter.createFromResource(getContext(),
-                R.array.keep_history_selection_names, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapterHistory = ArrayAdapter.createFromResource(getActivity(),
+                R.array.entryValues_history, android.R.layout.simple_spinner_item);
         adapterHistory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         keepHistoryDuration.setAdapter(adapterHistory);
         keepHistoryDuration.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -259,7 +265,7 @@ public class GeneralSettingsFragment extends Fragment {
         button_changeBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getContext())) {
+                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
                     Snackbar snackbar = Snackbar.make(rootView, R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
                     snackbar.setAction(R.string.grant, new View.OnClickListener() {
                         @Override
@@ -295,7 +301,7 @@ public class GeneralSettingsFragment extends Fragment {
                 }
 
                 getActivity().finish();
-                Intent intent = new Intent(getContext(), MainActivity.class);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -310,6 +316,10 @@ public class GeneralSettingsFragment extends Fragment {
 
         radioButtonDayNightBlue = (RadioButton) rootView.findViewById(R.id.radioButton_dayNight_blue);
         radioButtonDayNightBlue.setOnClickListener(onClickListener);
+
+
+        sendAnonymousCrashData = (CheckBox) rootView.findViewById(R.id.checkBox_sendAnonymousCrashData);
+        sendAnonymousCrashData.setOnCheckedChangeListener(onCheckedChangeListener);
 
         sendLogsProgress = (ProgressBar) rootView.findViewById(R.id.sendLogsProgress);
         sendLogs = (Button) rootView.findViewById(R.id.button_sendLogs);
@@ -347,7 +357,7 @@ public class GeneralSettingsFragment extends Fragment {
                                 });
                                 snackbar.show();
                             } else {
-                                StatusMessageHandler.showErrorMessage(getContext(), booleanAsyncTaskResult.getException());
+                                StatusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult.getException());
                             }
                         }
 
@@ -362,7 +372,7 @@ public class GeneralSettingsFragment extends Fragment {
         resetTutorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MaterialShowcaseView.resetAll(getContext());
+                MaterialShowcaseView.resetAll(getActivity());
             }
         });
 
@@ -414,6 +424,8 @@ public class GeneralSettingsFragment extends Fragment {
             default:
                 break;
         }
+
+        sendAnonymousCrashData.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA));
     }
 
     @Override
