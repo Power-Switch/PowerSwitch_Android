@@ -36,7 +36,7 @@
 
     <!-- General -->
     <string name="key_startupDefaultTab">startupDefaultTab</string>
-    <string name="title_startupDefaultTab">Startup default tab</string>
+    <string name="title_startupDefaultTab">Default tab</string>
 
     <string name="key_autodiscover">autoDiscover</string>
     <string name="title_autodiscover">Gateway autodiscovery</string>
