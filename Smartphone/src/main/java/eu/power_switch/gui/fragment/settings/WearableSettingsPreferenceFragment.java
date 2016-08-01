@@ -103,7 +103,7 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
 
         theme = (IntListPreference) findPreference(WearablePreferencesHandler.KEY_THEME);
         theme.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_THEME);
-        String[] themeNames = getResources().getStringArray(R.array.theme_names);
+        String[] themeNames = getResources().getStringArray(R.array.theme_names_wear);
         theme.setSummary(themeNames[WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME)]);
 
     }
@@ -119,7 +119,7 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
         vibrationDuration.setSummary(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
 
         theme.setValueIndex(WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME));
-        String[] themeNames = getResources().getStringArray(R.array.theme_names);
+        String[] themeNames = getResources().getStringArray(R.array.theme_names_wear);
         theme.setSummary(themeNames[WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME)]);
     }
 
@@ -131,7 +131,7 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
         } else if (WearablePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
             vibrationDuration.setSummary(sharedPreferences.getInt(WearablePreferencesHandler.KEY_VIBRATION_DURATION, WearablePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
         } else if (WearablePreferencesHandler.KEY_THEME.equals(key)) {
-            String[] themeNames = getResources().getStringArray(R.array.theme_names);
+            String[] themeNames = getResources().getStringArray(R.array.theme_names_wear);
             theme.setSummary(themeNames[sharedPreferences.getInt(WearablePreferencesHandler.KEY_THEME, WearablePreferencesHandler.DEFAULT_VALUE_THEME)]);
         }
 
