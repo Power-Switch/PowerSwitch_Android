@@ -74,13 +74,13 @@
     <string name="summary_showBackgroundActionToast_disabled">Do NOT show toast messages when executing actions in background</string>
 
     <string name="key_useCompactDrawer">useCompactDrawer</string>
-    <string name="title_useCompactDrawer">Use mini drawer</string>
+    <string name="title_useCompactDrawer">Mini drawer</string>
     <string name="summary_useCompactDrawer_enabled">Show mini version of navigation drawer</string>
     <string name="summary_useCompactDrawer_disabled">Show full navigation drawer</string>
 
     <string name="key_vibrateOnButtonPress">vibrateOnButtonPress</string>
-    <string name="title_vibrateOnButtonPress">Vibrate on button press</string>
-    <string name="summary_vibrateOnButtonPress_enabled">Vibrate</string>
+    <string name="title_vibrateOnButtonPress">Vibrate</string>
+    <string name="summary_vibrateOnButtonPress_enabled">Vibrate on button press</string>
     <string name="summary_vibrateOnButtonPress_disabled">Do NOT vibrate</string>
 
     <string name="key_vibrationDuration">vibrationDuration</string>
