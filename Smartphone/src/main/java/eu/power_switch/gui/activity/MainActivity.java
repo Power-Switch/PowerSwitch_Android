@@ -371,8 +371,11 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_ROOMS_SCENES, getString(R.string.menu_rooms_scenes),
-                                    RoomSceneTabFragment.class.newInstance());
+                            startFragmentTransaction(IDENTIFIER_ROOMS_SCENES,
+                                    getString(R.string.menu_rooms_scenes),
+                                    RoomSceneTabFragment.newInstance(
+                                            SmartphonePreferencesHandler.<Integer>get(
+                                                    SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);

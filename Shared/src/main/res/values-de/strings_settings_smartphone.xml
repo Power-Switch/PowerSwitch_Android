@@ -20,7 +20,7 @@
 <resources>
 
     <!-- General -->
-    <string name="title_startupDefaultTab">Default Tab beim Start</string>
+    <string name="title_startupDefaultTab">Standard Tab</string>
 
     <string name="title_autodiscover">Automatische Gatewaysuche</string>
     <string name="summary_autodiscover_enabled">Suche beim Start nach Gateways</string>
