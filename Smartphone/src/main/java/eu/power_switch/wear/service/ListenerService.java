@@ -35,7 +35,6 @@ import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.fragment.settings.WearableSettingsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
@@ -152,7 +151,6 @@ public class ListenerService extends WearableListenerService {
                         ArrayList<DataMap> settings = dataMapItem.getDataMap()
                                 .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
                         CommunicationHelper.extractSettings(settings);
-                        WearableSettingsFragment.notifySettingsChanged(this);
                     }
                 }
             }

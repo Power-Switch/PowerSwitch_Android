@@ -326,6 +326,13 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         } else if (SmartphonePreferencesHandler.KEY_THEME.equals(key)) {
             String[] themeNames = getResources().getStringArray(R.array.theme_names);
             theme.setSummary(themeNames[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)]);
+
+            // restart activity
+            getActivity().finish();
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
 
         SmartphonePreferencesHandler.forceRefresh();

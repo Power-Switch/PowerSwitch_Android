@@ -125,17 +125,9 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB.equals(key)) {
-            String[] mainTabNames = getResources().getStringArray(R.array.wear_tab_names);
-            startupDefaultTab.setSummary(mainTabNames[sharedPreferences.getInt(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB, WearablePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)]);
-        } else if (WearablePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
-            vibrationDuration.setSummary(sharedPreferences.getInt(WearablePreferencesHandler.KEY_VIBRATION_DURATION, WearablePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
-        } else if (WearablePreferencesHandler.KEY_THEME.equals(key)) {
-            String[] themeNames = getResources().getStringArray(R.array.theme_names_wear);
-            theme.setSummary(themeNames[sharedPreferences.getInt(WearablePreferencesHandler.KEY_THEME, WearablePreferencesHandler.DEFAULT_VALUE_THEME)]);
-        }
-
         WearablePreferencesHandler.forceRefresh();
+
+        updateUI();
 
         // sync settings with wearable app
         UtilityService.forceWearSettingsUpdate(getContext());

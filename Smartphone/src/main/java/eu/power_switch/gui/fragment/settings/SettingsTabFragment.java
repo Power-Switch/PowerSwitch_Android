@@ -188,7 +188,7 @@ public class SettingsTabFragment extends Fragment {
                     //return new WearableSettingsFragment();
                     return new WearableSettingsPreferenceFragment();
                 default:
-                    return new GeneralSettingsFragment();
+                    return new GeneralSettingsPreferenceFragment();
             }
         }
 
