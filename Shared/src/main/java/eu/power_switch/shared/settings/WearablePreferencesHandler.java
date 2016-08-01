@@ -54,14 +54,14 @@ public class WearablePreferencesHandler {
     public static final String KEY_VIBRATION_DURATION = "vibrationDuration";
 
     // default values
-    private static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
-    private static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
-    private static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
-    private static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
-    private static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
-    private static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants
+    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
+    public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
+    public static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
+    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
+    public static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants
             .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
-    private static final int DEFAULT_VALUE_STARTUP_TAB = 0;
+    public static final int DEFAULT_VALUE_STARTUP_TAB = 0;
 
     private static SharedPreferences sharedPreferences;
     private static Map<String, ?> cachedValues;

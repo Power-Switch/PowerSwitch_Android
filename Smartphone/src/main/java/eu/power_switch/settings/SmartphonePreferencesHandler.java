@@ -183,6 +183,11 @@ public class SmartphonePreferencesHandler {
         defaultValueMap.put(KEY_AUTO_DISCOVER, DEFAULT_VALUE_AUTO_DISCOVER);
         defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
         defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
+
+        for (String key : defaultValueMap.keySet()) {
+            // initialize missing default values
+            get(key);
+        }
     }
 
     /**
@@ -207,13 +212,16 @@ public class SmartphonePreferencesHandler {
     public static <T> T get(String settingsKey) throws ClassCastException {
         // Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
 
-        if (!defaultValueMap.containsKey(settingsKey)) {
-            Log.w("Setting \"" + settingsKey + "\" has no associated default value");
-        }
-
         Object value = cachedValues.get(settingsKey);
 
         if (value == null) {
+            if (!defaultValueMap.containsKey(settingsKey)) {
+                Log.w("Setting \"" + settingsKey + "\" has no associated default value");
+            } else {
+                // set default value
+                set(settingsKey, getDefaultValue(settingsKey));
+                forceRefresh();
+            }
             return (T) getDefaultValue(settingsKey);
         } else {
             // special treatment for this key, to make playstore mode possible

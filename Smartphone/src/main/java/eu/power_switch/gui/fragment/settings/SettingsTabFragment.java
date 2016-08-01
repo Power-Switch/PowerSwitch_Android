@@ -185,7 +185,8 @@ public class SettingsTabFragment extends Fragment {
                     return new GatewaySettingsFragment();
 //                    return new GeneralSettingsFragment();
                 case SettingsConstants.WEARABLE_TAB_INDEX:
-                    return new WearableSettingsFragment();
+                    //return new WearableSettingsFragment();
+                    return new WearableSettingsPreferenceFragment();
                 default:
                     return new GeneralSettingsFragment();
             }

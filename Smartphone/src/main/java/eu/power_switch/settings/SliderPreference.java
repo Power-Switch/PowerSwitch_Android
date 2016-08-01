@@ -77,10 +77,4 @@ public class SliderPreference extends DialogPreference {
         super.setDependency(dependencyKey);
     }
 
-    @Override
-    public void notifyDependencyChange(boolean disableDependents) {
-        super.notifyDependencyChange(disableDependents);
-
-        setEnabled(!disableDependents);
-    }
 }

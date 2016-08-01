@@ -41,7 +41,7 @@
             <TextView
                 android:id="@+id/TextView_wearableSettings"
                 style="@style/header_settings"
-                android:text="@string/wearable_settings"/>
+                android:text="@string/general"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

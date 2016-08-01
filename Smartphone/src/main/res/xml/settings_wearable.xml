@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="category_general"
+        android:title="@string/general">
+
+        <eu.power_switch.settings.IntListPreference
+            android:entries="@array/wearable_tab_names"
+            android:entryValues="@array/wearable_tab_values"
+            android:key="@string/key_startupDefaultTab"
+            android:title="@string/title_startupDefaultTab"/>
+
+        <SwitchPreference
+            android:key="@string/key_autoCollapseRooms"
+            android:title="@string/title_autoCollapseRooms"/>
+
+        <SwitchPreference
+            android:key="@string/key_highlightLastActivatedButton"
+            android:title="@string/title_highlightLastActivatedButton"/>
+
+        <SwitchPreference
+            android:key="@string/key_vibrateOnButtonPress"
+            android:title="@string/title_vibrateOnButtonPress"/>
+
+        <eu.power_switch.settings.SliderPreference
+            android:dependency="@string/key_vibrateOnButtonPress"
+            android:key="@string/key_vibrationDuration"
+            android:title="@string/title_vibrationDuration"/>
+
+    </PreferenceCategory>
+
+    <!-- Theme -->
+    <PreferenceCategory
+        android:title="@string/theme">
+
+        <eu.power_switch.settings.IntListPreference
+            android:entries="@array/theme_names_wear"
+            android:entryValues="@array/theme_values_wear"
+            android:key="@string/key_theme"
+            android:title="@string/title_theme"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
