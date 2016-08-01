@@ -36,10 +36,10 @@
 
     <!-- General -->
     <string name="key_startupDefaultTab">startupDefaultTab</string>
-    <string name="title_startupDefaultTab">@string/startup_default_tab</string>
+    <string name="title_startupDefaultTab">Startup default tab</string>
 
     <string name="key_autodiscover">autoDiscover</string>
-    <string name="title_autodiscover">@string/autodiscover</string>
+    <string name="title_autodiscover">Gateway autodiscovery</string>
     <string name="summary_autodiscover_enabled">Search Gateways on startup</string>
     <string name="summary_autodiscover_disabled">Do NOT search Gateways on startup</string>
 
@@ -134,7 +134,7 @@
 
     <!-- Tutorial -->
     <string name="key_resetTutorial">resetTutorial</string>
-    <string name="title_resetTutorial">@string/reset_tutorial</string>
+    <string name="title_resetTutorial">Reset Tutorial</string>
     <string name="tutorial_was_reset">Tutorial was reset</string>
 
     <!-- Logs -->

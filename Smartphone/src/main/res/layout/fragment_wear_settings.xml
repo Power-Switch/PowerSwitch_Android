@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="8dp"
-                    android:text="@string/startup_default_tab"/>
+                    android:text="@string/title_startupDefaultTab"/>
 
                 <Spinner
                     android:id="@+id/spinner_startupDefaultTab"
@@ -67,14 +67,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
-                android:text="@string/auto_collapse_rooms"/>
+                android:text="@string/title_autoCollapseRooms"/>
 
             <CheckBox
                 android:id="@+id/checkBox_highlightLastActivatedButton"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
-                android:text="@string/highlight_last_activated_button"/>
+                android:text="@string/title_highlightLastActivatedButton"/>
 
             <CheckBox
                 android:id="@+id/checkBox_vibrateOnButtonPress"
@@ -82,7 +82,7 @@
                 android:layout_height="48dp"
                 android:layout_marginBottom="4dp"
                 android:checked="false"
-                android:text="@string/vibrate_on_button_press"/>
+                android:text="@string/title_vibrateOnButtonPress"/>
 
             <LinearLayout
                 android:id="@+id/linearLayout_vibrationDuration"
@@ -96,14 +96,13 @@
                     android:layout_height="match_parent"
                     android:layout_margin="4dp"
                     android:gravity="center"
-                    android:text="@string/duration_title"/>
+                    android:text="@string/title_vibrationDuration"/>
 
                 <EditText
                     android:id="@+id/editText_vibrationDuration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:hint="@string/haptic_feedback_duration_hint"
                     android:inputType="number"
                     android:maxLength="3"/>
 

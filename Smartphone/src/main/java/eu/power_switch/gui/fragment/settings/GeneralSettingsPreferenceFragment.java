@@ -200,7 +200,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
                 MaterialShowcaseView.resetAll(getActivity());
 
                 new AlertDialog.Builder(getContext())
-                        .setTitle(R.string.reset_tutorial)
+                        .setTitle(R.string.title_resetTutorial)
                         .setMessage(R.string.tutorial_was_reset)
                         .setNeutralButton(R.string.close, null)
                         .show();

@@ -85,7 +85,7 @@ public class SettingsFragment extends Fragment {
 
         SelectOneSettingsItem item0 = new SelectOneSettingsItem(getActivity(),
                 IconicsHelper.getTabsIcon(getActivity()),
-                R.string.startup_default_tab,
+                R.string.title_startupDefaultTab,
                 WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
                 R.array.wear_tab_names) {
 
@@ -94,17 +94,17 @@ public class SettingsFragment extends Fragment {
         SettingsItem item1 = new BooleanSettingsItem(
                 getActivity(),
                 IconicsHelper.getAutocollapseRoomsIcon(getActivity()),
-                R.string.auto_collapse_rooms,
+                R.string.title_autoCollapseRooms,
                 WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
         SettingsItem item2 = new BooleanSettingsItem(
                 getActivity(),
                 IconicsHelper.getHistoryIcon(getActivity()),
-                R.string.highlight_last_activated_button,
+                R.string.title_highlightLastActivatedButton,
                 WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
         SettingsItem item3 = new BooleanSettingsItem(
                 getActivity(),
                 IconicsHelper.getVibrationIcon(getActivity()),
-                R.string.vibrate_on_button_press,
+                R.string.title_vibrateOnButtonPress,
                 WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
 
         settings.add(item0);

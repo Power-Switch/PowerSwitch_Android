@@ -73,7 +73,7 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         WearableListView wearableListView = (WearableListView) findViewById(R.id.listView);
         final SelectOneSettingsItem selectOneSettingsItem = new SelectOneSettingsItem(this,
                 IconicsHelper.getTabsIcon(this),
-                R.string.startup_default_tab,
+                R.string.title_startupDefaultTab,
                 WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB,
                 R.array.wear_tab_names) {
         };

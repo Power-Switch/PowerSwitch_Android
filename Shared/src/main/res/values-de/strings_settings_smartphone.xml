@@ -20,9 +20,9 @@
 <resources>
 
     <!-- General -->
-    <string name="title_startupDefaultTab">@string/startup_default_tab</string>
+    <string name="title_startupDefaultTab">Default Tab beim Start</string>
 
-    <string name="title_autodiscover">@string/autodiscover</string>
+    <string name="title_autodiscover">Automatische Gatewaysuche</string>
     <string name="summary_autodiscover_enabled">Suche beim Start nach Gateways</string>
     <string name="summary_autodiscover_disabled">Suche beim Start NICHT nach Gateways</string>
 
@@ -76,7 +76,7 @@
     <string name="title_theme">Theme</string>
 
     <!-- Tutorial -->
-    <string name="title_resetTutorial">@string/reset_tutorial</string>
+    <string name="title_resetTutorial">Tutorial zurücksetzen</string>
     <string name="tutorial_was_reset">Tutorial wurde zurückgesetzt</string>
 
     <!-- Logs -->

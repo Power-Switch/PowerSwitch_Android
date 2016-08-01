@@ -28,7 +28,7 @@
             android:entries="@array/main_tab_names"
             android:entryValues="@array/main_tab_values"
             android:key="@string/key_startupDefaultTab"
-            android:title="@string/startup_default_tab"/>
+            android:title="@string/title_startupDefaultTab"/>
 
         <SwitchPreference
             android:key="@string/key_autodiscover"

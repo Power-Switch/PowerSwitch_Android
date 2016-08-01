@@ -23,46 +23,20 @@
     <string name="general">Allgemein</string>
 
     <!-- settings -->
-    <string name="general_settings">Allgemeine Einstellungen</string>
-    <string name="startup_default_tab">Standard Tab beim Start</string>
     <string name="wearable_settings">Wearable Einstellungen</string>
-    <string name="autodiscover">Automatisch nach Gateways suchen</string>
-    <string name="auto_collapse_rooms">Automatisch alle Räume zusammenklappen</string>
-    <string name="auto_collapse_timers">Automatisch alle Timer zusammenklappen</string>
-    <string name="show_room_all_on_off_buttons">An/Aus Buttons für Räume anzeigen</string>
-    <string name="use_menu_instead_of_FABs">Nutze Optionsmenü anstelle von Floating Action Buttons</string>
-    <string name="change_backup_path">Pfad ändern</string>
-    <string name="send_anonymous_crash_data">Anonyme Crash Daten senden</string>
-
-    <!-- History -->
-    <string name="selection_forever">Immer</string>
-    <string name="selection_1_year">1 Jahr</string>
-    <string name="selection_6_months">6 Monate</string>
-    <string name="selection_1_month">1 Monat</string>
-    <string name="selection_14_days">14 Tage</string>
-    <string name="keep_history_for">Behalte Verlauf für </string>
 
     <!-- Themes -->
     <string name="theme">Theme</string>
     <string name="theme_dark_blue">Dunkel Blau</string>
-    <string name="theme_dark_red">Dunkel Rot</string>
     <string name="theme_light_blue">Hell Blau</string>
-    <string name="theme_light_red">Hell Rot</string>
     <string name="theme_dayNight_blue">Tag/Nacht Blau</string>
 
     <string name="create_gateway">Gateway erstellen</string>
     <string name="search_gateway">Gateway suchen</string>
-    <string name="draw_room_buttons">Zeige Raum An/Aus Buttons</string>
 
-    <string name="show_toast_when_not_in_foreground">Zeige Toast Benachrichtigung bei Aktionen im Hintergrund</string>
-
-    <string name="vibrate_on_button_press">Vibration bei Tastendruck</string>
-    <string name="duration_title">Dauer:</string>
-    <string name="highlight_last_activated_button">Zuletzt aktivierten Button hervorheben</string>
     <string name="gateways">Gateways</string>
 
     <string name="tutorial">Hilfe</string>
-    <string name="reset_tutorial">Hilfe erneut anzeigen</string>
 
     <string name="autodiscover_response_message">Neu: %1$d, Bekannt: %2$d, Unbekannt: %3$d</string>
 
