@@ -27,6 +27,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.ArrayRes;
 import android.support.design.widget.Snackbar;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.ActivityCompat;
@@ -41,6 +42,8 @@ import android.support.v7.preference.PreferenceScreen;
 import android.view.View;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
@@ -88,9 +91,9 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
     private Calendar devMenuFirstClickTime;
     private int devMenuClickCounter;
-    private String[] themeNames;
-    private String[] mainTabNames;
-    private String[] historyValues;
+    private Map<Integer, String> mainTabsMap;
+    private Map<Integer, String> keepHistoryMap;
+    private Map<Integer, String> themeMap;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -119,8 +122,9 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         startupDefaultTab = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
         startupDefaultTab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
-        mainTabNames = getResources().getStringArray(R.array.main_tab_names);
-        startupDefaultTab.setSummary(mainTabNames[SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)]);
+
+        mainTabsMap = getListPreferenceEntryValueMap(R.array.main_tab_values, R.array.main_tab_names);
+        startupDefaultTab.setSummary(mainTabsMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
 
         autodiscover = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
         autodiscover.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_DISCOVER);
@@ -168,8 +172,8 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         keepHistoryDuration = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION);
         keepHistoryDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION);
-        historyValues = getResources().getStringArray(R.array.entries_history);
-        keepHistoryDuration.setSummary(historyValues[SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)]);
+        keepHistoryMap = getListPreferenceEntryValueMap(R.array.entryValues_history, R.array.entries_history);
+        keepHistoryDuration.setSummary(keepHistoryMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)));
 
         final Fragment fragment = this;
         backupPath = findPreference(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
@@ -202,8 +206,8 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         theme = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_THEME);
         theme.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_THEME);
-        themeNames = getResources().getStringArray(R.array.theme_names);
-        theme.setSummary(themeNames[SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)]);
+        themeMap = getListPreferenceEntryValueMap(R.array.theme_values, R.array.theme_names);
+        theme.setSummary(themeMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)));
 
         resetTutial = findPreference(getString(R.string.key_resetTutorial));
         resetTutial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -326,18 +330,38 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         }
     }
 
+    /**
+     * Gets a Map from two array resources
+     *
+     * @param valueRes values stored in preferences
+     * @param nameRes  name/description of this option used in view
+     * @return Map from stored value -> display name
+     */
+    private Map<Integer, String> getListPreferenceEntryValueMap(@ArrayRes int valueRes, @ArrayRes int nameRes) {
+        Map<Integer, String> map = new HashMap<>();
+
+        String[] values = getResources().getStringArray(valueRes);
+        String[] names = getResources().getStringArray(nameRes);
+
+        for (int i = 0; i < values.length; i++) {
+            map.put(Integer.valueOf(values[i]), names[i]);
+        }
+
+        return map;
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION.equals(key)) {
-            keepHistoryDuration.setSummary(historyValues[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION)]);
+            keepHistoryDuration.setSummary(keepHistoryMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION)));
         } else if (SmartphonePreferencesHandler.KEY_BACKUP_PATH.equals(key)) {
             backupPath.setSummary(sharedPreferences.getString(key, SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH));
         } else if (SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB.equals(key)) {
-            startupDefaultTab.setSummary(mainTabNames[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)]);
+            startupDefaultTab.setSummary(mainTabsMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)));
         } else if (SmartphonePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
             vibrationDuration.setSummary(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
         } else if (SmartphonePreferencesHandler.KEY_THEME.equals(key)) {
-            theme.setSummary(themeNames[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)]);
+            theme.setSummary(themeMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)));
 
             // restart activity
             getActivity().finish();

@@ -46,7 +46,7 @@
                 android:id="@+id/button_share_via_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/send_via_mail"/>
+                android:text="@string/title_sendLogsEmail"/>
 
             <Button
                 android:id="@+id/button_share_plain_text"
