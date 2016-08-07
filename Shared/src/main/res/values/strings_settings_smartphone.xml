@@ -125,8 +125,8 @@
 
     <string-array name="theme_values">
         <item>0</item>
-        <item>1</item>
         <item>2</item>
+        <item>4</item>
     </string-array>
 
     <string name="key_theme">theme</string>
@@ -144,6 +144,7 @@
     <string name="summary_sendAnonymousCrashData_disabled">Do NOT send anonymous crash data</string>
 
     <string name="key_sendLogsEmail">sendLogsEmail</string>
-    <string name="title_sendLogsEmail">@string/send_via_mail</string>
+    <string name="title_sendLogsEmail">Send crashreport via E-Mail</string>
+    <string name="dialogMessage_sendLogsEmail">PowerSwitch will now collect internal logs and some anonymous data about your device. This info will then be shared to your favorite E-Mail client, where you can give additional feedback if possible.</string>
 
 </resources>

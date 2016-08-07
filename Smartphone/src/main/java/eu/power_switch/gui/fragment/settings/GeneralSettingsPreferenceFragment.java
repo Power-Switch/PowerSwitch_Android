@@ -21,6 +21,7 @@ package eu.power_switch.gui.fragment.settings;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -87,6 +88,9 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
     private Calendar devMenuFirstClickTime;
     private int devMenuClickCounter;
+    private String[] themeNames;
+    private String[] mainTabNames;
+    private String[] historyValues;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -115,7 +119,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         startupDefaultTab = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
         startupDefaultTab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
-        String[] mainTabNames = getResources().getStringArray(R.array.main_tab_names);
+        mainTabNames = getResources().getStringArray(R.array.main_tab_names);
         startupDefaultTab.setSummary(mainTabNames[SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)]);
 
         autodiscover = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
@@ -164,7 +168,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         keepHistoryDuration = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION);
         keepHistoryDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION);
-        String[] historyValues = getResources().getStringArray(R.array.entries_history);
+        historyValues = getResources().getStringArray(R.array.entries_history);
         keepHistoryDuration.setSummary(historyValues[SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)]);
 
         final Fragment fragment = this;
@@ -198,7 +202,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         theme = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_THEME);
         theme.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_THEME);
-        String[] themeNames = getResources().getStringArray(R.array.theme_names);
+        themeNames = getResources().getStringArray(R.array.theme_names);
         theme.setSummary(themeNames[SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)]);
 
         resetTutial = findPreference(getString(R.string.key_resetTutorial));
@@ -225,45 +229,56 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         sendLogsEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
+
+                new AlertDialog.Builder(getPreferenceManagerContext())
+                        .setTitle(R.string.title_sendLogsEmail)
+                        .setMessage(R.string.dialogMessage_sendLogsEmail)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new AsyncTask<Void, Void, AsyncTaskResult<Boolean>>() {
+                                    @Override
+                                    protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
+                                        try {
+                                            LogHandler.sendLogsAsMail(getActivity());
+                                            return new AsyncTaskResult<>(true);
+                                        } catch (Exception e) {
+                                            return new AsyncTaskResult<>(e);
+                                        }
+                                    }
+
+                                    @Override
+                                    protected void onPostExecute(AsyncTaskResult<Boolean> booleanAsyncTaskResult) {
+
+                                        if (booleanAsyncTaskResult.isSuccess()) {
+                                            // all is good
+                                        } else {
+                                            if (booleanAsyncTaskResult.getException() instanceof MissingPermissionException) {
+                                                Snackbar snackbar = Snackbar.make(getListView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
+                                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        ActivityCompat.requestPermissions(MainActivity.getActivity(), new String[]{
+                                                                Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+                                                    }
+                                                });
+                                                snackbar.show();
+                                            } else {
+                                                StatusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult.getException());
+                                            }
+                                        }
+
+                                        sendLogsEmail.setEnabled(true);
+//                        sendLogsProgress.setVisibility(View.GONE);
+                                    }
+                                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        })
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .show();
+
                 sendLogsEmail.setEnabled(false);
 //                sendLogsProgress.setVisibility(View.VISIBLE);
-
-                new AsyncTask<Void, Void, AsyncTaskResult<Boolean>>() {
-                    @Override
-                    protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
-                        try {
-                            LogHandler.sendLogsAsMail(getActivity());
-                            return new AsyncTaskResult<>(true);
-                        } catch (Exception e) {
-                            return new AsyncTaskResult<>(e);
-                        }
-                    }
-
-                    @Override
-                    protected void onPostExecute(AsyncTaskResult<Boolean> booleanAsyncTaskResult) {
-
-                        if (booleanAsyncTaskResult.isSuccess()) {
-                            // all is good
-                        } else {
-                            if (booleanAsyncTaskResult.getException() instanceof MissingPermissionException) {
-                                Snackbar snackbar = Snackbar.make(getListView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
-                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        ActivityCompat.requestPermissions(MainActivity.getActivity(), new String[]{
-                                                Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
-                                    }
-                                });
-                                snackbar.show();
-                            } else {
-                                StatusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult.getException());
-                            }
-                        }
-
-                        sendLogsEmail.setEnabled(true);
-//                        sendLogsProgress.setVisibility(View.GONE);
-                    }
-                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                 return true;
             }
@@ -314,17 +329,14 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION.equals(key)) {
-            String[] historyValues = getResources().getStringArray(R.array.entryValues_history);
             keepHistoryDuration.setSummary(historyValues[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION)]);
         } else if (SmartphonePreferencesHandler.KEY_BACKUP_PATH.equals(key)) {
             backupPath.setSummary(sharedPreferences.getString(key, SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH));
         } else if (SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB.equals(key)) {
-            String[] mainTabNames = getResources().getStringArray(R.array.main_tab_names);
             startupDefaultTab.setSummary(mainTabNames[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)]);
         } else if (SmartphonePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
             vibrationDuration.setSummary(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
         } else if (SmartphonePreferencesHandler.KEY_THEME.equals(key)) {
-            String[] themeNames = getResources().getStringArray(R.array.theme_names);
             theme.setSummary(themeNames[sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)]);
 
             // restart activity
