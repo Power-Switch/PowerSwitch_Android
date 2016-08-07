@@ -96,8 +96,9 @@ public class UnknownErrorDialog extends AppCompatActivity {
                 try {
                     reportExceptionViaMail();
                 } catch (MissingPermissionException e) {
-                    StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.missing_external_storage_permission, Snackbar
-                            .LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(getApplicationContext(),
+                            R.string.missing_external_storage_permission,
+                            Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
                     finish();
                     StatusMessageHandler.showErrorMessage(getApplicationContext(), e);

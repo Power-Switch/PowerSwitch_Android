@@ -298,7 +298,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
             Preference developerOptionsPreference = new Preference(getPreferenceManagerContext());
             developerOptionsPreference.setTitle("Developer Options");
-            developerOptionsPreference.setSummary("CAUTION! Using options in this menu can IRREVERSIBLY corrupt your app!");
+            developerOptionsPreference.setSummary("CAUTION! Using options in this menu can IRREVERSIBLY CORRUPT this app!");
             developerOptionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
