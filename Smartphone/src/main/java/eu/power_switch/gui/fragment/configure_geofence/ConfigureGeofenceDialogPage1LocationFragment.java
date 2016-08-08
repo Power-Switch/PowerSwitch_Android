@@ -69,6 +69,7 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationDialogFragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
+    public static final String KEY_NAME = "name";
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
     public static final String KEY_RADIUS = "radius";
@@ -101,7 +102,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
     public static void sendSetupGeofenceChangedBroadcast(Context context, String name, LatLng location, double
             geofenceRadius, Bitmap snapShot) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
-        intent.putExtra("name", name);
+        intent.putExtra(KEY_NAME, name);
         intent.putExtra(KEY_LATITUDE, location.latitude);
         intent.putExtra(KEY_LONGITUDE, location.longitude);
         intent.putExtra(KEY_RADIUS, geofenceRadius);
@@ -121,12 +122,13 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
         mapViewHandler.initMapAsync();
 
         searchAddressProgress = (ProgressBar) rootView.findViewById(R.id.searchAddressProgress);
-        searchAddressTextInputLayout = (TextInputLayout) rootView.findViewById(R.id
-                .searchAddressTextInputLayout);
+        searchAddressTextInputLayout = (TextInputLayout) rootView.findViewById(R.id.searchAddressTextInputLayout);
         searchAddressEditText = (EditText) rootView.findViewById(R.id.searchAddressEditText);
 
         searchAddressButton = (ImageButton) rootView.findViewById(R.id.searchAddressImageButton);
-        searchAddressButton.setImageDrawable(IconicsHelper.getSearchIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        searchAddressButton.setImageDrawable(
+                IconicsHelper.getSearchIcon(
+                        getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         searchAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +161,11 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
                             }
 
                             cameraChangedBySystem = true;
-                            mapViewHandler.moveCamera(result.getResult().get(0), 14, true);
+
+                            LatLng location = result.getResult().get(0);
+                            mapViewHandler.moveCamera(location, 14, true);
+
+                            findAddress(location);
                         } else {
                             if (result.getException() instanceof CoordinatesNotFoundException) {
                                 searchAddressTextInputLayout.setErrorEnabled(true);
@@ -423,7 +429,9 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
                     searchAddressTextInputLayout.setError(null);
                     searchAddressTextInputLayout.setErrorEnabled(false);
 
-                    searchAddressEditText.setText(result.getResult().get(0));
+                    String firstMatch = result.getResult().get(0);
+                    searchAddressEditText.setText(firstMatch);
+                    name = firstMatch;
                 } else {
                     searchAddressEditText.setText("");
                 }

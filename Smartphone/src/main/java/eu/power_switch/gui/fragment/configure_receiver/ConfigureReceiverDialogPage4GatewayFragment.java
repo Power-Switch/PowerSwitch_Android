@@ -118,15 +118,11 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                     sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, gateways);
                 } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
                     String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME);
-                    if (roomName != null) {
-                        try {
-                            // dont use apartment.getRoom(roomName) because existing rooms might have changed (and apartment object is not updated)
-                            room = DatabaseHandler.getRoom(roomName);
-                        } catch (Exception e) {
-                            Log.e(e);
-                            room = null;
-                        }
-                    } else {
+                    try {
+                        // dont use apartment.getRoom(roomName) because existing rooms might have changed (and apartment object is not updated)
+                        room = DatabaseHandler.getRoom(roomName);
+                    } catch (Exception e) {
+                        Log.e(e);
                         room = null;
                     }
                     updateGatewayViews();

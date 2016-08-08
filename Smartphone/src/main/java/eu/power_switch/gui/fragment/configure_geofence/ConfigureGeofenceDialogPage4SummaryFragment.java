@@ -89,7 +89,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED.equals(intent.getAction())) {
-                    currentName = intent.getStringExtra("name");
+                    currentName = intent.getStringExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_NAME);
 
                     double latitude = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_LATITUDE, Geofence.INVALID_LAT);
                     double longitude = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_LONGITUDE, Geofence.INVALID_LON);
