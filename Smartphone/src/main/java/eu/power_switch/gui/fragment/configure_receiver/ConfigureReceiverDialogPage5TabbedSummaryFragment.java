@@ -47,7 +47,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Apartment;
@@ -412,7 +411,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
 
-        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

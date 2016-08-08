@@ -134,8 +134,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                         return;
                     }
 
-                    ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
-                    configureReceiverDialog.setTargetFragment(recyclerViewFragment, 0);
+                    ConfigureReceiverDialog configureReceiverDialog = ConfigureReceiverDialog.newInstance(recyclerViewFragment);
                     configureReceiverDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -178,8 +177,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                     return true;
                 }
 
-                ConfigureReceiverDialog configureReceiverDialog = new ConfigureReceiverDialog();
-                configureReceiverDialog.setTargetFragment(this, 0);
+                ConfigureReceiverDialog configureReceiverDialog = ConfigureReceiverDialog.newInstance(this);
                 configureReceiverDialog.show(getFragmentManager(), null);
                 break;
             case R.id.reorder_rooms:

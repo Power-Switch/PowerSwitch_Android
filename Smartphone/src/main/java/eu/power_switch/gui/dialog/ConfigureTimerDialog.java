@@ -32,7 +32,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1TimeFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2DaysFragment;
@@ -74,13 +73,13 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
             // init dialog using existing scene
             timerId = arguments.getLong(TIMER_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), timerId));
+                    getTargetFragment(), timerId));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment()));
+                    getTargetFragment()));
             return false;
         }
     }
@@ -110,7 +109,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                                     // notify scenes fragment
                                     TimersFragment.sendTimersChangedBroadcast(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.timer_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -127,21 +126,21 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
         private Context context;
         private long timerId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private RecyclerViewFragment recyclerViewFragment;
+        private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.context = context;
             this.timerId = -1;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long
                 id) {
             super(fm);
             this.context = context;
             this.timerId = id;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
         public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
@@ -181,7 +180,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                     break;
                 case 3:
                     fragment = new ConfigureTimerDialogPage4TabbedSummaryFragment();
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment.setTargetFragment(targetFragment, 0);
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }
 

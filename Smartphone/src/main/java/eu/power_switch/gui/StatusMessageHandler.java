@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -117,6 +118,25 @@ public class StatusMessageHandler {
      * it is running in the foreground.
      * The Snackbar will have a "Dismiss" Button by default.
      *
+     * @param fragment          target fragment this snackbar is shown on (used for
+     *                          the Snackbar and as a context)
+     * @param messageResourceId status message resource id
+     * @param duration          duration
+     */
+    public static void showInfoMessage(Fragment fragment, @StringRes int messageResourceId, int duration) {
+        if (fragment instanceof RecyclerViewFragment) {
+            RecyclerViewFragment recyclerViewFragment = (RecyclerViewFragment) fragment;
+            showInfoMessage(recyclerViewFragment.getRecyclerView(), messageResourceId, duration);
+        } else {
+            showInfoMessage(fragment.getView(), messageResourceId, duration);
+        }
+    }
+
+    /**
+     * Shows a status message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground.
+     * The Snackbar will have a "Dismiss" Button by default.
+     *
      * @param view              view this snackbar is shown on (used for
      *                          the Snackbar and as a context)
      * @param messageResourceId status message resource id
@@ -179,6 +199,25 @@ public class StatusMessageHandler {
             showInfoSnackbar(MainActivity.getMainAppView(), message, duration);
         } else {
             showInfoToast(context, message, duration);
+        }
+    }
+
+    /**
+     * Shows an error message on screen, either as Toast if the app is running in the background or as a snackbar if
+     * it is running in the foreground.
+     * The Snackbar will have a "Details" Button by default, which opens up a dialog showing more infos about the exception.
+     * The exception will also be logged, so you dont have to do this in your catch{} blocks yourself.
+     *
+     * @param fragment target fragment this snackbar is shown on (used for
+     *                 the Snackbar and as a context)
+     * @param e        throwable
+     */
+    public static void showErrorMessage(Fragment fragment, final Throwable e) {
+        if (fragment instanceof RecyclerViewFragment) {
+            RecyclerViewFragment recyclerViewFragment = (RecyclerViewFragment) fragment;
+            showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+        } else {
+            showErrorMessage(fragment.getView(), e);
         }
     }
 

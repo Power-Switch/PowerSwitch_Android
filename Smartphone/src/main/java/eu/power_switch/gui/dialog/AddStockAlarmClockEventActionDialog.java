@@ -32,7 +32,6 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
@@ -84,8 +83,8 @@ public class AddStockAlarmClockEventActionDialog extends AddActionDialog {
             ArrayList<Action> actions = new ArrayList<>(DatabaseHandler.getAlarmActions(currentEventType));
             actions.add(getCurrentSelection());
             DatabaseHandler.setAlarmActions(currentEventType, actions);
-            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string
-                    .action_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getTargetFragment(),
+                    R.string.action_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

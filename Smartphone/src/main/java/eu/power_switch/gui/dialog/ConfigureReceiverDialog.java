@@ -32,7 +32,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
@@ -58,11 +57,16 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     private long receiverId = -1;
 
-    public static ConfigureReceiverDialog newInstance(long receiverId) {
+    public static ConfigureReceiverDialog newInstance(Fragment targetFragment) {
+        return newInstance(-1, targetFragment);
+    }
+
+    public static ConfigureReceiverDialog newInstance(long receiverId, Fragment targetFragment) {
         Bundle args = new Bundle();
         args.putLong(RECEIVER_ID_KEY, receiverId);
 
         ConfigureReceiverDialog fragment = new ConfigureReceiverDialog();
+        fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,13 +82,13 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
             // init dialog using existing receiver
             receiverId = arguments.getLong(RECEIVER_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), receiverId));
+                    getTargetFragment(), receiverId));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment()));
+                    getTargetFragment()));
             return false;
         }
     }
@@ -116,7 +120,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                                     // update wear data
                                     UtilityService.forceWearDataUpdate(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.receiver_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -133,20 +137,20 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
         private Context context;
         private long receiverId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private RecyclerViewFragment recyclerViewFragment;
+        private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.context = context;
             this.receiverId = -1;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
             this.context = context;
             this.receiverId = id;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
         public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
@@ -191,7 +195,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                     break;
                 case 4:
                     fragment = new ConfigureReceiverDialogPage5TabbedSummaryFragment();
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;

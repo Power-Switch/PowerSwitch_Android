@@ -32,7 +32,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1NameFragment;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2SetupFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
@@ -74,11 +73,11 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
             // init dialog using existing scene
             sceneId = arguments.getLong(SCENE_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), sceneId));
+                    getTargetFragment(), sceneId));
             return true;
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment()));
+                    getTargetFragment()));
             return false;
         }
     }
@@ -114,7 +113,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                                     // update wear data
                                     UtilityService.forceWearDataUpdate(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.scene_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -131,20 +130,20 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
         private Context context;
         private long sceneId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
-        private RecyclerViewFragment recyclerViewFragment;
+        private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.context = context;
             this.sceneId = -1;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
             this.context = context;
             this.sceneId = id;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
         public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
@@ -176,7 +175,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                     break;
                 case 1:
                     fragment = new ConfigureSceneDialogTabbedPage2SetupFragment();
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }

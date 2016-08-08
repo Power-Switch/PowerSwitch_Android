@@ -46,7 +46,6 @@ import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
@@ -295,7 +294,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
         }
 
         ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+        StatusMessageHandler.showInfoMessage(getTargetFragment()
                 , R.string.apartment_saved, Snackbar.LENGTH_LONG);
     }
 

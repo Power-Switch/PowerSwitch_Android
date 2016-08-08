@@ -41,7 +41,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.IntervalTimer;
@@ -217,7 +216,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             }
 
             TimersFragment.sendTimersChangedBroadcast(getContext());
-            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+            StatusMessageHandler.showInfoMessage(getTargetFragment(),
                     R.string.timer_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

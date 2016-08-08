@@ -48,7 +48,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -175,7 +174,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
             // update wear data
             UtilityService.forceWearDataUpdate(getActivity());
 
-            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.scene_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

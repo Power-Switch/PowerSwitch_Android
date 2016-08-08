@@ -31,7 +31,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1LocationFragment;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActionsFragment;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActionsFragment;
@@ -73,14 +72,14 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                     // Create the adapter that will return a fragment
                     // for each of the two primary sections of the app.
                     setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                            (RecyclerViewFragment) getTargetFragment(), apartmentId));
+                            getTargetFragment(), apartmentId));
                     imageButtonDelete.setVisibility(View.GONE);
                     return false;
                 } else {
                     // init dialog using existing geofence
                     geofenceId = apartment.getGeofence().getId();
                     setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                            (RecyclerViewFragment) getTargetFragment(), apartmentId, geofenceId));
+                            getTargetFragment(), apartmentId, geofenceId));
                     imageButtonDelete.setVisibility(View.VISIBLE);
                     return true;
                 }
@@ -107,7 +106,7 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                                     // same for timers
                                     ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.geofence_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -125,22 +124,22 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
         private long apartmentId;
         private long geofenceId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private RecyclerViewFragment recyclerViewFragment;
+        private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long apartmentId) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long apartmentId) {
             super(fm);
             this.context = context;
             this.apartmentId = apartmentId;
             this.geofenceId = -1;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long apartmentId, long geofenceId) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long apartmentId, long geofenceId) {
             super(fm);
             this.context = context;
             this.apartmentId = apartmentId;
             this.geofenceId = geofenceId;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
         public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
@@ -180,7 +179,7 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                     break;
                 case 3:
                     fragment = new ConfigureGeofenceDialogPage4SummaryFragment();
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;

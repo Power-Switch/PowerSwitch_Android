@@ -45,7 +45,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureRoomDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -335,7 +334,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
 
-        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+        StatusMessageHandler.showInfoMessage(getTargetFragment()
                 , R.string.room_saved, Snackbar.LENGTH_LONG);
     }
 

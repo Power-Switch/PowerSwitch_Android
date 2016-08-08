@@ -32,7 +32,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1ContactsFragment;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2ActionsFragment;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3SummaryFragment;
@@ -73,11 +72,11 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
             // init dialog using existing scene
             callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), callEventId));
+                    getTargetFragment(), callEventId));
             return true;
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment()));
+                    getTargetFragment()));
             return false;
         }
     }
@@ -107,7 +106,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                                     // notify scenes fragment
                                     CallEventsFragment.sendCallEventsChangedBroadcast(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.call_event_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -123,20 +122,20 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
         private Context context;
         private long callEventId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
-        private RecyclerViewFragment recyclerViewFragment;
+        private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.context = context;
             this.callEventId = -1;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
             this.context = context;
             this.callEventId = id;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
         public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
@@ -171,7 +170,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                     break;
                 case 2:
                     fragment = new ConfigureCallEventDialogPage3SummaryFragment();
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }

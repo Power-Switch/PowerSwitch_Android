@@ -35,7 +35,6 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.ApartmentFragment;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1NameFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -75,11 +74,11 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             apartmentId = args.getLong(APARTMENT_ID_KEY);
 
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), apartmentId));
+                    getTargetFragment(), apartmentId));
             return true;
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment()));
+                    getTargetFragment()));
             return false;
         }
     }
@@ -119,7 +118,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                             }
 
                             ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-                            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                     R.string.apartment_removed, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -136,20 +135,20 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
         private Context context;
         private long apartmentId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
-        private RecyclerViewFragment recyclerViewFragment;
+        private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.context = context;
             this.apartmentId = -1;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
             this.context = context;
             this.apartmentId = id;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
         public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
@@ -176,7 +175,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
             switch (i) {
                 case 0:
                     fragment = new ConfigureApartmentDialogPage1NameFragment();
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;

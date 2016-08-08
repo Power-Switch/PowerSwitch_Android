@@ -36,7 +36,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.RoomNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.wear.service.UtilityService;
@@ -133,7 +132,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
             // update wear data
             UtilityService.forceWearDataUpdate(getActivity());
 
-            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+            StatusMessageHandler.showInfoMessage(getTargetFragment()
                     , R.string.room_saved, Snackbar.LENGTH_LONG);
             getDialog().dismiss();
         } catch (Exception e) {

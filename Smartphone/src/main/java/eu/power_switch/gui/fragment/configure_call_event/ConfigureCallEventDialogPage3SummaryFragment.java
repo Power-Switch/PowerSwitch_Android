@@ -46,7 +46,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -177,7 +176,8 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
         }
 
         CallEventsFragment.sendCallEventsChangedBroadcast(getContext());
-        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage(getTargetFragment(),
+                R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

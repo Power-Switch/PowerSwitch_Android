@@ -40,7 +40,6 @@ import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 
@@ -98,7 +97,7 @@ public class CreateBackupDialog extends DialogFragment {
                     backupHandler.createBackup(false, name.getText().toString().trim(), false);
                     BackupFragment.sendBackupsChangedBroadcast(getActivity());
 
-                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                    StatusMessageHandler.showInfoMessage(getTargetFragment()
                             , R.string.backup_successful, Snackbar.LENGTH_LONG);
                 } catch (BackupAlreadyExistsException e) {
                     Log.e(e);
@@ -112,8 +111,7 @@ public class CreateBackupDialog extends DialogFragment {
                                         backupHandler.createBackup(false, name.getText().toString().trim(), true);
                                         BackupFragment.sendBackupsChangedBroadcast(getActivity());
 
-                                        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment())
-                                                        .getRecyclerView(),
+                                        StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                                 R.string.backup_successful, Snackbar.LENGTH_LONG);
                                     } catch (Exception e1) {
                                         Log.e(e1);
@@ -121,8 +119,7 @@ public class CreateBackupDialog extends DialogFragment {
                                 }
                             }).setNegativeButton(android.R.string.no, null).create().show();
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
-                            , e);
+                    StatusMessageHandler.showErrorMessage(getTargetFragment(), e);
                 }
             }
         });

@@ -32,7 +32,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1Fragment;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2SummaryFragment;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
@@ -73,13 +72,13 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
             // init dialog using existing receiver
             roomId = arguments.getLong(ROOM_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment(), roomId));
+                    getTargetFragment(), roomId));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    (RecyclerViewFragment) getTargetFragment()));
+                    getTargetFragment()));
             return false;
         }
     }
@@ -110,7 +109,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
                             // update wear data
                             UtilityService.forceWearDataUpdate(getActivity());
 
-                            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                     R.string.room_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -127,20 +126,20 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
         private Context context;
         private long roomId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private RecyclerViewFragment recyclerViewFragment;
+        private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.context = context;
             this.roomId = -1;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
             this.context = context;
             this.roomId = id;
-            this.recyclerViewFragment = recyclerViewFragment;
+            this.targetFragment = targetFragment;
         }
 
         public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
@@ -170,7 +169,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
                     break;
                 case 1:
                     fragment = new ConfigureRoomDialogPage2SummaryFragment();
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
+                    fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;

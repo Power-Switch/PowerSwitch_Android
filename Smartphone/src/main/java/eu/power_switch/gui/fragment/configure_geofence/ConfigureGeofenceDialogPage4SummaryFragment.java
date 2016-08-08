@@ -49,7 +49,6 @@ import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.obj.Apartment;
@@ -283,7 +282,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
             ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(getContext());
             CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getContext());
 
-            StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+            StatusMessageHandler.showInfoMessage(getTargetFragment(),
                     R.string.geofence_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

@@ -38,7 +38,6 @@ import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
@@ -107,15 +106,15 @@ public class EditBackupDialog extends DialogFragment {
                         BackupHandler backupHandler = new BackupHandler(getActivity());
                         backupHandler.renameBackup(backupName, name.getText().toString().trim());
                         BackupFragment.sendBackupsChangedBroadcast(getActivity());
-                        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                        StatusMessageHandler.showInfoMessage(getTargetFragment()
                                 , R.string.backup_saved, Snackbar.LENGTH_LONG);
                     } catch (BackupAlreadyExistsException e) {
                         Log.e(e);
-                        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                        StatusMessageHandler.showInfoMessage(getTargetFragment()
                                 , R.string.backup_already_exists, Snackbar.LENGTH_LONG);
                     } catch (BackupNotFoundException e) {
                         Log.e(e);
-                        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView()
+                        StatusMessageHandler.showInfoMessage(getTargetFragment()
                                 , R.string.backup_not_found, Snackbar.LENGTH_LONG);
                     }
                 }

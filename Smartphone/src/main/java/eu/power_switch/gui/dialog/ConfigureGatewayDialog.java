@@ -32,7 +32,6 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1Fragment;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage2Fragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
@@ -92,7 +91,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
                                 try {
                                     DatabaseHandler.deleteGateway(gatewayId);
                                     GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-                                    StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(),
+                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.gateway_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);

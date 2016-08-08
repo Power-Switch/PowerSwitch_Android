@@ -50,7 +50,6 @@ import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
-import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -238,7 +237,8 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         }
 
         GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-        StatusMessageHandler.showInfoMessage(((RecyclerViewFragment) getTargetFragment()).getRecyclerView(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage(getTargetFragment(),
+                R.string.gateway_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
