@@ -156,9 +156,12 @@
         <item>Internal + External</item>
     </string-array>
 
+    <string name="value_internal">0</string>
+    <string name="value_internal_and_external">1</string>
+
     <string-array name="logDestination_values">
-        <item>0</item>
-        <item>1</item>
+        <item>@string/value_internal</item>
+        <item>@string/value_internal_and_external</item>
     </string-array>
 
     <string name="key_logDestination">logDestination</string>

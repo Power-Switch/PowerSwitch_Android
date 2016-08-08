@@ -43,6 +43,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import eu.power_switch.BuildConfig;
+import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -151,8 +152,16 @@ public class PowerSwitch extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
+        // needs to be initialized before logging framework is up to get settings for that
+        SmartphonePreferencesHandler.init(this);
+
         // Configure Log4J Logger
-        LogHandler.configureLogger(getApplicationContext());
+        if (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)
+                .equals(Integer.valueOf(getString(R.string.value_internal)))) {
+            LogHandler.configureInternalLogger(this);
+        } else {
+            LogHandler.configureLogger(this);
+        }
 
         Log.d("Application init...");
         Log.d("App version: " + ApplicationHelper.getAppVersionDescription(this));
@@ -164,9 +173,10 @@ public class PowerSwitch extends MultiDexApplication {
         // Onetime initialization of handlers for static access
         DatabaseHandler.init(this);
         NetworkHandler.init(this);
+
+        // reinitialize after logging framework is up to log current values
         SmartphonePreferencesHandler.init(this);
         WearablePreferencesHandler.init(this);
-
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric

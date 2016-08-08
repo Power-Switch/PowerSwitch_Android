@@ -59,7 +59,7 @@ public class SmartphonePreferencesHandler {
     public static final boolean DEFAULT_VALUE_AUTO_DISCOVER = true;
     public static final boolean DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND = true;
     public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA = true;
-    public static final int DEFAULT_VALUE_LOG_DESTINATION = SettingsConstants.LOG_INTERNAL;
+    public static final int DEFAULT_VALUE_LOG_DESTINATION = 0;
     public static final boolean DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = true;
 
     public static String KEY_AUTO_DISCOVER;

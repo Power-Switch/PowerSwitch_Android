@@ -96,11 +96,12 @@ public class LogHandler {
 
     public static void configureLogger(Context context) {
         LogHandler.context = context;
-        configureInternalLogger();
+
+        configureInternalLogger(context);
         configureExternalLogger();
     }
 
-    private static void configureInternalLogger() {
+    public static void configureInternalLogger(Context context) {
         LogConfigurator internalLogConfigurator = new LogConfigurator();
         internalLogConfigurator.setFileName(context.getFilesDir().getParent() + File.separator +
                 LOG_FOLDER_NAME_INTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
