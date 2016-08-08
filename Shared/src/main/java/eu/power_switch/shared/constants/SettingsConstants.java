@@ -52,11 +52,19 @@ public class SettingsConstants {
     public static final int KEEP_HISTORY_6_MONTHS = 2;
     public static final int KEEP_HISTORY_1_MONTH = 3;
     public static final int KEEP_HISTORY_14_DAYS = 4;
+
+    // Theme
     public static final int THEME_DARK_BLUE = 0;
     public static final int THEME_DARK_RED = 1;
     public static final int THEME_LIGHT_BLUE = 2;
     public static final int THEME_LIGHT_RED = 3;
     public static final int THEME_DAY_NIGHT_BLUE = 4;
+
+    // Log
+    public static final int LOG_INTERNAL = 0;
+    public static final int LOG_INTERNAL_AND_EXTERNAL = 1;
+
+
     // Google API
     public static final String VOK_ZWEQ =
             "jVMU2RnWW1oelVoMVF4ZXJkV1B1cDcwWFRYc3g0c0hScmN2WjhmR21NN3R0V3E5YlF4cWtVSUFiYjFUQ0EzcW9ScU00bUxNY0E0T29ZVjVsTE1hSGxXanVyVHdJREFRQUI=";

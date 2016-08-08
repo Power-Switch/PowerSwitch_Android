@@ -151,6 +151,19 @@
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
 
+    <string-array name="logDestination_names">
+        <item>Internal</item>
+        <item>Internal + External</item>
+    </string-array>
+
+    <string-array name="logDestination_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="key_logDestination">logDestination</string>
+    <string name="title_logDestination">Save logs</string>
+
     <string name="key_sendLogsEmail">sendLogsEmail</string>
     <string name="title_sendLogsEmail">Send crash report via E-Mail</string>
     <string name="dialogMessage_sendLogsEmail">PowerSwitch will now collect internal logs and some anonymous data about your device. This info will then be shared to your favorite E-Mail client, where you can give additional feedback if possible.</string>

@@ -85,15 +85,16 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     private IntListPreference theme;
     private Preference resetTutial;
     private SwitchPreference sendAnonymousCrashData;
+    private IntListPreference logDestination;
     private Preference sendLogsEmail;
 
     private BroadcastReceiver broadcastReceiver;
-
     private Calendar devMenuFirstClickTime;
     private int devMenuClickCounter;
     private Map<Integer, String> mainTabsMap;
     private Map<Integer, String> keepHistoryMap;
     private Map<Integer, String> themeMap;
+    private Map<Integer, String> logDestinationMap;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -228,6 +229,11 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         sendAnonymousCrashData.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
         sendAnonymousCrashData.setSummaryOn(R.string.summary_sendAnonymousCrashData_enabled);
         sendAnonymousCrashData.setSummaryOff(R.string.summary_sendAnonymousCrashData_disabled);
+
+        logDestination = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
+        logDestination.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION);
+        logDestinationMap = getListPreferenceEntryValueMap(R.array.logDestination_values, R.array.logDestination_names);
+        logDestination.setSummary(logDestinationMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)));
 
         sendLogsEmail = findPreference(getString(R.string.key_sendLogsEmail));
         sendLogsEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -369,6 +375,8 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        } else if (SmartphonePreferencesHandler.KEY_LOG_DESTINATION.equals(key)) {
+            logDestination.setSummary(logDestinationMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION)));
         }
 
         SmartphonePreferencesHandler.forceRefresh();

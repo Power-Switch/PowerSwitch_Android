@@ -59,6 +59,7 @@ public class SmartphonePreferencesHandler {
     public static final boolean DEFAULT_VALUE_AUTO_DISCOVER = true;
     public static final boolean DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND = true;
     public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA = true;
+    public static final int DEFAULT_VALUE_LOG_DESTINATION = SettingsConstants.LOG_INTERNAL;
     public static final boolean DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = true;
 
     public static String KEY_AUTO_DISCOVER;
@@ -80,6 +81,7 @@ public class SmartphonePreferencesHandler {
     public static String KEY_SHOW_TOAST_IN_BACKGROUND;
     public static String KEY_SEND_ANONYMOUS_CRASH_DATA;
     public static String KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
+    public static String KEY_LOG_DESTINATION;
 
     // setting keys
     private static SharedPreferences sharedPreferences;
@@ -89,6 +91,7 @@ public class SmartphonePreferencesHandler {
     private static Map<String, Object> defaultValueMap;
 
     private static Context context;
+
 
     /**
      * Private Constructor
@@ -140,6 +143,7 @@ public class SmartphonePreferencesHandler {
         KEY_SHOW_TOAST_IN_BACKGROUND = context.getString(R.string.key_showBackgroundActionToast);
         KEY_SEND_ANONYMOUS_CRASH_DATA = context.getString(R.string.key_sendAnonymousCrashData);
         KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = "shouldAskSendAnonymousCrashData";
+        KEY_LOG_DESTINATION = context.getString(R.string.key_logDestination);
     }
 
     private static void initializeDefaultValueMap() {
@@ -164,6 +168,7 @@ public class SmartphonePreferencesHandler {
         defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
         defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
         defaultValueMap.put(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA);
+        defaultValueMap.put(KEY_LOG_DESTINATION, DEFAULT_VALUE_LOG_DESTINATION);
 
         for (String key : defaultValueMap.keySet()) {
             // initialize missing default values

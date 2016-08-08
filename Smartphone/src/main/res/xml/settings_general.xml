@@ -119,6 +119,12 @@
             android:key="@string/key_sendAnonymousCrashData"
             android:title="@string/title_sendAnonymousCrashData"/>
 
+        <eu.power_switch.settings.IntListPreference
+            android:entries="@array/logDestination_names"
+            android:entryValues="@array/logDestination_values"
+            android:key="@string/key_logDestination"
+            android:title="@string/title_logDestination"/>
+
         <Preference
             android:key="@string/key_sendLogsEmail"
             android:title="@string/title_sendLogsEmail"/>
