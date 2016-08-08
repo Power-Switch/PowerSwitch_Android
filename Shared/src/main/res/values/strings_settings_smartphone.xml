@@ -140,8 +140,8 @@
     <!-- Logs -->
     <string name="key_sendAnonymousCrashData">sendAnonymousCrashData</string>
     <string name="title_sendAnonymousCrashData">Automatic Crash Reporting</string>
-    <string name="summary_sendAnonymousCrashData_enabled">Send anonymous crash data</string>
-    <string name="summary_sendAnonymousCrashData_disabled">Do NOT send anonymous crash data</string>
+    <string name="summary_sendAnonymousCrashData_enabled">Send anonymous crash data automatically</string>
+    <string name="summary_sendAnonymousCrashData_disabled">Do NOT send anonymous crash data automatically</string>
 
     <string name="message_sendAnonymousCrashData">PowerSwitch can automatically collect important crash and usage data and send it to the developer.
         This way you can help make PowerSwitch a better app just by using it.
@@ -152,7 +152,7 @@
     <string name="disable">Disable</string>
 
     <string name="key_sendLogsEmail">sendLogsEmail</string>
-    <string name="title_sendLogsEmail">Send crashreport via E-Mail</string>
+    <string name="title_sendLogsEmail">Send crash report via E-Mail</string>
     <string name="dialogMessage_sendLogsEmail">PowerSwitch will now collect internal logs and some anonymous data about your device. This info will then be shared to your favorite E-Mail client, where you can give additional feedback if possible.</string>
 
 </resources>
