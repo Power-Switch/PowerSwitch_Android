@@ -21,13 +21,11 @@ package eu.power_switch.shared.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringDef;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.power_switch.shared.R;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -43,16 +41,6 @@ public class WearablePreferencesHandler {
 
     // SharedPreferences
     public static final String WEARABLE_SHARED_PREFS_NAME = "eu.power_switch.wearable.prefs";
-
-    // setting keys
-    public static final String KEY_SHOW_ROOM_ALL_ON_OFF = "showRoomAllOnOff";
-    public static final String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = "highlightLastActivatedButton";
-    public static final String KEY_AUTO_COLLAPSE_ROOMS = "autoCollapseRooms";
-    public static final String KEY_STARTUP_DEFAULT_TAB = "startupDefaultTab";
-    public static final String KEY_THEME = "theme";
-    public static final String KEY_VIBRATE_ON_BUTTON_PRESS = "vibrateOnButtonPress";
-    public static final String KEY_VIBRATION_DURATION = "vibrationDuration";
-
     // default values
     public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
     public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
@@ -62,7 +50,14 @@ public class WearablePreferencesHandler {
     public static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants
             .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
     public static final int DEFAULT_VALUE_STARTUP_TAB = 0;
-
+    // setting keys
+    public static String KEY_SHOW_ROOM_ALL_ON_OFF;
+    public static String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+    public static String KEY_AUTO_COLLAPSE_ROOMS;
+    public static String KEY_STARTUP_DEFAULT_TAB;
+    public static String KEY_THEME;
+    public static String KEY_VIBRATE_ON_BUTTON_PRESS;
+    public static String KEY_VIBRATION_DURATION;
     private static SharedPreferences sharedPreferences;
     private static Map<String, ?> cachedValues;
 
@@ -99,8 +94,37 @@ public class WearablePreferencesHandler {
                 WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         forceRefresh();
 
+        initializePublicKeys(context);
+        initializeDefaultValueMap();
+
         for (String key : cachedValues.keySet()) {
             Log.d(WearablePreferencesHandler.class, key + ": " + get(key));
+        }
+    }
+
+    private static void initializePublicKeys(Context context) {
+        KEY_STARTUP_DEFAULT_TAB = context.getString(R.string.key_startupDefaultTab);
+        KEY_SHOW_ROOM_ALL_ON_OFF = context.getString(R.string.key_showRoomAllOnOff);
+        KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = context.getString(R.string.key_highlightLastActivatedButton);
+        KEY_AUTO_COLLAPSE_ROOMS = context.getString(R.string.key_autoCollapseRooms);
+        KEY_THEME = context.getString(R.string.key_theme);
+        KEY_VIBRATE_ON_BUTTON_PRESS = context.getString(R.string.key_vibrateOnButtonPress);
+        KEY_VIBRATION_DURATION = context.getString(R.string.key_vibrationDuration);
+    }
+
+    private static void initializeDefaultValueMap() {
+        defaultValueMap = new HashMap<>();
+        defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
+        defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        defaultValueMap.put(KEY_AUTO_COLLAPSE_ROOMS, DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
+        defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
+        defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
+        defaultValueMap.put(KEY_VIBRATION_DURATION, DEFAULT_VALUE_VIBRATION_DURATION);
+        defaultValueMap.put(KEY_STARTUP_DEFAULT_TAB, DEFAULT_VALUE_STARTUP_TAB);
+
+        for (String key : defaultValueMap.keySet()) {
+            // initialize missing default values
+            get(key);
         }
     }
 
@@ -118,7 +142,7 @@ public class WearablePreferencesHandler {
      * @param <T>         type of expected return value
      * @return
      */
-    public static <T> T get(@Key String settingsKey) throws ClassCastException {
+    public static <T> T get(String settingsKey) throws ClassCastException {
         // Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
 
         Object value = cachedValues.get(settingsKey);
@@ -130,7 +154,7 @@ public class WearablePreferencesHandler {
         }
     }
 
-    private static Object getDefaultValue(@Key String settingsKey) {
+    private static Object getDefaultValue(String settingsKey) {
         return defaultValueMap.get(settingsKey);
     }
 
@@ -141,7 +165,7 @@ public class WearablePreferencesHandler {
      * @param newValue    new value
      * @param <T>
      */
-    public static <T> void set(@Key String settingsKey, T newValue) {
+    public static <T> void set(String settingsKey, T newValue) {
         Log.d(WearablePreferencesHandler.class, "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -163,16 +187,5 @@ public class WearablePreferencesHandler {
         editor.apply();
 
         forceRefresh();
-    }
-
-    @StringDef({KEY_SHOW_ROOM_ALL_ON_OFF,
-            KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
-            KEY_AUTO_COLLAPSE_ROOMS,
-            KEY_THEME,
-            KEY_VIBRATE_ON_BUTTON_PRESS,
-            KEY_VIBRATION_DURATION,
-            KEY_STARTUP_DEFAULT_TAB})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Key {
     }
 }

@@ -81,14 +81,14 @@ public class SmartphonePreferencesHandler {
     public static String KEY_SEND_ANONYMOUS_CRASH_DATA;
     public static String KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
 
-    private static Context context;
-
     // setting keys
     private static SharedPreferences sharedPreferences;
     private static Map<String, ?> cachedValues;
 
     // default values for each settings key
     private static Map<String, Object> defaultValueMap;
+
+    private static Context context;
 
     /**
      * Private Constructor
@@ -112,7 +112,7 @@ public class SmartphonePreferencesHandler {
                 SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         forceRefresh();
 
-        initializePublicKeys();
+        initializePublicKeys(context);
         initializeDefaultValueMap();
 
         for (String key : cachedValues.keySet()) {
@@ -120,7 +120,7 @@ public class SmartphonePreferencesHandler {
         }
     }
 
-    private static void initializePublicKeys() {
+    private static void initializePublicKeys(Context context) {
         KEY_AUTO_DISCOVER = context.getString(R.string.key_autodiscover);
         KEY_BACKUP_PATH = context.getString(R.string.key_backupPath);
         KEY_STARTUP_DEFAULT_TAB = context.getString(R.string.key_startupDefaultTab);
