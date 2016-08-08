@@ -52,6 +52,7 @@ import java.util.zip.ZipOutputStream;
 
 import de.mindpipe.android.logging.log4j.LogConfigurator;
 import eu.power_switch.shared.R;
+import eu.power_switch.shared.application.ApplicationHelper;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.permission.PermissionHelper;
 
@@ -76,6 +77,11 @@ public class LogHandler {
      * Duration in days to keep log files (file creation date)
      */
     private static final int KEEP_LOGS_DAY_COUNT = 14;
+
+    /**
+     * Default E-Mail recipients
+     */
+    private static final String[] DEFAULT_EMAILS = new String[]{"contact@power-switch.eu"};
 
     private static Context context;
 
@@ -330,22 +336,78 @@ public class LogHandler {
 
     /**
      * Send Logs to an Email App via Intent
+     *
+     * @param destinationAddresses destination addresses (or null)
+     * @param throwable            an exception that should be used for subject and content text
+     * @param timeRaised           time the exception was raised
      */
-    public static void sendLogsAsMail(Activity activity) throws Exception {
+    public static void sendLogsAsMail(Activity activity, String[] destinationAddresses, Throwable throwable, Date timeRaised) throws Exception {
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (destinationAddresses == null) {
+            destinationAddresses = DEFAULT_EMAILS;
+        }
+
+        String subject;
+        if (throwable == null) {
+            subject = "PowerSwitch Logs";
+        } else {
+            subject = "Unknown Error - " + throwable.getClass().getSimpleName() +
+                    ": " + throwable.getMessage();
+        }
+
+        String content;
+        if (throwable == null) {
+            content = context.getString(R.string.send_logs_template);
+        } else {
+            content = context.getString(R.string.send_unknown_error_log_template);
+            content += "\n\n\n";
+            content += "<<<<<<<<<< DEVELOPER INFOS >>>>>>>>>>\n";
+            content += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
+            content += "\n";
+            content += "PowerSwitch Application Version: " + ApplicationHelper.getAppVersionDescription(activity) + "\n";
+            content += "Device API Level: " + android.os.Build.VERSION.SDK_INT + "\n";
+            content += "Device OS Version name: " + Build.VERSION.RELEASE + "\n";
+            content += "Device brand/model: " + LogHandler.getDeviceName() + "\n";
+            content += "\n";
+            content += "Exception stacktrace:\n";
+            content += "\n";
+            content += Log.getStackTraceText(throwable) + "\n";
         }
 
         Intent emailIntent = new Intent();
         emailIntent.setAction(Intent.ACTION_SENDTO);
         emailIntent.setType("*/*");
         emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"contact@power-switch.eu"});
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "PowerSwitch Logs");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.send_logs_template));
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, destinationAddresses);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, content);
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
 
         activity.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.send_to)));
+    }
+
+    /**
+     * Send Logs to an E-Mail App via Intent
+     * This includes an Exception that has been raised just before
+     *
+     * @param activity   activity context
+     * @param throwable  exception
+     * @param timeRaised time the exception was raised
+     */
+    public static void sendLogsAsMail(Activity activity, Throwable throwable, Date timeRaised) throws Exception {
+        sendLogsAsMail(activity, null, throwable, timeRaised);
+    }
+
+    /**
+     * Send Logs to an E-Mail App via Intent
+     *
+     * @param activity activity context
+     */
+    public static void sendLogsAsMail(Activity activity) throws Exception {
+        sendLogsAsMail(activity, null, null, null);
     }
 
     /**

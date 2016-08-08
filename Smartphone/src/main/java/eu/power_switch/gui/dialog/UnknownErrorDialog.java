@@ -18,28 +18,26 @@
 
 package eu.power_switch.gui.dialog;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import eu.power_switch.R;
-import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
+import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * Shows a Dialog with details about an unknown Exception/Error that occurred during runtime
@@ -48,7 +46,6 @@ import eu.power_switch.shared.log.LogHandler;
  */
 public class UnknownErrorDialog extends AppCompatActivity {
 
-    private static final String[] DEFAULT_EMAILS = new String[]{"contact@power-switch.eu"};
     private static final String THROWABLE_KEY = "throwable";
     private static final String TIME_KEY = "time";
 
@@ -96,9 +93,10 @@ public class UnknownErrorDialog extends AppCompatActivity {
                 try {
                     reportExceptionViaMail();
                 } catch (MissingPermissionException e) {
-                    StatusMessageHandler.showInfoMessage(getApplicationContext(),
-                            R.string.missing_external_storage_permission,
-                            Snackbar.LENGTH_LONG);
+                    PermissionHelper.showMissingPermissionDialog(
+                            UnknownErrorDialog.this,
+                            PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 } catch (Exception e) {
                     finish();
                     StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
@@ -142,35 +140,7 @@ public class UnknownErrorDialog extends AppCompatActivity {
     }
 
     private void reportExceptionViaMail() throws Exception {
-        Intent emailIntent = new Intent();
-        emailIntent.setAction(Intent.ACTION_SENDTO);
-        emailIntent.setType("*/*");
-        emailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, DEFAULT_EMAILS);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Unknown Error - " + throwable.getClass().getSimpleName() +
-                ": " + throwable.getMessage());
-        emailIntent.putExtra(Intent.EXTRA_TEXT, getEmailContentText());
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
-
-        startActivity(Intent.createChooser(emailIntent, getString(R.string.send_to)));
+        LogHandler.sendLogsAsMail(this, throwable, timeRaised);
     }
 
-    private String getEmailContentText() {
-        String shareText = "";
-        shareText += getString(R.string.send_unknown_error_log_template);
-        shareText += "\n\n\n";
-        shareText += "<<<<<<<<<< DEVELOPER INFOS >>>>>>>>>>\n";
-        shareText += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
-        shareText += "\n";
-        shareText += "PowerSwitch Application Version: " + PowerSwitch.getAppVersionDescription(this) + "\n";
-        shareText += "Device API Level: " + android.os.Build.VERSION.SDK_INT + "\n";
-        shareText += "Device OS Version name: " + Build.VERSION.RELEASE + "\n";
-        shareText += "Device brand/model: " + LogHandler.getDeviceName() + "\n";
-        shareText += "\n";
-        shareText += "Exception stacktrace:\n";
-        shareText += "\n";
-        shareText += Log.getStackTraceText(throwable) + "\n";
-
-        return shareText;
-    }
 }

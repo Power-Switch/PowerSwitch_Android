@@ -84,6 +84,14 @@
     <string name="summary_sendAnonymousCrashData_enabled">Anonyme Crashdaten werden automatisch gesendet</string>
     <string name="summary_sendAnonymousCrashData_disabled">Anonyme Crashdaten werden NICHT automatisch gesendet</string>
 
+    <string name="message_sendAnonymousCrashData">PowerSwitch kann automatisch wichtige Informationen über Abstürze und Nutzung der App sammeln.
+        Dadurch kannst du helfen PowerSwitch zu verbessern, ohne mehr zu tun als die App zu benutzen.
+        Alle gesammelten Infos werden natürlich anonymisiert behandelt, deine Privatsphäre bleibt also geschützt.
+        \n\nSolltest du deine Meinung ändern kannst du die Funktion jederzeit in den Einstellungen de- oder aktivieren.
+    </string>
+    <string name="enable">Aktivieren</string>
+    <string name="disable">Deaktivieren</string>
+
     <string name="title_sendLogsEmail">Fehlerbericht ber E-Mail senden</string>
     <string name="dialogMessage_sendLogsEmail">PowerSwitch wird nun Logs und einige anonyme Daten über dein Gerät sammeln. Diese Infos werden dann an die E-Mail App deiner Wahl geteilt, wo du (wenn möglich) weiteres persönliches Feedback geben kannst.</string>
 

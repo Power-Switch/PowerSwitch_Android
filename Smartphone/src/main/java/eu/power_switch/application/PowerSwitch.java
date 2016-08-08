@@ -20,7 +20,6 @@ package eu.power_switch.application;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -52,6 +51,7 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.application.ApplicationHelper;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.shared.permission.PermissionHelper;
@@ -111,23 +111,6 @@ public class PowerSwitch extends MultiDexApplication {
     }
 
     /**
-     * Get a text representation of application version name and build number
-     *
-     * @param context any suitable context
-     * @return app version as text (or "unknown" if failed to retrieve), never null
-     */
-    @NonNull
-    public static String getAppVersionDescription(@NonNull Context context) {
-        try {
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return pInfo.versionName + " (" + pInfo.versionCode + ")";
-        } catch (Exception e) {
-            Log.e(e);
-            return "unknown (error while retrieving)";
-        }
-    }
-
-    /**
      * Get the build time of the current version of this application
      *
      * @param context any suitable context
@@ -172,7 +155,7 @@ public class PowerSwitch extends MultiDexApplication {
         LogHandler.configureLogger(getApplicationContext());
 
         Log.d("Application init...");
-        Log.d("App version: " + getAppVersionDescription(this));
+        Log.d("App version: " + ApplicationHelper.getAppVersionDescription(this));
         Log.d("App build time: " + getAppBuildTime(this));
         Log.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
         Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
