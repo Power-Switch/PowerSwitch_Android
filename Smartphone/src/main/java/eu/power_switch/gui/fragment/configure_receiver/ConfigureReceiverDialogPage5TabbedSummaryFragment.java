@@ -41,6 +41,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.clipboard.ClipboardHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -71,7 +72,6 @@ import eu.power_switch.wear.service.UtilityService;
  */
 public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
-    private View rootView;
     private long currentId = -1;
     private String currentName;
     private String currentRoomName;
@@ -100,12 +100,12 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
     private LinearLayout linearLayoutDips;
     private LinearLayout linearLayoutUniversalButtons;
     private LinearLayout linearLayoutAutoPairReceiver;
-    private TextView seed;
+    private TextView seedTextView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_5_summary, container, false);
+        View rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_5_summary, container, false);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -122,7 +122,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
                         Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(currentModel));
                         currentType = receiver.getType();
                     } catch (Exception e) {
-                        StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        StatusMessageHandler.showErrorMessage(getContentView(), e);
                     }
                 } else if (intent.getAction().equals(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED)) {
                     String name = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_NAME);
@@ -171,7 +171,20 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
         linearLayoutDips = (LinearLayout) rootView.findViewById(R.id.linearLayout_dips);
 
         linearLayoutAutoPairReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_autoPair);
-        seed = (TextView) rootView.findViewById(R.id.textView_seed);
+        seedTextView = (TextView) rootView.findViewById(R.id.textView_seed);
+
+        android.widget.Button buttonCopySeed = (android.widget.Button) rootView.findViewById(R.id.button_copySeed);
+        buttonCopySeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    ClipboardHelper.copyToClipboard(getActivity(), getString(R.string.seed), seedTextView.getText().toString());
+                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.copied_to_clipboard, Snackbar.LENGTH_LONG);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(getContentView(), e);
+                }
+            }
+        });
 
         linearLayoutUniversalReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalReceiver);
         linearLayoutUniversalButtons = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalButtons);
@@ -219,7 +232,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         updateUi();
@@ -259,7 +272,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
             }
         }
 
-        seed.setText(String.valueOf(currentSeed));
+        seedTextView.setText(String.valueOf(currentSeed));
 
         if (currentUniversalButtons != null) {
             linearLayoutUniversalButtons.removeAllViews();

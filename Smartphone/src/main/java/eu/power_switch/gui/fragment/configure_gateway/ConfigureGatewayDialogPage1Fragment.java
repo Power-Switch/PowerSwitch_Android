@@ -196,7 +196,7 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

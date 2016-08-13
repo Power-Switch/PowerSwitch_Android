@@ -141,7 +141,7 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
             actions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

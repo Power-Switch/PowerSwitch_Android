@@ -64,7 +64,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 
     private View rootView;
 
-    private int repetitionAmount = 0;
+    private int repetitionAmount = Receiver.MIN_REPETITIONS;
     private List<Gateway> gateways = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
@@ -140,10 +140,10 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 repetitionAmount++;
                 textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
-                buttonMinus.setEnabled(true);
+                buttonMinus.setVisibility(View.VISIBLE);
 
                 if (repetitionAmount >= Receiver.MAX_REPETITIONS) {
-                    buttonPlus.setEnabled(false);
+                    buttonPlus.setVisibility(View.INVISIBLE);
                 }
 
                 sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
@@ -157,10 +157,10 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 repetitionAmount--;
                 textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
-                buttonPlus.setEnabled(true);
+                buttonPlus.setVisibility(View.VISIBLE);
 
                 if (repetitionAmount <= Receiver.MIN_REPETITIONS) {
-                    buttonMinus.setEnabled(false);
+                    buttonMinus.setVisibility(View.INVISIBLE);
                 }
 
                 sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
@@ -193,7 +193,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             gateways = DatabaseHandler.getAllGateways();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         updateGatewayViews();
@@ -215,12 +215,12 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             repetitionAmount = receiver.getRepetitionAmount();
             textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
             if (repetitionAmount >= Receiver.MAX_REPETITIONS) {
-                buttonPlus.setEnabled(false);
+                textView_repetitionAmount.setText(String.valueOf(Receiver.MAX_REPETITIONS));
+                buttonPlus.setVisibility(View.INVISIBLE);
+            } else if (repetitionAmount <= Receiver.MIN_REPETITIONS) {
+                textView_repetitionAmount.setText(String.valueOf(Receiver.MIN_REPETITIONS));
+                buttonMinus.setVisibility(View.INVISIBLE);
             }
-            if (repetitionAmount <= Receiver.MIN_REPETITIONS) {
-                buttonMinus.setEnabled(false);
-            }
-
 
             room = DatabaseHandler.getRoom(receiver.getRoomId());
 
@@ -237,7 +237,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -314,7 +314,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

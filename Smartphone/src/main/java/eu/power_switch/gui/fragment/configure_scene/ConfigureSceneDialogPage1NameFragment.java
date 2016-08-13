@@ -111,7 +111,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
         try {
             existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         linearLayout_selectableReceivers = (LinearLayout) rootView.findViewById(R.id.linearLayout_selectableReceivers);
@@ -174,7 +174,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -201,7 +201,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

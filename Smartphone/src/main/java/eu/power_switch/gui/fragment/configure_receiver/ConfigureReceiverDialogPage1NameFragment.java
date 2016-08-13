@@ -200,7 +200,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             name.setText(receiver.getName());
             roomsListView.setItemChecked(roomNamesAdapter.getPosition(room.getName()), true);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -213,7 +213,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
                 roomList.add(room.getName());
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
         roomNamesAdapter.notifyDataSetChanged();
     }

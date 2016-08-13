@@ -120,7 +120,7 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
 
                                     sendPhoneNumbersChangedBroadcast(getContext(), phoneNumbers);
                                 } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                                    StatusMessageHandler.showErrorMessage(getContentView(), e);
                                 }
                             }
                         })
@@ -158,7 +158,7 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
 
             phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

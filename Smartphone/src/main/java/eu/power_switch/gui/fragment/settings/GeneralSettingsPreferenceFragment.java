@@ -250,7 +250,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
                                     @Override
                                     protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
                                         try {
-                                            LogHandler.sendLogsAsMail(getActivity());
+                                            LogHandler.sendLogsAsMail();
                                             return new AsyncTaskResult<>(true);
                                         } catch (Exception e) {
                                             return new AsyncTaskResult<>(e);

@@ -139,7 +139,7 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
             currentEnterActions.clear();
             currentEnterActions.addAll(DatabaseHandler.getGeofence(geofenceId).getActions(Geofence.EventType.ENTER));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

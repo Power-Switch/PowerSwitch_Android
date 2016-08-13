@@ -124,7 +124,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             gateways = DatabaseHandler.getAllGateways();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
         
         updateGatewayViews();
@@ -236,7 +236,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

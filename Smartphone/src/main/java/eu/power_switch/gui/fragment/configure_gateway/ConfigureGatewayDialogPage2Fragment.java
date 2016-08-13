@@ -107,7 +107,7 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
                                     ssidRecyclerViewAdapter.notifyDataSetChanged();
                                     notifyConfigurationChanged();
                                 } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                                    StatusMessageHandler.showErrorMessage(getContentView(), e);
                                 }
                             }
                         })
@@ -181,7 +181,7 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
             ssids.addAll(gateway.getSsids());
             ssidRecyclerViewAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

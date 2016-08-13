@@ -140,7 +140,7 @@ public class UnknownErrorDialog extends AppCompatActivity {
     }
 
     private void reportExceptionViaMail() throws Exception {
-        LogHandler.sendLogsAsMail(this, throwable, timeRaised);
+        LogHandler.sendLogsAsMail(throwable, timeRaised);
     }
 
 }

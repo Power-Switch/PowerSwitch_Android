@@ -25,6 +25,7 @@
     android:scrollbars="vertical">
 
     <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -41,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="24dp"
             android:layout_marginRight="@dimen/dialog_horizontal_margin"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/button_minus"
@@ -77,15 +78,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/checkbox_use_custom_gateway_selection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/use_custom_gateway_selection"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:text="@string/use_custom_gateway_selection"/>
 
             <TextView
                 android:id="@+id/textView_custom_selection_description"

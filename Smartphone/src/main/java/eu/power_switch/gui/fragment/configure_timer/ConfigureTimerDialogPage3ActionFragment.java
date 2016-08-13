@@ -138,7 +138,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
             currentActions.clear();
             currentActions.addAll(DatabaseHandler.getTimer(timerId).getActions());
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

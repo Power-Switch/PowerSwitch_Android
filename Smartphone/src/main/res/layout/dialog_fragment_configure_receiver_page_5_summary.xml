@@ -25,6 +25,7 @@
     android:scrollbars="vertical">
 
     <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -158,6 +159,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/ui_element_margin_double"
                 android:layout_marginTop="@dimen/title_margin_top"/>
+
+            <Button
+                android:id="@+id/button_copySeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/copySeed"/>
 
         </LinearLayout>
 

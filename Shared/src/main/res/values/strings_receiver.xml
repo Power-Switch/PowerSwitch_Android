@@ -73,4 +73,6 @@
     <string name="gateway_not_supported_by_receiver">Gateway not supported by Receiver!</string>
     <string name="no_receiver_supports_this_action">No Receiver in this Room supports this Action!</string>
 
+    <string name="copySeed">Copy Seed</string>
+
 </resources>

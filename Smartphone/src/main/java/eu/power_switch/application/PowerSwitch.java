@@ -154,13 +154,14 @@ public class PowerSwitch extends MultiDexApplication {
 
         // needs to be initialized before logging framework is up to get settings for that
         SmartphonePreferencesHandler.init(this);
+        LogHandler.init(this);
 
         // Configure Log4J Logger
         if (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)
                 .equals(Integer.valueOf(getString(R.string.value_internal)))) {
-            LogHandler.configureInternalLogger(this);
+            LogHandler.configureInternalLogger();
         } else {
-            LogHandler.configureLogger(this);
+            LogHandler.configureLogger();
         }
 
         Log.d("Application init...");

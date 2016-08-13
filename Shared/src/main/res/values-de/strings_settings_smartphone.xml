@@ -100,6 +100,6 @@
     <string name="title_logDestination">Speichere Logs</string>
 
     <string name="title_sendLogsEmail">Fehlerbericht per E-Mail senden</string>
-    <string name="dialogMessage_sendLogsEmail">PowerSwitch wird nun Logs und einige anonyme Daten über dein Gerät sammeln. Diese Infos werden dann an die E-Mail App deiner Wahl geteilt, wo du (wenn möglich) weiteres persönliches Feedback geben kannst.</string>
+    <string name="dialogMessage_sendLogsEmail">PowerSwitch wird nun Logs und ein paar anonyme Daten über dein Gerät sammeln. Diese Infos werden dann an die E-Mail App deiner Wahl geteilt, wo du (wenn möglich) weiteres persönliches Feedback geben kannst.</string>
 
 </resources>

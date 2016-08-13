@@ -88,6 +88,8 @@
     <string name="report">Report</string>
     <string name="share_plain_text">Share plain text</string>
 
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
     <string name="send_to">Send to</string>
     <string name="unknown_error_info">An Exception was raised during the operation of PowerSwitch.
         Use the buttons below to share it with the developer and help improve the App.</string>

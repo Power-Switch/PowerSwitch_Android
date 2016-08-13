@@ -143,7 +143,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                         sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
                                 dipSwitchArrayList, getCurrentSeed(), getCurrentUniversalButtons());
                     } catch (Exception e) {
-                        StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        StatusMessageHandler.showErrorMessage(getContentView(), e);
                     }
                 }
             }
@@ -246,7 +246,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                     NetworkHandler.send(networkPackages);
 
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    StatusMessageHandler.showErrorMessage(getContentView(), e);
                 }
             }
         });
@@ -275,7 +275,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                     NetworkHandler.init(getContext());
                     NetworkHandler.send(networkPackages);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    StatusMessageHandler.showErrorMessage(getContentView(), e);
                 }
             }
         });
@@ -304,7 +304,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                     NetworkHandler.init(getContext());
                     NetworkHandler.send(networkPackages);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    StatusMessageHandler.showErrorMessage(getContentView(), e);
                 }
             }
         });
@@ -349,7 +349,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
             initType(receiver);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

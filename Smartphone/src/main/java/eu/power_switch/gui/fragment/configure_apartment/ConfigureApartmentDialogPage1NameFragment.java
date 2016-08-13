@@ -80,7 +80,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
         try {
             existingApartments = DatabaseHandler.getAllApartments();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         TextWatcher textWatcher = new TextWatcher() {
@@ -146,7 +146,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -248,7 +248,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

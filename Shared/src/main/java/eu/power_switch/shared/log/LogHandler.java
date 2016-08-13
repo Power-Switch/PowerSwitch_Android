@@ -19,7 +19,6 @@
 package eu.power_switch.shared.log;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -94,14 +93,18 @@ public class LogHandler {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
-    public static void configureLogger(Context context) {
-        LogHandler.context = context;
+    public static void init(Context context) {
+        if (LogHandler.context == null) {
+            LogHandler.context = context;
+        }
+    }
 
-        configureInternalLogger(context);
+    public static void configureLogger() {
+        configureInternalLogger();
         configureExternalLogger();
     }
 
-    public static void configureInternalLogger(Context context) {
+    public static void configureInternalLogger() {
         LogConfigurator internalLogConfigurator = new LogConfigurator();
         internalLogConfigurator.setFileName(context.getFilesDir().getParent() + File.separator +
                 LOG_FOLDER_NAME_INTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
@@ -342,7 +345,7 @@ public class LogHandler {
      * @param throwable            an exception that should be used for subject and content text
      * @param timeRaised           time the exception was raised
      */
-    public static void sendLogsAsMail(Activity activity, String[] destinationAddresses, Throwable throwable, Date timeRaised) throws Exception {
+    public static void sendLogsAsMail(String[] destinationAddresses, Throwable throwable, Date timeRaised) throws Exception {
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(context)) {
             throw new MissingPermissionException(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
@@ -368,7 +371,7 @@ public class LogHandler {
             content += "<<<<<<<<<< DEVELOPER INFOS >>>>>>>>>>\n";
             content += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
             content += "\n";
-            content += "PowerSwitch Application Version: " + ApplicationHelper.getAppVersionDescription(activity) + "\n";
+            content += "PowerSwitch Application Version: " + ApplicationHelper.getAppVersionDescription(context) + "\n";
             content += "Device API Level: " + android.os.Build.VERSION.SDK_INT + "\n";
             content += "Device OS Version name: " + Build.VERSION.RELEASE + "\n";
             content += "Device brand/model: " + LogHandler.getDeviceName() + "\n";
@@ -387,28 +390,28 @@ public class LogHandler {
         emailIntent.putExtra(Intent.EXTRA_TEXT, content);
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(LogHandler.getLogsAsZip()));
 
-        activity.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.send_to)));
+        Intent intent = Intent.createChooser(emailIntent, context.getString(R.string.send_to));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        context.startActivity(intent);
     }
 
     /**
      * Send Logs to an E-Mail App via Intent
      * This includes an Exception that has been raised just before
      *
-     * @param activity   activity context
      * @param throwable  exception
      * @param timeRaised time the exception was raised
      */
-    public static void sendLogsAsMail(Activity activity, Throwable throwable, Date timeRaised) throws Exception {
-        sendLogsAsMail(activity, null, throwable, timeRaised);
+    public static void sendLogsAsMail(Throwable throwable, Date timeRaised) throws Exception {
+        sendLogsAsMail(null, throwable, timeRaised);
     }
 
     /**
      * Send Logs to an E-Mail App via Intent
-     *
-     * @param activity activity context
      */
-    public static void sendLogsAsMail(Activity activity) throws Exception {
-        sendLogsAsMail(activity, null, null, null);
+    public static void sendLogsAsMail() throws Exception {
+        sendLogsAsMail(null, null, null);
     }
 
     /**
@@ -471,4 +474,5 @@ public class LogHandler {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         return simpleDateFormat.format(new Date());
     }
+
 }

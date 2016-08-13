@@ -150,7 +150,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
             currentEnterActions = geofence.getActions(Geofence.EventType.ENTER);
             currentExitActions = geofence.getActions(Geofence.EventType.EXIT);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -285,7 +285,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
             StatusMessageHandler.showInfoMessage(getTargetFragment(),
                     R.string.geofence_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

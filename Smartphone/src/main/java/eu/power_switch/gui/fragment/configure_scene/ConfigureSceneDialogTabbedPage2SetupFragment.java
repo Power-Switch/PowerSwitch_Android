@@ -145,7 +145,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
             customRecyclerViewAdapter.setReceiverSceneItemHashMap(map);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -176,7 +176,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

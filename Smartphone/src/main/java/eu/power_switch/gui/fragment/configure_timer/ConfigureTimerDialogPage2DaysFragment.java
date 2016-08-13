@@ -148,7 +148,7 @@ public class ConfigureTimerDialogPage2DaysFragment extends ConfigurationDialogFr
 
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

@@ -155,7 +155,7 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
                 roomNames.add(room.getName());
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         return true;

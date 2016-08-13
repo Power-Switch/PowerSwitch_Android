@@ -131,7 +131,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         updateUi();
@@ -219,7 +219,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             StatusMessageHandler.showInfoMessage(getTargetFragment(),
                     R.string.timer_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

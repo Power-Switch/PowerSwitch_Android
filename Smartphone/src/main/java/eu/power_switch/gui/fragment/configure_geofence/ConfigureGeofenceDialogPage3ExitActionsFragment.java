@@ -139,7 +139,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
             currentExitActions.clear();
             currentExitActions.addAll(DatabaseHandler.getGeofence(geofenceId).getActions(Geofence.EventType.EXIT));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

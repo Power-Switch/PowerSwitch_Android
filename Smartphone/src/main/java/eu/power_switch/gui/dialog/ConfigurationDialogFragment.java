@@ -19,10 +19,14 @@
 package eu.power_switch.gui.dialog;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.View;
 
+import eu.power_switch.R;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 25.03.2016.
@@ -35,6 +39,26 @@ public abstract class ConfigurationDialogFragment extends Fragment {
     public void notifyConfigurationChanged() {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+    }
+
+    /**
+     * Get content view of this ConfigurationDialogFragment
+     * <p/>
+     * This view should be declared with the id "contentView" in the layout definition of this content fragment.
+     * If no such view can be found it will default to the "getView()" method of the Fragment
+     *
+     * @return
+     */
+    @Nullable
+    public View getContentView() {
+        View contentView = getView().findViewById(R.id.contentView);
+
+        if (contentView == null) {
+            Log.w("ContentView is null! Did you define a view with id \"contentView\" in your layout? Using getView() as fallback.");
+            return getView();
+        } else {
+            return contentView;
+        }
     }
 
 }

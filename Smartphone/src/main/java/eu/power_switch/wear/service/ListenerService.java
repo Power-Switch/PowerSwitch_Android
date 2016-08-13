@@ -59,7 +59,7 @@ public class ListenerService extends WearableListenerService {
      */
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        LogHandler.configureLogger(getApplicationContext());
+        LogHandler.init(getApplicationContext());
 
         if (messageEvent.getPath().equals(WearableConstants.RECEIVER_ACTION_TRIGGER_PATH)) {
 

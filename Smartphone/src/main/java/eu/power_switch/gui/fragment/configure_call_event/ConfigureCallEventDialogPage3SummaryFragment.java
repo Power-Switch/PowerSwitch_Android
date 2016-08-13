@@ -107,7 +107,7 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
 
             updateUi();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

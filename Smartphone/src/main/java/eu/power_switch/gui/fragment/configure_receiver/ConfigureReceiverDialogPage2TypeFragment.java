@@ -271,7 +271,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
                 modelListView.smoothScrollToPosition(modelPosition);
 
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getActivity(), e);
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }
