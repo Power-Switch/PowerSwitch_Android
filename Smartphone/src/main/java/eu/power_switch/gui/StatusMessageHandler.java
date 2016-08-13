@@ -31,6 +31,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.Date;
 
 import eu.power_switch.R;
@@ -398,6 +400,7 @@ public class StatusMessageHandler {
      */
     private static void showErrorSnackbar(final FragmentActivity activity, View parent, final Throwable e) {
         Log.e("Error Snackbar", e);
+        Crashlytics.logException(e);
 
         // remember the time when the exception was raised
         final Date timeRaised = new Date();
