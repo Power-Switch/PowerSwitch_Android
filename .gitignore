@@ -18,6 +18,8 @@ local.properties
 /Smartphone/*.apk
 /Smartphone/*.zip
 
+fabric.properties
+
 
 # Gradle
 /gradle/wrapper/gradle-wrapper.jar
