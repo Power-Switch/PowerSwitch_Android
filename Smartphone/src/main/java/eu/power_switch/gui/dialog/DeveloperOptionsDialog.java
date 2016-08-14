@@ -126,6 +126,15 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
+        CheckBox checkBox_forceFabricEnabled = (CheckBox) rootView.findViewById(R.id.checkBox_forceFabricEnabled);
+        checkBox_forceFabricEnabled.setChecked(DeveloperPreferencesHandler.getForceFabricEnabled());
+        checkBox_forceFabricEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                DeveloperPreferencesHandler.setForceFabricEnabled(isChecked);
+            }
+        });
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView);
         builder.setTitle("Developer Options");

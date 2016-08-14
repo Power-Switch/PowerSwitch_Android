@@ -24,7 +24,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.apache.log4j.Logger;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Common Logger Class used by all classes in this application
@@ -53,6 +57,9 @@ public class Log {
      */
     public static void d(@Nullable String message) {
         LOGGER.debug(message);
+        if (Fabric.isInitialized()) {
+            Crashlytics.log(message);
+        }
     }
 
     /**
@@ -73,7 +80,11 @@ public class Log {
         } else {
             logMessage.append(source.getClass());
         }
-        LOGGER.debug(logMessage);
+
+        LOGGER.debug(logMessage.toString());
+        if (Fabric.isInitialized()) {
+            Crashlytics.log(logMessage.toString());
+        }
     }
 
     /**
@@ -110,7 +121,10 @@ public class Log {
             logMessage.append(String.valueOf(message));
         }
 
-        LOGGER.debug(logMessage);
+        LOGGER.debug(logMessage.toString());
+        if (Fabric.isInitialized()) {
+            Crashlytics.log(logMessage.toString());
+        }
     }
 
     private static String getIntentDescription(Intent intent) {
@@ -142,6 +156,9 @@ public class Log {
      */
     public static void e(@Nullable String message) {
         LOGGER.error(message);
+        if (Fabric.isInitialized()) {
+            Crashlytics.log(message);
+        }
     }
 
     /**
@@ -152,6 +169,9 @@ public class Log {
     public static void e(@Nullable Throwable throwable) {
         if (throwable != null) {
             LOGGER.error("Error", throwable);
+            if (Fabric.isInitialized()) {
+                Crashlytics.logException(throwable);
+            }
         }
     }
 
@@ -181,7 +201,10 @@ public class Log {
         }
 
         logMessage.append(message);
-        LOGGER.error(logMessage);
+        LOGGER.error(logMessage.toString());
+        if (Fabric.isInitialized()) {
+            Crashlytics.log(logMessage.toString());
+        }
     }
 
     /**
@@ -210,6 +233,9 @@ public class Log {
         }
 
         LOGGER.error(logMessage, throwable);
+        if (Fabric.isInitialized()) {
+            Crashlytics.logException(throwable);
+        }
     }
 
     /**
@@ -221,8 +247,14 @@ public class Log {
     public static void e(@Nullable String message, @Nullable Throwable throwable) {
         if (throwable != null) {
             LOGGER.error(message, throwable);
+            if (Fabric.isInitialized()) {
+                Crashlytics.logException(throwable);
+            }
         } else {
             LOGGER.error(message);
+            if (Fabric.isInitialized()) {
+                Crashlytics.log(message);
+            }
         }
     }
 
@@ -233,6 +265,9 @@ public class Log {
      */
     public static void w(@Nullable String message) {
         LOGGER.warn(message);
+        if (Fabric.isInitialized()) {
+            Crashlytics.log(message);
+        }
     }
 
     /**
@@ -241,9 +276,8 @@ public class Log {
      * @param throwable throwable
      * @return StackTrace string
      */
-    public static
     @NonNull
-    String getStackTraceText(@Nullable Throwable throwable) {
+    public static String getStackTraceText(@Nullable Throwable throwable) {
         return android.util.Log.getStackTraceString(throwable);
     }
 }

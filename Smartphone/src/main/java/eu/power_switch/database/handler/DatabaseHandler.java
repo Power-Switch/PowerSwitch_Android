@@ -1099,6 +1099,8 @@ public final class DatabaseHandler {
         try {
             id = GatewayHandler.add(gateway);
             database.setTransactionSuccessful();
+        } catch (GatewayAlreadyExistsException e) {
+            throw e;
         } catch (Exception e) {
             Log.e(e);
             throw e;

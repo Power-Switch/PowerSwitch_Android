@@ -36,6 +36,7 @@ public class DeveloperPreferencesHandler {
     // cached values
     private static boolean playStoreModeCache;
     private static boolean forceLanguageCache;
+    private static boolean forceFabricEnabledCache;
     private static String localeCache;
 
     /**
@@ -61,12 +62,14 @@ public class DeveloperPreferencesHandler {
      * First time initialization of cached values
      */
     private static void initCache() {
-        playStoreModeCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.PLAY_STORE_MODE_KEY, false);
-        forceLanguageCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.FORCE_LANGUAGE_KEY, false);
-        localeCache = sharedPreferences.getString(DeveloperSettingsConstants.LOCALE_KEY, Locale.GERMAN.toString());
+        playStoreModeCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.KEY_PLAY_STORE_MODE, false);
+        forceLanguageCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.KEY_FORCE_LANGUAGE, false);
+        forceFabricEnabledCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.KEY_FORCE_ENABLE_FABRIC, false);
+        localeCache = sharedPreferences.getString(DeveloperSettingsConstants.KEY_LOCALE, Locale.GERMAN.toString());
 
         Log.d(DeveloperPreferencesHandler.class, "PlayStoreMode: " + playStoreModeCache);
         Log.d(DeveloperPreferencesHandler.class, "ForceLanguage: " + forceLanguageCache);
+        Log.d(DeveloperPreferencesHandler.class, "ForceEnableFabric: " + forceFabricEnabledCache);
         Log.d(DeveloperPreferencesHandler.class, "Locale: " + localeCache);
     }
 
@@ -94,7 +97,7 @@ public class DeveloperPreferencesHandler {
     public static void setPlayStoreMode(boolean bool) {
         Log.d(DeveloperPreferencesHandler.class, "setPlayStoreMode: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(DeveloperSettingsConstants.PLAY_STORE_MODE_KEY, bool);
+        editor.putBoolean(DeveloperSettingsConstants.KEY_PLAY_STORE_MODE, bool);
         editor.apply();
 
         playStoreModeCache = bool;
@@ -107,7 +110,7 @@ public class DeveloperPreferencesHandler {
     public static void setForceLanguage(boolean bool) {
         Log.d(DeveloperPreferencesHandler.class, "setForceLanguage: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(DeveloperSettingsConstants.FORCE_LANGUAGE_KEY, bool);
+        editor.putBoolean(DeveloperSettingsConstants.KEY_FORCE_LANGUAGE, bool);
         editor.apply();
 
         forceLanguageCache = bool;
@@ -120,9 +123,32 @@ public class DeveloperPreferencesHandler {
     public static void setLocale(Locale locale) {
         Log.d(DeveloperPreferencesHandler.class, "setLocale: " + locale.toString());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(DeveloperSettingsConstants.LOCALE_KEY, locale.toString());
+        editor.putString(DeveloperSettingsConstants.KEY_LOCALE, locale.toString());
         editor.apply();
 
         localeCache = locale.toString();
+    }
+
+    /**
+     * Retrieves setting to force enable Fabric
+     *
+     * @return true if enabled
+     */
+    public static boolean getForceFabricEnabled() {
+        return forceFabricEnabledCache;
+    }
+
+    /**
+     * Sets setting to force enable Fabric
+     *
+     * @param bool true if enabled
+     */
+    public static void setForceFabricEnabled(boolean bool) {
+        Log.d(DeveloperPreferencesHandler.class, "setForceFabricEnabled: " + bool);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(DeveloperSettingsConstants.KEY_FORCE_ENABLE_FABRIC, bool);
+        editor.apply();
+
+        forceFabricEnabledCache = bool;
     }
 }

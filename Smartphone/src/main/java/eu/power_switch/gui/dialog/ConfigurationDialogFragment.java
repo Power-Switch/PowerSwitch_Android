@@ -45,12 +45,18 @@ public abstract class ConfigurationDialogFragment extends Fragment {
      * Get content view of this ConfigurationDialogFragment
      * <p/>
      * This view should be declared with the id "contentView" in the layout definition of this content fragment.
-     * If no such view can be found it will default to the "getView()" method of the Fragment
+     * If no such view can be found it will default to the "getView()" method of the Fragment,
+     * which should be the outermost dialog window view.
      *
-     * @return
+     * @return view with Id "contentView" if defined, dialog fragment view otherwise
      */
     @Nullable
     public View getContentView() {
+        if (getView() == null) {
+            Log.w("View is null!");
+            return null;
+        }
+
         View contentView = getView().findViewById(R.id.contentView);
 
         if (contentView == null) {

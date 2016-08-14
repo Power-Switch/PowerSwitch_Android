@@ -181,13 +181,16 @@ public class PowerSwitch extends MultiDexApplication {
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric
-        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
+        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler.getForceFabricEnabled();
 
         if (enableFabric) {
             Fabric.with(this,
                     new Crashlytics.Builder().core(
                             new CrashlyticsCore.Builder()
-                                    .disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds
+                                    .disabled(
+                                            // disable Crashlytics on debug builds
+                                            BuildConfig.DEBUG &&
+                                                    !DeveloperPreferencesHandler.getForceFabricEnabled())
                                     .build())
                             .build(),
                     new Answers()
