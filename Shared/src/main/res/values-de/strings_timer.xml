@@ -24,6 +24,8 @@
     <!-- ConfigureTimerDialog -->
     <string name="configure_timer">Timer einrichten</string>
     <string name="time">Zeit</string>
+    <string name="randomizer">Randomisierer</string>
+
     <string name="days">Tage</string>
     <string name="weekdays">Wochentage</string>
     <string name="action">Aktion</string>

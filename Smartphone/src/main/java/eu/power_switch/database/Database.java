@@ -62,7 +62,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 public class Database extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
     private Context context;
 

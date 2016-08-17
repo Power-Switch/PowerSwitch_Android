@@ -45,6 +45,10 @@ import eu.power_switch.timer.WeekdayTimer;
  */
 public class ConfigureTimerDialogPage2DaysFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_EXECUTION_INTERVAL = "executionInterval";
+    public static final String KEY_EXECUTION_DAYS = "executionDays";
+    public static final String KEY_EXECUTION_TYPE = "executionType";
+
     private View rootView;
     private ToggleButton toggleButtonMonday;
     private ToggleButton toggleButtonTuesday;
@@ -62,13 +66,13 @@ public class ConfigureTimerDialogPage2DaysFragment extends ConfigurationDialogFr
      * @param executionDays     list of days
      * @param executionType     Timer Type
      */
-    public static void sendTimerEexecutionIntervalChangedBroadcast(Context context, long executionInterval,
-                                                                   ArrayList<WeekdayTimer.Day> executionDays, String
+    public static void sendTimerExecutionIntervalChangedBroadcast(Context context, long executionInterval,
+                                                                  ArrayList<WeekdayTimer.Day> executionDays, String
                                                                            executionType) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
-        intent.putExtra("executionInterval", executionInterval);
-        intent.putExtra("executionDays", executionDays);
-        intent.putExtra("executionType", executionType);
+        intent.putExtra(KEY_EXECUTION_INTERVAL, executionInterval);
+        intent.putExtra(KEY_EXECUTION_DAYS, executionDays);
+        intent.putExtra(KEY_EXECUTION_TYPE, executionType);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -81,7 +85,7 @@ public class ConfigureTimerDialogPage2DaysFragment extends ConfigurationDialogFr
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sendTimerEexecutionIntervalChangedBroadcast(getContext(), 1000, getSelectedDays(), Timer
+                sendTimerExecutionIntervalChangedBroadcast(getContext(), 1000, getSelectedDays(), Timer
                         .EXECUTION_TYPE_WEEKDAY);
             }
         };

@@ -24,6 +24,10 @@
     <!-- ConfigureTimerDialog -->
     <string name="configure_timer">Configure Timer</string>
     <string name="time">Time</string>
+    <string name="randomizer">Randomizer</string>
+
+    <string name="plus_minus_minutes">+/- %d min</string>
+
     <string name="days">Days</string>
     <string name="weekdays">Weekdays</string>
     <string name="action">Action</string>

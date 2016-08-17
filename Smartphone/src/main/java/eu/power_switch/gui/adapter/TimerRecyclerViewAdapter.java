@@ -112,6 +112,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         }
         executionTimeText += minute;
 
+        if (timer.getRandomizerValue() != 0) {
+            executionTimeText += " " + context.getString(R.string.plus_minus_minutes, timer.getRandomizerValue());
+        }
+
         holder.executionTime.setText(executionTimeText);
 
         String executionDaysText = "";

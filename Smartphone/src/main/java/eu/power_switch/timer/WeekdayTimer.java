@@ -37,18 +37,12 @@ public class WeekdayTimer extends Timer {
     public static final long INTERVAL_DAILY = 1000 * 60 * 60 * 24;
 
     private ArrayList<Day> executionDays;
-    private Calendar executionTime;
 
-    public WeekdayTimer(long id, boolean isActive, String name, Calendar executionTime, ArrayList<Day> executionDays,
+
+    public WeekdayTimer(long id, boolean isActive, String name, Calendar executionTime, int randomizerValue, ArrayList<Day> executionDays,
                         ArrayList<Action> actions) {
-        super(id, isActive, name, EXECUTION_TYPE_WEEKDAY, actions);
-        this.executionTime = executionTime;
+        super(id, isActive, name, executionTime, randomizerValue, EXECUTION_TYPE_WEEKDAY, actions);
         this.executionDays = executionDays;
-    }
-
-    @Override
-    public Calendar getExecutionTime() {
-        return executionTime;
     }
 
     @Override

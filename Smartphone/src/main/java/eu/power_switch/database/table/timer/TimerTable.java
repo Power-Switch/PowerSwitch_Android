@@ -32,9 +32,10 @@ public class TimerTable {
     public static final String COLUMN_EXECUTION_TIME = "execution_time";
     public static final String COLUMN_EXECUTION_INTERVAL = "execution_interval";
     public static final String COLUMN_EXECUTION_TYPE = "execution_type";
+    public static final String COLUMN_RANDOMIZER_VALUE = "randomizer_value";
 
     public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_ACTIVE, COLUMN_NAME,
-            COLUMN_EXECUTION_TIME, COLUMN_EXECUTION_INTERVAL, COLUMN_EXECUTION_TYPE};
+            COLUMN_EXECUTION_TIME, COLUMN_EXECUTION_INTERVAL, COLUMN_EXECUTION_TYPE, COLUMN_RANDOMIZER_VALUE};
 
 
     //@formatter:off
@@ -44,7 +45,8 @@ public class TimerTable {
             COLUMN_NAME + " text not null, " +
             COLUMN_EXECUTION_TIME + " integer not null, " +
             COLUMN_EXECUTION_INTERVAL + " integer not null, " +
-            COLUMN_EXECUTION_TYPE + " text not null " +
+            COLUMN_EXECUTION_TYPE + " text not null, " +
+            COLUMN_RANDOMIZER_VALUE + " int not null " +
         ");";
     //@formatter:on
 
@@ -63,7 +65,10 @@ public class TimerTable {
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);
                 break;
+        }
 
+        if (oldVersion <= 18) {
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COLUMN_RANDOMIZER_VALUE + " int not null DEFAULT 0;");
         }
     }
 }

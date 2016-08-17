@@ -52,6 +52,8 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_ACTIONS = "actions";
+
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static ArrayList<Action> currentActions;
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
@@ -66,7 +68,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
      */
     public static void sendTimerActionChangedBroadcast(Context context, ArrayList<Action> actions) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
-        intent.putExtra("actions", actions);
+        intent.putExtra(KEY_ACTIONS, actions);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }

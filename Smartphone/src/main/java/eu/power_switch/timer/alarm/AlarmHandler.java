@@ -75,7 +75,7 @@ public abstract class AlarmHandler {
                 .FLAG_UPDATE_CURRENT);
 
         Log.d("AlarmHandler", "intent: " + createAlarmIntent(timer));
-        Log.d("AlarmHandler", "time: " + timer.getExecutionTime().getTime().toLocaleString());
+        Log.d("AlarmHandler", "exactTime: " + timer.getExecutionTime().getTime().toLocaleString());
 
         if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
             createAlarm(context, (WeekdayTimer) timer, pendingIntent);
@@ -89,20 +89,23 @@ public abstract class AlarmHandler {
 
         if (timer.getExecutionInterval() == -1) {
             // one time alarm
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, timer.getExecutionTime().getTimeInMillis(), pendingIntent);
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, timer.getRandomizedExecutionTime().getTimeInMillis(), pendingIntent);
         } else {
             // repeating alarm
             Calendar currentTime = Calendar.getInstance();
-            Calendar exactExecutionTime = Calendar.getInstance();
-            exactExecutionTime.set(Calendar.HOUR_OF_DAY, timer.getExecutionTime().get(Calendar.HOUR_OF_DAY));
-            exactExecutionTime.set(Calendar.MINUTE, timer.getExecutionTime().get(Calendar.MINUTE));
-            exactExecutionTime.set(Calendar.SECOND, 0);
-            exactExecutionTime.set(Calendar.MILLISECOND, 0);
+
+            Calendar randomizedExecutionTime = timer.getRandomizedExecutionTime();
+
+            Calendar nextExecutionTime = Calendar.getInstance();
+            nextExecutionTime.set(Calendar.HOUR_OF_DAY, randomizedExecutionTime.get(Calendar.HOUR_OF_DAY));
+            nextExecutionTime.set(Calendar.MINUTE, randomizedExecutionTime.get(Calendar.MINUTE));
+            nextExecutionTime.set(Calendar.SECOND, 0);
+            nextExecutionTime.set(Calendar.MILLISECOND, 0);
 
             int i = 0;
             while (true) {
-                if (!timer.containsExecutionDay(exactExecutionTime.get(Calendar.DAY_OF_WEEK)) || exactExecutionTime.before(currentTime)) {
-                    exactExecutionTime.add(Calendar.DAY_OF_WEEK, 1);
+                if (!timer.containsExecutionDay(nextExecutionTime.get(Calendar.DAY_OF_WEEK)) || nextExecutionTime.before(currentTime)) {
+                    nextExecutionTime.add(Calendar.DAY_OF_WEEK, 1);
                     i++;
 
                     if (i > 100) {
@@ -114,14 +117,14 @@ public abstract class AlarmHandler {
                 }
             }
 
-            Log.d("AlarmHandler", "next exactExecutionTime: " + exactExecutionTime.getTime().toLocaleString());
+            Log.d("AlarmHandler", "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime().toLocaleString());
 
             if (Build.VERSION.SDK_INT >= 23) {
-                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, exactExecutionTime.getTimeInMillis(), pendingIntent);
+                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 23) {
-                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, exactExecutionTime.getTimeInMillis(), pendingIntent);
+                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else if (Build.VERSION.SDK_INT < 19) {
-                alarmMgr.set(AlarmManager.RTC_WAKEUP, exactExecutionTime.getTimeInMillis(), pendingIntent);
+                alarmMgr.set(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else {
                 Log.e("AlarmHandler", "Unknown SDK Version!");
             }
@@ -133,26 +136,31 @@ public abstract class AlarmHandler {
 
         if (timer.getExecutionInterval() == -1) {
             // one time alarm
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, timer.getExecutionTime().getTimeInMillis(), pendingIntent);
+            alarmMgr.set(AlarmManager.RTC_WAKEUP, timer.getRandomizedExecutionTime().getTimeInMillis(), pendingIntent);
         } else {
             // repeating alarm
             Calendar currentTime = Calendar.getInstance();
-            Calendar exactExecutionTime = Calendar.getInstance();
-            exactExecutionTime.set(Calendar.HOUR_OF_DAY, timer.getExecutionTime().get(Calendar.HOUR_OF_DAY));
-            exactExecutionTime.set(Calendar.MINUTE, timer.getExecutionTime().get(Calendar.MINUTE));
-            exactExecutionTime.set(Calendar.SECOND, 0);
-            exactExecutionTime.set(Calendar.MILLISECOND, 0);
 
-            while (exactExecutionTime.before(currentTime)) {
-                exactExecutionTime.add(Calendar.MILLISECOND, (int) timer.getExecutionInterval());
+            Calendar randomizedExecutionTime = timer.getRandomizedExecutionTime();
+
+            Calendar nextExecutionTime = Calendar.getInstance();
+            nextExecutionTime.set(Calendar.HOUR_OF_DAY, randomizedExecutionTime.get(Calendar.HOUR_OF_DAY));
+            nextExecutionTime.set(Calendar.MINUTE, randomizedExecutionTime.get(Calendar.MINUTE));
+            nextExecutionTime.set(Calendar.SECOND, 0);
+            nextExecutionTime.set(Calendar.MILLISECOND, 0);
+
+            while (nextExecutionTime.before(currentTime)) {
+                nextExecutionTime.add(Calendar.MILLISECOND, (int) timer.getExecutionInterval());
             }
 
+            Log.d("AlarmHandler", "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime().toLocaleString());
+
             if (Build.VERSION.SDK_INT >= 23) {
-                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, exactExecutionTime.getTimeInMillis(), pendingIntent);
+                alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 23) {
-                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, exactExecutionTime.getTimeInMillis(), pendingIntent);
+                alarmMgr.setExact(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else if (Build.VERSION.SDK_INT < 19) {
-                alarmMgr.set(AlarmManager.RTC_WAKEUP, exactExecutionTime.getTimeInMillis(), pendingIntent);
+                alarmMgr.set(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else {
                 Log.e("AlarmHandler", "Unknown SDK Version!");
             }
@@ -170,8 +178,8 @@ public abstract class AlarmHandler {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(timer), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.d("AlarmHandler", "intent: " + createAlarmIntent(timer));
-        Log.d("AlarmHandler", "time: " + timer.getExecutionTime().getTime().toLocaleString());
+        Log.d("AlarmHandler", "cancelling intent: " + createAlarmIntent(timer));
+        Log.d("AlarmHandler", "cancelling time: " + timer.getExecutionTime().getTime().toLocaleString());
         alarmMgr.cancel(pendingIntent);
     }
 }

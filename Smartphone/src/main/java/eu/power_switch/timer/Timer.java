@@ -24,6 +24,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 import eu.power_switch.action.Action;
 
@@ -51,31 +52,42 @@ public abstract class Timer {
      * Name of this Timer
      */
     protected String name;
-
+    /**
+     * Randomizer value, determining how much time before/after the actual execution time the actions should be executed
+     */
+    protected int randomizerValue;
     /**
      * ExecutionType of this Timer
      */
     @ExecutionType
     protected String executionType;
-
     /**
      * Actions of this Timer
      */
     protected ArrayList<Action> actions;
+    /**
+     * Time when this timer should be executed
+     */
+    private Calendar executionTime;
+
 
     /**
      * Constructor
      *
-     * @param id            ID of this Timer
-     * @param active        "Active" state of this Timer
-     * @param name          Name of this Timer
-     * @param executionType {@see ExecutionType} of this Timer
-     * @param actions       list of actions
+     * @param id              ID of this Timer
+     * @param active          "Active" state of this Timer
+     * @param name            Name of this Timer
+     * @param executionTime   time when this timer should be executed
+     * @param randomizerValue
+     * @param executionType   {@see ExecutionType} of this Timer
+     * @param actions         list of actions
      */
-    public Timer(long id, boolean active, String name, String executionType, ArrayList<Action> actions) {
+    public Timer(long id, boolean active, String name, Calendar executionTime, int randomizerValue, String executionType, ArrayList<Action> actions) {
         this.id = id;
         this.active = active;
         this.name = name;
+        this.executionTime = executionTime;
+        this.randomizerValue = randomizerValue;
         this.executionType = executionType;
         this.actions = actions;
     }
@@ -117,6 +129,42 @@ public abstract class Timer {
     }
 
     /**
+     * Returns the time when this Timer should execute
+     *
+     * @return Calender (only Hour/Minute is important)
+     */
+    public Calendar getExecutionTime() {
+        return executionTime;
+    }
+
+    /**
+     * Get randomizer value for this timer
+     *
+     * @return randomizer value
+     */
+    public int getRandomizerValue() {
+        return randomizerValue;
+    }
+
+    /**
+     * Randomly generate an upcoming execution time based on ExecutionTime and RandomizerValue
+     *
+     * @return (within boundaries) randomized execution time
+     */
+    public Calendar getRandomizedExecutionTime() {
+        Calendar randomExecutionTime = Calendar.getInstance();
+        randomExecutionTime.setTime(getExecutionTime().getTime()); // init with exact time
+        randomExecutionTime.add(Calendar.MINUTE, -randomizerValue); // substract highest possible variation (in one direction)
+        Random r = new Random();
+        int randomMinutes = r.nextInt(randomizerValue * 2 + 1); // generate random variation but with double the range (in both directions)
+        randomExecutionTime.add(Calendar.MINUTE, randomMinutes); // add randomly generated variation to time
+        randomExecutionTime.set(Calendar.SECOND, 0); // seconds and milliseconds can be ignored^
+        randomExecutionTime.set(Calendar.MILLISECOND, 0);
+
+        return randomExecutionTime;
+    }
+
+    /**
      * Returns execution type of this Timer
      *
      * @return execution type
@@ -136,19 +184,11 @@ public abstract class Timer {
     }
 
     /**
-     * Returns the time when this Timer should execute
-     *
-     * @return Calender (only Hour/Minute is important)
-     */
-    public abstract Calendar getExecutionTime();
-
-    /**
      * Returns the interval this Timer should execute regularly
      *
      * @return Interval
      */
     public abstract long getExecutionInterval();
-
 
     @Override
     public abstract String toString();

@@ -31,6 +31,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -49,21 +51,27 @@ import eu.power_switch.timer.Timer;
  */
 public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFragment {
 
-    private View rootView;
+    public static final String KEY_NAME = "name";
+    public static final String KEY_EXECUTION_TIME = "executionTime";
+    public static final String KEY_RANDOMIZER_VALUE = "randomizerValue";
+
     private TextInputLayout floatingName;
     private EditText name;
     private TimePicker timePicker;
+    private TextView textViewRandomizer;
+    private SeekBar seekBarRandomizer;
 
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context any suitable context
+     * @param context  any suitable context
      * @param calendar The calendar when this timer activates
      */
-    public static void sendTimerNameExecutionTimeChangedBroadcast(Context context, String name, Calendar calendar) {
+    public static void sendTimerNameExecutionTimeChangedBroadcast(Context context, String name, Calendar calendar, int randomizerValue) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
-        intent.putExtra("name", name);
-        intent.putExtra("executionTime", calendar);
+        intent.putExtra(KEY_NAME, name);
+        intent.putExtra(KEY_EXECUTION_TIME, calendar);
+        intent.putExtra(KEY_RANDOMIZER_VALUE, randomizerValue);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -71,7 +79,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_1, container, false);
+        View rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_1, container, false);
 
         floatingName = (TextInputLayout) rootView.findViewById(R.id.timer_name_text_input_layout);
         name = (EditText) rootView.findViewById(R.id.editText_timer_name);
@@ -88,7 +96,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
             @Override
             public void afterTextChanged(Editable s) {
                 checkValidity();
-                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), getCurrentTime());
+                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), getCurrentTime(), getCurrentRandomizerValue());
             }
         });
 
@@ -102,10 +110,30 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
                 c.set(Calendar.MINUTE, minute);
                 c.set(Calendar.SECOND, 0);
                 c.set(Calendar.MILLISECOND, 0);
-                Log.d("TimerConfigurationDialog", "Time set to: " + hourOfDay + ":" + minute);
-                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), c);
+                Log.d(ConfigureTimerDialogPage1TimeFragment.class, "Time set to: " + hourOfDay + ":" + minute);
+                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), c, getCurrentRandomizerValue());
             }
         });
+
+        textViewRandomizer = (TextView) rootView.findViewById(R.id.textViewRandomizer);
+
+        seekBarRandomizer = (SeekBar) rootView.findViewById(R.id.seekbarRandomizer);
+        seekBarRandomizer.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                updateRandomizerValue(seekBar.getProgress());
+                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), getCurrentTime(), getCurrentRandomizerValue());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        updateRandomizerValue(0);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
@@ -127,6 +155,8 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
             Calendar c = timer.getExecutionTime();
             timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
             timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
+
+            updateRandomizerValue(timer.getRandomizerValue());
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -145,6 +175,10 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
         return c;
     }
 
+    private int getCurrentRandomizerValue() {
+        return seekBarRandomizer.getProgress();
+    }
+
     private boolean checkValidity() {
         String currentReceiverName = getCurrentName();
 
@@ -157,6 +191,11 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
         floatingName.setError(null);
         floatingName.setErrorEnabled(false);
         return true;
+    }
+
+    private void updateRandomizerValue(int progress) {
+        textViewRandomizer.setText(getString(R.string.plus_minus_minutes, progress));
+        seekBarRandomizer.setProgress(progress);
     }
 
 }

@@ -62,6 +62,7 @@ abstract class TimerHandler {
         values.put(TimerTable.COLUMN_EXECUTION_TIME, timer.getExecutionTime().getTimeInMillis());
         values.put(TimerTable.COLUMN_EXECUTION_INTERVAL, timer.getExecutionInterval());
         values.put(TimerTable.COLUMN_EXECUTION_TYPE, timer.getExecutionType());
+        values.put(TimerTable.COLUMN_RANDOMIZER_VALUE, timer.getRandomizerValue());
 
         long timerId = DatabaseHandler.database.insert(TimerTable.TABLE_NAME, null, values);
 
@@ -130,6 +131,7 @@ abstract class TimerHandler {
         values.put(TimerTable.COLUMN_EXECUTION_TYPE, timer.getExecutionType());
         values.put(TimerTable.COLUMN_EXECUTION_INTERVAL, timer.getExecutionInterval());
         values.put(TimerTable.COLUMN_EXECUTION_TIME, timer.getExecutionTime().getTimeInMillis());
+        values.put(TimerTable.COLUMN_RANDOMIZER_VALUE, timer.getRandomizerValue());
 
         DatabaseHandler.database.update(TimerTable.TABLE_NAME, values,
                 TimerTable.COLUMN_ID + "=" + timer.getId(), null);
@@ -194,10 +196,7 @@ abstract class TimerHandler {
     protected static List<Timer> getAll(boolean isActive) throws Exception {
         List<Timer> timers = new ArrayList<>();
         int isActiveInt = isActive ? 1 : 0;
-        String[] columns = {TimerTable.COLUMN_ID, TimerTable.COLUMN_ACTIVE, TimerTable.COLUMN_NAME,
-                TimerTable.COLUMN_EXECUTION_TIME, TimerTable.COLUMN_EXECUTION_INTERVAL,
-                TimerTable.COLUMN_EXECUTION_TYPE};
-        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, columns, TimerTable.COLUMN_ACTIVE +
+        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS, TimerTable.COLUMN_ACTIVE +
                 "=" + isActiveInt, null, null, null, null, null);
         cursor.moveToFirst();
 
@@ -246,6 +245,7 @@ abstract class TimerHandler {
         long executionTimeRAW = c.getLong(3);
         Calendar executionTime = Calendar.getInstance();
         executionTime.setTime(new Date(executionTimeRAW));
+        int randomizerValue = c.getInt(6);
 
         long executionInterval = c.getLong(4);
         String executionType = c.getString(5);
@@ -255,9 +255,9 @@ abstract class TimerHandler {
         if (executionType.equals(Timer.EXECUTION_TYPE_WEEKDAY)) {
             ArrayList<WeekdayTimer.Day> weekdays = getWeekdayDetails(timerId);
 
-            return new WeekdayTimer(timerId, active, name, executionTime, weekdays, actions);
+            return new WeekdayTimer(timerId, active, name, executionTime, randomizerValue, weekdays, actions);
         } else if (executionType.equals(Timer.EXECUTION_TYPE_INTERVAL)) {
-            return new IntervalTimer(timerId, active, name, executionTime, executionInterval, actions);
+            return new IntervalTimer(timerId, active, name, executionTime, randomizerValue, executionInterval, actions);
         }
 
         return null;

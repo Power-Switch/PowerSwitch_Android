@@ -31,20 +31,13 @@ import eu.power_switch.shared.log.LogHandler;
  */
 public class IntervalTimer extends Timer {
 
-    private Calendar executionTime;
     private long executionInterval;
 
-    public IntervalTimer(long id, boolean isActive, String name, Calendar executionTime, long executionInterval,
+    public IntervalTimer(long id, boolean isActive, String name, Calendar executionTime, int randomizerValue, long executionInterval,
                          ArrayList<Action> actions) {
-        super(id, isActive, name, EXECUTION_TYPE_INTERVAL, new ArrayList<Action>());
-        this.executionTime = executionTime;
+        super(id, isActive, name, executionTime, randomizerValue, EXECUTION_TYPE_INTERVAL, new ArrayList<Action>());
         this.executionInterval = executionInterval;
         this.actions = actions;
-    }
-
-    @Override
-    public Calendar getExecutionTime() {
-        return executionTime;
     }
 
     @Override

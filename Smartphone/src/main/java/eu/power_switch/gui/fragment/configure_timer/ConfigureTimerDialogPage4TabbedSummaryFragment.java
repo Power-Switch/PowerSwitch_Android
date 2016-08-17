@@ -56,6 +56,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
     private boolean currentIsActive;
     private String currentName = "";
     private Calendar currentExecutionTime = Calendar.getInstance();
+    private int currentRandomizerValue = 0;
     private long currentExecutionInterval = -1;
     private ArrayList<WeekdayTimer.Day> currentExecutionDays;
     private String currentExecutionType;
@@ -78,16 +79,17 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED.equals(intent.getAction())) {
-                    currentExecutionTime = (Calendar) intent.getSerializableExtra("executionTime");
-                    currentName = intent.getStringExtra("name");
+                    currentExecutionTime = (Calendar) intent.getSerializableExtra(ConfigureTimerDialogPage1TimeFragment.KEY_EXECUTION_TIME);
+                    currentName = intent.getStringExtra(ConfigureTimerDialogPage1TimeFragment.KEY_NAME);
+                    currentRandomizerValue = intent.getIntExtra(ConfigureTimerDialogPage1TimeFragment.KEY_RANDOMIZER_VALUE, 0);
 
                 } else if (LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED.equals(intent.getAction())) {
-                    currentExecutionInterval = intent.getLongExtra("executionInterval", -1);
-                    currentExecutionDays = (ArrayList<WeekdayTimer.Day>) intent.getSerializableExtra("executionDays");
-                    currentExecutionType = intent.getStringExtra("executionType");
+                    currentExecutionInterval = intent.getLongExtra(ConfigureTimerDialogPage2DaysFragment.KEY_EXECUTION_INTERVAL, -1);
+                    currentExecutionDays = (ArrayList<WeekdayTimer.Day>) intent.getSerializableExtra(ConfigureTimerDialogPage2DaysFragment.KEY_EXECUTION_DAYS);
+                    currentExecutionType = intent.getStringExtra(ConfigureTimerDialogPage2DaysFragment.KEY_EXECUTION_TYPE);
 
                 } else if (LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentActions = (ArrayList<Action>) intent.getSerializableExtra("actions");
+                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureTimerDialogPage3ActionFragment.KEY_ACTIONS);
                 }
 
                 updateUi();
@@ -161,6 +163,8 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             }
             executionTime += minute;
 
+            executionTime += " " + getString(R.string.plus_minus_minutes, currentRandomizerValue);
+
             textViewTime.setText(executionTime);
         } else {
             textViewTime.setText("");
@@ -195,21 +199,21 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
         try {
             if (currentId == -1) {
                 if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-                    Timer timer = new IntervalTimer(0, true, currentName, currentExecutionTime, currentExecutionInterval,
+                    Timer timer = new IntervalTimer(0, true, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionInterval,
                             currentActions);
                     DatabaseHandler.addTimer(timer);
                 } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-                    Timer timer = new WeekdayTimer(0, true, currentName, currentExecutionTime, currentExecutionDays,
+                    Timer timer = new WeekdayTimer(0, true, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionDays,
                             currentActions);
                     DatabaseHandler.addTimer(timer);
                 }
             } else {
                 if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-                    Timer timer = new IntervalTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentExecutionInterval,
+                    Timer timer = new IntervalTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionInterval,
                             currentActions);
                     DatabaseHandler.updateTimer(timer);
                 } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-                    Timer timer = new WeekdayTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentExecutionDays,
+                    Timer timer = new WeekdayTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionDays,
                             currentActions);
                     DatabaseHandler.updateTimer(timer);
                 }

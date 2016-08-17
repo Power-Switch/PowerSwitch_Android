@@ -254,7 +254,7 @@ public class PlayStoreModeDataModel {
         c.set(Calendar.HOUR_OF_DAY, 20);
         c.set(Calendar.MINUTE, 0);
 
-        timers.add(new WeekdayTimer(0, true, "Abendlicht", c, days, actions));
+        timers.add(new WeekdayTimer(0, true, "Abendlicht", c, 0, days, actions));
 
 
         ReceiverAction timerReceiverAction2 = new ReceiverAction(0, APARTMENT_HEIMAT.getName(),
@@ -275,7 +275,7 @@ public class PlayStoreModeDataModel {
         c2.set(Calendar.HOUR_OF_DAY, 6);
         c2.set(Calendar.MINUTE, 30);
 
-        timers.add(new WeekdayTimer(1, true, "Morgenkaffee", c2, days2, actions2));
+        timers.add(new WeekdayTimer(1, true, "Morgenkaffee", c2, 0, days2, actions2));
 
         return timers;
     }
