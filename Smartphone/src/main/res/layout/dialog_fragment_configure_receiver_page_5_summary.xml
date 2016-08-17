@@ -17,176 +17,183 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fadeScrollbars="false"
-    android:scrollbars="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/contentView"
+    <android.support.v4.widget.NestedScrollView
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/dialog_margin_bottom"
-        android:paddingLeft="@dimen/dialog_horizontal_margin"
-        android:paddingRight="@dimen/dialog_horizontal_margin">
-
-        <TextView
-            android:id="@+id/textView_name_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/name"/>
-
-        <TextView
-            android:id="@+id/textView_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
-
-        <TextView
-            android:id="@+id/textView_roomName_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/room"/>
-
-        <TextView
-            android:id="@+id/textView_roomName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
-
-        <TextView
-            android:id="@+id/textView_brand_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/brand"/>
-
-        <TextView
-            android:id="@+id/textView_brand"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
-
-        <TextView
-            android:id="@+id/textView_model_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/model"/>
-
-        <TextView
-            android:id="@+id/textView_model"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical">
 
         <LinearLayout
-            android:id="@+id/linearLayout_masterSlaveReceiver"
+            android:id="@+id/contentView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dialog_margin_bottom"
+            android:paddingLeft="@dimen/dialog_horizontal_margin"
+            android:paddingRight="@dimen/dialog_horizontal_margin">
 
             <TextView
-                android:id="@+id/textView_channelMaster_title"
+                android:id="@+id/textView_name_title"
                 style="@style/sub_header"
                 android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/channelMaster"/>
+                android:text="@string/name"/>
 
             <TextView
-                android:id="@+id/textView_channelMaster"
+                android:id="@+id/textView_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/ui_element_margin_double"
                 android:layout_marginTop="@dimen/title_margin_top"/>
 
             <TextView
-                android:id="@+id/textView_channelSlave_title"
+                android:id="@+id/textView_roomName_title"
                 style="@style/sub_header"
                 android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/channelSlave"/>
+                android:text="@string/room"/>
 
             <TextView
-                android:id="@+id/textView_channelSlave"
+                android:id="@+id/textView_roomName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/ui_element_margin_double"
                 android:layout_marginTop="@dimen/title_margin_top"/>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout_dipReceiver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
             <TextView
-                android:id="@+id/textView_dips_title"
+                android:id="@+id/textView_brand_title"
                 style="@style/sub_header"
                 android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/dips"/>
+                android:text="@string/brand"/>
+
+            <TextView
+                android:id="@+id/textView_brand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ui_element_margin_double"
+                android:layout_marginTop="@dimen/title_margin_top"/>
+
+            <TextView
+                android:id="@+id/textView_model_title"
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:text="@string/model"/>
+
+            <TextView
+                android:id="@+id/textView_model"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ui_element_margin_double"
+                android:layout_marginTop="@dimen/title_margin_top"/>
 
             <LinearLayout
-                android:id="@+id/linearLayout_dips"
-                android:layout_width="wrap_content"
+                android:id="@+id/linearLayout_masterSlaveReceiver"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/ui_element_margin_double"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:orientation="vertical"/>
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/textView_channelMaster_title"
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/channelMaster"/>
 
-        <LinearLayout
-            android:id="@+id/linearLayout_autoPair"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <TextView
+                    android:id="@+id/textView_channelMaster"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ui_element_margin_double"
+                    android:layout_marginTop="@dimen/title_margin_top"/>
 
-            <TextView
-                style="@style/sub_header"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/seed"/>
+                <TextView
+                    android:id="@+id/textView_channelSlave_title"
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/channelSlave"/>
 
-            <TextView
-                android:id="@+id/textView_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/ui_element_margin_double"
-                android:layout_marginTop="@dimen/title_margin_top"/>
+                <TextView
+                    android:id="@+id/textView_channelSlave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ui_element_margin_double"
+                    android:layout_marginTop="@dimen/title_margin_top"/>
 
-            <Button
-                android:id="@+id/button_copySeed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/copySeed"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout_universalReceiver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/TextView_universalButtons_title"
-                style="@style/sub_header"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/universal_buttons"/>
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayout_universalButtons"
+                android:id="@+id/linearLayout_dipReceiver"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_dips_title"
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/dips"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_dips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ui_element_margin_double"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:orientation="vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_autoPair"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/seed"/>
+
+                <TextView
+                    android:id="@+id/textView_seed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/ui_element_margin_double"
+                    android:layout_marginTop="@dimen/title_margin_top"/>
+
+                <Button
+                    android:id="@+id/button_copySeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/copySeed"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_universalReceiver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/TextView_universalButtons_title"
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/universal_buttons"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_universalButtons"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
-</android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

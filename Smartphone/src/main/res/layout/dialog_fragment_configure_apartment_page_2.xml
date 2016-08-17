@@ -17,84 +17,90 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <TextView
-        style="@style/sub_header"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:text="@string/search_address"/>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/searchAddressTextInputLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/searchAddressEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPostalAddress"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-        <ImageButton
-            android:id="@+id/searchAddressImageButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView_geofence_radius"
-        style="@style/sub_header"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:text="@string/geofence_radius"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/geofenceRadiusEditText"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="numberDecimal"
-            android:maxLength="4"/>
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="m"/>
+            style="@style/sub_header"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/search_address"/>
 
-        <SeekBar
-            android:id="@+id/geofenceRadiusSeekbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:paddingLeft="8dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/searchAddressTextInputLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/searchAddressEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPostalAddress"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/searchAddressImageButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView_geofence_radius"
+            style="@style/sub_header"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/geofence_radius"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/geofenceRadiusEditText"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:maxLength="4"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="m"/>
+
+            <SeekBar
+                android:id="@+id/geofenceRadiusSeekbar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:paddingLeft="8dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

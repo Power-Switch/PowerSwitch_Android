@@ -39,15 +39,21 @@
 
     <string name="add_room">Raum erstellen</string>
     <string name="room">Raum</string>
+
     <string name="brand">Hersteller</string>
     <string name="model">Modell</string>
+
     <string name="channelMaster">Master</string>
     <string name="channelSlave">Slave</string>
+
     <string name="dips">Dips</string>
+
+    <string name="copySeed">Seed kopieren</string>
     <string name="paste">Einfügen (Zwischenablage)</string>
-    <string name="new_room_name">Neuer Raum Name</string>
-    <string name="add_universal_button">Universellen Button erstellen</string>
-    <string name="remove_universal_button">Universellen Button entfernen</string>
+    <string name="pasted_from_clipboard">Aus Zwischenablage eingefügt</string>
+    <string name="clipboard_is_empty">Zwischenablage ist leer</string>
+    <string name="invalid_format">Ungültiges Format</string>
+
     <string name="universal_buttons">Universelle Buttons</string>
     <string name="enter_network_signal">Netzwerksignal</string>
     <string name="receiver_will_be_gone_forever">Der Empfänger wird für immer verloren sein!</string>
@@ -69,7 +75,5 @@
     <string name="action_not_supported_by_receiver">Der Empfänger unterstützt diese Aktion nicht!</string>
     <string name="gateway_not_supported_by_receiver">Der Empfänger unterstützt dieses Gateway nicht!</string>
     <string name="no_receiver_supports_this_action">Kein Empfänger in diesem Raum unterstützt diese Aktion!</string>
-
-    <string name="copySeed">Seed kopieren</string>
 
 </resources>

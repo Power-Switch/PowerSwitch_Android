@@ -17,45 +17,51 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/dialog_margin_top">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/room_name_text_input_layout"
+    <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/ui_element_margin"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dialog_margin_top">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/editText_room_name"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/room_name_text_input_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/ui_element_height"
-            android:ems="10"
-            android:hint="@string/name"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ui_element_margin"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/editText_room_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ui_element_height"
+                android:ems="10"
+                android:hint="@string/name"/>
 
-    <TextView
-        android:id="@+id/textView_order_title"
-        style="@style/sub_header"
-        android:layout_marginBottom="@dimen/title_margin_top"
-        android:layout_marginLeft="@dimen/title_margin_horizontal"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:text="@string/order"/>
+        </android.support.design.widget.TextInputLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_list_of_receivers"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fadeScrollbars="false"
-        android:scrollbars="vertical"/>
+        <TextView
+            android:id="@+id/textView_order_title"
+            style="@style/sub_header"
+            android:layout_marginBottom="@dimen/title_margin_top"
+            android:layout_marginLeft="@dimen/title_margin_horizontal"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:text="@string/order"/>
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_list_of_receivers"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

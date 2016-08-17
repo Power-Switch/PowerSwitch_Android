@@ -17,298 +17,304 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
-    android:id="@+id/contentView"
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <TableLayout
-        android:id="@+id/tableLayout_MasterSlave"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical">
-
-        <TableRow>
-
-            <TextView
-                android:id="@+id/textView_channelMaster"
-                style="@style/sub_header"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/channelMaster"/>
-
-            <TextView
-                android:id="@+id/textView_channelSlave"
-                style="@style/sub_header"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/channelSlave"/>
-        </TableRow>
-
-        <TableRow>
-
-            <ListView
-                android:id="@+id/listView_channelMaster"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                android:choiceMode="singleChoice"/>
-
-            <ListView
-                android:id="@+id/listView_channelSlave"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_weight="1"
-                android:choiceMode="singleChoice"/>
-
-        </TableRow>
-
-    </TableLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollView_dip"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fadeScrollbars="false"
-        android:scrollbars="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView_dips"
-                style="@style/sub_header"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:gravity="bottom"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/dips"/>
-
-            <TableLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/ui_element_margin"
-                android:layout_marginTop="@dimen/ui_element_margin"
-                android:columnCount="2"
-                android:gravity="center_horizontal">
-
-                <TableRow
-                    android:layout_marginBottom="@dimen/ui_element_margin">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip0"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="@dimen/padding_double"/>
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/padding_double"/>
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_marginBottom="@dimen/ui_element_margin">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="@dimen/padding_double"/>
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/padding_double"/>
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_marginBottom="@dimen/ui_element_margin">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="@dimen/padding_double"/>
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/padding_double"/>
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_marginBottom="@dimen/ui_element_margin">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="@dimen/padding_double"/>
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/padding_double"/>
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_marginBottom="@dimen/ui_element_margin">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="@dimen/padding_double"/>
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/switch_dip9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/padding_double"/>
-
-                </TableRow>
-
-            </TableLayout>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollView_autoPair"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fadeScrollbars="false"
-        android:scrollbars="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:gravity="center"
-                android:text="@string/pair_manual"/>
-
-            <TextView
-                style="@style/sub_header"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/seed"/>
-
-            <EditText
-                android:id="@+id/editText_seed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
-
-            <Button
-                android:id="@+id/button_paste"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/paste"/>
-
-            <Button
-                android:id="@+id/button_pair"
-                android:layout_width="wrap_content"
-                android:layout_height="64dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="@string/pair"/>
-
-            <Button
-                android:id="@+id/button_unpair"
-                android:layout_width="wrap_content"
-                android:layout_height="64dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/unpair"/>
-
-            <Button
-                android:id="@+id/button_unpairAll"
-                android:layout_width="wrap_content"
-                android:layout_height="64dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="@string/unpair_all"/>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/linearLayout_universalButtons"
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/TextView_universalButtons"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:gravity="bottom"
-            android:paddingLeft="@dimen/dialog_horizontal_margin"
-            android:text="@string/universal_buttons"/>
+        <TableLayout
+            android:id="@+id/tableLayout_MasterSlave"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical">
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/textView_channelMaster"
+                    style="@style/sub_header"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/channelMaster"/>
+
+                <TextView
+                    android:id="@+id/textView_channelSlave"
+                    style="@style/sub_header"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/channelSlave"/>
+            </TableRow>
+
+            <TableRow>
+
+                <ListView
+                    android:id="@+id/listView_channelMaster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
+                    android:choiceMode="singleChoice"/>
+
+                <ListView
+                    android:id="@+id/listView_channelSlave"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:choiceMode="singleChoice"/>
+
+            </TableRow>
+
+        </TableLayout>
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView_dip"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:fadeScrollbars="false"
             android:scrollbars="vertical">
 
             <LinearLayout
-                android:id="@+id/universalButtons_List"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/ui_element_margin"
-                android:orientation="vertical"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_dips"
+                    style="@style/sub_header"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:gravity="bottom"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/dips"/>
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/ui_element_margin"
+                    android:layout_marginTop="@dimen/ui_element_margin"
+                    android:columnCount="2"
+                    android:gravity="center_horizontal">
+
+                    <TableRow
+                        android:layout_marginBottom="@dimen/ui_element_margin">
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/padding_double"/>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/padding_double"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="@dimen/ui_element_margin">
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/padding_double"/>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/padding_double"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="@dimen/ui_element_margin">
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/padding_double"/>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/padding_double"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="@dimen/ui_element_margin">
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/padding_double"/>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/padding_double"/>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="@dimen/ui_element_margin">
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="@dimen/padding_double"/>
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/switch_dip9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/padding_double"/>
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_universalButton_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            app:backgroundTint="?attr/colorAccent"
-            app:borderWidth="0dp"
-            app:elevation="8dp"
-            app:fabSize="normal"/>
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView_autoPair"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:gravity="center"
+                    android:text="@string/pair_manual"/>
+
+                <TextView
+                    style="@style/sub_header"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/title_margin_top"
+                    android:text="@string/seed"/>
+
+                <EditText
+                    android:id="@+id/editText_seed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"/>
+
+                <Button
+                    android:id="@+id/button_paste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/paste"/>
+
+                <Button
+                    android:id="@+id/button_pair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/pair"/>
+
+                <Button
+                    android:id="@+id/button_unpair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/unpair"/>
+
+                <Button
+                    android:id="@+id/button_unpairAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/unpair_all"/>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_universalButtons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/TextView_universalButtons"
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:gravity="bottom"
+                android:paddingLeft="@dimen/dialog_horizontal_margin"
+                android:text="@string/universal_buttons"/>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/universalButtons_List"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/ui_element_margin"
+                    android:orientation="vertical"/>
+
+            </android.support.v4.widget.NestedScrollView>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/add_universalButton_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                app:backgroundTint="?attr/colorAccent"
+                app:borderWidth="0dp"
+                app:elevation="8dp"
+                app:fabSize="normal"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

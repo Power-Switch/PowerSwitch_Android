@@ -17,45 +17,51 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView_brand"
-        style="@style/sub_header"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:paddingLeft="@dimen/dialog_horizontal_margin"
-        android:paddingRight="@dimen/dialog_horizontal_margin"
-        android:text="@string/brand"/>
-
-    <ListView
-        android:id="@+id/listView_brands"
+    <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:choiceMode="singleChoice"
-        android:fadeScrollbars="false"
-        android:scrollbars="vertical"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView_model"
-        style="@style/sub_header"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:paddingLeft="@dimen/dialog_horizontal_margin"
-        android:paddingRight="@dimen/dialog_horizontal_margin"
-        android:text="@string/model"/>
+        <TextView
+            android:id="@+id/textView_brand"
+            style="@style/sub_header"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:paddingLeft="@dimen/dialog_horizontal_margin"
+            android:paddingRight="@dimen/dialog_horizontal_margin"
+            android:text="@string/brand"/>
 
-    <ListView
-        android:id="@+id/listView_models"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:choiceMode="singleChoice"
-        android:fadeScrollbars="false"
-        android:scrollbars="vertical"/>
+        <ListView
+            android:id="@+id/listView_brands"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:choiceMode="singleChoice"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView_model"
+            style="@style/sub_header"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:paddingLeft="@dimen/dialog_horizontal_margin"
+            android:paddingRight="@dimen/dialog_horizontal_margin"
+            android:text="@string/model"/>
+
+        <ListView
+            android:id="@+id/listView_models"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:choiceMode="singleChoice"
+            android:fadeScrollbars="false"
+            android:scrollbars="vertical"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

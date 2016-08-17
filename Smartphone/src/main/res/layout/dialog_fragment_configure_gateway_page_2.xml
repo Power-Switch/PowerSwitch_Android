@@ -17,44 +17,50 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/dialog_margin_top">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/optional_ssid_description"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/dialog_margin_top">
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView_ssids"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_ssid_fab"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            app:backgroundTint="?attr/colorAccent"
-            app:borderWidth="0dp"
-            app:elevation="8dp"
-            app:fabSize="normal"
-            app:layout_anchor="@id/recyclerView_ssids"
-            app:layout_anchorGravity="bottom|right|end"/>
+            android:gravity="center"
+            android:text="@string/optional_ssid_description"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+        <android.support.design.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView_ssids"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/add_ssid_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                app:backgroundTint="?attr/colorAccent"
+                app:borderWidth="0dp"
+                app:elevation="8dp"
+                app:fabSize="normal"
+                app:layout_anchor="@id/recyclerView_ssids"
+                app:layout_anchorGravity="bottom|right|end"/>
+
+        </android.support.design.widget.CoordinatorLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

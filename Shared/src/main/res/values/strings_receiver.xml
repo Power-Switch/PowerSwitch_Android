@@ -29,6 +29,7 @@
     <string name="channel">Channel</string>
     <string name="network">Network</string>
     <string name="summary">Summary</string>
+
     <string name="receiver_saved">Receiver saved</string>
 
     <string name="no_room_selected">No Room selected</string>
@@ -38,16 +39,22 @@
 
     <string name="add_room">Create Room</string>
     <string name="room">Room</string>
+
     <string name="brand">Brand</string>
     <string name="model">Model</string>
+
     <string name="channelMaster">Master</string>
     <string name="channelSlave">Slave</string>
+
     <string name="dips">Dips</string>
+
     <string name="seed">Seed</string>
+    <string name="copySeed">Copy Seed</string>
     <string name="paste">Paste (Clipboard)</string>
-    <string name="new_room_name">New Room name</string>
-    <string name="add_universal_button">Create universal Button</string>
-    <string name="remove_universal_button">Remove universal Button</string>
+    <string name="pasted_from_clipboard">Pasted from clipboard</string>
+    <string name="clipboard_is_empty">Clipboard is empty</string>
+    <string name="invalid_format">Invalid format</string>
+
     <string name="universal_buttons">Universal Buttons</string>
     <string name="enter_network_signal">Enter Network Signal</string>
     <string name="receiver_will_be_gone_forever">Receiver will be gone forever!</string>
@@ -73,7 +80,5 @@
     <string name="action_not_supported_by_receiver">Action not supported by Receiver!</string>
     <string name="gateway_not_supported_by_receiver">Gateway not supported by Receiver!</string>
     <string name="no_receiver_supports_this_action">No Receiver in this Room supports this Action!</string>
-
-    <string name="copySeed">Copy Seed</string>
 
 </resources>

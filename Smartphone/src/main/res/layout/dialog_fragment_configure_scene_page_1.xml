@@ -17,57 +17,63 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/dialog_horizontal_margin"
-        android:paddingRight="@dimen/dialog_horizontal_margin">
+        android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/scene_name_text_input_layout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/title_margin_top">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dialog_horizontal_margin"
+            android:paddingRight="@dimen/dialog_horizontal_margin">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/editText_scene_name"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/editText_height"
-                android:ems="10"
-                android:hint="@string/name"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:gravity="bottom"
-            android:text="@string/receivers"/>
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadeScrollbars="false"
-            android:scrollbars="vertical">
-
-            <LinearLayout
-                android:id="@+id/linearLayout_selectableReceivers"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/scene_name_text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="8dp">
-            </LinearLayout>
+                android:layout_marginTop="@dimen/title_margin_top">
 
-        </android.support.v4.widget.NestedScrollView>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editText_scene_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/editText_height"
+                    android:ems="10"
+                    android:hint="@string/name"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:gravity="bottom"
+                android:text="@string/receivers"/>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout_selectableReceivers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="8dp">
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

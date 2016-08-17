@@ -17,51 +17,57 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView_actions"
-        style="@style/sub_header"
-        android:layout_marginTop="@dimen/title_margin_top"
-        android:paddingLeft="@dimen/dialog_horizontal_margin"
-        android:paddingRight="@dimen/dialog_horizontal_margin"
-        android:text="@string/actions"/>
-
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview_list_of_actions"
+        <TextView
+            android:id="@+id/textView_actions"
+            style="@style/sub_header"
+            android:layout_marginTop="@dimen/title_margin_top"
+            android:paddingLeft="@dimen/dialog_horizontal_margin"
+            android:paddingRight="@dimen/dialog_horizontal_margin"
+            android:text="@string/actions"/>
+
+        <android.support.design.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fadeScrollbars="false"
-            android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add_timer_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            app:backgroundTint="?attr/colorAccent"
-            app:borderWidth="0dp"
-            app:elevation="8dp"
-            app:fabSize="normal"
-            app:layout_anchor="@id/recyclerview_list_of_actions"
-            app:layout_anchorGravity="bottom|right|end"
-            app:layout_behavior="eu.power_switch.gui.animation.ScrollAwareFABBehavior"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_list_of_actions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/add_timer_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="16dp"
+                app:backgroundTint="?attr/colorAccent"
+                app:borderWidth="0dp"
+                app:elevation="8dp"
+                app:fabSize="normal"
+                app:layout_anchor="@id/recyclerview_list_of_actions"
+                app:layout_anchorGravity="bottom|right|end"
+                app:layout_behavior="eu.power_switch.gui.animation.ScrollAwareFABBehavior"/>
 
-</LinearLayout>
+        </android.support.design.widget.CoordinatorLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

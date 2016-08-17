@@ -17,62 +17,68 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <TableLayout
+    <LinearLayout
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical">
+        android:orientation="vertical">
 
-        <TableRow>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/textView_brand"
-                style="@style/sub_header"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/brand"/>
+            <TableRow>
 
-            <TextView
-                android:id="@+id/textView_model"
-                style="@style/sub_header"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:paddingLeft="@dimen/dialog_horizontal_margin"
-                android:text="@string/model"/>
+                <TextView
+                    android:id="@+id/textView_brand"
+                    style="@style/sub_header"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/brand"/>
 
-        </TableRow>
+                <TextView
+                    android:id="@+id/textView_model"
+                    style="@style/sub_header"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dialog_horizontal_margin"
+                    android:text="@string/model"/>
 
-        <TableRow>
+            </TableRow>
 
-            <ListView
-                android:id="@+id/listView_brands"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                android:choiceMode="singleChoice"
-                android:fadeScrollbars="false"
-                android:scrollbars="vertical"/>
+            <TableRow>
 
-            <ListView
-                android:id="@+id/listView_models"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_weight="1"
-                android:choiceMode="singleChoice"
-                android:fadeScrollbars="false"
-                android:scrollbars="vertical"/>
+                <ListView
+                    android:id="@+id/listView_brands"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
+                    android:choiceMode="singleChoice"
+                    android:fadeScrollbars="false"
+                    android:scrollbars="vertical"/>
 
-        </TableRow>
+                <ListView
+                    android:id="@+id/listView_models"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:choiceMode="singleChoice"
+                    android:fadeScrollbars="false"
+                    android:scrollbars="vertical"/>
 
-    </TableLayout>
+            </TableRow>
 
-</LinearLayout>
+        </TableLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

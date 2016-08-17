@@ -17,74 +17,80 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fadeScrollbars="false"
-    android:scrollbars="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/contentView"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/dialog_margin_bottom"
-        android:paddingLeft="@dimen/dialog_horizontal_margin"
-        android:paddingRight="@dimen/dialog_horizontal_margin">
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical">
 
-        <TextView
-            android:id="@+id/textView_name_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/name"/>
+        <LinearLayout
+            android:id="@+id/contentView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dialog_margin_bottom"
+            android:paddingLeft="@dimen/dialog_horizontal_margin"
+            android:paddingRight="@dimen/dialog_horizontal_margin">
 
-        <TextView
-            android:id="@+id/textView_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
+            <TextView
+                android:id="@+id/textView_name_title"
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:text="@string/name"/>
 
-        <TextView
-            android:id="@+id/textView_time_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/time"/>
+            <TextView
+                android:id="@+id/textView_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ui_element_margin_double"
+                android:layout_marginTop="@dimen/title_margin_top"/>
 
-        <TextView
-            android:id="@+id/textView_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
+            <TextView
+                android:id="@+id/textView_time_title"
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:text="@string/time"/>
 
-        <TextView
-            android:id="@+id/textView_execution_days_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/weekdays"/>
+            <TextView
+                android:id="@+id/textView_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ui_element_margin_double"
+                android:layout_marginTop="@dimen/title_margin_top"/>
 
-        <TextView
-            android:id="@+id/textView_execution_days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
+            <TextView
+                android:id="@+id/textView_execution_days_title"
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:text="@string/weekdays"/>
 
-        <TextView
-            android:id="@+id/textView_action_title"
-            style="@style/sub_header"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/actions"/>
+            <TextView
+                android:id="@+id/textView_execution_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ui_element_margin_double"
+                android:layout_marginTop="@dimen/title_margin_top"/>
 
-        <TextView
-            android:id="@+id/textView_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/ui_element_margin_double"
-            android:layout_marginTop="@dimen/title_margin_top"/>
+            <TextView
+                android:id="@+id/textView_action_title"
+                style="@style/sub_header"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:text="@string/actions"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/ui_element_margin_double"
+                android:layout_marginTop="@dimen/title_margin_top"/>
 
-</android.support.v4.widget.NestedScrollView>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

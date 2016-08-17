@@ -112,6 +112,12 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
         return rootView;
     }
 
+    @Nullable
+    @Override
+    public View getContentView() {
+        return rootView.findViewById(R.id.recyclerview_list_of_receivers);
+    }
+
     private void initializeSceneData(long sceneId) {
         try {
             Scene scene = DatabaseHandler.getScene(sceneId);

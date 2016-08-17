@@ -25,6 +25,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
@@ -252,11 +253,14 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                     String content = ClipboardHelper.getClipboardContent(getActivity());
                     Long longValue = Long.parseLong(content);
                     editTextSeed.setText(String.valueOf(longValue));
+                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.pasted_from_clipboard, Snackbar.LENGTH_LONG);
                 } catch (EmptyClipboardException e) {
                     Log.w("Tried to paste but clipboard is empty");
+                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.clipboard_is_empty, Snackbar.LENGTH_LONG);
                     // do nothing
                 } catch (NumberFormatException e) {
                     Log.w("Invalid number format: " + e.getMessage());
+                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.invalid_format, Snackbar.LENGTH_LONG);
                 }
             }
         });

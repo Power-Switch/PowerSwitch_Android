@@ -17,52 +17,58 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:fadeScrollbars="false"
-    android:orientation="vertical"
-    android:scrollbars="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:fadeScrollbars="false"
+        android:orientation="vertical"
+        android:scrollbars="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/timer_name_text_input_layout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dialog_horizontal_margin"
-            android:layout_marginRight="@dimen/dialog_horizontal_margin"
-            android:layout_marginTop="@dimen/title_margin_top">
+            android:orientation="vertical">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/editText_timer_name"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/timer_name_text_input_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/editText_height"
-                android:ems="10"
-                android:hint="@string/name"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dialog_horizontal_margin"
+                android:layout_marginRight="@dimen/dialog_horizontal_margin"
+                android:layout_marginTop="@dimen/title_margin_top">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/editText_timer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/editText_height"
+                    android:ems="10"
+                    android:hint="@string/name"/>
 
-        <TextView
-            android:id="@+id/textView_time_title"
-            style="@style/sub_header"
-            android:layout_marginLeft="@dimen/dialog_horizontal_margin"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:text="@string/time"/>
+            </android.support.design.widget.TextInputLayout>
 
-        <TimePicker
-            android:id="@+id/timePicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="@dimen/title_margin_top"
-            android:timePickerMode="spinner"/>
+            <TextView
+                android:id="@+id/textView_time_title"
+                style="@style/sub_header"
+                android:layout_marginLeft="@dimen/dialog_horizontal_margin"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:text="@string/time"/>
 
-    </LinearLayout>
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="@dimen/title_margin_top"
+                android:timePickerMode="spinner"/>
 
-</android.support.v4.widget.NestedScrollView>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>
