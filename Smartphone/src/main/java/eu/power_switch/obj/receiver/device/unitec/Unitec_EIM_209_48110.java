@@ -103,4 +103,9 @@ public class Unitec_EIM_209_48110 extends Receiver implements AutoPairReceiver {
     public long getSeed() {
         return seed;
     }
+
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
 }

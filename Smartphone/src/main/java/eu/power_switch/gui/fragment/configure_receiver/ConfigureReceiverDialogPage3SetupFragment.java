@@ -38,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -48,6 +49,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.clipboard.ClipboardHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.IconicsHelper;
@@ -66,6 +68,7 @@ import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -100,6 +103,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
     private ArrayList<DipSwitch> dipSwitchArrayList;
 
     private Receiver currentAutoPairReceiver;
+    private EditText editTextSeed;
 
 
     /**
@@ -220,6 +224,43 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
 
         // AutoPair
         layoutAutoPair = (NestedScrollView) rootView.findViewById(R.id.scrollView_autoPair);
+
+        editTextSeed = (EditText) rootView.findViewById(R.id.editText_seed);
+        editTextSeed.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                ((AutoPairReceiver) currentAutoPairReceiver).setSeed(Long.valueOf(editable.toString()));
+
+                sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
+                        dipSwitchArrayList, getCurrentSeed(), getCurrentUniversalButtons());
+            }
+        });
+
+        android.widget.Button buttonPaste = (android.widget.Button) rootView.findViewById(R.id.button_paste);
+        buttonPaste.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String content = ClipboardHelper.getClipboardContent(getActivity());
+                    Long longValue = Long.parseLong(content);
+                    editTextSeed.setText(String.valueOf(longValue));
+                } catch (EmptyClipboardException e) {
+                    Log.w("Tried to paste but clipboard is empty");
+                    // do nothing
+                } catch (NumberFormatException e) {
+                    Log.w("Invalid number format: " + e.getMessage());
+                }
+            }
+        });
+
         android.widget.Button buttonPair = (android.widget.Button) rootView.findViewById(R.id.button_pair);
         buttonPair.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -461,6 +502,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                     layoutDip.setVisibility(View.GONE);
                     layoutAutoPair.setVisibility(View.VISIBLE);
                     layoutUniversal.setVisibility(View.GONE);
+
+                    editTextSeed.setText(String.valueOf(getCurrentSeed()));
                     break;
             }
         }

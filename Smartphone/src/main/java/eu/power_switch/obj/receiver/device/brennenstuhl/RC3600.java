@@ -54,6 +54,11 @@ public class RC3600 extends Receiver implements AutoPairReceiver {
         return seed;
     }
 
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
+
     // // TODO: uses other Sequences for Low and High
     // // can be paired automatically
     //

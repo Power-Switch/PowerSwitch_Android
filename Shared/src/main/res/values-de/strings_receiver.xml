@@ -44,6 +44,7 @@
     <string name="channelMaster">Master</string>
     <string name="channelSlave">Slave</string>
     <string name="dips">Dips</string>
+    <string name="paste">Einfügen (Zwischenablage)</string>
     <string name="new_room_name">Neuer Raum Name</string>
     <string name="add_universal_button">Universellen Button erstellen</string>
     <string name="remove_universal_button">Universellen Button entfernen</string>

@@ -157,4 +157,9 @@ public class RMF_Motor extends Receiver implements AutoPairReceiver {
     public long getSeed() {
         return seed;
     }
+
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
 }

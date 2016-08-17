@@ -148,7 +148,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView_seed_title"
                 style="@style/sub_header"
                 android:layout_marginTop="@dimen/title_margin_top"
                 android:text="@string/seed"/>

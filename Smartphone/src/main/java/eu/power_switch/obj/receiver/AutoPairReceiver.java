@@ -23,6 +23,18 @@ package eu.power_switch.obj.receiver;
  */
 public interface AutoPairReceiver {
 
+    /**
+     * Get the seed used for this receiver
+     *
+     * @return seed
+     */
     long getSeed();
+
+    /**
+     * Set the seed that should be used for this receiver
+     *
+     * @param seed new seed
+     */
+    void setSeed(long seed);
 
 }

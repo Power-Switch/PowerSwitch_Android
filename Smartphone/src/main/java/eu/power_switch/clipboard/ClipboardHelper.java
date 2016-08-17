@@ -18,9 +18,12 @@
 
 package eu.power_switch.clipboard;
 
+import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.annotation.StringRes;
+
+import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
 
 /**
  * Helper class for convenient access to android clipboard manager
@@ -60,4 +63,24 @@ public class ClipboardHelper {
         }
     }
 
+    /**
+     * Get the current clipboard content as text
+     *
+     * @param context any suitable context
+     * @return clipboard content text
+     * @throws EmptyClipboardException if the clipboard is empty
+     */
+    public static String getClipboardContent(Context context) throws EmptyClipboardException {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        if (!clipboard.hasPrimaryClip()) {
+            throw new EmptyClipboardException();
+        }
+
+        if (clipboard.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+            return clipboard.getPrimaryClip().getItemAt(0).getText().toString();
+        } else {
+            return clipboard.getPrimaryClip().getItemAt(0).coerceToText(context).toString();
+        }
+    }
 }

@@ -399,4 +399,9 @@ public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveRe
         return seed;
     }
 
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
+
 }

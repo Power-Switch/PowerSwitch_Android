@@ -173,4 +173,9 @@ public class HX2262_Comp extends Receiver implements AutoPairReceiver {
     public long getSeed() {
         return seed;
     }
+
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
 }

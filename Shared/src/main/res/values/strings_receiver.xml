@@ -44,6 +44,7 @@
     <string name="channelSlave">Slave</string>
     <string name="dips">Dips</string>
     <string name="seed">Seed</string>
+    <string name="paste">Paste (Clipboard)</string>
     <string name="new_room_name">New Room name</string>
     <string name="add_universal_button">Create universal Button</string>
     <string name="remove_universal_button">Remove universal Button</string>

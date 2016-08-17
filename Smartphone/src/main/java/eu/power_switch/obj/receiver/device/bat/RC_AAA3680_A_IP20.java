@@ -126,4 +126,9 @@ public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
     public long getSeed() {
         return seed;
     }
+
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
 }

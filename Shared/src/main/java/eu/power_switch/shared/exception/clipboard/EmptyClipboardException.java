@@ -16,24 +16,17 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.fabric.io/public' }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.3'
-        classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
+package eu.power_switch.shared.exception.clipboard;
 
-allprojects {
-    repositories {
-        jcenter()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.fabric.io/public' }
+/**
+ * Exception to indicate the clipboard is empty
+ * <p/>
+ * Created by Markus on 17.08.2016.
+ */
+public class EmptyClipboardException extends Exception {
+
+    public EmptyClipboardException() {
+        super("Clipboard is empty!");
     }
+
 }

@@ -159,4 +159,9 @@ public class ITL300 extends Receiver implements AutoPairReceiver {
     public long getSeed() {
         return seed;
     }
+
+    @Override
+    public void setSeed(long seed) {
+        this.seed = seed;
+    }
 }
