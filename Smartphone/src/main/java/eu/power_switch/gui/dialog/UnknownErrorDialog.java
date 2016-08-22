@@ -33,6 +33,7 @@ import java.util.Date;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.Log;
@@ -69,63 +70,79 @@ public class UnknownErrorDialog extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate();
-        // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
-        // apply forced locale (if set in developer options)
-        applyLocale();
+        // do everything in a try statement to prevent repeating errors if something goes wrong while reporting the previous error
+        try {
+            // set Theme before anything else in onCreate();
+            // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
+            // apply forced locale (if set in developer options)
+            applyLocale();
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_unknown_error);
-        setFinishOnTouchOutside(false); // prevent close dialog on touch outside window
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.dialog_unknown_error);
+            setFinishOnTouchOutside(false); // prevent close dialog on touch outside window
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(THROWABLE_KEY)) {
-            throwable = (Throwable) intent.getSerializableExtra(THROWABLE_KEY);
-        }
-        if (intent.hasExtra(TIME_KEY)) {
-            timeRaised = new Date(intent.getLongExtra(TIME_KEY, 0));
-        }
+            Intent intent = getIntent();
+            if (intent.hasExtra(THROWABLE_KEY)) {
+                throwable = (Throwable) intent.getSerializableExtra(THROWABLE_KEY);
+            }
+            if (intent.hasExtra(TIME_KEY)) {
+                timeRaised = new Date(intent.getLongExtra(TIME_KEY, 0));
+            }
 
-        Button buttonShareEmail = (Button) findViewById(R.id.button_share_via_mail);
-        buttonShareEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    reportExceptionViaMail();
-                } catch (MissingPermissionException e) {
-                    PermissionHelper.showMissingPermissionDialog(
-                            UnknownErrorDialog.this,
-                            PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                } catch (Exception e) {
-                    finish();
-                    StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
+            TextView textView_automaticCrashReportingEnabledInfo = (TextView) findViewById(R.id.textView_automaticCrashReportingEnabledInfo);
+            TextView textView_automaticCrashReportingDisabledInfo = (TextView) findViewById(R.id.textView_automaticCrashReportingDisabledInfo);
+
+            Button buttonShareEmail = (Button) findViewById(R.id.button_share_via_mail);
+            buttonShareEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        reportExceptionViaMail();
+                    } catch (MissingPermissionException e) {
+                        PermissionHelper.showMissingPermissionDialog(
+                                UnknownErrorDialog.this,
+                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    } catch (Exception e) {
+                        finish();
+                        StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
+                    }
                 }
-            }
-        });
+            });
 
-        Button buttonShareText = (Button) findViewById(R.id.button_share_plain_text);
-        buttonShareText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TEXT, Log.getStackTraceText(throwable));
-                intent.setType("text/plain");
-                startActivity(Intent.createChooser(intent, getString(R.string.send_to)));
-            }
-        });
+            Button buttonShareText = (Button) findViewById(R.id.button_share_plain_text);
+            buttonShareText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_TEXT, Log.getStackTraceText(throwable));
+                    intent.setType("text/plain");
+                    startActivity(Intent.createChooser(intent, getString(R.string.send_to)));
+                }
+            });
 
-        TextView textViewErrorDescription = (TextView) findViewById(R.id.editText_error_description);
-        textViewErrorDescription.setText(Log.getStackTraceText(throwable));
+            TextView textViewErrorDescription = (TextView) findViewById(R.id.editText_error_description);
+            textViewErrorDescription.setText(Log.getStackTraceText(throwable));
 
-        Button buttonClose = (Button) findViewById(R.id.button_close);
-        buttonClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+            if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
+                textView_automaticCrashReportingEnabledInfo.setVisibility(View.VISIBLE);
+                textView_automaticCrashReportingDisabledInfo.setVisibility(View.GONE);
+            } else {
+                textView_automaticCrashReportingEnabledInfo.setVisibility(View.GONE);
+                textView_automaticCrashReportingDisabledInfo.setVisibility(View.VISIBLE);
             }
-        });
+
+            Button buttonClose = (Button) findViewById(R.id.button_close);
+            buttonClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        } catch (Exception e) {
+            Log.e(e);
+        }
     }
 
     private void applyLocale() {

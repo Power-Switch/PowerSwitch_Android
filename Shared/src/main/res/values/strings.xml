@@ -93,6 +93,8 @@
     <string name="send_to">Send to</string>
     <string name="unknown_error_info">An Exception was raised during the operation of PowerSwitch.
         Use the buttons below to share it with the developer and help improve the App.</string>
+    <string name="automatic_crash_report_enabled_info">Because you have automatic crash reporting enabled you don\'t need to do anything here. You can still report your issue via mail but please refrain from doing so if you can\'t provide additional info about how and why it happened.</string>
+    <string name="automatic_crash_report_disabled_info">For easier reporting of errors please enable \"Automatic Crash Reporting\" in settings.</string>
 
     <!-- supported gateways, brands and models -->
     <string-array name="gateway_array">
