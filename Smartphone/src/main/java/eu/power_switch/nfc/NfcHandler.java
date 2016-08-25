@@ -19,6 +19,7 @@
 package eu.power_switch.nfc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -47,14 +48,27 @@ public class NfcHandler {
     }
 
     /**
-     * Checks if NFC is supported by the device
+     * Checks if NFC is enabled on the device
      *
      * @param context any suitable context
-     * @return true if NFC is supported, false otherwise
+     * @return true if NFC is enabled, false otherwise
      */
     public static boolean isNfcEnabled(Context context) {
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         return nfcAdapter.isEnabled();
+    }
+
+    /**
+     * Open NFC settings page in system settings
+     *
+     * @param context any suitable context
+     */
+    public static void openNfcSettings(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            context.startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
+        } else {
+            context.startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+        }
     }
 
     /**

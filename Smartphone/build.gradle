@@ -68,7 +68,6 @@ dependencies {
     // Google Play Services
     compile 'com.google.android.gms:play-services-maps:9.4.0'
     compile 'com.google.android.gms:play-services-location:9.4.0'
-    compile 'com.google.android.gms:play-services-wearable:9.4.0'
 
     // Firebase
     compile 'com.firebase:firebase-client-android:2.5.2'

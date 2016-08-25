@@ -18,10 +18,12 @@
 
 package eu.power_switch.gui.fragment;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.WriteNfcTagDialog;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.nfc.HiddenReceiverActivity;
+import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -225,7 +228,21 @@ public class NfcFragment extends Fragment {
         buttonWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(WriteNfcTagDialog.getNewInstanceIntent(getNfcActionContent(getCurrentSelection())));
+                if (NfcHandler.isNfcEnabled(getActivity())) {
+                    startActivity(WriteNfcTagDialog.getNewInstanceIntent(getNfcActionContent(getCurrentSelection())));
+                } else {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(R.string.nfc_disabled)
+                            .setMessage(R.string.nfc_disabled_please_enable)
+                            .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    NfcHandler.openNfcSettings(getActivity());
+                                }
+                            })
+                            .setNeutralButton(R.string.close, null)
+                            .show();
+                }
             }
         });
 

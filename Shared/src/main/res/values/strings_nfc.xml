@@ -28,4 +28,7 @@
     <string name="tag_written_successfully">NFC Tag written successfully</string>
     <string name="error_writing_tag_please_try_again">Error writing NFC Tag\nPlease try again</string>
 
+    <string name="nfc_disabled">NFC disabled</string>
+    <string name="nfc_disabled_please_enable">NFC is currently disabled on your device. To use this feature you need to activate it in your system settings.</string>
+
 </resources>

@@ -27,4 +27,7 @@
     <string name="tag_written_successfully">NFC Tag erfolgreich beschrieben</string>
     <string name="error_writing_tag_please_try_again">Fehler beim Beschreiben des NFC Tags\nBitte versuche es erneut</string>
 
+    <string name="nfc_disabled">NFC deaktiviert</string>
+    <string name="nfc_disabled_please_enable">NFC ist auf deinem Gerät momentan deaktiviert. Um diese Funktion verwenden zu können musst du NFC in deinen Systemeinstellungen aktivieren.</string>
+
 </resources>

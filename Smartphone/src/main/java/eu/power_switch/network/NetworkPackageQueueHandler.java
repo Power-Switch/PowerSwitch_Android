@@ -220,6 +220,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
         if (s.hasNext()) {
             response = s.next();
             Log.d("HTTP Response", response);
+
         } else {
             return;
         }
