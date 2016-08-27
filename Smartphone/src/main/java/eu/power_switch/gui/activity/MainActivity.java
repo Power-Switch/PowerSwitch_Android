@@ -100,7 +100,6 @@ import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
-import eu.power_switch.wear.service.WearableHelper;
 
 /**
  * Main entry Activity for the app
@@ -273,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                     .show();
         }
 
-        if (Build.VERSION.SDK_INT >= 23 && WearableHelper.isAndroidWearInstalled(getActivity()) && !PowerSaverHelper.isIgnoringBatteryOptimizations(getActivity())) {
+        if (Build.VERSION.SDK_INT >= 23 && !PowerSaverHelper.isIgnoringBatteryOptimizations(getActivity())) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.disable_battery_optimizations_title)
                     .setMessage(R.string.disable_battery_optimizations_message)
