@@ -68,7 +68,7 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
 
     @Override
     public void onBindViewHolder(final ReceiverNameRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Receiver receiver = receivers.get(holder.getAdapterPosition());
+        final Receiver receiver = receivers.get(position);
         holder.receiverName.setText(receiver.getName());
 
         holder.dragHandle.setOnTouchListener(new View.OnTouchListener() {

@@ -59,10 +59,10 @@ public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNu
 
     @Override
     public void onBindViewHolder(final PhoneNumberRecyclerViewAdapter.ViewHolder holder, int position) {
-        final String phoneNumber = phoneNumbers.get(holder.getAdapterPosition());
+        final String phoneNumber = phoneNumbers.get(position);
         holder.phoneNumber.setText(phoneNumber);
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -94,7 +94,7 @@ public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNu
                 @Override
                 public void onClick(View v) {
                     if (onDeleteClickListener != null) {
-                        onDeleteClickListener.onItemClick(delete, getLayoutPosition());
+                        onDeleteClickListener.onItemClick(delete, getAdapterPosition());
                     }
                 }
             });

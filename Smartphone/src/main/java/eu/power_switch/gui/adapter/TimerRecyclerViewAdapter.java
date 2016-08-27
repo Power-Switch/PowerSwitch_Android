@@ -73,7 +73,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
     @Override
     public void onBindViewHolder(final TimerRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Timer timer = timers.get(holder.getAdapterPosition());
+        final Timer timer = timers.get(position);
 
         final LinearLayout linearLayoutDescription = holder.linearLayoutTimerDescription;
         holder.name.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +171,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
             linearLayoutDescription.setVisibility(View.GONE);
         }
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -215,7 +215,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });
@@ -223,7 +223,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
-                        onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
+                        onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;
                 }

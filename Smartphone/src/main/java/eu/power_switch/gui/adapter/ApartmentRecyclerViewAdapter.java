@@ -69,7 +69,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
 
     @Override
     public void onBindViewHolder(ApartmentRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Apartment apartment = apartments.get(holder.getAdapterPosition());
+        final Apartment apartment = apartments.get(position);
 
         holder.active.setChecked(apartment.isActive());
         holder.active.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +109,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         }
         holder.contentSummary.setText(contentSummary);
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -146,7 +146,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });
@@ -154,7 +154,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
-                        onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
+                        onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;
                 }

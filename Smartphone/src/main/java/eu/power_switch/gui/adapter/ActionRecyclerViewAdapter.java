@@ -61,10 +61,10 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
 
     @Override
     public void onBindViewHolder(final ActionRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Action action = actions.get(holder.getAdapterPosition());
+        final Action action = actions.get(position);
         holder.description.setText(action.toString());
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -96,7 +96,7 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
                 @Override
                 public void onClick(View v) {
                     if (onDeleteClickListener != null) {
-                        onDeleteClickListener.onItemClick(delete, getLayoutPosition());
+                        onDeleteClickListener.onItemClick(delete, getAdapterPosition());
                     }
                 }
             });

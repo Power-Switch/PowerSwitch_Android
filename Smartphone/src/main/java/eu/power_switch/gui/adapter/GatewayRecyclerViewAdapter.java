@@ -71,7 +71,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
 
     @Override
     public void onBindViewHolder(GatewayRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Gateway gateway = gateways.get(holder.getAdapterPosition());
+        final Gateway gateway = gateways.get(position);
 
         holder.gatewaySwitchStatus.setChecked(gateway.isActive());
         holder.gatewaySwitchStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -134,7 +134,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         }
         holder.wanAddress.setText(gateway.getWanHost() + ":" + String.valueOf(gateway.getWanPort()));
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -182,7 +182,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });
@@ -190,7 +190,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
-                        onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
+                        onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;
                 }

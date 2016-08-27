@@ -66,7 +66,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
     @Override
     public void onBindViewHolder(final ContactRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Contact contact = contacts.get(holder.getAdapterPosition());
+        final Contact contact = contacts.get(position);
         holder.name.setText(contact.getName());
 
         holder.numbers.removeAllViews();
@@ -96,7 +96,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             holder.numbers.addView(linearLayout);
         }
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

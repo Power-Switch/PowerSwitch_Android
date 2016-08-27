@@ -59,13 +59,13 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
 
     @Override
     public void onBindViewHolder(final HistoryItemRecyclerViewAdapter.ViewHolder holder, int position) {
-        final HistoryItem historyItem = historyItems.get(holder.getAdapterPosition());
+        final HistoryItem historyItem = historyItems.get(position);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
         holder.time.setText(simpleDateFormat.format(historyItem.getTime().getTime()));
         holder.description.setText(historyItem.getShortDescription());
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -97,7 +97,7 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });

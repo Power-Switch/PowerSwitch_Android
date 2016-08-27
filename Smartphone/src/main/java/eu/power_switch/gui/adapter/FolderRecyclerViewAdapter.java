@@ -58,7 +58,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
 
     @Override
     public void onBindViewHolder(final FolderRecyclerViewAdapter.ViewHolder holder, int position) {
-        final File folder = folders.get(holder.getAdapterPosition());
+        final File folder = folders.get(position);
         holder.name.setText("./" + folder.getName());
     }
 
@@ -83,7 +83,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });

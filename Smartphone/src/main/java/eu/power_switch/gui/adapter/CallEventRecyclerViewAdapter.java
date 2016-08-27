@@ -67,7 +67,7 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
 
     @Override
     public void onBindViewHolder(final CallEventRecyclerViewAdapter.ViewHolder holder, int position) {
-        final CallEvent callEvent = callEvents.get(holder.getAdapterPosition());
+        final CallEvent callEvent = callEvents.get(position);
 
         String phoneNumbers = "";
         Iterator<String> iterator = callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING).iterator();
@@ -87,7 +87,7 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
             holder.linearLayoutActions.addView(textViewActionDescription);
         }
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -123,7 +123,7 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });
@@ -131,7 +131,7 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
-                        onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
+                        onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;
                 }

@@ -519,7 +519,9 @@ public class StatusMessageHandler {
      */
     public static void dismissCurrentSnackbar() {
         try {
-            lastSnackbar.dismiss();
+            if (lastSnackbar != null) {
+                lastSnackbar.dismiss();
+            }
         } catch (Exception e) {
             Log.e(e);
         }

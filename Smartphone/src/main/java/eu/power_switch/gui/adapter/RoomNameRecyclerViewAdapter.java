@@ -63,7 +63,7 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
 
     @Override
     public void onBindViewHolder(final RoomNameRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Room room = rooms.get(holder.getAdapterPosition());
+        final Room room = rooms.get(position);
         holder.roomName.setText(room.getName());
 
         holder.dragHandle.setOnTouchListener(new View.OnTouchListener() {

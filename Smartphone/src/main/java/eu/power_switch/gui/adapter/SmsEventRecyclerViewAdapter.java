@@ -57,7 +57,7 @@ public class SmsEventRecyclerViewAdapter extends RecyclerView.Adapter<SmsEventRe
 
     @Override
     public void onBindViewHolder(final SmsEventRecyclerViewAdapter.ViewHolder holder, int position) {
-        final SmsEvent smsEvent = smsEvents.get(holder.getAdapterPosition());
+        final SmsEvent smsEvent = smsEvents.get(position);
 
         String phoneNumbers = "";
         Iterator<String> iterator = smsEvent.getPhoneNumbers(PhoneConstants.SmsType.INCOMING).iterator();
@@ -77,7 +77,7 @@ public class SmsEventRecyclerViewAdapter extends RecyclerView.Adapter<SmsEventRe
             holder.linearLayoutActions.addView(textViewActionDescription);
         }
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);

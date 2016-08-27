@@ -59,10 +59,10 @@ public class SsidRecyclerViewAdapter extends RecyclerView.Adapter<SsidRecyclerVi
 
     @Override
     public void onBindViewHolder(final SsidRecyclerViewAdapter.ViewHolder holder, int position) {
-        final String ssid = ssids.get(holder.getAdapterPosition());
+        final String ssid = ssids.get(position);
         holder.ssid.setText(ssid);
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -94,7 +94,7 @@ public class SsidRecyclerViewAdapter extends RecyclerView.Adapter<SsidRecyclerVi
                 @Override
                 public void onClick(View v) {
                     if (onDeleteClickListener != null) {
-                        onDeleteClickListener.onItemClick(delete, getLayoutPosition());
+                        onDeleteClickListener.onItemClick(delete, getAdapterPosition());
                     }
                 }
             });

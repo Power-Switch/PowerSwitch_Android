@@ -76,7 +76,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
     @Override
     public void onBindViewHolder(final BackupRecyclerViewAdapter.ViewHolder holder, int position) {
-        final Backup backup = backups.get(holder.getAdapterPosition());
+        final Backup backup = backups.get(position);
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
         holder.backupName.setText(backup.getName());
@@ -110,7 +110,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
             }
         });
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -147,7 +147,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });
@@ -155,7 +155,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
-                        onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
+                        onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;
                 }

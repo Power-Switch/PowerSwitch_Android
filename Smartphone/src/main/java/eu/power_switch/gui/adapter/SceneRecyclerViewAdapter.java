@@ -82,7 +82,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Scene scene = scenes.get(holder.getAdapterPosition());
+        final Scene scene = scenes.get(position);
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
         LayoutInflater inflater = (LayoutInflater) fragmentActivity.getSystemService(inflaterString);
@@ -192,7 +192,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             }
         }
 
-        if (holder.getAdapterPosition() == getItemCount() - 1) {
+        if (position == getItemCount() - 1) {
             holder.footer.setVisibility(View.VISIBLE);
         } else {
             holder.footer.setVisibility(View.GONE);
@@ -229,7 +229,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClick(itemView, getLayoutPosition());
+                        onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
             });
@@ -237,7 +237,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
-                        onItemLongClickListener.onItemLongClick(itemView, getLayoutPosition());
+                        onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;
                 }
