@@ -33,6 +33,7 @@ import java.net.UnknownHostException;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.shared.Tupel;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -97,26 +98,26 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
         if (NetworkHandler.isNetworkConnected()) {
             StatusMessageHandler.showInfoMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
-            NetworkPackage currentNetworkPackage;
+            Tupel<NetworkPackage, NetworkResponseCallback> currentNetworkPackageTupel;
             while (NetworkHandler.networkPackagesQueue.size() > 0) {
 
                 synchronized (NetworkHandler.networkPackagesQueue) {
-                    currentNetworkPackage = NetworkHandler.networkPackagesQueue.get(0);
+                    currentNetworkPackageTupel = NetworkHandler.networkPackagesQueue.get(0);
                 }
                 try {
-                    send(currentNetworkPackage);
+                    send(currentNetworkPackageTupel);
 
-                    int delay = 1000;
+                    int delay = 1000; // default delay
                     synchronized (NetworkHandler.networkPackagesQueue) {
                         // calculate time to wait before sending next package
                         if (NetworkHandler.networkPackagesQueue.size() > 1) {
-                            NetworkPackage nextNetworkPackage = NetworkHandler.networkPackagesQueue.get(1);
-                            if (currentNetworkPackage.getHost().equals(nextNetworkPackage.getHost()) &&
-                                    currentNetworkPackage.getPort() == nextNetworkPackage.getPort()) {
+                            Tupel<NetworkPackage, NetworkResponseCallback> nextNetworkPackageTupel = NetworkHandler.networkPackagesQueue.get(1);
+                            if (currentNetworkPackageTupel.getLeft().getHost().equals(nextNetworkPackageTupel.getLeft().getHost()) &&
+                                    currentNetworkPackageTupel.getLeft().getPort() == nextNetworkPackageTupel.getLeft().getPort()) {
                                 // if same gateway, wait gateway-specific time
-                                Log.d("Waiting Gateway specific time (" + currentNetworkPackage.getTimeout() + "ms) " +
+                                Log.d("Waiting Gateway specific time (" + currentNetworkPackageTupel.getLeft().getTimeout() + "ms) " +
                                         "before sending next signal...");
-                                delay = currentNetworkPackage.getTimeout();
+                                delay = currentNetworkPackageTupel.getLeft().getTimeout();
                             }
                         }
 
@@ -179,7 +180,8 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private void send(NetworkPackage networkPackage) throws Exception {
+    private void send(Tupel<NetworkPackage, NetworkResponseCallback> networkPackageTupel) throws Exception {
+        NetworkPackage networkPackage = networkPackageTupel.getLeft();
         switch (networkPackage.getCommunicationType()) {
             case UDP:
                 InetAddress host = InetAddress.getByName(networkPackage.getHost());
@@ -205,7 +207,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    readStream(in);
+                    readStream(in, networkPackageTupel.getRight());
                 } finally {
                     urlConnection.disconnect();
                 }
@@ -213,16 +215,21 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private void readStream(InputStream inputStream) {
+    private void readStream(InputStream inputStream, NetworkResponseCallback responseCallback) {
         String response;
 
         java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
         if (s.hasNext()) {
             response = s.next();
             Log.d("HTTP Response", response);
-
+            if (responseCallback != null) {
+                responseCallback.receiveResponse("key", response);
+            }
         } else {
-            return;
+            Log.d("Scanner is empty");
+            if (responseCallback != null) {
+                responseCallback.receiveResponse("key", null);
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -67,6 +68,7 @@ import java.util.List;
 import java.util.Stack;
 
 import eu.power_switch.R;
+import eu.power_switch.application.PowerSaverHelper;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHelper;
@@ -98,6 +100,7 @@ import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
+import eu.power_switch.wear.service.WearableHelper;
 
 /**
  * Main entry Activity for the app
@@ -265,6 +268,19 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, false);
                             SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                        }
+                    })
+                    .show();
+        }
+
+        if (Build.VERSION.SDK_INT >= 23 && WearableHelper.isAndroidWearInstalled(getActivity()) && !PowerSaverHelper.isIgnoringBatteryOptimizations(getActivity())) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.disable_battery_optimizations_title)
+                    .setMessage(R.string.disable_battery_optimizations_message)
+                    .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            PowerSaverHelper.openIgnoreOptimizationSettings(getActivity());
                         }
                     })
                     .show();

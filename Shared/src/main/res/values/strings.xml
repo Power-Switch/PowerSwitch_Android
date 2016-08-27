@@ -22,6 +22,10 @@
     <!-- Package name -->
     <string name="PACKAGE_NAME">eu.power_switch</string>
 
+    <!-- Doze -->
+    <string name="disable_battery_optimizations_title">Disable battery optimizations</string>
+    <string name="disable_battery_optimizations_message">PowerSwitch can automatically execute tasks in the background. To be able to do this even when your phone is in standby (doze) and make a network connection you need to \"Ignore Optimisations\" for this app. This is important for Timers, Geofences, Wearable functionality and probably more features in the future.</string>
+
     <!-- Wear DataApi -->
     <string name="RECEIVER_ACTION_TRIGGER_CAPABILITY_NAME">receiver_action_trigger</string>
     <string name="REQUEST_DATA_UPDATE_CAPABILITY_NAME">request_data_update</string>

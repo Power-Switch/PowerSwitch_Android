@@ -44,6 +44,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.obj.sensor.Sensor;
+import eu.power_switch.shared.Tupel;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -52,7 +53,7 @@ import eu.power_switch.shared.log.Log;
  */
 public abstract class NetworkHandler {
 
-    protected static final List<NetworkPackage> networkPackagesQueue = new LinkedList<>();
+    protected static final List<Tupel<NetworkPackage, NetworkResponseCallback>> networkPackagesQueue = new LinkedList<>();
     protected static final Object lockObject = new Object();
     protected static NetworkPackageQueueHandler networkPackageQueueHandler;
     protected static Context context;
@@ -199,14 +200,16 @@ public abstract class NetworkHandler {
      *
      * @param networkPackages list of network packages
      */
-    public static synchronized void send(List<NetworkPackage> networkPackages) {
+    public static synchronized void send(NetworkResponseCallback responseCallback, List<NetworkPackage> networkPackages) {
         if (networkPackages == null) {
             return;
         }
 
         // add NetworkPackages to queue
         synchronized (networkPackagesQueue) {
-            networkPackagesQueue.addAll(networkPackages);
+            for (NetworkPackage networkPackage : networkPackages) {
+                networkPackagesQueue.add(new Tupel<>(networkPackage, responseCallback));
+            }
         }
         // notify worker thread to handle new packages
         synchronized (NetworkPackageQueueHandler.lock) {
@@ -214,13 +217,21 @@ public abstract class NetworkHandler {
         }
     }
 
+    public static synchronized void send(List<NetworkPackage> networkPackages) {
+        send(null, networkPackages);
+    }
+
     /**
      * sends an array of NetworkPackages
      *
      * @param networkPackages array of network packages
      */
+    public static synchronized void send(NetworkResponseCallback responseCallback, NetworkPackage... networkPackages) {
+        send(responseCallback, Arrays.asList(networkPackages));
+    }
+
     public static synchronized void send(NetworkPackage... networkPackages) {
-        send(Arrays.asList(networkPackages));
+        send(null, Arrays.asList(networkPackages));
     }
 
     /**

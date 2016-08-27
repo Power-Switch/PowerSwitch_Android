@@ -43,15 +43,12 @@ public class FHT80B extends Communicator implements HeatingControl {
         super(id);
     }
 
-    public Object requestValue(Gateway gateway, Object key) {
+    public void requestValue(Gateway gateway, Object key) {
         String signal = getSignal(gateway, key);
         NetworkPackage networkPackage = new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway
                 .getLocalPort(), signal, gateway.getTimeout());
-        NetworkHandler.send(networkPackage);
-
-        return null;
+        NetworkHandler.send(this, networkPackage);
     }
-
 
 
     @Override
@@ -68,7 +65,6 @@ public class FHT80B extends Communicator implements HeatingControl {
     public void setTargetTemperature(double targetTemperature) throws Exception {
         // TODO: sende Befehl an Gateway
 
-        this.targetTemperature = targetTemperature;
     }
 
     private String getSignal(Gateway gateway, Object key) {
@@ -76,7 +72,7 @@ public class FHT80B extends Communicator implements HeatingControl {
     }
 
     @Override
-    public void receiveResponse(String message) {
+    public void receiveResponse(String key, String message) {
         Log.d("received response: ", message);
     }
 }

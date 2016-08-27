@@ -16,21 +16,29 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.network;
+package eu.power_switch.shared;
 
 /**
- * Interface used to send network response messages (received after request or from a sensor) to the requesting party
+ * Simple class representing a tupel
  * <p/>
- * Created by Markus on 18.01.2016.
+ * Created by Markus on 25.08.2016.
  */
-public interface NetworkResponseCallback {
+public class Tupel<T, K> {
 
-    /**
-     * This Method is called when a response is received after a request has been sent to a gateway
-     *
-     * @param key request key
-     * @param message response message
-     */
-    void receiveResponse(String key, String message);
+    private T t;
+    private K k;
+
+    public Tupel(T t, K k) {
+        this.t = t;
+        this.k = k;
+    }
+
+    public T getLeft() {
+        return t;
+    }
+
+    public K getRight() {
+        return k;
+    }
 
 }

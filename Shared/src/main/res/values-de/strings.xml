@@ -19,6 +19,10 @@
 
 <resources>
 
+    <!-- Doze -->
+    <string name="disable_battery_optimizations_title">Batterie Optimierungen deaktiveren</string>
+    <string name="disable_battery_optimizations_message">PowerSwitch kann automatisiert Aktionen im Hintergrund ausführen. Damit das auch funktioniert, wenn dein Gerät im Standby (Doze Modus) ist und eine Netzwerkverbindung hergestellt werden kann, musst du die Batterie Optimierungen für diese App deaktivieren. Dies ist insbesondere für Timer, Geofences und die Wearable Funktionalität wichtig, zukünftig wahrscheinlich noch weitere.</string>
+
     <string name="action_settings">Einstellungen</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="close">Schließen</string>
