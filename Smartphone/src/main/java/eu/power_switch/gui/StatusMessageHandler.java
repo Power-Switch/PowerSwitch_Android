@@ -364,6 +364,7 @@ public class StatusMessageHandler {
             });
         }
         snackbar.show();
+        lastSnackbar = snackbar;
     }
 
     /**
@@ -459,9 +460,7 @@ public class StatusMessageHandler {
             @Override
             public void run() {
                 // cancel last toast
-                if (lastToast != null) {
-                    lastToast.cancel();
-                }
+                dismissCurrentToast();
 
                 // create and show new toast
                 Toast toast = Toast.makeText(context.getApplicationContext(), message, duration);
@@ -487,9 +486,7 @@ public class StatusMessageHandler {
             @Override
             public void run() {
                 // cancel last toast
-                if (lastToast != null) {
-                    lastToast.cancel();
-                }
+                dismissCurrentToast();
 
                 // create and show new toast
                 Toast toast = Toast.makeText(context.getApplicationContext(), e.getClass()
@@ -500,5 +497,31 @@ public class StatusMessageHandler {
                 lastToast = toast;
             }
         });
+    }
+
+    /**
+     * Dismisses the currently visible toast.
+     * If there is no toast this method will do nothing.
+     */
+    public static void dismissCurrentToast() {
+        try {
+            if (lastToast != null) {
+                lastToast.cancel();
+            }
+        } catch (Exception e) {
+            Log.e(e);
+        }
+    }
+
+    /**
+     * Dismisses the currently visible snackbar.
+     * If there is no snackbar this method will do nothing.
+     */
+    public static void dismissCurrentSnackbar() {
+        try {
+            lastSnackbar.dismiss();
+        } catch (Exception e) {
+            Log.e(e);
+        }
     }
 }

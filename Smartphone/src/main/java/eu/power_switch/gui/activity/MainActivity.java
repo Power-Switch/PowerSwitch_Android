@@ -918,6 +918,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         appIsInForeground = true;
 
+        StatusMessageHandler.dismissCurrentSnackbar();
+
         updateHistory();
         HolidaySpecialHandler.showHolidaySpecial(this);
     }
