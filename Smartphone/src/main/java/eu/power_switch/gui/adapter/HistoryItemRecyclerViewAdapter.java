@@ -97,6 +97,9 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return;
+                        }
                         onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }

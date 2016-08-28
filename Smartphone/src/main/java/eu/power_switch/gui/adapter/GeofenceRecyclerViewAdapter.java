@@ -181,6 +181,9 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return;
+                        }
                         onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
@@ -189,6 +192,9 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return false;
+                        }
                         onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;

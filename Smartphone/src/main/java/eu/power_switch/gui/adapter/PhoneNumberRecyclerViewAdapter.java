@@ -94,6 +94,9 @@ public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNu
                 @Override
                 public void onClick(View v) {
                     if (onDeleteClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return;
+                        }
                         onDeleteClickListener.onItemClick(delete, getAdapterPosition());
                     }
                 }

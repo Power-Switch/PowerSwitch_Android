@@ -94,6 +94,9 @@ public class SsidRecyclerViewAdapter extends RecyclerView.Adapter<SsidRecyclerVi
                 @Override
                 public void onClick(View v) {
                     if (onDeleteClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return;
+                        }
                         onDeleteClickListener.onItemClick(delete, getAdapterPosition());
                     }
                 }

@@ -102,6 +102,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public boolean onLongClick(View v) {
                 if (onItemLongClickListener != null) {
+                    if (holder.getAdapterPosition() == RecyclerView.NO_POSITION) {
+                        return false;
+                    }
                     onItemLongClickListener.onItemLongClick(v, holder.getAdapterPosition());
                 }
                 return true;
@@ -229,6 +232,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return;
+                        }
                         onItemClickListener.onItemClick(itemView, getAdapterPosition());
                     }
                 }
@@ -237,6 +243,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 @Override
                 public boolean onLongClick(View v) {
                     if (onItemLongClickListener != null) {
+                        if (getAdapterPosition() == RecyclerView.NO_POSITION) {
+                            return false;
+                        }
                         onItemLongClickListener.onItemLongClick(itemView, getAdapterPosition());
                     }
                     return true;
