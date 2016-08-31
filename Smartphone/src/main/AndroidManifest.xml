@@ -327,6 +327,10 @@
                     android:scheme="wear"/>
             </intent-filter>
         </service>
+        <service
+            android:name=".network.NetworkPackageQueueHandler"
+            android:exported="false">
+        </service>
         <service android:name=".wear.service.UtilityService">
             <!-- <intent-filter> -->
             <!-- <action android:name="eu.power_switch.wear.UPDATE_DATA"/> -->

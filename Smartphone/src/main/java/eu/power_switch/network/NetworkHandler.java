@@ -18,12 +18,14 @@
 
 package eu.power_switch.network;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.WorkerThread;
 
@@ -74,17 +76,17 @@ public abstract class NetworkHandler {
 
         NetworkHandler.context = context;
 
-        if (networkPackageQueueHandler == null) {
-            networkPackageQueueHandler = new NetworkPackageQueueHandler(context);
-        }
-
-        if (networkPackageQueueHandler.getStatus() != AsyncTask.Status.RUNNING) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                networkPackageQueueHandler.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                networkPackageQueueHandler.execute();
-            }
-        }
+//        if (networkPackageQueueHandler == null) {
+//            networkPackageQueueHandler = new NetworkPackageQueueHandler(context);
+//        }
+//
+//        if (networkPackageQueueHandler.getStatus() != AsyncTask.Status.RUNNING) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                networkPackageQueueHandler.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//            } else {
+//                networkPackageQueueHandler.execute();
+//            }
+//        }
     }
 
     /**
@@ -211,9 +213,14 @@ public abstract class NetworkHandler {
                 networkPackagesQueue.add(new Tupel<>(networkPackage, responseCallback));
             }
         }
-        // notify worker thread to handle new packages
-        synchronized (NetworkPackageQueueHandler.lock) {
-            NetworkPackageQueueHandler.lock.notify();
+
+        Intent serviceIntent = new Intent(context, NetworkPackageQueueHandler.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent pendingIntent = PendingIntent.getService(context, 0, serviceIntent, 0);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setExactAndAllowWhileIdle(0, System.currentTimeMillis(), pendingIntent);
+        } else {
+            context.startService(serviceIntent);
         }
     }
 

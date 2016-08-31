@@ -18,8 +18,8 @@
 
 package eu.power_switch.network;
 
-import android.content.Context;
-import android.os.AsyncTask;
+import android.app.IntentService;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 
 import java.io.BufferedInputStream;
@@ -41,62 +41,37 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 29.10.2015.
  */
-public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
-
-    /**
-     * Lock Object used to lock thread on empty queue and wakeup again on notify
-     */
-    public static final Object lock = new Object();
-
-    /**
-     * Context
-     */
-    private Context context;
+public class NetworkPackageQueueHandler extends IntentService {
 
     /**
      * Socket used to send NetworkPackages over UDP
      */
     private DatagramSocket socket;
 
-    public NetworkPackageQueueHandler(Context context) {
-        this.context = context;
+    public NetworkPackageQueueHandler() {
+        super(NetworkPackageQueueHandler.class.getName());
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
-        while (true) {
-            // start working
+    protected void onHandleIntent(Intent intent) {
+        // start working
+        Log.d(this, "start working");
 
-            Log.d(this, "start working");
-
-            int queueSize;
-            synchronized (NetworkHandler.networkPackagesQueue) {
-                queueSize = NetworkHandler.networkPackagesQueue.size();
-            }
-
-            if (queueSize > 0) {
-                processQueue();
-            }
-
-            // queue is empty
-            Log.d(this, "queue is empty, wait for notify...");
-
-            // Put Thread asleep and wait for wakeup from NetworkHandler
-            synchronized (lock) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-                Log.d(this, "waking up");
-            }
+        int queueSize;
+        synchronized (NetworkHandler.networkPackagesQueue) {
+            queueSize = NetworkHandler.networkPackagesQueue.size();
         }
+
+        if (queueSize > 0) {
+            processQueue();
+        }
+
+        Log.d(this, "exiting");
     }
 
     private void processQueue() {
         if (NetworkHandler.isNetworkConnected()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.sending, Snackbar.LENGTH_INDEFINITE);
+            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
             Tupel<NetworkPackage, NetworkResponseCallback> currentNetworkPackageTupel;
             while (NetworkHandler.networkPackagesQueue.size() > 0) {
@@ -130,7 +105,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                 } catch (UnknownHostException e) {
                     removeQueueHead();
 
-                    StatusMessageHandler.showInfoMessage(context, R.string.unknown_host, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.unknown_host, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender", e);
                     try {
                         Thread.sleep(2000);
@@ -141,7 +116,7 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
                 } catch (Exception e) {
                     removeQueueHead();
 
-                    StatusMessageHandler.showErrorMessage(context, e);
+                    StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
                     Log.e("UDP Sender: Unknown error while sending message in background:", e);
                     try {
                         Thread.sleep(2000);
@@ -158,11 +133,11 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
             }
 
             // queue worked off
-            StatusMessageHandler.showInfoMessage(context, R.string.sent, Snackbar.LENGTH_SHORT);
+            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sent, Snackbar.LENGTH_SHORT);
         } else {
             clearQueue();
 
-            StatusMessageHandler.showInfoMessage(context, R.string.missing_network_connection, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.missing_network_connection, Snackbar.LENGTH_LONG);
         }
     }
 
@@ -232,4 +207,5 @@ public class NetworkPackageQueueHandler extends AsyncTask<Void, Void, Void> {
             }
         }
     }
+
 }
