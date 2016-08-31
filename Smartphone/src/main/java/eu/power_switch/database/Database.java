@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
@@ -304,6 +305,11 @@ public class Database extends SQLiteOpenHelper {
                 case 11:
                 case 12:
                     break;
+            }
+
+            if (oldVersion < 19) {
+                BackupHandler backupHandler = new BackupHandler(context);
+                backupHandler.upgradeOldBackupFormat();
             }
 
             db.setTransactionSuccessful();

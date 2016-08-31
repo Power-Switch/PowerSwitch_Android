@@ -251,7 +251,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         };
 
         // TODO: Cloud Backups
-        //FirebaseStorage storage = FirebaseStorage.getInstance();
+        // FirebaseStorageHandler firebaseStorageHandler = new FirebaseStorageHandler(getActivity());
 
     }
 

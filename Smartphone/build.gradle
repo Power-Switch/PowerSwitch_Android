@@ -104,6 +104,9 @@ dependencies {
     // TreeNode library
     compile 'com.github.bmelnychuk:atv:1.2.+'
 
+    // Zip Files
+    compile 'net.lingala.zip4j:zip4j:1.3.2'
+
     // PowerSwitch Modules
     compile project(':Shared')
     compile project(':LocaleApi')
