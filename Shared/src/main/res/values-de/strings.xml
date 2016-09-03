@@ -87,4 +87,8 @@
     <string name="automatic_crash_report_enabled_info">Das automatische Berichten von Fehlern ist aktiv, du brauchst hier also nichts mehr tun. Du kannst den Fehler trotzdem erneut per E-Mail berichten, falls du weitere Informationen hast wann und warum der Fehler aufgetreten sein könnte.</string>
     <string name="automatic_crash_report_disabled_info">Um das Berichten von Fehlern zu vereinfachen aktiviere die Option \"Fehlerberichte automatisch senden\" in den Einstellungen.</string>
 
+
+    <string name="total">Gesamt</string>
+    <string name="subprocess">Unteraufgabe</string>
+
 </resources>

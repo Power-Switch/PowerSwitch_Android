@@ -34,7 +34,6 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
-import com.firebase.client.Firebase;
 
 import org.apache.log4j.LogManager;
 
@@ -198,7 +197,7 @@ public class PowerSwitch extends MultiDexApplication {
         }
 
         // Initialize Firebase
-        Firebase.setAndroidContext(this);
+//        Firebase.setAndroidContext(this);
 
 
         // This is where you do your work in the UI thread.

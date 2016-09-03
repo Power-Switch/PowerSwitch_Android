@@ -19,10 +19,11 @@
 package eu.power_switch.backup;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 
 import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.progress.ProgressMonitor;
 import net.lingala.zip4j.util.Zip4jConstants;
 
 import java.io.File;
@@ -35,6 +36,8 @@ import java.io.FileNotFoundException;
  */
 public class ZipHelper {
 
+    private static final int PROGRESS_UPDATE_TIMEOUT = 16;
+
     /**
      * Creates a zip file from a given directory (recursive)
      * Zip files are encrypted by default
@@ -45,16 +48,20 @@ public class ZipHelper {
      * @return zip file
      * @throws FileNotFoundException
      */
-    public static ZipFile createZip(@NonNull String targetPath, char[] password, @NonNull String... sourcePaths) throws Exception {
+    @WorkerThread
+    public static ZipFile createZip(@NonNull String targetPath, char[] password, @NonNull OnZipProgressChangedListener onZipProgressChangedListener, @NonNull String... sourcePaths) throws Exception {
         File targetFile = new File(targetPath);
 
         ZipFile zipFile = new ZipFile(targetFile);
+        zipFile.setRunInThread(true);
 
         ZipParameters zipParameters = new ZipParameters();
-        zipParameters.setPassword(password);
-        zipParameters.setEncryptFiles(true);
-        zipParameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
-        zipParameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
+        // TODO: Password and encryption are not decrypted correctly when extracting the files
+        zipParameters.setCompressionMethod(Zip4jConstants.COMP_STORE);
+        zipParameters.setIncludeRootFolder(false);
+        // zipParameters.setPassword(password);
+//        zipParameters.setEncryptFiles(false);
+//        zipParameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
 
         if (sourcePaths.length == 0) {
             throw new IllegalArgumentException("No source path(s) defined!");
@@ -62,9 +69,29 @@ public class ZipHelper {
 
         if (sourcePaths.length == 1) {
             zipFile.createZipFileFromFolder(sourcePaths[0], zipParameters, false, 0);
+
+            ProgressMonitor progressMonitor = zipFile.getProgressMonitor();
+            // TODO: replace with... looper?
+            while (progressMonitor.getState() == ProgressMonitor.STATE_BUSY) {
+                onZipProgressChangedListener.onProgressChanged(progressMonitor);
+
+                Thread.sleep(PROGRESS_UPDATE_TIMEOUT);
+            }
+
+            onZipProgressChangedListener.onProgressChanged(progressMonitor);
         } else {
             for (String sourcePath : sourcePaths) {
                 zipFile.addFolder(sourcePath, zipParameters);
+
+                ProgressMonitor progressMonitor = zipFile.getProgressMonitor();
+                // TODO: replace with... looper?
+                while (progressMonitor.getState() == ProgressMonitor.STATE_BUSY) {
+                    onZipProgressChangedListener.onProgressChanged(progressMonitor);
+
+                    Thread.sleep(PROGRESS_UPDATE_TIMEOUT);
+                }
+
+                onZipProgressChangedListener.onProgressChanged(progressMonitor);
             }
         }
 
@@ -79,17 +106,25 @@ public class ZipHelper {
      * @param password   password of the zip file
      * @throws Exception
      */
-    public static void extractZip(String sourcePath, String targetPath, char[] password) throws Exception {
-        try {
-            ZipFile zipFile = new ZipFile(sourcePath);
-            if (zipFile.isEncrypted()) {
-                zipFile.setPassword(password);
-            }
-
-            zipFile.extractAll(targetPath);
-        } catch (ZipException e) {
-            e.printStackTrace();
+    @WorkerThread
+    public static void extractZip(String sourcePath, String targetPath, char[] password, @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws Exception {
+        ZipFile zipFile = new ZipFile(sourcePath);
+        if (zipFile.isEncrypted()) {
+            zipFile.setPassword(password);
         }
+        zipFile.setRunInThread(true);
+
+        zipFile.extractAll(targetPath);
+
+        ProgressMonitor progressMonitor = zipFile.getProgressMonitor();
+        // TODO: replace with... looper?
+        while (progressMonitor.getState() == ProgressMonitor.STATE_BUSY) {
+            onZipProgressChangedListener.onProgressChanged(progressMonitor);
+
+            Thread.sleep(PROGRESS_UPDATE_TIMEOUT);
+        }
+
+        onZipProgressChangedListener.onProgressChanged(progressMonitor);
     }
 
 }

@@ -56,6 +56,7 @@ import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
+import eu.power_switch.gui.dialog.UpgradeBackupsDialog;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
@@ -253,6 +254,8 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         // TODO: Cloud Backups
         // FirebaseStorageHandler firebaseStorageHandler = new FirebaseStorageHandler(getActivity());
 
+        UpgradeBackupsDialog upgradeBackupsDialog = UpgradeBackupsDialog.newInstance();
+        upgradeBackupsDialog.show(getFragmentManager(), null);
     }
 
     @Override

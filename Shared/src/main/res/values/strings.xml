@@ -100,6 +100,11 @@
     <string name="automatic_crash_report_enabled_info">Because you have automatic crash reporting enabled you don\'t need to do anything here. You can still report your issue via mail but please refrain from doing so if you can\'t provide additional info about how and why it happened.</string>
     <string name="automatic_crash_report_disabled_info">For easier reporting of errors please enable \"Automatic Crash Reporting\" in settings.</string>
 
+    <string name="start">Start</string>
+
+    <string name="total">Total</string>
+    <string name="subprocess">Subprocess</string>
+
     <!-- supported gateways, brands and models -->
     <string-array name="gateway_array">
         <item>Brematic GWY433</item>

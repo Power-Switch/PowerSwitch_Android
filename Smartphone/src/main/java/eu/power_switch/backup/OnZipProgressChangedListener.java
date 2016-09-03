@@ -16,22 +16,15 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.google_play_services.firebase.storage;
+package eu.power_switch.backup;
 
-import android.content.Context;
-
+import net.lingala.zip4j.progress.ProgressMonitor;
 
 /**
- * Handler for easy access to Firebase storage
- * <p/>
- * Created by Markus on 31.08.2016.
+ * Created by Markus on 02.09.2016.
  */
-public class FirebaseStorageHandler {
+public interface OnZipProgressChangedListener {
 
-//    private final FirebaseStorage storage;
-
-    public FirebaseStorageHandler(Context context) {
-//        storage = FirebaseStorage.getInstance();
-    }
+    void onProgressChanged(ProgressMonitor progressMonitor);
 
 }

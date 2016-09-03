@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~     PowerSwitch by Max Rosin & Markus Ressel
+  ~     Copyright (C) 2015  Markus Ressel
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/imageView_success"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:elevation="4dp"
+            android:visibility="gone"
+            app:iiv_color="@color/active_green"
+            app:iiv_icon="gmi-check-circle"/>
+
+        <com.mikepenz.iconics.view.IconicsImageView
+            android:id="@+id/imageView_error"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:elevation="4dp"
+            android:visibility="gone"
+            app:iiv_color="@color/red"
+            app:iiv_icon="gmi-close-circle"/>
+
+        <ProgressBar
+            android:id="@+id/progressIndicator"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/textView_statusMessage_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        style="@style/sub_header"
+        android:text="@string/total"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:orientation="vertical">
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/progressBar_main"
+            style="@style/NumberProgressBar_Default"
+            android:layout_marginTop="8dp"
+            app:max="100"
+            app:progress_text_size="12dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        style="@style/sub_header"
+        android:text="@string/subprocess"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_statusMessage_sub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"/>
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
+            android:id="@+id/progressBar_sub"
+            style="@style/NumberProgressBar_Default"
+            app:max="100"
+            app:progress_text_size="12dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -20,9 +20,9 @@ package eu.power_switch.backup;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
 
 import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.progress.ProgressMonitor;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -32,9 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
@@ -54,9 +52,9 @@ public class BackupHandler {
      */
     public static final String MAIN_BACKUP_FOLDERNAME = "PowerSwitch_Backup";
 
-    private static final String BACKUP_FILE_SUFFIX = ".psbak";
+    public static final String BACKUP_FILE_SUFFIX = ".zip";
 
-    private static final char[] BACKUP_PASSWORD = "ps_backup".toCharArray();
+    public static final char[] BACKUP_PASSWORD = "ps_backup".toCharArray();
 
     /**
      * Context
@@ -141,8 +139,13 @@ public class BackupHandler {
                 ZipFile zip = ZipHelper.createZip(
                         SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
                         BACKUP_PASSWORD,
-                        context.getFilesDir().getParent() + File.separator + "databases",
-                        context.getFilesDir().getParent() + File.separator + "shared_prefs");
+                        new OnZipProgressChangedListener() {
+                            @Override
+                            public void onProgressChanged(ProgressMonitor progressMonitor) {
+
+                            }
+                        },
+                        context.getFilesDir().getParent());
             } catch (Exception e) {
                 Log.e(e);
                 throw new CreateBackupException(e);
@@ -229,7 +232,13 @@ public class BackupHandler {
 
             ZipHelper.extractZip(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
                     context.getFilesDir().getParent(),
-                    BACKUP_PASSWORD);
+                    BACKUP_PASSWORD,
+                    new OnZipProgressChangedListener() {
+                        @Override
+                        public void onProgressChanged(ProgressMonitor progressMonitor) {
+
+                        }
+                    });
         } catch (Exception e) {
             Log.e(e);
             throw new RestoreBackupException(e);
@@ -285,45 +294,5 @@ public class BackupHandler {
             }
         }
         return fileOrDirectory.delete();
-    }
-
-    /**
-     * Upgrades the old backup format to the new one.
-     * Old: Folder containing "database" and "shared_preferences" folders
-     * New: Zip file containing "database" and "shared_preferences" folders
-     *
-     * @throws Exception
-     */
-    @WorkerThread
-    public void upgradeOldBackupFormat() throws Exception {
-        File backupDir = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
-
-        FileFilter backupFileFilter = new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                if (pathname.list() == null) {
-                    return false;
-                }
-
-                List<String> subFolders = Arrays.asList(pathname.list());
-                return pathname.isDirectory() && subFolders.contains("shared_prefs") &&
-                        subFolders.contains("databases");
-            }
-        };
-
-        if (backupDir.exists()) {
-            for (File oldBackup : backupDir.listFiles(backupFileFilter)) {
-                File target = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldBackup.getName() + BACKUP_FILE_SUFFIX);
-                if (target.exists()) {
-                    target.delete();
-                }
-
-                ZipHelper.createZip(target.getAbsolutePath(),
-                        BACKUP_PASSWORD,
-                        oldBackup.getAbsolutePath());
-
-                oldBackup.delete();
-            }
-        }
     }
 }
