@@ -111,7 +111,7 @@ public abstract class ProcessingDialog extends DialogFragment {
 
         buttonStart.setEnabled(true);
         buttonClose.setEnabled(false);
-        buttonCancel.setEnabled(true);
+        buttonCancel.setEnabled(false);
 
         return dialog;
     }
