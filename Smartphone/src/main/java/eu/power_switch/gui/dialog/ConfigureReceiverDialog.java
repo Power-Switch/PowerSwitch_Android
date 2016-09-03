@@ -58,7 +58,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
     private long receiverId = -1;
 
     public static ConfigureReceiverDialog newInstance(Fragment targetFragment) {
-        return newInstance(-1, targetFragment);
+        ConfigureReceiverDialog fragment = new ConfigureReceiverDialog();
+        fragment.setTargetFragment(targetFragment, 0);
+        return fragment;
     }
 
     public static ConfigureReceiverDialog newInstance(long receiverId, Fragment targetFragment) {
