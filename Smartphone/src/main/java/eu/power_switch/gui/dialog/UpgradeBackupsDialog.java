@@ -36,11 +36,13 @@ import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
+ * Backup Upgrade Dialog
+ * <p/>
  * Created by Markus on 03.09.2016.
  */
 public class UpgradeBackupsDialog extends ProcessingDialog {
 
-    private AsyncTask<Void, Integer, AsyncTaskResult<Void>> processingTask;
+    private AsyncTask<Void, Object, AsyncTaskResult<Void>> processingTask;
 
     public static UpgradeBackupsDialog newInstance() {
         Bundle args = new Bundle();
@@ -57,12 +59,14 @@ public class UpgradeBackupsDialog extends ProcessingDialog {
 
     @Override
     protected void onStartProcessing() throws Exception {
+        super.onStartProcessing();
+
         /*
           Upgrades the old backup format to the new one.
           Old: Folder containing "database" and "shared_preferences" folders
           New: Zip file containing "database" and "shared_preferences" folders
          */
-        processingTask = new AsyncTask<Void, Integer, AsyncTaskResult<Void>>() {
+        processingTask = new AsyncTask<Void, Object, AsyncTaskResult<Void>>() {
 
             @Override
             protected AsyncTaskResult<Void> doInBackground(Void... voids) {
@@ -99,9 +103,10 @@ public class UpgradeBackupsDialog extends ProcessingDialog {
                                         @Override
                                         public void onProgressChanged(ProgressMonitor progressMonitor) {
                                             if (progressMonitor.getState() == ProgressMonitor.RESULT_WORKING) {
-                                                publishProgress(1, progressMonitor.getPercentDone());
+                                                String fileName = progressMonitor.getFileName();
+                                                publishProgress(1, progressMonitor.getPercentDone(), fileName.substring(fileName.lastIndexOf("/") + 1));
                                             } else if (progressMonitor.getState() == ProgressMonitor.RESULT_SUCCESS) {
-                                                publishProgress(1, 100);
+                                                publishProgress(1, 100, "Done!");
                                             }
                                         }
                                     },
@@ -110,7 +115,7 @@ public class UpgradeBackupsDialog extends ProcessingDialog {
                             // TODO: optionally delete existing backups in old format
                             // oldBackup.delete();
 
-                            Thread.sleep(500);
+                            Thread.sleep(200);
                         }
                     }
 
@@ -121,13 +126,13 @@ public class UpgradeBackupsDialog extends ProcessingDialog {
             }
 
             @Override
-            protected void onProgressUpdate(Integer... values) {
-                if (values[0] == 0) {
-                    setMainProgress(100 * values[1] / values[2]);
-                    setMainStatusMessage(String.format("Processing %d of %d...", values[1], values[2]));
+            protected void onProgressUpdate(Object... values) {
+                if ((Integer) values[0] == 0) {
+                    setMainProgress(100 * (Integer) values[1] / (Integer) values[2]);
+                    setMainStatusMessage(String.format("Processing %d of %d...", (Integer) values[1] + 1, values[2]));
                 } else {
-                    setSubProgress(values[1]);
-                    setSubStatusMessage(String.valueOf(values[1]));
+                    setSubProgress((Integer) values[1]);
+                    setSubStatusMessage((String) values[2]);
                 }
             }
 
@@ -143,10 +148,12 @@ public class UpgradeBackupsDialog extends ProcessingDialog {
     }
 
     @Override
-    protected void onCancel() {
+    protected void onCancelProcessing() {
         if (processingTask != null) {
             processingTask.cancel(true);
         }
+
+        super.onCancelProcessing();
     }
 
 }

@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -91,14 +92,6 @@ public abstract class ProcessingDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 try {
-                    progressIndicator.setVisibility(View.VISIBLE);
-                    imageViewError.setVisibility(View.GONE);
-                    imageViewSuccess.setVisibility(View.GONE);
-
-                    buttonStart.setEnabled(false);
-                    buttonCancel.setEnabled(true);
-                    buttonClose.setEnabled(false);
-
                     onStartProcessing();
                 } catch (Exception e) {
                     onFinishedFailure(e);
@@ -112,7 +105,7 @@ public abstract class ProcessingDialog extends DialogFragment {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCancel();
+                onCancelProcessing();
             }
         });
 
@@ -215,11 +208,43 @@ public abstract class ProcessingDialog extends DialogFragment {
      * <p/>
      * Be sure to do your work in an AsyncTask or a similar construct
      * so you can update status messages and progress values while processing your data.
+     * <p/>
+     * Also:
+     * Be sure to call super.onStartProcessing() so the dialog gets initialized correctly.
+     * This call should normally be the <b>first</b> line of your code.
      */
-    protected abstract void onStartProcessing() throws Exception;
+    @MainThread
+    @CallSuper
+    protected void onStartProcessing() throws Exception {
+        progressIndicator.setVisibility(View.VISIBLE);
+        imageViewError.setVisibility(View.GONE);
+        imageViewSuccess.setVisibility(View.GONE);
+
+        buttonStart.setEnabled(false);
+        buttonCancel.setEnabled(true);
+        buttonClose.setEnabled(false);
+    }
 
     /**
      * This method is called when the user cancels the progress
+     * <p/>
+     * Be sure to call super.onCancelProcessing() so the dialog gets initialized correctly.
+     * This call should normally be the first <b>last</b> of your code.
      */
-    protected abstract void onCancel();
+    @MainThread
+    @CallSuper
+    protected void onCancelProcessing() {
+        setMainProgress(0);
+        setMainStatusMessage("Canceled");
+        setSubProgress(0);
+        setSubStatusMessage("");
+
+        progressIndicator.setVisibility(View.GONE);
+        imageViewError.setVisibility(View.VISIBLE);
+        imageViewSuccess.setVisibility(View.GONE);
+
+        buttonStart.setEnabled(true);
+        buttonClose.setEnabled(true);
+        buttonCancel.setEnabled(false);
+    }
 }
