@@ -31,7 +31,7 @@
         <item name="colorPrimaryLight">@color/primaryColor_light</item>
         <item name="colorPrimaryDark">@color/primaryColor_dark</item>
         <item name="colorAccent">#FF999999</item>
-        <item name="android:windowBackground">@color/windowBackgroundColorInverse</item>
+        <item name="android:windowBackground">@color/windowBackgroundColor</item>
         <item name="android:colorBackground">@color/windowBackgroundColor</item>
 
         <!-- custom views -->
@@ -45,6 +45,7 @@
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+        <item name="textColorError">@color/color_red_a700</item>
 
         <!-- About Libraries -->
         <item name="about_libraries_window_background">@color/windowBackgroundColor</item>
@@ -93,6 +94,7 @@
         <item name="colorPrimaryLight">@color/primaryColor_lightInverse</item>
         <item name="colorAccent">#FF333333</item>
         <item name="android:windowBackground">@color/windowBackgroundColorInverse</item>
+        <item name="android:colorBackground">@color/windowBackgroundColorInverse</item>
 
         <!-- custom views -->
         <item name="dialog_bottomBar_next_color">@color/textColorPrimaryInverse</item>
@@ -105,6 +107,7 @@
         <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
         <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
         <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+        <item name="textColorError">@color/color_red_a700</item>
 
         <!-- About Libraries -->
         <item name="about_libraries_window_background">@color/windowBackgroundColorInverse</item>
