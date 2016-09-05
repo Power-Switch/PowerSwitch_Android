@@ -70,8 +70,8 @@ public class SceneWidgetProvider extends AppWidgetProvider {
             try {
                 SceneWidget sceneWidget = DatabaseHandler.getSceneWidget(appWidgetId);
                 // update UI
-                Scene scene = DatabaseHandler.getScene(sceneWidget.getSceneId());
-                if (scene != null) {
+                try {
+                    Scene scene = DatabaseHandler.getScene(sceneWidget.getSceneId());
                     Apartment apartment = DatabaseHandler.getApartment(scene.getApartmentId());
 
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, apartment.getName() + ": " + scene.getName());
@@ -79,7 +79,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                     remoteViews.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
                             WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, apartment, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.VISIBLE);
-                } else {
+                } catch (Exception e) {
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_not_found));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
                 }

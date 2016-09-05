@@ -77,11 +77,11 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
 
             try {
                 ReceiverWidget receiverWidget = DatabaseHandler.getReceiverWidget(appWidgetId);
-                Room room = DatabaseHandler.getRoom(receiverWidget.getRoomId());
-                if (room != null) {
-                    Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
+                try {
+                    Room room = DatabaseHandler.getRoom(receiverWidget.getRoomId());
+                    try {
+                        Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
 
-                    if (receiver != null) {
                         Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
                         // update UI
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name, apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
@@ -114,12 +114,14 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                             buttonOffset++;
                         }
                         remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.VISIBLE);
-                    } else {
+                    } catch (Exception e) {
+                        Log.e(e);
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.receiver_not_found));
                         remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
                         remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.GONE);
                     }
-                } else {
+                } catch (Exception e) {
+                    Log.e(e);
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.room_not_found));
                     remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
                     remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.GONE);

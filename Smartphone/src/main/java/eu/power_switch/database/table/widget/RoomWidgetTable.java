@@ -45,13 +45,7 @@ public class RoomWidgetTable {
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         switch (oldVersion) {
             case 1:
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-                onCreate(db);
-                break;
             case 2:
-                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-                onCreate(db);
-                break;
             case 3:
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
                 onCreate(db);

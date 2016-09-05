@@ -69,8 +69,8 @@ public class RoomWidgetProvider extends AppWidgetProvider {
 
             try {
                 RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
-                Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
-                if (room != null) {
+                try {
+                    Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
                     Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
 
                     // update UI
@@ -85,7 +85,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                                             .string.off),
                                     ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
-                } else {
+                } catch (Exception e) {
                     remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_not_found));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
                 }
