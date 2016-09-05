@@ -210,7 +210,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION) {
                             if (results[0] == PackageManager.PERMISSION_GRANTED) {
                                 // Permission Granted
-                                updateListContent();
+                                updateUI();
                                 StatusMessageHandler.showInfoMessage(getRecyclerView(),
                                         R.string.permission_granted, Snackbar.LENGTH_SHORT);
                             } else {
@@ -230,28 +230,6 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
         // TODO: Cloud Backups
         // FirebaseStorageHandler firebaseStorageHandler = new FirebaseStorageHandler(getActivity());
-
-        if (BackupHandler.oldBackupFormatsExist()) {
-            final AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.old_backups_found_title)
-                    .setMessage(R.string.old_backups_found_message)
-                    .setView(R.layout.dialog_old_backup_format)
-                    .setPositiveButton(R.string.convert, null)
-                    .setNeutralButton(R.string.close, null)
-                    .show();
-
-            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.checkbox_delete_old_format);
-
-                    UpgradeBackupsProcessingDialog upgradeBackupsProcessingDialog = UpgradeBackupsProcessingDialog.newInstance(checkBox.isChecked());
-                    upgradeBackupsProcessingDialog.show(getFragmentManager(), null);
-
-                    dialog.dismiss();
-                }
-            });
-        }
     }
 
     @Override
@@ -282,6 +260,28 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                     NEEDED_PERMISSIONS);
         } else {
             updateListContent();
+
+            if (BackupHandler.oldBackupFormatsExist()) {
+                final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.old_backups_found_title)
+                        .setMessage(R.string.old_backups_found_message)
+                        .setView(R.layout.dialog_old_backup_format)
+                        .setPositiveButton(R.string.convert, null)
+                        .setNeutralButton(R.string.close, null)
+                        .show();
+
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.checkbox_delete_old_format);
+
+                        UpgradeBackupsProcessingDialog upgradeBackupsProcessingDialog = UpgradeBackupsProcessingDialog.newInstance(checkBox.isChecked());
+                        upgradeBackupsProcessingDialog.show(getFragmentManager(), null);
+
+                        dialog.dismiss();
+                    }
+                });
+            }
         }
     }
 

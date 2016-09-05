@@ -48,7 +48,7 @@
     <string name="upgrade">Upgrade</string>
 
     <string name="old_backups_found_title">Backup im alten Format gefunden</string>
-    <string name="old_backups_found_message">Seit 1.6.3 nutzt PowerSwitch ein neues Format für Backups. Um deine alten Backups in dieser und zukünftigen Versionen benutzen zu können musst die sie in das neue Format konvertieren.</string>
+    <string name="old_backups_found_message">Seit v1.6.5 nutzt PowerSwitch ein neues Format für Backups. Um deine alten Backups in dieser und zukünftigen Versionen benutzen zu können musst die sie in das neue Format konvertieren.</string>
     <string name="delete_old_formats">Backups im alten Format löschen</string>
 
     <string name="creating_backup">Backup wird erstellt…</string>
