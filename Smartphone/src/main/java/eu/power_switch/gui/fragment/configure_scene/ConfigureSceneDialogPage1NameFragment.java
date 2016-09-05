@@ -215,13 +215,11 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
 
         if (getCheckedReceivers().isEmpty()) {
             floatingName.setError(getString(R.string.please_select_receivers));
-            floatingName.setErrorEnabled(true);
             sendNameSceneChangedBroadcast(getActivity(), getCurrentSceneName(), getCheckedReceivers());
             return false;
         }
 
         floatingName.setError(null);
-        floatingName.setErrorEnabled(false);
         sendNameSceneChangedBroadcast(getActivity(), getCurrentSceneName(), getCheckedReceivers());
         return true;
     }
@@ -229,13 +227,11 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
     private boolean checkNameValidity() {
         if (getCurrentSceneName().length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
             return false;
         } else {
             for (Scene scene : existingScenes) {
                 if (!scene.getId().equals(sceneId) && scene.getName().equalsIgnoreCase(getCurrentSceneName())) {
                     floatingName.setError(getString(R.string.scene_name_already_exists));
-                    floatingName.setErrorEnabled(true);
                     return false;
                 }
             }

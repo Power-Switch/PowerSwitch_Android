@@ -151,7 +151,6 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
                     protected void onPostExecute(AsyncTaskResult<LatLng> result) {
                         if (result.isSuccess()) {
                             searchAddressTextInputLayout.setError(null);
-                            searchAddressTextInputLayout.setErrorEnabled(false);
 
                             if (geofenceView == null) {
                                 geofenceView = mapViewHandler.addGeofence(result.getResult().get(0), currentGeofenceRadius);
@@ -168,10 +167,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
                             findAddress(location);
                         } else {
                             if (result.getException() instanceof CoordinatesNotFoundException) {
-                                searchAddressTextInputLayout.setErrorEnabled(true);
                                 searchAddressTextInputLayout.setError(getString(R.string.address_not_found));
                             } else {
-                                searchAddressTextInputLayout.setErrorEnabled(true);
                                 searchAddressTextInputLayout.setError(getString(R.string.unknown_error));
                             }
                         }
@@ -427,7 +424,6 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
 
                 if (result.isSuccess()) {
                     searchAddressTextInputLayout.setError(null);
-                    searchAddressTextInputLayout.setErrorEnabled(false);
 
                     String firstMatch = result.getResult().get(0);
                     searchAddressEditText.setText(firstMatch);

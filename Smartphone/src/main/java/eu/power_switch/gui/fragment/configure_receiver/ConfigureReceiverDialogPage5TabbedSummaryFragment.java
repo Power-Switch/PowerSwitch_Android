@@ -272,7 +272,11 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
             }
         }
 
-        seedTextView.setText(String.valueOf(currentSeed));
+        if (currentSeed == -1) {
+            seedTextView.setText("");
+        } else {
+            seedTextView.setText(String.valueOf(currentSeed));
+        }
 
         if (currentUniversalButtons != null) {
             linearLayoutUniversalButtons.removeAllViews();

@@ -51,7 +51,7 @@ public class BackupHandler {
      */
     public static final String MAIN_BACKUP_FOLDERNAME = "PowerSwitch_Backup";
 
-    public static final String BACKUP_FILE_SUFFIX = ".zip";
+    public static final String BACKUP_FILE_SUFFIX = ".psbak";
 
     public static final char[] BACKUP_PASSWORD = "ps_backup".toCharArray();
 

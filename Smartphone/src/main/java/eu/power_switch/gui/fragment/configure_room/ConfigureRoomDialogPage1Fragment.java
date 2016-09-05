@@ -164,19 +164,15 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
     private boolean isValid() {
         if (getCurrentRoomName().equals(originalName)) {
             floatingName.setError(null);
-            floatingName.setErrorEnabled(false);
             return true;
         } else if (getCurrentRoomName().length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
             return false;
         } else if (checkRoomAlreadyExists()) {
             floatingName.setError(getString(R.string.room_already_exists));
-            floatingName.setErrorEnabled(true);
             return false;
         } else {
             floatingName.setError(null);
-            floatingName.setErrorEnabled(false);
             return true;
         }
     }

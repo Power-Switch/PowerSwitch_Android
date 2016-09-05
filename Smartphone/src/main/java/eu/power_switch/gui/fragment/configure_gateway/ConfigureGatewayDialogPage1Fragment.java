@@ -209,11 +209,9 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
     private boolean checkNameValidity(String name) {
         if (name.length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
             return false;
         } else {
             floatingName.setError(null);
-            floatingName.setErrorEnabled(false);
             return true;
         }
     }
@@ -227,7 +225,6 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
     private boolean checkLocalAddressValidity(String address) {
         if (address.length() <= 0) {
             floatingLocalAddress.setError(getString(R.string.please_enter_host));
-            floatingLocalAddress.setErrorEnabled(true);
             return false;
         } else {
 //            try {
@@ -236,12 +233,10 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
 
             // if it works, everything is ok
             floatingLocalAddress.setError(null);
-            floatingLocalAddress.setErrorEnabled(false);
             return true;
 
 //            } catch (MalformedURLException e) {
 //                floatingLocalAddress.setError(getString(R.string.malformed_url));
-//                floatingLocalAddress.setErrorEnabled(true);
 //            }
         }
     }
@@ -255,7 +250,6 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
     private boolean checkLocalPortValidity(String portText) {
         if (portText.length() <= 0) {
             floatingLocalPort.setError(null);
-            floatingLocalPort.setErrorEnabled(false);
             return true;
         } else {
             try {
@@ -263,16 +257,13 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
                 int port = Integer.valueOf(portText);
                 if (port > 65535 || port <= 0) {
                     floatingLocalPort.setError(getString(R.string.port_invalid));
-                    floatingLocalPort.setErrorEnabled(true);
                     return false;
                 } else {
                     floatingLocalPort.setError(null);
-                    floatingLocalPort.setErrorEnabled(false);
                     return true;
                 }
             } catch (Exception e) {
                 floatingLocalPort.setError(getString(R.string.unknown_error));
-                floatingLocalPort.setErrorEnabled(true);
                 return false;
             }
         }
@@ -287,7 +278,6 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
     private boolean checkWanAddressValidity(String address) {
         if (address.length() <= 0) {
             floatingWanAddress.setError(getString(R.string.please_enter_host));
-            floatingWanAddress.setErrorEnabled(true);
             return false;
         } else {
 //            try {
@@ -296,12 +286,10 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
 
             // if it works, everything is ok
             floatingWanAddress.setError(null);
-            floatingWanAddress.setErrorEnabled(false);
             return true;
 
 //            } catch (MalformedURLException e) {
 //                floatingLocalAddress.setError(getString(R.string.malformed_url));
-//                floatingLocalAddress.setErrorEnabled(true);
 //            }
         }
     }
@@ -315,7 +303,6 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
     private boolean checkWanPortValidity(String portText) {
         if (portText.length() <= 0) {
             floatingWanPort.setError(null);
-            floatingWanPort.setErrorEnabled(false);
             return true;
         } else {
             try {
@@ -323,16 +310,13 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
                 int port = Integer.valueOf(portText);
                 if (port > 65535 || port <= 0) {
                     floatingWanPort.setError(getString(R.string.port_invalid));
-                    floatingWanPort.setErrorEnabled(true);
                     return false;
                 } else {
                     floatingWanPort.setError(null);
-                    floatingWanPort.setErrorEnabled(false);
                     return true;
                 }
             } catch (Exception e) {
                 floatingWanPort.setError(getString(R.string.unknown_error));
-                floatingWanPort.setErrorEnabled(true);
                 return false;
             }
         }
@@ -397,13 +381,9 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
         // disable error messages if one address is valid
         if (oneAddressIsValid) {
             floatingLocalAddress.setError(null);
-            floatingLocalAddress.setErrorEnabled(false);
             floatingLocalPort.setError(null);
-            floatingLocalPort.setErrorEnabled(false);
             floatingWanAddress.setError(null);
-            floatingWanAddress.setErrorEnabled(false);
             floatingWanPort.setError(null);
-            floatingWanPort.setErrorEnabled(false);
         }
 
         return nameIsValid && oneAddressIsValid;

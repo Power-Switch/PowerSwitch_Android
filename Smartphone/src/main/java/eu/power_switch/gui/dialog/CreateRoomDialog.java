@@ -151,15 +151,12 @@ public class CreateRoomDialog extends DialogFragment {
         if (getRoomName().length() <= 0) {
             setPositiveButtonVisibility(false);
             floatingName.setError(null);
-            floatingName.setErrorEnabled(false);
         } else if (checkRoomAlreadyExists()) {
             setPositiveButtonVisibility(false);
             floatingName.setError(getString(R.string.room_already_exists));
-            floatingName.setErrorEnabled(true);
         } else {
             setPositiveButtonVisibility(true);
             floatingName.setError(null);
-            floatingName.setErrorEnabled(false);
         }
     }
 

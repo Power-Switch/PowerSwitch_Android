@@ -184,12 +184,10 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
 
         if (currentReceiverName.length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
             return false;
         }
 
         floatingName.setError(null);
-        floatingName.setErrorEnabled(false);
         return true;
     }
 

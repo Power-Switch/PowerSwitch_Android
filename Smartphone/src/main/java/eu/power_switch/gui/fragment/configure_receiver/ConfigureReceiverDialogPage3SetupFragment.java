@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
@@ -39,7 +41,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -104,7 +105,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
     private ArrayList<DipSwitch> dipSwitchArrayList;
 
     private Receiver currentAutoPairReceiver;
-    private EditText editTextSeed;
+    private TextInputEditText editTextSeed;
+    private TextInputLayout textInputEditTextSeed;
 
 
     /**
@@ -226,7 +228,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         // AutoPair
         layoutAutoPair = (NestedScrollView) rootView.findViewById(R.id.scrollView_autoPair);
 
-        editTextSeed = (EditText) rootView.findViewById(R.id.editText_seed);
+        textInputEditTextSeed = (TextInputLayout) rootView.findViewById(R.id.textInputEditText_seed);
+        editTextSeed = (TextInputEditText) rootView.findViewById(R.id.editText_seed);
         editTextSeed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -238,10 +241,19 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
 
             @Override
             public void afterTextChanged(Editable editable) {
-                ((AutoPairReceiver) currentAutoPairReceiver).setSeed(Long.valueOf(editable.toString()));
+                try {
+                    ((AutoPairReceiver) currentAutoPairReceiver).setSeed(Long.valueOf(editable.toString()));
 
-                sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
-                        dipSwitchArrayList, getCurrentSeed(), getCurrentUniversalButtons());
+                    textInputEditTextSeed.setError(null);
+                    sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
+                            dipSwitchArrayList, getCurrentSeed(), getCurrentUniversalButtons());
+                } catch (Exception e) {
+                    Log.e(e);
+
+                    textInputEditTextSeed.setError(e.getMessage());
+                    sendChannelDetailsChangedBroadcast(getActivity(), getSelectedChannelMaster(), getSelectedChannelSlave(),
+                            dipSwitchArrayList, -1, getCurrentUniversalButtons());
+                }
             }
         });
 

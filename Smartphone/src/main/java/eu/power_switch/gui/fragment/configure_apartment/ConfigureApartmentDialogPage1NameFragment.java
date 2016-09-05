@@ -159,15 +159,12 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
     private boolean checkNameValidity(String name) {
         if (name.length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
             return false;
         } else if (checkNameAlreadyExists()) {
             floatingName.setError(getString(R.string.apartment_already_exists));
-            floatingName.setErrorEnabled(true);
             return false;
         } else {
             floatingName.setError(null);
-            floatingName.setErrorEnabled(false);
             return true;
         }
     }

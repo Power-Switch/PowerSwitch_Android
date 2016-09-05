@@ -225,14 +225,12 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
 
         if (currentReceiverName.length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
-            floatingName.setErrorEnabled(true);
             sendNameRoomChangedBroadcast(getActivity(), null, getCheckedRoomName());
             return false;
         }
 
         if (currentRoomName == null) {
             floatingName.setError(getString(R.string.no_room_selected));
-            floatingName.setErrorEnabled(true);
             sendNameRoomChangedBroadcast(getActivity(), getCurrentName(), null);
             return false;
         }
@@ -248,20 +246,17 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             } catch (ReceiverAlreadyExistsException e) {
                 Log.e(e);
                 floatingName.setError(getString(R.string.receiver_already_exists));
-                floatingName.setErrorEnabled(true);
                 sendNameRoomChangedBroadcast(getActivity(), null, getCheckedRoomName());
                 return false;
             } catch (Exception e) {
                 Log.e(e);
                 floatingName.setError(getString(R.string.unknown_error));
-                floatingName.setErrorEnabled(true);
                 sendNameRoomChangedBroadcast(getActivity(), null, null);
                 return false;
             }
         }
 
         floatingName.setError(null);
-        floatingName.setErrorEnabled(false);
         sendNameRoomChangedBroadcast(getActivity(), getCurrentName(), getCheckedRoomName());
         return true;
     }
