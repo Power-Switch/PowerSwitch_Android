@@ -42,4 +42,21 @@
     <string name="do_you_want_to_overwrite">Willst du sie überschreiben?</string>
     <string name="backup_saved">Sicherung gespeichert</string>
 
+    <string name="ready">Bereit</string>
+
+    <string name="convert">Konvertieren</string>
+    <string name="upgrade">Upgrade</string>
+
+    <string name="old_backups_found_title">Backup im alten Format gefunden</string>
+    <string name="old_backups_found_message">Seit 1.6.3 nutzt PowerSwitch ein neues Format für Backups. Um deine alten Backups in dieser und zukünftigen Versionen benutzen zu können musst die sie in das neue Format konvertieren.</string>
+    <string name="delete_old_formats">Backups im alten Format löschen</string>
+
+    <string name="creating_backup">Backup wird erstellt…</string>
+    <string name="restoring_backup">Backup wird wiederhergestellt…</string>
+    <string name="processing">Verarbeite…</string>
+
+    <string name="processing_backup_x_of_y">Verarbeite Backup %1$d von %2$d…</string>
+    <string name="canceled">Abgebrochen</string>
+    <string name="done">Abgeschlossen</string>
+
 </resources>

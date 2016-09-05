@@ -21,9 +21,6 @@ package eu.power_switch.backup;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.progress.ProgressMonitor;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -32,7 +29,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
@@ -71,6 +70,46 @@ public class BackupHandler {
     }
 
     /**
+     * Checks if Backups using the old format exist in backup directory
+     *
+     * @return true if old backups exist, false otherwise
+     */
+    public static boolean oldBackupFormatsExist() {
+        File backupDir = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+
+        FileFilter backupFileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.list() == null) {
+                    return false;
+                }
+
+                List<String> subFolders = Arrays.asList(pathname.list());
+                return pathname.isDirectory() && subFolders.contains("shared_prefs") &&
+                        subFolders.contains("databases");
+            }
+        };
+
+        return backupDir.exists() && backupDir.listFiles(backupFileFilter).length > 0;
+    }
+
+    /**
+     * Deletes a folder/file recursively
+     *
+     * @param fileOrDirectory
+     * @return
+     * @throws Exception
+     */
+    public static boolean deleteRecursive(@NonNull File fileOrDirectory) throws Exception {
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+        return fileOrDirectory.delete();
+    }
+
+    /**
      * Get all Backups
      *
      * @return List of Backups
@@ -105,7 +144,7 @@ public class BackupHandler {
      * @throws CreateBackupException
      * @throws BackupAlreadyExistsException
      */
-    public void createBackup(boolean useExternalStorage, @NonNull String name, boolean force) throws
+    public void createBackup(boolean useExternalStorage, @NonNull String name, boolean force, @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws
             CreateBackupException, BackupAlreadyExistsException {
         if (useExternalStorage) {
             // TODO: kp wie man internen und externen speicher unterscheidet
@@ -136,15 +175,10 @@ public class BackupHandler {
             }
 
             try {
-                ZipFile zip = ZipHelper.createZip(
+                ZipHelper.createZip(
                         SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
                         BACKUP_PASSWORD,
-                        new OnZipProgressChangedListener() {
-                            @Override
-                            public void onProgressChanged(ProgressMonitor progressMonitor) {
-
-                            }
-                        },
+                        onZipProgressChangedListener,
                         context.getFilesDir().getParent());
             } catch (Exception e) {
                 Log.e(e);
@@ -168,13 +202,8 @@ public class BackupHandler {
             File backupZipFile = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
                     + File.separator + name + BACKUP_FILE_SUFFIX);
 
-            if (backupFolder.exists()) {
+            if (backupFolder.exists() || backupZipFile.exists()) {
                 deleteRecursive(backupFolder);
-            } else {
-                throw new BackupNotFoundException();
-            }
-
-            if (backupZipFile.exists()) {
                 backupZipFile.delete();
             } else {
                 throw new BackupNotFoundException();
@@ -194,18 +223,18 @@ public class BackupHandler {
      * @throws BackupAlreadyExistsException
      */
     public void renameBackup(@NonNull String oldName, @NonNull String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
-        File oldFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
+        File oldZipFile = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
                 + File.separator + oldName + BACKUP_FILE_SUFFIX);
         File newFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
                 + File.separator + newName + BACKUP_FILE_SUFFIX);
 
-        if (!oldFolder.exists()) {
+        if (!oldZipFile.exists()) {
             throw new BackupNotFoundException();
         }
         if (newFolder.exists()) {
             throw new BackupAlreadyExistsException();
         }
-        oldFolder.renameTo(newFolder);
+        oldZipFile.renameTo(newFolder);
     }
 
     /**
@@ -215,30 +244,20 @@ public class BackupHandler {
      * @throws BackupNotFoundException
      * @throws RestoreBackupException
      */
-    public void restoreBackup(@NonNull String name) throws BackupNotFoundException, RestoreBackupException {
+    public void restoreBackup(@NonNull String name, @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws BackupNotFoundException, RestoreBackupException {
         try {
             // create destination path object
             File dst = new File(context.getFilesDir().getParent());
 
             // delete existing files
             for (File fileOrFolder : dst.listFiles()) {
-                if (fileOrFolder.getPath().equals(context.getFilesDir().getParent() + File.separator
-                        + "shared_prefs")
-                        || fileOrFolder.getPath().equals(context.getFilesDir().getParent() + File.separator +
-                        "databases")) {
-                    deleteRecursive(fileOrFolder);
-                }
+                deleteRecursive(fileOrFolder);
             }
 
             ZipHelper.extractZip(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
                     context.getFilesDir().getParent(),
                     BACKUP_PASSWORD,
-                    new OnZipProgressChangedListener() {
-                        @Override
-                        public void onProgressChanged(ProgressMonitor progressMonitor) {
-
-                        }
-                    });
+                    onZipProgressChangedListener);
         } catch (Exception e) {
             Log.e(e);
             throw new RestoreBackupException(e);
@@ -278,21 +297,5 @@ public class BackupHandler {
         } else {
             copyFile(sourceLocation, targetLocation);
         }
-    }
-
-    /**
-     * Deletes a folder/file recursively
-     *
-     * @param fileOrDirectory
-     * @return
-     * @throws Exception
-     */
-    private boolean deleteRecursive(@NonNull File fileOrDirectory) throws Exception {
-        if (fileOrDirectory.isDirectory()) {
-            for (File child : fileOrDirectory.listFiles()) {
-                deleteRecursive(child);
-            }
-        }
-        return fileOrDirectory.delete();
     }
 }

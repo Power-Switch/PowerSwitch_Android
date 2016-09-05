@@ -77,7 +77,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+
         android:layout_marginLeft="8dp"
         android:orientation="vertical">
 
@@ -90,29 +90,38 @@
 
     </LinearLayout>
 
-    <TextView
-        style="@style/sub_header"
-        android:text="@string/subprocess"/>
-
     <LinearLayout
+        android:id="@+id/layout_subprocess"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView_statusMessage_sub"
+            style="@style/sub_header"
+            android:text="@string/subprocess"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:maxLines="1"/>
+            android:layout_marginLeft="8dp"
+            android:orientation="vertical">
 
-        <com.daimajia.numberprogressbar.NumberProgressBar
-            android:id="@+id/progressBar_sub"
-            style="@style/NumberProgressBar_Default"
-            app:max="100"
-            app:progress_text_size="12dp"/>
+            <TextView
+                android:id="@+id/textView_statusMessage_sub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:maxLines="1"/>
+
+            <com.daimajia.numberprogressbar.NumberProgressBar
+                android:id="@+id/progressBar_sub"
+                style="@style/NumberProgressBar_Default"
+                app:max="100"
+                app:progress_text_size="12dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

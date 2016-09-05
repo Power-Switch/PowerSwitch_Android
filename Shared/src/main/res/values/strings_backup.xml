@@ -40,4 +40,21 @@
     <string name="do_you_want_to_overwrite">Do you want to overwrite it?</string>
     <string name="backup_saved">Backup saved</string>
 
+    <string name="ready">Ready</string>
+
+    <string name="convert">Convert</string>
+    <string name="upgrade">Upgrade</string>
+
+    <string name="old_backups_found_title">Old Backup format found</string>
+    <string name="old_backups_found_message">Since 1.6.3 PowerSwitch uses a new format for backup files. To use your old Backups in this and upcoming versions you need to convert them to the new format.</string>
+    <string name="delete_old_formats">Delete Backups in old format</string>
+
+    <string name="creating_backup">Creating Backup…</string>
+    <string name="restoring_backup">Restoring Backup…</string>
+    <string name="processing">Processing…</string>
+
+    <string name="processing_backup_x_of_y">Processing Backup %1$d of %2$d…</string>
+    <string name="canceled">Canceled</string>
+    <string name="done">Done</string>
+
 </resources>

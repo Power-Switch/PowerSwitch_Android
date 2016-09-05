@@ -24,7 +24,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -37,11 +36,6 @@ import android.widget.EditText;
 import java.util.Calendar;
 
 import eu.power_switch.R;
-import eu.power_switch.backup.BackupHandler;
-import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
-import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to create a new Backup
@@ -88,39 +82,10 @@ public class CreateBackupDialog extends DialogFragment {
         builder.setTitle(R.string.create_backup);
         builder.setPositiveButton(R.string.create, new OnClickListener() {
 
-            private BackupHandler backupHandler;
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                backupHandler = new BackupHandler(getActivity());
-                try {
-                    backupHandler.createBackup(false, name.getText().toString().trim(), false);
-                    BackupFragment.sendBackupsChangedBroadcast(getActivity());
-
-                    StatusMessageHandler.showInfoMessage(getTargetFragment()
-                            , R.string.backup_successful, Snackbar.LENGTH_LONG);
-                } catch (BackupAlreadyExistsException e) {
-                    Log.e(e);
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.backup_already_exists)
-                            .setMessage(R.string.do_you_want_to_overwrite)
-                            .setPositiveButton(android.R.string.yes, new OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        backupHandler.createBackup(false, name.getText().toString().trim(), true);
-                                        BackupFragment.sendBackupsChangedBroadcast(getActivity());
-
-                                        StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                                R.string.backup_successful, Snackbar.LENGTH_LONG);
-                                    } catch (Exception e1) {
-                                        Log.e(e1);
-                                    }
-                                }
-                            }).setNegativeButton(android.R.string.no, null).create().show();
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getTargetFragment(), e);
-                }
+                CreateBackupProcessingDialog createBackupProcessingDialog = CreateBackupProcessingDialog.newInstance(name.getText().toString().trim(), true);
+                createBackupProcessingDialog.show(getFragmentManager(), null);
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);

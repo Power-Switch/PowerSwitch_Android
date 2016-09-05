@@ -20,7 +20,6 @@ package eu.power_switch.gui.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -29,6 +28,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -45,13 +45,17 @@ import eu.power_switch.R;
 public abstract class ProcessingDialog extends DialogFragment {
 
     private View rootView;
-    private ProgressBar progressIndicator;
-    private NumberProgressBar progressBarMain;
-    private TextView textViewMainStatusMessage;
-    private NumberProgressBar progressBarSub;
-    private TextView textViewSubStatusMessage;
+
     private IconicsImageView imageViewSuccess;
     private IconicsImageView imageViewError;
+    private ProgressBar progressIndicator;
+
+    private TextView textViewMainStatusMessage;
+    private NumberProgressBar progressBarMain;
+
+    private LinearLayout layoutSubProcess;
+    private TextView textViewSubStatusMessage;
+    private NumberProgressBar progressBarSub;
 
     private Button buttonStart;
     private Button buttonClose;
@@ -69,11 +73,18 @@ public abstract class ProcessingDialog extends DialogFragment {
         progressBarMain = (NumberProgressBar) rootView.findViewById(R.id.progressBar_main);
         textViewMainStatusMessage = (TextView) rootView.findViewById(R.id.textView_statusMessage_main);
 
+        layoutSubProcess = (LinearLayout) rootView.findViewById(R.id.layout_subprocess);
         progressBarSub = (NumberProgressBar) rootView.findViewById(R.id.progressBar_sub);
         textViewSubStatusMessage = (TextView) rootView.findViewById(R.id.textView_statusMessage_sub);
 
         imageViewSuccess = (IconicsImageView) rootView.findViewById(R.id.imageView_success);
         imageViewError = (IconicsImageView) rootView.findViewById(R.id.imageView_error);
+
+        if (!hasSubProcess()) {
+            layoutSubProcess.setVisibility(View.GONE);
+        } else {
+            layoutSubProcess.setVisibility(View.VISIBLE);
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView);
@@ -92,7 +103,7 @@ public abstract class ProcessingDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 try {
-                    onStartProcessing();
+                    preOnStartProcessing();
                 } catch (Exception e) {
                     onFinishedFailure(e);
                 }
@@ -105,15 +116,36 @@ public abstract class ProcessingDialog extends DialogFragment {
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCancelProcessing();
+                preOnCancelProcessing();
             }
         });
 
-        buttonStart.setEnabled(true);
-        buttonClose.setEnabled(true);
-        buttonCancel.setEnabled(false);
+        if (startAutomatically()) {
+            try {
+                preOnStartProcessing();
+            } catch (Exception e) {
+                onFinishedFailure(e);
+            }
+        } else {
+            buttonStart.setEnabled(true);
+            buttonClose.setEnabled(true);
+            buttonCancel.setEnabled(false);
+        }
+
+        setMainStatusMessage(R.string.ready);
 
         return dialog;
+    }
+
+    /**
+     * Set status message for the overall progress
+     *
+     * @param message status message string resource
+     */
+    @MainThread
+    @StringRes
+    protected void setMainStatusMessage(int message) {
+        textViewMainStatusMessage.setText(message);
     }
 
     /**
@@ -134,6 +166,17 @@ public abstract class ProcessingDialog extends DialogFragment {
     @MainThread
     protected void setMainProgress(int progress) {
         progressBarMain.setProgress(progress);
+    }
+
+    /**
+     * Set status message for the current sub process
+     *
+     * @param message status message string resource
+     */
+    @MainThread
+    @StringRes
+    protected void setSubStatusMessage(int message) {
+        textViewSubStatusMessage.setText(message);
     }
 
     /**
@@ -164,8 +207,8 @@ public abstract class ProcessingDialog extends DialogFragment {
         setMainProgress(100);
         setSubProgress(100);
 
-        setMainStatusMessage("Done!");
-        setSubStatusMessage("");
+        setMainStatusMessage(R.string.done);
+        setSubStatusMessage(R.string.done);
 
         progressIndicator.setVisibility(View.GONE);
         imageViewError.setVisibility(View.GONE);
@@ -183,7 +226,7 @@ public abstract class ProcessingDialog extends DialogFragment {
      */
     @MainThread
     protected void onFinishedFailure(Exception error) {
-        setMainStatusMessage("Error :(");
+        setMainStatusMessage(getString(R.string.unknown_error));
         setSubStatusMessage(error.getMessage());
 
         progressIndicator.setVisibility(View.GONE);
@@ -203,6 +246,24 @@ public abstract class ProcessingDialog extends DialogFragment {
     @StringRes
     protected abstract int getDialogTitle();
 
+    @MainThread
+    private void preOnStartProcessing() throws Exception {
+        setMainStatusMessage(R.string.processing);
+        setMainProgress(0);
+        setSubStatusMessage(R.string.processing);
+        setSubProgress(0);
+
+        progressIndicator.setVisibility(View.VISIBLE);
+        imageViewError.setVisibility(View.GONE);
+        imageViewSuccess.setVisibility(View.GONE);
+
+        buttonStart.setEnabled(false);
+        buttonCancel.setEnabled(true);
+        buttonClose.setEnabled(false);
+
+        onStartProcessing();
+    }
+
     /**
      * This is where you perform your processing.
      * <p/>
@@ -214,15 +275,22 @@ public abstract class ProcessingDialog extends DialogFragment {
      * This call should normally be the <b>first</b> line of your code.
      */
     @MainThread
-    @CallSuper
-    protected void onStartProcessing() throws Exception {
-        progressIndicator.setVisibility(View.VISIBLE);
-        imageViewError.setVisibility(View.GONE);
+    protected abstract void onStartProcessing() throws Exception;
+
+    @MainThread
+    private void preOnCancelProcessing() {
+        setMainStatusMessage(R.string.canceled);
+        setSubStatusMessage(R.string.canceled);
+
+        progressIndicator.setVisibility(View.GONE);
+        imageViewError.setVisibility(View.VISIBLE);
         imageViewSuccess.setVisibility(View.GONE);
 
-        buttonStart.setEnabled(false);
-        buttonCancel.setEnabled(true);
-        buttonClose.setEnabled(false);
+        buttonStart.setEnabled(true);
+        buttonClose.setEnabled(true);
+        buttonCancel.setEnabled(false);
+
+        onCancelProcessing();
     }
 
     /**
@@ -232,19 +300,22 @@ public abstract class ProcessingDialog extends DialogFragment {
      * This call should normally be the first <b>last</b> of your code.
      */
     @MainThread
-    @CallSuper
-    protected void onCancelProcessing() {
-        setMainProgress(0);
-        setMainStatusMessage("Canceled");
-        setSubProgress(0);
-        setSubStatusMessage("");
+    protected abstract void onCancelProcessing();
 
-        progressIndicator.setVisibility(View.GONE);
-        imageViewError.setVisibility(View.VISIBLE);
-        imageViewSuccess.setVisibility(View.GONE);
+    /**
+     * Define if the dialog should display two progress bars, one for overall progress and another one
+     * for any kind of sub process.
+     * <p/>
+     * If set to false only one progress bar will be shown.
+     *
+     * @return true if your process has a sub process, false otherwise
+     */
+    protected abstract boolean hasSubProcess();
 
-        buttonStart.setEnabled(true);
-        buttonClose.setEnabled(true);
-        buttonCancel.setEnabled(false);
-    }
+    /**
+     * Define if the processing should start automatically.
+     *
+     * @return true if autostart is turned on, false otherwise
+     */
+    protected abstract boolean startAutomatically();
 }

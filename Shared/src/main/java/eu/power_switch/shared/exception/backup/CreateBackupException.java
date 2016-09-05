@@ -24,7 +24,7 @@ package eu.power_switch.shared.exception.backup;
 public class CreateBackupException extends Exception {
 
     public CreateBackupException(Exception e) {
-        super("Error creating Backup!", e);
+        super("Error creating Backup: " + e.getMessage(), e);
     }
 
     public CreateBackupException(String description) {

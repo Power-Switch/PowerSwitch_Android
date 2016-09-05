@@ -39,6 +39,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -51,22 +52,19 @@ import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
-import eu.power_switch.gui.dialog.UpgradeBackupsDialog;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
+import eu.power_switch.gui.dialog.RestoreBackupProcessingDialog;
+import eu.power_switch.gui.dialog.UpgradeBackupsProcessingDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
-import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
-import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -145,29 +143,8 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        BackupHandler backupHandler = new BackupHandler(getActivity());
-                                        backupHandler.restoreBackup(backup.getName());
-
-                                        DeveloperPreferencesHandler.forceRefresh();
-                                        SmartphonePreferencesHandler.forceRefresh();
-                                        WearablePreferencesHandler.forceRefresh();
-
-                                        // restart app to apply
-                                        getActivity().finish();
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                    } catch (BackupNotFoundException e) {
-                                        Log.e(e);
-                                        StatusMessageHandler.showInfoMessage(
-                                                recyclerViewFragment.getRecyclerView(),
-                                                R.string.backup_not_found, Snackbar.LENGTH_LONG);
-                                    } catch (Exception e) {
-                                        StatusMessageHandler.showErrorMessage(
-                                                recyclerViewFragment.getRecyclerView(), e);
-                                    }
+                                    RestoreBackupProcessingDialog restoreBackupProcessingDialog = RestoreBackupProcessingDialog.newInstance(backup.getName());
+                                    restoreBackupProcessingDialog.show(getFragmentManager(), null);
                                 }
                             }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
                             .setTitle(getActivity().getString(R.string.are_you_sure))
@@ -254,8 +231,27 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         // TODO: Cloud Backups
         // FirebaseStorageHandler firebaseStorageHandler = new FirebaseStorageHandler(getActivity());
 
-        UpgradeBackupsDialog upgradeBackupsDialog = UpgradeBackupsDialog.newInstance();
-        upgradeBackupsDialog.show(getFragmentManager(), null);
+        if (BackupHandler.oldBackupFormatsExist()) {
+            final AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.old_backups_found_title)
+                    .setMessage(R.string.old_backups_found_message)
+                    .setView(R.layout.dialog_old_backup_format)
+                    .setPositiveButton(R.string.convert, null)
+                    .setNeutralButton(R.string.close, null)
+                    .show();
+
+            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.checkbox_delete_old_format);
+
+                    UpgradeBackupsProcessingDialog upgradeBackupsProcessingDialog = UpgradeBackupsProcessingDialog.newInstance(checkBox.isChecked());
+                    upgradeBackupsProcessingDialog.show(getFragmentManager(), null);
+
+                    dialog.dismiss();
+                }
+            });
+        }
     }
 
     @Override
