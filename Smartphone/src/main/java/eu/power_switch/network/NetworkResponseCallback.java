@@ -18,17 +18,19 @@
 
 package eu.power_switch.network;
 
+import java.io.Serializable;
+
 /**
  * Interface used to send network response messages (received after request or from a sensor) to the requesting party
  * <p/>
  * Created by Markus on 18.01.2016.
  */
-public interface NetworkResponseCallback {
+public interface NetworkResponseCallback extends Serializable {
 
     /**
      * This Method is called when a response is received after a request has been sent to a gateway
      *
-     * @param key request key
+     * @param key     request key
      * @param message response message
      */
     void receiveResponse(String key, String message);

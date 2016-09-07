@@ -97,7 +97,7 @@ public class ActionHandler {
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
         Room room = apartment.getRoom(receiver.getRoomId());
 
-        List<NetworkPackage> networkPackages = new ArrayList<>();
+        ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
         List<Gateway> gateways;
         if (!receiver.getAssociatedGateways().isEmpty()) {
             gateways = receiver.getAssociatedGateways();
@@ -229,7 +229,7 @@ public class ActionHandler {
             return;
         }
 
-        List<NetworkPackage> networkPackages = new ArrayList<>();
+        ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
             try {
                 Button button = receiver.getButtonCaseInsensitive(buttonName);
@@ -316,7 +316,7 @@ public class ActionHandler {
             return;
         }
 
-        List<NetworkPackage> networkPackages = new ArrayList<>();
+        ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
         for (Receiver receiver : room.getReceivers()) {
             try {
                 Button button = receiver.getButton(buttonId);
@@ -418,7 +418,7 @@ public class ActionHandler {
             return;
         }
 
-        List<NetworkPackage> networkPackages = new ArrayList<>();
+        ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
         for (SceneItem sceneItem : scene.getSceneItems()) {
             Room room = DatabaseHandler.getRoom(sceneItem.getReceiver().getRoomId());
             Receiver receiver = sceneItem.getReceiver();

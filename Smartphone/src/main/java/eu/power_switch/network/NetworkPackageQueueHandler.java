@@ -22,18 +22,15 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 
-import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
-import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.shared.Tupel;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -42,6 +39,9 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 29.10.2015.
  */
 public class NetworkPackageQueueHandler extends IntentService {
+
+    public static final String KEY_NETWORK_PACKAGES = "networkPackages";
+    public static final String KEY_CALLBACK = "callback";
 
     /**
      * Socket used to send NetworkPackages over UDP
@@ -57,53 +57,54 @@ public class NetworkPackageQueueHandler extends IntentService {
         // start working
         Log.d(this, "start working");
 
-        int queueSize;
-        synchronized (NetworkHandler.networkPackagesQueue) {
-            queueSize = NetworkHandler.networkPackagesQueue.size();
+        try {
+            ArrayList<NetworkPackage> networkPackages = (ArrayList<NetworkPackage>) intent.getSerializableExtra(KEY_NETWORK_PACKAGES);
+
+            int queueSize = networkPackages.size();
+
+            if (queueSize > 0) {
+                processQueue(networkPackages);
+            }
+
+        } catch (Exception e) {
+            Log.e("Illegal intent extras");
         }
 
-        if (queueSize > 0) {
-            processQueue();
-        }
 
         Log.d(this, "exiting");
     }
 
-    private void processQueue() {
+    private void processQueue(ArrayList<NetworkPackage> networkPackages) {
         if (NetworkHandler.isNetworkConnected()) {
             StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
-            Tupel<NetworkPackage, NetworkResponseCallback> currentNetworkPackageTupel;
-            while (NetworkHandler.networkPackagesQueue.size() > 0) {
+            NetworkPackage currentNetworkPackage;
+            while (networkPackages.size() > 0) {
 
-                synchronized (NetworkHandler.networkPackagesQueue) {
-                    currentNetworkPackageTupel = NetworkHandler.networkPackagesQueue.get(0);
-                }
+                currentNetworkPackage = networkPackages.get(0);
                 try {
-                    send(currentNetworkPackageTupel);
+                    send(currentNetworkPackage);
 
                     int delay = 1000; // default delay
-                    synchronized (NetworkHandler.networkPackagesQueue) {
-                        // calculate time to wait before sending next package
-                        if (NetworkHandler.networkPackagesQueue.size() > 1) {
-                            Tupel<NetworkPackage, NetworkResponseCallback> nextNetworkPackageTupel = NetworkHandler.networkPackagesQueue.get(1);
-                            if (currentNetworkPackageTupel.getLeft().getHost().equals(nextNetworkPackageTupel.getLeft().getHost()) &&
-                                    currentNetworkPackageTupel.getLeft().getPort() == nextNetworkPackageTupel.getLeft().getPort()) {
-                                // if same gateway, wait gateway-specific time
-                                Log.d("Waiting Gateway specific time (" + currentNetworkPackageTupel.getLeft().getTimeout() + "ms) " +
-                                        "before sending next signal...");
-                                delay = currentNetworkPackageTupel.getLeft().getTimeout();
-                            }
+                    // calculate time to wait before sending next package
+                    if (networkPackages.size() > 1) {
+                        NetworkPackage nextNetworkPackage = networkPackages.get(1);
+                        if (currentNetworkPackage.getHost().equals(nextNetworkPackage.getHost()) &&
+                                currentNetworkPackage.getPort() == nextNetworkPackage.getPort()) {
+                            // if same gateway, wait gateway-specific time
+                            Log.d("Waiting Gateway specific time (" + currentNetworkPackage.getTimeout() + "ms) " +
+                                    "before sending next signal...");
+                            delay = currentNetworkPackage.getTimeout();
                         }
-
-                        // remove NetworkPackage from queue
-                        NetworkHandler.networkPackagesQueue.remove(0);
                     }
+
+                    // remove NetworkPackage from queue
+                    networkPackages.remove(0);
 
                     Log.d("Waiting for Gateway to finish sending Signal before sending next...");
                     Thread.sleep(delay);
                 } catch (UnknownHostException e) {
-                    removeQueueHead();
+                    removeQueueHead(networkPackages);
 
                     StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.unknown_host, Snackbar.LENGTH_LONG);
                     Log.e("UDP Sender", e);
@@ -114,7 +115,7 @@ public class NetworkPackageQueueHandler extends IntentService {
                         Log.e("UDP Sender", e1);
                     }
                 } catch (Exception e) {
-                    removeQueueHead();
+                    removeQueueHead(networkPackages);
 
                     StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
                     Log.e("UDP Sender: Unknown error while sending message in background:", e);
@@ -135,28 +136,23 @@ public class NetworkPackageQueueHandler extends IntentService {
             // queue worked off
             StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sent, Snackbar.LENGTH_SHORT);
         } else {
-            clearQueue();
+            clearQueue(networkPackages);
 
             StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.missing_network_connection, Snackbar.LENGTH_LONG);
         }
     }
 
-    private void removeQueueHead() {
-        synchronized (NetworkHandler.networkPackagesQueue) {
-            // remove NetworkPackage from queue
-            NetworkHandler.networkPackagesQueue.remove(0);
-        }
+    private void removeQueueHead(ArrayList<NetworkPackage> networkPackages) {
+        // remove NetworkPackage from queue
+        networkPackages.remove(0);
     }
 
-    private void clearQueue() {
-        synchronized (NetworkHandler.networkPackagesQueue) {
-            // remove NetworkPackage from queue
-            NetworkHandler.networkPackagesQueue.clear();
-        }
+    private void clearQueue(ArrayList<NetworkPackage> networkPackages) {
+        // remove NetworkPackage from queue
+        networkPackages.clear();
     }
 
-    private void send(Tupel<NetworkPackage, NetworkResponseCallback> networkPackageTupel) throws Exception {
-        NetworkPackage networkPackage = networkPackageTupel.getLeft();
+    private void send(NetworkPackage networkPackage) throws Exception {
         switch (networkPackage.getCommunicationType()) {
             case UDP:
                 InetAddress host = InetAddress.getByName(networkPackage.getHost());
@@ -177,15 +173,15 @@ public class NetworkPackageQueueHandler extends IntentService {
                 socket.close();
                 break;
             case HTTP:
-                URL url = new URL("http://" + networkPackage.getHost() + ":" + networkPackage.getPort() + "/" +
-                        networkPackage.getMessage());
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                try {
-                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    readStream(in, networkPackageTupel.getRight());
-                } finally {
-                    urlConnection.disconnect();
-                }
+//                URL url = new URL("http://" + networkPackage.getHost() + ":" + networkPackage.getPort() + "/" +
+//                        networkPackage.getMessage());
+//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//                try {
+//                    InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//                    readStream(in, networkPackageTupel.getRight());
+//                } finally {
+//                    urlConnection.disconnect();
+//                }
                 break;
         }
     }

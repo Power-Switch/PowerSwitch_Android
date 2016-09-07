@@ -18,10 +18,12 @@
 
 package eu.power_switch.network;
 
+import java.io.Serializable;
+
 /**
  * Internal representation of a network package that is used in NetworkHandler
  */
-public class NetworkPackage {
+public class NetworkPackage implements Serializable {
 
     /**
      * Destination localHost of this network package
