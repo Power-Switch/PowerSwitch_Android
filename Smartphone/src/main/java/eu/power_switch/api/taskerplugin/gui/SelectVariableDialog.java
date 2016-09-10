@@ -100,9 +100,10 @@ public class SelectVariableDialog extends DialogFragment {
                 try {
                     sendVariableSelectedBroadcast(getActivity(), relevantVariables.get(position), field);
                 } catch (Exception e) {
-                    dismiss();
                     StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
+
+                dismiss();
             }
         });
 

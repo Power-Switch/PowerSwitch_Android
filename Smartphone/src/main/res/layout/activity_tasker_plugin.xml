@@ -238,8 +238,7 @@
             <Spinner
                 android:id="@+id/spinner_button"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/action_spinner_height"
-                android:visibility="gone"/>
+                android:layout_height="@dimen/action_spinner_height"/>
 
             <EditText
                 android:id="@+id/editText_button"
