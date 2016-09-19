@@ -56,13 +56,13 @@ android {
 
 dependencies {
     // Support Library stuff
-    compile 'com.android.support:cardview-v7:24.2.0'
-    compile 'com.android.support:recyclerview-v7:24.2.0'
-    compile 'com.android.support:gridlayout-v7:24.2.0'
-    compile 'com.android.support:support-v4:24.2.0'
-    compile 'com.android.support:preference-v14:24.2.0'
-    compile 'com.android.support:design:24.2.0'
-    compile 'com.android.support:support-annotations:24.2.0'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:gridlayout-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:preference-v14:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:support-annotations:24.2.1'
     compile 'com.google.android.support:wearable:2.0.0-alpha2'
 
     // Google Play Services
@@ -119,11 +119,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //testCompile 'org.mockito:mockito-core:1.10.19'
 
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
     // Set this dependency to use JUnit 4 rules
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
+    androidTestCompile 'com.android.support.test:rules:0.5'
     // Set this dependency to build and run Espresso tests
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     // Set this dependency to build and run UI Automator tests
     //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 
