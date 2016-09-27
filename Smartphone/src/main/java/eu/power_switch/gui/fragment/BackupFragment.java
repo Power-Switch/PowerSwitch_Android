@@ -143,7 +143,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    RestoreBackupProcessingDialog restoreBackupProcessingDialog = RestoreBackupProcessingDialog.newInstance(backup.getName());
+                                    RestoreBackupProcessingDialog restoreBackupProcessingDialog = RestoreBackupProcessingDialog.newInstance(backup.getPath());
                                     restoreBackupProcessingDialog.show(getFragmentManager(), null);
                                 }
                             }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)

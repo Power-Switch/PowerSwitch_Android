@@ -59,4 +59,6 @@
     <string name="canceled">Abgebrochen</string>
     <string name="done">Abgeschlossen</string>
 
+    <string name="powerswitch_backup_file">PowerSwitch Backup Datei</string>
+
 </resources>

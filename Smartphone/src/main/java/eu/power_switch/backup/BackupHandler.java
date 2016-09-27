@@ -244,11 +244,11 @@ public class BackupHandler {
     /**
      * Restore Backup
      *
-     * @param name name of backup
+     * @param filePath absolute file path of the backup
      * @throws BackupNotFoundException
      * @throws RestoreBackupException
      */
-    public void restoreBackup(@NonNull String name, @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws BackupNotFoundException, RestoreBackupException {
+    public void restoreBackup(@NonNull String filePath, @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws BackupNotFoundException, RestoreBackupException {
         try {
             // create destination path object
             File dst = new File(context.getFilesDir().getParent());
@@ -258,7 +258,7 @@ public class BackupHandler {
                 deleteRecursive(fileOrFolder);
             }
 
-            ZipHelper.extractZip(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
+            ZipHelper.extractZip(filePath,
                     context.getFilesDir().getParent(),
                     BACKUP_PASSWORD,
                     onZipProgressChangedListener);
@@ -280,8 +280,8 @@ public class BackupHandler {
 
             intentShareFile.setType("application/pdf");
             intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + backup.getPath()));
-            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.send_to));
-            intentShareFile.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.send_to));
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.powerswitch_backup_file));
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.powerswitch_backup_file));
 
             context.startActivity(Intent.createChooser(intentShareFile, context.getString(R.string.send_to)));
         } catch (Exception e) {

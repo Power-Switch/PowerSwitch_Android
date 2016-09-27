@@ -65,9 +65,8 @@ public class Backup {
      *
      * @return Backup name
      */
-    public
     @NonNull
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -76,20 +75,18 @@ public class Backup {
      *
      * @return Backup creation date
      */
-    public
     @NonNull
-    Date getDate() {
+    public Date getDate() {
         return date;
     }
 
     /**
-     * Get Backup store path
+     * Get full Backup file path
      *
-     * @return Backup store path
+     * @return Backup file path
      */
-    public
     @NonNull
-    String getPath() {
+    public String getPath() {
         return path;
     }
 

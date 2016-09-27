@@ -28,7 +28,6 @@ import android.view.View;
 import android.widget.Button;
 
 import eu.power_switch.R;
-import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
@@ -62,8 +61,8 @@ public class RestoreBackupFromFileActivity extends AppCompatActivity {
         buttonRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BackupHandler backupHandler = new BackupHandler(getApplicationContext());
-//                backupHandler.restoreBackup();
+                RestoreBackupProcessingDialog restoreBackupProcessingDialog = RestoreBackupProcessingDialog.newInstance(fileUri.getPath());
+                restoreBackupProcessingDialog.show(getSupportFragmentManager(), null);
             }
         });
 
