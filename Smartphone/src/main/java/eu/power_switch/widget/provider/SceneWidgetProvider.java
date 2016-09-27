@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -79,10 +80,13 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                     remoteViews.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
                             WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, apartment, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.VISIBLE);
-                } catch (Exception e) {
+                } catch (NoSuchElementException e) {
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_not_found));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
                 }
+            } catch (NoSuchElementException e) {
+                remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.missing_widget_data));
+                remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
             } catch (Exception e) {
                 Log.e(e);
                 remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.unknown_error));

@@ -32,5 +32,6 @@
     <string name="receiver_not_found">Receiver not found</string>
     <string name="room_not_found">Room not found</string>
     <string name="scene_not_found">Scene not found</string>
+    <string name="missing_widget_data">Missing Widget Data :(</string>
 
 </resources>

@@ -31,5 +31,6 @@
     <string name="receiver_not_found">Empfänger nicht gefunden</string>
     <string name="room_not_found">Raum nicht gefunden</string>
     <string name="scene_not_found">Szene nicht gefunden</string>
+    <string name="missing_widget_data">Widget Daten fehlen :(</string>
 
 </resources>
