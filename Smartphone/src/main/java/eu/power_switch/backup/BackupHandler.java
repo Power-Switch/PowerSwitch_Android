@@ -19,6 +19,8 @@
 package eu.power_switch.backup;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import java.io.File;
@@ -33,6 +35,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import eu.power_switch.R;
+import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
@@ -261,6 +265,27 @@ public class BackupHandler {
         } catch (Exception e) {
             Log.e(e);
             throw new RestoreBackupException(e);
+        }
+    }
+
+    /**
+     * Opens a share dialog to share a backup with any suitable application
+     *
+     * @param context any suitable context
+     * @param backup  a valid backup
+     */
+    public void shareBackup(@NonNull Context context, @NonNull Backup backup) {
+        try {
+            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+
+            intentShareFile.setType("application/pdf");
+            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + backup.getPath()));
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.send_to));
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.send_to));
+
+            context.startActivity(Intent.createChooser(intentShareFile, context.getString(R.string.send_to)));
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(context, e);
         }
     }
 

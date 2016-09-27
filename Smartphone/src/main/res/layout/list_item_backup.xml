@@ -62,6 +62,16 @@
             </LinearLayout>
 
             <com.mikepenz.iconics.view.IconicsImageView
+                android:id="@+id/share"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_margin="8dp"
+                android:elevation="4dp"
+                app:iiv_color="?android:textColorPrimary"
+                app:iiv_icon="gmi-share"/>
+
+            <com.mikepenz.iconics.view.IconicsImageView
                 android:id="@+id/delete"
                 android:layout_width="32dp"
                 android:layout_height="32dp"

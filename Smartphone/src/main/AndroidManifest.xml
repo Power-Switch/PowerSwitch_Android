@@ -73,6 +73,35 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".gui.dialog.RestoreBackupFromFileActivity"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
+            android:label="@string/restore"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data android:scheme="file"/>
+                <data android:mimeType="*/*"/>
+                <!--
+                     Work around Android's ugly primitive PatternMatcher
+                     implementation that can't cope with finding a . early in
+                     the path unless it's explicitly matched.
+                -->
+                <data android:pathPattern=".*\\.psbak"/>
+                <data android:pathPattern=".*\\..*\\.psbak"/>
+                <data android:pathPattern=".*\\..*\\..*\\.psbak"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.psbak"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.psbak"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.psbak"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak"/>
+                <data android:host="*"/>
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".gui.dialog.WriteNfcTagDialog"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="@string/write_nfc_tag"
