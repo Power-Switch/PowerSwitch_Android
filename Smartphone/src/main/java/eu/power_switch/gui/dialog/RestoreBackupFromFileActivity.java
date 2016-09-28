@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.dialog;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -28,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
@@ -39,17 +41,29 @@ import eu.power_switch.shared.log.Log;
 
 public class RestoreBackupFromFileActivity extends AppCompatActivity {
 
+    /**
+     * Get launch intent for this activity
+     *
+     * @param context any suitable context
+     * @param fileUri backup file uri
+     */
+    public static void newInstance(Context context, Uri fileUri) {
+        Intent intent = new Intent(context, RestoreBackupFromFileActivity.class);
+        intent.setData(fileUri);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate();
-        // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
+        SmartphoneThemeHelper.applyDialogTheme(this);
         // apply forced locale (if set in developer options)
         applyLocale();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_restore_backup);
+        setContentView(R.layout.dialog_restore_backup_confirm);
         setFinishOnTouchOutside(false); // prevent close dialog on touch outside window
-        setTitle(R.string.restore);
+        setTitle(R.string.are_you_sure);
 
         Intent intent = getIntent();
         Log.d(intent);

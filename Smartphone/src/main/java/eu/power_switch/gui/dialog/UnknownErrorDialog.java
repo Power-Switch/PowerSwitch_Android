@@ -32,6 +32,7 @@ import java.util.Date;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
@@ -73,7 +74,7 @@ public class UnknownErrorDialog extends AppCompatActivity {
         // do everything in a try statement to prevent repeating errors if something goes wrong while reporting the previous error
         try {
             // set Theme before anything else in onCreate();
-            // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
+            SmartphoneThemeHelper.applyDialogTheme(this);
             // apply forced locale (if set in developer options)
             applyLocale();
 
