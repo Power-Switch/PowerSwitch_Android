@@ -42,6 +42,8 @@ import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * Dialog used while waiting for an NFC tag to be written
+ * <p>
  * Created by mre on 08.04.2016.
  */
 public class WriteNfcTagDialog extends AppCompatActivity {

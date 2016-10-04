@@ -26,7 +26,9 @@
 
         <!-- material design -->
         <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVeryLight">@color/color_gray_700</item>
         <item name="colorPrimaryLight">@color/primaryColor_light</item>
+        <item name="colorPrimaryHalf">@color/color_gray_850</item>
         <item name="colorPrimaryDark">@color/primaryColor_dark</item>
         <item name="colorAccent">#FF999999</item>
         <item name="android:windowBackground">@color/windowBackgroundColor</item>
@@ -86,7 +88,9 @@
 
         <!-- material design -->
         <item name="colorPrimaryDark">@color/primaryColor_darkInverse</item>
+        <item name="colorPrimaryVeryLight">@color/color_gray_300</item>
         <item name="colorPrimary">@color/primaryColorInverse</item>
+        <item name="colorPrimaryHalf">@color/color_gray_200</item>
         <item name="colorPrimaryLight">@color/primaryColor_lightInverse</item>
         <item name="colorAccent">#FF333333</item>
         <item name="android:windowBackground">@color/windowBackgroundColorInverse</item>

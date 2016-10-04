@@ -42,7 +42,7 @@ import eu.power_switch.shared.log.Log;
 public class RestoreBackupFromFileActivity extends AppCompatActivity {
 
     /**
-     * Get launch intent for this activity
+     * Start new instance of this activity
      *
      * @param context any suitable context
      * @param fileUri backup file uri

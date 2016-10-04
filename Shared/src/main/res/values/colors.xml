@@ -22,8 +22,12 @@
 
     <!-- Grey 100 #F5F5F5 -->
     <color name="color_gray_100">#FFF5F5F5</color>
+    <!-- Grey 150 #F1F1F1 -->
+    <color name="color_gray_150">#FFF1F1F1</color>
     <!-- Grey 200 #EEEEEE -->
     <color name="color_gray_200">#FFEEEEEE</color>
+    <!-- Grey 300 #E0E0E0 -->
+    <color name="color_gray_300">#FFE0E0E0</color>
     <!-- Grey 500 #9E9E9E -->
     <color name="color_gray_500">#FF9E9E9E</color>
     <!-- Grey 600 #757575 -->
@@ -32,10 +36,13 @@
     <color name="color_gray_700">#FF616161</color>
     <!-- Grey 800 #424242 -->
     <color name="color_gray_800">#FF424242</color>
+    <!-- Grey 850 #313131 -->
+    <color name="color_gray_850">#FF313131</color>
     <!-- Grey 900 #212121 -->
     <color name="color_gray_900">#FF212121</color>
     <!-- Grey 950 #109090 -->
     <color name="color_gray_950">#FF101010</color>
+
 
     <!--&lt;!&ndash; Blue 500 #2196F3 &ndash;&gt;-->
     <!--<color name="color_blue_500">#FF2196F3</color>-->

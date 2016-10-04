@@ -49,13 +49,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/txt_apartment_name"
-                        style="@style/text_list_item_header"
-                        />
+                        style="@style/card_view_headline"/>
 
                     <TextView
                         android:id="@+id/txt_content_summary"

@@ -80,6 +80,14 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
         holder.backupName.setText(backup.getName());
+        holder.backupSize.setText(backup.getSizeInMb(2) + " MB");
+
+        holder.restore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
+            }
+        });
         holder.share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,6 +148,8 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView backupName;
         public TextView backupDate;
+        public TextView backupSize;
+        public IconicsImageView restore;
         public IconicsImageView share;
         public IconicsImageView delete;
         public LinearLayout footer;
@@ -148,6 +158,8 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
             super(itemView);
             this.backupName = (TextView) itemView.findViewById(R.id.txt_backup_name);
             this.backupDate = (TextView) itemView.findViewById(R.id.txt_backup_date);
+            this.backupSize = (TextView) itemView.findViewById(R.id.txt_backup_size);
+            this.restore = (IconicsImageView) itemView.findViewById(R.id.restore);
             this.share = (IconicsImageView) itemView.findViewById(R.id.share);
             this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);

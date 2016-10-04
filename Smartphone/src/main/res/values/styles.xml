@@ -31,6 +31,14 @@
         <item name="android:textSize">@dimen/font_title_size</item>
     </style>
 
+    <style name="card_view_headline">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:textSize">@dimen/font_title_size</item>
+    </style>
+
     <style name="sub_header">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

@@ -28,6 +28,8 @@
     <string name="create_backup">Sicherung erstellen</string>
     <string name="remove">Entfernen</string>
     <string name="path">Pfad</string>
+    <string name="date">Datum</string>
+    <string name="size">Größe</string>
     <string name="backup_successful">Sichern erfolgreich</string>
     <string name="restore_successful">Wiederherstellen erfolgreich</string>
     <string name="are_you_sure">Bist du sicher?</string>

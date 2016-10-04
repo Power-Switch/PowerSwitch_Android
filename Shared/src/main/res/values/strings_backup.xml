@@ -27,6 +27,8 @@
     <string name="backup_removed">Backup removed</string>
     <string name="create_backup">Create Backup</string>
     <string name="remove">Remove</string>
+    <string name="date">Date</string>
+    <string name="size">Size</string>
     <string name="path">Path</string>
     <string name="backup_successful">Backup successful</string>
     <string name="restore_successful">Restore successful</string>
