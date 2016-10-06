@@ -20,6 +20,7 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -31,12 +32,14 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
@@ -85,7 +88,14 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
         holder.restore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
+                try {
+                    final Backup backup = backups.get(holder.getAdapterPosition());
+
+                    Uri fileUri = Uri.fromFile(new File(backup.getPath()));
+                    RestoreBackupFromFileActivity.newInstance(context, fileUri);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                }
             }
         });
         holder.share.setOnClickListener(new View.OnClickListener() {

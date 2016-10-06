@@ -133,19 +133,19 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
-        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                try {
-                    final Backup backup = backups.get(position);
-
-                    Uri fileUri = Uri.fromFile(new File(backup.getPath()));
-                    RestoreBackupFromFileActivity.newInstance(getActivity(), fileUri);
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
-                }
-            }
-        });
+//        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View itemView, int position) {
+//                try {
+//                    final Backup backup = backups.get(position);
+//
+//                    Uri fileUri = Uri.fromFile(new File(backup.getPath()));
+//                    RestoreBackupFromFileActivity.newInstance(getActivity(), fileUri);
+//                } catch (Exception e) {
+//                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+//                }
+//            }
+//        });
         backupArrayAdapter.setOnItemLongClickListener(new BackupRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
