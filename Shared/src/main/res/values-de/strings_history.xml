@@ -32,5 +32,6 @@
     <string name="history">Verlauf</string>
 
     <string name="clear">Löschen</string>
+    <string name="clear_history_message">Verlauf löschen?</string>
 
 </resources>

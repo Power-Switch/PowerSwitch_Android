@@ -32,5 +32,6 @@
     <string name="history">History</string>
 
     <string name="clear">Clear</string>
+    <string name="clear_history_message">Clear history?</string>
 
 </resources>

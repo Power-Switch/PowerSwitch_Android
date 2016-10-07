@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -42,6 +43,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -56,7 +58,7 @@ import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
-import eu.power_switch.gui.dialog.RestoreBackupProcessingDialog;
+import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.dialog.UpgradeBackupsProcessingDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
@@ -131,31 +133,19 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
         recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
-        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                try {
-                    final Backup backup = backups.get(position);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setPositiveButton(getActivity().getString(R.string.restore),
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    RestoreBackupProcessingDialog restoreBackupProcessingDialog = RestoreBackupProcessingDialog.newInstance(backup.getName());
-                                    restoreBackupProcessingDialog.show(getFragmentManager(), null);
-                                }
-                            }).setNeutralButton(getActivity().getString(android.R.string.cancel), null)
-                            .setTitle(getActivity().getString(R.string.are_you_sure))
-                            .setMessage(R.string.restore_backup_message);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
-                }
-            }
-        });
+//        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View itemView, int position) {
+//                try {
+//                    final Backup backup = backups.get(position);
+//
+//                    Uri fileUri = Uri.fromFile(new File(backup.getPath()));
+//                    RestoreBackupFromFileActivity.newInstance(getActivity(), fileUri);
+//                } catch (Exception e) {
+//                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+//                }
+//            }
+//        });
         backupArrayAdapter.setOnItemLongClickListener(new BackupRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {

@@ -39,13 +39,13 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class RestoreBackupProcessingDialog extends ProcessingDialog {
 
-    public static final String KEY_NAME = "name";
+    public static final String KEY_FILE_PATH = "file_path";
 
     private AsyncTask<Void, Object, AsyncTaskResult<Void>> processingTask;
 
-    public static RestoreBackupProcessingDialog newInstance(String backupName) {
+    public static RestoreBackupProcessingDialog newInstance(String filePath) {
         Bundle args = new Bundle();
-        args.putString(KEY_NAME, backupName);
+        args.putString(KEY_FILE_PATH, filePath);
 
         RestoreBackupProcessingDialog fragment = new RestoreBackupProcessingDialog();
         fragment.setArguments(args);
@@ -65,7 +65,7 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
             protected AsyncTaskResult<Void> doInBackground(Void... voids) {
                 try {
                     BackupHandler backupHandler = new BackupHandler(getActivity());
-                    backupHandler.restoreBackup(getArguments().getString(KEY_NAME), new OnZipProgressChangedListener() {
+                    backupHandler.restoreBackup(getArguments().getString(KEY_FILE_PATH), new OnZipProgressChangedListener() {
                         @Override
                         public void onProgressChanged(ProgressMonitor progressMonitor) {
                             publishProgress(progressMonitor.getPercentDone());

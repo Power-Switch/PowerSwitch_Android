@@ -35,12 +35,15 @@ import android.widget.TextView;
 import com.mikepenz.iconics.view.IconicsImageView;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * Dialog used while waiting for an NFC tag to be written
+ * <p>
  * Created by mre on 08.04.2016.
  */
 public class WriteNfcTagDialog extends AppCompatActivity {
@@ -66,7 +69,7 @@ public class WriteNfcTagDialog extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // set Theme before anything else in onCreate();
-        // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
+        SmartphoneThemeHelper.applyDialogTheme(this);
         // apply forced locale (if set in developer options)
         applyLocale();
 

@@ -65,4 +65,39 @@ public class SmartphoneThemeHelper {
         }
     }
 
+    /**
+     * Apply a Theme to an Activity
+     *
+     * @param activity Activity to apply theme on
+     */
+    public static void applyDialogTheme(Activity activity) {
+        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                activity.getApplicationContext().setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
+                activity.setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                activity.getApplicationContext().setTheme(R.style.PowerSwitchDialogTheme_Light_Blue);
+                activity.setTheme(R.style.PowerSwitchDialogTheme_Light_Blue);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+//                activity.getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Red);
+//                activity.setTheme(R.style.PowerSwitchTheme_Dark_Red);
+//                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+//                activity.getApplicationContext().setTheme(R.style.PowerSwitchTheme_Light_Red);
+//                activity.setTheme(R.style.PowerSwitchTheme_Light_Red);
+//                break;
+            case SettingsConstants.THEME_DAY_NIGHT_BLUE:
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+//
+//                activity.getApplicationContext().setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
+//                activity.setTheme(R.style.PowerSwitchTheme_DayNight_Blue);
+//                break;
+            default:
+                activity.setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
+                break;
+        }
+    }
+
 }

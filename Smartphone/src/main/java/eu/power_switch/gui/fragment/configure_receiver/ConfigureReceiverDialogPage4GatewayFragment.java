@@ -138,13 +138,14 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             @Override
             public void onClick(View v) {
                 repetitionAmount++;
-                textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
-
                 buttonMinus.setVisibility(View.VISIBLE);
 
                 if (repetitionAmount >= Receiver.MAX_REPETITIONS) {
+                    repetitionAmount = Receiver.MAX_REPETITIONS;
                     buttonPlus.setVisibility(View.INVISIBLE);
                 }
+
+                textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
                 sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
             }
@@ -155,13 +156,14 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             @Override
             public void onClick(View v) {
                 repetitionAmount--;
-                textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
-
                 buttonPlus.setVisibility(View.VISIBLE);
 
                 if (repetitionAmount <= Receiver.MIN_REPETITIONS) {
+                    repetitionAmount = Receiver.MIN_REPETITIONS;
                     buttonMinus.setVisibility(View.INVISIBLE);
                 }
+
+                textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
                 sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, getCheckedGateways());
             }
@@ -213,14 +215,17 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         try {
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
             repetitionAmount = receiver.getRepetitionAmount();
-            textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
+
             if (repetitionAmount >= Receiver.MAX_REPETITIONS) {
-                textView_repetitionAmount.setText(String.valueOf(Receiver.MAX_REPETITIONS));
+                repetitionAmount = Receiver.MAX_REPETITIONS;
                 buttonPlus.setVisibility(View.INVISIBLE);
+                buttonMinus.setVisibility(View.VISIBLE);
             } else if (repetitionAmount <= Receiver.MIN_REPETITIONS) {
-                textView_repetitionAmount.setText(String.valueOf(Receiver.MIN_REPETITIONS));
+                repetitionAmount = Receiver.MIN_REPETITIONS;
+                buttonPlus.setVisibility(View.VISIBLE);
                 buttonMinus.setVisibility(View.INVISIBLE);
             }
+            textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
             room = DatabaseHandler.getRoom(receiver.getRoomId());
 

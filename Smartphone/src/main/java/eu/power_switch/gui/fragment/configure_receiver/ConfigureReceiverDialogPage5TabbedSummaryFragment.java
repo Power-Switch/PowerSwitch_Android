@@ -83,7 +83,7 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
     private int currentSlave;
     private long currentSeed;
     private List<UniversalButton> currentUniversalButtons = new ArrayList<>();
-    private int currentRepetitionAmount;
+    private int currentRepetitionAmount = Receiver.MIN_REPETITIONS;
     private List<Gateway> currentAssociatedGateways = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;

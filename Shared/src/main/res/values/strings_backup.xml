@@ -27,6 +27,8 @@
     <string name="backup_removed">Backup removed</string>
     <string name="create_backup">Create Backup</string>
     <string name="remove">Remove</string>
+    <string name="date">Date</string>
+    <string name="size">Size</string>
     <string name="path">Path</string>
     <string name="backup_successful">Backup successful</string>
     <string name="restore_successful">Restore successful</string>
@@ -56,5 +58,7 @@
     <string name="processing_backup_x_of_y">Processing Backup %1$d of %2$d…</string>
     <string name="canceled">Canceled</string>
     <string name="done">Done</string>
+
+    <string name="powerswitch_backup_file">PowerSwitch Backup File</string>
 
 </resources>

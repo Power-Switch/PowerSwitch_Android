@@ -48,7 +48,7 @@ dependencies {
     compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
     compile fileTree(include: ['*.jar'], dir: 'libraries')
     compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.google.android.gms:play-services-wearable:9.4.0'
+    compile 'com.google.android.gms:play-services-wearable:9.6.1'
 
     // Iconics (use SVG resources)
     compile 'com.mikepenz:iconics-core:2.6.7@aar'

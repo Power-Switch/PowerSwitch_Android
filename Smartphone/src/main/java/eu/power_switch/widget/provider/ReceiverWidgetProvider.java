@@ -33,6 +33,7 @@ import android.widget.RemoteViews;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -114,18 +115,20 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                             buttonOffset++;
                         }
                         remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.VISIBLE);
-                    } catch (Exception e) {
-                        Log.e(e);
+                    } catch (NoSuchElementException e) {
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.receiver_not_found));
                         remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
                         remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.GONE);
                     }
-                } catch (Exception e) {
-                    Log.e(e);
+                } catch (NoSuchElementException e) {
                     remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.room_not_found));
                     remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
                     remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.GONE);
                 }
+            } catch (NoSuchElementException e) {
+                remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.missing_widget_data));
+                remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);
+                remoteViews.setViewVisibility(R.id.linearlayout_receiver_widget, View.GONE);
             } catch (Exception e) {
                 Log.e(e);
                 remoteViews.setTextViewText(R.id.textView_receiver_widget_name, context.getString(R.string.unknown_error));

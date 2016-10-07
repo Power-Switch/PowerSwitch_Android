@@ -20,6 +20,9 @@ package eu.power_switch.backup;
 
 import android.support.annotation.NonNull;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 /**
@@ -44,6 +47,7 @@ public class Backup {
      * true when Backup is stored on external storage (sdcard)
      */
     private boolean externalStorage;
+    private int size;
 
     /**
      * Default constructor
@@ -65,9 +69,8 @@ public class Backup {
      *
      * @return Backup name
      */
-    public
     @NonNull
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -76,20 +79,18 @@ public class Backup {
      *
      * @return Backup creation date
      */
-    public
     @NonNull
-    Date getDate() {
+    public Date getDate() {
         return date;
     }
 
     /**
-     * Get Backup store path
+     * Get full Backup file path
      *
-     * @return Backup store path
+     * @return Backup file path
      */
-    public
     @NonNull
-    String getPath() {
+    public String getPath() {
         return path;
     }
 
@@ -110,5 +111,44 @@ public class Backup {
      */
     public int compareDate(@NonNull Backup backup) {
         return date.compareTo(backup.getDate());
+    }
+
+    /**
+     * Get the file size of this Backup in MB
+     *
+     * @return file size in MB
+     */
+    public double getSizeInMb() {
+        return getSizeInMb(-1);
+    }
+
+    /**
+     * Get the file size of this Backup in MB
+     *
+     * @param decimalPlaces decimal places to round the value
+     * @return file size in MB
+     */
+    public double getSizeInMb(int decimalPlaces) {
+        try {
+            // Get file from file name
+            File file = new File(getPath());
+
+            // Get length of file in bytes
+            long fileSizeInBytes = file.length();
+            // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+            double fileSizeInKB = fileSizeInBytes / 1024;
+            // Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+            double fileSizeInMB = fileSizeInKB / 1024;
+
+            if (decimalPlaces != -1) {
+                BigDecimal bd = new BigDecimal(fileSizeInMB);
+                bd = bd.setScale(decimalPlaces, RoundingMode.HALF_UP);
+                return bd.doubleValue();
+            } else {
+                return fileSizeInMB;
+            }
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

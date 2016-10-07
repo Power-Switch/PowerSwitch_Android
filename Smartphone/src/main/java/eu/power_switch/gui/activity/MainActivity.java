@@ -771,7 +771,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.clear)
-                        .setMessage(R.string.clear)
+                        .setMessage(R.string.clear_history_message)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

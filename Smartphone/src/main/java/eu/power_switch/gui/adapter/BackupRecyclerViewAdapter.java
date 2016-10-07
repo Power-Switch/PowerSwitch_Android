@@ -20,6 +20,7 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -31,12 +32,14 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
@@ -80,6 +83,28 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
         holder.backupName.setText(backup.getName());
+        holder.backupSize.setText(backup.getSizeInMb(2) + " MB");
+
+        holder.restore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    final Backup backup = backups.get(holder.getAdapterPosition());
+
+                    Uri fileUri = Uri.fromFile(new File(backup.getPath()));
+                    RestoreBackupFromFileActivity.newInstance(context, fileUri);
+                } catch (Exception e) {
+                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                }
+            }
+        });
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BackupHandler backupHandler = new BackupHandler(context);
+                backupHandler.shareBackup(context, backup);
+            }
+        });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +158,9 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView backupName;
         public TextView backupDate;
+        public TextView backupSize;
+        public IconicsImageView restore;
+        public IconicsImageView share;
         public IconicsImageView delete;
         public LinearLayout footer;
 
@@ -140,6 +168,9 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
             super(itemView);
             this.backupName = (TextView) itemView.findViewById(R.id.txt_backup_name);
             this.backupDate = (TextView) itemView.findViewById(R.id.txt_backup_date);
+            this.backupSize = (TextView) itemView.findViewById(R.id.txt_backup_size);
+            this.restore = (IconicsImageView) itemView.findViewById(R.id.restore);
+            this.share = (IconicsImageView) itemView.findViewById(R.id.share);
             this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
 

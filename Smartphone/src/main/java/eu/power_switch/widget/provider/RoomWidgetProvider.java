@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -85,10 +86,13 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                                             .string.off),
                                     ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
-                } catch (Exception e) {
+                } catch (NoSuchElementException e) {
                     remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.room_not_found));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
                 }
+            } catch (NoSuchElementException e) {
+                remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.missing_widget_data));
+                remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.GONE);
             } catch (Exception e) {
                 Log.e(e);
                 remoteViews.setTextViewText(R.id.textView_room_widget_name, context.getString(R.string.unknown_error));

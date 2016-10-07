@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.support:wearable:+'
+    compile 'com.google.android.support:wearable:2.0.0-alpha2'
     //compile 'com.google.android.support:wearable:1.4.0'
     provided 'com.google.android.wearable:wearable:1.0.0'
 

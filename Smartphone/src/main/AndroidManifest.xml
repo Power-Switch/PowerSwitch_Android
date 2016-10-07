@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -17,38 +16,37 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="eu.power_switch"
     android:versionCode="101"
     android:versionName="@string/app_version">
 
     <!-- Smartphone ONLY Permissions -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.NFC"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!--<uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
     <!--<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>-->
     <!--<uses-permission android:name="android.permission.READ_CONTACTS"/>-->
     <!--<uses-permission android:name="android.permission.READ_SMS"/>-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <!-- IMPLICIT THROUGH PLAY SERVICES -->
     <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> -->
     <!-- <uses-permission android:name="android.permission.INTERNET"/> -->
 
     <!-- Shared Permissions -->
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Wear ONLY Permissions -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".application.PowerSwitch"
@@ -64,12 +62,84 @@
             android:label="@string/powerswitch_app_name"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.ASSIST"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.ASSIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".gui.dialog.RestoreBackupFromFileActivity"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
+            android:label="@string/restore"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:windowSoftInputMode="adjustPan">
+
+            <!-- This intent filter will match intents specifying a uri
+                 with the file:// scheme and any mime-type as long as the
+                 file extension is matched.  -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <!--
+                     Work around Android's ugly primitive PatternMatcher
+                     implementation that can't cope with finding a . early in
+                     the path unless it's explicitly matched.
+                -->
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+            </intent-filter>
+
+            <!--
+                This is the same intent filter as above, except the
+                android:mimeType attribute is removed.  This will match
+                intents that specify a uri but no mime-type.
+             -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <!--
+                     Work around Android's ugly primitive PatternMatcher
+                     implementation that can't cope with finding a . early in
+                     the path unless it's explicitly matched.
+                -->
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak" />
             </intent-filter>
         </activity>
         <activity
@@ -80,8 +150,8 @@
             android:theme="@style/Theme.AppCompat.Dialog"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="eu.power_switch.write_nfc_tag_activity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="eu.power_switch.write_nfc_tag_activity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -90,9 +160,9 @@
             android:noHistory="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="application/eu.power_switch"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/eu.power_switch" />
             </intent-filter>
         </activity>
         <activity
@@ -105,8 +175,8 @@
             android:theme="@style/Theme.AppCompat.Dialog"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
-                <action android:name="eu.power_switch.unknown_error_activity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="eu.power_switch.unknown_error_activity" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -115,7 +185,7 @@
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
         <activity
@@ -124,7 +194,7 @@
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
         <activity
@@ -133,7 +203,7 @@
             android:label="@string/title_activity_configure_widget"
             android:theme="@style/Theme.AppCompat.Dialog">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
@@ -158,7 +228,7 @@
 
             <!-- this Intent filter allows the plug-in to be discovered by Locale -->
             <intent-filter>
-                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING"/>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
             </intent-filter>
         </activity>
 
@@ -168,63 +238,63 @@
             android:icon="@drawable/ic_launcher"
             android:label="@string/receiver">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/receiver_widget_info"/>
+                android:resource="@xml/receiver_widget_info" />
         </receiver>
         <receiver
             android:name=".widget.provider.RoomWidgetProvider"
             android:icon="@drawable/ic_launcher"
             android:label="@string/room">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/room_widget_info"/>
+                android:resource="@xml/room_widget_info" />
         </receiver>
         <receiver
             android:name=".widget.provider.SceneWidgetProvider"
             android:icon="@drawable/ic_launcher"
             android:label="@string/scene">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/scene_widget_info"/>
+                android:resource="@xml/scene_widget_info" />
         </receiver>
         <receiver android:name=".widget.WidgetIntentReceiver">
             <!-- Widgets -->
             <intent-filter>
-                <action android:name="eu.power_switch.widget_action"/>
+                <action android:name="eu.power_switch.widget_action" />
             </intent-filter>
         </receiver>
         <receiver android:name=".api.IntentReceiver">
             <!-- Tasker/LLama interface -->
             <intent-filter>
-                <action android:name="eu.power_switch.action"/>
+                <action android:name="eu.power_switch.action" />
 
                 <!-- deprecated -->
-                <action android:name="de.ressel.powerswitch.action.Switch.ON"/>
-                <action android:name="de.ressel.powerswitch.action.Switch.OFF"/>
-                <action android:name="de.ressel.powerswitch.action.Room.ON"/>
-                <action android:name="de.ressel.powerswitch.action.Room.OFF"/>
+                <action android:name="de.ressel.powerswitch.action.Switch.ON" />
+                <action android:name="de.ressel.powerswitch.action.Switch.OFF" />
+                <action android:name="de.ressel.powerswitch.action.Room.ON" />
+                <action android:name="de.ressel.powerswitch.action.Room.OFF" />
             </intent-filter>
         </receiver>
         <receiver android:name=".timer.alarm.AlarmIntentReceiver">
             <!-- Timer alarms -->
             <intent-filter>
-                <action android:name="eu.power_switch.alarm"/>
-                <data android:scheme="timer"/>
+                <action android:name="eu.power_switch.alarm" />
+                <data android:scheme="timer" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
@@ -234,56 +304,56 @@
             <!-- Other Clock Apps -->
             <intent-filter>
                 <!-- Stock App -->
-                <action android:name="com.android.alarmclock.ALARM_ALERT"/>
-                <action android:name="com.android.alarmclock.ALARM_DONE"/>
-                <action android:name="com.google.android.deskclock.ALARM_DONE"/>
-                <action android:name="com.google.android.deskclock.ALARM_ALERT"/>
-                <action android:name="com.android.deskclock.ALARM_ALERT"/>
-                <action android:name="com.android.deskclock.ALARM_DISMISS"/>
-                <action android:name="com.android.deskclock.ALARM_SNOOZE"/>
+                <action android:name="com.android.alarmclock.ALARM_ALERT" />
+                <action android:name="com.android.alarmclock.ALARM_DONE" />
+                <action android:name="com.google.android.deskclock.ALARM_DONE" />
+                <action android:name="com.google.android.deskclock.ALARM_ALERT" />
+                <action android:name="com.android.deskclock.ALARM_ALERT" />
+                <action android:name="com.android.deskclock.ALARM_DISMISS" />
+                <action android:name="com.android.deskclock.ALARM_SNOOZE" />
 
                 <!-- Samsung -->
-                <action android:name="com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT"/>
-                <action android:name="com.samsung.sec.android.clockpackage.alarm.ALARM_DONE"/>
+                <action android:name="com.samsung.sec.android.clockpackage.alarm.ALARM_ALERT" />
+                <action android:name="com.samsung.sec.android.clockpackage.alarm.ALARM_DONE" />
 
                 <!-- HTC -->
-                <action android:name="com.htc.android.worldclock.ALARM_ALERT"/>
-                <action android:name="com.htc.android.worldclock.ALARM_DONE"/>
+                <action android:name="com.htc.android.worldclock.ALARM_ALERT" />
+                <action android:name="com.htc.android.worldclock.ALARM_DONE" />
 
                 <!-- SONY -->
-                <action android:name="com.sonyericsson.alarm.ALARM_ALERT"/>
-                <action android:name="com.sonyericsson.alarm.ALARM_DONE"/>
+                <action android:name="com.sonyericsson.alarm.ALARM_ALERT" />
+                <action android:name="com.sonyericsson.alarm.ALARM_DONE" />
 
                 <!-- ZTE -->
-                <action android:name="zte.com.cn.alarmclock.ALARM_ALERT"/>
+                <action android:name="zte.com.cn.alarmclock.ALARM_ALERT" />
 
                 <!-- Motorola -->
-                <action android:name="com.motorola.blur.alarmclock.ALARM_ALERT"/>
-                <action android:name="com.motorola.blur.alarmclock.ALARM_DONE"/>
+                <action android:name="com.motorola.blur.alarmclock.ALARM_ALERT" />
+                <action android:name="com.motorola.blur.alarmclock.ALARM_DONE" />
 
                 <!-- LG -->
-                <action android:name="com.lge.alarm.alarmclocknew.ALARM_ALERT"/>
-                <action android:name="com.lge.clock.ALARM_ALERT"/>
-                <action android:name="com.lge.clock.ALARM_DONE"/>
+                <action android:name="com.lge.alarm.alarmclocknew.ALARM_ALERT" />
+                <action android:name="com.lge.clock.ALARM_ALERT" />
+                <action android:name="com.lge.clock.ALARM_DONE" />
 
                 <!-- Night Clock -->
-                <action android:name="com.neddashfox.nightclockdonate.ALARM_ALERT"/>
-                <action android:name="com.neddashfox.nightclockdonate.ALARM_DONE"/>
+                <action android:name="com.neddashfox.nightclockdonate.ALARM_ALERT" />
+                <action android:name="com.neddashfox.nightclockdonate.ALARM_DONE" />
 
             </intent-filter>
         </receiver>
         <receiver android:name=".alarm_clock.sleep_as_android.IntentReceiver">
             <!-- Sleep As Android -->
             <intent-filter>
-                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_START"/>
-                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION"/>
-                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS"/>
+                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_START" />
+                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION" />
+                <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS" />
             </intent-filter>
         </receiver>
         <receiver android:name=".google_play_services.geofence.GeofenceIntentReceiver">
             <!-- Geofences -->
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <!-- Phone -->
@@ -292,7 +362,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.intent.action.PHONE_STATE" />
                 <!--<action android:name="android.intent.action.NEW_OUTGOING_CALL"/>-->
             </intent-filter>
         </receiver>
@@ -311,26 +381,25 @@
 
             <!-- this Intent filter allows the plug-in to discovered by Locale -->
             <intent-filter>
-                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING"/>
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
             </intent-filter>
         </receiver>
 
         <!-- Services -->
-        <service android:name=".google_play_services.geofence.GeofenceIntentService"/>
+        <service android:name=".google_play_services.geofence.GeofenceIntentService" />
         <service android:name=".wear.service.ListenerService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.DATA_CHANGED"/>
-                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED"/>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
 
                 <data
                     android:host="*"
-                    android:scheme="wear"/>
+                    android:scheme="wear" />
             </intent-filter>
         </service>
         <service
             android:name=".network.NetworkPackageQueueHandler"
-            android:exported="false">
-        </service>
+            android:exported="false"></service>
         <service android:name=".wear.service.UtilityService">
             <!-- <intent-filter> -->
             <!-- <action android:name="eu.power_switch.wear.UPDATE_DATA"/> -->
@@ -340,19 +409,19 @@
         <!-- Google Play Services Version Number -->
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
         <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB4bVF6jhwXE35xvNLP7LOdpsM5uleCoEs"/>
+            android:value="AIzaSyB4bVF6jhwXE35xvNLP7LOdpsM5uleCoEs" />
         <!-- LG Dual Window -->
         <meta-data
             android:name="com.lge.support.SPLIT_WINDOW"
-            android:value="true"/>
+            android:value="true" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="dde27fb8b9771295016a742c2b00fbe8f4525765"/>
+            android:value="dde27fb8b9771295016a742c2b00fbe8f4525765" />
 
     </application>
 
