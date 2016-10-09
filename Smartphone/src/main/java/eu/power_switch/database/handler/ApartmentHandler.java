@@ -197,6 +197,32 @@ abstract class ApartmentHandler {
     }
 
     /**
+     * Gets all Apartments that are associated with the given gateway id
+     *
+     * @param gatewayId ID of gateway
+     * @return list of apartments
+     */
+    public static List<Apartment> getAssociated(long gatewayId) throws Exception {
+        ArrayList<Apartment> apartments = new ArrayList<>();
+
+        Cursor cursor = DatabaseHandler.database.query(
+                ApartmentGatewayRelationTable.TABLE_NAME,
+                ApartmentGatewayRelationTable.ALL_COLUMNS,
+                ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "==" + gatewayId
+                , null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Apartment apartment = get(cursor.getLong(0));
+            apartments.add(apartment);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return apartments;
+    }
+
+    /**
      * Gets the containing Apartment of a receiver
      *
      * @param receiver Receiver

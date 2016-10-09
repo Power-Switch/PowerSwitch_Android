@@ -25,7 +25,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -43,7 +42,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,13 +50,13 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
+import eu.power_switch.google_play_services.firebase.database.FirebaseDatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
-import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.dialog.UpgradeBackupsProcessingDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
@@ -220,6 +218,12 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
         // TODO: Cloud Backups
         // FirebaseStorageHandler firebaseStorageHandler = new FirebaseStorageHandler(getActivity());
+
+        FirebaseDatabaseHandler firebaseDatabaseHandler = new FirebaseDatabaseHandler();
+
+        for (Backup backup : backups) {
+
+        }
     }
 
     @Override

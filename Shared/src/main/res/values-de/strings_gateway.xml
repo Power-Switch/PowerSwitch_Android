@@ -65,6 +65,8 @@
 
     <string name="gateway_not_associated_with_any_apartment">Dieses Gateway ist mit keiner Wohnung verknüpft. Selbst im aktivierten Zustand wird es nicht verwendet! Gehe zur Wohnungsübersicht und verknüpfe es mit einer oder mehreren Wohnungen.</string>
 
+    <string name="associated_apartments">Verknüpfte Wohnungen</string>
+
     <string name="disabled">Deaktiviert</string>
 
     <string name="port_invalid">Port ungültig</string>

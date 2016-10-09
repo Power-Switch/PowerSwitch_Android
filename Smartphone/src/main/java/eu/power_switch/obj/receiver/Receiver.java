@@ -31,6 +31,7 @@ import java.util.Set;
 
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
+import eu.power_switch.network.UdpNetworkPackage;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
@@ -373,21 +374,39 @@ public abstract class Receiver {
      */
     public NetworkPackage getNetworkPackage(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String signal = getSignal(gateway, action);
+
+        String host;
+        int port;
+
         if (gateway.hasValidLocalAddress()) {
 
             if (NetworkHandler.isWifiConnected()) {
                 Log.d("Using local address");
-                return new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway.getLocalPort(), signal,
-                        gateway.getTimeout());
+                host = gateway.getLocalHost();
+                port = gateway.getLocalPort();
             } else {
                 Log.d("Using WAN address");
-                return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
-                        gateway.getTimeout());
+                host = gateway.getWanHost();
+                port = gateway.getWanPort();
             }
         } else {
             Log.d("Using WAN address");
-            return new NetworkPackage(gateway.getCommunicationType(), gateway.getWanHost(), gateway.getWanPort(), signal,
-                    gateway.getTimeout());
+            host = gateway.getWanHost();
+            port = gateway.getWanPort();
+        }
+
+
+        switch (gateway.getCommunicationProtocol()) {
+            case UDP:
+                return new UdpNetworkPackage(host, port, signal,
+                        gateway.getTimeout());
+            case TCP:
+                return null;
+            case HTTP:
+//                        return new HttpNetworkPackage(host, port, signal,
+//                                gateway.getTimeout());
+            default:
+                throw new RuntimeException("Unknown Communication Protocol!");
         }
     }
 

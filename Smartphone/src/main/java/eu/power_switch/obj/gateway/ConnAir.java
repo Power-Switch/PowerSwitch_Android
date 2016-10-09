@@ -22,8 +22,6 @@ import android.support.annotation.NonNull;
 
 import java.util.Set;
 
-import eu.power_switch.network.NetworkPackage;
-
 /**
  * ConnAir represents a ConnAir Gateway from Simple-Solutions
  */
@@ -54,7 +52,7 @@ public class ConnAir extends Gateway {
     }
 
     @Override
-    public NetworkPackage.CommunicationType getCommunicationType() {
-        return NetworkPackage.CommunicationType.UDP;
+    public CommunicationProtocol getCommunicationProtocol() {
+        return CommunicationProtocol.UDP;
     }
 }

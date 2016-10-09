@@ -18,8 +18,6 @@
 
 package eu.power_switch.google_play_services.firebase.database;
 
-import android.content.Context;
-
 /**
  * Handler for easy access to Firebase database
  * <p/>
@@ -27,8 +25,27 @@ import android.content.Context;
  */
 public class FirebaseDatabaseHandler {
 
-    public FirebaseDatabaseHandler(Context context) {
 
-    }
+//    private final FirebaseDatabase database;
+//
+//    public FirebaseDatabaseHandler() {
+//        database = FirebaseDatabase.getInstance();
+//    }
+//
+//    public void addValueEventListener(String key, ValueEventListener valueEventListener) {
+//        DatabaseReference reference = database.getReference(key);
+//        reference.addValueEventListener(valueEventListener);
+//    }
+//
+//    /**
+//     * Set value
+//     *
+//     * @param key
+//     * @param value
+//     */
+//    public void setValue(String key, Object value) {
+//        DatabaseReference myRef = database.getReference(key);
+//        myRef.setValue(value);
+//    }
 
 }

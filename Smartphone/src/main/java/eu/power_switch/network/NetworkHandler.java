@@ -106,10 +106,10 @@ public abstract class NetworkHandler {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isWificonnected = (networkInfo != null &&
+        boolean isWifiConnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_WIFI == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isWifiConnected: " + isWificonnected);
-        return isWificonnected;
+        Log.d("isWifiConnected: " + isWifiConnected);
+        return isWifiConnected;
     }
 
     /**
@@ -121,10 +121,10 @@ public abstract class NetworkHandler {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isWificonnected = (networkInfo != null &&
+        boolean isEthernetConnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_ETHERNET == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isEthernetConnected: " + isWificonnected);
-        return isWificonnected;
+        Log.d("isEthernetConnected: " + isEthernetConnected);
+        return isEthernetConnected;
     }
 
     /**
@@ -136,10 +136,10 @@ public abstract class NetworkHandler {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isGprsconnected = (networkInfo != null &&
+        boolean isGprsConnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isGprsConnected: " + isGprsconnected);
-        return isGprsconnected;
+        Log.d("isGprsConnected: " + isGprsConnected);
+        return isGprsConnected;
     }
 
     /**
@@ -151,9 +151,9 @@ public abstract class NetworkHandler {
         ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isconnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
-        Log.d("isNetworkConnected: " + isconnected);
-        return isconnected;
+        boolean isNetworkConnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
+        Log.d("isNetworkConnected: " + isNetworkConnected);
+        return isNetworkConnected;
     }
 
     /**

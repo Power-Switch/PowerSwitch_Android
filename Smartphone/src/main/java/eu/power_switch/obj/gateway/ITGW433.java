@@ -22,8 +22,6 @@ import android.support.annotation.NonNull;
 
 import java.util.Set;
 
-import eu.power_switch.network.NetworkPackage;
-
 /**
  * ITGW433 represents a ITGW-433 Gateway from Intertechno
  */
@@ -54,7 +52,7 @@ public class ITGW433 extends Gateway {
     }
 
     @Override
-    public NetworkPackage.CommunicationType getCommunicationType() {
-        return NetworkPackage.CommunicationType.UDP;
+    public CommunicationProtocol getCommunicationProtocol() {
+        return CommunicationProtocol.UDP;
     }
 }

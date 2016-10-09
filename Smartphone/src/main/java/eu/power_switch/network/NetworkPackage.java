@@ -23,28 +23,27 @@ import java.io.Serializable;
 /**
  * Internal representation of a network package that is used in NetworkHandler
  */
-public class NetworkPackage implements Serializable {
+public abstract class NetworkPackage implements Serializable {
 
     /**
-     * Destination localHost of this network package
+     * Destination host of this network package
      */
     private String host;
+
     /**
-     * Destination localPort of this network package
+     * Destination port of this network package
      */
     private int port;
+
     /**
      * Message of this network package
      */
     private String message;
+
     /**
      * Time to wait after sending this package before sending the next one
      */
     private int timeout;
-    /**
-     * Type of this Network Package
-     */
-    private CommunicationType communicationType;
 
     /**
      * Default Constructor
@@ -54,21 +53,11 @@ public class NetworkPackage implements Serializable {
      * @param message Message
      * @param timeout Timeout
      */
-    public NetworkPackage(CommunicationType communicationType, String host, int port, String message, int timeout) {
-        this.communicationType = communicationType;
+    public NetworkPackage(String host, int port, String message, int timeout) {
         this.host = host;
         this.port = port;
         this.message = message;
         this.timeout = timeout;
-    }
-
-    /**
-     * Get Type of this Network Package
-     *
-     * @return type {@see CommunicationType}
-     */
-    public CommunicationType getCommunicationType() {
-        return communicationType;
     }
 
     /**
@@ -111,8 +100,4 @@ public class NetworkPackage implements Serializable {
         return timeout;
     }
 
-    public enum CommunicationType {
-        UDP,
-        HTTP
-    }
 }

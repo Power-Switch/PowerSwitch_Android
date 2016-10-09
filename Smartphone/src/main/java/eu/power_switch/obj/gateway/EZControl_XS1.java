@@ -23,7 +23,6 @@ import android.support.annotation.NonNull;
 import java.util.Set;
 
 import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.sensor.Sensor;
 
@@ -80,7 +79,7 @@ public class EZControl_XS1 extends Gateway {
     }
 
     @Override
-    public NetworkPackage.CommunicationType getCommunicationType() {
-        return NetworkPackage.CommunicationType.HTTP;
+    public CommunicationProtocol getCommunicationProtocol() {
+        return CommunicationProtocol.HTTP;
     }
 }

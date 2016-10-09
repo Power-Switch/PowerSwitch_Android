@@ -22,8 +22,6 @@ import android.support.annotation.NonNull;
 
 import java.util.Set;
 
-import eu.power_switch.network.NetworkPackage;
-
 /**
  * BrematicGWY433 represents a Brematic GWY 433 Gateway from Brennenstuhl
  */
@@ -54,7 +52,7 @@ public class BrematicGWY433 extends Gateway {
     }
 
     @Override
-    public NetworkPackage.CommunicationType getCommunicationType() {
-        return NetworkPackage.CommunicationType.UDP;
+    public CommunicationProtocol getCommunicationProtocol() {
+        return CommunicationProtocol.UDP;
     }
 }

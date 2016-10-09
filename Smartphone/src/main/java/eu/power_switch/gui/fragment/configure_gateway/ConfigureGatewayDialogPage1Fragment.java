@@ -51,6 +51,13 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFragment {
 
+    public static final String KEY_NAME = "name";
+    public static final String KEY_MODEL = "model";
+    public static final String KEY_LOCAL_ADDRESS = "localAddress";
+    public static final String KEY_LOCAL_PORT = "localPort";
+    public static final String KEY_WAN_ADDRESS = "wanAddress";
+    public static final String KEY_WAN_PORT = "wanPort";
+
     private View rootView;
     private TextInputLayout floatingName;
     private EditText name;
@@ -90,12 +97,12 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
         }
 
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SETUP_CHANGED);
-        intent.putExtra("name", name);
-        intent.putExtra("model", model);
-        intent.putExtra("localAddress", localAddress);
-        intent.putExtra("localPort", localPort);
-        intent.putExtra("wanAddress", wanAddress);
-        intent.putExtra("wanPort", wanPort);
+        intent.putExtra(KEY_NAME, name);
+        intent.putExtra(KEY_MODEL, model);
+        intent.putExtra(KEY_LOCAL_ADDRESS, localAddress);
+        intent.putExtra(KEY_LOCAL_PORT, localPort);
+        intent.putExtra(KEY_WAN_ADDRESS, wanAddress);
+        intent.putExtra(KEY_WAN_PORT, wanPort);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

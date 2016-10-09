@@ -71,6 +71,8 @@
 
     <string name="disabled">Disabled</string>
 
+    <string name="associated_apartments">Associated Apartments</string>
+
     <string name="port_invalid">Port invalid</string>
     <string name="please_enter_port">Please enter localPort</string>
     <string name="please_enter_host">Please enter host</string>

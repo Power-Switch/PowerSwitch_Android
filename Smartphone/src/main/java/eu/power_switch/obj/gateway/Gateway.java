@@ -23,7 +23,6 @@ import android.support.annotation.NonNull;
 import java.util.HashSet;
 import java.util.Set;
 
-import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.log.LogHandler;
 
@@ -99,7 +98,7 @@ public abstract class Gateway {
 
     /**
      * Constructor
-     *
+     * <p>
      * Variant allowing an Integer as an ID (used for testing)
      *
      * @param id        ID of this Gateway
@@ -287,7 +286,13 @@ public abstract class Gateway {
                 (String.valueOf(gateway.getLocalPort()).equals(String.valueOf(getLocalPort())));
     }
 
-    public abstract NetworkPackage.CommunicationType getCommunicationType();
+    public abstract CommunicationProtocol getCommunicationProtocol();
+
+    public enum CommunicationProtocol {
+        UDP,
+        TCP,
+        HTTP
+    }
 
     public enum Capability {
         SEND,

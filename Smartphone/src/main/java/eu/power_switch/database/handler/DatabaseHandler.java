@@ -385,6 +385,28 @@ public final class DatabaseHandler {
     }
 
     /**
+     * Get all Apartments associated with the given gateway id from Database
+     *
+     * @return List of Apartments
+     * @throws Exception
+     */
+    @NonNull
+    @WorkerThread
+    public static List<Apartment> getAssociatedApartments(long gatewayId) throws Exception {
+        openReadable();
+        List<Apartment> apartments = new ArrayList<>();
+        try {
+            apartments = ApartmentHandler.getAssociated(gatewayId);
+        } catch (Exception e) {
+            Log.e(e);
+            throw e;
+        } finally {
+            close();
+        }
+        return apartments;
+    }
+
+    /**
      * Get Apartment that contains a specific Receiver
      *
      * @param receiver Receiver

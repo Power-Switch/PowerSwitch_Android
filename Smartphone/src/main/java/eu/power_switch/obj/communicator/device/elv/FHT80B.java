@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
+import eu.power_switch.network.UdpNetworkPackage;
 import eu.power_switch.obj.HeatingControl;
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.gateway.Gateway;
@@ -45,8 +46,20 @@ public class FHT80B extends Communicator implements HeatingControl {
 
     public void requestValue(Gateway gateway, Object key) {
         String signal = getSignal(gateway, key);
-        NetworkPackage networkPackage = new NetworkPackage(gateway.getCommunicationType(), gateway.getLocalHost(), gateway
-                .getLocalPort(), signal, gateway.getTimeout());
+
+        NetworkPackage networkPackage;
+        switch (gateway.getCommunicationProtocol()) {
+            case UDP:
+                // todo: local/wan logic
+                networkPackage = new UdpNetworkPackage(gateway.getLocalHost(), gateway
+                        .getLocalPort(), signal, gateway.getTimeout());
+                break;
+            case TCP:
+            case HTTP:
+            default:
+                throw new RuntimeException("Unknown Communication Protocol");
+        }
+
         NetworkHandler.send(this, networkPackage);
     }
 

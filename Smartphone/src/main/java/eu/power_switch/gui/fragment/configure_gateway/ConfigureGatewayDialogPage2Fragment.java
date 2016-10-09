@@ -26,20 +26,17 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -48,35 +45,22 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SsidRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
-import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
-import eu.power_switch.obj.gateway.BrematicGWY433;
-import eu.power_switch.obj.gateway.ConnAir;
-import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFragment {
+
+    public static final String KEY_SSIDS = "ssids";
 
     private View rootView;
     private long gatewayId = -1;
 
-    private String currentName;
-    private String currentModel;
-    private String currentLocalAddress;
-    private int currentLocalPort = -1;
-    private String currentWanAddress;
-    private int currentWanPort = -1;
     private ArrayList<String> ssids = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
@@ -84,6 +68,18 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
     private FloatingActionButton addSsidFAB;
     private RecyclerView recyclerViewSsids;
     private SsidRecyclerViewAdapter ssidRecyclerViewAdapter;
+
+    /**
+     * Used to notify the setup page that some info has changed
+     *
+     * @param context any suitable context
+     */
+    public static void sendSsidsChangedBroadcast(Context context, ArrayList<String> ssids) {
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SSIDS_CHANGED);
+        intent.putExtra(KEY_SSIDS, ssids);
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
 
     @Nullable
     @Override
@@ -105,7 +101,7 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
                                 try {
                                     ssids.remove(position);
                                     ssidRecyclerViewAdapter.notifyDataSetChanged();
-                                    notifyConfigurationChanged();
+                                    sendSsidsChangedBroadcast(getActivity(), ssids);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getContentView(), e);
                                 }
@@ -137,18 +133,9 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
                     ArrayList<String> newSsids = intent.getStringArrayListExtra(AddSsidDialog.KEY_SSID);
                     ssids.addAll(newSsids);
                     ssidRecyclerViewAdapter.notifyDataSetChanged();
-                }
 
-                if (LocalBroadcastConstants.INTENT_GATEWAY_SETUP_CHANGED.equals(intent.getAction())) {
-                    currentName = intent.getStringExtra("name");
-                    currentModel = intent.getStringExtra("model");
-                    currentLocalAddress = intent.getStringExtra("localAddress");
-                    currentLocalPort = intent.getIntExtra("localPort", -1);
-                    currentWanAddress = intent.getStringExtra("wanAddress");
-                    currentWanPort = intent.getIntExtra("wanPort", -1);
+                    sendSsidsChangedBroadcast(getActivity(), ssids);
                 }
-
-                notifyConfigurationChanged();
             }
         };
 
@@ -170,13 +157,6 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         try {
             Gateway gateway = DatabaseHandler.getGateway(gatewayId);
 
-            currentName = gateway.getName();
-            currentModel = gateway.getModel();
-            currentLocalAddress = gateway.getLocalHost();
-            currentLocalPort = gateway.getLocalPort();
-            currentWanAddress = gateway.getWanHost();
-            currentWanPort = gateway.getWanPort();
-
             ssids.clear();
             ssids.addAll(gateway.getSsids());
             ssidRecyclerViewAdapter.notifyDataSetChanged();
@@ -186,67 +166,10 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
     }
 
     @Override
-    public boolean checkSetupValidity() {
-
-        if (TextUtils.isEmpty(currentName)) {
-            return false;
-        }
-
-        if (TextUtils.isEmpty(currentModel)) {
-            return false;
-        }
-
-        // as long as one of the address fields is filled in its ok
-        return !(TextUtils.isEmpty(currentLocalAddress) && TextUtils.isEmpty(currentWanAddress));
-
-    }
-
-    @Override
-    public void saveCurrentConfigurationToDatabase() throws Exception {
-        if (gatewayId == -1) {
-            Gateway newGateway;
-
-            switch (currentModel) {
-                case BrematicGWY433.MODEL:
-                    newGateway = new BrematicGWY433((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
-                    break;
-                case ConnAir.MODEL:
-                    newGateway = new ConnAir((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
-                    break;
-                case EZControl_XS1.MODEL:
-                    newGateway = new EZControl_XS1((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
-                    break;
-                case ITGW433.MODEL:
-                    newGateway = new ITGW433((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
-                    break;
-                case RaspyRFM.MODEL:
-                    newGateway = new RaspyRFM((long) -1, true, currentName, "", currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
-                    break;
-                default:
-                    throw new GatewayUnknownException();
-            }
-
-            try {
-                DatabaseHandler.addGateway(newGateway);
-            } catch (GatewayAlreadyExistsException e) {
-                StatusMessageHandler.showInfoMessage(rootView.getContext(),
-                        R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
-            }
-        } else {
-            DatabaseHandler.updateGateway(gatewayId, currentName, currentModel, currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(ssids));
-        }
-
-        GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
-        StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                R.string.gateway_saved, Snackbar.LENGTH_LONG);
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_SSID_ADDED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_SETUP_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
     }
 

@@ -34,6 +34,8 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1Fragment;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage2Fragment;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage3Fragment;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage4SummaryFragment;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.shared.log.Log;
 
@@ -136,6 +138,10 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
                     return context.getString(R.string.address);
                 case 1:
                     return context.getString(R.string.ssids);
+                case 2:
+                    return context.getString(R.string.apartments);
+                case 3:
+                    return context.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -152,6 +158,14 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
                     break;
                 case 1:
                     fragment = new ConfigureGatewayDialogPage2Fragment();
+                    fragment.setTargetFragment(targetFragment, 0);
+                    break;
+                case 2:
+                    fragment = new ConfigureGatewayDialogPage3Fragment();
+                    fragment.setTargetFragment(targetFragment, 0);
+                    break;
+                case 3:
+                    fragment = new ConfigureGatewayDialogPage4SummaryFragment();
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
@@ -172,7 +186,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
          */
         @Override
         public int getCount() {
-            return 2;
+            return 4;
         }
     }
 }

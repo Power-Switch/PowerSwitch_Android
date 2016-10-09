@@ -16,36 +16,23 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-apply plugin: 'com.android.library'
+package eu.power_switch.network;
 
-android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.3'
+/**
+ * Internal representation of a network package that is used in NetworkHandler
+ */
+public class UdpNetworkPackage extends NetworkPackage {
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+    /**
+     * Default Constructor
+     *
+     * @param host    Host address
+     * @param port    Port
+     * @param message Message
+     * @param timeout Timeout
+     */
+    public UdpNetworkPackage(String host, int port, String message, int timeout) {
+        super(host, port, message, timeout);
     }
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        debug {
-            minifyEnabled false
-        }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile 'com.android.support:appcompat-v7:+'
-//    compile project(path: ':Shared')
 }

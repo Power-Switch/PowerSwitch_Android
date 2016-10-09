@@ -153,26 +153,25 @@ public class NetworkPackageQueueHandler extends IntentService {
     }
 
     private void send(NetworkPackage networkPackage) throws Exception {
-        switch (networkPackage.getCommunicationType()) {
-            case UDP:
-                InetAddress host = InetAddress.getByName(networkPackage.getHost());
-                int port = networkPackage.getPort();
+        if (networkPackage instanceof UdpNetworkPackage) {
 
-                socket = new DatagramSocket(null);
-                socket.setReuseAddress(true);
-                socket.connect(host, port);
+            InetAddress host = InetAddress.getByName(networkPackage.getHost());
+            int port = networkPackage.getPort();
 
-                byte[] messageBuffer = networkPackage.getMessage().getBytes();
-                DatagramPacket messagePacket = new DatagramPacket(messageBuffer, messageBuffer.length, host, port);
-                socket.send(messagePacket);
+            socket = new DatagramSocket(null);
+            socket.setReuseAddress(true);
+            socket.connect(host, port);
 
-                Log.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port
-                        + " Message: \"" + new String(messageBuffer) + "\" sent.");
+            byte[] messageBuffer = networkPackage.getMessage().getBytes();
+            DatagramPacket messagePacket = new DatagramPacket(messageBuffer, messageBuffer.length, host, port);
+            socket.send(messagePacket);
 
-                socket.disconnect();
-                socket.close();
-                break;
-            case HTTP:
+            Log.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port
+                    + " Message: \"" + new String(messageBuffer) + "\" sent.");
+
+            socket.disconnect();
+            socket.close();
+//        } else networkPackage instanceof HttpNetworkPackage) {
 //                URL url = new URL("http://" + networkPackage.getHost() + ":" + networkPackage.getPort() + "/" +
 //                        networkPackage.getMessage());
 //                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -182,7 +181,6 @@ public class NetworkPackageQueueHandler extends IntentService {
 //                } finally {
 //                    urlConnection.disconnect();
 //                }
-                break;
         }
     }
 

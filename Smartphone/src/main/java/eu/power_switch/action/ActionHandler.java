@@ -35,6 +35,7 @@ import eu.power_switch.history.HistoryHelper;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
+import eu.power_switch.network.UdpNetworkPackage;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -653,12 +654,10 @@ public class ActionHandler {
     }
 
     private static NetworkPackage getLocalNetworkPackage(Gateway gateway, String signal) {
-        return new NetworkPackage(gateway.getCommunicationType(),
-                gateway.getLocalHost(), gateway.getLocalPort(), signal, gateway.getTimeout());
+        return new UdpNetworkPackage(gateway.getLocalHost(), gateway.getLocalPort(), signal, gateway.getTimeout());
     }
 
     private static NetworkPackage getWanNetworkPackage(Gateway gateway, String signal) {
-        return new NetworkPackage(gateway.getCommunicationType(),
-                gateway.getWanHost(), gateway.getWanPort(), signal, gateway.getTimeout());
+        return new UdpNetworkPackage(gateway.getWanHost(), gateway.getWanPort(), signal, gateway.getTimeout());
     }
 }
