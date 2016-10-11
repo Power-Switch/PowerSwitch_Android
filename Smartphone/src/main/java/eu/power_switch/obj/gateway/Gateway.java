@@ -130,6 +130,15 @@ public abstract class Gateway {
     }
 
     /**
+     * Set ID of this Gateway
+     *
+     * @param id new ID
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
      * Returns whether this Gateway is active or not
      * (if it will be used by the App to send packets)
      *

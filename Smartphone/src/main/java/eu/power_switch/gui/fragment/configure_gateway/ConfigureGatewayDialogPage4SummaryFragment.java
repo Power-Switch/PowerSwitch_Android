@@ -231,13 +231,46 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
             }
 
             try {
-                DatabaseHandler.addGateway(newGateway);
+                long id = DatabaseHandler.addGateway(newGateway);
+
+                newGateway.setId(id);
+                for (String apartmentName : currentApartmentNames) {
+                    Apartment apartment = DatabaseHandler.getApartment(apartmentName);
+
+                    List<Gateway> associatedGateways = apartment.getAssociatedGateways();
+                    if (!apartment.isAssociatedWith(id)) {
+                        associatedGateways.add(newGateway);
+                    }
+                    Apartment updatedApartment = new Apartment(apartment.getId(), apartment.isActive(), apartment.getName(), associatedGateways, apartment.getGeofence());
+                    DatabaseHandler.updateApartment(updatedApartment);
+                }
+
             } catch (GatewayAlreadyExistsException e) {
                 StatusMessageHandler.showInfoMessage(rootView.getContext(),
                         R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
             }
         } else {
             DatabaseHandler.updateGateway(gatewayId, currentName, currentModel, currentLocalAddress, currentLocalPort, currentWanAddress, currentWanPort, new HashSet<>(currentSsids));
+            Gateway updatedGateway = DatabaseHandler.getGateway(gatewayId);
+
+            List<Apartment> apartments = DatabaseHandler.getAllApartments();
+            for (Apartment apartment : apartments) {
+                if (apartment.isAssociatedWith(updatedGateway.getId())) {
+                    if (!currentApartmentNames.contains(apartment.getName())) {
+                        for (Gateway gateway : apartment.getAssociatedGateways()) {
+                            if (gateway.getId().equals(updatedGateway.getId())) {
+                                apartment.getAssociatedGateways().remove(gateway);
+                                DatabaseHandler.updateApartment(apartment);
+                            }
+                        }
+                    }
+                } else {
+                    if (currentApartmentNames.contains(apartment.getName())) {
+                        apartment.getAssociatedGateways().add(updatedGateway);
+                        DatabaseHandler.updateApartment(apartment);
+                    }
+                }
+            }
         }
 
         GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());

@@ -168,12 +168,12 @@ public class Apartment {
     /**
      * Checks if this Apartment is associated with the given Gateway
      *
-     * @param gateway Gateway to check
+     * @param gatewayId Gateway ID to check
      * @return true if this apartment is associated with the given Gateway, false otherwise
      */
-    public boolean isAssociatedWith(Gateway gateway) {
+    public boolean isAssociatedWith(long gatewayId) {
         for (Gateway associatedGateway : getAssociatedGateways()) {
-            if (associatedGateway.getId().equals(gateway.getId())) {
+            if (associatedGateway.getId().equals(gatewayId)) {
                 return true;
             }
         }
