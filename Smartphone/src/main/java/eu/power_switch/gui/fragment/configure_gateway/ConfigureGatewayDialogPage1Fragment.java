@@ -45,7 +45,7 @@ import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
- * "Name" Fragment used in Configure Apartment Dialog
+ * First Fragment used in Configure Gateway Dialog to set basic gateway settings
  * <p/>
  * Created by Markus on 16.08.2015.
  */
@@ -103,6 +103,7 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
         intent.putExtra(KEY_LOCAL_PORT, localPort);
         intent.putExtra(KEY_WAN_ADDRESS, wanAddress);
         intent.putExtra(KEY_WAN_PORT, wanPort);
+
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

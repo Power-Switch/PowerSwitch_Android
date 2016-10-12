@@ -51,6 +51,7 @@ import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
+import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 
@@ -118,6 +119,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
                     currentApartmentNames.addAll((ArrayList<String>) intent.getSerializableExtra(ConfigureGatewayDialogPage3Fragment.KEY_APARTMENT_NAMES));
                 }
 
+                updateUI();
                 notifyConfigurationChanged();
             }
         };
@@ -163,8 +165,26 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
     private void updateUI() {
         name.setText(currentName);
         model.setText(currentModel);
-        localAddress.setText(currentLocalAddress + ":" + currentLocalPort);
-        wanAddress.setText(currentWanAddress + ":" + currentWanPort);
+
+        if (!TextUtils.isEmpty(currentLocalAddress)) {
+            if (currentLocalPort != DatabaseConstants.INVALID_GATEWAY_PORT) {
+                localAddress.setText(currentLocalAddress + ":" + currentLocalPort);
+            } else {
+                localAddress.setText(currentLocalAddress);
+            }
+        } else {
+            localAddress.setText("");
+        }
+
+        if (!TextUtils.isEmpty(currentWanAddress)) {
+            if (currentWanPort != DatabaseConstants.INVALID_GATEWAY_PORT) {
+                wanAddress.setText(currentWanAddress + ":" + currentWanPort);
+            } else {
+                wanAddress.setText(currentWanAddress);
+            }
+        } else {
+            wanAddress.setText("");
+        }
 
         String ssidText = "";
         for (int i = 0, currentSsidsSize = currentSsids.size(); i < currentSsidsSize; i++) {
@@ -261,6 +281,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
                             if (gateway.getId().equals(updatedGateway.getId())) {
                                 apartment.getAssociatedGateways().remove(gateway);
                                 DatabaseHandler.updateApartment(apartment);
+                                break;
                             }
                         }
                     }

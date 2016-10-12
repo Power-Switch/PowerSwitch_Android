@@ -180,7 +180,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             gatewayCheckboxList.clear();
             for (Gateway gateway : gateways) {
                 LinearLayout gatewayLayout;
-                if (apartment != null && apartment.isAssociatedWith(gateway)) {
+                if (apartment != null && apartment.isAssociatedWith(gateway.getId())) {
                     gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfApartmentGateways, false);
                     linearLayoutOfApartmentGateways.addView(gatewayLayout);
                 } else {

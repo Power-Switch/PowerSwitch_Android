@@ -265,7 +265,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 if (room != null && room.isAssociatedWith(gateway)) {
                     gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfRoomGateways, false);
                     linearLayoutOfRoomGateways.addView(gatewayLayout);
-                } else if (apartment != null && apartment.isAssociatedWith(gateway)) {
+                } else if (apartment != null && apartment.isAssociatedWith(gateway.getId())) {
                     gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, linearLayoutOfApartmentGateways, false);
                     linearLayoutOfApartmentGateways.addView(gatewayLayout);
                 } else {

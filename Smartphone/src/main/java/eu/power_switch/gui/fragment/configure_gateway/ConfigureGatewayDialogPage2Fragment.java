@@ -50,7 +50,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
- * "Name" Fragment used in Configure Apartment Dialog
+ * "SSID" Fragment used in Configure Apartment Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
