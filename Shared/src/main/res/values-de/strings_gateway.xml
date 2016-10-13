@@ -36,10 +36,12 @@
     <string name="local_address">Lokale Adresse</string>
     <string name="wan_address">Internet Adresse</string>
     <string name="add_ssids">SSID\'s hinzufügen</string>
-    <string name="optional_ssid_description">Optional: Spezifiziere SSIDs, über die das Gateway immer die lokale Adresse anstatt der Internet Adresse verwenden soll. Dies hilft PowerSwitch dabei das Gateway stets über die beste Adresse zu erreichen.</string>
+    <string name="optional_ssid_description">Optional: Spezifiziere SSID\'s, über die das Gateway immer die lokale Adresse anstatt der Internet Adresse verwenden soll. Dies hilft PowerSwitch dabei stets den kürzesten Weg zum Gateway zu finden.</string>
 
     <string name="manual">Manuell</string>
     <string name="available_networks">Verfügbare Netzwerke</string>
+
+    <string name="wifi_ssids">WLAN SSID\'s</string>
 
     <string name="add_gateway">Gateway hinzufügen</string>
     <string name="apartment_gateways">Wohnungs-Gateways</string>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -41,7 +40,7 @@
     <string name="add_ssids">Add SSID\'s</string>
     <string name="ssids">SSID\'s</string>
     <string name="ssid">SSID</string>
-    <string name="optional_ssid_description">Optional: Specify SSIDs over which this Gateway should always use the local address instead of the Internet address. This will help PowerSwitch to always connect to the Gateway using the proper address.</string>
+    <string name="optional_ssid_description">Optional: Specify SSID\'s over which this Gateway should always use the local address instead of the Internet address. This will help PowerSwitch to always connect to the Gateway using the proper address.</string>
 
     <string name="manual">Manual</string>
     <string name="available_networks">Available Networks</string>
@@ -50,6 +49,8 @@
     <string name="apartment_gateways">Apartment Gateways</string>
     <string name="room_gateways">Room Gateways</string>
     <string name="other_gateways">Other Gateways</string>
+
+    <string name="wifi_ssids">WiFi SSID\'s</string>
 
     <string name="associated_gateways_for_receiver_description">Optional: Select Gateways that should always be used for this Receiver. If you dont select anything it will default to the Room configuration. If the room also has no associated Gateways it will default to the Apartments configuration.</string>
     <string name="associated_gateways_for_room_description">Optional: Select Gateways that should always be used for this Room. If you dont select anything it will default to the Apartment configuration.</string>

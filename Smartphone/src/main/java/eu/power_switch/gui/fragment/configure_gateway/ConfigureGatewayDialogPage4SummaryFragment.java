@@ -104,7 +104,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (INTENT_GATEWAY_SSIDS_CHANGED.equals(intent.getAction())) {
-                    ArrayList<String> changedSsids = intent.getStringArrayListExtra(AddSsidDialog.KEY_SSID);
+                    ArrayList<String> changedSsids = intent.getStringArrayListExtra(ConfigureGatewayDialogPage2Fragment.KEY_SSIDS);
                     currentSsids.clear();
                     currentSsids.addAll(changedSsids);
                 } else if (INTENT_GATEWAY_SETUP_CHANGED.equals(intent.getAction())) {
@@ -308,7 +308,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(INTENT_GATEWAY_SSID_ADDED);
+        intentFilter.addAction(INTENT_GATEWAY_SSIDS_CHANGED);
         intentFilter.addAction(INTENT_GATEWAY_SETUP_CHANGED);
         intentFilter.addAction(INTENT_GATEWAY_APARTMENTS_CHANGED);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);

@@ -90,7 +90,7 @@
             <TextView
                 style="@style/sub_header"
                 android:layout_marginTop="@dimen/title_margin_top"
-                android:text="@string/ssids"/>
+                android:text="@string/wifi_ssids"/>
 
             <TextView
                 android:id="@+id/textView_ssids"
