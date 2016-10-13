@@ -77,7 +77,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
     private String currentWanAddress;
     private int currentWanPort = -1;
     private ArrayList<String> currentSsids = new ArrayList<>();
-    private ArrayList<String> currentApartmentNames = new ArrayList<>();
+    private ArrayList<Long> currentApartmentIds = new ArrayList<>();
 
     private TextView name;
     private TextView model;
@@ -115,8 +115,8 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
                     currentWanAddress = intent.getStringExtra(ConfigureGatewayDialogPage1Fragment.KEY_WAN_ADDRESS);
                     currentWanPort = intent.getIntExtra(ConfigureGatewayDialogPage1Fragment.KEY_WAN_PORT, -1);
                 } else if (INTENT_GATEWAY_APARTMENTS_CHANGED.equals(intent.getAction())) {
-                    currentApartmentNames.clear();
-                    currentApartmentNames.addAll((ArrayList<String>) intent.getSerializableExtra(ConfigureGatewayDialogPage3Fragment.KEY_APARTMENT_NAMES));
+                    currentApartmentIds.clear();
+                    currentApartmentIds.addAll((ArrayList<Long>) intent.getSerializableExtra(ConfigureGatewayDialogPage3Fragment.KEY_APARTMENT_IDS));
                 }
 
                 updateUI();
@@ -152,7 +152,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
 
             List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gatewayId);
             for (Apartment associatedApartment : associatedApartments) {
-                currentApartmentNames.add(associatedApartment.getName());
+                currentApartmentIds.add(associatedApartment.getId());
             }
 
             currentSsids.clear();
@@ -198,9 +198,14 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
         ssids.setText(ssidText);
 
         String apartmentsText = "";
-        for (int i = 0, currentApartmentNamesSize = currentApartmentNames.size(); i < currentApartmentNamesSize; i++) {
-            String apartmentName = currentApartmentNames.get(i);
-            apartmentsText += apartmentName;
+        for (int i = 0, currentApartmentNamesSize = currentApartmentIds.size(); i < currentApartmentNamesSize; i++) {
+            Long apartmentId = currentApartmentIds.get(i);
+
+            try {
+                apartmentsText += DatabaseHandler.getApartmentName(apartmentId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if (i < currentApartmentNamesSize - 1) {
                 apartmentsText += "\n";
@@ -254,8 +259,8 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
                 long id = DatabaseHandler.addGateway(newGateway);
 
                 newGateway.setId(id);
-                for (String apartmentName : currentApartmentNames) {
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentName);
+                for (Long apartmentId : currentApartmentIds) {
+                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
 
                     List<Gateway> associatedGateways = apartment.getAssociatedGateways();
                     if (!apartment.isAssociatedWith(id)) {
@@ -276,7 +281,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
             List<Apartment> apartments = DatabaseHandler.getAllApartments();
             for (Apartment apartment : apartments) {
                 if (apartment.isAssociatedWith(updatedGateway.getId())) {
-                    if (!currentApartmentNames.contains(apartment.getName())) {
+                    if (!currentApartmentIds.contains(apartment.getId())) {
                         for (Gateway gateway : apartment.getAssociatedGateways()) {
                             if (gateway.getId().equals(updatedGateway.getId())) {
                                 apartment.getAssociatedGateways().remove(gateway);
@@ -286,7 +291,7 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
                         }
                     }
                 } else {
-                    if (currentApartmentNames.contains(apartment.getName())) {
+                    if (currentApartmentIds.contains(apartment.getId())) {
                         apartment.getAssociatedGateways().add(updatedGateway);
                         DatabaseHandler.updateApartment(apartment);
                     }

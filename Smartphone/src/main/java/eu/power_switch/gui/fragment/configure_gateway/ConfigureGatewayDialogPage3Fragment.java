@@ -51,7 +51,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFragment {
 
-    public static final String KEY_APARTMENT_NAMES = "apartment_names";
+    public static final String KEY_APARTMENT_IDS = "apartment_ids";
 
     private View rootView;
     private long gatewayId = -1;
@@ -65,9 +65,9 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
      *
      * @param context any suitable context
      */
-    public static void sendApartmentsChangedBroadcast(Context context, ArrayList<String> apartmentNames) {
+    public static void sendApartmentsChangedBroadcast(Context context, ArrayList<Long> apartmentIds) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_APARTMENTS_CHANGED);
-        intent.putExtra(KEY_APARTMENT_NAMES, apartmentNames);
+        intent.putExtra(KEY_APARTMENT_IDS, apartmentIds);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -136,7 +136,7 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
-                        notifyConfigurationChanged();
+                        sendApartmentsChangedBroadcast(getActivity(), getCheckedApartmentIds());
                     }
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
@@ -147,7 +147,7 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
                     @Override
                     public void onClick(View v) {
                         checkBox.setChecked(!checkBox.isChecked());
-                        sendApartmentsChangedBroadcast(getActivity(), getCheckedApartmentNames());
+                        sendApartmentsChangedBroadcast(getActivity(), getCheckedApartmentIds());
                     }
                 });
 
@@ -159,16 +159,16 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
         }
     }
 
-    private ArrayList<String> getCheckedApartmentNames() {
-        ArrayList<String> checkedApartmentNames = new ArrayList<>();
+    private ArrayList<Long> getCheckedApartmentIds() {
+        ArrayList<Long> checkedApartmentIds = new ArrayList<>();
 
         for (CheckBox checkBox : apartmentCheckboxList) {
             if (checkBox.isChecked()) {
                 Apartment apartment = (Apartment) checkBox.getTag(R.string.apartments);
-                checkedApartmentNames.add(apartment.getName());
+                checkedApartmentIds.add(apartment.getId());
             }
         }
 
-        return checkedApartmentNames;
+        return checkedApartmentIds;
     }
 }
