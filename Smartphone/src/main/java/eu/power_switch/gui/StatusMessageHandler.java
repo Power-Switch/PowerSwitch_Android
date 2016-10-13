@@ -447,7 +447,7 @@ public class StatusMessageHandler {
      * @param message  toast message
      * @param duration duration of toast
      */
-    private static void showInfoToast(final Context context, final String message, final int duration) {
+    public static void showInfoToast(final Context context, final String message, final int duration) {
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND)) {
             Log.w("Toast suppressed (disabled): " + message);
             return;
@@ -478,7 +478,7 @@ public class StatusMessageHandler {
      * @param context any suitable context
      * @param e       throwable
      */
-    private static void showErrorToast(final Context context, final Throwable e) {
+    public static void showErrorToast(final Context context, final Throwable e) {
         Log.e("Error Toast: ", e);
 
         Handler handler = new Handler(Looper.getMainLooper());

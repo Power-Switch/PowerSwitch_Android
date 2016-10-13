@@ -56,6 +56,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.log.Log;
 
 /**
  * Dialog to create a new Room
@@ -96,15 +97,22 @@ public class AddSsidDialog extends DialogFragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                ArrayList<String> connections = new ArrayList<>();
+                try {
+                    ArrayList<String> connections = new ArrayList<>();
 
-                for (ScanResult scanResult : mainWifi.getScanResults()) {
-                    if (scanResult.SSID != null && !scanResult.SSID.isEmpty()) {
-                        connections.add(scanResult.SSID);
+                    for (ScanResult scanResult : mainWifi.getScanResults()) {
+                        if (scanResult.SSID != null && !scanResult.SSID.isEmpty()) {
+                            connections.add(scanResult.SSID);
+                        }
                     }
-                }
 
-                updateSSIDs(connections);
+                    updateSSIDs(connections);
+
+                } catch (SecurityException e) {
+                    StatusMessageHandler.showInfoToast(getContext(), getString(R.string.missing_location_permission), Toast.LENGTH_LONG);
+                } catch (Exception e) {
+                    Log.e(e);
+                }
 
                 layoutLoading.setVisibility(View.GONE);
                 listView.setVisibility(View.VISIBLE);
