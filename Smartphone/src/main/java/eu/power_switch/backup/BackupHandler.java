@@ -278,10 +278,10 @@ public class BackupHandler {
         try {
             Intent intentShareFile = new Intent(Intent.ACTION_SEND);
 
-            intentShareFile.setType("application/pdf");
+            intentShareFile.setType("*/*");
             intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + backup.getPath()));
-            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.powerswitch_backup_file));
-            intentShareFile.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.powerswitch_backup_file));
+            intentShareFile.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.powerswitch_backup_file, backup.getName()));
+            intentShareFile.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.powerswitch_backup_file, backup.getName()));
 
             context.startActivity(Intent.createChooser(intentShareFile, context.getString(R.string.send_to)));
         } catch (Exception e) {
