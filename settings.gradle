@@ -15,9 +15,6 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-include ':ShowcaseViewLibrary'
-project(':ShowcaseViewLibrary').projectDir = new File(settingsDir, '../MaterialShowcaseView/library')
 //include ':TargetTooltipLibrary'
 //project(':TargetTooltipLibrary').projectDir = new File(settingsDir, '../android-target-tooltip/library')
 include ':Shared', ':LocaleApi', ':Wearable', ':Smartphone'
