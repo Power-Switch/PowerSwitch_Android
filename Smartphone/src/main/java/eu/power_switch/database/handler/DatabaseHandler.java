@@ -21,7 +21,6 @@ package eu.power_switch.database.handler;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
 import java.util.ArrayList;
@@ -258,7 +257,7 @@ public final class DatabaseHandler {
      * @param name Name of Apartment
      * @return Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Apartment getApartmentCaseInsensitive(String name) throws Exception {
         openReadable();
@@ -302,7 +301,7 @@ public final class DatabaseHandler {
      * @param name Name of Apartment
      * @return ID of Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Long getApartmentId(String name) throws Exception {
         openReadable();
@@ -324,7 +323,7 @@ public final class DatabaseHandler {
      * @param id ID of Apartment
      * @return Name of Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static String getApartmentName(Long id) throws Exception {
         openReadable();
@@ -588,7 +587,7 @@ public final class DatabaseHandler {
      * @param name the name of the room
      * @return a room object
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Room getRoom(String name) throws Exception {
         openReadable();
@@ -1825,7 +1824,7 @@ public final class DatabaseHandler {
      * @param id ID of Gateway
      * @return Gateway
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Geofence getGeofence(Long id) throws Exception {
         openReadable();
