@@ -132,7 +132,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
                 boolean roomFound = false;
                 for (Room room : checkedReceivers) {
-                    if (room.getId() == sceneItem.getReceiver().getRoomId()) {
+                    if (room.getId().equals(sceneItem.getReceiver().getRoomId())) {
                         room.addReceiver(sceneItem.getReceiver());
                         roomFound = true;
                     }

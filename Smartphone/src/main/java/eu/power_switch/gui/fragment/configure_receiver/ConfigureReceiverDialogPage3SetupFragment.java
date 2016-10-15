@@ -589,8 +589,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                     .getCheckedItemPosition() == -1) {
                 channelMasterListView.setItemChecked(0, true);
             }
-            return channelMasterNamesAdapter.getItem(channelMasterListView.getCheckedItemPosition())
-                    .toString().charAt(0);
+            return channelMasterNamesAdapter.getItem(channelMasterListView.getCheckedItemPosition()).charAt(0);
         } catch (Exception e) {
             return null;
         }
@@ -603,8 +602,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                 channelSlaveListView.setItemChecked(0, true);
             }
 
-            return Integer.valueOf(channelSlaveNamesAdapter.getItem(channelSlaveListView.getCheckedItemPosition())
-                    .toString());
+            return Integer.valueOf(channelSlaveNamesAdapter.getItem(channelSlaveListView.getCheckedItemPosition()));
         } catch (Exception e) {
             return null;
         }

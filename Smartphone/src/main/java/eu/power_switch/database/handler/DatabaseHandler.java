@@ -236,7 +236,7 @@ public final class DatabaseHandler {
      * @param name Name of Apartment
      * @return Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Apartment getApartment(String name) throws Exception {
         openReadable();
@@ -280,7 +280,7 @@ public final class DatabaseHandler {
      * @param id ID of Apartment
      * @return Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Apartment getApartment(Long id) throws Exception {
         openReadable();
@@ -412,7 +412,7 @@ public final class DatabaseHandler {
      * @param receiver Receiver
      * @return Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Apartment getContainingApartment(Receiver receiver) throws Exception {
         openReadable();
@@ -434,7 +434,7 @@ public final class DatabaseHandler {
      * @param room Room
      * @return Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Apartment getContainingApartment(Room room) throws Exception {
         openReadable();
@@ -456,7 +456,7 @@ public final class DatabaseHandler {
      * @param scene Scene
      * @return Apartment
      */
-    @Nullable
+    @NonNull
     @WorkerThread
     public static Apartment getContainingApartment(Scene scene) throws Exception {
         openReadable();

@@ -23,7 +23,7 @@ package eu.power_switch.shared.exception.gateway;
  */
 public class GatewayAlreadyExistsException extends Exception {
 
-    public long idOfExistingGateway;
+    private final long idOfExistingGateway;
 
     public GatewayAlreadyExistsException(long idOfExistingGateway) {
         super("Gateway already exists!");

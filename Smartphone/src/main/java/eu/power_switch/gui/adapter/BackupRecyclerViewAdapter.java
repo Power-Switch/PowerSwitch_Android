@@ -34,6 +34,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
@@ -41,6 +42,7 @@ import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
 
@@ -83,7 +85,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
         holder.backupName.setText(backup.getName());
-        holder.backupSize.setText(backup.getSizeInMb(2) + " MB");
+        holder.backupSize.setText(String.format(Locale.getDefault(), "%f MB", backup.getSizeInMb(2)));
 
         holder.restore.setOnClickListener(new View.OnClickListener() {
             @Override

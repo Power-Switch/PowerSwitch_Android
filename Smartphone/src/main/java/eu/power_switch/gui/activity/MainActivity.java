@@ -65,6 +65,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Stack;
 
 import eu.power_switch.R;
@@ -814,7 +815,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(View itemView, int position) {
                 HistoryItem historyItem = historyItems.get(position);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss", Locale.getDefault());
                 new AlertDialog.Builder(getActivity())
                         .setTitle(R.string.details)
                         .setMessage(simpleDateFormat.format(historyItem.getTime().getTime()) + "\n\n" +

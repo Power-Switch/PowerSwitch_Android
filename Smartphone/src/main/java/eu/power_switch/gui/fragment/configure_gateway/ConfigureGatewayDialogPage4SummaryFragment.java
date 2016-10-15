@@ -39,7 +39,6 @@ import java.util.List;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
@@ -58,7 +57,6 @@ import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GATEWAY_APARTMENTS_CHANGED;
 import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GATEWAY_SETUP_CHANGED;
 import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GATEWAY_SSIDS_CHANGED;
-import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GATEWAY_SSID_ADDED;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog

@@ -120,7 +120,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
     private String getSelectedBrand() {
         try {
             int position = brandListView.getCheckedItemPosition();
-            String brand = brandNamesAdapter.getItem(position).toString();
+            String brand = brandNamesAdapter.getItem(position);
             return brand;
         } catch (Exception e) {
             return null;

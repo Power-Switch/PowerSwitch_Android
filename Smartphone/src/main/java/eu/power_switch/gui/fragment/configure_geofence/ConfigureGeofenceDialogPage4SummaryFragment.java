@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
@@ -168,7 +169,7 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
         }
 
         if (currentGeofenceRadius != -1) {
-            textViewGeofenceRadius.setText(String.valueOf((int) currentGeofenceRadius) + " m");
+            textViewGeofenceRadius.setText(String.format(Locale.getDefault(), "%d m", (int) currentGeofenceRadius));
         }
 
         String enterActionText = "";

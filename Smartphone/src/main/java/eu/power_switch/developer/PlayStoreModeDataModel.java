@@ -133,7 +133,7 @@ public class PlayStoreModeDataModel {
         GATEWAYS.clear();
 
 
-        GATEWAYS.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880, "example.myfritz.dyndns.org", 49880, new HashSet<String>(Arrays.asList("FritzBox 7272"))));
+        GATEWAYS.add(new ConnAir((long) 0, true, "AutoDiscovered", "1.0", "192.168.2.125", 49880, "example.myfritz.dyndns.org", 49880, new HashSet<>(Arrays.asList("FritzBox 7272"))));
         GATEWAYS.add(new ITGW433((long) 1, true, "AutoDiscovered", "1.0", "192.168.2.148", 49880, "example.myfritz.dyndns.org", 49881, Collections.<String>emptySet()));
         GATEWAYS.add(new BrematicGWY433((long) 2, true, "AutoDiscovered", "1.0", "192.168.2.189", 49880, "example.myfritz.dyndns.org", 49882, Collections.<String>emptySet()));
     }

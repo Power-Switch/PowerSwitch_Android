@@ -19,6 +19,7 @@
 package eu.power_switch.shared.log;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -82,6 +83,7 @@ public class LogHandler {
      */
     private static final String[] DEFAULT_EMAILS = new String[]{"contact@power-switch.eu"};
 
+    //TODO: DONT assign context classes to static fields! (Lint)
     private static Context context;
 
     /**
@@ -449,7 +451,7 @@ public class LogHandler {
     /**
      * Add indentation to a String with multiple lines
      *
-     * @param string
+     * @param string any text
      * @return indented string
      */
     public static String addIndentation(String string) {
@@ -471,6 +473,7 @@ public class LogHandler {
     }
 
     private static String getHumanReadableDate() {
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         return simpleDateFormat.format(new Date());
     }

@@ -23,10 +23,11 @@ package eu.power_switch.shared.exception.location;
  */
 public class CoordinatesNotFoundException extends Exception {
 
-    String address;
+    private String address;
 
     public CoordinatesNotFoundException(String address) {
         super("No Coordinates could be found for the given address: " + address);
+        this.address = address;
     }
 
     public String getAddress() {

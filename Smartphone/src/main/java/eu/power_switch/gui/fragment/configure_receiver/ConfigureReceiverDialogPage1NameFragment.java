@@ -268,7 +268,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
     private String getCheckedRoomName() {
         try {
             int checkedPosition = roomsListView.getCheckedItemPosition();
-            return roomNamesAdapter.getItem(checkedPosition).toString().trim();
+            return roomNamesAdapter.getItem(checkedPosition).trim();
         } catch (Exception e) {
             return null;
         }

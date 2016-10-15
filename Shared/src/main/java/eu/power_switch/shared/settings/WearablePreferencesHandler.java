@@ -139,8 +139,8 @@ public class WearablePreferencesHandler {
      * Get a settings value by key
      *
      * @param settingsKey Key of setting
-     * @param <T>         type of expected return value
-     * @return
+     * @param <T>         expected type of return value
+     * @return value
      */
     public static <T> T get(String settingsKey) throws ClassCastException {
         // Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
@@ -163,9 +163,8 @@ public class WearablePreferencesHandler {
      *
      * @param settingsKey Key of setting
      * @param newValue    new value
-     * @param <T>
      */
-    public static <T> void set(String settingsKey, T newValue) {
+    public static void set(String settingsKey, Object newValue) {
         Log.d(WearablePreferencesHandler.class, "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();

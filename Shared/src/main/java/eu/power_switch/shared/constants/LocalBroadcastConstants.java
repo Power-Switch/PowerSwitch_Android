@@ -67,16 +67,13 @@ public class LocalBroadcastConstants {
 
     public static final String INTENT_NAME_APARTMENT_CHANGED = "eu.power_switch.name_apartment_changed";
 
-    public static final String INTENT_RECEIVER_SUMMARY_CHANGED = "eu.power_switch.receiver_summary_changed";
     public static final String INTENT_NAME_SCENE_CHANGED = "eu.power_switch.name_scene_changed";
 
-    public static final String INTENT_SETUP_SCENE_CHANGED = "eu.power_switch.setup_scene_changed";
     public static final String INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED =
             "eu.power_switch.timer_name_execution_time_changed";
     public static final String INTENT_TIMER_EXECUTION_INTERVAL_CHANGED =
             "eu.power_switch.timer_execution_interval_changed";
     public static final String INTENT_TIMER_ACTIONS_CHANGED = "eu.power_switch.timer_actions_changed";
-    public static final String INTENT_TIMER_SUMMARY_CHANGED = "eu.power_switch.timer_summary_changed";
 
     public static final String INTENT_TIMER_ACTION_ADDED = "eu.power_switch.timer_action_added";
     public static final String INTENT_ALARM_EVENT_ACTION_ADDED = "eu.power_switch.alarm_event_action_added";

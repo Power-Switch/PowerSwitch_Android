@@ -51,7 +51,7 @@ public class Sets {
      * @return a newly-created, initially-empty {@code HashSet}
      */
     public static <K> HashSet<K> newHashSet() {
-        return new HashSet<K>();
+        return new HashSet<>();
     }
 
     /**
@@ -73,7 +73,7 @@ public class Sets {
      */
     public static <E> HashSet<E> newHashSet(E... elements) {
         int capacity = elements.length * 4 / 3 + 1;
-        HashSet<E> set = new HashSet<E>(capacity);
+        HashSet<E> set = new HashSet<>(capacity);
         Collections.addAll(set, elements);
         return set;
     }
@@ -84,7 +84,7 @@ public class Sets {
      * @return a newly-created, initially-empty {@code SortedSet}.
      */
     public static <E> SortedSet<E> newSortedSet() {
-        return new TreeSet<E>();
+        return new TreeSet<>();
     }
 
     /**
@@ -95,7 +95,7 @@ public class Sets {
      * duplicates)
      */
     public static <E> SortedSet<E> newSortedSet(E... elements) {
-        SortedSet<E> set = new TreeSet<E>();
+        SortedSet<E> set = new TreeSet<>();
         Collections.addAll(set, elements);
         return set;
     }

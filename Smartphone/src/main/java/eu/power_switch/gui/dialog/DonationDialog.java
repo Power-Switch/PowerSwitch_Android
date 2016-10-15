@@ -235,7 +235,6 @@ public class DonationDialog extends DialogFragment {
                 if (result.isFailure()) {
                     StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " +
                             result.getMessage(), Snackbar.LENGTH_LONG);
-                    return;
                 }
             }
         });

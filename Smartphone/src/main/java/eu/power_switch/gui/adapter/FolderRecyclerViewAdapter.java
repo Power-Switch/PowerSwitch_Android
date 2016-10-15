@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import eu.power_switch.R;
 
@@ -59,7 +60,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
     @Override
     public void onBindViewHolder(final FolderRecyclerViewAdapter.ViewHolder holder, int position) {
         final File folder = folders.get(position);
-        holder.name.setText("./" + folder.getName());
+        holder.name.setText(String.format(Locale.getDefault(), "./%s", folder.getName()));
     }
 
     // Return the total count of items

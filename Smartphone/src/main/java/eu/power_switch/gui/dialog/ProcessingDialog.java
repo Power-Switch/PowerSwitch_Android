@@ -143,8 +143,7 @@ public abstract class ProcessingDialog extends DialogFragment {
      * @param message status message string resource
      */
     @MainThread
-    @StringRes
-    protected void setMainStatusMessage(int message) {
+    protected void setMainStatusMessage(@StringRes int message) {
         textViewMainStatusMessage.setText(message);
     }
 
@@ -174,8 +173,7 @@ public abstract class ProcessingDialog extends DialogFragment {
      * @param message status message string resource
      */
     @MainThread
-    @StringRes
-    protected void setSubStatusMessage(int message) {
+    protected void setSubStatusMessage(@StringRes int message) {
         textViewSubStatusMessage.setText(message);
     }
 

@@ -26,6 +26,8 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import eu.power_switch.R;
 
 /**
@@ -63,7 +65,7 @@ public class SliderPreferenceFragmentCompat extends PreferenceDialogFragmentComp
         SliderPreference sliderPreference = getSliderPreference();
 
         textView = (TextView) view.findViewById(R.id.textView);
-        textView.setText(sliderPreference.getProgress() + " ms");
+        textView.setText(String.format(Locale.getDefault(), "%d ms", sliderPreference.getProgress()));
 
         seekBar = (SeekBar) view.findViewById(R.id.seekbar);
         seekBar.setMax(1000);
@@ -71,7 +73,7 @@ public class SliderPreferenceFragmentCompat extends PreferenceDialogFragmentComp
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                textView.setText(seekBar.getProgress() + " ms");
+                textView.setText(String.format(Locale.getDefault(), "%d ms", seekBar.getProgress()));
             }
 
             @Override
@@ -94,7 +96,7 @@ public class SliderPreferenceFragmentCompat extends PreferenceDialogFragmentComp
             if (sliderPreference.isPersistent()) {
                 sliderPreference.persistInt(seekBar.getProgress());
             }
-            sliderPreference.setSummary(seekBar.getProgress() + " ms");
+            sliderPreference.setSummary(String.format(Locale.getDefault(), "%d ms", seekBar.getProgress()));
         }
     }
 

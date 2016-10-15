@@ -184,15 +184,14 @@ public class SmartphonePreferencesHandler {
     }
 
     public static String getPublicKeyString() {
-        String string = SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
-        return string;
+        return SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
     }
 
     /**
      * Get a settings value by key
      *
      * @param settingsKey Key of setting
-     * @param <T>         type of expected return value
+     * @param <T>         expected type of return value
      * @return settings value
      */
     public static <T> T get(String settingsKey) throws ClassCastException {
@@ -234,9 +233,8 @@ public class SmartphonePreferencesHandler {
      *
      * @param settingsKey Key of setting
      * @param newValue    new value
-     * @param <T>
      */
-    public static <T> void set(String settingsKey, T newValue) {
+    public static void set(String settingsKey, Object newValue) {
         Log.d(SmartphonePreferencesHandler.class, "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();

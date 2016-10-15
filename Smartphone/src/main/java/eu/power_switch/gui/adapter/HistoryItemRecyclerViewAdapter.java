@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import java.util.Locale;
 
 import eu.power_switch.R;
 import eu.power_switch.history.HistoryItem;
@@ -61,7 +62,7 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
     public void onBindViewHolder(final HistoryItemRecyclerViewAdapter.ViewHolder holder, int position) {
         final HistoryItem historyItem = historyItems.get(position);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss", Locale.getDefault());
         holder.time.setText(simpleDateFormat.format(historyItem.getTime().getTime()));
         holder.description.setText(historyItem.getShortDescription());
 

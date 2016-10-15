@@ -183,7 +183,7 @@ public class ActionHandler {
      * @param room     room to execute on
      * @param buttonId button ID to execute on each receiver
      */
-    public static void execute(@NonNull Context context, @NonNull Room room, @NonNull long buttonId) {
+    public static void execute(@NonNull Context context, @NonNull Room room, long buttonId) {
         try {
             executeRoomAction(context, room, buttonId);
 
@@ -286,7 +286,7 @@ public class ActionHandler {
         }
     }
 
-    private static void executeRoomAction(@NonNull Context context, @NonNull Room room, @NonNull long buttonId) throws Exception {
+    private static void executeRoomAction(@NonNull Context context, @NonNull Room room, long buttonId) throws Exception {
         NetworkHandler.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);

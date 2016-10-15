@@ -32,6 +32,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -282,7 +283,7 @@ public class UtilityService extends IntentService {
             DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request).await();
 
             if (!result.getStatus().isSuccess()) {
-                Log.e("", String.format("Error sending data using DataApi (error code = %d)",
+                Log.e("", String.format(Locale.getDefault(), "Error sending data using DataApi (error code = %d)",
                         result.getStatus().getStatusCode()));
             } else {
                 Log.d("Update data sent");
@@ -321,7 +322,7 @@ public class UtilityService extends IntentService {
             DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request).await();
 
             if (!result.getStatus().isSuccess()) {
-                Log.e("", String.format("Error sending settings using DataApi (error code = %d)",
+                Log.e("", String.format(Locale.getDefault(), "Error sending settings using DataApi (error code = %d)",
                         result.getStatus().getStatusCode()));
             } else {
                 Log.d("Updated settings sent");

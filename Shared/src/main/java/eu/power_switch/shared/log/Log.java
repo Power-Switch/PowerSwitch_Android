@@ -39,7 +39,7 @@ import io.fabric.sdk.android.Fabric;
  */
 public class Log {
 
-    public static final Logger LOGGER = Logger.getLogger("Log");
+    private static final Logger LOGGER = Logger.getLogger("Log");
 
     /**
      * Private Constructor

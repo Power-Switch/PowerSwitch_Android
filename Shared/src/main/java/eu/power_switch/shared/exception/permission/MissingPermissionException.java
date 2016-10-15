@@ -23,7 +23,7 @@ package eu.power_switch.shared.exception.permission;
  */
 public class MissingPermissionException extends Exception {
 
-    String permission;
+    private final String permission;
 
     public MissingPermissionException(String permission) {
         super("Missing permission: " + permission);
