@@ -27,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
@@ -69,7 +70,12 @@ public class RestoreBackupFromFileActivity extends AppCompatActivity {
         Log.d(intent);
 
         final Uri fileUri = intent.getData();
-        Log.d("Uri: " + fileUri.toString());
+        Log.d("Uri: " + String.valueOf(fileUri));
+
+        if (fileUri == null) {
+            Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG).show();
+            finish();
+        }
 
         Button buttonRestore = (Button) findViewById(R.id.button_restore);
         buttonRestore.setOnClickListener(new View.OnClickListener() {
