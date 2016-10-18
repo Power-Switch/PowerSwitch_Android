@@ -21,6 +21,7 @@ package eu.power_switch.shared;
 import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
@@ -37,7 +38,7 @@ public class ThemeHelper {
      * @return Color as Int
      */
     @ColorInt
-    public static int getThemeAttrColor(Context context, @AttrRes int attr) {
+    public static int getThemeAttrColor(@NonNull Context context, @AttrRes int attr) {
         TypedValue typedValue = new TypedValue();
         if (context.getTheme().resolveAttribute(attr, typedValue, true)) {
             if (typedValue.type >= TypedValue.TYPE_FIRST_INT
