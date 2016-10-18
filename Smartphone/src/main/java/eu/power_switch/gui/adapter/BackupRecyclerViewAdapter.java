@@ -85,7 +85,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
         holder.backupDate.setText(backup.getDate().toLocaleString());
         holder.backupName.setText(backup.getName());
-        holder.backupSize.setText(String.format(Locale.getDefault(), "%f MB", backup.getSizeInMb(2)));
+        holder.backupSize.setText(backup.getSizeInMb(2) + " MB");
 
         holder.restore.setOnClickListener(new View.OnClickListener() {
             @Override
