@@ -29,6 +29,7 @@ Github is for social coding: if you want to write code, I encourage contribution
 * various com.android.support.* packages (see /smartphone/build.gradle for more info)
 * Google Play Services
 * net.lingala.zip4j:zip4j
+* com.github.bmelnychuk:atv
 * com.daimajia.numberprogressbar:library
 * me.grantland:autofittextview
 * com.crashlytics.sdk.android:crashlytics
