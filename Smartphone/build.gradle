@@ -30,6 +30,9 @@ android {
 
         // Enabling multidex support.
         multiDexEnabled true
+
+        // Write compile time timestamp
+        buildConfigField "long", "BUILD_TIMESTAMP", System.currentTimeMillis() + "L"
     }
     buildTypes {
         debug {

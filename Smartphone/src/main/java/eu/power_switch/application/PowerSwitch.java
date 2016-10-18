@@ -38,6 +38,7 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import org.apache.log4j.LogManager;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -113,20 +114,13 @@ public class PowerSwitch extends MultiDexApplication {
     /**
      * Get the build time of the current version of this application
      *
-     * @param context any suitable context
      * @return build time as string (or "unknown" if error while retrieving), never null
      */
     @NonNull
-    public static String getAppBuildTime(@NonNull Context context) {
+    public static String getAppBuildTime() {
         try {
-            ApplicationInfo ai = context.getPackageManager().getApplicationInfo(context.getPackageName(), 0);
-            ZipFile zf = new ZipFile(ai.sourceDir);
-            ZipEntry ze = zf.getEntry("classes.dex");
-            long time = ze.getTime();
-            String s = SimpleDateFormat.getInstance().format(new java.util.Date(time));
-            zf.close();
-
-            return s;
+            Date date = new Date(BuildConfig.BUILD_TIMESTAMP);
+            return SimpleDateFormat.getInstance().format(date);
         } catch (Exception e) {
             return "unknown";
         }
@@ -165,7 +159,7 @@ public class PowerSwitch extends MultiDexApplication {
 
         Log.d("Application init...");
         Log.d("App version: " + ApplicationHelper.getAppVersionDescription(this));
-        Log.d("App build time: " + getAppBuildTime(this));
+        Log.d("App build time: " + getAppBuildTime());
         Log.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
         Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
         Log.d("Device brand/model: " + LogHandler.getDeviceName());

@@ -642,7 +642,7 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        String aboutAppName = getString(R.string.powerswitch_app_name) + "\n(" + PowerSwitch.getAppBuildTime(getActivity()) + ")";
+                        String aboutAppName = getString(R.string.powerswitch_app_name) + "\n(" + PowerSwitch.getAppBuildTime() + ")";
                         if (eu.power_switch.BuildConfig.DEBUG) {
                             aboutAppName += "\n" + "DEBUG";
                         }
