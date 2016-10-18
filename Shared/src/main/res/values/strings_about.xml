@@ -19,7 +19,7 @@
 
 <resources>
 
-    <string name="app_version">1.6.6</string>
+    <string name="app_version">1.6.7</string>
 
     <!-- application information -->
     <string name="app_description_html">
