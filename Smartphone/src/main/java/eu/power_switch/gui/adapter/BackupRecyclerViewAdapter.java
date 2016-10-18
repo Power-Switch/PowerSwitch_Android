@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
@@ -42,6 +43,7 @@ import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
@@ -175,6 +177,10 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
             this.share = (IconicsImageView) itemView.findViewById(R.id.share);
             this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
             this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+
+            // workaround for not being able to set background color using "?attr/xxx" notation in XML
+            RelativeLayout controls = (RelativeLayout) itemView.findViewById(R.id.relativeLayout_controls);
+            controls.setBackgroundColor(ThemeHelper.getThemeAttrColor(context, R.attr.colorPrimaryHalf));
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

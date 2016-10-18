@@ -82,10 +82,10 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/relativeLayout_controls"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:background="?attr/colorPrimaryHalf">
+                android:layout_weight="0">
 
                 <com.mikepenz.iconics.view.IconicsImageView
                     android:id="@+id/restore"
