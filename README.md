@@ -19,6 +19,8 @@ Um die Entwicklung der App voran zu treiben und interessierten einen Blick hinte
 Github is for social coding: if you want to write code, I encourage contributions through pull requests from forks of this repository. Create Github tickets for bugs and new features and comment on the ones that you are interested in.
 
 # Dependencies
+* uk.co.deanwild.materialshowcaseview
+* it.sephiroth.android.library.targettooltip:target-tooltip-library
 * com.mikepenz:materialdrawer
 * com.mikepenz:aboutlibraries
 * com.mikepenz:iconics-core
@@ -26,6 +28,11 @@ Github is for social coding: if you want to write code, I encourage contribution
     * com.mikepenz:material-design-iconic-typeface
 * various com.android.support.* packages (see /smartphone/build.gradle for more info)
 * Google Play Services
+* net.lingala.zip4j:zip4j
+* com.daimajia.numberprogressbar:library
+* me.grantland:autofittextview
+* com.crashlytics.sdk.android:crashlytics
+* com.crashlytics.sdk.android:answers
 
 
 # Lizenz
