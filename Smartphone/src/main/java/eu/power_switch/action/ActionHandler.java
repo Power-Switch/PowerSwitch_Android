@@ -36,6 +36,7 @@ import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.network.UdpNetworkPackage;
+import eu.power_switch.notification.NotificationHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -72,16 +73,16 @@ public class ActionHandler {
         try {
             executeReceiverAction(context, receiver, button);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
-                    context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
+            HistoryHelper.add(context,
+                    new HistoryItem((long) -1,
+                            Calendar.getInstance(),
+                            context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
         } catch (ActionNotSupportedException e) {
             Log.e("Action not supported by Receiver!", e);
-            StatusMessageHandler.showInfoMessage(context,
-                    context.getString(R.string.action_not_supported_by_receiver), 5000);
+            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
         } catch (GatewayNotSupportedException e) {
             Log.e("Gateway not supported by Receiver!", e);
-            StatusMessageHandler.showInfoMessage(context,
-                    context.getString(R.string.gateway_not_supported_by_receiver), 5000);
+            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -92,7 +93,8 @@ public class ActionHandler {
         }
     }
 
-    private static void executeReceiverAction(@NonNull Context context, @NonNull Receiver receiver, @NonNull Button button) throws Exception {
+    private static void executeReceiverAction(@NonNull Context context, @NonNull Receiver receiver,
+                                              @NonNull Button button) throws Exception {
         NetworkHandler.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
@@ -111,8 +113,7 @@ public class ActionHandler {
         }
 
         if (gateways.isEmpty() && apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
-                    Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -164,8 +165,10 @@ public class ActionHandler {
         try {
             executeRoomAction(context, room, buttonName);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
-                    context.getString(R.string.room_action_history_text, room.getName(), buttonName)));
+            HistoryHelper.add(context,
+                    new HistoryItem((long) -1,
+                            Calendar.getInstance(),
+                            context.getString(R.string.room_action_history_text, room.getName(), buttonName)));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -187,8 +190,10 @@ public class ActionHandler {
         try {
             executeRoomAction(context, room, buttonId);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
-                    context.getString(R.string.room_action_history_text, room.getName(), Button.getName(context, buttonId))));
+            HistoryHelper.add(context,
+                    new HistoryItem((long) -1,
+                            Calendar.getInstance(),
+                            context.getString(R.string.room_action_history_text, room.getName(), Button.getName(context, buttonId))));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -212,8 +217,7 @@ public class ActionHandler {
         }
 
         if (gateways.isEmpty() && apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
-                    Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -257,11 +261,13 @@ public class ActionHandler {
                         } catch (ActionNotSupportedException e) {
                             Log.e("Action not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context,
-                                    context.getString(R.string.action_not_supported_by_receiver), 5000);
+                                    context.getString(R.string.action_not_supported_by_receiver),
+                                    5000);
                         } catch (GatewayNotSupportedException e) {
                             Log.e("Gateway not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context,
-                                    context.getString(R.string.gateway_not_supported_by_receiver), 5000);
+                                    context.getString(R.string.gateway_not_supported_by_receiver),
+                                    5000);
                         }
                     }
                 }
@@ -273,7 +279,8 @@ public class ActionHandler {
         if (networkPackages.size() <= 0) {
             Log.d(context.getString(R.string.no_receiver_supports_this_action));
             StatusMessageHandler.showInfoMessage(context,
-                    context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
+                    context.getString(R.string.no_receiver_supports_this_action),
+                    Snackbar.LENGTH_LONG);
         } else {
             NetworkHandler.send(networkPackages);
         }
@@ -299,8 +306,7 @@ public class ActionHandler {
         }
 
         if (gateways.isEmpty() && apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways,
-                    Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -339,11 +345,13 @@ public class ActionHandler {
                         } catch (ActionNotSupportedException e) {
                             Log.e("Action not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context,
-                                    context.getString(R.string.action_not_supported_by_receiver), 5000);
+                                    context.getString(R.string.action_not_supported_by_receiver),
+                                    5000);
                         } catch (GatewayNotSupportedException e) {
                             Log.e("Gateway not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context,
-                                    context.getString(R.string.gateway_not_supported_by_receiver), 5000);
+                                    context.getString(R.string.gateway_not_supported_by_receiver),
+                                    5000);
                         }
                     }
                 }
@@ -359,7 +367,8 @@ public class ActionHandler {
         if (networkPackages.size() <= 0) {
             Log.d(context.getString(R.string.no_receiver_supports_this_action));
             StatusMessageHandler.showInfoMessage(context,
-                    context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
+                    context.getString(R.string.no_receiver_supports_this_action),
+                    Snackbar.LENGTH_LONG);
         } else {
             NetworkHandler.send(networkPackages);
         }
@@ -382,8 +391,10 @@ public class ActionHandler {
         try {
             executeScene(context, scene);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
-                    context.getString(R.string.scene_action_history_text, scene.getName())));
+            HistoryHelper.add(context,
+                    new HistoryItem((long) -1,
+                            Calendar.getInstance(),
+                            context.getString(R.string.scene_action_history_text, scene.getName())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -401,8 +412,7 @@ public class ActionHandler {
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
 
         if (apartment.getAssociatedGateways().isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context,
-                    R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -437,7 +447,10 @@ public class ActionHandler {
 
             for (Gateway gateway : gateways) {
                 if (gateway.isActive()) {
-                    NetworkPackage networkPackage = getNetworkPackage(apartment, gateway, sceneItem.getReceiver(), sceneItem.getActiveButton());
+                    NetworkPackage networkPackage = getNetworkPackage(apartment,
+                            gateway,
+                            sceneItem.getReceiver(),
+                            sceneItem.getActiveButton());
 
                     for (int i = 0; i < receiver.getRepetitionAmount(); i++) {
                         networkPackages.add(networkPackage);
@@ -445,8 +458,7 @@ public class ActionHandler {
 
                     // set on object, as well as in database
                     sceneItem.getReceiver().setLastActivatedButtonId(sceneItem.getActiveButton().getId());
-                    DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
-                            .getId(), sceneItem.getActiveButton().getId());
+                    DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver().getId(), sceneItem.getActiveButton().getId());
                 }
             }
         }
@@ -471,8 +483,11 @@ public class ActionHandler {
         try {
             executeActions(context, timer.getActions());
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
-                    context.getString(R.string.timer_action_history_text, timer.getName())));
+            NotificationHandler.createNotification(context, "Timer", "Timer \"" + timer.getName() + "\" executed");
+            HistoryHelper.add(context,
+                    new HistoryItem((long) -1,
+                            Calendar.getInstance(),
+                            context.getString(R.string.timer_action_history_text, timer.getName())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -494,8 +509,10 @@ public class ActionHandler {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(context, actions);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
-                    context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
+            HistoryHelper.add(context,
+                    new HistoryItem((long) -1,
+                            Calendar.getInstance(),
+                            context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -517,8 +534,10 @@ public class ActionHandler {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(context, actions);
 
-            HistoryHelper.add(context, new HistoryItem((long) -1, Calendar.getInstance(),
-                    context.getString(R.string.alarm_clock_action_history_text, event.toString())));
+            HistoryHelper.add(context,
+                    new HistoryItem((long) -1,
+                            Calendar.getInstance(),
+                            context.getString(R.string.alarm_clock_action_history_text, event.toString())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -542,12 +561,21 @@ public class ActionHandler {
 
             HistoryItem historyItem;
             if (Geofence.EventType.ENTER.equals(eventType)) {
+                NotificationHandler.createNotification(context,
+                        context.getString(R.string.geofence),
+                        "Geofence \"" + geofence.getName() + "\" entered");
                 historyItem = new HistoryItem((long) -1, Calendar.getInstance(),
                         context.getString(R.string.geofence_enter_action_history_text, geofence.getName()));
             } else if (Geofence.EventType.EXIT.equals(eventType)) {
+                NotificationHandler.createNotification(context,
+                        context.getString(R.string.geofence),
+                        "Geofence \"" + geofence.getName() + "\" exited");
                 historyItem = new HistoryItem((long) -1, Calendar.getInstance(),
                         context.getString(R.string.geofence_exit_action_history_text, geofence.getName()));
             } else {
+                NotificationHandler.createNotification(context,
+                        context.getString(R.string.geofence),
+                        "Geofence \"" + geofence.getName() + "\" Event: " + eventType.toString() + " activated");
                 historyItem = new HistoryItem((long) -1, Calendar.getInstance(),
                         context.getString(R.string.geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
             }
@@ -606,7 +634,8 @@ public class ActionHandler {
         }
     }
 
-    private static NetworkPackage getNetworkPackage(Apartment apartment, Gateway gateway, Receiver receiver, Button button) throws Exception {
+    private static NetworkPackage getNetworkPackage(Apartment apartment, Gateway gateway, Receiver receiver,
+                                                    Button button) throws Exception {
         String signal = receiver.getSignal(gateway, button.getName());
 
         if (gateway.hasValidLocalAddress() && !gateway.hasValidWanAddress()) {

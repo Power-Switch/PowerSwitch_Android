@@ -61,6 +61,7 @@ public class SmartphonePreferencesHandler {
     public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA = true;
     public static final int DEFAULT_VALUE_LOG_DESTINATION = 0;
     public static final boolean DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = true;
+    public static final boolean DEFAULT_VALUE_SHOW_NOTIFICATIONS = true;
 
     public static String KEY_AUTO_DISCOVER;
     public static String KEY_BACKUP_PATH;
@@ -82,6 +83,8 @@ public class SmartphonePreferencesHandler {
     public static String KEY_SEND_ANONYMOUS_CRASH_DATA;
     public static String KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
     public static String KEY_LOG_DESTINATION;
+    public static String KEY_SHOW_NOTIFICATIONS;
+
 
     // setting keys
     private static SharedPreferences sharedPreferences;
@@ -144,6 +147,7 @@ public class SmartphonePreferencesHandler {
         KEY_SEND_ANONYMOUS_CRASH_DATA = context.getString(R.string.key_sendAnonymousCrashData);
         KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = "shouldAskSendAnonymousCrashData";
         KEY_LOG_DESTINATION = context.getString(R.string.key_logDestination);
+        KEY_SHOW_NOTIFICATIONS = context.getString(R.string.key_showNotifications);
     }
 
     private static void initializeDefaultValueMap() {
@@ -169,6 +173,7 @@ public class SmartphonePreferencesHandler {
         defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
         defaultValueMap.put(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA);
         defaultValueMap.put(KEY_LOG_DESTINATION, DEFAULT_VALUE_LOG_DESTINATION);
+        defaultValueMap.put(KEY_SHOW_NOTIFICATIONS, DEFAULT_VALUE_SHOW_NOTIFICATIONS);
 
         for (String key : defaultValueMap.keySet()) {
             // initialize missing default values
