@@ -82,7 +82,7 @@ public class NotificationHandler {
 	 *
 	 * @param context   any suitable context
 	 * @param largeIcon large icon bitmap
-	 * @param smallIcon small icon drawable ressource
+	 * @param smallIcon small icon drawable resource
 	 * @param title     tile text
 	 * @param message   message text
 	 * @param ongoing   ongoing notification
@@ -105,9 +105,11 @@ public class NotificationHandler {
 					R.drawable.ic_launcher);
 		}
 		if (title == null) {
+			// set default title text
 			title = context.getString(R.string.powerswitch_app_name);
 		}
 		if (tapAction == null) {
+			// set default tap action (open PowerSwitch app)
 			Intent openPowerSwitchIntent = new Intent(context, MainActivity.class);
 			tapAction = PendingIntent.getActivity(context, 0, openPowerSwitchIntent, 0);
 		}

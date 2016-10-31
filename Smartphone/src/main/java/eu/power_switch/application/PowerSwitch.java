@@ -18,8 +18,10 @@
 
 package eu.power_switch.application;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -39,14 +41,13 @@ import org.apache.log4j.LogManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
@@ -92,7 +93,8 @@ public class PowerSwitch extends MultiDexApplication {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                StatusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
+                                StatusMessageHandler.showErrorDialog(getApplicationContext(),
+                                        throwable);
                             }
                         });
                     }
@@ -174,20 +176,15 @@ public class PowerSwitch extends MultiDexApplication {
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric
-        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler.getForceFabricEnabled();
+        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(
+                SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler
+                .getForceFabricEnabled();
 
         if (enableFabric) {
-            Fabric.with(this,
-                    new Crashlytics.Builder().core(
-                            new CrashlyticsCore.Builder()
-                                    .disabled(
-                                            // disable Crashlytics on debug builds
-                                            BuildConfig.DEBUG &&
-                                                    !DeveloperPreferencesHandler.getForceFabricEnabled())
-                                    .build())
-                            .build(),
-                    new Answers()
-            );
+            Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(
+                    // disable Crashlytics on debug builds
+                    BuildConfig.DEBUG && !DeveloperPreferencesHandler.getForceFabricEnabled())
+                    .build()).build(), new Answers());
         }
 
         // Initialize Firebase
@@ -201,7 +198,8 @@ public class PowerSwitch extends MultiDexApplication {
             public void handleMessage(Message message) {
                 // This is where you do your work in the UI thread.
                 // Your worker tells you in the message what to do.
-                Toast.makeText(getApplicationContext(), message.obj.toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), message.obj.toString(), Toast.LENGTH_SHORT)
+                        .show();
             }
         };
 
@@ -277,5 +275,37 @@ public class PowerSwitch extends MultiDexApplication {
         LogManager.shutdown();
 
         super.onTerminate();
+    }
+
+    /**
+     * Trigger restart of the application
+     *
+     * @param context application context
+     */
+    public static void restart(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        context.startActivity(intent);
+
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                0,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        long executionTime = System.currentTimeMillis() + 1000;
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+                    executionTime,
+                    pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 23) {
+            alarmMgr.setExact(AlarmManager.RTC_WAKEUP, executionTime, pendingIntent);
+        } else if (Build.VERSION.SDK_INT < 19) {
+            alarmMgr.set(AlarmManager.RTC, executionTime, pendingIntent);
+        }
+
+        System.exit(0);
     }
 }

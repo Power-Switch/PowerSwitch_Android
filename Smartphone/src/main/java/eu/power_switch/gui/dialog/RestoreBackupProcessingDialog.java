@@ -18,16 +18,15 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import net.lingala.zip4j.progress.ProgressMonitor;
 
 import eu.power_switch.R;
+import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.backup.OnZipProgressChangedListener;
-import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -65,12 +64,13 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
             protected AsyncTaskResult<Void> doInBackground(Void... voids) {
                 try {
                     BackupHandler backupHandler = new BackupHandler(getActivity());
-                    backupHandler.restoreBackup(getArguments().getString(KEY_FILE_PATH), new OnZipProgressChangedListener() {
-                        @Override
-                        public void onProgressChanged(ProgressMonitor progressMonitor) {
-                            publishProgress(progressMonitor.getPercentDone());
-                        }
-                    });
+                    backupHandler.restoreBackup(getArguments().getString(KEY_FILE_PATH),
+                            new OnZipProgressChangedListener() {
+                                @Override
+                                public void onProgressChanged(ProgressMonitor progressMonitor) {
+                                    publishProgress(progressMonitor.getPercentDone());
+                                }
+                            });
 
                     return new AsyncTaskResult<>();
                 } catch (Exception e) {
@@ -93,11 +93,7 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
                     WearablePreferencesHandler.forceRefresh();
 
                     // restart app to apply
-                    getActivity().finish();
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    PowerSwitch.restart(getActivity().getApplicationContext());
                 } else {
                     Log.e(RestoreBackupProcessingDialog.class, voidAsyncTaskResult.getException());
                     onFinishedFailure(voidAsyncTaskResult.getException());
