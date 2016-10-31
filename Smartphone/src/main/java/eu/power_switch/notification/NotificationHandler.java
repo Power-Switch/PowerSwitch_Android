@@ -19,7 +19,11 @@
 package eu.power_switch.notification;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,6 +33,7 @@ import android.support.v4.app.NotificationCompat;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.activity.MainActivity;
 
 /**
  * Class used to manage any kind of system notifications
@@ -38,92 +43,107 @@ import eu.power_switch.R;
 
 public class NotificationHandler {
 
-    private static int LAST_ID = 0;
+	private static int LAST_ID = 0;
 
-    /**
-     * Create a new notification
-     *
-     * @param context any suitable context
-     * @param title   tile text
-     * @param message message text
-     * @return ID of notification
-     */
-    public static int createNotification(@NonNull Context context, @StringRes int title, @StringRes int message) {
-        return createNotification(context,
-                R.drawable.ic_launcher,
-                context.getString(title),
-                context.getString(message),
-                false,
-                NotificationCompat.PRIORITY_DEFAULT,
-                null);
-    }
+	/**
+	 * Create a new notification
+	 *
+	 * @param context any suitable context
+	 * @param title   tile text
+	 * @param message message text
+	 * @return ID of notification
+	 */
+	public static int createNotification(@NonNull Context context, @StringRes int title, @StringRes int message) {
+		return createNotification(context, context.getString(title), context.getString(message));
+	}
 
-    /**
-     * Create a new notification
-     *
-     * @param context any suitable context
-     * @param title   tile text
-     * @param message message text
-     * @return ID of notification
-     */
-    public static int createNotification(@NonNull Context context, @Nullable String title, @Nullable String message) {
-        return createNotification(context, R.drawable.ic_launcher, title, message, false, NotificationCompat.PRIORITY_DEFAULT, null);
-    }
+	/**
+	 * Create a new notification
+	 *
+	 * @param context any suitable context
+	 * @param title   tile text
+	 * @param message message text
+	 * @return ID of notification
+	 */
+	public static int createNotification(@NonNull Context context, @Nullable String title, @Nullable String message) {
+		return createNotification(context,
+				null,
+				R.drawable.icon_notification,
+				title,
+				message,
+				false,
+				NotificationCompat.PRIORITY_DEFAULT,
+				null,
+				null);
+	}
 
-    /**
-     * Create a new notification
-     *
-     * @param context   any suitable context
-     * @param smallIcon small icon drawable ressource
-     * @param title     tile text
-     * @param message   message text
-     * @param ongoing   ongoing notification
-     * @return ID of notification
-     */
-    public static int createNotification(@NonNull Context context, @DrawableRes int smallIcon, @Nullable String title,
-                                         @Nullable String message, boolean ongoing, int priority,
-                                         @Nullable List<NotificationCompat.Action> actions) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        int id = ++LAST_ID;
+	/**
+	 * Create a new notification
+	 *
+	 * @param context   any suitable context
+	 * @param largeIcon large icon bitmap
+	 * @param smallIcon small icon drawable ressource
+	 * @param title     tile text
+	 * @param message   message text
+	 * @param ongoing   ongoing notification
+	 * @param priority  notification priority
+	 * @param actions   list of actions for this notification
+	 * @return ID of notification
+	 */
+	public static int createNotification(@NonNull Context context, @Nullable Bitmap largeIcon, @DrawableRes int smallIcon, @Nullable String title, @Nullable String message, boolean ongoing, int priority, @Nullable PendingIntent tapAction, @Nullable List<NotificationCompat.Action> actions) {
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+				Context.NOTIFICATION_SERVICE);
+		int id = ++LAST_ID;
 
-        // construct notification
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(smallIcon)
-                .setOngoing(ongoing)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setPriority(priority);
-        if (actions != null) {
-            for (NotificationCompat.Action action : actions) {
-                mBuilder.addAction(action);
-            }
-        }
+		if (smallIcon <= 0) {
+			// set default small icon
+			smallIcon = R.drawable.icon_notification;
+		}
+		if (largeIcon == null) {
+			// set default large icon
+			largeIcon = BitmapFactory.decodeResource(context.getResources(),
+					R.drawable.ic_launcher);
+		}
+		if (title == null) {
+			title = context.getString(R.string.powerswitch_app_name);
+		}
+		if (tapAction == null) {
+			Intent openPowerSwitchIntent = new Intent(context, MainActivity.class);
+			tapAction = PendingIntent.getActivity(context, 0, openPowerSwitchIntent, 0);
+		}
 
-        // show notification
-        notificationManager.notify(id, mBuilder.build());
+		// construct notification
+		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context).setLargeIcon(
+				largeIcon)
+				.setSmallIcon(smallIcon)
+				.setOngoing(ongoing)
+				.setContentTitle(title)
+				.setContentText(message)
+				.setPriority(priority)
+				.setContentIntent(tapAction);
 
-        return id;
-    }
+		if (actions != null) {
+			for (NotificationCompat.Action action : actions) {
+				notificationBuilder.addAction(action);
+			}
+		}
 
-    /**
-     * Update an existing notification
-     *
-     * @param context any suitable context
-     * @param id      ID of notification
-     */
-    public static void updateNotification(Context context, int id) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		// show notification
+		notificationManager.notify(id, notificationBuilder.build());
 
-    }
+		return id;
+	}
 
-    /**
-     * Dismiss a notification
-     *
-     * @param context any suitable context
-     * @param id      ID of notification
-     */
-    public static void dismissNotification(Context context, int id) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(id);
-    }
+	/**
+	 * Dismiss a notification
+	 *
+	 * @param context any suitable context
+	 * @param id      ID of notification
+	 */
+	public static void dismissNotification(Context context, int id) {
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+				Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(id);
+	}
 
 }

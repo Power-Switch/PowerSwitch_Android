@@ -37,6 +37,7 @@ import java.util.Locale;
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.notification.NotificationHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -132,6 +133,14 @@ public class DeveloperOptionsDialog extends DialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 DeveloperPreferencesHandler.setForceFabricEnabled(isChecked);
+            }
+        });
+
+        Button buttonTestNotification = (Button) rootView.findViewById(R.id.button_testNotification);
+        buttonTestNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationHandler.createNotification(getActivity(), "Title", "Message");
             }
         });
 

@@ -70,351 +70,363 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  */
 public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private IntListPreference startupDefaultTab;
-    private SwitchPreference autodiscover;
-    private SwitchPreference autoCollapseRooms;
-    private SwitchPreference autoCollapseTimers;
-    private SwitchPreference showRoomOnOff;
-    private SwitchPreference hideFab;
-    private SwitchPreference highlightLastActivatedButton;
-    private SwitchPreference showBackgroundActionToast;
-    private SwitchPreference vibrateOnButtonPress;
-    private SliderPreference vibrationDuration;
-    private IntListPreference keepHistoryDuration;
-    private Preference backupPath;
-    private IntListPreference theme;
-    private Preference resetTutial;
-    private SwitchPreference sendAnonymousCrashData;
-    private IntListPreference logDestination;
-    private Preference sendLogsEmail;
+	private IntListPreference startupDefaultTab;
+	private SwitchPreference autodiscover;
+	private SwitchPreference autoCollapseRooms;
+	private SwitchPreference autoCollapseTimers;
+	private SwitchPreference showRoomOnOff;
+	private SwitchPreference hideFab;
+	private SwitchPreference highlightLastActivatedButton;
+	private SwitchPreference showBackgroundActionToast;
+	private SwitchPreference vibrateOnButtonPress;
+	private SliderPreference vibrationDuration;
+	private IntListPreference keepHistoryDuration;
+	private Preference backupPath;
+	private IntListPreference theme;
+	private Preference resetTutial;
+	private SwitchPreference sendAnonymousCrashData;
+	private IntListPreference logDestination;
+	private Preference sendLogsEmail;
 
-    private BroadcastReceiver broadcastReceiver;
-    private Calendar devMenuFirstClickTime;
-    private int devMenuClickCounter;
-    private Map<Integer, String> mainTabsMap;
-    private Map<Integer, String> keepHistoryMap;
-    private Map<Integer, String> themeMap;
-    private Map<Integer, String> logDestinationMap;
+	private BroadcastReceiver broadcastReceiver;
+	private Calendar devMenuFirstClickTime;
+	private int devMenuClickCounter;
+	private Map<Integer, String> mainTabsMap;
+	private Map<Integer, String> keepHistoryMap;
+	private Map<Integer, String> themeMap;
+	private Map<Integer, String> logDestinationMap;
+	private SwitchPreference showGeofenceNotifications;
+	private SwitchPreference showTimerNotifications;
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        // set preferences file name
-        getPreferenceManager().setSharedPreferencesName(SettingsConstants.SHARED_PREFS_NAME);
+	@Override
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+		// set preferences file name
+		getPreferenceManager().setSharedPreferencesName(SettingsConstants.SHARED_PREFS_NAME);
 
-        // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.settings_general);
+		// Load the preferences from an XML resource
+		addPreferencesFromResource(R.xml.settings_general);
 
-        initializePreferenceItems();
+		initializePreferenceItems();
 
-        // Listen for preference item actions
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+		// Listen for preference item actions
+		broadcastReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Log.d(this, "received intent: " + intent.getAction());
 
-                if (LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED.equals(intent.getAction())) {
-                    backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
-                }
-            }
-        };
-    }
+				if (LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED.equals(intent.getAction())) {
+					backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+				}
+			}
+		};
+	}
 
-    private void initializePreferenceItems() {
+	private void initializePreferenceItems() {
 
-        startupDefaultTab = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
-        startupDefaultTab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
+		startupDefaultTab = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
+		startupDefaultTab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
 
-        mainTabsMap = getListPreferenceEntryValueMap(R.array.main_tab_values, R.array.main_tab_names);
-        startupDefaultTab.setSummary(mainTabsMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
+		mainTabsMap = getListPreferenceEntryValueMap(R.array.main_tab_values, R.array.main_tab_names);
+		startupDefaultTab.setSummary(mainTabsMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
 
-        autodiscover = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
-        autodiscover.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_DISCOVER);
-        autodiscover.setSummaryOn(R.string.summary_autodiscover_enabled);
-        autodiscover.setSummaryOff(R.string.summary_autodiscover_disabled);
+		autodiscover = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
+		autodiscover.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_DISCOVER);
+		autodiscover.setSummaryOn(R.string.summary_autodiscover_enabled);
+		autodiscover.setSummaryOff(R.string.summary_autodiscover_disabled);
 
-        autoCollapseRooms = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
-        autoCollapseRooms.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
-        autoCollapseRooms.setSummaryOn(R.string.summary_autoCollapseRooms_enabled);
-        autoCollapseRooms.setSummaryOff(R.string.summary_autoCollapseRooms_disabled);
+		autoCollapseRooms = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+		autoCollapseRooms.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
+		autoCollapseRooms.setSummaryOn(R.string.summary_autoCollapseRooms_enabled);
+		autoCollapseRooms.setSummaryOff(R.string.summary_autoCollapseRooms_disabled);
 
-        autoCollapseTimers = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS);
-        autoCollapseTimers.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS);
-        autoCollapseTimers.setSummaryOn(R.string.summary_autoCollapseTimers_enabled);
-        autoCollapseTimers.setSummaryOff(R.string.summary_autoCollapseTimers_disabled);
+		autoCollapseTimers = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS);
+		autoCollapseTimers.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS);
+		autoCollapseTimers.setSummaryOn(R.string.summary_autoCollapseTimers_enabled);
+		autoCollapseTimers.setSummaryOff(R.string.summary_autoCollapseTimers_disabled);
 
-        showRoomOnOff = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF);
-        showRoomOnOff.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
-        showRoomOnOff.setSummaryOn(R.string.summary_showRoomAllOnOff_enabled);
-        showRoomOnOff.setSummaryOff(R.string.summary_showRoomAllOnOff_disabled);
+		showRoomOnOff = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF);
+		showRoomOnOff.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
+		showRoomOnOff.setSummaryOn(R.string.summary_showRoomAllOnOff_enabled);
+		showRoomOnOff.setSummaryOff(R.string.summary_showRoomAllOnOff_disabled);
 
-        hideFab = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
-        hideFab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
-        hideFab.setSummaryOn(R.string.summary_useOptionsMenuInsteadOfFab_enabled);
-        hideFab.setSummaryOff(R.string.summary_useOptionsMenuInsteadOfFab_disabled);
+		hideFab = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+		hideFab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+		hideFab.setSummaryOn(R.string.summary_useOptionsMenuInsteadOfFab_enabled);
+		hideFab.setSummaryOff(R.string.summary_useOptionsMenuInsteadOfFab_disabled);
 
-        highlightLastActivatedButton = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-        highlightLastActivatedButton.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-        highlightLastActivatedButton.setSummaryOn(R.string.summary_highlightLastActivatedButton_enabled);
-        highlightLastActivatedButton.setSummaryOff(R.string.summary_highlightLastActivatedButton_disabled);
+		highlightLastActivatedButton = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+		highlightLastActivatedButton.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+		highlightLastActivatedButton.setSummaryOn(R.string.summary_highlightLastActivatedButton_enabled);
+		highlightLastActivatedButton.setSummaryOff(R.string.summary_highlightLastActivatedButton_disabled);
 
-        showBackgroundActionToast = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND);
-        showBackgroundActionToast.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
-        showBackgroundActionToast.setSummaryOn(R.string.summary_showBackgroundActionToast_enabled);
-        showBackgroundActionToast.setSummaryOff(R.string.summary_showBackgroundActionToast_disabled);
+		showBackgroundActionToast = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND);
+		showBackgroundActionToast.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
+		showBackgroundActionToast.setSummaryOn(R.string.summary_showBackgroundActionToast_enabled);
+		showBackgroundActionToast.setSummaryOff(R.string.summary_showBackgroundActionToast_disabled);
 
-        vibrateOnButtonPress = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
-        vibrateOnButtonPress.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
-        vibrateOnButtonPress.setSummaryOn(R.string.summary_vibrateOnButtonPress_enabled);
-        vibrateOnButtonPress.setSummaryOff(R.string.summary_vibrateOnButtonPress_disabled);
+		vibrateOnButtonPress = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
+		vibrateOnButtonPress.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
+		vibrateOnButtonPress.setSummaryOn(R.string.summary_vibrateOnButtonPress_enabled);
+		vibrateOnButtonPress.setSummaryOff(R.string.summary_vibrateOnButtonPress_disabled);
 
-        vibrationDuration = (SliderPreference) findPreference(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
-        vibrationDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION);
-        vibrationDuration.setSummary(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
+		vibrationDuration = (SliderPreference) findPreference(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
+		vibrationDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION);
+		vibrationDuration.setSummary(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
 
-        keepHistoryDuration = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION);
-        keepHistoryDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION);
-        keepHistoryMap = getListPreferenceEntryValueMap(R.array.entryValues_history, R.array.entries_history);
-        keepHistoryDuration.setSummary(keepHistoryMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)));
+		showGeofenceNotifications = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS);
+		showGeofenceNotifications.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS);
+		showGeofenceNotifications.setSummaryOn(R.string.summary_showGeofenceNotifications_enabled);
+		showGeofenceNotifications.setSummaryOff(R.string.summary_showGeofenceNotifications_disabled);
 
-        final Fragment fragment = this;
-        backupPath = findPreference(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
-        backupPath.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH);
-        backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
-        backupPath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                // open edit dialog
-                if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
-                    Snackbar snackbar = Snackbar.make(getListView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
-                    snackbar.setAction(R.string.grant, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ActivityCompat.requestPermissions(MainActivity.getActivity(), new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
-                        }
-                    });
-                    snackbar.show();
-                    return true;
-                }
+		showTimerNotifications = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS);
+		showTimerNotifications.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS);
+		showTimerNotifications.setSummaryOn(R.string.summary_showTimerNotifications_enabled);
+		showTimerNotifications.setSummaryOff(R.string.summary_showTimerNotifications_disabled);
 
-                PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
-                pathChooserDialog.setTargetFragment(fragment, 0);
-                pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
+		keepHistoryDuration = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION);
+		keepHistoryDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION);
+		keepHistoryMap = getListPreferenceEntryValueMap(R.array.entryValues_history, R.array.entries_history);
+		keepHistoryDuration.setSummary(keepHistoryMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)));
 
-                return true;
-            }
-        });
+		final Fragment fragment = this;
+		backupPath = findPreference(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
+		backupPath.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH);
+		backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+		backupPath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				// open edit dialog
+				if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
+					Snackbar snackbar = Snackbar.make(getListView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
+					snackbar.setAction(R.string.grant, new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							ActivityCompat.requestPermissions(MainActivity.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+						}
+					});
+					snackbar.show();
+					return true;
+				}
 
-        theme = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_THEME);
-        theme.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_THEME);
-        themeMap = getListPreferenceEntryValueMap(R.array.theme_values, R.array.theme_names);
-        theme.setSummary(themeMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)));
+				PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
+				pathChooserDialog.setTargetFragment(fragment, 0);
+				pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
 
-        resetTutial = findPreference(getString(R.string.key_resetTutorial));
-        resetTutial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                MaterialShowcaseView.resetAll(getActivity());
+				return true;
+			}
+		});
 
-                new AlertDialog.Builder(getContext())
-                        .setTitle(R.string.title_resetTutorial)
-                        .setMessage(R.string.tutorial_was_reset)
-                        .setNeutralButton(R.string.close, null)
-                        .show();
-                return true;
-            }
-        });
+		theme = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_THEME);
+		theme.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_THEME);
+		themeMap = getListPreferenceEntryValueMap(R.array.theme_values, R.array.theme_names);
+		theme.setSummary(themeMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)));
 
-        sendAnonymousCrashData = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
-        sendAnonymousCrashData.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
-        sendAnonymousCrashData.setSummaryOn(R.string.summary_sendAnonymousCrashData_enabled);
-        sendAnonymousCrashData.setSummaryOff(R.string.summary_sendAnonymousCrashData_disabled);
+		resetTutial = findPreference(getString(R.string.key_resetTutorial));
+		resetTutial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				MaterialShowcaseView.resetAll(getActivity());
 
-        logDestination = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
-        logDestination.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION);
-        logDestinationMap = getListPreferenceEntryValueMap(R.array.logDestination_values, R.array.logDestination_names);
-        logDestination.setSummary(logDestinationMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)));
+				new AlertDialog.Builder(getContext()).setTitle(R.string.title_resetTutorial)
+						.setMessage(R.string.tutorial_was_reset)
+						.setNeutralButton(R.string.close, null)
+						.show();
+				return true;
+			}
+		});
 
-        sendLogsEmail = findPreference(getString(R.string.key_sendLogsEmail));
-        sendLogsEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
+		sendAnonymousCrashData = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA);
+		sendAnonymousCrashData.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
+		sendAnonymousCrashData.setSummaryOn(R.string.summary_sendAnonymousCrashData_enabled);
+		sendAnonymousCrashData.setSummaryOff(R.string.summary_sendAnonymousCrashData_disabled);
 
-                new AlertDialog.Builder(getPreferenceManagerContext())
-                        .setTitle(R.string.title_sendLogsEmail)
-                        .setMessage(R.string.dialogMessage_sendLogsEmail)
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new AsyncTask<Void, Void, AsyncTaskResult<Boolean>>() {
-                                    @Override
-                                    protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
-                                        try {
-                                            LogHandler.sendLogsAsMail();
-                                            return new AsyncTaskResult<>(true);
-                                        } catch (Exception e) {
-                                            return new AsyncTaskResult<>(e);
-                                        }
-                                    }
+		logDestination = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
+		logDestination.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION);
+		logDestinationMap = getListPreferenceEntryValueMap(R.array.logDestination_values, R.array.logDestination_names);
+		logDestination.setSummary(logDestinationMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)));
 
-                                    @Override
-                                    protected void onPostExecute(AsyncTaskResult<Boolean> booleanAsyncTaskResult) {
+		sendLogsEmail = findPreference(getString(R.string.key_sendLogsEmail));
+		sendLogsEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
 
-                                        if (booleanAsyncTaskResult.isSuccess()) {
-                                            // all is good
-                                        } else {
-                                            if (booleanAsyncTaskResult.getException() instanceof MissingPermissionException) {
-                                                Snackbar snackbar = Snackbar.make(getListView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
-                                                snackbar.setAction(R.string.grant, new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        ActivityCompat.requestPermissions(MainActivity.getActivity(), new String[]{
-                                                                Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
-                                                    }
-                                                });
-                                                snackbar.show();
-                                            } else {
-                                                StatusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult.getException());
-                                            }
-                                        }
+				new AlertDialog.Builder(getPreferenceManagerContext()).setTitle(R.string.title_sendLogsEmail)
+						.setMessage(R.string.dialogMessage_sendLogsEmail)
+						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+								new AsyncTask<Void, Void, AsyncTaskResult<Boolean>>() {
+									@Override
+									protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
+										try {
+											LogHandler.sendLogsAsMail();
+											return new AsyncTaskResult<>(true);
+										} catch (Exception e) {
+											return new AsyncTaskResult<>(e);
+										}
+									}
 
-                                        sendLogsEmail.setEnabled(true);
+									@Override
+									protected void onPostExecute(AsyncTaskResult<Boolean> booleanAsyncTaskResult) {
+
+										if (booleanAsyncTaskResult.isSuccess()) {
+											// all is good
+										} else {
+											if (booleanAsyncTaskResult.getException() instanceof MissingPermissionException) {
+												Snackbar snackbar = Snackbar.make(getListView(), R.string.missing_external_storage_permission, Snackbar.LENGTH_LONG);
+												snackbar.setAction(R.string.grant, new View.OnClickListener() {
+													@Override
+													public void onClick(View v) {
+														ActivityCompat.requestPermissions(MainActivity
+																.getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION);
+													}
+												});
+												snackbar.show();
+											} else {
+												StatusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult
+														.getException());
+											}
+										}
+
+										sendLogsEmail.setEnabled(true);
 //                        sendLogsProgress.setVisibility(View.GONE);
-                                    }
-                                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            }
-                        })
-                        .setNeutralButton(android.R.string.cancel, null)
-                        .show();
+									}
+								}.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+							}
+						})
+						.setNeutralButton(android.R.string.cancel, null)
+						.show();
 
-                sendLogsEmail.setEnabled(false);
+				sendLogsEmail.setEnabled(false);
 //                sendLogsProgress.setVisibility(View.VISIBLE);
 
-                return true;
-            }
-        });
+				return true;
+			}
+		});
 
-        if (BuildConfig.DEBUG) {
-            PreferenceScreen preferenceScreen = getPreferenceScreen();
+		if (BuildConfig.DEBUG) {
+			PreferenceScreen preferenceScreen = getPreferenceScreen();
 
-            PreferenceCategory developerCategory = new PreferenceCategory(getPreferenceManagerContext());
-            developerCategory.setTitle("Developer Options");
-            // add category to parent first, then add items to category!
-            preferenceScreen.addPreference(developerCategory);
+			PreferenceCategory developerCategory = new PreferenceCategory(getPreferenceManagerContext());
+			developerCategory.setTitle("Developer Options");
+			// add category to parent first, then add items to category!
+			preferenceScreen.addPreference(developerCategory);
 
-            Preference developerOptionsPreference = new Preference(getPreferenceManagerContext());
-            developerOptionsPreference.setTitle("Developer Options");
-            developerOptionsPreference.setSummary("CAUTION! Using options in this menu can IRREVERSIBLY CORRUPT this app!");
-            developerOptionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Calendar currentTime = Calendar.getInstance();
-                    if (devMenuFirstClickTime != null) {
-                        Calendar latestTime = Calendar.getInstance();
-                        latestTime.setTime(devMenuFirstClickTime.getTime());
-                        latestTime.add(Calendar.SECOND, 5);
-                        if (currentTime.after(latestTime)) {
-                            devMenuClickCounter = 0;
-                        }
-                    }
+			Preference developerOptionsPreference = new Preference(getPreferenceManagerContext());
+			developerOptionsPreference.setTitle("Developer Options");
+			developerOptionsPreference.setSummary("CAUTION! Using options in this menu can IRREVERSIBLY CORRUPT this app!");
+			developerOptionsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					Calendar currentTime = Calendar.getInstance();
+					if (devMenuFirstClickTime != null) {
+						Calendar latestTime = Calendar.getInstance();
+						latestTime.setTime(devMenuFirstClickTime.getTime());
+						latestTime.add(Calendar.SECOND, 5);
+						if (currentTime.after(latestTime)) {
+							devMenuClickCounter = 0;
+						}
+					}
 
-                    devMenuClickCounter++;
-                    if (devMenuClickCounter == 1) {
-                        devMenuFirstClickTime = currentTime;
-                    }
-                    if (devMenuClickCounter >= 5) {
-                        devMenuClickCounter = 0;
+					devMenuClickCounter++;
+					if (devMenuClickCounter == 1) {
+						devMenuFirstClickTime = currentTime;
+					}
+					if (devMenuClickCounter >= 5) {
+						devMenuClickCounter = 0;
 
-                        DeveloperOptionsDialog developerOptionsDialog = new DeveloperOptionsDialog();
-                        developerOptionsDialog.show(getActivity().getSupportFragmentManager(), null);
-                    }
-                    return true;
-                }
-            });
+						DeveloperOptionsDialog developerOptionsDialog = new DeveloperOptionsDialog();
+						developerOptionsDialog.show(getActivity().getSupportFragmentManager(), null);
+					}
+					return true;
+				}
+			});
 
-            developerCategory.addPreference(developerOptionsPreference);
-        }
-    }
+			developerCategory.addPreference(developerOptionsPreference);
+		}
+	}
 
-    /**
-     * Gets a Map from two array resources
-     *
-     * @param valueRes values stored in preferences
-     * @param nameRes  name/description of this option used in view
-     * @return Map from stored value -> display name
-     */
-    private Map<Integer, String> getListPreferenceEntryValueMap(@ArrayRes int valueRes, @ArrayRes int nameRes) {
-        Map<Integer, String> map = new HashMap<>();
+	/**
+	 * Gets a Map from two array resources
+	 *
+	 * @param valueRes values stored in preferences
+	 * @param nameRes  name/description of this option used in view
+	 * @return Map from stored value -> display name
+	 */
+	private Map<Integer, String> getListPreferenceEntryValueMap(@ArrayRes int valueRes, @ArrayRes int nameRes) {
+		Map<Integer, String> map = new HashMap<>();
 
-        String[] values = getResources().getStringArray(valueRes);
-        String[] names = getResources().getStringArray(nameRes);
+		String[] values = getResources().getStringArray(valueRes);
+		String[] names = getResources().getStringArray(nameRes);
 
-        for (int i = 0; i < values.length; i++) {
-            map.put(Integer.valueOf(values[i]), names[i]);
-        }
+		for (int i = 0; i < values.length; i++) {
+			map.put(Integer.valueOf(values[i]), names[i]);
+		}
 
-        return map;
-    }
+		return map;
+	}
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION.equals(key)) {
-            keepHistoryDuration.setSummary(keepHistoryMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION)));
-        } else if (SmartphonePreferencesHandler.KEY_BACKUP_PATH.equals(key)) {
-            backupPath.setSummary(sharedPreferences.getString(key, SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH));
-        } else if (SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB.equals(key)) {
-            startupDefaultTab.setSummary(mainTabsMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)));
-        } else if (SmartphonePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
-            vibrationDuration.setSummary(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
-        } else if (SmartphonePreferencesHandler.KEY_THEME.equals(key)) {
-            theme.setSummary(themeMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)));
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION.equals(key)) {
+			keepHistoryDuration.setSummary(keepHistoryMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION)));
+		} else if (SmartphonePreferencesHandler.KEY_BACKUP_PATH.equals(key)) {
+			backupPath.setSummary(sharedPreferences.getString(key, SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH));
+		} else if (SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB.equals(key)) {
+			startupDefaultTab.setSummary(mainTabsMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)));
+		} else if (SmartphonePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
+			vibrationDuration.setSummary(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
+		} else if (SmartphonePreferencesHandler.KEY_THEME.equals(key)) {
+			theme.setSummary(themeMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)));
 
-            // restart activity
-            getActivity().finish();
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } else if (SmartphonePreferencesHandler.KEY_LOG_DESTINATION.equals(key)) {
-            logDestination.setSummary(logDestinationMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION)));
-        }
+			// restart activity
+			getActivity().finish();
+			Intent intent = new Intent(getActivity(), MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+		} else if (SmartphonePreferencesHandler.KEY_LOG_DESTINATION.equals(key)) {
+			logDestination.setSummary(logDestinationMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION)));
+		}
 
-        SmartphonePreferencesHandler.forceRefresh();
-    }
+		SmartphonePreferencesHandler.forceRefresh();
+	}
 
-    @Override
-    public void onDisplayPreferenceDialog(Preference preference) {
-        DialogFragment fragment;
-        if (preference instanceof SliderPreference) {
-            fragment = SliderPreferenceFragmentCompat.newInstance(preference.getKey());
-            fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
-                    "android.support.v7.preference.PreferenceFragment.DIALOG");
-        } else super.onDisplayPreferenceDialog(preference);
-    }
+	@Override
+	public void onDisplayPreferenceDialog(Preference preference) {
+		DialogFragment fragment;
+		if (preference instanceof SliderPreference) {
+			fragment = SliderPreferenceFragmentCompat.newInstance(preference.getKey());
+			fragment.setTargetFragment(this, 0);
+			fragment.show(getFragmentManager(), "android.support.v7.preference.PreferenceFragment.DIALOG");
+		} else
+			super.onDisplayPreferenceDialog(preference);
+	}
 
-    @Override
-    public void onResume() {
-        super.onResume();
+	@Override
+	public void onResume() {
+		super.onResume();
 
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
-    }
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED);
+		LocalBroadcastManager.getInstance(getActivity())
+				.registerReceiver(broadcastReceiver, intentFilter);
+	}
 
-    @Override
-    public void onPause() {
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+	@Override
+	public void onPause() {
+		getPreferenceScreen().getSharedPreferences()
+				.unregisterOnSharedPreferenceChangeListener(this);
 
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+		LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
 
-        super.onPause();
-    }
+		super.onPause();
+	}
 
-    private Context getPreferenceManagerContext() {
-        // use this Context to correctly inflate new Preferences added in code
-        return getPreferenceManager().getContext();
-    }
+	private Context getPreferenceManagerContext() {
+		// use this Context to correctly inflate new Preferences added in code
+		return getPreferenceManager().getContext();
+	}
 }

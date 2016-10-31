@@ -60,6 +60,7 @@
             android:name=".gui.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:label="@string/powerswitch_app_name"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -399,7 +400,7 @@
         </service>
         <service
             android:name=".network.NetworkPackageQueueHandler"
-            android:exported="false"></service>
+            android:exported="false"/>
         <service android:name=".wear.service.UtilityService">
             <!-- <intent-filter> -->
             <!-- <action android:name="eu.power_switch.wear.UPDATE_DATA"/> -->

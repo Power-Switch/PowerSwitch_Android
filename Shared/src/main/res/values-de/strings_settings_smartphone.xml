@@ -59,9 +59,15 @@
 
     <string name="title_vibrationDuration">Vibrationsdauer</string>
 
-    <string name="title_showNotifications">Zeige Benachrichtigungen</string>
-    <string name="summary_showNotifications_enabled">Benachrichtigungen werden angezeigt</string>
-    <string name="summary_showNotifications_disabled">Benachrichtigungen werden NICHT angezeigt</string>
+    <!-- Notifications -->
+
+    <string name="title_showGeofenceNotifications">Geofence Benachrichtigungen</string>
+    <string name="summary_showGeofenceNotifications_enabled">Zeige eine Benachrichtigung beim Ein- oder Austreten in/aus einem Geofence</string>
+    <string name="summary_showGeofenceNotifications_disabled">Zeige KEINE Benachrichtigung beim Ein- oder Austreten in/aus einem Geofence</string>
+
+    <string name="title_showTimerNotifications">Timer Benachrichtigungen</string>
+    <string name="summary_showTimerNotifications_enabled">Zeige eine Benachrichtigung, wenn ein Timer aktiviert wird</string>
+    <string name="summary_showTimerNotifications_disabled">Zeige KEINE Benachrichtigung, wenn ein Timer aktiviert wird</string>
 
     <!-- History -->
     <string name="selection_forever">Keine Begrenzung</string>

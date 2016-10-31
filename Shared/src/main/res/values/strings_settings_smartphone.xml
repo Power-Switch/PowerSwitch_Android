@@ -85,10 +85,18 @@
     <string name="key_vibrationDuration">vibrationDuration</string>
     <string name="title_vibrationDuration">Vibration duration</string>
 
-    <string name="key_showNotifications">showNotifications</string>
-    <string name="title_showNotifications">Show notifications</string>
-    <string name="summary_showNotifications_enabled">Notifications are shown</string>
-    <string name="summary_showNotifications_disabled">Notifications are NOT shown</string>
+    <!-- Notifications -->
+
+    <string name="key_showGeofenceNotifications">showGeofenceNotifications</string>
+    <string name="title_showGeofenceNotifications">Geofence notifications</string>
+    <string name="summary_showGeofenceNotifications_enabled">Show a notification when entering or exiting a geofence</string>
+    <string name="summary_showGeofenceNotifications_disabled">Do NOT show a notification when entering or exiting a geofence</string>
+
+    <string name="key_showTimerNotifications">showTimerNotifications</string>
+    <string name="title_showTimerNotifications">Timer notifications</string>
+    <string name="summary_showTimerNotifications_enabled">Show a notification when a timer executes</string>
+    <string name="summary_showTimerNotifications_disabled">Do NOT show a notification when a timer executes</string>
+
 
     <!-- History -->
     <string name="selection_forever">forever</string>

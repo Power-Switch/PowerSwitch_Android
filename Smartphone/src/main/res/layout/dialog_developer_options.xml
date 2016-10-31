@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -17,8 +16,7 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -33,27 +31,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_double"
-            android:text="Play Store Mode"/>
+            android:text="Play Store Mode" />
 
         <CheckBox
             android:id="@+id/checkBox_forceLanguage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/padding_double"
-            android:text="Force Language"/>
+            android:text="Force Language" />
 
         <Spinner
             android:id="@+id/spinner_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"/>
+            android:layout_marginLeft="16dp" />
 
         <Button
             android:id="@+id/button_resetShowcases"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_double"
-            android:text="Reset Showcases (Tutorial)"/>
+            android:text="Reset Showcases (Tutorial)" />
 
 
         <Button
@@ -61,28 +59,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_double"
-            android:text="Remove all Geofences"/>
+            android:text="Remove all Geofences" />
 
         <Button
             android:id="@+id/button_forceUnknownExceptionDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_double"
-            android:text="Force &quot;Unknown Error&quot; Dialog"/>
+            android:text="Force &quot;Unknown Error&quot; Dialog" />
 
         <Button
             android:id="@+id/button_forceUnhandledException"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_double"
-            android:text="Force Unhandled Exception"/>
+            android:text="Force Unhandled Exception" />
 
         <CheckBox
             android:id="@+id/checkBox_forceFabricEnabled"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_double"
-            android:text="Force-Enable Fabric"/>
+            android:text="Force-Enable Fabric" />
+
+        <Button
+            android:id="@+id/button_testNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show test Notification" />
 
     </LinearLayout>
 
