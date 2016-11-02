@@ -182,13 +182,14 @@ public class MainActivity extends AppCompatActivity {
                 lastFragmentClasses.push(fragment.getClass());
                 lastFragmentTitles.push(String.valueOf(menuItemTitle));
                 drawerPositionStack.push(menuItemIdentifier);
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim
-                                .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                .slide_in_left, android.R.anim.slide_out_right)
+                getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                android.R.anim.slide_in_left,
+                                android.R.anim.slide_out_right)
                         .replace(R.id.mainContentFrameLayout, fragment)
-                        .addToBackStack(fragment.getTag()).commit();
+                        .addToBackStack(fragment.getTag())
+                        .commit();
 
                 setTitle(menuItemTitle);
             }
@@ -222,16 +223,6 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initNavigationDrawer();
-        initHistoryDrawer(navigationDrawer);
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateHistory();
-            }
-        };
-
         // Load first Fragment
         try {
             Fragment fragment;
@@ -239,10 +230,10 @@ public class MainActivity extends AppCompatActivity {
                 fragment = ApartmentFragment.class.newInstance();
                 drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
-                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(
+                        SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
-            navigationDrawer.setSelection(drawerPositionStack.peek());
             lastFragmentClasses.push(fragment.getClass());
             lastFragmentTitles.push(String.valueOf(getTitle()));
             getSupportFragmentManager().beginTransaction()
@@ -252,47 +243,62 @@ public class MainActivity extends AppCompatActivity {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
+        initNavigationDrawer();
+        navigationDrawer.setSelection(drawerPositionStack.peek());
+        initHistoryDrawer(navigationDrawer);
+
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.title_sendAnonymousCrashData)
+            new AlertDialog.Builder(this).setTitle(R.string.title_sendAnonymousCrashData)
                     .setMessage(R.string.message_sendAnonymousCrashData)
                     .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, true);
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA,
+                                    true);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA,
+                                    false);
                         }
                     })
                     .setNegativeButton(R.string.disable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, false);
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA,
+                                    false);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA,
+                                    false);
                         }
                     })
                     .show();
         }
 
-        if (Build.VERSION.SDK_INT >= 23 && !PowerSaverHelper.isIgnoringBatteryOptimizations(getActivity())) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.disable_battery_optimizations_title)
+        if (Build.VERSION.SDK_INT >= 23 && !PowerSaverHelper.isIgnoringBatteryOptimizations(
+                getActivity())) {
+            new AlertDialog.Builder(this).setTitle(R.string.disable_battery_optimizations_title)
                     .setMessage(R.string.disable_battery_optimizations_message)
-                    .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            PowerSaverHelper.openIgnoreOptimizationSettings(getActivity());
-                        }
-                    })
+                    .setPositiveButton(R.string.open_settings,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    PowerSaverHelper.openIgnoreOptimizationSettings(getActivity());
+                                }
+                            })
                     .show();
         }
+
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                updateHistory();
+            }
+        };
 
         startGatewayAutoDiscovery();
     }
 
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) &&
-                (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected())) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (NetworkHandler
+                .isWifiConnected() || NetworkHandler.isEthernetConnected())) {
             new AsyncTask<Context, Void, AsyncTaskResult<Gateway>>() {
 
                 @Override
@@ -317,9 +323,11 @@ public class MainActivity extends AppCompatActivity {
                         List<Gateway> foundGateways = result.getResult();
 
                         try {
-                            if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways().isEmpty()) {
+                            if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways()
+                                    .isEmpty()) {
                                 StatusMessageHandler.showInfoMessage(getActivity(),
-                                        R.string.no_gateway_found, Snackbar.LENGTH_LONG);
+                                        R.string.no_gateway_found,
+                                        Snackbar.LENGTH_LONG);
                             } else {
                                 for (Gateway gateway : foundGateways) {
                                     if (gateway == null) {
@@ -328,16 +336,19 @@ public class MainActivity extends AppCompatActivity {
                                     try {
                                         DatabaseHandler.addGateway(gateway);
                                         StatusMessageHandler.showInfoMessage(getActivity(),
-                                                R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                                R.string.gateway_found,
+                                                Snackbar.LENGTH_LONG);
                                     } catch (GatewayAlreadyExistsException e) {
                                         try {
                                             DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
                                             StatusMessageHandler.showInfoMessage(getActivity(),
-                                                    R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                                    R.string.gateway_found,
+                                                    Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
                                             Log.e(e1);
                                             StatusMessageHandler.showInfoMessage(getActivity(),
-                                                    R.string.error_enabling_gateway, Snackbar.LENGTH_LONG);
+                                                    R.string.error_enabling_gateway,
+                                                    Snackbar.LENGTH_LONG);
                                         }
                                     }
                                 }
@@ -373,15 +384,15 @@ public class MainActivity extends AppCompatActivity {
         final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final IDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back)
-                        .color(accentColor)
-                        .sizeDp(24))
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back).color(
+                        accentColor).sizeDp(24))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            getSupportFragmentManager().popBackStack(null,
+                                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             while (drawerPositionStack.size() > 1) {
                                 drawerPositionStack.pop();
                             }
@@ -414,9 +425,8 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES,
                                     getString(R.string.menu_rooms_scenes),
-                                    RoomSceneTabFragment.newInstance(
-                                            SmartphonePreferencesHandler.<Integer>get(
-                                                    SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
+                                    RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(
+                                            SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -434,7 +444,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_APARTMENTS, getString(R.string.menu_apartments),
+                            startFragmentTransaction(IDENTIFIER_APARTMENTS,
+                                    getString(R.string.menu_apartments),
                                     ApartmentFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
@@ -453,7 +464,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_GEOFENCES, getString(R.string.menu_geofences),
+                            startFragmentTransaction(IDENTIFIER_GEOFENCES,
+                                    getString(R.string.menu_geofences),
                                     GeofencesTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
@@ -472,7 +484,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_ALARM_CLOCK, getString(R.string.menu_alarm_clock),
+                            startFragmentTransaction(IDENTIFIER_ALARM_CLOCK,
+                                    getString(R.string.menu_alarm_clock),
                                     AlarmClockTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
@@ -568,7 +581,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_BACKUP_RESTORE, getString(R.string.menu_backup_restore),
+                            startFragmentTransaction(IDENTIFIER_BACKUP_RESTORE,
+                                    getString(R.string.menu_backup_restore),
                                     BackupFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
@@ -587,7 +601,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_SETTINGS, getString(R.string.menu_settings),
+                            startFragmentTransaction(IDENTIFIER_SETTINGS,
+                                    getString(R.string.menu_settings),
                                     SettingsTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
@@ -606,7 +621,8 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
                             String url = "http://power-switch.eu/faq/";
-                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(),
+                                    url));
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -642,7 +658,8 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        String aboutAppName = getString(R.string.powerswitch_app_name) + "\n(" + PowerSwitch.getAppBuildTime() + ")";
+                        String aboutAppName = getString(R.string.powerswitch_app_name) + "\n(" + PowerSwitch
+                                .getAppBuildTime() + ")";
                         if (eu.power_switch.BuildConfig.DEBUG) {
                             aboutAppName += "\n" + "DEBUG";
                         }
@@ -666,7 +683,9 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onIconClicked(View v) {
                                         String url = "https://power-switch.eu/";
-                                        startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                                        startActivity(ChromeCustomTabHelper.getBrowserIntent(
+                                                getActivity(),
+                                                url));
                                     }
 
                                     @Override
@@ -688,11 +707,15 @@ public class MainActivity extends AppCompatActivity {
                                     public boolean onExtraClicked(View v, Libs.SpecialButton specialButton) {
                                         if (specialButton == Libs.SpecialButton.SPECIAL1) {
                                             String url = "https://power-switch.eu/download/";
-                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(
+                                                    getActivity(),
+                                                    url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL2) {
                                             String url = "https://github.com/Power-Switch/PowerSwitch_Android";
-                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
+                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(
+                                                    getActivity(),
+                                                    url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
                                             return false;
@@ -723,26 +746,23 @@ public class MainActivity extends AppCompatActivity {
                                 })
                                 .supportFragment();
                         fragment.setHasOptionsMenu(true);
-                        startFragmentTransaction(IDENTIFIER_ABOUT, getString(R.string.menu_about), fragment);
+                        startFragmentTransaction(IDENTIFIER_ABOUT,
+                                getString(R.string.menu_about),
+                                fragment);
 
                         navigationDrawer.closeDrawer();
                         return true;
                     }
                 });
 
-        AccountHeader accountHeader = new AccountHeaderBuilder()
-                .withActivity(this)
+        AccountHeader accountHeader = new AccountHeaderBuilder().withActivity(this)
                 .withHeaderBackground(R.drawable.header_background)
                 .withCompactStyle(false)
                 .build();
 
-        navigationDrawer = new DrawerBuilder(this)
-                .withToolbar(toolbar)
+        navigationDrawer = new DrawerBuilder(this).withToolbar(toolbar)
                 .withTranslucentStatusBar(true)
-                .withAccountHeader(accountHeader)
-                .withHeaderPadding(true)
-                .addDrawerItems(
-                        itemHome,
+                .withAccountHeader(accountHeader).withHeaderPadding(true).addDrawerItems(itemHome,
                         itemHistory,
                         new DividerDrawerItem(),
                         itemApartments,
@@ -770,37 +790,39 @@ public class MainActivity extends AppCompatActivity {
         clearHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.clear)
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.clear)
                         .setMessage(R.string.clear_history_message)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new AsyncTask<Void, Void, Exception>() {
-
+                        .setPositiveButton(android.R.string.yes,
+                                new DialogInterface.OnClickListener() {
                                     @Override
-                                    protected Exception doInBackground(Void... params) {
-                                        try {
-                                            DatabaseHandler.clearHistory();
-                                        } catch (Exception e) {
-                                            return e;
-                                        }
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        new AsyncTask<Void, Void, Exception>() {
 
-                                        return null;
+                                            @Override
+                                            protected Exception doInBackground(Void... params) {
+                                                try {
+                                                    DatabaseHandler.clearHistory();
+                                                } catch (Exception e) {
+                                                    return e;
+                                                }
+
+                                                return null;
+                                            }
+
+                                            @Override
+                                            protected void onPostExecute(Exception exception) {
+                                                updateHistory();
+
+                                                if (exception != null) {
+                                                    StatusMessageHandler.showErrorMessage(
+                                                            getActivity(),
+                                                            exception);
+                                                }
+
+                                            }
+                                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                     }
-
-                                    @Override
-                                    protected void onPostExecute(Exception exception) {
-                                        updateHistory();
-
-                                        if (exception != null) {
-                                            StatusMessageHandler.showErrorMessage(getActivity(), exception);
-                                        }
-
-                                    }
-                                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            }
-                        })
+                                })
                         .setNeutralButton(android.R.string.cancel, null)
                         .show();
             }
@@ -815,10 +837,11 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(View itemView, int position) {
                 HistoryItem historyItem = historyItems.get(position);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss", Locale.getDefault());
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.details)
-                        .setMessage(simpleDateFormat.format(historyItem.getTime().getTime()) + "\n\n" +
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss",
+                        Locale.getDefault());
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.details)
+                        .setMessage(simpleDateFormat.format(historyItem.getTime()
+                                .getTime()) + "\n\n" +
                                 historyItem.getShortDescription() + "\n\n" +
                                 historyItem.getLongDescription())
                         .setNeutralButton(R.string.close, null)
@@ -826,11 +849,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         recyclerViewHistory.setAdapter(historyItemArrayAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1,
+                StaggeredGridLayoutManager.VERTICAL);
         recyclerViewHistory.setLayoutManager(layoutManager);
 
-        historyDrawer = new DrawerBuilder()
-                .withActivity(this)
+        historyDrawer = new DrawerBuilder().withActivity(this)
                 .withCustomView(historyView)
                 .withHeaderPadding(true)
                 .withDrawerGravity(Gravity.END)
@@ -872,7 +895,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // send permission change to possible listeners via local broadcast
-        PermissionHelper.sendPermissionChangedBroadcast(this, requestCode, permissions, grantResults);
+        PermissionHelper.sendPermissionChangedBroadcast(this,
+                requestCode,
+                permissions,
+                grantResults);
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -939,8 +965,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(this, "onActivityResult(" + requestCode + "," + resultCode + ","
-                + data);
+        Log.d(this, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
 
         if (DonationDialog.iapHelper == null) {
             return;
