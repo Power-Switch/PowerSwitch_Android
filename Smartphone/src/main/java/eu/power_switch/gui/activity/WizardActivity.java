@@ -30,6 +30,7 @@ import eu.power_switch.gui.fragment.wizard.AdvancedFeaturesPage;
 import eu.power_switch.gui.fragment.wizard.ApartmentsPage;
 import eu.power_switch.gui.fragment.wizard.RoomsScenesPage;
 import eu.power_switch.gui.fragment.wizard.SetupApartmentPage;
+import eu.power_switch.gui.fragment.wizard.SetupRoomPage;
 import eu.power_switch.gui.fragment.wizard.TimerAlarmClockPage;
 import eu.power_switch.gui.fragment.wizard.WelcomePage;
 
@@ -41,6 +42,17 @@ import eu.power_switch.gui.fragment.wizard.WelcomePage;
 public class WizardActivity extends AppIntro {
 
     private static final int INITIAL_SETUP_PAGE_INDEX = 5;
+
+    /**
+     * Get launch Intent for the Wizard
+     *
+     * @param context application context
+     * @return intent
+     */
+    public static Intent getLaunchIntent(Context context) {
+        Intent intent = new Intent(context, WizardActivity.class);
+        return intent;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,13 +69,14 @@ public class WizardActivity extends AppIntro {
 
         // initial setup pages
         addSlide(SetupApartmentPage.newInstance());
-//        addSlide(SetupRoomPage.newInstance());
+        addSlide(SetupRoomPage.newInstance());
 //        addSlide(SetupGatewayPage.newInstance());
 
         // finish page
 //        addSlide(DonePage.newInstance());
 
         setWizardMode(true);
+        pager.setOffscreenPageLimit(mPagerAdapter.getCount());
         setButtonState(skipButton, true); // enable skip button
         setColorTransitionsEnabled(true); // enable fancy color transitions
     }
@@ -72,15 +85,27 @@ public class WizardActivity extends AppIntro {
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
 
-        if (pager.getCurrentItem() < getSetupPageIndex()) {
+        if (pager.getCurrentItem() == 0) {
             pager.setCurrentItem(getSetupPageIndex(), true);
+            showSkipButton();
         } else {
-            pager.setCurrentItem(pager.getChildCount() - 1, true);
+            pager.setCurrentItem(mPagerAdapter.getCount() - 1, true);
+            showBackButton();
         }
     }
 
     private int getSetupPageIndex() {
         return INITIAL_SETUP_PAGE_INDEX;
+    }
+
+    private void showBackButton() {
+        setButtonState(skipButton, false); // disable skip button
+        setButtonState(backButton, true); // disable skip button
+    }
+
+    private void showSkipButton() {
+        setButtonState(skipButton, true); // enable skip button
+        setButtonState(backButton, false); // disable skip button
     }
 
     @Override
@@ -94,13 +119,10 @@ public class WizardActivity extends AppIntro {
     @Override
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
         super.onSlideChanged(oldFragment, newFragment);
-        if (pager.getCurrentItem() > 0) {
-            setButtonState(skipButton, false); // disable skip button
-            setButtonState(backButton, true); // disable skip button
-
+        if (pager.getCurrentItem() == 0 || pager.getCurrentItem() == INITIAL_SETUP_PAGE_INDEX) {
+            showSkipButton();
         } else {
-            setButtonState(skipButton, true); // enable skip button
-            setButtonState(backButton, false); // disable skip button
+            showBackButton();
         }
     }
 
@@ -112,10 +134,5 @@ public class WizardActivity extends AppIntro {
             // go back one page at a time
             pager.setCurrentItem(pager.getCurrentItem() - 1, true);
         }
-    }
-
-    public static Intent getLaunchIntent(Context context) {
-        Intent intent = new Intent(context, WizardActivity.class);
-        return intent;
     }
 }

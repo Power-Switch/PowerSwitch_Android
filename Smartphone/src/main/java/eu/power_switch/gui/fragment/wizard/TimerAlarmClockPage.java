@@ -21,6 +21,7 @@ package eu.power_switch.gui.fragment.wizard;
 import android.os.Bundle;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
 
 /**
  * Basic wizard page consisting of an icon, a title text and a description text
@@ -38,9 +39,10 @@ public class TimerAlarmClockPage extends BasicPage {
 
     @Override
     protected void onSetUiValues() {
-        setIcon(R.drawable.ic_launcher);
-        setTitle(R.string.apartments);
-        setDescription(R.string.tutorial__apartment_explanation);
+        super.onSetUiValues();
+        setIcon(IconicsHelper.getAlarmClockIcon(getActivity()));
+        setTitle(R.string.timers);
+        setDescription(R.string.tutorial__timer_explanation);
     }
 
     @Override

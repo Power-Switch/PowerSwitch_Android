@@ -38,6 +38,7 @@ public class WelcomePage extends BasicPage {
 
     @Override
     protected void onSetUiValues() {
+        super.onSetUiValues();
         setIcon(R.drawable.ic_launcher);
         setTitle(R.string.powerswitch_app_name);
         setDescription(R.string.app_description_html);

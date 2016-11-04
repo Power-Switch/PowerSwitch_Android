@@ -21,6 +21,7 @@ package eu.power_switch.gui.fragment.wizard;
 import android.os.Bundle;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
 
 /**
  * Basic wizard page consisting of an icon, a title text and a description text
@@ -38,7 +39,8 @@ public class ApartmentsPage extends BasicPage {
 
     @Override
     protected void onSetUiValues() {
-        setIcon(R.drawable.ic_launcher);
+        super.onSetUiValues();
+        setIcon(IconicsHelper.getApartmentsIcon(getActivity()));
         setTitle(R.string.apartments);
         setDescription(R.string.tutorial__apartment_explanation);
     }

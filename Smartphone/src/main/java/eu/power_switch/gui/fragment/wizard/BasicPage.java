@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.fragment.wizard;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
@@ -111,7 +112,16 @@ public class BasicPage extends WizardPage {
      * @param drawableRes drawable
      */
     protected void setIcon(@DrawableRes int drawableRes) {
-        icon.setImageDrawable(getResources().getDrawable(drawableRes));
+        setIcon(getResources().getDrawable(drawableRes));
+    }
+
+    /**
+     * Set icon drawable
+     *
+     * @param drawable drawable
+     */
+    protected void setIcon(Drawable drawable) {
+        icon.setImageDrawable(drawable);
     }
 
     /**

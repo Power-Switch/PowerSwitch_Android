@@ -7,11 +7,11 @@ import eu.power_switch.R;
 /**
  * Created by Markus on 04.11.2016.
  */
-public class SetupApartmentPage extends SingleLineTextInputPage {
+public class SetupRoomPage extends SingleLineTextInputPage {
 
-    public static SetupApartmentPage newInstance() {
+    public static SetupRoomPage newInstance() {
         Bundle args = new Bundle();
-        SetupApartmentPage fragment = new SetupApartmentPage();
+        SetupRoomPage fragment = new SetupRoomPage();
         fragment.setArguments(args);
         return fragment;
     }
@@ -20,9 +20,9 @@ public class SetupApartmentPage extends SingleLineTextInputPage {
     protected void onSetUiValues() {
         super.onSetUiValues();
 
-        setTitle(R.string.configure_apartment);
-        setHint("Home");
-        setDescription(R.string.tutorial__apartment_explanation);
+        setTitle(R.string.configure_room);
+        setHint("Living room");
+        setDescription(R.string.tutorial__room_explanation);
     }
 
     @Override
