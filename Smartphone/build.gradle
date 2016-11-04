@@ -116,6 +116,9 @@ dependencies {
     // Http networking
     // compile 'com.android.volley:volley:1.0.0'
 
+    // AppIntro (Intro Wizard)
+    compile 'com.github.paolorotolo:appintro:4.1.0'
+
     // PowerSwitch Modules
     compile project(':Shared')
     compile project(':LocaleApi')

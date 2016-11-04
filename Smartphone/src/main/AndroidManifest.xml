@@ -55,6 +55,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/powerswitch_app_name">
 
+
+        <activity
+            android:name=".gui.activity.WizardActivity"
+            android:theme="@style/WizardTheme"/>
         <!-- The SplashTheme is just used for the initial SpashScreen Background.
              The real Theme is loaded in onCreate of the Activity
         -->
@@ -144,6 +148,17 @@
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak"/>
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak"/>
                 <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.psbak"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".gui.dialog.GatewayDetectedDialog"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
+            android:label="@string/gateway_found"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="eu.power_switch.gateway_detected_activity"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity

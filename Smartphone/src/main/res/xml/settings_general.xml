@@ -115,6 +115,10 @@
     <PreferenceCategory android:title="@string/tutorial">
 
         <Preference
+            android:key="@string/key_relaunchWizard"
+            android:title="@string/title_relaunchWizard"/>
+
+        <Preference
             android:key="@string/key_resetTutorial"
             android:title="@string/title_resetTutorial" />
 

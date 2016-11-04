@@ -23,6 +23,11 @@
         <item name="android:windowBackground">@drawable/splashscreen_background</item>
     </style>
 
+    <style name="WizardTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorAccent">@color/color_light_blue_a700</item>
+        <item name="android:textColorLink">@color/color_light_blue_a700</item>
+    </style>
+
     <!-- Base Dark Theme -->
     <style name="PowerSwitchThemeBase.Dark" parent="Theme.AppCompat">
         <item name="windowActionBar">false</item>

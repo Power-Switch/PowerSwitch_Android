@@ -17,16 +17,25 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-            android:opacity="opaque">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <item
-        android:drawable="@color/primaryColor"/>
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/icon"
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_launcher"/>
-    </item>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
-</layer-list>
+    <TextView
+        android:id="@+id/title"
+        style="@style/WizardPageTitle"/>
+
+    <TextView
+        android:id="@+id/description"
+        style="@style/WizardPageDescription"/>
+
+</LinearLayout>
