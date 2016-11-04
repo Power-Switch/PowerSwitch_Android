@@ -18,17 +18,20 @@
 
 package eu.power_switch.gui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
-import eu.power_switch.R;
-import eu.power_switch.gui.fragment.wizard.BasicPage;
-import eu.power_switch.shared.ThemeHelper;
-
-import static eu.power_switch.gui.activity.MainActivity.getActivity;
+import eu.power_switch.gui.fragment.wizard.AdvancedFeaturesPage;
+import eu.power_switch.gui.fragment.wizard.ApartmentsPage;
+import eu.power_switch.gui.fragment.wizard.RoomsScenesPage;
+import eu.power_switch.gui.fragment.wizard.SetupApartmentPage;
+import eu.power_switch.gui.fragment.wizard.TimerAlarmClockPage;
+import eu.power_switch.gui.fragment.wizard.WelcomePage;
 
 /**
  * Wizard main activity
@@ -37,41 +40,47 @@ import static eu.power_switch.gui.activity.MainActivity.getActivity;
  */
 public class WizardActivity extends AppIntro {
 
+    private static final int INITIAL_SETUP_PAGE_INDEX = 5;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int colorPrimary = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorPrimary);
-        int colorAccent = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
+        // welcome page
+        addSlide(WelcomePage.newInstance());
 
-        BasicPage welcomePage = BasicPage.newInstance(colorPrimary,
-                R.drawable.ic_launcher,
-                R.string.powerswitch_app_name,
-                R.string.tutorial__first_add_room);
-        addSlide(welcomePage);
+        // info pages
+        addSlide(ApartmentsPage.newInstance());
+        addSlide(RoomsScenesPage.newInstance());
+        addSlide(TimerAlarmClockPage.newInstance());
+        addSlide(AdvancedFeaturesPage.newInstance());
 
-        BasicPage apartmentsPage = BasicPage.newInstance(colorAccent,
-                R.drawable.ic_launcher,
-                R.string.apartments,
-                R.string.tutorial__apartment_explanation);
-        addSlide(apartmentsPage);
+        // initial setup pages
+        addSlide(SetupApartmentPage.newInstance());
+//        addSlide(SetupRoomPage.newInstance());
+//        addSlide(SetupGatewayPage.newInstance());
 
-        BasicPage roomsPage = BasicPage.newInstance(colorAccent,
-                R.drawable.ic_launcher,
-                R.string.rooms,
-                R.string.tutorial__room_explanation);
-        addSlide(roomsPage);
+        // finish page
+//        addSlide(DonePage.newInstance());
 
         setWizardMode(true);
-        setButtonState(backButton, true); // enable back button
-        setBackButtonVisibilityWithDone(true); // show back button on final page
+        setButtonState(skipButton, true); // enable skip button
         setColorTransitionsEnabled(true); // enable fancy color transitions
-
     }
 
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
+
+        if (pager.getCurrentItem() < getSetupPageIndex()) {
+            pager.setCurrentItem(getSetupPageIndex(), true);
+        } else {
+            pager.setCurrentItem(pager.getChildCount() - 1, true);
+        }
+    }
+
+    private int getSetupPageIndex() {
+        return INITIAL_SETUP_PAGE_INDEX;
     }
 
     @Override
@@ -85,5 +94,28 @@ public class WizardActivity extends AppIntro {
     @Override
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
         super.onSlideChanged(oldFragment, newFragment);
+        if (pager.getCurrentItem() > 0) {
+            setButtonState(skipButton, false); // disable skip button
+            setButtonState(backButton, true); // disable skip button
+
+        } else {
+            setButtonState(skipButton, true); // enable skip button
+            setButtonState(backButton, false); // disable skip button
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (pager == null || pager.getCurrentItem() <= 0) {
+            super.onBackPressed();
+        } else {
+            // go back one page at a time
+            pager.setCurrentItem(pager.getCurrentItem() - 1, true);
+        }
+    }
+
+    public static Intent getLaunchIntent(Context context) {
+        Intent intent = new Intent(context, WizardActivity.class);
+        return intent;
     }
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -17,25 +16,25 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/appIntroBottomBarHeight">
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/icon"
-
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/title"
-        style="@style/WizardPageTitle"/>
+        style="@style/WizardPageTitle" />
 
     <TextView
         android:id="@+id/description"
-        style="@style/WizardPageDescription"/>
+        style="@style/WizardPageDescription" />
 
 </LinearLayout>

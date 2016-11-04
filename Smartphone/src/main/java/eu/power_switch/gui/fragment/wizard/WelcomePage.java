@@ -18,39 +18,39 @@
 
 package eu.power_switch.gui.fragment.wizard;
 
-import android.support.annotation.ColorInt;
-import android.support.v4.app.Fragment;
-import android.view.View;
+import android.os.Bundle;
 
-import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
+import eu.power_switch.R;
 
 /**
- * Wizard page base class
+ * Basic wizard page consisting of an icon, a title text and a description text
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public abstract class WizardPage extends Fragment implements ISlideBackgroundColorHolder {
+public class WelcomePage extends BasicPage {
 
-    @Override
-    public void setBackgroundColor(@ColorInt int backgroundColor) {
-        View mainView = getMainView();
-        if (mainView != null) {
-            mainView.setBackgroundColor(backgroundColor);
-        }
+    public static WelcomePage newInstance() {
+        Bundle args = new Bundle();
+        WelcomePage fragment = new WelcomePage();
+        fragment.setArguments(args);
+        return fragment;
     }
 
-    /**
-     * Returns the layout resource file for this page
-     *
-     * @return layout resource
-     */
-    protected abstract int getLayout();
+    @Override
+    protected void onSetUiValues() {
+        setIcon(R.drawable.ic_launcher);
+        setTitle(R.string.powerswitch_app_name);
+        setDescription(R.string.app_description_html);
+    }
 
-    /**
-     * Get the main view of this page
-     * This view will be used to set the background color
-     *
-     * @return view
-     */
-    public abstract View getMainView();
+    @Override
+    public int getDefaultBackgroundColor() {
+        return getResources().getColor(R.color.red);
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.wizard_page_basic;
+    }
+
 }

@@ -292,6 +292,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         startGatewayAutoDiscovery();
+
+        startActivity(WizardActivity.getLaunchIntent(this));
     }
 
     private void startGatewayAutoDiscovery() {
@@ -767,8 +769,8 @@ public class MainActivity extends AppCompatActivity {
                         itemApartments,
                         itemRoomsScenes,
                         itemTimer,
-                        itemGeofences,
                         itemAlarmClock,
+                        itemGeofences,
 //                        itemPhone,
                         itemNfc,
                         new DividerDrawerItem(),
