@@ -19,62 +19,40 @@
 package eu.power_switch.gui.fragment.wizard;
 
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
-
 import eu.power_switch.R;
-import eu.power_switch.shared.ThemeHelper;
 
 /**
- * Wizard page base class
- * <p>
- * Created by Markus on 04.11.2016.
+ * Created by Markus on 05.11.2016.
  */
-public abstract class WizardPage extends Fragment implements ISlideBackgroundColorHolder {
+public class SetupGatewayPage extends WizardPage {
 
-    private View mainView;
+    public static SetupGatewayPage newInstance() {
+        Bundle args = new Bundle();
+        SetupGatewayPage fragment = new SetupGatewayPage();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        mainView = inflater.inflate(getLayout(), container, false);
-        return mainView;
+
+        return getMainView();
     }
 
     @Override
-    public void setBackgroundColor(@ColorInt int backgroundColor) {
-        View mainView = getMainView();
-        if (mainView != null) {
-            mainView.setBackgroundColor(backgroundColor);
-        }
-    }
-
-    /**
-     * Returns the layout resource file for this page
-     *
-     * @return layout resource
-     */
-    protected abstract int getLayout();
-
-    /**
-     * Get the main view of this page
-     * This view will be used to set the background color
-     *
-     * @return view
-     */
-    public View getMainView() {
-        return mainView;
+    protected int getLayout() {
+        return R.layout.wizard_page_setup_gateway;
     }
 
     @Override
     public int getDefaultBackgroundColor() {
-        return ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorPrimary);
+        return getResources().getColor(R.color.blue);
     }
 }

@@ -48,8 +48,6 @@ public class BasicPage extends WizardPage {
     protected static final String KEY_TITLE = "titleText";
     protected static final String KEY_DESCRIPTION = "descriptionText";
 
-    private View rootView;
-
     private int defaultBackgroundColor;
 
     private TextView title;
@@ -70,15 +68,15 @@ public class BasicPage extends WizardPage {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(getLayout(), container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        icon = (IconicsImageView) rootView.findViewById(R.id.icon);
-        title = (TextView) rootView.findViewById(R.id.title);
-        description = (TextView) rootView.findViewById(R.id.description);
+        icon = (IconicsImageView) getMainView().findViewById(R.id.icon);
+        title = (TextView) getMainView().findViewById(R.id.title);
+        description = (TextView) getMainView().findViewById(R.id.description);
 
         onSetUiValues();
 
-        return rootView;
+        return getMainView();
     }
 
     /**
@@ -169,11 +167,6 @@ public class BasicPage extends WizardPage {
     @Override
     public int getDefaultBackgroundColor() {
         return defaultBackgroundColor;
-    }
-
-    @Override
-    public View getMainView() {
-        return rootView;
     }
 
 }

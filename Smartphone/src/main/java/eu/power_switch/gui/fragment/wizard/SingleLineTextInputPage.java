@@ -45,15 +45,14 @@ public class SingleLineTextInputPage extends WizardPage {
     protected static final String KEY_HINT = "titleText";
     protected static final String KEY_DESCRIPTION = "descriptionText";
 
-    private View rootView;
-
     private int defaultBackgroundColor;
 
     private TextView title;
     private TextView description;
     private TextInputEditText input;
 
-    public static SingleLineTextInputPage newInstance(@ColorInt int color, @StringRes int title, @StringRes int hint, @StringRes int description) {
+    public static SingleLineTextInputPage newInstance(@ColorInt int color, @StringRes int title, @StringRes int hint,
+                                                      @StringRes int description) {
         Bundle args = new Bundle();
         args.putInt(KEY_BACKGROUND_COLOR, color);
         args.putInt(KEY_TITLE, title);
@@ -67,15 +66,15 @@ public class SingleLineTextInputPage extends WizardPage {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(getLayout(), container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        title = (TextView) rootView.findViewById(R.id.title);
-        input = (TextInputEditText) rootView.findViewById(R.id.input);
-        description = (TextView) rootView.findViewById(R.id.description);
+        title = (TextView) getMainView().findViewById(R.id.title);
+        input = (TextInputEditText) getMainView().findViewById(R.id.input);
+        description = (TextView) getMainView().findViewById(R.id.description);
 
         onSetUiValues();
 
-        return rootView;
+        return getMainView();
     }
 
     /**
@@ -84,8 +83,8 @@ public class SingleLineTextInputPage extends WizardPage {
     @CallSuper
     protected void onSetUiValues() {
         Bundle arguments = getArguments();
-        if (arguments.containsKey(KEY_BACKGROUND_COLOR) && arguments.containsKey(KEY_TITLE)
-                && arguments.containsKey(KEY_HINT) && arguments.containsKey(KEY_DESCRIPTION)) {
+        if (arguments.containsKey(KEY_BACKGROUND_COLOR) && arguments.containsKey(KEY_TITLE) && arguments.containsKey(KEY_HINT) && arguments.containsKey(
+                KEY_DESCRIPTION)) {
             defaultBackgroundColor = arguments.getInt(KEY_BACKGROUND_COLOR, -1);
             @StringRes int titleText = arguments.getInt(KEY_TITLE, -1);
             @StringRes int hintText = arguments.getInt(KEY_HINT, -1);
@@ -166,11 +165,6 @@ public class SingleLineTextInputPage extends WizardPage {
     @Override
     public int getDefaultBackgroundColor() {
         return defaultBackgroundColor;
-    }
-
-    @Override
-    public View getMainView() {
-        return rootView;
     }
 
 }

@@ -28,8 +28,10 @@ import com.github.paolorotolo.appintro.AppIntro;
 
 import eu.power_switch.gui.fragment.wizard.AdvancedFeaturesPage;
 import eu.power_switch.gui.fragment.wizard.ApartmentsPage;
+import eu.power_switch.gui.fragment.wizard.FinishPage;
 import eu.power_switch.gui.fragment.wizard.RoomsScenesPage;
 import eu.power_switch.gui.fragment.wizard.SetupApartmentPage;
+import eu.power_switch.gui.fragment.wizard.SetupGatewayPage;
 import eu.power_switch.gui.fragment.wizard.SetupRoomPage;
 import eu.power_switch.gui.fragment.wizard.TimerAlarmClockPage;
 import eu.power_switch.gui.fragment.wizard.WelcomePage;
@@ -70,10 +72,10 @@ public class WizardActivity extends AppIntro {
         // initial setup pages
         addSlide(SetupApartmentPage.newInstance());
         addSlide(SetupRoomPage.newInstance());
-//        addSlide(SetupGatewayPage.newInstance());
+        addSlide(SetupGatewayPage.newInstance());
 
         // finish page
-//        addSlide(DonePage.newInstance());
+        addSlide(FinishPage.newInstance());
 
         setWizardMode(true);
         pager.setOffscreenPageLimit(mPagerAdapter.getCount());
