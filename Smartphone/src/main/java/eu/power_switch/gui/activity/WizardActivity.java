@@ -19,10 +19,12 @@
 package eu.power_switch.gui.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
@@ -141,8 +143,20 @@ public class WizardActivity extends AppIntro {
 
     @Override
     public void onBackPressed() {
-        if (pager == null || pager.getCurrentItem() <= 0) {
+        if (pager == null) {
             super.onBackPressed();
+        } else if (pager.getCurrentItem() <= 0) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.wizard_close)
+                    .setMessage(R.string.wizard_close_message)
+                    .setNeutralButton(android.R.string.cancel, null)
+                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
+                    .show();
         } else {
             // go back one page at a time
             pager.setCurrentItem(pager.getCurrentItem() - 1, true);

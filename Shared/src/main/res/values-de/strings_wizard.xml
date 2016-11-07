@@ -21,5 +21,7 @@
     <string name="title_relaunchWizard">Wizard erneut starten</string>
 
     <string name="refresh">Aktualisieren</string>
+    <string name="wizard_close">Wizard beenden</string>
+    <string name="wizard_close_message">Möchtest du den Wizard wirklich beenden?</string>
 
 </resources>

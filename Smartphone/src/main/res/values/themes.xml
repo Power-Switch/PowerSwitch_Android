@@ -251,6 +251,11 @@
 
     <!-- Dialog Themes -->
     <style name="PowerSwitchThemeBase.Dialog.Dark" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">false</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">false</item>
+
         <!-- material design -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryLight">@color/primaryColor_light</item>
@@ -275,6 +280,8 @@
     </style>
 
     <style name="PowerSwitchThemeBase.Dialog.Light" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">false</item>
+
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">false</item>
 

@@ -22,6 +22,8 @@
     <string name="title_relaunchWizard">Relaunch Wizard</string>
 
     <string name="refresh">Refresh</string>
+    <string name="wizard_close">Exit Wizard</string>
+    <string name="wizard_close_message">Do you really want to close the wizard?</string>
 
     <string name="wizard_welcome_title">Welcome to PowerSwitch!</string>
     <string name="wizard_welcome_description">This wizard will walk you through some of the great features of PowerSwitch and help you with the initial setup.\n\n

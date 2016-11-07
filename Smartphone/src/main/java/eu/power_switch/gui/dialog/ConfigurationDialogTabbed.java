@@ -45,6 +45,7 @@ import android.widget.ImageButton;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
@@ -71,6 +72,12 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
 
     private BroadcastReceiver broadcastReceiver;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SmartphoneThemeHelper.applyDialogTheme(this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +89,8 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
                 }
             }
         };
+
+        getDialog().setTitle(getDialogTitle());
 
         rootView = inflater.inflate(R.layout.dialog_configuration_tabbed, container);
 

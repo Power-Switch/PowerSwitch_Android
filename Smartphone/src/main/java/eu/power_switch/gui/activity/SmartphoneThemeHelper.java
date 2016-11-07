@@ -19,6 +19,7 @@
 package eu.power_switch.gui.activity;
 
 import android.app.Activity;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatDelegate;
 
 import eu.power_switch.R;
@@ -96,6 +97,36 @@ public class SmartphoneThemeHelper {
 //                break;
             default:
                 activity.setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
+                break;
+        }
+    }
+
+    /**
+     * Apply a Theme to a Fragment
+     *
+     * @param dialogFragment Fragment to apply theme on
+     */
+    public static void applyDialogTheme(DialogFragment dialogFragment) {
+        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
+            case SettingsConstants.THEME_DARK_BLUE:
+                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Dark_Blue);
+                break;
+            case SettingsConstants.THEME_LIGHT_BLUE:
+                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);
+                break;
+            case SettingsConstants.THEME_DARK_RED:
+//                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);
+//                break;
+            case SettingsConstants.THEME_LIGHT_RED:
+//                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);
+//                break;
+            case SettingsConstants.THEME_DAY_NIGHT_BLUE:
+//                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+//
+//                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Light_Blue);
+//                break;
+            default:
+                dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Dark_Blue);
                 break;
         }
     }
