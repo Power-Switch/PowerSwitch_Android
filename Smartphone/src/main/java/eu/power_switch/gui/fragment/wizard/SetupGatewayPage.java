@@ -26,6 +26,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.adapter.WizardGatewayRecyclerViewAdapter;
+import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
@@ -52,6 +54,7 @@ public class SetupGatewayPage extends WizardPage {
     private RecyclerView recyclerViewGateways;
     private WizardGatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
     private TextView textViewEmpty;
+    private IconicsImageView refreshIcon;
 
     public static SetupGatewayPage newInstance() {
         Bundle args = new Bundle();
@@ -67,13 +70,15 @@ public class SetupGatewayPage extends WizardPage {
 
         layoutLoading = (LinearLayout) getMainView().findViewById(R.id.layoutLoading);
 
-        IconicsImageView refreshButton = (IconicsImageView) getMainView().findViewById(R.id.refreshButton);
-        refreshButton.setOnClickListener(new View.OnClickListener() {
+        LinearLayout layoutRefresh = (LinearLayout) getMainView().findViewById(R.id.layoutRefresh);
+        layoutRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 findLocalGateways();
             }
         });
+
+        refreshIcon = (IconicsImageView) getMainView().findViewById(R.id.button_refresh);
 
         textViewEmpty = (TextView) getMainView().findViewById(R.id.textViewEmpty);
 
@@ -83,8 +88,6 @@ public class SetupGatewayPage extends WizardPage {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewGateways.setLayoutManager(layoutManager);
 
-        findLocalGateways();
-
         return getMainView();
     }
 
@@ -93,6 +96,11 @@ public class SetupGatewayPage extends WizardPage {
 
             @Override
             protected void onPreExecute() {
+                Animation rotationClockwiseAnimation = AnimationHandler.getClockwiseInfiniteAnimation(getActivity());
+                refreshIcon.startAnimation(rotationClockwiseAnimation);
+
+                foundGateways.clear();
+
                 showLoading();
             }
 
@@ -124,6 +132,8 @@ public class SetupGatewayPage extends WizardPage {
                 } else {
                     showResult();
                 }
+
+                refreshIcon.clearAnimation();
             }
         }.execute();
     }
@@ -154,6 +164,13 @@ public class SetupGatewayPage extends WizardPage {
     @Override
     public int getDefaultBackgroundColor() {
         return getResources().getColor(R.color.green);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        findLocalGateways();
     }
 
 }

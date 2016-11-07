@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -17,11 +16,10 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<rotate
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="1000"
     android:fromDegrees="0"
     android:pivotX="50%"
     android:pivotY="50%"
     android:repeatCount="2"
-    android:toDegrees="360"/>
+    android:toDegrees="360" />

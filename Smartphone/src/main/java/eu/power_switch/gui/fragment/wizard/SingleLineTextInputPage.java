@@ -25,10 +25,14 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TextInputEditText;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.github.paolorotolo.appintro.ISlidePolicy;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.ThemeHelper;
@@ -38,7 +42,7 @@ import eu.power_switch.shared.ThemeHelper;
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public class SingleLineTextInputPage extends WizardPage {
+public class SingleLineTextInputPage extends WizardPage implements ISlidePolicy {
 
     protected static final String KEY_BACKGROUND_COLOR = "defaultBackgroundColor";
     protected static final String KEY_TITLE = "titleText";
@@ -70,6 +74,21 @@ public class SingleLineTextInputPage extends WizardPage {
 
         title = (TextView) getMainView().findViewById(R.id.title);
         input = (TextInputEditText) getMainView().findViewById(R.id.input);
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onInputChanged(s, start, before, count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         description = (TextView) getMainView().findViewById(R.id.description);
 
         onSetUiValues();
@@ -156,6 +175,28 @@ public class SingleLineTextInputPage extends WizardPage {
         this.description.setText(description);
     }
 
+    /**
+     * Get the text of the input field
+     *
+     * @return
+     */
+    public String getInput() {
+        return input.getText().toString();
+    }
+
+    /**
+     * This method is called when the input changes
+     * Override it if you want to change this behaviour
+     *
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
+    public void onInputChanged(CharSequence s, int start, int before, int count) {
+        // override this
+    }
+
     @LayoutRes
     @Override
     protected int getLayout() {
@@ -165,6 +206,17 @@ public class SingleLineTextInputPage extends WizardPage {
     @Override
     public int getDefaultBackgroundColor() {
         return defaultBackgroundColor;
+    }
+
+    @Override
+    public boolean isPolicyRespected() {
+        return true;
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        flashBackground(R.color.color_red_a700, 1000);
+        showErrorMessage(getString(R.string.unknown_error));
     }
 
 }

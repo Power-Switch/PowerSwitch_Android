@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="UTF-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -16,10 +16,10 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
-
-    <string name="title_relaunchWizard">Wizard erneut starten</string>
-
-    <string name="refresh">Aktualisieren</string>
-
-</resources>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:fromDegrees="0"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:repeatCount="infinite"
+    android:toDegrees="360" />

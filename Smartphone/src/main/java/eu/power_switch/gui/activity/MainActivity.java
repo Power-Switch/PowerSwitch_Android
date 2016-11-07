@@ -291,9 +291,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        startGatewayAutoDiscovery();
-
-        startActivity(WizardActivity.getLaunchIntent(this));
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
+            startActivity(WizardActivity.getLaunchIntent(this));
+        } else {
+            startGatewayAutoDiscovery();
+        }
     }
 
     private void startGatewayAutoDiscovery() {

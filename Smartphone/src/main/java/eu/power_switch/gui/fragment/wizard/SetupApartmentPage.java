@@ -9,6 +9,8 @@ import eu.power_switch.R;
  */
 public class SetupApartmentPage extends SingleLineTextInputPage {
 
+    private boolean isValid = false;
+
     public static SetupApartmentPage newInstance() {
         Bundle args = new Bundle();
         SetupApartmentPage fragment = new SetupApartmentPage();
@@ -29,4 +31,25 @@ public class SetupApartmentPage extends SingleLineTextInputPage {
     public int getDefaultBackgroundColor() {
         return getResources().getColor(R.color.blue);
     }
+
+    @Override
+    public void onInputChanged(CharSequence s, int start, int before, int count) {
+        if (s.length() <= 0) {
+            isValid = false;
+        } else {
+            isValid = true;
+        }
+    }
+
+    @Override
+    public boolean isPolicyRespected() {
+        return isValid;
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        flashBackground(R.color.color_red_a700, 1000);
+        showErrorMessage(getString(R.string.please_enter_name));
+    }
+
 }

@@ -35,6 +35,7 @@ import eu.power_switch.gui.fragment.wizard.SetupGatewayPage;
 import eu.power_switch.gui.fragment.wizard.SetupRoomPage;
 import eu.power_switch.gui.fragment.wizard.TimerAlarmClockPage;
 import eu.power_switch.gui.fragment.wizard.WelcomePage;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * Wizard main activity
@@ -113,6 +114,9 @@ public class WizardActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+
+        // disable wizard for future launches
+        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD, false);
 
         // close wizard
         finish();

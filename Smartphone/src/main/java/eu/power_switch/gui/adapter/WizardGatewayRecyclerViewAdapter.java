@@ -20,7 +20,6 @@ package eu.power_switch.gui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,7 @@ public class WizardGatewayRecyclerViewAdapter extends RecyclerView.Adapter<Wizar
 
     @Override
     public WizardGatewayRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.gateway_overview, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.wizard_gateway_overview, parent, false);
         return new WizardGatewayRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -67,8 +66,6 @@ public class WizardGatewayRecyclerViewAdapter extends RecyclerView.Adapter<Wizar
     public void onBindViewHolder(WizardGatewayRecyclerViewAdapter.ViewHolder holder, int position) {
         final Gateway gateway = gateways.get(position);
 
-        holder.checkbox.setChecked(true);
-        holder.name.setText(gateway.getName());
         holder.model.setText(gateway.getModel());
         holder.host.setText(gateway.getLocalHost() + ":" + gateway.getLocalPort());
     }
@@ -87,17 +84,13 @@ public class WizardGatewayRecyclerViewAdapter extends RecyclerView.Adapter<Wizar
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
         public TextView model;
         public TextView host;
-        public SwitchCompat checkbox;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.textView_gatewayName);
             model = (TextView) itemView.findViewById(R.id.textView_gatewayType);
             host = (TextView) itemView.findViewById(R.id.textView_gatewayHost);
-            checkbox = (SwitchCompat) itemView.findViewById(R.id.switch_gateway_status);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

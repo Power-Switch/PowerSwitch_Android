@@ -22,4 +22,6 @@
     <string name="key_relaunchWizard">relaunchWizard</string>
     <string name="title_relaunchWizard">Relaunch Wizard</string>
 
+    <string name="refresh">Refresh</string>
+
 </resources>

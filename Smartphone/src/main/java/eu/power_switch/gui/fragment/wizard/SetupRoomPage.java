@@ -27,6 +27,8 @@ import eu.power_switch.R;
  */
 public class SetupRoomPage extends SingleLineTextInputPage {
 
+    private boolean isValid = false;
+
     public static SetupRoomPage newInstance() {
         Bundle args = new Bundle();
         SetupRoomPage fragment = new SetupRoomPage();
@@ -46,5 +48,25 @@ public class SetupRoomPage extends SingleLineTextInputPage {
     @Override
     public int getDefaultBackgroundColor() {
         return getResources().getColor(R.color.md_yellow_800);
+    }
+
+    @Override
+    public void onInputChanged(CharSequence s, int start, int before, int count) {
+        if (s.length() <= 0) {
+            isValid = false;
+        } else {
+            isValid = true;
+        }
+    }
+
+    @Override
+    public boolean isPolicyRespected() {
+        return isValid;
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        flashBackground(R.color.color_red_a700, 1000);
+        showErrorMessage(getString(R.string.please_enter_name));
     }
 }

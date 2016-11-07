@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -26,6 +25,7 @@
     <style name="WizardTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorAccent">@color/color_light_blue_a700</item>
         <item name="android:textColorLink">@color/color_light_blue_a700</item>
+        <item name="cardview_backgroundColor">@color/cardview_background</item>
     </style>
 
     <!-- Base Dark Theme -->
@@ -318,19 +318,19 @@
     </style>
 
     <!-- Themes -->
-    <style name="PowerSwitchTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dark.Blue"/>
+    <style name="PowerSwitchTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dark.Blue" />
 
-    <style name="PowerSwitchTheme.DayNight.Blue" parent="PowerSwitchThemeBase.DayNight.Blue"/>
+    <style name="PowerSwitchTheme.DayNight.Blue" parent="PowerSwitchThemeBase.DayNight.Blue" />
 
-    <style name="PowerSwitchTheme.Dark.Red" parent="PowerSwitchThemeBase.Dark.Red"/>
+    <style name="PowerSwitchTheme.Dark.Red" parent="PowerSwitchThemeBase.Dark.Red" />
 
-    <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue"/>
+    <style name="PowerSwitchTheme.Light.Blue" parent="PowerSwitchThemeBase.Light.Blue" />
 
-    <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red"/>
+    <style name="PowerSwitchTheme.Light.Red" parent="PowerSwitchThemeBase.Light.Red" />
 
-    <style name="PowerSwitchDialogTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dialog.Dark.Blue"/>
+    <style name="PowerSwitchDialogTheme.Dark.Blue" parent="PowerSwitchThemeBase.Dialog.Dark.Blue" />
 
-    <style name="PowerSwitchDialogTheme.Light.Blue" parent="PowerSwitchThemeBase.Dialog.Light.Blue"/>
+    <style name="PowerSwitchDialogTheme.Light.Blue" parent="PowerSwitchThemeBase.Dialog.Light.Blue" />
 
     <style name="PowerSwitchTheme.Tasker.Dark" parent="Theme.Locale.Dark">
         <!-- material design -->

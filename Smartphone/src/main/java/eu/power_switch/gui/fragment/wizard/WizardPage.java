@@ -18,14 +18,19 @@
 
 package eu.power_switch.gui.fragment.wizard;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
@@ -78,5 +83,32 @@ public abstract class WizardPage extends Fragment implements ISlideBackgroundCol
     @Override
     public int getDefaultBackgroundColor() {
         return ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorPrimary);
+    }
+
+    /**
+     * Flashes the background
+     *
+     * @param flashColor           color to flash
+     * @param durationMilliseconds time window from normal to flash to normal color in milliseconds
+     */
+    protected void flashBackground(@ColorRes int flashColor, int durationMilliseconds) {
+        ValueAnimator colorAnimator = ValueAnimator.ofObject(
+                new ArgbEvaluator(), getResources().getColor(flashColor), getDefaultBackgroundColor());
+        colorAnimator.setDuration(durationMilliseconds);
+        colorAnimator.setInterpolator(new DecelerateInterpolator());
+        colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                getMainView().setBackgroundColor((int) animation.getAnimatedValue());
+            }
+        });
+        colorAnimator.start();
+    }
+
+    /**
+     * Shows an error message on the page
+     */
+    protected void showErrorMessage(String message) {
+        Snackbar.make(getMainView(), message, Snackbar.LENGTH_LONG).show();
     }
 }

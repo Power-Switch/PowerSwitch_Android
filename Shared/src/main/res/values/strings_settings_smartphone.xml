@@ -33,6 +33,8 @@
         <item>de</item>
     </string-array>
 
+    <string name="key_shouldShowWizard">shouldShowWizard</string>
+
     <!-- General -->
     <string name="key_startupDefaultTab">startupDefaultTab</string>
     <string name="title_startupDefaultTab">Default tab</string>

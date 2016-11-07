@@ -38,239 +38,243 @@ import eu.power_switch.shared.log.Log;
  */
 public class SmartphonePreferencesHandler {
 
-	// default values
-	public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
-	public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
-	public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
-	public static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
-	public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
-	public static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
-	public static final int DEFAULT_VALUE_STARTUP_TAB = SettingsConstants.ROOMS_TAB_INDEX;
-	public static final boolean DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED = true;
-	public static final boolean DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED = true;
-	public static final int DEFAULT_VALUE_KEEP_HISTORY_DURATION = SettingsConstants.KEEP_HISTORY_FOREVER;
-	public static final long DEFAULT_VALUE_CURRENT_APARTMENT_ID = SettingsConstants.INVALID_APARTMENT_ID;
-	public static final boolean DEFAULT_VALUE_USE_COMPACT_DRAWER = false;
-	public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS = false;
-	public static final boolean DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB = false;
-	public static final String DEFAULT_VALUE_BACKUP_PATH = Environment.getExternalStorageDirectory()
-			.getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME;
-	public static final boolean DEFAULT_VALUE_AUTO_DISCOVER = true;
-	public static final boolean DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND = true;
-	public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA = true;
-	public static final int DEFAULT_VALUE_LOG_DESTINATION = 0;
-	public static final boolean DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = true;
-	public static final boolean DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS = true;
-	public static final boolean DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS = true;
+    // default values
+    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
+    public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
+    public static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
+    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
+    public static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
+    public static final int DEFAULT_VALUE_STARTUP_TAB = SettingsConstants.ROOMS_TAB_INDEX;
+    public static final boolean DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED = true;
+    public static final boolean DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED = true;
+    public static final int DEFAULT_VALUE_KEEP_HISTORY_DURATION = SettingsConstants.KEEP_HISTORY_FOREVER;
+    public static final long DEFAULT_VALUE_CURRENT_APARTMENT_ID = SettingsConstants.INVALID_APARTMENT_ID;
+    public static final boolean DEFAULT_VALUE_USE_COMPACT_DRAWER = false;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS = false;
+    public static final boolean DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB = false;
+    public static final String DEFAULT_VALUE_BACKUP_PATH = Environment.getExternalStorageDirectory()
+            .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME;
+    public static final boolean DEFAULT_VALUE_AUTO_DISCOVER = true;
+    public static final boolean DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND = true;
+    public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA = true;
+    public static final int DEFAULT_VALUE_LOG_DESTINATION = 0;
+    public static final boolean DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = true;
+    public static final boolean DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS = true;
+    public static final boolean DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS = true;
+    public static final boolean DEFAULT_VALUE_SHOULD_SHOW_WIZARD = true;
 
-	public static String KEY_AUTO_DISCOVER;
-	public static String KEY_BACKUP_PATH;
-	public static String KEY_STARTUP_DEFAULT_TAB;
-	public static String KEY_SHOW_ROOM_ALL_ON_OFF;
-	public static String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-	public static String KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
-	public static String KEY_AUTO_COLLAPSE_ROOMS;
-	public static String KEY_AUTO_COLLAPSE_TIMERS;
-	public static String KEY_THEME;
-	public static String KEY_USE_COMPACT_DRAWER;
-	public static String KEY_VIBRATE_ON_BUTTON_PRESS;
-	public static String KEY_VIBRATION_DURATION;
-	public static String KEY_CURRENT_APARTMENT_ID;
-	public static String KEY_KEEP_HISTORY_DURATION;
-	public static String KEY_SLEEP_AS_ANDROID_ENABLED;
-	public static String KEY_STOCK_ALARM_CLOCK_ENABLED;
-	public static String KEY_SHOW_TOAST_IN_BACKGROUND;
-	public static String KEY_SEND_ANONYMOUS_CRASH_DATA;
-	public static String KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
-	public static String KEY_LOG_DESTINATION;
-	public static String KEY_SHOW_GEOFENCE_NOTIFICATIONS;
-	public static String KEY_SHOW_TIMER_NOTIFICATIONS;
-
-
-	// setting keys
-	private static SharedPreferences sharedPreferences;
-	private static Map<String, ?> cachedValues;
-
-	// default values for each settings key
-	private static Map<String, Object> defaultValueMap;
-
-	private static Context context;
+    public static String KEY_AUTO_DISCOVER;
+    public static String KEY_BACKUP_PATH;
+    public static String KEY_STARTUP_DEFAULT_TAB;
+    public static String KEY_SHOW_ROOM_ALL_ON_OFF;
+    public static String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+    public static String KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB;
+    public static String KEY_AUTO_COLLAPSE_ROOMS;
+    public static String KEY_AUTO_COLLAPSE_TIMERS;
+    public static String KEY_THEME;
+    public static String KEY_USE_COMPACT_DRAWER;
+    public static String KEY_VIBRATE_ON_BUTTON_PRESS;
+    public static String KEY_VIBRATION_DURATION;
+    public static String KEY_CURRENT_APARTMENT_ID;
+    public static String KEY_KEEP_HISTORY_DURATION;
+    public static String KEY_SLEEP_AS_ANDROID_ENABLED;
+    public static String KEY_STOCK_ALARM_CLOCK_ENABLED;
+    public static String KEY_SHOW_TOAST_IN_BACKGROUND;
+    public static String KEY_SEND_ANONYMOUS_CRASH_DATA;
+    public static String KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA;
+    public static String KEY_LOG_DESTINATION;
+    public static String KEY_SHOW_GEOFENCE_NOTIFICATIONS;
+    public static String KEY_SHOW_TIMER_NOTIFICATIONS;
+    public static String KEY_SHOULD_SHOW_WIZARD;
 
 
-	/**
-	 * Private Constructor
-	 *
-	 * @throws UnsupportedOperationException because this class cannot be instantiated.
-	 */
-	private SmartphonePreferencesHandler() {
-		throw new UnsupportedOperationException(
-				"This class is non-instantiable. Use static one time initialization via init() method instead.");
-	}
+    // setting keys
+    private static SharedPreferences sharedPreferences;
+    private static Map<String, ?> cachedValues;
 
-	/**
-	 * Initialize this Handler
-	 * <p/>
-	 * Only one call per Application launch is needed
-	 *
-	 * @param context any suitable context
-	 */
-	public static void init(Context context) {
-		SmartphonePreferencesHandler.context = context;
-		sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME,
-				Context.MODE_PRIVATE);
-		forceRefresh();
+    // default values for each settings key
+    private static Map<String, Object> defaultValueMap;
 
-		initializePublicKeys(context);
-		initializeDefaultValueMap();
+    private static Context context;
 
-		for (String key : cachedValues.keySet()) {
-			Log.d(SmartphonePreferencesHandler.class, key + ": " + get(key));
-		}
-	}
 
-	private static void initializePublicKeys(Context context) {
-		KEY_AUTO_DISCOVER = context.getString(R.string.key_autodiscover);
-		KEY_BACKUP_PATH = context.getString(R.string.key_backupPath);
-		KEY_STARTUP_DEFAULT_TAB = context.getString(R.string.key_startupDefaultTab);
-		KEY_SHOW_ROOM_ALL_ON_OFF = context.getString(R.string.key_showRoomAllOnOff);
-		KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = context.getString(R.string.key_highlightLastActivatedButton);
-		KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB = context.getString(R.string.key_useOptionsMenuInsteadOfFab);
-		KEY_AUTO_COLLAPSE_ROOMS = context.getString(R.string.key_autoCollapseRooms);
-		KEY_AUTO_COLLAPSE_TIMERS = context.getString(R.string.key_autoCollapseTimers);
-		KEY_THEME = context.getString(R.string.key_theme);
-		KEY_USE_COMPACT_DRAWER = context.getString(R.string.key_useCompactDrawer);
-		KEY_VIBRATE_ON_BUTTON_PRESS = context.getString(R.string.key_vibrateOnButtonPress);
-		KEY_VIBRATION_DURATION = context.getString(R.string.key_vibrationDuration);
-		KEY_CURRENT_APARTMENT_ID = "currentApartmentId";
-		KEY_KEEP_HISTORY_DURATION = context.getString(R.string.key_keepHistoryDuration);
-		KEY_SLEEP_AS_ANDROID_ENABLED = "SLEEP_AS_ANDROID_ENABLED_KEY";
-		KEY_STOCK_ALARM_CLOCK_ENABLED = "STOCK_ALARM_CLOCK_ENABLED_KEY";
-		KEY_SHOW_TOAST_IN_BACKGROUND = context.getString(R.string.key_showBackgroundActionToast);
-		KEY_SEND_ANONYMOUS_CRASH_DATA = context.getString(R.string.key_sendAnonymousCrashData);
-		KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = "shouldAskSendAnonymousCrashData";
-		KEY_LOG_DESTINATION = context.getString(R.string.key_logDestination);
-		KEY_SHOW_GEOFENCE_NOTIFICATIONS = context.getString(R.string.key_showGeofenceNotifications);
-		KEY_SHOW_TIMER_NOTIFICATIONS = context.getString(R.string.key_showTimerNotifications);
-	}
+    /**
+     * Private Constructor
+     *
+     * @throws UnsupportedOperationException because this class cannot be instantiated.
+     */
+    private SmartphonePreferencesHandler() {
+        throw new UnsupportedOperationException(
+                "This class is non-instantiable. Use static one time initialization via init() method instead.");
+    }
 
-	private static void initializeDefaultValueMap() {
-		defaultValueMap = new HashMap<>();
-		defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
-		defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
-				DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-		defaultValueMap.put(KEY_AUTO_COLLAPSE_ROOMS, DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
-		defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
-		defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
-		defaultValueMap.put(KEY_VIBRATION_DURATION, DEFAULT_VALUE_VIBRATION_DURATION);
-		defaultValueMap.put(KEY_STARTUP_DEFAULT_TAB, DEFAULT_VALUE_STARTUP_TAB);
+    /**
+     * Initialize this Handler
+     * <p/>
+     * Only one call per Application launch is needed
+     *
+     * @param context any suitable context
+     */
+    public static void init(Context context) {
+        SmartphonePreferencesHandler.context = context;
+        sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME,
+                Context.MODE_PRIVATE);
+        forceRefresh();
 
-		defaultValueMap.put(KEY_STOCK_ALARM_CLOCK_ENABLED, DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED);
-		defaultValueMap.put(KEY_SLEEP_AS_ANDROID_ENABLED, DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED);
-		defaultValueMap.put(KEY_KEEP_HISTORY_DURATION, DEFAULT_VALUE_KEEP_HISTORY_DURATION);
-		defaultValueMap.put(KEY_CURRENT_APARTMENT_ID, DEFAULT_VALUE_CURRENT_APARTMENT_ID);
-		defaultValueMap.put(KEY_USE_COMPACT_DRAWER, DEFAULT_VALUE_USE_COMPACT_DRAWER);
-		defaultValueMap.put(KEY_AUTO_COLLAPSE_TIMERS, DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS);
-		defaultValueMap.put(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB,
-				DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
-		defaultValueMap.put(KEY_BACKUP_PATH, DEFAULT_VALUE_BACKUP_PATH);
-		defaultValueMap.put(KEY_AUTO_DISCOVER, DEFAULT_VALUE_AUTO_DISCOVER);
-		defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
-		defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
-		defaultValueMap.put(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA,
-				DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA);
-		defaultValueMap.put(KEY_LOG_DESTINATION, DEFAULT_VALUE_LOG_DESTINATION);
-		defaultValueMap.put(KEY_SHOW_GEOFENCE_NOTIFICATIONS,
-				DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS);
-		defaultValueMap.put(KEY_SHOW_TIMER_NOTIFICATIONS, DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS);
+        initializePublicKeys(context);
+        initializeDefaultValueMap();
 
-		for (String key : defaultValueMap.keySet()) {
-			// initialize missing default values
-			get(key);
-		}
-	}
+        for (String key : cachedValues.keySet()) {
+            Log.d(SmartphonePreferencesHandler.class, key + ": " + get(key));
+        }
+    }
 
-	/**
-	 * Forces an update of the cached values
-	 */
-	public static void forceRefresh() {
-		cachedValues = sharedPreferences.getAll();
-	}
+    private static void initializePublicKeys(Context context) {
+        KEY_AUTO_DISCOVER = context.getString(R.string.key_autodiscover);
+        KEY_BACKUP_PATH = context.getString(R.string.key_backupPath);
+        KEY_STARTUP_DEFAULT_TAB = context.getString(R.string.key_startupDefaultTab);
+        KEY_SHOW_ROOM_ALL_ON_OFF = context.getString(R.string.key_showRoomAllOnOff);
+        KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON = context.getString(R.string.key_highlightLastActivatedButton);
+        KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB = context.getString(R.string.key_useOptionsMenuInsteadOfFab);
+        KEY_AUTO_COLLAPSE_ROOMS = context.getString(R.string.key_autoCollapseRooms);
+        KEY_AUTO_COLLAPSE_TIMERS = context.getString(R.string.key_autoCollapseTimers);
+        KEY_THEME = context.getString(R.string.key_theme);
+        KEY_USE_COMPACT_DRAWER = context.getString(R.string.key_useCompactDrawer);
+        KEY_VIBRATE_ON_BUTTON_PRESS = context.getString(R.string.key_vibrateOnButtonPress);
+        KEY_VIBRATION_DURATION = context.getString(R.string.key_vibrationDuration);
+        KEY_CURRENT_APARTMENT_ID = "currentApartmentId";
+        KEY_KEEP_HISTORY_DURATION = context.getString(R.string.key_keepHistoryDuration);
+        KEY_SLEEP_AS_ANDROID_ENABLED = "SLEEP_AS_ANDROID_ENABLED_KEY";
+        KEY_STOCK_ALARM_CLOCK_ENABLED = "STOCK_ALARM_CLOCK_ENABLED_KEY";
+        KEY_SHOW_TOAST_IN_BACKGROUND = context.getString(R.string.key_showBackgroundActionToast);
+        KEY_SEND_ANONYMOUS_CRASH_DATA = context.getString(R.string.key_sendAnonymousCrashData);
+        KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = "shouldAskSendAnonymousCrashData";
+        KEY_LOG_DESTINATION = context.getString(R.string.key_logDestination);
+        KEY_SHOW_GEOFENCE_NOTIFICATIONS = context.getString(R.string.key_showGeofenceNotifications);
+        KEY_SHOW_TIMER_NOTIFICATIONS = context.getString(R.string.key_showTimerNotifications);
+        KEY_SHOULD_SHOW_WIZARD = context.getString(R.string.key_shouldShowWizard);
+    }
 
-	public static String getPublicKeyString() {
-		return SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
-	}
+    private static void initializeDefaultValueMap() {
+        defaultValueMap = new HashMap<>();
+        defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
+        defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
+                DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        defaultValueMap.put(KEY_AUTO_COLLAPSE_ROOMS, DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
+        defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
+        defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
+        defaultValueMap.put(KEY_VIBRATION_DURATION, DEFAULT_VALUE_VIBRATION_DURATION);
+        defaultValueMap.put(KEY_STARTUP_DEFAULT_TAB, DEFAULT_VALUE_STARTUP_TAB);
 
-	/**
-	 * Get a settings value by key
-	 *
-	 * @param settingsKey Key of setting
-	 * @param <T>         expected type of return value
-	 * @return settings value
-	 */
-	public static <T> T get(String settingsKey) throws ClassCastException {
-		// Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
+        defaultValueMap.put(KEY_STOCK_ALARM_CLOCK_ENABLED, DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED);
+        defaultValueMap.put(KEY_SLEEP_AS_ANDROID_ENABLED, DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED);
+        defaultValueMap.put(KEY_KEEP_HISTORY_DURATION, DEFAULT_VALUE_KEEP_HISTORY_DURATION);
+        defaultValueMap.put(KEY_CURRENT_APARTMENT_ID, DEFAULT_VALUE_CURRENT_APARTMENT_ID);
+        defaultValueMap.put(KEY_USE_COMPACT_DRAWER, DEFAULT_VALUE_USE_COMPACT_DRAWER);
+        defaultValueMap.put(KEY_AUTO_COLLAPSE_TIMERS, DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS);
+        defaultValueMap.put(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB,
+                DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        defaultValueMap.put(KEY_BACKUP_PATH, DEFAULT_VALUE_BACKUP_PATH);
+        defaultValueMap.put(KEY_AUTO_DISCOVER, DEFAULT_VALUE_AUTO_DISCOVER);
+        defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
+        defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
+        defaultValueMap.put(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA,
+                DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA);
+        defaultValueMap.put(KEY_LOG_DESTINATION, DEFAULT_VALUE_LOG_DESTINATION);
+        defaultValueMap.put(KEY_SHOW_GEOFENCE_NOTIFICATIONS,
+                DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS);
+        defaultValueMap.put(KEY_SHOW_TIMER_NOTIFICATIONS, DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS);
+        defaultValueMap.put(KEY_SHOULD_SHOW_WIZARD, DEFAULT_VALUE_SHOULD_SHOW_WIZARD);
 
-		Object value = cachedValues.get(settingsKey);
+        for (String key : defaultValueMap.keySet()) {
+            // initialize missing default values
+            get(key);
+        }
+    }
 
-		if (value == null) {
-			if (!defaultValueMap.containsKey(settingsKey)) {
-				Log.w("Setting \"" + settingsKey + "\" has no associated default value");
-			} else {
-				// set default value
-				set(settingsKey, getDefaultValue(settingsKey));
-				forceRefresh();
-			}
-			return (T) getDefaultValue(settingsKey);
-		} else {
-			// special treatment for this key, to make playstore mode possible
-			if (KEY_CURRENT_APARTMENT_ID.equals(settingsKey)) {
-				if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
-					return (T) value;
-				} else {
-					PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(
-							SmartphonePreferencesHandler.context);
-					return (T) playStoreModeDataModel.getApartments().get(0).getId();
-				}
-			}
+    /**
+     * Forces an update of the cached values
+     */
+    public static void forceRefresh() {
+        cachedValues = sharedPreferences.getAll();
+    }
 
-			return (T) value;
-		}
-	}
+    public static String getPublicKeyString() {
+        return SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
+    }
 
-	@Nullable
-	private static Object getDefaultValue(String settingsKey) {
-		return defaultValueMap.get(settingsKey);
-	}
+    /**
+     * Get a settings value by key
+     *
+     * @param settingsKey Key of setting
+     * @param <T>         expected type of return value
+     * @return settings value
+     */
+    public static <T> T get(String settingsKey) throws ClassCastException {
+        // Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
 
-	/**
-	 * Set a settings value by key
-	 *
-	 * @param settingsKey Key of setting
-	 * @param newValue    new value
-	 */
-	public static void set(String settingsKey, Object newValue) {
-		Log.d(SmartphonePreferencesHandler.class,
-				"setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
+        Object value = cachedValues.get(settingsKey);
 
-		SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (value == null) {
+            if (!defaultValueMap.containsKey(settingsKey)) {
+                Log.w("Setting \"" + settingsKey + "\" has no associated default value");
+            } else {
+                // set default value
+                set(settingsKey, getDefaultValue(settingsKey));
+                forceRefresh();
+            }
+            return (T) getDefaultValue(settingsKey);
+        } else {
+            // special treatment for this key, to make playstore mode possible
+            if (KEY_CURRENT_APARTMENT_ID.equals(settingsKey)) {
+                if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
+                    return (T) value;
+                } else {
+                    PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(
+                            SmartphonePreferencesHandler.context);
+                    return (T) playStoreModeDataModel.getApartments().get(0).getId();
+                }
+            }
 
-		if (newValue instanceof Boolean) {
-			editor.putBoolean(settingsKey, (Boolean) newValue);
-		} else if (newValue instanceof String) {
-			editor.putString(settingsKey, (String) newValue);
-		} else if (newValue instanceof Integer) {
-			editor.putInt(settingsKey, (Integer) newValue);
-		} else if (newValue instanceof Float) {
-			editor.putFloat(settingsKey, (Float) newValue);
-		} else if (newValue instanceof Long) {
-			editor.putLong(settingsKey, (Long) newValue);
-		} else {
-			throw new IllegalArgumentException("Cant save objects of type " + newValue.getClass());
-		}
+            return (T) value;
+        }
+    }
 
-		editor.apply();
+    @Nullable
+    private static Object getDefaultValue(String settingsKey) {
+        return defaultValueMap.get(settingsKey);
+    }
 
-		forceRefresh();
-	}
+    /**
+     * Set a settings value by key
+     *
+     * @param settingsKey Key of setting
+     * @param newValue    new value
+     */
+    public static void set(String settingsKey, Object newValue) {
+        Log.d(SmartphonePreferencesHandler.class,
+                "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (newValue instanceof Boolean) {
+            editor.putBoolean(settingsKey, (Boolean) newValue);
+        } else if (newValue instanceof String) {
+            editor.putString(settingsKey, (String) newValue);
+        } else if (newValue instanceof Integer) {
+            editor.putInt(settingsKey, (Integer) newValue);
+        } else if (newValue instanceof Float) {
+            editor.putFloat(settingsKey, (Float) newValue);
+        } else if (newValue instanceof Long) {
+            editor.putLong(settingsKey, (Long) newValue);
+        } else {
+            throw new IllegalArgumentException("Cant save objects of type " + newValue.getClass());
+        }
+
+        editor.apply();
+
+        forceRefresh();
+    }
 
 }
