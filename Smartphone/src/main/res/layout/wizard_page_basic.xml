@@ -29,15 +29,26 @@
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/WizardPageTitle" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/description"
-        style="@style/WizardPageDescription" />
+        <TextView
+            android:id="@+id/title"
+            style="@style/WizardPageTitle" />
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/WizardPageDescription"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
 </LinearLayout>

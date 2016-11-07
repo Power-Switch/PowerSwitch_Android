@@ -23,7 +23,7 @@ import android.os.Bundle;
 import eu.power_switch.R;
 
 /**
- * Basic wizard page consisting of an icon, a title text and a description text
+ * "Welcome" page to introduce the user to the wizard
  * <p>
  * Created by Markus on 04.11.2016.
  */
@@ -40,18 +40,13 @@ public class WelcomePage extends BasicPage {
     protected void onSetUiValues() {
         super.onSetUiValues();
         setIcon(R.drawable.ic_launcher);
-        setTitle(R.string.powerswitch_app_name);
-        setDescription(R.string.app_description_html);
+        setTitle(R.string.wizard_welcome_title);
+        setDescription(R.string.wizard_welcome_description);
     }
 
     @Override
     public int getDefaultBackgroundColor() {
         return getResources().getColor(R.color.red);
-    }
-
-    @Override
-    protected int getLayout() {
-        return R.layout.wizard_page_basic;
     }
 
 }

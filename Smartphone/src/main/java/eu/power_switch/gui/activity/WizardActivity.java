@@ -26,6 +26,7 @@ import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro;
 
+import eu.power_switch.R;
 import eu.power_switch.gui.fragment.wizard.AdvancedFeaturesPage;
 import eu.power_switch.gui.fragment.wizard.ApartmentsPage;
 import eu.power_switch.gui.fragment.wizard.FinishPage;
@@ -129,6 +130,12 @@ public class WizardActivity extends AppIntro {
             showSkipButton();
         } else {
             showBackButton();
+        }
+
+        if (newFragment instanceof FinishPage) {
+            FinishPage finishPage = (FinishPage) newFragment;
+            finishPage.onSuccess(R.string.wizard_finish_success);
+            finishPage.onFailure(R.string.wizard_finish_failure);
         }
     }
 

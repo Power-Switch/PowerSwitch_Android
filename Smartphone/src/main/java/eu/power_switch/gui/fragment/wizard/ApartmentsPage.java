@@ -24,7 +24,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 
 /**
- * Basic wizard page consisting of an icon, a title text and a description text
+ * "Apartments" page explaining the possibilities with apartments
  * <p>
  * Created by Markus on 04.11.2016.
  */
@@ -41,8 +41,8 @@ public class ApartmentsPage extends BasicPage {
     protected void onSetUiValues() {
         super.onSetUiValues();
         setIcon(IconicsHelper.getApartmentsIcon(getActivity()));
-        setTitle(R.string.apartments);
-        setDescription(R.string.tutorial__apartment_explanation);
+        setTitle(R.string.wizard_apartments_title);
+        setDescription(R.string.wizard_apartments_description);
     }
 
     @Override

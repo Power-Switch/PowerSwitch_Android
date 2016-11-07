@@ -29,9 +29,10 @@
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/imageView_success"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:layout_marginBottom="8dp"
+        android:layout_weight="3"
         android:elevation="4dp"
         android:visibility="gone"
         app:iiv_color="@color/active_green"
@@ -39,17 +40,21 @@
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/imageView_error"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
         android:layout_marginBottom="8dp"
+        android:layout_weight="3"
         android:elevation="4dp"
         android:visibility="gone"
         app:iiv_color="@color/red"
         app:iiv_icon="gmi-close-circle" />
 
+
     <TextView
         android:id="@+id/resultText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center" />
 
 </LinearLayout>

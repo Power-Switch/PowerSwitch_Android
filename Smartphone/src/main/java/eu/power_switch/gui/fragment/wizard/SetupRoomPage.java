@@ -23,6 +23,8 @@ import android.os.Bundle;
 import eu.power_switch.R;
 
 /**
+ * Setup Page for entering a Room name
+ * <p>
  * Created by Markus on 04.11.2016.
  */
 public class SetupRoomPage extends SingleLineTextInputPage {

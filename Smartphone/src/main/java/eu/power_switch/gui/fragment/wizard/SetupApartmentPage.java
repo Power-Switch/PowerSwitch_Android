@@ -5,6 +5,8 @@ import android.os.Bundle;
 import eu.power_switch.R;
 
 /**
+ * Setup page for entering a Apartment name
+ * <p>
  * Created by Markus on 04.11.2016.
  */
 public class SetupApartmentPage extends SingleLineTextInputPage {

@@ -25,6 +25,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -107,6 +108,17 @@ public abstract class WizardPage extends Fragment implements ISlideBackgroundCol
 
     /**
      * Shows an error message on the page
+     *
+     * @param messageRes error message resource
+     */
+    protected void showErrorMessage(@StringRes int messageRes) {
+        Snackbar.make(getMainView(), messageRes, Snackbar.LENGTH_LONG).show();
+    }
+
+    /**
+     * Shows an error message on the page
+     *
+     * @param message error message
      */
     protected void showErrorMessage(String message) {
         Snackbar.make(getMainView(), message, Snackbar.LENGTH_LONG).show();

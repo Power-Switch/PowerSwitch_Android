@@ -24,7 +24,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 
 /**
- * Basic wizard page consisting of an icon, a title text and a description text
+ * "Time based actions" page, showing the possibilities of timers and alarm clock actions.
  * <p>
  * Created by Markus on 04.11.2016.
  */
@@ -41,18 +41,13 @@ public class TimerAlarmClockPage extends BasicPage {
     protected void onSetUiValues() {
         super.onSetUiValues();
         setIcon(IconicsHelper.getAlarmClockIcon(getActivity()));
-        setTitle(R.string.timers);
-        setDescription(R.string.tutorial__timer_explanation);
+        setTitle(R.string.wizard_timer_alarm_clock_title);
+        setDescription(R.string.wizard_timer_alarm_clock_description);
     }
 
     @Override
     public int getDefaultBackgroundColor() {
         return getResources().getColor(R.color.red);
-    }
-
-    @Override
-    protected int getLayout() {
-        return R.layout.wizard_page_basic;
     }
 
 }

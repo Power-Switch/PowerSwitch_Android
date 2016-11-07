@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -23,5 +22,24 @@
     <string name="title_relaunchWizard">Relaunch Wizard</string>
 
     <string name="refresh">Refresh</string>
+
+    <string name="wizard_welcome_title">Welcome to PowerSwitch!</string>
+    <string name="wizard_welcome_description">This wizard will walk you through some of the great features of PowerSwitch and help you with the initial setup.\n\n
+        So let\'s not waste any more time and begin!</string>
+
+    <string name="wizard_apartments_title">Apartments</string>
+    <string name="wizard_apartments_description">PowerSwitch allows you to manage not only your own living space but multiple.</string>
+
+    <string name="wizard_rooms_scenes_title">Rooms &amp; Scenes</string>
+    <string name="wizard_rooms_scenes_description">Manage your devices per apartment in their appropriate rooms and create scenes for quick access to often used scenarios.</string>
+
+    <string name="wizard_timer_alarm_clock_title">Timers &amp; Alarm Clock</string>
+    <string name="wizard_timer_alarm_clock_description">For recurring actions you can create Timers based on weekdays or even react to your phone alarms.</string>
+
+    <string name="wizard_advanced_features_title">Geofences, NFC &amp; more</string>
+    <string name="wizard_advanced_features_description">For advanced users thers much more: Geofences for position based actions, NFC for wall switch replacements and a Plugin for Tasker, LLama and similar applications for unlimited possibilities.</string>
+
+    <string name="wizard_finish_success">Great! Your now all set to add your first receiver :)</string>
+    <string name="wizard_finish_failure">Somethings not right yet :/\nPlease check your input again.</string>
 
 </resources>

@@ -24,7 +24,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 
 /**
- * Basic wizard page consisting of an icon, a title text and a description text
+ * Rooms/Scenes page explaining the rooms and scenes functionality
  * <p>
  * Created by Markus on 04.11.2016.
  */
@@ -41,18 +41,13 @@ public class RoomsScenesPage extends BasicPage {
     protected void onSetUiValues() {
         super.onSetUiValues();
         setIcon(IconicsHelper.getRoomsScenesIcon(getActivity()));
-        setTitle(R.string.rooms);
-        setDescription(R.string.tutorial__room_explanation);
+        setTitle(R.string.wizard_rooms_scenes_title);
+        setDescription(R.string.wizard_rooms_scenes_description);
     }
 
     @Override
     public int getDefaultBackgroundColor() {
         return getResources().getColor(R.color.red);
-    }
-
-    @Override
-    protected int getLayout() {
-        return R.layout.wizard_page_basic;
     }
 
 }

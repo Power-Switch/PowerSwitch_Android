@@ -38,7 +38,7 @@ import eu.power_switch.R;
 import eu.power_switch.shared.ThemeHelper;
 
 /**
- * Basic wizard page consisting of an icon, a title text and a description text
+ * Basic wizard page consisting of an icon, a title text, a text input field and a description text
  * <p>
  * Created by Markus on 04.11.2016.
  */
@@ -46,7 +46,7 @@ public class SingleLineTextInputPage extends WizardPage implements ISlidePolicy 
 
     protected static final String KEY_BACKGROUND_COLOR = "defaultBackgroundColor";
     protected static final String KEY_TITLE = "titleText";
-    protected static final String KEY_HINT = "titleText";
+    protected static final String KEY_HINT = "hintText";
     protected static final String KEY_DESCRIPTION = "descriptionText";
 
     private int defaultBackgroundColor;

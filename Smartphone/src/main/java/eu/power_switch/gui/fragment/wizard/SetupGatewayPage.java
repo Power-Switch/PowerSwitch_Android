@@ -44,6 +44,8 @@ import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 
 /**
+ * Setup page for searching a Gateway
+ * <p>
  * Created by Markus on 05.11.2016.
  */
 public class SetupGatewayPage extends WizardPage {

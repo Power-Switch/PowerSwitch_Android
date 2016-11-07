@@ -31,6 +31,8 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import eu.power_switch.R;
 
 /**
+ * "Finished" page, indicating the user has reached the end of the wizard
+ * <p>
  * Created by Markus on 05.11.2016.
  */
 public class FinishPage extends WizardPage {
