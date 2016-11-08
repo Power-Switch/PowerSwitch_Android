@@ -40,6 +40,7 @@
         <attr name="startDiameter" format="dimension" />
         <attr name="targetDiameter" format="dimension" />
         <attr name="color" format="color" />
+        <attr name="delayMillisecondsBetweenWaves" format="integer" />
         <attr name="strokeWidth" format="integer" />
         <attr name="durationMilliseconds" format="integer" />
         <attr name="waveCount" format="integer" />

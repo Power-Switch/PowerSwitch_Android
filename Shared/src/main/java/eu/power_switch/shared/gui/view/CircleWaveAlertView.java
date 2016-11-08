@@ -36,13 +36,14 @@ public class CircleWaveAlertView extends View {
     private int color;
     private int strokeWidth;
     private int duration;
+    private int delayBetweenWaves;
     private int waveCount;
 
-    float[] currentDiameters;
-    Paint[] paints;
+    private float[] currentDiameters;
+    private Paint[] paints;
 
-    ValueAnimator[] colorAnimators;
-    ValueAnimator[] sizeAnimators;
+    private ValueAnimator[] colorAnimators;
+    private ValueAnimator[] sizeAnimators;
 
 
     public CircleWaveAlertView(Context context) {
@@ -81,7 +82,9 @@ public class CircleWaveAlertView extends View {
             color = a.getColor(R.styleable.CircleWaveAlertView_color, defaultColor);
             strokeWidth = a.getColor(R.styleable.CircleWaveAlertView_strokeWidth, DEFAULT_STROKE_WIDTH);
             duration = a.getInt(R.styleable.CircleWaveAlertView_durationMilliseconds, DEFAULT_DURATION_MILLISECONDS);
+            delayBetweenWaves = a.getInt(R.styleable.CircleWaveAlertView_delayMillisecondsBetweenWaves, -1);
             waveCount = a.getInt(R.styleable.CircleWaveAlertView_waveCount, DEFAULT_WAVE_COUNT);
+
             if (waveCount > 10) {
                 Log.w(TAG, "Maximum amount of circles is 10, ignoring higher value and dropping to 10.");
                 waveCount = 10;
@@ -116,7 +119,7 @@ public class CircleWaveAlertView extends View {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     currentDiameters[index] = (float) animation.getAnimatedValue();
 
-                    // we only need to rerender the view if the first animator updates, as all animators will update at the same speed
+                    // we only need to rerender the view if the first animator updates, as all animators update at the same speed
                     if (index == 0) {
                         invalidate();
                     }
@@ -141,7 +144,12 @@ public class CircleWaveAlertView extends View {
             @Override
             public void run() {
                 for (int i = 0; i < waveCount; i++) {
-                    int delay = i * (duration / 10);
+                    int delay;
+                    if (delayBetweenWaves == -1) {
+                        delay = i * (duration / 10);
+                    } else {
+                        delay = i * delayBetweenWaves;
+                    }
                     sizeAnimators[i].setStartDelay(delay);
                     colorAnimators[i].setStartDelay(delay);
 
