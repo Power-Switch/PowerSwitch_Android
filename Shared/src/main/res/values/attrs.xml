@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     PowerSwitch by Max Rosin & Markus Ressel
   ~     Copyright (C) 2015  Markus Ressel
   ~
@@ -20,42 +19,51 @@
 <resources>
 
     <declare-styleable name="PageIndicatorView">
-        <attr name="pageCount" format="integer"/>
-        <attr name="initialPageIndex" format="integer"/>
-        <attr name="activeIndicatorSize" format="dimension"/>
-        <attr name="inactiveIndicatorSize" format="dimension"/>
-        <attr name="indicatorGap" format="dimension"/>
-        <attr name="activeIndicatorColorFill" format="color"/>
-        <attr name="activeIndicatorColorStroke" format="color"/>
-        <attr name="inactiveIndicatorColorFill" format="color"/>
-        <attr name="inactiveIndicatorColorStroke" format="color"/>
+        <attr name="pageCount" format="integer" />
+        <attr name="initialPageIndex" format="integer" />
+        <attr name="activeIndicatorSize" format="dimension" />
+        <attr name="inactiveIndicatorSize" format="dimension" />
+        <attr name="indicatorGap" format="dimension" />
+        <attr name="activeIndicatorColorFill" format="color" />
+        <attr name="activeIndicatorColorStroke" format="color" />
+        <attr name="inactiveIndicatorColorFill" format="color" />
+        <attr name="inactiveIndicatorColorStroke" format="color" />
     </declare-styleable>
 
     <declare-styleable name="CircleIndicatorView">
-        <attr name="diameter" format="dimension"/>
-        <attr name="fillColor" format="color"/>
-        <attr name="strokeColor" format="color"/>
+        <attr name="diameter" format="dimension" />
+        <attr name="fillColor" format="color" />
+        <attr name="strokeColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="CircleWaveAlertView">
+        <attr name="startDiameter" format="dimension" />
+        <attr name="targetDiameter" format="dimension" />
+        <attr name="color" format="color" />
+        <attr name="strokeWidth" format="integer" />
+        <attr name="durationMilliseconds" format="integer" />
+        <attr name="waveCount" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="colorPrimaryLight">
-        <attr name="colorPrimaryLight" format="color"/>
-        <attr name="textColorInactive" format="color"/>
+        <attr name="colorPrimaryLight" format="color" />
+        <attr name="textColorInactive" format="color" />
     </declare-styleable>
 
     <declare-styleable name="cardview">
-        <attr name="cardview_backgroundColor" format="color"/>
+        <attr name="cardview_backgroundColor" format="color" />
     </declare-styleable>
 
     <declare-styleable name="button">
-        <attr name="button_backgroundDrawable" format="reference"/>
+        <attr name="button_backgroundDrawable" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="dialog_bottom_bar">
-        <attr name="dialog_bottomBar_next_color" format="color"/>
+        <attr name="dialog_bottomBar_next_color" format="color" />
     </declare-styleable>
 
     <declare-styleable name="dialog">
-        <attr name="dialog_background_color" format="color"/>
+        <attr name="dialog_background_color" format="color" />
     </declare-styleable>
 
 </resources>
