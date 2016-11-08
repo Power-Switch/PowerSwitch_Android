@@ -146,7 +146,7 @@ public class CircleWaveAlertView extends View {
                 for (int i = 0; i < waveCount; i++) {
                     int delay;
                     if (delayBetweenWaves == -1) {
-                        delay = i * (duration / 10);
+                        delay = i * (duration / waveCount);
                     } else {
                         delay = i * delayBetweenWaves;
                     }
