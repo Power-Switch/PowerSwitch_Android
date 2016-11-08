@@ -27,7 +27,6 @@ public class CircleWaveAlertView extends View {
 
     private static final String TAG = "CircleWaveAlertView";
 
-    private static final int DEFAULT_DIAMETER = 200;
     private static final int DEFAULT_STROKE_WIDTH = 3;
     private static final int DEFAULT_DURATION_MILLISECONDS = 3000;
     private static final int DEFAULT_WAVE_COUNT = 3;
@@ -58,7 +57,6 @@ public class CircleWaveAlertView extends View {
         super(context, attrs, defStyleAttr);
 
         readArguments(context, attrs);
-        init();
     }
 
     @TargetApi(21)
@@ -66,7 +64,6 @@ public class CircleWaveAlertView extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
 
         readArguments(context, attrs);
-        init();
     }
 
     private void readArguments(Context context, AttributeSet attrs) {
@@ -80,7 +77,7 @@ public class CircleWaveAlertView extends View {
             int defaultColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
 
             startDiameter = a.getDimensionPixelSize(R.styleable.CircleWaveAlertView_startDiameter, 0);
-            targetDiameter = a.getDimensionPixelSize(R.styleable.CircleWaveAlertView_targetDiameter, DEFAULT_DIAMETER);
+            targetDiameter = a.getDimensionPixelSize(R.styleable.CircleWaveAlertView_targetDiameter, -1);
             color = a.getColor(R.styleable.CircleWaveAlertView_color, defaultColor);
             strokeWidth = a.getColor(R.styleable.CircleWaveAlertView_strokeWidth, DEFAULT_STROKE_WIDTH);
             duration = a.getInt(R.styleable.CircleWaveAlertView_durationMilliseconds, DEFAULT_DURATION_MILLISECONDS);
@@ -118,7 +115,11 @@ public class CircleWaveAlertView extends View {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     currentDiameters[index] = (float) animation.getAnimatedValue();
-                    invalidate();
+
+                    // we only need to rerender the view if the first animator updates, as all animators will update at the same speed
+                    if (index == 0) {
+                        invalidate();
+                    }
                 }
             });
 
@@ -191,6 +192,12 @@ public class CircleWaveAlertView extends View {
         }
 
         setMeasuredDimension(width, height);
+
+        if (targetDiameter == -1) {
+            targetDiameter = Math.min(width, height);
+        }
+
+        init();
     }
 
     @Override
