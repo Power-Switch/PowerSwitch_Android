@@ -100,7 +100,7 @@ public class CircleWaveAlertView extends View {
         colorAnimators = new ValueAnimator[waveCount];
         sizeAnimators = new ValueAnimator[waveCount];
 
-        Interpolator interpolator1 = new DecelerateInterpolator();
+        Interpolator interpolator = new DecelerateInterpolator();
 
         for (int i = 0; i < waveCount; i++) {
             paints[i] = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -112,7 +112,7 @@ public class CircleWaveAlertView extends View {
             sizeAnimators[i].setDuration(duration);
             sizeAnimators[i].setRepeatCount(ObjectAnimator.INFINITE);
             sizeAnimators[i].setRepeatMode(ValueAnimator.RESTART);
-            sizeAnimators[i].setInterpolator(interpolator1);
+            sizeAnimators[i].setInterpolator(interpolator);
             final int index = i;
             sizeAnimators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -131,7 +131,7 @@ public class CircleWaveAlertView extends View {
             colorAnimators[i].setDuration(duration);
             colorAnimators[i].setRepeatCount(ObjectAnimator.INFINITE);
             colorAnimators[i].setRepeatMode(ValueAnimator.RESTART);
-            colorAnimators[i].setInterpolator(interpolator1);
+            colorAnimators[i].setInterpolator(interpolator);
             colorAnimators[i].addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
