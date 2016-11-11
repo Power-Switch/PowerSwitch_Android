@@ -22,10 +22,7 @@ fabric.properties
 
 
 # Gradle
-/gradle/wrapper/gradle-wrapper.jar
 .gradle
-gradlew
-gradlew.bat
 
 *.iml
 
