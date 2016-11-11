@@ -64,6 +64,8 @@ public class WizardActivity extends AppIntro {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        addSlide(TestPage.newInstance());
+
         // welcome page
         addSlide(WelcomePage.newInstance());
 
