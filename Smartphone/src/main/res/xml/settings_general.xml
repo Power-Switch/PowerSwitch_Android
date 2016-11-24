@@ -110,6 +110,12 @@
             android:key="@string/key_theme"
             android:title="@string/title_theme"/>
 
+        <eu.power_switch.settings.IntListPreference
+            android:entries="@array/entries_launcher_icon"
+            android:entryValues="@array/entryValues_launcher_icon"
+            android:key="@string/key_launcher_icon"
+            android:title="@string/title_launcher_icon"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/tutorial">

@@ -18,9 +18,18 @@
 
 package eu.power_switch.shared.application;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.support.annotation.NonNull;
+
+import java.util.List;
+import java.util.NoSuchElementException;
 
 import eu.power_switch.shared.log.Log;
 
@@ -46,4 +55,50 @@ public class ApplicationHelper {
         }
     }
 
+    /**
+     * Set the active launcher icon
+     *
+     * @param ctx  application context
+     * @param icon
+     */
+    public static void setLauncherIcon(Context ctx, LauncherIcon icon) {
+        PackageManager pm = ctx.getPackageManager();
+        ActivityManager am = (ActivityManager) ctx.getSystemService(Activity.ACTIVITY_SERVICE);
+
+        // Enable/disable activity-aliases
+        pm.setComponentEnabledSetting(new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-MaterialIcon"),
+                icon.ordinal() == LauncherIcon.Material.ordinal() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        pm.setComponentEnabledSetting(new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-OldIcon"),
+                icon.ordinal() == LauncherIcon.Old.ordinal() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+
+        // Find launcher and kill it
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        List<ResolveInfo> resolves = pm.queryIntentActivities(i, 0);
+        for (ResolveInfo res : resolves) {
+            if (res.activityInfo != null) {
+                am.killBackgroundProcesses(res.activityInfo.packageName);
+            }
+        }
+    }
+
+    public enum LauncherIcon {
+        Material,
+        Old;
+
+        public static LauncherIcon valueOf(int ordinal) {
+            for (LauncherIcon value : values()) {
+                if (value.ordinal() == ordinal) {
+                    return value;
+                }
+            }
+
+            throw new NoSuchElementException();
+        }
+    }
 }

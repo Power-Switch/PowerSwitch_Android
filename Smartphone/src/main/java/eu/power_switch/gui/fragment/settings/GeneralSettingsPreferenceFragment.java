@@ -57,6 +57,7 @@ import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.shared.application.ApplicationHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -81,9 +82,12 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     private SwitchPreference showBackgroundActionToast;
     private SwitchPreference vibrateOnButtonPress;
     private SliderPreference vibrationDuration;
+    private SwitchPreference showGeofenceNotifications;
+    private SwitchPreference showTimerNotifications;
     private IntListPreference keepHistoryDuration;
     private Preference backupPath;
     private IntListPreference theme;
+    private IntListPreference launcherIcon;
     private Preference resetTutial;
     private Preference relaunchWizard;
     private SwitchPreference sendAnonymousCrashData;
@@ -97,8 +101,8 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     private Map<Integer, String> keepHistoryMap;
     private Map<Integer, String> themeMap;
     private Map<Integer, String> logDestinationMap;
-    private SwitchPreference showGeofenceNotifications;
-    private SwitchPreference showTimerNotifications;
+    private Map<Integer, String> launcherIconMap;
+
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -224,6 +228,11 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         theme.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_THEME);
         themeMap = getListPreferenceEntryValueMap(R.array.theme_values, R.array.theme_names);
         theme.setSummary(themeMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)));
+
+        launcherIcon = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON);
+        launcherIcon.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON);
+        launcherIconMap = getListPreferenceEntryValueMap(R.array.entryValues_launcher_icon, R.array.entries_launcher_icon);
+        launcherIcon.setSummary(launcherIconMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
 
         resetTutial = findPreference(getString(R.string.key_resetTutorial));
         resetTutial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -409,6 +418,16 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         } else if (SmartphonePreferencesHandler.KEY_LOG_DESTINATION.equals(key)) {
             logDestination.setSummary(logDestinationMap.get(sharedPreferences.getInt(key,
                     SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION)));
+        } else if (SmartphonePreferencesHandler.KEY_LAUNCHER_ICON.equals(key)) {
+            ApplicationHelper.setLauncherIcon(getContext(),
+                    ApplicationHelper.LauncherIcon.valueOf(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
+            launcherIcon.setSummary(launcherIconMap.get(sharedPreferences.getInt(key,
+                    SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON)));
+
+            new AlertDialog.Builder(getActivity()).setTitle(R.string.attention)
+                    .setMessage(R.string.changes_may_only_show_up_after_device_restart)
+                    .setNeutralButton(android.R.string.ok, null)
+                    .show();
         }
 
         SmartphonePreferencesHandler.forceRefresh();

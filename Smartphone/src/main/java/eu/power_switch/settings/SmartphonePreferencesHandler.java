@@ -63,6 +63,7 @@ public class SmartphonePreferencesHandler {
     public static final boolean DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS = true;
     public static final boolean DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS = true;
     public static final boolean DEFAULT_VALUE_SHOULD_SHOW_WIZARD = true;
+    public static final int DEFAULT_VALUE_LAUNCHER_ICON = 0;
 
     public static String KEY_AUTO_DISCOVER;
     public static String KEY_BACKUP_PATH;
@@ -87,6 +88,7 @@ public class SmartphonePreferencesHandler {
     public static String KEY_SHOW_GEOFENCE_NOTIFICATIONS;
     public static String KEY_SHOW_TIMER_NOTIFICATIONS;
     public static String KEY_SHOULD_SHOW_WIZARD;
+    public static String KEY_LAUNCHER_ICON;
 
 
     // setting keys
@@ -118,8 +120,7 @@ public class SmartphonePreferencesHandler {
      */
     public static void init(Context context) {
         SmartphonePreferencesHandler.context = context;
-        sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME,
-                Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         forceRefresh();
 
         initializePublicKeys(context);
@@ -154,13 +155,13 @@ public class SmartphonePreferencesHandler {
         KEY_SHOW_GEOFENCE_NOTIFICATIONS = context.getString(R.string.key_showGeofenceNotifications);
         KEY_SHOW_TIMER_NOTIFICATIONS = context.getString(R.string.key_showTimerNotifications);
         KEY_SHOULD_SHOW_WIZARD = context.getString(R.string.key_shouldShowWizard);
+        KEY_LAUNCHER_ICON = context.getString(R.string.key_launcher_icon);
     }
 
     private static void initializeDefaultValueMap() {
         defaultValueMap = new HashMap<>();
         defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
-        defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON,
-                DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
+        defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
         defaultValueMap.put(KEY_AUTO_COLLAPSE_ROOMS, DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS);
         defaultValueMap.put(KEY_THEME, DEFAULT_VALUE_THEME);
         defaultValueMap.put(KEY_VIBRATE_ON_BUTTON_PRESS, DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS);
@@ -173,19 +174,17 @@ public class SmartphonePreferencesHandler {
         defaultValueMap.put(KEY_CURRENT_APARTMENT_ID, DEFAULT_VALUE_CURRENT_APARTMENT_ID);
         defaultValueMap.put(KEY_USE_COMPACT_DRAWER, DEFAULT_VALUE_USE_COMPACT_DRAWER);
         defaultValueMap.put(KEY_AUTO_COLLAPSE_TIMERS, DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS);
-        defaultValueMap.put(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB,
-                DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
+        defaultValueMap.put(KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB, DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB);
         defaultValueMap.put(KEY_BACKUP_PATH, DEFAULT_VALUE_BACKUP_PATH);
         defaultValueMap.put(KEY_AUTO_DISCOVER, DEFAULT_VALUE_AUTO_DISCOVER);
         defaultValueMap.put(KEY_SHOW_TOAST_IN_BACKGROUND, DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND);
         defaultValueMap.put(KEY_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA);
-        defaultValueMap.put(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA,
-                DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA);
+        defaultValueMap.put(KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA);
         defaultValueMap.put(KEY_LOG_DESTINATION, DEFAULT_VALUE_LOG_DESTINATION);
-        defaultValueMap.put(KEY_SHOW_GEOFENCE_NOTIFICATIONS,
-                DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS);
+        defaultValueMap.put(KEY_SHOW_GEOFENCE_NOTIFICATIONS, DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS);
         defaultValueMap.put(KEY_SHOW_TIMER_NOTIFICATIONS, DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS);
         defaultValueMap.put(KEY_SHOULD_SHOW_WIZARD, DEFAULT_VALUE_SHOULD_SHOW_WIZARD);
+        defaultValueMap.put(KEY_LAUNCHER_ICON, DEFAULT_VALUE_LAUNCHER_ICON);
 
         for (String key : defaultValueMap.keySet()) {
             // initialize missing default values
@@ -231,8 +230,7 @@ public class SmartphonePreferencesHandler {
                 if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
                     return (T) value;
                 } else {
-                    PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(
-                            SmartphonePreferencesHandler.context);
+                    PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(SmartphonePreferencesHandler.context);
                     return (T) playStoreModeDataModel.getApartments().get(0).getId();
                 }
             }
@@ -253,8 +251,7 @@ public class SmartphonePreferencesHandler {
      * @param newValue    new value
      */
     public static void set(String settingsKey, Object newValue) {
-        Log.d(SmartphonePreferencesHandler.class,
-                "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
+        Log.d(SmartphonePreferencesHandler.class, "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
