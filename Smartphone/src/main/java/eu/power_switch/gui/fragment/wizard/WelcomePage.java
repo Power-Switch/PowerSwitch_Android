@@ -39,7 +39,7 @@ public class WelcomePage extends BasicPage {
     @Override
     protected void onSetUiValues() {
         super.onSetUiValues();
-        setIcon(R.drawable.ic_launcher);
+        setIcon(R.drawable.ic_launcher_material);
         setTitle(R.string.wizard_welcome_title);
         setDescription(R.string.wizard_welcome_description);
     }

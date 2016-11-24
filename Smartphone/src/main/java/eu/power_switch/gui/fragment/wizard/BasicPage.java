@@ -98,7 +98,7 @@ public class BasicPage extends WizardPage {
             setDescription(descriptionText);
         } else {
             defaultBackgroundColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorPrimary);
-            setIcon(R.drawable.ic_launcher);
+            setIcon(R.drawable.ic_launcher_material);
             setTitle("Title");
             setDescription("Description text...");
         }
