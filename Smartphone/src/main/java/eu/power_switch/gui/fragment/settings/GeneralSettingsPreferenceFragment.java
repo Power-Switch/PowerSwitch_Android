@@ -420,7 +420,8 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
                     SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION)));
         } else if (SmartphonePreferencesHandler.KEY_LAUNCHER_ICON.equals(key)) {
             ApplicationHelper.setLauncherIcon(getContext(),
-                    ApplicationHelper.LauncherIcon.valueOf(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
+                    ApplicationHelper.LauncherIcon.valueOf(sharedPreferences.getInt(key,
+                            SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON)));
             launcherIcon.setSummary(launcherIconMap.get(sharedPreferences.getInt(key,
                     SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON)));
 

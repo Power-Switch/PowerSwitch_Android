@@ -162,7 +162,7 @@
     <string name="key_launcher_icon">launcherIcon</string>
     <string name="title_launcher_icon">Launcher Icon</string>
 
-    <string name="changes_may_only_show_up_after_device_restart">Changes may only apply after a deveice reboot</string>
+    <string name="changes_may_only_show_up_after_device_restart">Changes may only apply after a device reboot</string>
 
     <!-- Tutorial -->
     <string name="key_resetTutorial">resetTutorial</string>

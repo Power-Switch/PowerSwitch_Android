@@ -65,15 +65,30 @@ public class ApplicationHelper {
         PackageManager pm = ctx.getPackageManager();
         ActivityManager am = (ActivityManager) ctx.getSystemService(Activity.ACTIVITY_SERVICE);
 
-        // Enable/disable activity-aliases
-        pm.setComponentEnabledSetting(new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-MaterialIcon"),
-                icon.ordinal() == LauncherIcon.Material.ordinal() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+        ComponentName materialIconComponent = new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-MaterialIcon");
+        ComponentName oldIconComponent = new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-OldIcon");
 
-        pm.setComponentEnabledSetting(new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-OldIcon"),
-                icon.ordinal() == LauncherIcon.Old.ordinal() ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
+        switch (icon) {
+            case Old:
+                pm.setComponentEnabledSetting(materialIconComponent,
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
 
+                pm.setComponentEnabledSetting(oldIconComponent,
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP);
+                break;
+            case Material:
+            default:
+                pm.setComponentEnabledSetting(materialIconComponent,
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP);
+
+                pm.setComponentEnabledSetting(oldIconComponent,
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
+                break;
+        }
 
         // Find launcher and kill it
         Intent i = new Intent(Intent.ACTION_MAIN);
@@ -87,6 +102,9 @@ public class ApplicationHelper {
         }
     }
 
+    /**
+     * Launcher Icons
+     */
     public enum LauncherIcon {
         Material,
         Old;
