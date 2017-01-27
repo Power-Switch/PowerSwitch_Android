@@ -146,6 +146,24 @@
     <string name="key_theme">theme</string>
     <string name="title_theme">Theme</string>
 
+    <string-array name="entries_launcher_icon">
+        <item>@string/material_icon</item>
+        <item>@string/old_icon</item>
+    </string-array>
+
+    <string-array name="entryValues_launcher_icon">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="old_icon">Old Icon</string>
+    <string name="material_icon">Material Design Icon</string>
+
+    <string name="key_launcher_icon">launcherIcon</string>
+    <string name="title_launcher_icon">Launcher Icon</string>
+
+    <string name="changes_may_only_show_up_after_device_restart">Changes may only apply after a device reboot</string>
+
     <!-- Tutorial -->
     <string name="key_resetTutorial">resetTutorial</string>
     <string name="title_resetTutorial">Reset Tutorial</string>

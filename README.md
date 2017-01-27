@@ -1,4 +1,4 @@
-# PowerSwitch
+# ![PowerSwitch Logo](https://github.com/Power-Switch/PowerSwitch_Android/blob/dev/Smartphone/src/main/res/drawable-hdpi/ic_launcher_material.png "PowerSwitch Logo") PowerSwitch
 PowerSwitch - Funksteckdosen auf dem Smartphone
 
 https://power-switch.eu

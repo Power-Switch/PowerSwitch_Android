@@ -37,6 +37,8 @@
     <!--<uses-permission android:name="android.permission.READ_SMS"/>-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <!-- used to restart launcher when changing the launcher icon -->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
 
     <!-- IMPLICIT THROUGH PLAY SERVICES -->
     <!-- <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> -->
@@ -52,7 +54,7 @@
         android:name=".application.PowerSwitch"
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher_material"
         android:label="@string/powerswitch_app_name">
 
 
@@ -62,6 +64,7 @@
         <!-- The SplashTheme is just used for the initial SpashScreen Background.
              The real Theme is loaded in onCreate of the Activity
         -->
+
         <activity
             android:name=".gui.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
@@ -71,13 +74,41 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity-alias
+            android:name=".gui.activity.MainActivity-MaterialIcon"
+            android:enabled="true"
+            android:icon="@drawable/ic_launcher_material"
+            android:label="@string/powerswitch_app_name"
+            android:targetActivity=".gui.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.ASSIST"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-        </activity>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".gui.activity.MainActivity-OldIcon"
+            android:enabled="false"
+            android:icon="@drawable/ic_launcher_old"
+            android:label="@string/powerswitch_app_name"
+            android:targetActivity=".gui.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name=".gui.dialog.RestoreBackupFromFileActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
@@ -238,7 +269,7 @@
             android:name=".api.taskerplugin.EditActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/ic_launcher_material"
             android:label="@string/powerswitch_plugin_name"
             android:theme="@style/PowerSwitchTheme.Tasker.Dark.Blue"
             android:uiOptions="splitActionBarWhenNarrow"
@@ -254,7 +285,7 @@
         <!-- Receiver -->
         <receiver
             android:name=".widget.provider.ReceiverWidgetProvider"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/ic_launcher_material"
             android:label="@string/receiver">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -266,7 +297,7 @@
         </receiver>
         <receiver
             android:name=".widget.provider.RoomWidgetProvider"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/ic_launcher_material"
             android:label="@string/room">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -278,7 +309,7 @@
         </receiver>
         <receiver
             android:name=".widget.provider.SceneWidgetProvider"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@drawable/ic_launcher_material"
             android:label="@string/scene">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>

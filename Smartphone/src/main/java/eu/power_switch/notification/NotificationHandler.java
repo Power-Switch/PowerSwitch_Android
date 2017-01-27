@@ -101,8 +101,7 @@ public class NotificationHandler {
 		}
 		if (largeIcon == null) {
 			// set default large icon
-			largeIcon = BitmapFactory.decodeResource(context.getResources(),
-					R.drawable.ic_launcher);
+			largeIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher_material);
 		}
 		if (title == null) {
 			// set default title text
