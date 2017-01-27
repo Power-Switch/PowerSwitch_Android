@@ -271,6 +271,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         dialog.getWindow().setAttributes(lp);
 
         dialog.show();
+
         return dialog;
     }
 

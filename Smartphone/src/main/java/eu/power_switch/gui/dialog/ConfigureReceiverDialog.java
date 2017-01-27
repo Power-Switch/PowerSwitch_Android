@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -83,13 +82,13 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
         if (arguments != null && arguments.containsKey(RECEIVER_ID_KEY)) {
             // init dialog using existing receiver
             receiverId = arguments.getLong(RECEIVER_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     getTargetFragment(), receiverId));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     getTargetFragment()));
             return false;
         }
@@ -136,21 +135,21 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private Context context;
+        private ConfigurationDialogTabbed parentDialog;
         private long receiverId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
         private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.receiverId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.receiverId = id;
             this.targetFragment = targetFragment;
         }
@@ -164,15 +163,15 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.name);
+                    return parentDialog.getString(R.string.name);
                 case 1:
-                    return context.getString(R.string.type);
+                    return parentDialog.getString(R.string.type);
                 case 2:
-                    return context.getString(R.string.channel);
+                    return parentDialog.getString(R.string.channel);
                 case 3:
-                    return context.getString(R.string.network);
+                    return parentDialog.getString(R.string.network);
                 case 4:
-                    return context.getString(R.string.summary);
+                    return parentDialog.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -184,19 +183,19 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureReceiverDialogPage1NameFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage1NameFragment.class, parentDialog);
                     break;
                 case 1:
-                    fragment = new ConfigureReceiverDialogPage2TypeFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage2TypeFragment.class, parentDialog);
                     break;
                 case 2:
-                    fragment = new ConfigureReceiverDialogPage3SetupFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage3SetupFragment.class, parentDialog);
                     break;
                 case 3:
-                    fragment = new ConfigureReceiverDialogPage4GatewayFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage4GatewayFragment.class, parentDialog);
                     break;
                 case 4:
-                    fragment = new ConfigureReceiverDialogPage5TabbedSummaryFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage5TabbedSummaryFragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

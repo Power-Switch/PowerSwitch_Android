@@ -20,7 +20,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 android {
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.2'
     compileSdkVersion 25
 
     compileOptions {

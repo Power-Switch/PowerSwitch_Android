@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -77,13 +76,13 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
         if (arguments != null && arguments.containsKey(GEOFENCE_ID_KEY)) {
             // init dialog using existing geofence
             geofenceId = arguments.getLong(GEOFENCE_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment(), geofenceId));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     (RecyclerViewFragment) getTargetFragment()));
             return false;
         }
@@ -135,21 +134,21 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
 
     protected static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private Context context;
+        private ConfigurationDialogTabbed parentDialog;
         private long geofenceId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
         private RecyclerViewFragment recyclerViewFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, RecyclerViewFragment recyclerViewFragment) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.geofenceId = -1;
             this.recyclerViewFragment = recyclerViewFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, RecyclerViewFragment recyclerViewFragment, long id) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.geofenceId = id;
             this.recyclerViewFragment = recyclerViewFragment;
         }
@@ -163,13 +162,13 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.location);
+                    return parentDialog.getString(R.string.location);
                 case 1:
-                    return context.getString(R.string.enter);
+                    return parentDialog.getString(R.string.enter);
                 case 2:
-                    return context.getString(R.string.exit);
+                    return parentDialog.getString(R.string.exit);
                 case 3:
-                    return context.getString(R.string.summary);
+                    return parentDialog.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -181,16 +180,16 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureGeofenceDialogPage1LocationFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage1LocationFragment.class, parentDialog);
                     break;
                 case 1:
-                    fragment = new ConfigureGeofenceDialogPage2EnterActionsFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage2EnterActionsFragment.class, parentDialog);
                     break;
                 case 2:
-                    fragment = new ConfigureGeofenceDialogPage3ExitActionsFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage3ExitActionsFragment.class, parentDialog);
                     break;
                 case 3:
-                    fragment = new ConfigureGeofenceDialogPage4SummaryFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage4SummaryFragment.class, parentDialog);
                     fragment.setTargetFragment(recyclerViewFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

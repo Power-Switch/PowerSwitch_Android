@@ -80,8 +80,7 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
      * @param name      name of room
      * @param receivers list of receivers (with changed order)
      */
-    public static void sendGatewayDetailsChangedBroadcast(Context context, String name,
-                                                          ArrayList<Receiver> receivers) {
+    public static void sendGatewayDetailsChangedBroadcast(Context context, String name, ArrayList<Receiver> receivers) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_NAME_CHANGED);
         intent.putExtra(KEY_NAME, name);
         intent.putExtra(KEY_RECEIVERS, receivers);
@@ -195,4 +194,5 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
     private String getCurrentRoomName() {
         return name.getText().toString().trim();
     }
+
 }

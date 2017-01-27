@@ -71,13 +71,13 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
         if (arguments != null && arguments.containsKey(ROOM_ID_KEY)) {
             // init dialog using existing receiver
             roomId = arguments.getLong(ROOM_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     getTargetFragment(), roomId));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     getTargetFragment()));
             return false;
         }
@@ -123,21 +123,24 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
+        private ConfigurationDialogTabbed parentDialog;
         private Context context;
         private long roomId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
         private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
+            this.context = parentDialog.getActivity();
             this.roomId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
+            this.context = parentDialog.getActivity();
             this.roomId = id;
             this.targetFragment = targetFragment;
         }
@@ -165,10 +168,10 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureRoomDialogPage1Fragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureRoomDialogPage1Fragment.class, parentDialog);
                     break;
                 case 1:
-                    fragment = new ConfigureRoomDialogPage2SummaryFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureRoomDialogPage2SummaryFragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

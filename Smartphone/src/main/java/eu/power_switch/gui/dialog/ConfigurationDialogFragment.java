@@ -19,10 +19,14 @@
 package eu.power_switch.gui.dialog;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
+
+import java.lang.reflect.Constructor;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -32,6 +36,35 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 25.03.2016.
  */
 public abstract class ConfigurationDialogFragment extends Fragment {
+
+    protected ConfigurationDialogTabbed configurationDialogTabbed;
+
+    /**
+     * Use this method to instantiate a page used in a (multipage) configuration dialog
+     *
+     * @param clazz        the page class that should be instantiated
+     * @param parentDialog the parent configuration dialog
+     *
+     * @return Instance of the configuration dialog page
+     */
+    public static <T extends ConfigurationDialogFragment> ConfigurationDialogFragment newInstance(@NonNull Class<T> clazz,
+                                                                                                  ConfigurationDialogTabbed parentDialog) {
+        Bundle args = new Bundle();
+
+        if (!ConfigurationDialogFragment.class.isAssignableFrom(clazz)) {
+            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogFragment.class.getName() + " or subclass it!");
+        }
+
+        try {
+            Constructor<T> constructor = clazz.getConstructor();
+            ConfigurationDialogFragment fragment = constructor.newInstance();
+            fragment.setParentConfigurationDialog(parentDialog);
+            fragment.setArguments(args);
+            return fragment;
+        } catch (Exception e) {
+            throw new RuntimeException("Couldn't instantiate configuration page!", e);
+        }
+    }
 
     /**
      * Used to notify parent Dialog that configuration has changed
@@ -44,7 +77,8 @@ public abstract class ConfigurationDialogFragment extends Fragment {
     /**
      * Get content view of this ConfigurationDialogFragment
      * <p/>
-     * This view should be declared with the id "contentView" in the layout definition of this content fragment.
+     * This view should be declared with the id "contentView" in the layout definition of this
+     * content fragment.
      * If no such view can be found it will default to the "getView()" method of the Fragment,
      * which should be the outermost dialog window view.
      *
@@ -67,4 +101,25 @@ public abstract class ConfigurationDialogFragment extends Fragment {
         }
     }
 
+    /**
+     * Set the parent dialog of this page
+     *
+     * @param configurationDialogTabbed Dialog
+     */
+    public void setParentConfigurationDialog(@NonNull ConfigurationDialogTabbed configurationDialogTabbed) {
+        this.configurationDialogTabbed = configurationDialogTabbed;
+    }
+
+    /**
+     * Get the parent dialog of this page
+     *
+     * @return parent ConfigurationDialogTabbed
+     */
+    public ConfigurationDialogTabbed getParentConfigurationDialog() {
+        if (configurationDialogTabbed == null) {
+            throw new IllegalStateException(
+                    "Missing parent dialog! Did you use ConfigurationDialogFragment.newInstance(Class<T>, ConfigurationDialogTabbed) to instantiate your page?");
+        }
+        return configurationDialogTabbed;
+    }
 }

@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -72,11 +71,11 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
         if (arguments != null && arguments.containsKey(SCENE_ID_KEY)) {
             // init dialog using existing scene
             sceneId = arguments.getLong(SCENE_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     getTargetFragment(), sceneId));
             return true;
         } else {
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                     getTargetFragment()));
             return false;
         }
@@ -127,21 +126,21 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private Context context;
+        private ConfigurationDialogTabbed parentDialog;
         private long sceneId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
         private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.sceneId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.sceneId = id;
             this.targetFragment = targetFragment;
         }
@@ -155,11 +154,11 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.name);
+                    return parentDialog.getString(R.string.name);
                 case 1:
-                    return context.getString(R.string.setup);
+                    return parentDialog.getString(R.string.setup);
                 case 2:
-                    return context.getString(R.string.summary);
+                    return parentDialog.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -171,10 +170,10 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureSceneDialogPage1NameFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureSceneDialogPage1NameFragment.class, parentDialog);
                     break;
                 case 1:
-                    fragment = new ConfigureSceneDialogTabbedPage2SetupFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureSceneDialogTabbedPage2SetupFragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

@@ -42,6 +42,12 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
+import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
@@ -168,7 +174,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         });
 
         // TODO: Showcase is rendered behind the Dialog, maybe needs fix in library
-//        MaterialShowcaseView materialShowcaseView = new MaterialShowcaseView.Builder(getActivity())
+//        MaterialShowcaseView materialShowcaseView = new MaterialShowcaseView.Builder
+// (getActivity())
 //                .setTarget(name)
 //                .setUseAutoRadius(false)
 //                .setRadius(64 * 2)
@@ -180,6 +187,38 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
 //                .build();
 //        materialShowcaseView.bringToFront();
 //        materialShowcaseView.show(getActivity());
+
+        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(name, TutorialTooltipView.Gravity.LEFT)
+                .message(new MessageBuilder().text("Gib als erstes hier einen Namen für deinen neuen Empfänger ein.")
+                        .gravity(TutorialTooltipView.Gravity.RIGHT)
+                        .size(MessageBuilder.WRAP_CONTENT, 200)
+                        .onClick(new OnMessageClickedListener() {
+                            @Override
+                            public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
+                                                         TutorialTooltipMessage tutorialTooltipMessage, View view) {
+                                tutorialTooltipView.remove();
+                            }
+                        })
+                        .build())
+                .build();
+
+        final TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(roomsListView, TutorialTooltipView.Gravity.CENTER)
+                .message(new MessageBuilder().text("Wähle hier den Raum aus, zu dem der Empfänger gehört.")
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(MessageBuilder.WRAP_CONTENT, 200)
+                        .onClick(new OnMessageClickedListener() {
+                            @Override
+                            public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
+                                                         TutorialTooltipMessage tutorialTooltipMessage, View view) {
+                                tutorialTooltipView.remove();
+                            }
+                        })
+                        .build())
+                .build();
+
+        new TutorialTooltipChainBuilder().addItem(message1).addItem(message2).execute();
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {

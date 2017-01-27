@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -71,14 +70,14 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                 if (apartment.getGeofence() == null) {
                     // Create the adapter that will return a fragment
                     // for each of the two primary sections of the app.
-                    setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                             getTargetFragment(), apartmentId));
                     imageButtonDelete.setVisibility(View.GONE);
                     return false;
                 } else {
                     // init dialog using existing geofence
                     geofenceId = apartment.getGeofence().getId();
-                    setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
                             getTargetFragment(), apartmentId, geofenceId));
                     imageButtonDelete.setVisibility(View.VISIBLE);
                     return true;
@@ -120,23 +119,24 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
     protected static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private Context context;
+        private ConfigurationDialogTabbed parentDialog;
         private long apartmentId;
         private long geofenceId;
         private ConfigurationDialogTabbedSummaryFragment summaryFragment;
         private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long apartmentId) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long apartmentId) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.apartmentId = apartmentId;
             this.geofenceId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long apartmentId, long geofenceId) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long apartmentId,
+                                long geofenceId) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.apartmentId = apartmentId;
             this.geofenceId = geofenceId;
             this.targetFragment = targetFragment;
@@ -151,13 +151,13 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.location);
+                    return parentDialog.getString(R.string.location);
                 case 1:
-                    return context.getString(R.string.enter);
+                    return parentDialog.getString(R.string.enter);
                 case 2:
-                    return context.getString(R.string.exit);
+                    return parentDialog.getString(R.string.exit);
                 case 3:
-                    return context.getString(R.string.summary);
+                    return parentDialog.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -169,16 +169,16 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureGeofenceDialogPage1LocationFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage1LocationFragment.class, parentDialog);
                     break;
                 case 1:
-                    fragment = new ConfigureGeofenceDialogPage2EnterActionsFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage2EnterActionsFragment.class, parentDialog);
                     break;
                 case 2:
-                    fragment = new ConfigureGeofenceDialogPage3ExitActionsFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage3ExitActionsFragment.class, parentDialog);
                     break;
                 case 3:
-                    fragment = new ConfigureGeofenceDialogPage4SummaryFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage4SummaryFragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

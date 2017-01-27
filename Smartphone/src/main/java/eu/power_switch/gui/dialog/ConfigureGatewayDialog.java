@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -69,10 +68,10 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
     protected boolean initializeFromExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(GATEWAY_ID_KEY)) {
             gatewayId = arguments.getLong(GATEWAY_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment(), gatewayId));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment(), gatewayId));
             return true;
         } else {
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
@@ -107,21 +106,21 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private Context context;
+        private ConfigurationDialogTabbed parentDialog;
         private long gatewayId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
         private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.gatewayId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
-            this.context = context;
+            this.parentDialog = parentDialog;
             this.gatewayId = id;
             this.targetFragment = targetFragment;
         }
@@ -135,13 +134,13 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.address);
+                    return parentDialog.getString(R.string.address);
                 case 1:
-                    return context.getString(R.string.ssids);
+                    return parentDialog.getString(R.string.ssids);
                 case 2:
-                    return context.getString(R.string.apartments);
+                    return parentDialog.getString(R.string.apartments);
                 case 3:
-                    return context.getString(R.string.summary);
+                    return parentDialog.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -153,19 +152,19 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureGatewayDialogPage1Fragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage1Fragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 1:
-                    fragment = new ConfigureGatewayDialogPage2Fragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage2Fragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 2:
-                    fragment = new ConfigureGatewayDialogPage3Fragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage3Fragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 3:
-                    fragment = new ConfigureGatewayDialogPage4SummaryFragment();
+                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage4SummaryFragment.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
