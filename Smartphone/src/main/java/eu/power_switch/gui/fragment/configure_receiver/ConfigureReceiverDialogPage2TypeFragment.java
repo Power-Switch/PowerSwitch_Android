@@ -119,7 +119,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
                 .anchor(brandListView, TutorialTooltipView.Gravity.CENTER)
                 .message(new MessageBuilder().text("Wähle hier zuerst den Hersteller der Steckdose aus.")
                         .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, 200)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
                         .onClick(new OnMessageClickedListener() {
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
@@ -134,7 +134,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
                 .anchor(modelListView, TutorialTooltipView.Gravity.CENTER)
                 .message(new MessageBuilder().text("Wähle anschließend hier das Modell aus.")
                         .gravity(TutorialTooltipView.Gravity.TOP)
-                        .size(MessageBuilder.WRAP_CONTENT, 200)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
                         .onClick(new OnMessageClickedListener() {
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,

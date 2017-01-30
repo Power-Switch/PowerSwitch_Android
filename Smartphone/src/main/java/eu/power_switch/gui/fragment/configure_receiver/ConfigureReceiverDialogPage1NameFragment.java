@@ -194,7 +194,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
                 .indicator(new IndicatorBuilder().offset(50, 0).build())
                 .message(new MessageBuilder().text("Gib als erstes hier einen Namen für deinen neuen Empfänger ein.")
                         .gravity(TutorialTooltipView.Gravity.RIGHT)
-                        .size(MessageBuilder.WRAP_CONTENT, 200)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
                         .onClick(new OnMessageClickedListener() {
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
@@ -209,7 +209,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
                 .anchor(roomsListView, TutorialTooltipView.Gravity.CENTER)
                 .message(new MessageBuilder().text("Wähle hier den Raum aus, zu dem der Empfänger gehört.")
                         .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, 200)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
                         .onClick(new OnMessageClickedListener() {
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
