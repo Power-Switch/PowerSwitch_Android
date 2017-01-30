@@ -42,6 +42,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
@@ -190,6 +191,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
 
         TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(name, TutorialTooltipView.Gravity.LEFT)
+                .indicator(new IndicatorBuilder().offset(50, 0).build())
                 .message(new MessageBuilder().text("Gib als erstes hier einen Namen für deinen neuen Empfänger ein.")
                         .gravity(TutorialTooltipView.Gravity.RIGHT)
                         .size(MessageBuilder.WRAP_CONTENT, 200)
@@ -197,7 +199,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
                                                          TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove();
+                                tutorialTooltipView.remove(true);
                             }
                         })
                         .build())
@@ -212,7 +214,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
                                                          TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove();
+                                tutorialTooltipView.remove(true);
                             }
                         })
                         .build())

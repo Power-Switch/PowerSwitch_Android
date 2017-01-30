@@ -124,7 +124,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
                                                          TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove();
+                                tutorialTooltipView.remove(true);
                             }
                         })
                         .build())
@@ -139,7 +139,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
                             @Override
                             public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
                                                          TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove();
+                                tutorialTooltipView.remove(true);
                             }
                         })
                         .build())

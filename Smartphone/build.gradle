@@ -156,6 +156,11 @@ sourceSets {
 
 configurations.all {
     resolutionStrategy.force 'com.android.support:support-annotations:25.1.0'
+
+    // cache dynamic versions for 10 minutes
+    resolutionStrategy.cacheDynamicVersionsFor 10 * 60, 'seconds'
+    // don't cache changing modules at all
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 apply plugin: 'com.google.gms.google-services'
