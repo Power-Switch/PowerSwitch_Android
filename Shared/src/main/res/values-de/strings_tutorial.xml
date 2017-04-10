@@ -107,9 +107,8 @@
     <string name="tutorial__phone_call_explanation"></string>
     <string name="tutorial__phone_sms_explanation"></string>
 
-    <string name="tutorial__add_new_roms_and_devices_here">Füge mit dem Plus Button neue Räume und Geräte hinzu</string>
-
-    <string name="tutorial__first_add_room">Erstelle als erstes einen Raum, um anschließend deine Funksteckdosen einem Raum
-        zuweisen zu können</string>
+    <string name="tutorial__configure_receiver_name">Gib hier den Namen deines neuen Empfängers ein</string>
+    <string name="tutorial__configure_receiver_room_add">Füge hier einen neuen Raum hinzu</string>
+    <string name="tutorial__configure_receiver_room_select">Oder wähle einen existierenden aus dieser Liste aus</string>
 
 </resources>

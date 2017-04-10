@@ -22,6 +22,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -46,8 +47,7 @@ import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnTutorialTooltipClickedListener;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -98,7 +98,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         intent.putExtra(KEY_NAME, name);
         intent.putExtra(KEY_ROOM_NAME, roomName);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     /**
@@ -111,7 +112,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_ADDED);
         intent.putExtra(KEY_ROOM_NAME, newRoomName);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
@@ -174,54 +176,6 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             }
         });
 
-        // TODO: Showcase is rendered behind the Dialog, maybe needs fix in library
-//        MaterialShowcaseView materialShowcaseView = new MaterialShowcaseView.Builder
-// (getActivity())
-//                .setTarget(name)
-//                .setUseAutoRadius(false)
-//                .setRadius(64 * 2)
-//                .setDismissText(getString(R.string.tutorial__got_it))
-//                .setContentText(getString(R.string.tutorial__first_add_room))
-//                .setDelay(500)
-//                .setDismissOnTouch(true)
-////                .singleUse("tutorial__first_add_room");
-//                .build();
-//        materialShowcaseView.bringToFront();
-//        materialShowcaseView.show(getActivity());
-
-        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(name, TutorialTooltipView.Gravity.LEFT)
-                .indicator(new IndicatorBuilder().offset(50, 0).build())
-                .message(new MessageBuilder().text("Gib als erstes hier einen Namen für deinen neuen Empfänger ein.")
-                        .gravity(TutorialTooltipView.Gravity.RIGHT)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(new OnMessageClickedListener() {
-                            @Override
-                            public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
-                                                         TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove(true);
-                            }
-                        })
-                        .build())
-                .build();
-
-        final TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(roomsListView, TutorialTooltipView.Gravity.CENTER)
-                .message(new MessageBuilder().text("Wähle hier den Raum aus, zu dem der Empfänger gehört.")
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(new OnMessageClickedListener() {
-                            @Override
-                            public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
-                                                         TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove(true);
-                            }
-                        })
-                        .build())
-                .build();
-
-        new TutorialTooltipChainBuilder().addItem(message1).addItem(message2).execute();
-
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
             long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
@@ -229,7 +183,54 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         }
         checkValidity();
 
+        createTutorial();
+
         return rootView;
+    }
+
+    private void createTutorial() {
+        OnTutorialTooltipClickedListener onClickListener = new OnTutorialTooltipClickedListener() {
+            @Override
+            public void onTutorialTooltipClicked(int i, TutorialTooltipView tutorialTooltipView) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(name, TutorialTooltipView.Gravity.LEFT)
+                .indicator(new IndicatorBuilder().offset(50, 0)
+                        .build())
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_name)
+                        .gravity(TutorialTooltipView.Gravity.RIGHT)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .build())
+                .onClick(onClickListener)
+                .build();
+
+        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(addRoomFAB, TutorialTooltipView.Gravity.CENTER)
+                .indicator(new IndicatorBuilder().color(Color.WHITE)
+                        .build())
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_room_add)
+                        .gravity(TutorialTooltipView.Gravity.LEFT)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .build())
+                .onClick(onClickListener)
+                .build();
+
+        TutorialTooltipBuilder message3 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(roomsListView, TutorialTooltipView.Gravity.CENTER)
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_room_select)
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .build())
+                .onClick(onClickListener)
+                .build();
+
+        new TutorialTooltipChainBuilder().addItem(message1)
+                .addItem(message2)
+                .addItem(message3)
+                .execute();
     }
 
     private void initializeReceiverData(long receiverId) {
@@ -280,7 +281,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             try {
                 Room selectedRoom = DatabaseHandler.getRoom(currentRoomName);
                 for (Receiver receiver : selectedRoom.getReceivers()) {
-                    if (receiver.getName().equalsIgnoreCase(currentReceiverName)) {
+                    if (receiver.getName()
+                            .equalsIgnoreCase(currentReceiverName)) {
                         throw new ReceiverAlreadyExistsException();
                     }
                 }
@@ -303,13 +305,16 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
     }
 
     private String getCurrentName() {
-        return name.getText().toString().trim();
+        return name.getText()
+                .toString()
+                .trim();
     }
 
     private String getCheckedRoomName() {
         try {
             int checkedPosition = roomsListView.getCheckedItemPosition();
-            return roomNamesAdapter.getItem(checkedPosition).trim();
+            return roomNamesAdapter.getItem(checkedPosition)
+                    .trim();
         } catch (Exception e) {
             return null;
         }
@@ -320,12 +325,14 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_ADDED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

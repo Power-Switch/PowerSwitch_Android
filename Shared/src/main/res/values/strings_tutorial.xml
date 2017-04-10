@@ -104,8 +104,8 @@
     <string name="tutorial__phone_call_explanation"></string>
     <string name="tutorial__phone_sms_explanation"></string>
 
-    <string name="tutorial__add_new_roms_and_devices_here">Add new Rooms and Receivers using the + button</string>
-
-    <string name="tutorial__first_add_room">At first create a room to add your devices to</string>
+    <string name="tutorial__configure_receiver_name">Enter the name of your new receiver here</string>
+    <string name="tutorial__configure_receiver_room_add">Add a new room by tapping here</string>
+    <string name="tutorial__configure_receiver_room_select">Or select an existing room from this list</string>
 
 </resources>

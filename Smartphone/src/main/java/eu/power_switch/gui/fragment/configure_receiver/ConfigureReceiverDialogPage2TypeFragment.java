@@ -36,8 +36,7 @@ import java.util.ArrayList;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
-import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnTutorialTooltipClickedListener;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -81,7 +80,8 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
         intent.putExtra(KEY_BRAND, brand);
         intent.putExtra(KEY_MODEL, model);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
@@ -115,37 +115,6 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
             }
         });
 
-        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(brandListView, TutorialTooltipView.Gravity.CENTER)
-                .message(new MessageBuilder().text("Wähle hier zuerst den Hersteller der Steckdose aus.")
-                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(new OnMessageClickedListener() {
-                            @Override
-                            public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
-                                                         TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove(true);
-                            }
-                        })
-                        .build())
-                .build();
-
-        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
-                .anchor(modelListView, TutorialTooltipView.Gravity.CENTER)
-                .message(new MessageBuilder().text("Wähle anschließend hier das Modell aus.")
-                        .gravity(TutorialTooltipView.Gravity.TOP)
-                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
-                        .onClick(new OnMessageClickedListener() {
-                            @Override
-                            public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView,
-                                                         TutorialTooltipMessage tutorialTooltipMessage, View view) {
-                                tutorialTooltipView.remove(true);
-                            }
-                        })
-                        .build())
-                .build();
-
-        new TutorialTooltipChainBuilder().addItem(message1).addItem(message2).execute();
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
@@ -153,7 +122,40 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
             initializeReceiverData(receiverId);
         }
 
+        createTutorial();
+
         return rootView;
+    }
+
+    private void createTutorial() {
+        OnTutorialTooltipClickedListener onClickListener = new OnTutorialTooltipClickedListener() {
+            @Override
+            public void onTutorialTooltipClicked(int i, TutorialTooltipView tutorialTooltipView) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(brandListView, TutorialTooltipView.Gravity.CENTER)
+                .message(new MessageBuilder(getActivity()).text("Wähle hier zuerst den Hersteller der Steckdose aus.")
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .build())
+                .onClick(onClickListener)
+                .build();
+
+        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(modelListView, TutorialTooltipView.Gravity.CENTER)
+                .message(new MessageBuilder(getActivity()).text("Wähle anschließend hier das Modell aus.")
+                        .gravity(TutorialTooltipView.Gravity.TOP)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .build())
+                .onClick(onClickListener)
+                .build();
+
+        new TutorialTooltipChainBuilder().addItem(message1)
+                .addItem(message2)
+                .execute();
     }
 
     private String getSelectedBrand() {
@@ -292,7 +294,8 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
         if (receiverId == -1) {
             // init blank
             brandListView.setItemChecked(0, true);
-            updateModelList(brandListView.getSelectedItem().toString());
+            updateModelList(brandListView.getSelectedItem()
+                    .toString());
 
             modelListView.setItemChecked(0, true);
         } else {
@@ -300,10 +303,12 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
                 // init existing receiver
                 final Receiver receiver = DatabaseHandler.getReceiver(receiverId);
 
-                int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand().getName());
+                int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand()
+                        .getName());
                 brandListView.setItemChecked(brandPosition, true);
                 brandListView.smoothScrollToPosition(brandPosition);
-                updateModelList(receiver.getBrand().getName());
+                updateModelList(receiver.getBrand()
+                        .getName());
 
                 int modelPosition = modelNamesAdapter.getPosition(receiver.getModel());
                 modelListView.setItemChecked(modelPosition, true);
