@@ -36,7 +36,8 @@ import java.util.ArrayList;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
-import de.markusressel.android.library.tutorialtooltip.interfaces.OnTutorialTooltipClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -128,29 +129,29 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
     }
 
     private void createTutorial() {
-        OnTutorialTooltipClickedListener onClickListener = new OnTutorialTooltipClickedListener() {
+        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
             @Override
-            public void onTutorialTooltipClicked(int i, TutorialTooltipView tutorialTooltipView) {
+            public void onMessageClicked(int i, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage, View view) {
                 tutorialTooltipView.remove(true);
             }
         };
 
         TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(brandListView, TutorialTooltipView.Gravity.CENTER)
-                .message(new MessageBuilder(getActivity()).text("Wähle hier zuerst den Hersteller der Steckdose aus.")
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_brand_select)
                         .gravity(TutorialTooltipView.Gravity.BOTTOM)
                         .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onClickListener)
                         .build())
-                .onClick(onClickListener)
                 .build();
 
         TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(modelListView, TutorialTooltipView.Gravity.CENTER)
-                .message(new MessageBuilder(getActivity()).text("Wähle anschließend hier das Modell aus.")
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_model_select)
                         .gravity(TutorialTooltipView.Gravity.TOP)
                         .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onClickListener)
                         .build())
-                .onClick(onClickListener)
                 .build();
 
         new TutorialTooltipChainBuilder().addItem(message1)

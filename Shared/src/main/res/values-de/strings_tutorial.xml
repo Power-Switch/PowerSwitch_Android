@@ -108,7 +108,13 @@
     <string name="tutorial__phone_sms_explanation"></string>
 
     <string name="tutorial__configure_receiver_name">Gib hier den Namen deines neuen Empfängers ein</string>
-    <string name="tutorial__configure_receiver_room_add">Füge hier einen neuen Raum hinzu</string>
-    <string name="tutorial__configure_receiver_room_select">Oder wähle einen existierenden aus dieser Liste aus</string>
+    <string name="tutorial__configure_receiver_room_add">Füge hier einen neuen Raum hinzu …</string>
+    <string name="tutorial__configure_receiver_room_select">… oder wähle einen existierenden aus dieser Liste aus</string>
+
+    <string name="tutorial__configure_receiver_brand_select">Wähle zunächst den Hersteller des Empfängers …</string>
+    <string name="tutorial__configure_receiver_model_select">… und anschließend das Modell</string>
+
+    <string name="tutorial__configure_receiver_master_select">Wähle den Master Kanel hier …</string>
+    <string name="tutorial__configure_receiver_slave_select">… und den Slave hier so aus, dass er zu deiner Gerätekonfiguration passt.</string>
 
 </resources>

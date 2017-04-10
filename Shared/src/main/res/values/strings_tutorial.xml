@@ -104,8 +104,14 @@
     <string name="tutorial__phone_call_explanation"></string>
     <string name="tutorial__phone_sms_explanation"></string>
 
-    <string name="tutorial__configure_receiver_name">Enter the name of your new receiver here</string>
-    <string name="tutorial__configure_receiver_room_add">Add a new room by tapping here</string>
-    <string name="tutorial__configure_receiver_room_select">Or select an existing room from this list</string>
+    <string name="tutorial__configure_receiver_name">Enter the name of your new receiver here …</string>
+    <string name="tutorial__configure_receiver_room_add">… then add a new room by tapping here …</string>
+    <string name="tutorial__configure_receiver_room_select">… or select an existing room from this list</string>
+
+    <string name="tutorial__configure_receiver_brand_select">Select your device brand here …</string>
+    <string name="tutorial__configure_receiver_model_select">… and the device model afterwards</string>
+
+    <string name="tutorial__configure_receiver_master_select">Select the master channel here …</string>
+    <string name="tutorial__configure_receiver_slave_select">… and the slave channel to match your device configuration</string>
 
 </resources>
