@@ -18,20 +18,13 @@
 
 package eu.power_switch.gui.animation;
 
-import android.animation.StateListAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.wearable.R.drawable;
-import android.support.wearable.R.id;
-import android.support.wearable.R.layout;
-import android.support.wearable.view.ActionLabel;
-import android.support.wearable.view.ActionPage;
-import android.widget.TextView;
+import android.support.wearable.view.ConfirmationOverlay;
+import android.util.SparseIntArray;
+
 
 /**
  * Custom implementation of ConfirmationActivity
@@ -41,80 +34,44 @@ import android.widget.TextView;
  * Created by Markus on 25.08.2015.
  */
 @TargetApi(21)
-public class ConfirmationActivityClone extends Activity {
-    public static final String EXTRA_MESSAGE = "message";
-    public static final String EXTRA_ANIMATION_TYPE = "animation_type";
+public class ConfirmationActivityClone extends Activity implements ConfirmationOverlay.FinishedAnimationListener {
+
+    public static final String EXTRA_MESSAGE = "android.support.wearable.activity.extra.MESSAGE";
+    public static final String EXTRA_ANIMATION_TYPE = "android.support.wearable.activity.extra.ANIMATION_TYPE";
     public static final int SUCCESS_ANIMATION = 1;
     public static final int OPEN_ON_PHONE_ANIMATION = 2;
     public static final int FAILURE_ANIMATION = 3;
-    private static final int TEXT_FADE_OFFSET_TIME_MS = 50;
-    private static final int OPEN_ON_PHONE_ANIMATION_DURATION_MS = 1666;
-    private static final int CONFIRMATION_ANIMATION_DURATION_MS = 1666;
-    private ActionPage mActionPage;
+    private static final SparseIntArray CONFIRMATION_OVERLAY_TYPES = new SparseIntArray();
+
+    static {
+        CONFIRMATION_OVERLAY_TYPES.append(1, 0);
+        CONFIRMATION_OVERLAY_TYPES.append(2, 2);
+        CONFIRMATION_OVERLAY_TYPES.append(3, 1);
+    }
 
     public ConfirmationActivityClone() {
     }
 
-    private static long getAnimationDuration(AnimationDrawable animation) {
-        int count = animation.getNumberOfFrames();
-        long duration = 0L;
-
-        for (int i = 0; i < count; ++i) {
-            duration += (long) animation.getDuration(i);
-        }
-
-        return duration;
-    }
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getIntent();
-        int animationType = intent.getIntExtra("animation_type", SUCCESS_ANIMATION);
-        String message = intent.getStringExtra("message");
-        this.mActionPage = new ActionPage(this);
-        long displayDurationMs;
-        if (animationType == FAILURE_ANIMATION) {
-            this.setContentView(layout.error_layout);
-            TextView animatedDrawable = (TextView) findViewById(id.message);
-            animatedDrawable.setText(message);
-            displayDurationMs = 2000L;
+        this.setTheme(android.support.wearable.R.style.ConfirmationActivity);
+        Intent intent = this.getIntent();
+        int requestedType = intent.getIntExtra("android.support.wearable.activity.extra.ANIMATION_TYPE", SUCCESS_ANIMATION);
+        if (CONFIRMATION_OVERLAY_TYPES.indexOfKey(requestedType) < 0) {
+            throw new IllegalArgumentException((new StringBuilder(38)).append("Unknown type of animation: ")
+                    .append(requestedType)
+                    .toString());
         } else {
-            this.mActionPage.setColor(0);
-            this.mActionPage.setStateListAnimator(new StateListAnimator());
-            this.mActionPage.setImageScaleMode(ActionPage.SCALE_MODE_CENTER);
-            this.setContentView(mActionPage);
-            if (message != null) {
-                this.mActionPage.setText(message);
-            }
-
-            Drawable animatedDrawable1;
-            switch (animationType) {
-                case SUCCESS_ANIMATION:
-                    animatedDrawable1 = getDrawable(drawable.generic_confirmation_animation);
-                    displayDurationMs = 1666L;
-                    break;
-                case OPEN_ON_PHONE_ANIMATION:
-                    animatedDrawable1 = getDrawable(drawable.open_on_phone_animation);
-                    displayDurationMs = 1666L;
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown type of animation: " + animationType);
-            }
-
-            this.mActionPage.setImageDrawable(animatedDrawable1);
-            final ActionLabel label = this.mActionPage.getLabel();
-            long fadeDuration = label.animate().getDuration();
-            final long fadeOutDelay = Math.max(0L, displayDurationMs - 2L * (50L + fadeDuration));
-            ((Animatable) animatedDrawable1).start();
-            label.setAlpha(0.0F);
-            label.animate().alpha(1.0F).setStartDelay(50L).withEndAction(new Runnable() {
-                public void run() {
-                    finish();
-                    overridePendingTransition(0, android.R.anim.fade_out);
-                }
-            });
+            int type = CONFIRMATION_OVERLAY_TYPES.get(requestedType);
+            String message = intent.getStringExtra("android.support.wearable.activity.extra.MESSAGE");
+            (new ConfirmationOverlay()).setType(type)
+                    .setMessage(message)
+                    .setFinishedAnimationListener(this)
+                    .showOn(this);
         }
+    }
 
-        this.mActionPage.setKeepScreenOn(true);
+    public void onAnimationFinished() {
+        this.finish();
     }
 }

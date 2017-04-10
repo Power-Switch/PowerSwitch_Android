@@ -119,7 +119,8 @@ public class AddSsidDialog extends DialogFragment {
             }
         };
 
-        mainWifi = (WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE);
+        mainWifi = (WifiManager) getActivity().getApplicationContext()
+                .getSystemService(Context.WIFI_SERVICE);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         contentView = inflater.inflate(R.layout.dialog_add_ssid, null);
