@@ -31,6 +31,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import java.util.Calendar;
@@ -50,19 +51,18 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
 
     protected View rootView;
     private LinearLayout layoutLoading;
-    private LinearLayout layoutEmpty;
+    private FrameLayout layoutEmpty;
     private LinearLayout layoutError;
 
     private Loader dataLoader;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         onCreateViewEvent(inflater, container, savedInstanceState);
 
         layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        layoutEmpty = (LinearLayout) rootView.findViewById(R.id.layoutEmpty);
+        layoutEmpty = (FrameLayout) rootView.findViewById(R.id.layoutEmpty);
         layoutError = (LinearLayout) rootView.findViewById(R.id.layoutError);
 
         // use loaderManager of fragment, so unique ID across app is not required (only across this fragment)
@@ -108,7 +108,8 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
     @Override
     public void onLoadFinished(Loader<RecyclerViewUpdateResult<T>> loader, RecyclerViewUpdateResult<T> result) {
         if (result.isSuccess()) {
-            if (result.getElements().size() == 0) {
+            if (result.getElements()
+                    .size() == 0) {
                 showEmpty();
             } else {
                 onListDataChanged(result.getElements());
@@ -116,7 +117,9 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
                 showList();
             }
         } else {
-            showError(result.getException(), Calendar.getInstance().getTimeInMillis());
+            showError(result.getException(),
+                    Calendar.getInstance()
+                            .getTimeInMillis());
             StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
         }
     }
@@ -156,7 +159,7 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
         layoutEmpty.setVisibility(View.VISIBLE);
         layoutError.setVisibility(View.GONE);
         layoutLoading.setVisibility(View.GONE);
-        getRecyclerView().setVisibility(View.GONE);
+        getRecyclerView().setVisibility(View.INVISIBLE);
     }
 
     protected void showError(final Exception e, final long timeInMilliseconds) {
@@ -191,8 +194,7 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
      */
     protected abstract int getSpanCount();
 
-    protected abstract void onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container,
-                                              @Nullable Bundle savedInstanceState);
+    protected abstract void onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
 
     public abstract RecyclerView getRecyclerView();
 

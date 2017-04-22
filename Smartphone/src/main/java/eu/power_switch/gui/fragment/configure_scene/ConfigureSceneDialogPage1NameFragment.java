@@ -38,6 +38,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
+import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
+import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -82,7 +92,8 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
         intent.putExtra("name", name);
         intent.putExtra("selectedReceivers", selectedReceivers);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
@@ -125,7 +136,55 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
 
         checkValidity();
 
+        createTutorial();
+
         return rootView;
+    }
+
+    private void createTutorial() {
+        OnMessageClickedListener onClickListener = new OnMessageClickedListener() {
+            @Override
+            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
+                                         View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
+            @Override
+            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
+                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(name, TutorialTooltipView.Gravity.CENTER)
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_scene_name__text)
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onClickListener)
+                        .build())
+                .oneTimeUse(R.string.tutorial__configure_scene_name__id)
+                .build();
+
+        TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(linearLayout_selectableReceivers, TutorialTooltipView.Gravity.CENTER)
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_scene_devices__text)
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onClickListener)
+                        .build())
+                .oneTimeUse(R.string.tutorial__configure_scene_devices__id)
+                .build();
+
+        new TutorialTooltipChainBuilder().addItem(message1)
+                .addItem(message2)
+                .execute();
     }
 
     private void addReceiversToLayout() {
@@ -186,7 +245,8 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
 
             ArrayList<Receiver> activeReceivers = new ArrayList<>();
             for (SceneItem sceneItem : scene.getSceneItems()) {
-                Receiver receiver = DatabaseHandler.getReceiver(sceneItem.getActiveButton().getReceiverId());
+                Receiver receiver = DatabaseHandler.getReceiver(sceneItem.getActiveButton()
+                        .getReceiverId());
                 activeReceivers.add(receiver);
             }
 
@@ -194,8 +254,9 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
                 for (CheckBox checkBox : receiverCheckboxList) {
                     Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
                     Room associatedRoom = (Room) checkBox.getTag(R.string.room);
-                    if (associatedReceiver.getId().equals(receiver.getId()) && associatedRoom.getId().equals(receiver
-                            .getRoomId())) {
+                    if (associatedReceiver.getId()
+                            .equals(receiver.getId()) && associatedRoom.getId()
+                            .equals(receiver.getRoomId())) {
                         checkBox.setChecked(true);
                     }
                 }
@@ -230,7 +291,9 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
             return false;
         } else {
             for (Scene scene : existingScenes) {
-                if (!scene.getId().equals(sceneId) && scene.getName().equalsIgnoreCase(getCurrentSceneName())) {
+                if (!scene.getId()
+                        .equals(sceneId) && scene.getName()
+                        .equalsIgnoreCase(getCurrentSceneName())) {
                     floatingName.setError(getString(R.string.scene_name_already_exists));
                     return false;
                 }
@@ -248,7 +311,8 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
                 Room originalRoom = (Room) checkBox.getTag(R.string.room);
                 Room room = null;
                 for (Room currentRoom : checkedReceivers) {
-                    if (currentRoom.getName().equals(originalRoom.getName())) {
+                    if (currentRoom.getName()
+                            .equals(originalRoom.getName())) {
                         room = currentRoom;
                         break;
                     }
@@ -256,9 +320,12 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
 
                 if (room == null) {
                     // copy room
-                    room = new Room(originalRoom.getId(), originalRoom.getApartmentId(),
-                            originalRoom.getName(), originalRoom.getPositionInApartment(),
-                            originalRoom.isCollapsed(), originalRoom.getAssociatedGateways());
+                    room = new Room(originalRoom.getId(),
+                            originalRoom.getApartmentId(),
+                            originalRoom.getName(),
+                            originalRoom.getPositionInApartment(),
+                            originalRoom.isCollapsed(),
+                            originalRoom.getAssociatedGateways());
                     // add room to list
                     checkedReceivers.add(room);
                 }
@@ -272,6 +339,8 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
     }
 
     private String getCurrentSceneName() {
-        return name.getText().toString().trim();
+        return name.getText()
+                .toString()
+                .trim();
     }
 }

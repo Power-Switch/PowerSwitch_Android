@@ -42,6 +42,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.markusressel.android.library.tutorialtooltip.TutorialTooltip;
+import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
+import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
+import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
+import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -98,8 +108,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
         customRecyclerViewAdapter = new CustomRecyclerViewAdapter(getActivity(), rooms);
         recyclerViewSelectedReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
         recyclerViewSelectedReceivers.setAdapter(customRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getResources().getInteger(R.integer.scene_grid_span_count), StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getResources().getInteger(R.integer.scene_grid_span_count),
+                StaggeredGridLayoutManager.VERTICAL);
         recyclerViewSelectedReceivers.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
@@ -109,7 +119,41 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
         }
         checkSetupValidity();
 
+        createTutorial();
+
         return rootView;
+    }
+
+    private void createTutorial() {
+        OnMessageClickedListener onMessageClickListener = new OnMessageClickedListener() {
+            @Override
+            public void onMessageClicked(TooltipId id, TutorialTooltipView tutorialTooltipView, TutorialTooltipMessage tutorialTooltipMessage,
+                                         View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
+            @Override
+            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
+                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
+        TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
+                .anchor(recyclerViewSelectedReceivers, TutorialTooltipView.Gravity.CENTER)
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
+                .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_scene_states__text)
+                        .gravity(TutorialTooltipView.Gravity.BOTTOM)
+                        .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
+                        .onClick(onMessageClickListener)
+                        .build())
+                .oneTimeUse(R.string.tutorial__configure_scene_states__id)
+                .build();
+
+        TutorialTooltip.show(message1);
     }
 
     @Nullable
@@ -128,19 +172,24 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
             HashMap<Long, SceneItem> map = new HashMap<>();
 
             for (SceneItem sceneItem : scene.getSceneItems()) {
-                map.put(sceneItem.getReceiver().getId(), sceneItem);
+                map.put(sceneItem.getReceiver()
+                        .getId(), sceneItem);
 
                 boolean roomFound = false;
                 for (Room room : checkedReceivers) {
-                    if (room.getId().equals(sceneItem.getReceiver().getRoomId())) {
+                    if (room.getId()
+                            .equals(sceneItem.getReceiver()
+                                    .getRoomId())) {
                         room.addReceiver(sceneItem.getReceiver());
                         roomFound = true;
                     }
                 }
 
                 if (!roomFound) {
-                    Room room = DatabaseHandler.getRoom(sceneItem.getReceiver().getRoomId());
-                    room.getReceivers().clear();
+                    Room room = DatabaseHandler.getRoom(sceneItem.getReceiver()
+                            .getRoomId());
+                    room.getReceivers()
+                            .clear();
                     room.addReceiver(sceneItem.getReceiver());
                     checkedReceivers.add(room);
                 }
@@ -161,7 +210,9 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
     @Override
     public void saveCurrentConfigurationToDatabase() {
-        Scene newScene = new Scene(currentId, SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID), currentName);
+        Scene newScene = new Scene(currentId,
+                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
+                currentName);
         newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
 
         try {
@@ -188,7 +239,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
     @Override
     public boolean checkSetupValidity() {
-        if (currentName == null || currentName.trim().isEmpty()) {
+        if (currentName == null || currentName.trim()
+                .isEmpty()) {
             return false;
         }
 
@@ -200,12 +252,14 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_SCENE_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 
@@ -236,7 +290,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
         @Override
         public CustomRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_room_dialog, parent, false);
+            View itemView = LayoutInflater.from(context)
+                    .inflate(R.layout.list_item_room_dialog, parent, false);
             return new CustomRecyclerViewAdapter.ViewHolder(itemView);
         }
 
@@ -266,15 +321,16 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
                 receiverName.setTextSize(18);
                 receiverName.setTextColor(ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary));
                 receiverName.setGravity(Gravity.CENTER_VERTICAL);
-                receiverRow.addView(receiverName, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
+                receiverRow.addView(receiverName,
+                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f));
 
                 TableLayout buttonLayout = new TableLayout(context);
-                receiverRow.addView(buttonLayout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                receiverRow.addView(buttonLayout,
+                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 int buttonsPerRow;
-                if (receiver.getButtons().size() % 3 == 0) {
+                if (receiver.getButtons()
+                        .size() % 3 == 0) {
                     buttonsPerRow = 3;
                 } else {
                     buttonsPerRow = 2;
@@ -284,18 +340,24 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
                 TableRow buttonRow = null;
 
                 if (!receiverSceneItemHashMap.containsKey(receiver.getId())) {
-                    receiverSceneItemHashMap.put(receiver.getId(), new SceneItem(receiver, receiver.getButtons()
-                            .getFirst()));
+                    receiverSceneItemHashMap.put(receiver.getId(),
+                            new SceneItem(receiver,
+                                    receiver.getButtons()
+                                            .getFirst()));
                 }
                 final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
                 for (Button button : receiver.getButtons()) {
-                    @SuppressLint("InflateParams")
-                    android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, null, false);
+                    @SuppressLint("InflateParams") android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button,
+                            null,
+                            false);
                     buttonList.add(buttonView);
 
                     final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
                     final int inactiveColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.textColorInactive);
-                    if (receiverSceneItemHashMap.get(receiver.getId()).getActiveButton().getId().equals(button.getId())) {
+                    if (receiverSceneItemHashMap.get(receiver.getId())
+                            .getActiveButton()
+                            .getId()
+                            .equals(button.getId())) {
                         buttonView.setTextColor(accentColor);
                     } else {
                         buttonView.setTextColor(inactiveColor);
@@ -311,7 +373,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
                                     button.setTextColor(accentColor);
 
                                     for (Button receiverButton : receiver.getButtons()) {
-                                        if (receiverButton.getName().equals(button.getText())) {
+                                        if (receiverButton.getName()
+                                                .equals(button.getText())) {
                                             receiverSceneItemHashMap.get(receiver.getId())
                                                     .setActiveButton(receiverButton);
                                             break;

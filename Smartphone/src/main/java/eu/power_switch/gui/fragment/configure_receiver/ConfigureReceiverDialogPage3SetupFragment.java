@@ -50,10 +50,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
 import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
 import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
 import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
@@ -432,8 +435,18 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             }
         };
 
+        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
+            @Override
+            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
+                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
         TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(channelMasterListView, TutorialTooltipView.Gravity.CENTER)
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
                 .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_master_select__text)
                         .gravity(TutorialTooltipView.Gravity.TOP)
                         .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)
@@ -444,6 +457,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
 
         TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(channelSlaveListView, TutorialTooltipView.Gravity.CENTER)
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
                 .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_slave_select__text)
                         .gravity(TutorialTooltipView.Gravity.BOTTOM)
                         .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)

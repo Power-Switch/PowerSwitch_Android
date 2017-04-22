@@ -47,7 +47,9 @@ import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipChainBuilder;
+import de.markusressel.android.library.tutorialtooltip.interfaces.OnIndicatorClickedListener;
 import de.markusressel.android.library.tutorialtooltip.interfaces.OnMessageClickedListener;
+import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipIndicator;
 import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialTooltipMessage;
 import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
@@ -199,9 +201,18 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             }
         };
 
+        OnIndicatorClickedListener onIndicatorClickedListener = new OnIndicatorClickedListener() {
+            @Override
+            public void onIndicatorClicked(TooltipId tooltipId, TutorialTooltipView tutorialTooltipView,
+                                           TutorialTooltipIndicator tutorialTooltipIndicator, View view) {
+                tutorialTooltipView.remove(true);
+            }
+        };
+
         TutorialTooltipBuilder message1 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(name, TutorialTooltipView.Gravity.LEFT)
                 .indicator(new IndicatorBuilder().offset(50, 0)
+                        .onClick(onIndicatorClickedListener)
                         .build())
                 .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_name__text)
                         .gravity(TutorialTooltipView.Gravity.RIGHT)
@@ -214,6 +225,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         TutorialTooltipBuilder message2 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(addRoomFAB, TutorialTooltipView.Gravity.CENTER)
                 .indicator(new IndicatorBuilder().color(Color.WHITE)
+                        .onClick(onIndicatorClickedListener)
                         .build())
                 .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_room_add__text)
                         .gravity(TutorialTooltipView.Gravity.LEFT)
@@ -225,6 +237,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
 
         TutorialTooltipBuilder message3 = new TutorialTooltipBuilder(getActivity()).attachToDialog(getParentConfigurationDialog().getDialog())
                 .anchor(roomsListView, TutorialTooltipView.Gravity.CENTER)
+                .indicator(new IndicatorBuilder().onClick(onIndicatorClickedListener)
+                        .build())
                 .message(new MessageBuilder(getActivity()).text(R.string.tutorial__configure_receiver_room_select__text)
                         .gravity(TutorialTooltipView.Gravity.BOTTOM)
                         .size(MessageBuilder.WRAP_CONTENT, MessageBuilder.WRAP_CONTENT)

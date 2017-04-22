@@ -108,6 +108,8 @@
     <string name="tutorial__phone_sms_explanation"></string>
 
 
+    <!-- Configure Receiver -->
+
     <string name="tutorial__configure_receiver_name__text">Gib hier den Namen deines neuen Empfängers ein</string>
 
     <string name="tutorial__configure_receiver_room_add__text">Füge hier einen neuen Raum hinzu …</string>
@@ -121,5 +123,13 @@
     <string name="tutorial__configure_receiver_master_select__text">Wähle den Master Kanel hier …</string>
 
     <string name="tutorial__configure_receiver_slave_select__text">… und den Slave hier so aus, dass er zu deiner Gerätekonfiguration passt.</string>
+
+    <!-- Configure Scene -->
+
+    <string name="tutorial__configure_scene_name__text">Gib hier den Namen deiner Szene ein …</string>
+
+    <string name="tutorial__configure_scene_devices__text">… und wähle anschließend die Geräte aus, die du damit kontrollieren möchtest.</string>
+
+    <string name="tutorial__configure_scene_states__text">Wähle nun für jedes Gerät den Zustand aus, den sie nach dem Ausführen der Szene haben sollen.</string>
 
 </resources>
