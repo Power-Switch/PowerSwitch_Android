@@ -45,6 +45,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.markusressel.android.library.tutorialtooltip.TutorialTooltip;
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -88,7 +89,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     private Preference backupPath;
     private IntListPreference theme;
     private IntListPreference launcherIcon;
-    private Preference resetTutial;
+    private Preference resetTutorial;
     private Preference relaunchWizard;
     private SwitchPreference sendAnonymousCrashData;
     private IntListPreference logDestination;
@@ -234,11 +235,13 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         launcherIconMap = getListPreferenceEntryValueMap(R.array.entryValues_launcher_icon, R.array.entries_launcher_icon);
         launcherIcon.setSummary(launcherIconMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
 
-        resetTutial = findPreference(getString(R.string.key_resetTutorial));
-        resetTutial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        resetTutorial = findPreference(getString(R.string.key_resetTutorial));
+        resetTutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 MaterialShowcaseView.resetAll(getActivity());
+
+                TutorialTooltip.resetAllShowCount(getActivity());
 
                 new AlertDialog.Builder(getContext()).setTitle(R.string.title_resetTutorial)
                         .setMessage(R.string.tutorial_was_reset)
@@ -378,6 +381,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
      *
      * @param valueRes values stored in preferences
      * @param nameRes  name/description of this option used in view
+     *
      * @return Map from stored value -> display name
      */
     private Map<Integer, String> getListPreferenceEntryValueMap(@ArrayRes int valueRes, @ArrayRes int nameRes) {
@@ -401,11 +405,9 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         } else if (SmartphonePreferencesHandler.KEY_BACKUP_PATH.equals(key)) {
             backupPath.setSummary(sharedPreferences.getString(key, SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH));
         } else if (SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB.equals(key)) {
-            startupDefaultTab.setSummary(mainTabsMap.get(sharedPreferences.getInt(key,
-                    SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)));
+            startupDefaultTab.setSummary(mainTabsMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB)));
         } else if (SmartphonePreferencesHandler.KEY_VIBRATION_DURATION.equals(key)) {
-            vibrationDuration.setSummary(sharedPreferences.getInt(key,
-                    SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
+            vibrationDuration.setSummary(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION) + " ms");
         } else if (SmartphonePreferencesHandler.KEY_THEME.equals(key)) {
             theme.setSummary(themeMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_THEME)));
 
@@ -420,10 +422,8 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
                     SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION)));
         } else if (SmartphonePreferencesHandler.KEY_LAUNCHER_ICON.equals(key)) {
             ApplicationHelper.setLauncherIcon(getContext(),
-                    ApplicationHelper.LauncherIcon.valueOf(sharedPreferences.getInt(key,
-                            SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON)));
-            launcherIcon.setSummary(launcherIconMap.get(sharedPreferences.getInt(key,
-                    SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON)));
+                    ApplicationHelper.LauncherIcon.valueOf(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON)));
+            launcherIcon.setSummary(launcherIconMap.get(sharedPreferences.getInt(key, SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON)));
 
             new AlertDialog.Builder(getActivity()).setTitle(R.string.attention)
                     .setMessage(R.string.changes_may_only_show_up_after_device_restart)
@@ -449,18 +449,22 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     public void onResume() {
         super.onResume();
 
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onPause() {
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
 
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
 
         super.onPause();
     }
