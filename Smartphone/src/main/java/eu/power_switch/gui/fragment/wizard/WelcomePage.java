@@ -46,7 +46,7 @@ public class WelcomePage extends BasicPage {
 
     @Override
     public int getDefaultBackgroundColor() {
-        return getResources().getColor(R.color.red);
+        return getResources().getColor(R.color.md_red_700);
     }
 
 }

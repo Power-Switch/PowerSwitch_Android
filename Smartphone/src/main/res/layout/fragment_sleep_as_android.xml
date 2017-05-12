@@ -95,7 +95,7 @@
             android:layout_gravity="center_vertical|right"
             android:layout_margin="8dp"
             android:elevation="4dp"
-            app:iiv_color="@color/white"
+            app:iiv_color="@color/color_gray_100"
             app:iiv_icon="gmi-smartphone-download"/>
 
     </LinearLayout>

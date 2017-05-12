@@ -165,7 +165,7 @@ public class SetupGatewayPage extends WizardPage {
 
     @Override
     public int getDefaultBackgroundColor() {
-        return getResources().getColor(R.color.green);
+        return getResources().getColor(R.color.md_green_700);
     }
 
     @Override
