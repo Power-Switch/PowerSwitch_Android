@@ -35,8 +35,8 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/layoutLoading"
             xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/layoutLoading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center">
@@ -66,7 +66,7 @@
             android:layout_marginBottom="8dp"
             android:elevation="4dp"
             android:visibility="gone"
-            app:iiv_color="@color/red"
+            app:iiv_color="@color/color_red_a700"
             app:iiv_icon="gmi-close-circle"/>
 
         <TextView

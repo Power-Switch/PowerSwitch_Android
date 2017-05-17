@@ -62,7 +62,7 @@
                 android:gravity="center_horizontal"
                 android:padding="8dp"
                 android:text="@string/automatic_crash_report_disabled_info"
-                android:textColor="@color/red"/>
+                android:textColor="@color/color_red_a700"/>
 
             <Button
                 android:id="@+id/button_share_via_mail"

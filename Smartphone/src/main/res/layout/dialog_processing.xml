@@ -49,7 +49,7 @@
             android:layout_gravity="center_vertical"
             android:elevation="4dp"
             android:visibility="gone"
-            app:iiv_color="@color/red"
+            app:iiv_color="@color/color_red_a700"
             app:iiv_icon="gmi-close-circle"/>
 
         <ProgressBar
@@ -85,7 +85,7 @@
             android:id="@+id/progressBar_main"
             style="@style/NumberProgressBar_Default"
             android:layout_marginTop="8dp"
-            app:max="100"
+            app:progress_max="100"
             app:progress_text_size="12dp"/>
 
     </LinearLayout>
@@ -118,7 +118,7 @@
             <com.daimajia.numberprogressbar.NumberProgressBar
                 android:id="@+id/progressBar_sub"
                 style="@style/NumberProgressBar_Default"
-                app:max="100"
+                app:progress_max="100"
                 app:progress_text_size="12dp"/>
 
         </LinearLayout>
