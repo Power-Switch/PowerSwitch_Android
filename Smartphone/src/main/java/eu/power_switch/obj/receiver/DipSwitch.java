@@ -18,9 +18,12 @@
 
 package eu.power_switch.obj.receiver;
 
+import lombok.Data;
+
 /**
  * Represents a dip switch used in DipReceivers
  */
+@Data
 public class DipSwitch {
 
     /**
@@ -31,44 +34,17 @@ public class DipSwitch {
     /**
      * State of Dip
      */
-    private boolean state;
+    private boolean checked;
 
     /**
      * Default Constructor
      *
      * @param name  Name of Dip
-     * @param state State of Dip
+     * @param checked State of Dip
      */
-    public DipSwitch(String name, boolean state) {
+    public DipSwitch(String name, boolean checked) {
         this.name = name;
-        this.state = state;
-    }
-
-    /**
-     * Get Name of Dip
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get state of Dip
-     *
-     * @return state (true if enabled)
-     */
-    public boolean isChecked() {
-        return state;
-    }
-
-    /**
-     * Set state of Dip
-     *
-     * @param checked checked state
-     */
-    public void setChecked(boolean checked) {
-        this.state = checked;
+        this.checked = checked;
     }
 
 }

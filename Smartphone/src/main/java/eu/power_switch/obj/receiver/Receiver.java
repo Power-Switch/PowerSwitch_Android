@@ -37,10 +37,14 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 import eu.power_switch.shared.log.Log;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Represents any kind of device that can receive network signals
  */
+@Data
+@ToString
 public abstract class Receiver {
 
     /**
@@ -237,133 +241,6 @@ public abstract class Receiver {
     }
 
     /**
-     * Get ID of this Receiver
-     *
-     * @return ID of this Receiver
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Get Name of this Receiver
-     *
-     * @return Name of this Receiver
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get Brand of this Receiver
-     *
-     * @return Brand of this receiver
-     */
-    public Brand getBrand() {
-        return brand;
-    }
-
-    /**
-     * Get Model of this Receiver
-     *
-     * @return Model of this Receiver
-     */
-    public String getModel() {
-        return model;
-    }
-
-    /**
-     * Get all Buttons of this Receiver
-     *
-     * @return List of Buttons
-     */
-    public LinkedList<Button> getButtons() {
-        return buttons;
-    }
-
-    /**
-     * Get ID of Room this Receiver is associated with
-     *
-     * @return ID of Room
-     */
-    public Long getRoomId() {
-        return roomId;
-    }
-
-    /**
-     * Get Type of this Receiver
-     *
-     * @return Type of this Receiver
-     */
-    public Type getType() {
-        return type;
-    }
-
-    /**
-     * Get Position in Room of this Receiver
-     *
-     * @return position in room
-     */
-    public Integer getPositionInRoom() {
-        return positionInRoom;
-    }
-
-    /**
-     * Set Position in Room of this Receiver
-     *
-     * @param positionInRoom position in room
-     */
-    public void setPositionInRoom(int positionInRoom) {
-        this.positionInRoom = positionInRoom;
-    }
-
-    /**
-     * Get ID of last activated Button
-     *
-     * @return ID of last activated Button
-     */
-    public Long getLastActivatedButtonId() {
-        return lastActivatedButtonId;
-    }
-
-    /**
-     * Set ID of last activated Button
-     *
-     * @param lastActivatedButtonId ID of last activated Button
-     */
-    public void setLastActivatedButtonId(Long lastActivatedButtonId) {
-        this.lastActivatedButtonId = lastActivatedButtonId;
-    }
-
-    /**
-     * Get amount of repetitions for sending network signals
-     *
-     * @return amount of repetitions
-     */
-    public int getRepetitionAmount() {
-        return repetitionAmount;
-    }
-
-    /**
-     * Set amount of repetitions for sending network signals
-     *
-     * @param repetitionAmount amount of repetitions
-     */
-    public void setRepetitionAmount(int repetitionAmount) {
-        this.repetitionAmount = repetitionAmount;
-    }
-
-    /**
-     * Get a list of Gateways this Receiver is associated with
-     *
-     * @return List of Gateways
-     */
-    @NonNull
-    public List<Gateway> getAssociatedGateways() {
-        return associatedGateways;
-    }
-
-    /**
      * Get NetworkPackage for a Gateway/Action combination for this Receiver
      *
      * @param gateway Gateway
@@ -470,11 +347,6 @@ public abstract class Receiver {
             }
         }
         throw new NoSuchElementException("Button with ID \"" + id + "\" not found");
-    }
-
-    @Override
-    public String toString() {
-        return getBrand().toString() + " " + getModel() + ": " + getName() + "(" + getId() + ")";
     }
 
     /**

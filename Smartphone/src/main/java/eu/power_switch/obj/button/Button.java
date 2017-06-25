@@ -24,11 +24,15 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.log.Log;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Represents a button that can be pressed on a receiver remote.
  * It is always associated with a receiverID.
  */
+@ToString
+@Getter
 public class Button {
 
     /**
@@ -86,30 +90,4 @@ public class Button {
         }
     }
 
-    /**
-     * Get ID of this Button
-     *
-     * @return ID
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Get name of this Button
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get receiver ID that this Button belongs to
-     *
-     * @return ID
-     */
-    public Long getReceiverId() {
-        return receiverId;
-    }
 }

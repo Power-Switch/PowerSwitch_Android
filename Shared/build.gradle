@@ -51,6 +51,11 @@ android {
 dependencies {
     compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
     compile fileTree(include: ['*.jar'], dir: 'libraries')
+
+    // Lombok - Boilerplate compile time generator
+    compile "org.projectlombok:lombok:1.16.16"
+    annotationProcessor "org.projectlombok:lombok:1.16.16"
+
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.google.android.gms:play-services-wearable:${rootProject.ext.playServicesVersion}"
 

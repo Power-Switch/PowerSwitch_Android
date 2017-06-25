@@ -33,8 +33,7 @@ public class UniversalReceiver extends Receiver {
 
     private static final String MODEL = Receiver.getModelName(UniversalReceiver.class.getCanonicalName());
 
-    public UniversalReceiver(Context context, Long id, String name, List<UniversalButton> buttons, Long
-            roomId, List<Gateway> associatedGateways) {
+    public UniversalReceiver(Context context, Long id, String name, List<UniversalButton> buttons, Long roomId, List<Gateway> associatedGateways) {
         super(context, id, name, Brand.UNIVERSAL, MODEL, Type.UNIVERSAL, roomId, associatedGateways);
         this.buttons.addAll(buttons);
     }
@@ -43,7 +42,8 @@ public class UniversalReceiver extends Receiver {
     public String getSignal(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         try {
             for (Button button : buttons) {
-                if (button.getName().equals(action)) {
+                if (button.getName()
+                        .equals(action)) {
                     return ((UniversalButton) button).getSignal();
                 }
             }

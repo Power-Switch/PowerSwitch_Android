@@ -22,11 +22,16 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
+import lombok.Data;
+import lombok.ToString;
+
 /**
  * Class representing a Phone Contact
  * <p/>
  * Created by Markus on 05.04.2016.
  */
+@Data
+@ToString
 public class Contact {
 
     /**
@@ -50,32 +55,4 @@ public class Contact {
         this.phoneNumbers = phoneNumbers;
     }
 
-    /**
-     * Get Name of this Contact
-     *
-     * @return name of this contact
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get a list of phone numbers of this contact
-     *
-     * @return list of phone number (as text)
-     */
-    public List<String> getPhoneNumbers() {
-        return phoneNumbers;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder(name);
-        stringBuilder.append(": ");
-        for (String number : phoneNumbers) {
-            stringBuilder.append(number).append(", ");
-        }
-
-        return stringBuilder.toString();
-    }
 }

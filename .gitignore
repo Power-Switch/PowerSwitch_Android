@@ -12,9 +12,13 @@ keystore
 ## Android Studio
 #################
 
-.idea
+.idea/*
 build
 local.properties
+
+!.idea/codeStyleSettings.xml
+!.idea/compiler.xml
+
 /Smartphone/*.apk
 /Smartphone/*.zip
 

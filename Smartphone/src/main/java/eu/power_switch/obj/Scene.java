@@ -22,18 +22,21 @@ import java.util.ArrayList;
 
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.LogHandler;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Represents a Scene
  * A Scene is a set of SceneItems
  */
+@ToString
+@Data
 public class Scene {
 
     /**
      * List containing all SceneItems
      */
-    ArrayList<SceneItem> items;
+    private ArrayList<SceneItem> sceneItems;
 
     /**
      * ID of this Scene
@@ -61,34 +64,7 @@ public class Scene {
         this.id = id;
         this.apartmentId = apartmentId;
         this.name = name;
-        items = new ArrayList<>();
-    }
-
-    /**
-     * Get ID of this Scene
-     *
-     * @return ID
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Get ID of Apartment this Scene belongs to
-     *
-     * @return ID of Apartment
-     */
-    public Long getApartmentId() {
-        return apartmentId;
-    }
-
-    /**
-     * Get name of this Scene
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
+        sceneItems = new ArrayList<>();
     }
 
     /**
@@ -98,7 +74,7 @@ public class Scene {
      * @param activeButton
      */
     public void addSceneItem(Receiver receiver, Button activeButton) {
-        items.add(new SceneItem(receiver, activeButton));
+        sceneItems.add(new SceneItem(receiver, activeButton));
     }
 
     /**
@@ -107,7 +83,9 @@ public class Scene {
      * @param receiver
      */
     public void addSceneItem(Receiver receiver) {
-        items.add(new SceneItem(receiver, receiver.getButtons().getFirst()));
+        sceneItems.add(new SceneItem(receiver,
+                receiver.getButtons()
+                        .getFirst()));
     }
 
     /**
@@ -116,7 +94,7 @@ public class Scene {
      * @param sceneItem
      */
     public void addSceneItem(SceneItem sceneItem) {
-        items.add(sceneItem);
+        sceneItems.add(sceneItem);
     }
 
     /**
@@ -125,31 +103,7 @@ public class Scene {
      * @param sceneItems
      */
     public void addSceneItems(ArrayList<SceneItem> sceneItems) {
-        items.addAll(sceneItems);
+        this.sceneItems.addAll(sceneItems);
     }
 
-    /**
-     * Get all SceneItems in this Scene
-     *
-     * @return SceneItem list
-     */
-    public ArrayList<SceneItem> getSceneItems() {
-        return items;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Scene: ").
-                append(getName())
-                .append("(").append(getId()).append(")")
-                .append(" {\n");
-
-        for (SceneItem sceneItem : getSceneItems()) {
-            stringBuilder.append(LogHandler.addIndentation(sceneItem.toString())).append("\n");
-        }
-
-        stringBuilder.append("}");
-        return stringBuilder.toString();
-    }
 }

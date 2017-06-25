@@ -24,6 +24,8 @@ import java.util.Map;
 
 import eu.power_switch.network.NetworkResponseCallback;
 import eu.power_switch.obj.gateway.Gateway;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * This class represents a network device, that is able to send data to the smartphone application as well as receive
@@ -31,6 +33,8 @@ import eu.power_switch.obj.gateway.Gateway;
  * <p/>
  * Created by Markus on 15.01.2016.
  */
+@Data
+@ToString
 public abstract class Communicator implements NetworkResponseCallback {
 
     /**

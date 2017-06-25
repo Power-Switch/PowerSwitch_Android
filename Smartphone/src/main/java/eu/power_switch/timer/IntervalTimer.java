@@ -22,13 +22,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.shared.log.LogHandler;
+import lombok.ToString;
 
 /**
  * Timer based on just a start time and an interval
  * <p/>
  * Created by Markus on 21.09.2015.
  */
+@ToString
 public class IntervalTimer extends Timer {
 
     private long executionInterval;
@@ -45,25 +46,4 @@ public class IntervalTimer extends Timer {
         return executionInterval;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Timer: ");
-        if (active) {
-            stringBuilder.append("(enabled) ");
-        } else {
-            stringBuilder.append("(disabled) ");
-        }
-        stringBuilder.append(getName())
-                .append("(").append(getId()).append(") Time: ")
-                .append(getExecutionTime().getTimeInMillis())
-                .append(" {\n");
-
-        for (Action action : getActions()) {
-            stringBuilder.append(LogHandler.addIndentation(action.toString())).append("\n");
-        }
-
-        stringBuilder.append("}");
-        return stringBuilder.toString();
-    }
 }

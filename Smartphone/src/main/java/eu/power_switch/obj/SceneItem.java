@@ -20,11 +20,15 @@ package eu.power_switch.obj;
 
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Represents a SceneItem
  * A SceneItem is associated with a Receiver and one of its buttons.
  */
+@Data
+@ToString
 public class SceneItem {
 
     /**
@@ -46,41 +50,5 @@ public class SceneItem {
     public SceneItem(Receiver receiver, Button activeButton) {
         this.receiver = receiver;
         this.activeButton = activeButton;
-    }
-
-    /**
-     * Get associated Receiver
-     *
-     * @return Receiver
-     */
-    public Receiver getReceiver() {
-        return receiver;
-    }
-
-    /**
-     * Get associated Button
-     *
-     * @return Button
-     */
-    public Button getActiveButton() {
-        return activeButton;
-    }
-
-    /**
-     * Set associated Button
-     *
-     * @param button
-     */
-    public void setActiveButton(Button button) {
-        this.activeButton = button;
-    }
-
-    @Override
-    public String toString() {
-        return "SceneItem(" +
-                receiver.getName() +
-                ":" +
-                activeButton.getName() +
-                ")";
     }
 }

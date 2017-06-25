@@ -27,12 +27,16 @@ import java.util.Calendar;
 import java.util.Random;
 
 import eu.power_switch.action.Action;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Timer base class
  * <p/>
  * Created by Markus on 12.09.2015.
  */
+@Data
+@ToString
 public abstract class Timer {
 
     public static final String EXECUTION_TYPE_WEEKDAY = "weekday_timer";
@@ -93,60 +97,6 @@ public abstract class Timer {
     }
 
     /**
-     * Get ID of this Timer
-     *
-     * @return ID of this Timer
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Returns if this Timer is active or not
-     *
-     * @return true if active, false otherwise
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Set "Active" state of this Timer
-     *
-     * @param active true if active, false otherwise
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * Returns name of this Timer
-     *
-     * @return Name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Returns the time when this Timer should execute
-     *
-     * @return Calender (only Hour/Minute is important)
-     */
-    public Calendar getExecutionTime() {
-        return executionTime;
-    }
-
-    /**
-     * Get randomizer value for this timer
-     *
-     * @return randomizer value
-     */
-    public int getRandomizerValue() {
-        return randomizerValue;
-    }
-
-    /**
      * Randomly generate an upcoming execution time based on ExecutionTime and RandomizerValue
      *
      * @return (within boundaries) randomized execution time
@@ -175,23 +125,11 @@ public abstract class Timer {
     }
 
     /**
-     * Returns all TimerActions associated with this Timer
-     *
-     * @return List of TimerActions
-     */
-    public ArrayList<Action> getActions() {
-        return actions;
-    }
-
-    /**
      * Returns the interval this Timer should execute regularly
      *
      * @return Interval
      */
     public abstract long getExecutionInterval();
-
-    @Override
-    public abstract String toString();
 
     @StringDef({EXECUTION_TYPE_WEEKDAY, EXECUTION_TYPE_INTERVAL})
     @Retention(RetentionPolicy.SOURCE)

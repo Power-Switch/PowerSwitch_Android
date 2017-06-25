@@ -24,12 +24,16 @@ import java.util.Set;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.shared.constants.PhoneConstants.CallType;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Internal representation of a Call Object
  * <p/>
  * Created by Markus on 05.04.2016.
  */
+@Data
+@ToString
 public class CallEvent {
 
     /**
@@ -72,33 +76,6 @@ public class CallEvent {
         this.name = name;
         this.phoneNumbersMap = phoneNumbersMap;
         this.actionsMap = actionsMap;
-    }
-
-    /**
-     * Get ID of this CallEvent
-     *
-     * @return id of this CallEvent
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Get active state of this CallEvent
-     *
-     * @return true if active, false otherwise
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Get name of this CallEvent
-     *
-     * @return name of this CallEvent
-     */
-    public String getName() {
-        return name;
     }
 
     /**

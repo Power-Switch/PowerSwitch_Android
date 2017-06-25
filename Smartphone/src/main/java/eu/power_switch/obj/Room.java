@@ -27,11 +27,14 @@ import java.util.NoSuchElementException;
 
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.LogHandler;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Represents a room that can contain receivers
  */
+@ToString
+@Data
 public class Room {
 
     /**
@@ -114,79 +117,6 @@ public class Room {
     }
 
     /**
-     * Get ID of this Room
-     *
-     * @return ID
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Get ID of the Apartment this Room is located in
-     *
-     * @return ID of Apartment
-     */
-    public Long getApartmentId() {
-        return apartmentId;
-    }
-
-    /**
-     * Get name of this Room
-     *
-     * @return Name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get Position of this Room in List
-     *
-     * @return position
-     */
-    public Integer getPositionInApartment() {
-        return positionInApartment;
-    }
-
-    /**
-     * Set Position of this Room in List
-     *
-     * @param positionInApartment position
-     */
-    public void setPositionInApartment(Integer positionInApartment) {
-        this.positionInApartment = positionInApartment;
-    }
-
-    /**
-     * Get collapsed state of this Room
-     *
-     * @return true if collapsed
-     */
-    public boolean isCollapsed() {
-        return collapsed;
-    }
-
-    /**
-     * Set collapsed state of this Room
-     *
-     * @param collapsed true if collapsed, false otherwise
-     */
-    public void setCollapsed(boolean collapsed) {
-        this.collapsed = collapsed;
-    }
-
-    /**
-     * Get a list of Gateways this Room is associated with
-     *
-     * @return List of Gateways
-     */
-    @NonNull
-    public List<Gateway> getAssociatedGateways() {
-        return associatedGateways;
-    }
-
-    /**
      * Checks if this Room is associated with the given Gateway
      *
      * @param gateway Gateway to check
@@ -253,19 +183,4 @@ public class Room {
         throw new NoSuchElementException("Receiver with ID \"" + id + "\" not found");
     }
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Room: ").
-                append(getName())
-                .append("(").append(getId()).append(")")
-                .append(" {\n");
-
-        for (Receiver receiver : getReceivers()) {
-            stringBuilder.append(LogHandler.addIndentation(receiver.toString())).append("\n");
-        }
-
-        stringBuilder.append("}");
-        return stringBuilder.toString();
-    }
 }

@@ -60,7 +60,7 @@ import eu.power_switch.shared.log.Log;
 public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDialogFragment {
 
     public static final String KEY_REPEAT_AMOUNT = "repetitionAmount";
-    public static final String KEY_ASSOCIATED_GATEWAYS = "associatedGateways";
+    public static final String KEY_ASSOCIATED_GATEWAYS = "gateways";
 
     private View rootView;
 

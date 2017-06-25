@@ -18,9 +18,14 @@
 
 package eu.power_switch.widget;
 
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * Container Object for storing information about a Receiver Widget
  */
+@Getter
+@ToString
 public class ReceiverWidget {
 
     /**
@@ -49,33 +54,6 @@ public class ReceiverWidget {
         this.widgetId = widgetId;
         this.roomId = roomId;
         this.receiverId = receiverId;
-    }
-
-    /**
-     * Get ID of this Widget
-     *
-     * @return ID of this Widget
-     */
-    public int getWidgetId() {
-        return widgetId;
-    }
-
-    /**
-     * Get ID of Receiver this Widget is associated with
-     *
-     * @return ID of associated Receiver
-     */
-    public long getReceiverId() {
-        return receiverId;
-    }
-
-    /**
-     * Get ID of Room this Widget is associated with
-     *
-     * @return ID of associated Room
-     */
-    public long getRoomId() {
-        return roomId;
     }
 
 }

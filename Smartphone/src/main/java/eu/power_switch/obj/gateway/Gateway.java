@@ -24,11 +24,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import eu.power_switch.shared.constants.DatabaseConstants;
-import eu.power_switch.shared.log.LogHandler;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Represents a Gateway that can receive network packages from the app and convert them for the actual wireless devices
  */
+@Data
+@ToString
 public abstract class Gateway {
 
     /**
@@ -121,53 +124,6 @@ public abstract class Gateway {
     public abstract int getTimeout();
 
     /**
-     * Get ID of this Gateway
-     *
-     * @return ID of this Gateway
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Set ID of this Gateway
-     *
-     * @param id new ID
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     * Returns whether this Gateway is active or not
-     * (if it will be used by the App to send packets)
-     *
-     * @return true if active, false otherwise
-     */
-    public boolean isActive() {
-        return active;
-    }
-
-    /**
-     * Sets active status of this Gateway
-     *
-     * @param active true if active
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
-     * Get local Host address of this Gateway
-     *
-     * @return Host address of this Gateway
-     */
-    @NonNull
-    public String getLocalHost() {
-        return localHost;
-    }
-
-    /**
      * Get local Port over which data can be exchanged with this Gateway
      *
      * @return local Port of this Gateway
@@ -188,16 +144,6 @@ public abstract class Gateway {
     protected abstract Integer getDefaultLocalPort();
 
     /**
-     * Get WAN Host address of this Gateway
-     *
-     * @return WAN Host address of this Gateway
-     */
-    @NonNull
-    public String getWanHost() {
-        return wanHost;
-    }
-
-    /**
      * Get WAN Port over which data can be exchanged with this Gateway
      *
      * @return WAN Port of this Gateway
@@ -213,75 +159,6 @@ public abstract class Gateway {
 
     public boolean hasValidWanAddress() {
         return getWanHost().length() > 0 && getWanPort() > 0;
-    }
-
-    /**
-     * Get name of this Gateway
-     *
-     * @return Name of this Gateway
-     */
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get model name of this Gateway
-     *
-     * @return Model of this Gateway
-     */
-    @NonNull
-    public String getModel() {
-        return model;
-    }
-
-    /**
-     * Get firmware version of this Gateway
-     *
-     * @return Firmware of this Gateway
-     */
-    @NonNull
-    public String getFirmware() {
-        return firmware;
-    }
-
-    /**
-     * Get set of SSIDs that should always communicate via local address
-     *
-     * @return Set of SSIDs
-     */
-    @NonNull
-    public Set<String> getSsids() {
-        return ssids;
-    }
-
-    /**
-     * Returns a set of {@link Capability} this gateway has
-     *
-     * @return Set of Capabilities
-     */
-    public Set<Capability> getCapabilities() {
-        return capabilities;
-    }
-
-    /**
-     * @return String representation of this Gateway
-     */
-    @NonNull
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Gateway: ").append(name)
-                .append(" (").append(model).append(", firmware: ").append(firmware).append("): \n");
-
-        if (hasValidLocalAddress()) {
-            stringBuilder.append(LogHandler.addIndentation("Local: " + localHost + ":" + localPort)).append("\n");
-        }
-        if (hasValidWanAddress()) {
-            stringBuilder.append(LogHandler.addIndentation("WAN: " + wanHost + ":" + wanPort)).append("\n");
-        }
-
-        return stringBuilder.toString();
     }
 
     /**

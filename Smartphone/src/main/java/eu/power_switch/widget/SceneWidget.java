@@ -18,9 +18,14 @@
 
 package eu.power_switch.widget;
 
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * Container Object for storing information about a Scene Widget
  */
+@Getter
+@ToString
 public class SceneWidget {
 
     /**
@@ -42,24 +47,6 @@ public class SceneWidget {
     public SceneWidget(int widgetId, long sceneId) {
         this.widgetId = widgetId;
         this.sceneId = sceneId;
-    }
-
-    /**
-     * Get ID of this Widget
-     *
-     * @return ID of this Widget
-     */
-    public int getWidgetId() {
-        return widgetId;
-    }
-
-    /**
-     * Get ID of Scene this Widget is associated with
-     *
-     * @return ID of associated Scene
-     */
-    public long getSceneId() {
-        return sceneId;
     }
 
 }

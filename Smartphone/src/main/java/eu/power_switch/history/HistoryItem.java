@@ -22,11 +22,16 @@ import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 
+import lombok.Data;
+import lombok.ToString;
+
 /**
  * This Class represents a history element used in history drawer
  * <p/>
  * Created by Markus on 08.12.2015.
  */
+@Data
+@ToString
 public class HistoryItem {
 
     /**
@@ -79,43 +84,4 @@ public class HistoryItem {
         this.longDescription = longDescription;
     }
 
-    /**
-     * Get ID of this HistoryItem
-     *
-     * @return Id of this HistoryItem
-     */
-    @NonNull
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Get shortDescription of this HistoryItem
-     *
-     * @return shortDescription of this HistoryItem
-     */
-    @NonNull
-    public String getShortDescription() {
-        return shortDescription;
-    }
-
-    /**
-     * Get longDescription of this HistoryItem
-     *
-     * @return longDescription of this HistoryItem
-     */
-    @NonNull
-    public String getLongDescription() {
-        return longDescription;
-    }
-
-    /**
-     * Get Date/Time of this HistoryItem
-     *
-     * @return Date/Time of this HistoryItem
-     */
-    @NonNull
-    public Calendar getTime() {
-        return time;
-    }
 }

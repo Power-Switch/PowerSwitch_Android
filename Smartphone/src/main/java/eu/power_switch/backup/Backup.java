@@ -25,10 +25,15 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 
+import lombok.Data;
+import lombok.ToString;
+
 /**
  * This class represents a Backup stored on the device.
  * Backups store all app data saved in "shared_preferences" and "database" folder
  */
+@Data
+@ToString
 public class Backup {
 
     /**
@@ -62,45 +67,6 @@ public class Backup {
         this.date = date;
         this.path = path;
         this.externalStorage = externalStorage;
-    }
-
-    /**
-     * Get Backup name
-     *
-     * @return Backup name
-     */
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get Backup creation date
-     *
-     * @return Backup creation date
-     */
-    @NonNull
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     * Get full Backup file path
-     *
-     * @return Backup file path
-     */
-    @NonNull
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     * Checks if this Backup is stored on an external storage (sdcard)
-     *
-     * @return true if stored on external storage
-     */
-    public boolean isOnExternalStorage() {
-        return externalStorage;
     }
 
     /**

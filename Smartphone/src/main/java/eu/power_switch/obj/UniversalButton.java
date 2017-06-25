@@ -19,10 +19,14 @@
 package eu.power_switch.obj;
 
 import eu.power_switch.obj.button.Button;
+import lombok.Data;
+import lombok.ToString;
 
 /**
  * Created by Markus on 28.08.2015.
  */
+@Data
+@ToString
 public class UniversalButton extends Button {
 
     /**
@@ -43,12 +47,4 @@ public class UniversalButton extends Button {
         this.signal = signal;
     }
 
-    /**
-     * Gets network signal of this UniversalButton
-     *
-     * @return network signal
-     */
-    public String getSignal() {
-        return signal;
-    }
 }
