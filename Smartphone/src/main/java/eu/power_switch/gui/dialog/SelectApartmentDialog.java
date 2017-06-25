@@ -56,7 +56,7 @@ public class SelectApartmentDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         rootView = inflater.inflate(R.layout.dialog_apartment_chooser, null);
 
-        ListView listViewApartments = (ListView) rootView.findViewById(R.id.listview_apartments);
+        ListView listViewApartments = rootView.findViewById(R.id.listview_apartments);
 
         // should be called async but since its still very fast it doesn't make that much of a difference
         apartmentNames.addAll(getApartmentNames());

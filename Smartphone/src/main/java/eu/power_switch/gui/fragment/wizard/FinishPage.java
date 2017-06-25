@@ -53,10 +53,10 @@ public class FinishPage extends WizardPage {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        successImage = (IconicsImageView) getMainView().findViewById(R.id.imageView_success);
-        errorImage = (IconicsImageView) getMainView().findViewById(R.id.imageView_error);
+        successImage = getMainView().findViewById(R.id.imageView_success);
+        errorImage = getMainView().findViewById(R.id.imageView_error);
 
-        resultText = (TextView) getMainView().findViewById(R.id.resultText);
+        resultText = getMainView().findViewById(R.id.resultText);
 
         onSuccess(android.R.string.ok);
 

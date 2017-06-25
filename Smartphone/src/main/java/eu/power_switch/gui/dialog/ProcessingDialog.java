@@ -68,17 +68,17 @@ public abstract class ProcessingDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         rootView = inflater.inflate(R.layout.dialog_processing, null);
 
-        progressIndicator = (ProgressBar) rootView.findViewById(R.id.progressIndicator);
+        progressIndicator = rootView.findViewById(R.id.progressIndicator);
 
-        progressBarMain = (NumberProgressBar) rootView.findViewById(R.id.progressBar_main);
-        textViewMainStatusMessage = (TextView) rootView.findViewById(R.id.textView_statusMessage_main);
+        progressBarMain = rootView.findViewById(R.id.progressBar_main);
+        textViewMainStatusMessage = rootView.findViewById(R.id.textView_statusMessage_main);
 
-        layoutSubProcess = (LinearLayout) rootView.findViewById(R.id.layout_subprocess);
-        progressBarSub = (NumberProgressBar) rootView.findViewById(R.id.progressBar_sub);
-        textViewSubStatusMessage = (TextView) rootView.findViewById(R.id.textView_statusMessage_sub);
+        layoutSubProcess = rootView.findViewById(R.id.layout_subprocess);
+        progressBarSub = rootView.findViewById(R.id.progressBar_sub);
+        textViewSubStatusMessage = rootView.findViewById(R.id.textView_statusMessage_sub);
 
-        imageViewSuccess = (IconicsImageView) rootView.findViewById(R.id.imageView_success);
-        imageViewError = (IconicsImageView) rootView.findViewById(R.id.imageView_error);
+        imageViewSuccess = rootView.findViewById(R.id.imageView_success);
+        imageViewError = rootView.findViewById(R.id.imageView_error);
 
         if (!hasSubProcess()) {
             layoutSubProcess.setVisibility(View.GONE);

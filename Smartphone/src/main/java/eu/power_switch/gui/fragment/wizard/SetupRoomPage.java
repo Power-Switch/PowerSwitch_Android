@@ -43,8 +43,8 @@ public class SetupRoomPage extends SingleLineTextInputPage {
         super.onSetUiValues();
 
         setTitle(R.string.configure_room);
-        setHint("Living room");
-        setDescription(R.string.tutorial__room_explanation);
+        setHint(R.string.wizard_setup_room_hint);
+        setDescription(R.string.wizard_setup_room_description);
     }
 
     @Override

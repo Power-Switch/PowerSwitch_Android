@@ -223,10 +223,10 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.sceneName = (TextView) itemView.findViewById(R.id.txt_scene_name);
-            this.buttonActivateScene = (android.widget.Button) itemView.findViewById(R.id.btn_activate_scene);
-            this.linearLayoutSceneItems = (LinearLayout) itemView.findViewById(R.id.layout_of_scene_items);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.sceneName = itemView.findViewById(R.id.txt_scene_name);
+            this.buttonActivateScene = itemView.findViewById(R.id.btn_activate_scene);
+            this.linearLayoutSceneItems = itemView.findViewById(R.id.layout_of_scene_items);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

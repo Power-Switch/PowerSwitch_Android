@@ -789,7 +789,7 @@ public class MainActivity extends AppCompatActivity {
         // parent HAS to be null, so it can be attached to navigationDrawer later on
         View historyView = LayoutInflater.from(this).inflate(R.layout.drawer_history, null, false);
 
-        IconicsImageView clearHistory = (IconicsImageView) historyView.findViewById(R.id.buttonClear);
+        IconicsImageView clearHistory = historyView.findViewById(R.id.buttonClear);
         clearHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -831,9 +831,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        layoutLoadingHistory = (LinearLayout) historyView.findViewById(R.id.layoutLoading);
+        layoutLoadingHistory = historyView.findViewById(R.id.layoutLoading);
 
-        recyclerViewHistory = (RecyclerView) historyView.findViewById(R.id.recyclerview_history);
+        recyclerViewHistory = historyView.findViewById(R.id.recyclerview_history);
         historyItemArrayAdapter = new HistoryItemRecyclerViewAdapter(this, historyItems);
         historyItemArrayAdapter.setOnItemClickListener(new HistoryItemRecyclerViewAdapter.OnItemClickListener() {
             @Override

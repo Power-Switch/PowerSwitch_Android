@@ -115,9 +115,9 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.phoneNumbers = (TextView) itemView.findViewById(R.id.txt_phoneNumbers);
-            this.linearLayoutActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_actions);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.phoneNumbers = itemView.findViewById(R.id.txt_phoneNumbers);
+            this.linearLayoutActions = itemView.findViewById(R.id.linearLayout_actions);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -110,16 +110,16 @@ public class DonationDialog extends DialogFragment {
             }
         };
 
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        layoutLoading = rootView.findViewById(R.id.layoutLoading);
 
-        layoutDonationButtons = (LinearLayout) rootView.findViewById(R.id.layout_donate_buttons);
-        donate10 = (Button) rootView.findViewById(R.id.button_donate_10);
+        layoutDonationButtons = rootView.findViewById(R.id.layout_donate_buttons);
+        donate10 = rootView.findViewById(R.id.button_donate_10);
         donate10.setOnClickListener(onClickListener);
-        donate5 = (Button) rootView.findViewById(R.id.button_donate_5);
+        donate5 = rootView.findViewById(R.id.button_donate_5);
         donate5.setOnClickListener(onClickListener);
-        donate2 = (Button) rootView.findViewById(R.id.button_donate_2);
+        donate2 = rootView.findViewById(R.id.button_donate_2);
         donate2.setOnClickListener(onClickListener);
-        donate1 = (Button) rootView.findViewById(R.id.button_donate_1);
+        donate1 = rootView.findViewById(R.id.button_donate_1);
         donate1.setOnClickListener(onClickListener);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -72,8 +72,8 @@ public class SingleLineTextInputPage extends WizardPage implements ISlidePolicy 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        title = (TextView) getMainView().findViewById(R.id.title);
-        input = (TextInputEditText) getMainView().findViewById(R.id.input);
+        title = getMainView().findViewById(R.id.title);
+        input = getMainView().findViewById(R.id.input);
         input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,7 +89,7 @@ public class SingleLineTextInputPage extends WizardPage implements ISlidePolicy 
 
             }
         });
-        description = (TextView) getMainView().findViewById(R.id.description);
+        description = getMainView().findViewById(R.id.description);
 
         onSetUiValues();
 

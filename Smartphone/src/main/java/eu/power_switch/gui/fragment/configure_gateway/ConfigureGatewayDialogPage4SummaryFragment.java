@@ -91,12 +91,12 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_gateway_page_4_summary, container, false);
 
-        name = (TextView) rootView.findViewById(R.id.textView_name);
-        model = (TextView) rootView.findViewById(R.id.textView_model);
-        localAddress = (TextView) rootView.findViewById(R.id.textView_localAddress);
-        wanAddress = (TextView) rootView.findViewById(R.id.textView_wanAddress);
-        ssids = (TextView) rootView.findViewById(R.id.textView_ssids);
-        associatedApartments = (TextView) rootView.findViewById(R.id.textView_associatedApartments);
+        name = rootView.findViewById(R.id.textView_name);
+        model = rootView.findViewById(R.id.textView_model);
+        localAddress = rootView.findViewById(R.id.textView_localAddress);
+        wanAddress = rootView.findViewById(R.id.textView_wanAddress);
+        ssids = rootView.findViewById(R.id.textView_ssids);
+        associatedApartments = rootView.findViewById(R.id.textView_associatedApartments);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override

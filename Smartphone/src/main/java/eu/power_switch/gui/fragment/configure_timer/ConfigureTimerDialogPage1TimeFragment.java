@@ -81,8 +81,8 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_1, container, false);
 
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.timer_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.editText_timer_name);
+        floatingName = rootView.findViewById(R.id.timer_name_text_input_layout);
+        name = rootView.findViewById(R.id.editText_timer_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,7 +100,7 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
             }
         });
 
-        timePicker = (TimePicker) rootView.findViewById(R.id.timePicker);
+        timePicker = rootView.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(DateFormat.is24HourFormat(getContext()));
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -115,9 +115,9 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
             }
         });
 
-        textViewRandomizer = (TextView) rootView.findViewById(R.id.textViewRandomizer);
+        textViewRandomizer = rootView.findViewById(R.id.textViewRandomizer);
 
-        seekBarRandomizer = (SeekBar) rootView.findViewById(R.id.seekbarRandomizer);
+        seekBarRandomizer = rootView.findViewById(R.id.seekbarRandomizer);
         seekBarRandomizer.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {

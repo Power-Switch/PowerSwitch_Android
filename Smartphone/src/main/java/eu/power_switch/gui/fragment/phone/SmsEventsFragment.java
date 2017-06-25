@@ -88,7 +88,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
 
         setHasOptionsMenu(true);
 
-        recyclerViewSmsEvents = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewSmsEvents = rootView.findViewById(R.id.recyclerView);
         smsEventRecyclerViewAdapter = new SmsEventRecyclerViewAdapter(getActivity(), smsEvents);
         recyclerViewSmsEvents.setAdapter(smsEventRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -97,7 +97,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

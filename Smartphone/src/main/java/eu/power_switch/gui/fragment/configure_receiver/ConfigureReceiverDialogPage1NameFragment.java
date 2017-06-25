@@ -138,8 +138,8 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             }
         };
 
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.receiver_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.editText_receiver_name);
+        floatingName = rootView.findViewById(R.id.receiver_name_text_input_layout);
+        name = rootView.findViewById(R.id.editText_receiver_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,7 +156,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             }
         });
 
-        roomsListView = (ListView) rootView.findViewById(R.id.listView_rooms);
+        roomsListView = rootView.findViewById(R.id.listView_rooms);
         roomNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, roomList);
         roomsListView.setAdapter(roomNamesAdapter);
         roomsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -168,7 +168,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
 
         updateRoomNamesList();
 
-        addRoomFAB = (FloatingActionButton) rootView.findViewById(R.id.add_room_fab);
+        addRoomFAB = rootView.findViewById(R.id.add_room_fab);
         addRoomFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final Fragment fragment = this;
         addRoomFAB.setOnClickListener(new View.OnClickListener() {

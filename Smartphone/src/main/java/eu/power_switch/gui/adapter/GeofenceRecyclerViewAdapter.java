@@ -169,13 +169,13 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.geofenceState = (TextView) itemView.findViewById(R.id.txt_geofence_state);
-            this.geofenceName = (TextView) itemView.findViewById(R.id.txt_geofence_name);
-            this.geofenceSwitchActive = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_geofence_active);
-            this.geofenceSnapshot = (ImageView) itemView.findViewById(R.id.imageView_locationSnapshot);
-            this.linearLayoutEnterActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_enterActions);
-            this.linearLayoutExitActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_exitActions);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.geofenceState = itemView.findViewById(R.id.txt_geofence_state);
+            this.geofenceName = itemView.findViewById(R.id.txt_geofence_name);
+            this.geofenceSwitchActive = itemView.findViewById(R.id.switch_geofence_active);
+            this.geofenceSnapshot = itemView.findViewById(R.id.imageView_locationSnapshot);
+            this.linearLayoutEnterActions = itemView.findViewById(R.id.linearLayout_enterActions);
+            this.linearLayoutExitActions = itemView.findViewById(R.id.linearLayout_exitActions);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -86,9 +86,9 @@ public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNu
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.phoneNumber = (TextView) itemView.findViewById(R.id.txt_phoneNumber);
-            this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.phoneNumber = itemView.findViewById(R.id.txt_phoneNumber);
+            this.delete = itemView.findViewById(R.id.delete);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             this.delete.setOnClickListener(new View.OnClickListener() {
                 @Override

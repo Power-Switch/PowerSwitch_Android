@@ -101,11 +101,11 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
                 }
             }
         };
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.apartment_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.txt_edit_apartment_name);
+        floatingName = rootView.findViewById(R.id.apartment_name_text_input_layout);
+        name = rootView.findViewById(R.id.txt_edit_apartment_name);
         name.addTextChangedListener(textWatcher);
 
-        linearLayoutSelectableGateways = (LinearLayout) rootView.findViewById(R.id.linearLayout_gateways);
+        linearLayoutSelectableGateways = rootView.findViewById(R.id.linearLayout_gateways);
         addGatewaysToLayout();
 
         Bundle args = getArguments();
@@ -208,7 +208,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
                 // child one, but not for every gateway
                 linearLayoutSelectableGateways.addView(gatewayLayout);
 
-                final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
+                final CheckBox checkBox = gatewayLayout.findViewById(R.id.checkbox_use_gateway);
                 checkBox.setTag(R.string.gateways, gateway);
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
@@ -228,16 +228,16 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
                     }
                 });
 
-                TextView gatewayName = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayName);
+                TextView gatewayName = gatewayLayout.findViewById(R.id.textView_gatewayName);
                 gatewayName.setText(gateway.getName());
 
-                TextView gatewayType = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayType);
+                TextView gatewayType = gatewayLayout.findViewById(R.id.textView_gatewayType);
                 gatewayType.setText(gateway.getModel());
 
-                TextView gatewayHost = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayHost);
+                TextView gatewayHost = gatewayLayout.findViewById(R.id.textView_gatewayHost);
                 gatewayHost.setText(String.format(Locale.getDefault(), "%s:%d", gateway.getLocalHost(), gateway.getLocalPort()));
 
-                TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
+                TextView gatewayDisabled = gatewayLayout.findViewById(R.id.textView_disabled);
                 if (gateway.isActive()) {
                     gatewayDisabled.setVisibility(View.GONE);
                 } else {

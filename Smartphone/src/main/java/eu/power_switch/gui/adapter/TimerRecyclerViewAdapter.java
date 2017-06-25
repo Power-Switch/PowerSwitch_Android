@@ -205,14 +205,14 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.linearLayoutTimerDescription = (LinearLayout) itemView.findViewById(R.id
+            this.linearLayoutTimerDescription = itemView.findViewById(R.id
                     .linearLayout_timerDescription);
-            this.linearLayoutTimerActions = (LinearLayout) itemView.findViewById(R.id.linearLayout_timerActions);
-            this.name = (TextView) itemView.findViewById(R.id.txt_timer_name);
-            this.executionTime = (TextView) itemView.findViewById(R.id.txt_timer_execution_time);
-            this.executionDays = (TextView) itemView.findViewById(R.id.txt_timer_execution_days);
-            this.timerStatus = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_timer_status);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.linearLayoutTimerActions = itemView.findViewById(R.id.linearLayout_timerActions);
+            this.name = itemView.findViewById(R.id.txt_timer_name);
+            this.executionTime = itemView.findViewById(R.id.txt_timer_execution_time);
+            this.executionDays = itemView.findViewById(R.id.txt_timer_execution_days);
+            this.timerStatus = itemView.findViewById(R.id.switch_timer_status);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

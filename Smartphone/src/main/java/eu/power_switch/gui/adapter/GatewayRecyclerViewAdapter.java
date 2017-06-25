@@ -167,16 +167,16 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            attention = (ImageView) itemView.findViewById(R.id.imageView_attention);
-            name = (TextView) itemView.findViewById(R.id.txt_gateway_name);
-            model = (TextView) itemView.findViewById(R.id.txt_gateway_model);
-            layoutLocalAddress = (LinearLayout) itemView.findViewById(R.id.layout_local_address);
-            localAddress = (TextView) itemView.findViewById(R.id.txt_gateway_local_address);
-            layoutWanAddress = (LinearLayout) itemView.findViewById(R.id.layout_wan_address);
-            wanAddress = (TextView) itemView.findViewById(R.id.txt_gateway_wan_address);
+            attention = itemView.findViewById(R.id.imageView_attention);
+            name = itemView.findViewById(R.id.txt_gateway_name);
+            model = itemView.findViewById(R.id.txt_gateway_model);
+            layoutLocalAddress = itemView.findViewById(R.id.layout_local_address);
+            localAddress = itemView.findViewById(R.id.txt_gateway_local_address);
+            layoutWanAddress = itemView.findViewById(R.id.layout_wan_address);
+            wanAddress = itemView.findViewById(R.id.txt_gateway_wan_address);
 
-            gatewaySwitchStatus = (android.support.v7.widget.SwitchCompat) itemView.findViewById(R.id.switch_gateway_status);
-            footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            gatewaySwitchStatus = itemView.findViewById(R.id.switch_gateway_status);
+            footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

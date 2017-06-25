@@ -127,11 +127,11 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
                 sendAddressChangedBroadcast(getActivity());
             }
         };
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.gateway_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.txt_edit_gateway_name);
+        floatingName = rootView.findViewById(R.id.gateway_name_text_input_layout);
+        name = rootView.findViewById(R.id.txt_edit_gateway_name);
         name.addTextChangedListener(textWatcher);
 
-        model = (Spinner) rootView.findViewById(R.id.spinner_gateway_type);
+        model = rootView.findViewById(R.id.spinner_gateway_type);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.gateway_array,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -145,20 +145,20 @@ public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFrag
         model.setOnTouchListener(spinnerInteractionListener);
         model.setOnItemSelectedListener(spinnerInteractionListener);
 
-        floatingLocalAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_local_address_text_input_layout);
-        localAddress = (EditText) rootView.findViewById(R.id.txt_edit_gateway_local_address);
+        floatingLocalAddress = rootView.findViewById(R.id.gateway_local_address_text_input_layout);
+        localAddress = rootView.findViewById(R.id.txt_edit_gateway_local_address);
         localAddress.addTextChangedListener(textWatcher);
 
-        floatingLocalPort = (TextInputLayout) rootView.findViewById(R.id.gateway_local_port_text_input_layout);
-        localPort = (EditText) rootView.findViewById(R.id.txt_edit_gateway_local_port);
+        floatingLocalPort = rootView.findViewById(R.id.gateway_local_port_text_input_layout);
+        localPort = rootView.findViewById(R.id.txt_edit_gateway_local_port);
         localPort.addTextChangedListener(textWatcher);
 
-        floatingWanAddress = (TextInputLayout) rootView.findViewById(R.id.gateway_wan_address_text_input_layout);
-        wanAddress = (EditText) rootView.findViewById(R.id.txt_edit_gateway_wan_address);
+        floatingWanAddress = rootView.findViewById(R.id.gateway_wan_address_text_input_layout);
+        wanAddress = rootView.findViewById(R.id.txt_edit_gateway_wan_address);
         wanAddress.addTextChangedListener(textWatcher);
 
-        floatingWanPort = (TextInputLayout) rootView.findViewById(R.id.gateway_wan_port_text_input_layout);
-        wanPort = (EditText) rootView.findViewById(R.id.txt_edit_gateway_wan_port);
+        floatingWanPort = rootView.findViewById(R.id.gateway_wan_port_text_input_layout);
+        wanPort = rootView.findViewById(R.id.txt_edit_gateway_wan_port);
         wanPort.addTextChangedListener(textWatcher);
 
         Bundle args = getArguments();

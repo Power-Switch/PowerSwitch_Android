@@ -87,9 +87,9 @@ public class CreateRoomDialog extends DialogFragment {
         view = inflater.inflate(R.layout.dialog_add_room, null);
         builder.setView(view);
 
-        floatingName = (TextInputLayout) view.findViewById(R.id.room_name_text_input_layout);
+        floatingName = view.findViewById(R.id.room_name_text_input_layout);
 
-        name = (EditText) view.findViewById(R.id.editText_room_name);
+        name = view.findViewById(R.id.editText_room_name);
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {

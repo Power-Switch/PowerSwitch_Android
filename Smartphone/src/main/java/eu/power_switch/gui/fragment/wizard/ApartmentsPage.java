@@ -40,7 +40,7 @@ public class ApartmentsPage extends BasicPage {
     @Override
     protected void onSetUiValues() {
         super.onSetUiValues();
-        setIcon(IconicsHelper.getApartmentsIcon(getActivity()));
+        setIcon(IconicsHelper.getApartmentsIcon(getActivity(), 96));
         setTitle(R.string.wizard_apartments_title);
         setDescription(R.string.wizard_apartments_description);
     }

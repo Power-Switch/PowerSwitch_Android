@@ -89,8 +89,8 @@ public class WizardGatewayRecyclerViewAdapter extends RecyclerView.Adapter<Wizar
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            model = (TextView) itemView.findViewById(R.id.textView_gatewayType);
-            host = (TextView) itemView.findViewById(R.id.textView_gatewayHost);
+            model = itemView.findViewById(R.id.textView_gatewayType);
+            host = itemView.findViewById(R.id.textView_gatewayHost);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

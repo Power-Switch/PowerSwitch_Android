@@ -88,9 +88,9 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.description = (TextView) itemView.findViewById(R.id.txt_action_description);
-            this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.description = itemView.findViewById(R.id.txt_action_description);
+            this.delete = itemView.findViewById(R.id.delete);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             this.delete.setOnClickListener(new View.OnClickListener() {
                 @Override

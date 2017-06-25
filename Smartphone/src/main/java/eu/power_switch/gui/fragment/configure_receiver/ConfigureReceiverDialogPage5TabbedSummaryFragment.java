@@ -158,22 +158,22 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
             }
         };
 
-        name = (TextView) rootView.findViewById(R.id.textView_name);
-        roomName = (TextView) rootView.findViewById(R.id.textView_roomName);
-        brand = (TextView) rootView.findViewById(R.id.textView_brand);
-        model = (TextView) rootView.findViewById(R.id.textView_model);
-        channelMaster = (TextView) rootView.findViewById(R.id.textView_channelMaster);
-        channelSlave = (TextView) rootView.findViewById(R.id.textView_channelSlave);
+        name = rootView.findViewById(R.id.textView_name);
+        roomName = rootView.findViewById(R.id.textView_roomName);
+        brand = rootView.findViewById(R.id.textView_brand);
+        model = rootView.findViewById(R.id.textView_model);
+        channelMaster = rootView.findViewById(R.id.textView_channelMaster);
+        channelSlave = rootView.findViewById(R.id.textView_channelSlave);
 
-        linearLayoutMasterSlaveReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_masterSlaveReceiver);
+        linearLayoutMasterSlaveReceiver = rootView.findViewById(R.id.linearLayout_masterSlaveReceiver);
 
-        linearLayoutDipReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_dipReceiver);
-        linearLayoutDips = (LinearLayout) rootView.findViewById(R.id.linearLayout_dips);
+        linearLayoutDipReceiver = rootView.findViewById(R.id.linearLayout_dipReceiver);
+        linearLayoutDips = rootView.findViewById(R.id.linearLayout_dips);
 
-        linearLayoutAutoPairReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_autoPair);
-        seedTextView = (TextView) rootView.findViewById(R.id.textView_seed);
+        linearLayoutAutoPairReceiver = rootView.findViewById(R.id.linearLayout_autoPair);
+        seedTextView = rootView.findViewById(R.id.textView_seed);
 
-        android.widget.Button buttonCopySeed = (android.widget.Button) rootView.findViewById(R.id.button_copySeed);
+        android.widget.Button buttonCopySeed = rootView.findViewById(R.id.button_copySeed);
         buttonCopySeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,8 +186,8 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
             }
         });
 
-        linearLayoutUniversalReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalReceiver);
-        linearLayoutUniversalButtons = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalButtons);
+        linearLayoutUniversalReceiver = rootView.findViewById(R.id.linearLayout_universalReceiver);
+        linearLayoutUniversalButtons = rootView.findViewById(R.id.linearLayout_universalButtons);
 
         updateUi();
 

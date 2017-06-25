@@ -172,8 +172,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         };
 
         // Master/Slave
-        layoutMasterSlave = (TableLayout) rootView.findViewById(R.id.tableLayout_MasterSlave);
-        channelMasterListView = (ListView) rootView.findViewById(R.id.listView_channelMaster);
+        layoutMasterSlave = rootView.findViewById(R.id.tableLayout_MasterSlave);
+        channelMasterListView = rootView.findViewById(R.id.listView_channelMaster);
         channelMasterNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice);
         channelMasterListView.setAdapter(channelMasterNamesAdapter);
         channelMasterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -189,7 +189,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             }
         });
 
-        channelSlaveListView = (ListView) rootView.findViewById(R.id.listView_channelSlave);
+        channelSlaveListView = rootView.findViewById(R.id.listView_channelSlave);
         channelSlaveNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice);
         channelSlaveListView.setAdapter(channelSlaveNamesAdapter);
         channelSlaveListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -206,18 +206,18 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         });
 
         // Dips
-        layoutDip = (NestedScrollView) rootView.findViewById(R.id.scrollView_dip);
+        layoutDip = rootView.findViewById(R.id.scrollView_dip);
         dipViewList = new ArrayList<>();
-        SwitchCompat dip0 = (SwitchCompat) rootView.findViewById(R.id.switch_dip0);
-        SwitchCompat dip1 = (SwitchCompat) rootView.findViewById(R.id.switch_dip1);
-        SwitchCompat dip2 = (SwitchCompat) rootView.findViewById(R.id.switch_dip2);
-        SwitchCompat dip3 = (SwitchCompat) rootView.findViewById(R.id.switch_dip3);
-        SwitchCompat dip4 = (SwitchCompat) rootView.findViewById(R.id.switch_dip4);
-        SwitchCompat dip5 = (SwitchCompat) rootView.findViewById(R.id.switch_dip5);
-        SwitchCompat dip6 = (SwitchCompat) rootView.findViewById(R.id.switch_dip6);
-        SwitchCompat dip7 = (SwitchCompat) rootView.findViewById(R.id.switch_dip7);
-        SwitchCompat dip8 = (SwitchCompat) rootView.findViewById(R.id.switch_dip8);
-        SwitchCompat dip9 = (SwitchCompat) rootView.findViewById(R.id.switch_dip9);
+        SwitchCompat dip0 = rootView.findViewById(R.id.switch_dip0);
+        SwitchCompat dip1 = rootView.findViewById(R.id.switch_dip1);
+        SwitchCompat dip2 = rootView.findViewById(R.id.switch_dip2);
+        SwitchCompat dip3 = rootView.findViewById(R.id.switch_dip3);
+        SwitchCompat dip4 = rootView.findViewById(R.id.switch_dip4);
+        SwitchCompat dip5 = rootView.findViewById(R.id.switch_dip5);
+        SwitchCompat dip6 = rootView.findViewById(R.id.switch_dip6);
+        SwitchCompat dip7 = rootView.findViewById(R.id.switch_dip7);
+        SwitchCompat dip8 = rootView.findViewById(R.id.switch_dip8);
+        SwitchCompat dip9 = rootView.findViewById(R.id.switch_dip9);
         dipViewList.add(dip0);
         dipViewList.add(dip1);
         dipViewList.add(dip2);
@@ -250,10 +250,10 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
 
 
         // AutoPair
-        layoutAutoPair = (NestedScrollView) rootView.findViewById(R.id.scrollView_autoPair);
+        layoutAutoPair = rootView.findViewById(R.id.scrollView_autoPair);
 
-        textInputEditTextSeed = (TextInputLayout) rootView.findViewById(R.id.textInputEditText_seed);
-        editTextSeed = (TextInputEditText) rootView.findViewById(R.id.editText_seed);
+        textInputEditTextSeed = rootView.findViewById(R.id.textInputEditText_seed);
+        editTextSeed = rootView.findViewById(R.id.editText_seed);
         editTextSeed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -289,7 +289,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             }
         });
 
-        android.widget.Button buttonPaste = (android.widget.Button) rootView.findViewById(R.id.button_paste);
+        android.widget.Button buttonPaste = rootView.findViewById(R.id.button_paste);
         buttonPaste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -309,7 +309,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             }
         });
 
-        android.widget.Button buttonPair = (android.widget.Button) rootView.findViewById(R.id.button_pair);
+        android.widget.Button buttonPair = rootView.findViewById(R.id.button_pair);
         buttonPair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,7 +339,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                 }
             }
         });
-        android.widget.Button buttonUnpair = (android.widget.Button) rootView.findViewById(R.id.button_unpair);
+        android.widget.Button buttonUnpair = rootView.findViewById(R.id.button_unpair);
         buttonUnpair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,7 +368,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                 }
             }
         });
-        android.widget.Button buttonUnpairAll = (android.widget.Button) rootView.findViewById(R.id.button_unpairAll);
+        android.widget.Button buttonUnpairAll = rootView.findViewById(R.id.button_unpairAll);
         buttonUnpairAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -399,10 +399,10 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         });
 
         // Universal
-        layoutUniversal = (LinearLayout) rootView.findViewById(R.id.linearLayout_universalButtons);
-        FloatingActionButton addUniversalButtonFAB = (FloatingActionButton) rootView.findViewById(R.id.add_universalButton_fab);
+        layoutUniversal = rootView.findViewById(R.id.linearLayout_universalButtons);
+        FloatingActionButton addUniversalButtonFAB = rootView.findViewById(R.id.add_universalButton_fab);
         addUniversalButtonFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        buttonsList = (LinearLayout) rootView.findViewById(R.id.universalButtons_List);
+        buttonsList = rootView.findViewById(R.id.universalButtons_List);
 
         addUniversalButtonFAB.setOnClickListener(new View.OnClickListener() {
 

@@ -90,9 +90,9 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.time = (TextView) itemView.findViewById(R.id.txt_time);
-            this.description = (TextView) itemView.findViewById(R.id.txt_description);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.time = itemView.findViewById(R.id.txt_time);
+            this.description = itemView.findViewById(R.id.txt_description);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

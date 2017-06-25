@@ -99,7 +99,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
-        recyclerViewGeofences = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewGeofences = rootView.findViewById(R.id.recyclerView);
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
         recyclerViewGeofences.setAdapter(geofenceRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -120,7 +120,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             }
         });
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

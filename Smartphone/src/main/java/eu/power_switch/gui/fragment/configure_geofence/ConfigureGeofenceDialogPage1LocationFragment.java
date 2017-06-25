@@ -116,16 +116,16 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_1, container, false);
 
-        MapView mapView = (MapView) rootView.findViewById(R.id.mapView);
+        MapView mapView = rootView.findViewById(R.id.mapView);
         mapViewHandler = new MapViewHandler(getContext(), mapView, savedInstanceState);
         mapViewHandler.addOnMapReadyListener(this);
         mapViewHandler.initMapAsync();
 
-        searchAddressProgress = (ProgressBar) rootView.findViewById(R.id.searchAddressProgress);
-        searchAddressTextInputLayout = (TextInputLayout) rootView.findViewById(R.id.searchAddressTextInputLayout);
-        searchAddressEditText = (EditText) rootView.findViewById(R.id.searchAddressEditText);
+        searchAddressProgress = rootView.findViewById(R.id.searchAddressProgress);
+        searchAddressTextInputLayout = rootView.findViewById(R.id.searchAddressTextInputLayout);
+        searchAddressEditText = rootView.findViewById(R.id.searchAddressEditText);
 
-        searchAddressButton = (ImageButton) rootView.findViewById(R.id.searchAddressImageButton);
+        searchAddressButton = rootView.findViewById(R.id.searchAddressImageButton);
         searchAddressButton.setImageDrawable(
                 IconicsHelper.getSearchIcon(
                         getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
@@ -180,7 +180,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
             }
         });
 
-        geofenceRadiusEditText = (EditText) rootView.findViewById(R.id.geofenceRadiusEditText);
+        geofenceRadiusEditText = rootView.findViewById(R.id.geofenceRadiusEditText);
         geofenceRadiusEditText.setText(String.valueOf((int) currentGeofenceRadius));
         geofenceRadiusEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -209,7 +209,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
             }
         });
 
-        geofenceRadiusSeekbar = (SeekBar) rootView.findViewById(R.id.geofenceRadiusSeekbar);
+        geofenceRadiusSeekbar = rootView.findViewById(R.id.geofenceRadiusSeekbar);
         geofenceRadiusSeekbar.setMax(2000);
         geofenceRadiusSeekbar.setProgress((int) currentGeofenceRadius);
         geofenceRadiusSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

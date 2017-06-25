@@ -75,7 +75,7 @@ public class CreateBackupDialog extends DialogFragment {
                 }
             }
         };
-        name = (EditText) rootView.findViewById(R.id.txt_backup_name);
+        name = rootView.findViewById(R.id.txt_backup_name);
         name.requestFocus();
         name.addTextChangedListener(textWatcher);
 

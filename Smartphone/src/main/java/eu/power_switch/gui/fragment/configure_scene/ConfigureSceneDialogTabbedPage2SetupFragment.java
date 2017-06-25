@@ -106,7 +106,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
         rooms = new ArrayList<>();
         customRecyclerViewAdapter = new CustomRecyclerViewAdapter(getActivity(), rooms);
-        recyclerViewSelectedReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
+        recyclerViewSelectedReceivers = rootView.findViewById(R.id.recyclerview_list_of_receivers);
         recyclerViewSelectedReceivers.setAdapter(customRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getResources().getInteger(R.integer.scene_grid_span_count),
                 StaggeredGridLayoutManager.VERTICAL);
@@ -413,8 +413,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
             public ViewHolder(final View itemView) {
                 super(itemView);
-                this.roomName = (TextView) itemView.findViewById(R.id.txt_room_name);
-                this.linearLayoutOfReceivers = (LinearLayout) itemView.findViewById(R.id.layout_of_receivers);
+                this.roomName = itemView.findViewById(R.id.txt_room_name);
+                this.linearLayoutOfReceivers = itemView.findViewById(R.id.layout_of_receivers);
             }
         }
     }

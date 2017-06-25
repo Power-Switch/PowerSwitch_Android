@@ -72,7 +72,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_edit_room_order_content, container);
 
-        recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewRooms = rootView.findViewById(R.id.recyclerView);
         roomNameRecyclerViewAdapter = new RoomNameRecyclerViewAdapter(getContext(), rooms, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerViewRooms.setLayoutManager(linearLayoutManager);

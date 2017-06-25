@@ -70,9 +70,9 @@ public class SetupGatewayPage extends WizardPage {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        layoutLoading = (LinearLayout) getMainView().findViewById(R.id.layoutLoading);
+        layoutLoading = getMainView().findViewById(R.id.layoutLoading);
 
-        LinearLayout layoutRefresh = (LinearLayout) getMainView().findViewById(R.id.layoutRefresh);
+        LinearLayout layoutRefresh = getMainView().findViewById(R.id.layoutRefresh);
         layoutRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,11 +80,11 @@ public class SetupGatewayPage extends WizardPage {
             }
         });
 
-        refreshIcon = (IconicsImageView) getMainView().findViewById(R.id.button_refresh);
+        refreshIcon = getMainView().findViewById(R.id.button_refresh);
 
-        textViewEmpty = (TextView) getMainView().findViewById(R.id.textViewEmpty);
+        textViewEmpty = getMainView().findViewById(R.id.textViewEmpty);
 
-        recyclerViewGateways = (RecyclerView) getMainView().findViewById(R.id.recyclerViewGateways);
+        recyclerViewGateways = getMainView().findViewById(R.id.recyclerViewGateways);
         gatewayRecyclerViewAdapter = new WizardGatewayRecyclerViewAdapter(getActivity(), foundGateways);
         recyclerViewGateways.setAdapter(gatewayRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);

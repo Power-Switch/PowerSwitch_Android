@@ -77,7 +77,7 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_gateway_page_3, container, false);
 
-        linearLayoutSelectableApartments = (LinearLayout) rootView.findViewById(R.id.linearLayout_Apartments);
+        linearLayoutSelectableApartments = rootView.findViewById(R.id.linearLayout_Apartments);
 
         addApartmentsToLayout();
 
@@ -131,7 +131,7 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
                 // child once
                 linearLayoutSelectableApartments.addView(apartmentLayout);
 
-                final CheckBox checkBox = (CheckBox) apartmentLayout.findViewById(R.id.checkbox_apartment);
+                final CheckBox checkBox = apartmentLayout.findViewById(R.id.checkbox_apartment);
                 checkBox.setTag(R.string.apartments, apartment);
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
@@ -151,7 +151,7 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
                     }
                 });
 
-                TextView apartmentName = (TextView) apartmentLayout.findViewById(R.id.textView_apartmentName);
+                TextView apartmentName = apartmentLayout.findViewById(R.id.textView_apartmentName);
                 apartmentName.setText(apartment.getName());
             }
         } catch (Exception e) {

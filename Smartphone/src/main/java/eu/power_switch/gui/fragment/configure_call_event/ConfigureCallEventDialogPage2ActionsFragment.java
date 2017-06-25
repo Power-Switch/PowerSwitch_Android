@@ -99,7 +99,7 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
         };
 
         final Fragment fragment = this;
-        FloatingActionButton addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action);
+        FloatingActionButton addActionFAB = rootView.findViewById(R.id.add_action);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +119,7 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
                 sendActionsChangedBroadcast(getContext(), actions);
             }
         });
-        RecyclerView recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_actions);
+        RecyclerView recyclerViewActions = rootView.findViewById(R.id.recyclerview_list_of_actions);
         recyclerViewActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);

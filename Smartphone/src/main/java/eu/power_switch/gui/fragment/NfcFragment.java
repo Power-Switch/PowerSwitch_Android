@@ -140,14 +140,14 @@ public class NfcFragment extends Fragment {
         };
 
         // Action Type Selection
-        radioButtonReceiverAction = (RadioButton) rootView.findViewById(R.id.radioButton_receiver_action);
+        radioButtonReceiverAction = rootView.findViewById(R.id.radioButton_receiver_action);
         radioButtonReceiverAction.setOnClickListener(onClickListener);
-        radioButtonRoomAction = (RadioButton) rootView.findViewById(R.id.radioButton_room_action);
+        radioButtonRoomAction = rootView.findViewById(R.id.radioButton_room_action);
         radioButtonRoomAction.setOnClickListener(onClickListener);
-        radioButtonSceneAction = (RadioButton) rootView.findViewById(R.id.radioButton_scene_action);
+        radioButtonSceneAction = rootView.findViewById(R.id.radioButton_scene_action);
         radioButtonSceneAction.setOnClickListener(onClickListener);
 
-        spinner_apartment = (Spinner) rootView.findViewById(R.id.spinner_apartment);
+        spinner_apartment = rootView.findViewById(R.id.spinner_apartment);
         apartmentSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, apartmentNames);
         apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_apartment.setAdapter(apartmentSpinnerArrayAdapter);
@@ -160,18 +160,18 @@ public class NfcFragment extends Fragment {
         spinner_apartment.setOnTouchListener(spinnerInteractionListener);
         spinner_apartment.setOnItemSelectedListener(spinnerInteractionListener);
 
-        linearLayoutRoom = (LinearLayout) rootView.findViewById(R.id.linearLayout_room);
-        linearLayoutReceiver = (LinearLayout) rootView.findViewById(R.id.linearLayout_receiver);
-        linearLayoutButton = (LinearLayout) rootView.findViewById(R.id.linearLayout_button);
-        linearLayoutScene = (LinearLayout) rootView.findViewById(R.id.linearLayout_scene);
+        linearLayoutRoom = rootView.findViewById(R.id.linearLayout_room);
+        linearLayoutReceiver = rootView.findViewById(R.id.linearLayout_receiver);
+        linearLayoutButton = rootView.findViewById(R.id.linearLayout_button);
+        linearLayoutScene = rootView.findViewById(R.id.linearLayout_scene);
 
-        progressApartment = (ProgressBar) rootView.findViewById(R.id.progressApartment);
-        progressRoom = (ProgressBar) rootView.findViewById(R.id.progressRoom);
-        progressReceiver = (ProgressBar) rootView.findViewById(R.id.progressReceiver);
-        progressButton = (ProgressBar) rootView.findViewById(R.id.progressButton);
-        progressScene = (ProgressBar) rootView.findViewById(R.id.progressScene);
+        progressApartment = rootView.findViewById(R.id.progressApartment);
+        progressRoom = rootView.findViewById(R.id.progressRoom);
+        progressReceiver = rootView.findViewById(R.id.progressReceiver);
+        progressButton = rootView.findViewById(R.id.progressButton);
+        progressScene = rootView.findViewById(R.id.progressScene);
 
-        spinner_room = (Spinner) rootView.findViewById(R.id.spinner_room);
+        spinner_room = rootView.findViewById(R.id.spinner_room);
         roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room.setAdapter(roomSpinnerArrayAdapter);
@@ -184,7 +184,7 @@ public class NfcFragment extends Fragment {
         spinner_room.setOnTouchListener(spinnerInteractionListener2);
         spinner_room.setOnItemSelectedListener(spinnerInteractionListener2);
 
-        spinner_receiver = (Spinner) rootView.findViewById(R.id.spinner_receiver);
+        spinner_receiver = rootView.findViewById(R.id.spinner_receiver);
         receiverSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, receiverNames);
         receiverSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver.setAdapter(receiverSpinnerArrayAdapter);
@@ -197,7 +197,7 @@ public class NfcFragment extends Fragment {
         spinner_receiver.setOnTouchListener(spinnerInteractionListener3);
         spinner_receiver.setOnItemSelectedListener(spinnerInteractionListener3);
 
-        spinner_button = (Spinner) rootView.findViewById(R.id.spinner_button);
+        spinner_button = rootView.findViewById(R.id.spinner_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNames);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_button.setAdapter(buttonSpinnerArrayAdapter);
@@ -210,7 +210,7 @@ public class NfcFragment extends Fragment {
         spinner_button.setOnTouchListener(spinnerInteractionListener4);
         spinner_button.setOnItemSelectedListener(spinnerInteractionListener4);
 
-        spinner_scene = (Spinner) rootView.findViewById(R.id.spinner_scene);
+        spinner_scene = rootView.findViewById(R.id.spinner_scene);
         sceneSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sceneNames);
         sceneSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_scene.setAdapter(sceneSpinnerArrayAdapter);
@@ -223,7 +223,7 @@ public class NfcFragment extends Fragment {
         spinner_scene.setOnTouchListener(spinnerInteractionListener7);
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener7);
 
-        buttonWriteTag = (IconicsButton) rootView.findViewById(R.id.button_write_nfc_tag);
+        buttonWriteTag = rootView.findViewById(R.id.button_write_nfc_tag);
         buttonWriteTag.setText(R.string.write_nfc_tag_image);
         buttonWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override

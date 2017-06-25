@@ -86,7 +86,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        Switch switchOnOff = (Switch) rootView.findViewById(R.id.switch_on_off);
+        Switch switchOnOff = rootView.findViewById(R.id.switch_on_off);
         switchOnOff.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED));
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -97,7 +97,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
             }
         });
 
-        spinnerEventType = (Spinner) rootView.findViewById(R.id.spinner_sleep_as_android_event);
+        spinnerEventType = rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.stock_alarm_clock_event_names, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -111,7 +111,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         spinnerEventType.setOnItemSelectedListener(spinnerInteractionListener);
         spinnerEventType.setOnTouchListener(spinnerInteractionListener);
 
-        recyclerViewActions = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewActions = rootView.findViewById(R.id.recyclerView);
         recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);
         recyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
@@ -143,7 +143,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
                 getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);
 
-        addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        addActionFAB = rootView.findViewById(R.id.add_fab);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override

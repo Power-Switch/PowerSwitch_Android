@@ -94,7 +94,7 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_2, container, false);
 
-        brandListView = (ListView) rootView.findViewById(R.id.listView_brands);
+        brandListView = rootView.findViewById(R.id.listView_brands);
         brandNamesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_single_choice,
                 getResources().getStringArray(R.array.brand_array));
@@ -107,9 +107,9 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
             }
         });
 
-        modelTextView = (TextView) rootView.findViewById(R.id.textView_model);
+        modelTextView = rootView.findViewById(R.id.textView_model);
 
-        modelListView = (ListView) rootView.findViewById(R.id.listView_models);
+        modelListView = rootView.findViewById(R.id.listView_models);
         modelNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, new ArrayList<String>());
         modelListView.setAdapter(modelNamesAdapter);
         modelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

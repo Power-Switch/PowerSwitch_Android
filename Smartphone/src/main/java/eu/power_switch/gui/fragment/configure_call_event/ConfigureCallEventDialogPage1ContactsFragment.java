@@ -102,7 +102,7 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
             }
         };
 
-        recyclerViewContacts = (RecyclerView) rootView.findViewById(R.id.recyclerView_phoneNumbers);
+        recyclerViewContacts = rootView.findViewById(R.id.recyclerView_phoneNumbers);
         phoneNumberRecyclerViewAdapter = new PhoneNumberRecyclerViewAdapter(getActivity(), phoneNumbers);
         recyclerViewContacts.setAdapter(phoneNumberRecyclerViewAdapter);
         phoneNumberRecyclerViewAdapter.setOnDeleteClickListener(new PhoneNumberRecyclerViewAdapter.OnItemClickListener() {
@@ -131,7 +131,7 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewContacts.setLayoutManager(layoutManager);
 
-        final FloatingActionButton addContactFAB = (FloatingActionButton) rootView.findViewById(R.id.add_contact_fab);
+        final FloatingActionButton addContactFAB = rootView.findViewById(R.id.add_contact_fab);
         addContactFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final Fragment fragment = this;
         addContactFAB.setOnClickListener(new View.OnClickListener() {

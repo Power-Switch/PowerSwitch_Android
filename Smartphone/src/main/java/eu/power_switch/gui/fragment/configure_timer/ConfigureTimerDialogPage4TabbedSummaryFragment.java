@@ -98,10 +98,10 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             }
         };
 
-        textViewName = (TextView) rootView.findViewById(R.id.textView_name);
-        textViewTime = (TextView) rootView.findViewById(R.id.textView_time);
-        textViewDays = (TextView) rootView.findViewById(R.id.textView_execution_days);
-        textViewAction = (TextView) rootView.findViewById(R.id.textView_action);
+        textViewName = rootView.findViewById(R.id.textView_name);
+        textViewTime = rootView.findViewById(R.id.textView_time);
+        textViewDays = rootView.findViewById(R.id.textView_execution_days);
+        textViewAction = rootView.findViewById(R.id.textView_action);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {

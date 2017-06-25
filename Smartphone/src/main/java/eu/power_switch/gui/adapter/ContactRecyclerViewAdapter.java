@@ -120,9 +120,9 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.name = (TextView) itemView.findViewById(R.id.txt_name);
-            this.numbers = (LinearLayout) itemView.findViewById(R.id.linearLayout_numbers);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.name = itemView.findViewById(R.id.txt_name);
+            this.numbers = itemView.findViewById(R.id.linearLayout_numbers);
+            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

@@ -87,11 +87,11 @@ public abstract class ConfigurationDialog extends DialogFragment {
 
         rootView = inflater.inflate(R.layout.dialog_configuration, null);
 
-        FrameLayout contentViewContainer = (FrameLayout) rootView.findViewById(R.id.contentView);
+        FrameLayout contentViewContainer = rootView.findViewById(R.id.contentView);
 
         contentView = initContentView(inflater, contentViewContainer, savedInstanceState);
 
-        imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
+        imageButtonDelete = rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), R.color.delete_color)));
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +100,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
             }
         });
 
-        imageButtonCancel = (ImageButton) rootView.findViewById(R.id.imageButton_cancel);
+        imageButtonCancel = rootView.findViewById(R.id.imageButton_cancel);
         imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +123,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
             }
         });
 
-        imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
+        imageButtonSave = rootView.findViewById(R.id.imageButton_save);
         imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override

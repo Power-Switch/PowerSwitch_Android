@@ -120,9 +120,9 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.mainLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_main);
-            this.receiverName = (TextView) itemView.findViewById(R.id.txt_name);
-            this.dragHandle = (ImageView) itemView.findViewById(R.id.drag_handle);
+            this.mainLayout = itemView.findViewById(R.id.linear_layout_main);
+            this.receiverName = itemView.findViewById(R.id.txt_name);
+            this.dragHandle = itemView.findViewById(R.id.drag_handle);
             this.dragHandle.setImageDrawable(IconicsHelper.getReorderHandleIcon(context));
         }
 

@@ -79,7 +79,7 @@ public class EditBackupDialog extends DialogFragment {
         builder.setView(rootView);
 
         // restore name
-        name = (EditText) rootView.findViewById(R.id.editText_backup_name);
+        name = rootView.findViewById(R.id.editText_backup_name);
         name.setText(backupName);
         name.addTextChangedListener(new TextWatcher() {
 

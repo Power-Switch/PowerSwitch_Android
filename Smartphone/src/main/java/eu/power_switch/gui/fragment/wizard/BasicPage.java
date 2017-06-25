@@ -26,6 +26,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,9 +71,9 @@ public class BasicPage extends WizardPage {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        icon = (IconicsImageView) getMainView().findViewById(R.id.icon);
-        title = (TextView) getMainView().findViewById(R.id.title);
-        description = (TextView) getMainView().findViewById(R.id.description);
+        icon = getMainView().findViewById(R.id.icon);
+        title = getMainView().findViewById(R.id.title);
+        description = getMainView().findViewById(R.id.description);
 
         onSetUiValues();
 
@@ -85,8 +86,8 @@ public class BasicPage extends WizardPage {
     @CallSuper
     protected void onSetUiValues() {
         Bundle arguments = getArguments();
-        if (arguments.containsKey(KEY_BACKGROUND_COLOR) && arguments.containsKey(KEY_ICON) && arguments
-                .containsKey(KEY_TITLE) && arguments.containsKey(KEY_DESCRIPTION)) {
+        if (arguments.containsKey(KEY_BACKGROUND_COLOR) && arguments.containsKey(KEY_ICON) && arguments.containsKey(KEY_TITLE) && arguments.containsKey(
+                KEY_DESCRIPTION)) {
             defaultBackgroundColor = arguments.getInt(KEY_BACKGROUND_COLOR, -1);
             @DrawableRes int iconRes = arguments.getInt(KEY_ICON, -1);
             @StringRes int titleText = arguments.getInt(KEY_TITLE, -1);
@@ -110,7 +111,7 @@ public class BasicPage extends WizardPage {
      * @param drawableRes drawable
      */
     protected void setIcon(@DrawableRes int drawableRes) {
-        setIcon(getResources().getDrawable(drawableRes));
+        setIcon(ContextCompat.getDrawable(getContext(), drawableRes));
     }
 
     /**

@@ -226,9 +226,19 @@ public class IconicsHelper {
      * @return "Apartments" icon
      */
     public static IconicsDrawable getApartmentsIcon(Context context) {
+        return getApartmentsIcon(context, 24);
+    }
+
+    /**
+     * Get "Apartments" icon
+     *
+     * @param context any suitable context
+     *
+     * @return "Apartments" icon
+     */
+    public static IconicsDrawable getApartmentsIcon(Context context, int sizeDp) {
         final int color = eu.power_switch.shared.ThemeHelper.getThemeAttrColor(context, android.R.attr.textColorPrimary);
-        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_home)
-                .sizeDp(24)
+        IconicsDrawable iconicsDrawable = new IconicsDrawable(context, MaterialDesignIconic.Icon.gmi_home).sizeDp(sizeDp)
                 .color(color);
 
         return iconicsDrawable;

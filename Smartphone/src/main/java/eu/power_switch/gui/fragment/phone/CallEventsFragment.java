@@ -94,7 +94,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        recyclerViewCalls = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewCalls = rootView.findViewById(R.id.recyclerView);
         callEventRecyclerViewAdapter = new CallEventRecyclerViewAdapter(getActivity(), callEvents);
         recyclerViewCalls.setAdapter(callEventRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -112,7 +112,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
             }
         });
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

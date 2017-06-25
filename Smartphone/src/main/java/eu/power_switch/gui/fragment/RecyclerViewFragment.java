@@ -61,9 +61,9 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         onCreateViewEvent(inflater, container, savedInstanceState);
 
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
-        layoutEmpty = (FrameLayout) rootView.findViewById(R.id.layoutEmpty);
-        layoutError = (LinearLayout) rootView.findViewById(R.id.layoutError);
+        layoutLoading = rootView.findViewById(R.id.layoutLoading);
+        layoutEmpty = rootView.findViewById(R.id.layoutEmpty);
+        layoutError = rootView.findViewById(R.id.layoutError);
 
         // use loaderManager of fragment, so unique ID across app is not required (only across this fragment)
         dataLoader = getLoaderManager().initLoader(0, null, this);

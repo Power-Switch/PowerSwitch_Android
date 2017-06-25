@@ -86,9 +86,9 @@ public class SsidRecyclerViewAdapter extends RecyclerView.Adapter<SsidRecyclerVi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.ssid = (TextView) itemView.findViewById(R.id.txt_ssid);
-            this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.ssid = itemView.findViewById(R.id.txt_ssid);
+            this.delete = itemView.findViewById(R.id.delete);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             this.delete.setOnClickListener(new View.OnClickListener() {
                 @Override

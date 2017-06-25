@@ -61,7 +61,7 @@ public class PhoneTabFragment extends Fragment {
 
         // Set up the tabViewPager, attaching the adapter and setting up a listener
         // for when the user swipes between sections.
-        tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
+        tabViewPager = rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
 
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
@@ -87,7 +87,7 @@ public class PhoneTabFragment extends Fragment {
 
         skipTutorial = true;
 
-        tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout);
+        tabLayout = rootView.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();

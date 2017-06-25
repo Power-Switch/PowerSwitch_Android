@@ -58,7 +58,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
-        CheckBox checkBox_playStoreMode = (CheckBox) rootView.findViewById(R.id.checkBox_playStoreMode);
+        CheckBox checkBox_playStoreMode = rootView.findViewById(R.id.checkBox_playStoreMode);
         checkBox_playStoreMode.setChecked(DeveloperPreferencesHandler.getPlayStoreMode());
         checkBox_playStoreMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -67,7 +67,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button resetShowcasesButton = (Button) rootView.findViewById(R.id.button_resetShowcases);
+        Button resetShowcasesButton = rootView.findViewById(R.id.button_resetShowcases);
         resetShowcasesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +76,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button removeAllGeofences = (Button) rootView.findViewById(R.id.button_removeAllGeofences);
+        Button removeAllGeofences = rootView.findViewById(R.id.button_removeAllGeofences);
         removeAllGeofences.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +84,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button forceUnknownExceptionDialog = (Button) rootView.findViewById(R.id.button_forceUnknownExceptionDialog);
+        Button forceUnknownExceptionDialog = rootView.findViewById(R.id.button_forceUnknownExceptionDialog);
         forceUnknownExceptionDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +92,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button forceUnhandledException = (Button) rootView.findViewById(R.id.button_forceUnhandledException);
+        Button forceUnhandledException = rootView.findViewById(R.id.button_forceUnhandledException);
         forceUnhandledException.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +100,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        final Spinner spinnerLanguage = (Spinner) rootView.findViewById(R.id.spinner_language);
+        final Spinner spinnerLanguage = rootView.findViewById(R.id.spinner_language);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.locales, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -118,7 +118,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        CheckBox checkBoxForceLanguage = (CheckBox) rootView.findViewById(R.id.checkBox_forceLanguage);
+        CheckBox checkBoxForceLanguage = rootView.findViewById(R.id.checkBox_forceLanguage);
         checkBoxForceLanguage.setChecked(DeveloperPreferencesHandler.getForceLanguage());
         checkBoxForceLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -127,7 +127,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        CheckBox checkBox_forceFabricEnabled = (CheckBox) rootView.findViewById(R.id.checkBox_forceFabricEnabled);
+        CheckBox checkBox_forceFabricEnabled = rootView.findViewById(R.id.checkBox_forceFabricEnabled);
         checkBox_forceFabricEnabled.setChecked(DeveloperPreferencesHandler.getForceFabricEnabled());
         checkBox_forceFabricEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -136,7 +136,7 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button buttonTestNotification = (Button) rootView.findViewById(R.id.button_testNotification);
+        Button buttonTestNotification = rootView.findViewById(R.id.button_testNotification);
         buttonTestNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

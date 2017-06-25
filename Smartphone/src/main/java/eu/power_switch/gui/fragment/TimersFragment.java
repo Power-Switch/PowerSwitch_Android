@@ -88,7 +88,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
         final RecyclerViewFragment recyclerViewFragment = this;
 
         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), timers);
-        recyclerViewTimers = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewTimers = rootView.findViewById(R.id.recyclerView);
         recyclerViewTimers.setAdapter(timerRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
                 getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
@@ -108,7 +108,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
             }
         });
 
-        addTimerFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        addTimerFAB = rootView.findViewById(R.id.add_fab);
         addTimerFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addTimerFAB.setOnClickListener(new View.OnClickListener() {
             @Override

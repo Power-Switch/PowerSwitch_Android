@@ -101,8 +101,8 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_scene_page_1, container, false);
 
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.scene_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.editText_scene_name);
+        floatingName = rootView.findViewById(R.id.scene_name_text_input_layout);
+        name = rootView.findViewById(R.id.editText_scene_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,7 +125,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
-        linearLayout_selectableReceivers = (LinearLayout) rootView.findViewById(R.id.linearLayout_selectableReceivers);
+        linearLayout_selectableReceivers = rootView.findViewById(R.id.linearLayout_selectableReceivers);
         addReceiversToLayout();
 
         Bundle args = getArguments();

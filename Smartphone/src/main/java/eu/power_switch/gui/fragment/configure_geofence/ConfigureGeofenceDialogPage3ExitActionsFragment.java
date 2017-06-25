@@ -97,7 +97,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
         };
 
         final Fragment fragment = this;
-        FloatingActionButton addActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_action);
+        FloatingActionButton addActionFAB = rootView.findViewById(R.id.add_action);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +118,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
                 sendActionsChangedBroadcast(getContext(), currentExitActions);
             }
         });
-        RecyclerView recyclerViewTimerActions = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_actions);
+        RecyclerView recyclerViewTimerActions = rootView.findViewById(R.id.recyclerview_list_of_actions);
         recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);

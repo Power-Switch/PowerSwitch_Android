@@ -83,7 +83,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
         setHasOptionsMenu(true);
 
-        recyclerViewScenes = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewScenes = rootView.findViewById(R.id.recyclerView);
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes);
         recyclerViewScenes.setAdapter(sceneRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
@@ -102,7 +102,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             }
         });
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

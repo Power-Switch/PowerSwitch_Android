@@ -59,8 +59,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     private FragmentActivity fragmentActivity;
 
     // Pass in the context and users array into the constructor
-    public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity,
-                                   ArrayList<Room> rooms) {
+    public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Room> rooms) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.rooms = rooms;
         this.fragmentActivity = fragmentActivity;
@@ -70,7 +69,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     @Override
     public RoomRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View itemView = LayoutInflater.from(fragmentActivity).inflate(R.layout.list_item_room, parent, false);
+        View itemView = LayoutInflater.from(fragmentActivity)
+                .inflate(R.layout.list_item_room, parent, false);
         // Return a new holder instance
         return new RoomRecyclerViewAdapter.ViewHolder(itemView);
     }
@@ -111,11 +111,13 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             @Override
             public void onClick(View v) {
                 if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                    VibrationHandler.vibrate(fragmentActivity,
+                            SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                 }
 
                 android.widget.Button buttonView = (android.widget.Button) v;
-                String buttonName = buttonView.getText().toString();
+                String buttonName = buttonView.getText()
+                        .toString();
                 new AsyncTask<String, Void, Void>() {
                     @Override
                     protected Void doInBackground(String... buttonNames) {
@@ -174,25 +176,35 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
         // clear previous items
         holder.linearLayoutOfReceivers.removeAllViews();
+
+        if (room.getReceivers()
+                .isEmpty()) {
+            holder.empty.setVisibility(View.VISIBLE);
+            holder.linearLayoutOfReceivers.setVisibility(View.GONE);
+        } else {
+            holder.empty.setVisibility(View.GONE);
+            holder.linearLayoutOfReceivers.setVisibility(View.VISIBLE);
+        }
+
         // add items
         for (final Receiver receiver : room.getReceivers()) {
             // create a new receiverRow for our current receiver and add it to
             // our table of all devices of our current room
             // the row will contain the device name and all buttons
 
-            LinearLayout receiverLayout = (LinearLayout) inflater.inflate(R.layout.list_item_receiver,
-                    holder.linearLayoutOfReceivers, false);
+            LinearLayout receiverLayout = (LinearLayout) inflater.inflate(R.layout.list_item_receiver, holder.linearLayoutOfReceivers, false);
             receiverLayout.setOrientation(LinearLayout.HORIZONTAL);
             holder.linearLayoutOfReceivers.addView(receiverLayout);
 
             // setup TextView to display device name
-            TextView receiverName = (TextView) receiverLayout.findViewById(R.id.txt_name);
+            TextView receiverName = receiverLayout.findViewById(R.id.txt_name);
             receiverName.setText(receiver.getName());
             receiverName.setTextSize(18);
 
-            TableLayout buttonLayout = (TableLayout) receiverLayout.findViewById(R.id.buttonLayout);
+            TableLayout buttonLayout = receiverLayout.findViewById(R.id.buttonLayout);
             int buttonsPerRow;
-            if (receiver.getButtons().size() % 3 == 0) {
+            if (receiver.getButtons()
+                    .size() % 3 == 0) {
                 buttonsPerRow = 3;
             } else {
                 buttonsPerRow = 2;
@@ -203,15 +215,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             long lastActivatedButtonId = receiver.getLastActivatedButtonId();
             TableRow buttonRow = null;
             for (final Button button : receiver.getButtons()) {
-                final android.widget.Button buttonView = (android.widget.Button) inflater
-                        .inflate(R.layout.simple_button, buttonRow, false);
+                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, buttonRow, false);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
                 final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
-                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && lastActivatedButtonId != -1 && button
-                        .getId
-                                () == lastActivatedButtonId) {
+                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && lastActivatedButtonId != -1 && button.getId() == lastActivatedButtonId) {
                     buttonView.setTextColor(accentColor);
                 }
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
@@ -219,7 +228,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     @Override
                     public void onClick(final View v) {
                         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                            VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                            VibrationHandler.vibrate(fragmentActivity,
+                                    SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                         }
 
                         new AsyncTask<Void, Void, Void>() {
@@ -286,17 +296,19 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         public android.widget.Button buttonAllOn;
         public android.widget.Button buttonAllOff;
         public LinearLayout linearLayoutOfReceivers;
+        public TextView empty;
         public LinearLayout footer;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            this.roomName = (TextView) itemView.findViewById(R.id.txt_room_name);
-            this.buttonAllOn = (android.widget.Button) itemView.findViewById(R.id.button_AllOn);
-            this.buttonAllOff = (android.widget.Button) itemView.findViewById(R.id.button_AllOff);
-            this.linearLayoutOfReceivers = (LinearLayout) itemView.findViewById(R.id.layout_of_receivers);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.roomName = itemView.findViewById(R.id.txt_room_name);
+            this.buttonAllOn = itemView.findViewById(R.id.button_AllOn);
+            this.buttonAllOff = itemView.findViewById(R.id.button_AllOff);
+            this.linearLayoutOfReceivers = itemView.findViewById(R.id.layout_of_receivers);
+            this.empty = itemView.findViewById(R.id.textview_empty);
+            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

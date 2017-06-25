@@ -24,4 +24,10 @@
     <string name="wizard_close">Wizard beenden</string>
     <string name="wizard_close_message">Möchtest du den Wizard wirklich beenden?</string>
 
+    <string name="wizard_setup_apartment_hint_home">Heimat</string>
+    <string name="wizard_setup_apartment_explanation">Gib den Namen für deine Wohnung ein</string>
+
+    <string name="wizard_setup_room_hint">Wohnzimmer</string>
+    <string name="wizard_setup_room_description">Gib den Namen für deinen Ersten Raum ein</string>
+
 </resources>

@@ -116,12 +116,12 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
-        textViewName = (TextView) rootView.findViewById(R.id.textView_name);
-        textViewLocation = (TextView) rootView.findViewById(R.id.textView_location);
-        imageViewLocationSnapshot = (ImageView) rootView.findViewById(R.id.imageView_locationSnapshot);
-        textViewGeofenceRadius = (TextView) rootView.findViewById(R.id.textView_geofence_radius);
-        textViewEnterActions = (TextView) rootView.findViewById(R.id.textView_enter_actions);
-        textViewExitActions = (TextView) rootView.findViewById(R.id.textView_exit_actions);
+        textViewName = rootView.findViewById(R.id.textView_name);
+        textViewLocation = rootView.findViewById(R.id.textView_location);
+        imageViewLocationSnapshot = rootView.findViewById(R.id.imageView_locationSnapshot);
+        textViewGeofenceRadius = rootView.findViewById(R.id.textView_geofence_radius);
+        textViewEnterActions = rootView.findViewById(R.id.textView_enter_actions);
+        textViewExitActions = rootView.findViewById(R.id.textView_exit_actions);
 
         Bundle args = getArguments();
         if (args != null) {

@@ -46,7 +46,7 @@ public class FolderTreeNodeViewHolder extends TreeNode.BaseNodeViewHolder<TreeIt
 
         final View view = inflater.inflate(R.layout.tree_node_item_folder, null, false);
 
-        arrowView = (IconicsImageView) view.findViewById(R.id.arrow);
+        arrowView = view.findViewById(R.id.arrow);
         arrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,10 +64,10 @@ public class FolderTreeNodeViewHolder extends TreeNode.BaseNodeViewHolder<TreeIt
             arrowView.setImageDrawable(IconicsHelper.getKbArrowRightIcon(context));
         }
 
-        IconicsImageView icon = (IconicsImageView) view.findViewById(R.id.icon);
+        IconicsImageView icon = view.findViewById(R.id.icon);
         icon.setImageDrawable(value.getIcon());
 
-        TextView folderNameView = (TextView) view.findViewById(R.id.folderName);
+        TextView folderNameView = view.findViewById(R.id.folderName);
         folderNameView.setText(value.getLabel());
 
         return view;

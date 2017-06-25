@@ -99,14 +99,14 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         setHasOptionsMenu(true);
 
         rooms = new ArrayList<>();
-        recyclerViewRooms = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewRooms = rootView.findViewById(R.id.recyclerView);
         roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms);
         recyclerViewRooms.setAdapter(roomsRecyclerViewAdapter);
         layoutManager = new StaggeredGridLayoutManager(
                 getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewRooms.setLayoutManager(layoutManager);
 
-        addReceiverFAB = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        addReceiverFAB = rootView.findViewById(R.id.add_fab);
         addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final RecyclerViewFragment recyclerViewFragment = this;
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {

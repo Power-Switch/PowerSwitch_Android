@@ -33,4 +33,6 @@
 
     <string name="please_enter_name">Bitte gib einen Namen ein</string>
 
+    <string name="room_empty">Der Raum ist leer. Füge Empfänger über den "+"-Button hinzu.</string>
+
 </resources>

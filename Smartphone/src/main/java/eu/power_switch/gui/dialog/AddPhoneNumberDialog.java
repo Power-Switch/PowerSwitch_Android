@@ -110,7 +110,7 @@ public class AddPhoneNumberDialog extends DialogFragment {
         contentView = inflater.inflate(R.layout.dialog_add_phone_number, null);
         builder.setView(contentView);
 
-        editText_phoneNumber = (TextInputEditText) contentView.findViewById(R.id.editText_phoneNumber);
+        editText_phoneNumber = contentView.findViewById(R.id.editText_phoneNumber);
         editText_phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,9 +126,9 @@ public class AddPhoneNumberDialog extends DialogFragment {
             }
         });
 
-        layoutLoading = (LinearLayout) contentView.findViewById(R.id.layoutLoading);
+        layoutLoading = contentView.findViewById(R.id.layoutLoading);
 
-        recyclerViewContacts = (RecyclerView) contentView.findViewById(R.id.recyclerView_phoneNumbers);
+        recyclerViewContacts = contentView.findViewById(R.id.recyclerView_phoneNumbers);
         contactRecyclerViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts, checkedNumbers);
         contactRecyclerViewAdapter.setCheckBoxInteractionListener(new CheckBoxInteractionListener() {
             @Override

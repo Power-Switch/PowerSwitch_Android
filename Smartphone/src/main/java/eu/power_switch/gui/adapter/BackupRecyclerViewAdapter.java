@@ -35,7 +35,6 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
@@ -44,7 +43,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.log.Log;
 
@@ -170,16 +168,16 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.backupName = (TextView) itemView.findViewById(R.id.txt_backup_name);
-            this.backupDate = (TextView) itemView.findViewById(R.id.txt_backup_date);
-            this.backupSize = (TextView) itemView.findViewById(R.id.txt_backup_size);
-            this.restore = (IconicsImageView) itemView.findViewById(R.id.restore);
-            this.share = (IconicsImageView) itemView.findViewById(R.id.share);
-            this.delete = (IconicsImageView) itemView.findViewById(R.id.delete);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.backupName = itemView.findViewById(R.id.txt_backup_name);
+            this.backupDate = itemView.findViewById(R.id.txt_backup_date);
+            this.backupSize = itemView.findViewById(R.id.txt_backup_size);
+            this.restore = itemView.findViewById(R.id.restore);
+            this.share = itemView.findViewById(R.id.share);
+            this.delete = itemView.findViewById(R.id.delete);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             // workaround for not being able to set background color using "?attr/xxx" notation in XML
-            RelativeLayout controls = (RelativeLayout) itemView.findViewById(R.id.relativeLayout_controls);
+            RelativeLayout controls = itemView.findViewById(R.id.relativeLayout_controls);
             controls.setBackgroundColor(ThemeHelper.getThemeAttrColor(context, R.attr.colorPrimaryHalf));
 
             itemView.setOnClickListener(new View.OnClickListener() {

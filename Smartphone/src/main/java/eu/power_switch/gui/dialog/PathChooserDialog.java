@@ -90,12 +90,12 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
 
         currentPath = SmartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
 
-        textViewCurrentPath = (TextView) rootView.findViewById(R.id.textView_currentPath);
+        textViewCurrentPath = rootView.findViewById(R.id.textView_currentPath);
         textViewCurrentPath.setText(currentPath);
 
-        containerView = (LinearLayout) rootView.findViewById(R.id.containerView);
+        containerView = rootView.findViewById(R.id.containerView);
 
-        loadingLayout = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        loadingLayout = rootView.findViewById(R.id.layoutLoading);
 
         getLoaderManager().initLoader(0, null, this);
 

@@ -100,7 +100,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             }
         };
 
-        checkBoxUseCustomGatewaySelection = (CheckBox) rootView.findViewById(R.id.checkbox_use_custom_gateway_selection);
+        checkBoxUseCustomGatewaySelection = rootView.findViewById(R.id.checkbox_use_custom_gateway_selection);
         CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
             @Override
             public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
@@ -112,13 +112,13 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
-        textViewCustomSelectionDescription = (TextView) rootView.findViewById(R.id.textView_custom_selection_description);
+        textViewCustomSelectionDescription = rootView.findViewById(R.id.textView_custom_selection_description);
 
-        apartmentGateways = (LinearLayout) rootView.findViewById(R.id.apartmentGateways);
-        otherGateways = (LinearLayout) rootView.findViewById(R.id.otherGateways);
+        apartmentGateways = rootView.findViewById(R.id.apartmentGateways);
+        otherGateways = rootView.findViewById(R.id.otherGateways);
 
-        linearLayoutOfApartmentGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfApartmentGateways);
-        linearLayoutOfOtherGateways = (LinearLayout) rootView.findViewById(R.id.linearLayoutOfOtherGateways);
+        linearLayoutOfApartmentGateways = rootView.findViewById(R.id.linearLayoutOfApartmentGateways);
+        linearLayoutOfOtherGateways = rootView.findViewById(R.id.linearLayoutOfOtherGateways);
 
         try {
             apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
@@ -188,7 +188,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
                     linearLayoutOfOtherGateways.addView(gatewayLayout);
                 }
 
-                final CheckBox checkBox = (CheckBox) gatewayLayout.findViewById(R.id.checkbox_use_gateway);
+                final CheckBox checkBox = gatewayLayout.findViewById(R.id.checkbox_use_gateway);
                 checkBox.setTag(R.string.gateways, gateway);
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
@@ -219,16 +219,16 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
                     }
                 });
 
-                TextView gatewayName = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayName);
+                TextView gatewayName = gatewayLayout.findViewById(R.id.textView_gatewayName);
                 gatewayName.setText(gateway.getName());
 
-                TextView gatewayType = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayType);
+                TextView gatewayType = gatewayLayout.findViewById(R.id.textView_gatewayType);
                 gatewayType.setText(gateway.getModel());
 
-                TextView gatewayHost = (TextView) gatewayLayout.findViewById(R.id.textView_gatewayHost);
+                TextView gatewayHost = gatewayLayout.findViewById(R.id.textView_gatewayHost);
                 gatewayHost.setText(String.format(Locale.getDefault(), "%s:%d", gateway.getLocalHost(), gateway.getLocalPort()));
 
-                TextView gatewayDisabled = (TextView) gatewayLayout.findViewById(R.id.textView_disabled);
+                TextView gatewayDisabled = gatewayLayout.findViewById(R.id.textView_disabled);
                 if (gateway.isActive()) {
                     gatewayDisabled.setVisibility(View.GONE);
                 } else {

@@ -97,7 +97,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
         };
 
         final Fragment fragment = this;
-        FloatingActionButton addTimerActionFAB = (FloatingActionButton) rootView.findViewById(R.id.add_timer_action);
+        FloatingActionButton addTimerActionFAB = rootView.findViewById(R.id.add_timer_action);
         addTimerActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addTimerActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +118,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
                 sendTimerActionChangedBroadcast(getContext(), currentActions);
             }
         });
-        RecyclerView recyclerViewTimerActions = (RecyclerView) rootView.findViewById(R.id
+        RecyclerView recyclerViewTimerActions = rootView.findViewById(R.id
                 .recyclerview_list_of_actions);
         recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);

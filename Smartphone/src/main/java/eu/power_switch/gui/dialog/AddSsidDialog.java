@@ -126,7 +126,7 @@ public class AddSsidDialog extends DialogFragment {
         contentView = inflater.inflate(R.layout.dialog_add_ssid, null);
         builder.setView(contentView);
 
-        editText_ssid = (TextInputEditText) contentView.findViewById(R.id.editText_ssid);
+        editText_ssid = contentView.findViewById(R.id.editText_ssid);
         editText_ssid.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -142,7 +142,7 @@ public class AddSsidDialog extends DialogFragment {
             }
         });
 
-        final IconicsImageView refresh = (IconicsImageView) contentView.findViewById(R.id.button_refresh);
+        final IconicsImageView refresh = contentView.findViewById(R.id.button_refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,9 +155,9 @@ public class AddSsidDialog extends DialogFragment {
             }
         });
 
-        layoutLoading = (LinearLayout) contentView.findViewById(R.id.layoutLoading);
+        layoutLoading = contentView.findViewById(R.id.layoutLoading);
 
-        listView = (ListView) contentView.findViewById(R.id.listView);
+        listView = contentView.findViewById(R.id.listView);
         ssidAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, ssids);
         listView.setAdapter(ssidAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -109,7 +109,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        textViewBackupPath = (TextView) rootView.findViewById(R.id.textView_backupPath);
+        textViewBackupPath = rootView.findViewById(R.id.textView_backupPath);
         textViewBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +129,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             }
         });
 
-        recyclerViewBackups = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewBackups = rootView.findViewById(R.id.recyclerView);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
 //        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
 //            @Override
@@ -163,7 +163,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                 getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         recyclerViewBackups.setLayoutManager(layoutManager);
 
-        fab = (FloatingActionButton) rootView.findViewById(R.id.add_fab);
+        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

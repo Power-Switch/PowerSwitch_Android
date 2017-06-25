@@ -90,19 +90,19 @@ public class ConfigureTimerDialogPage2DaysFragment extends ConfigurationDialogFr
             }
         };
 
-        toggleButtonMonday = (ToggleButton) rootView.findViewById(R.id.toggleButton_monday);
+        toggleButtonMonday = rootView.findViewById(R.id.toggleButton_monday);
         toggleButtonMonday.setOnCheckedChangeListener(onCheckedChangeListener);
-        toggleButtonTuesday = (ToggleButton) rootView.findViewById(R.id.toggleButton_tuesday);
+        toggleButtonTuesday = rootView.findViewById(R.id.toggleButton_tuesday);
         toggleButtonTuesday.setOnCheckedChangeListener(onCheckedChangeListener);
-        toggleButtonWednesday = (ToggleButton) rootView.findViewById(R.id.toggleButton_wednesday);
+        toggleButtonWednesday = rootView.findViewById(R.id.toggleButton_wednesday);
         toggleButtonWednesday.setOnCheckedChangeListener(onCheckedChangeListener);
-        toggleButtonThursday = (ToggleButton) rootView.findViewById(R.id.toggleButton_thursday);
+        toggleButtonThursday = rootView.findViewById(R.id.toggleButton_thursday);
         toggleButtonThursday.setOnCheckedChangeListener(onCheckedChangeListener);
-        toggleButtonFriday = (ToggleButton) rootView.findViewById(R.id.toggleButton_friday);
+        toggleButtonFriday = rootView.findViewById(R.id.toggleButton_friday);
         toggleButtonFriday.setOnCheckedChangeListener(onCheckedChangeListener);
-        toggleButtonSaturday = (ToggleButton) rootView.findViewById(R.id.toggleButton_saturday);
+        toggleButtonSaturday = rootView.findViewById(R.id.toggleButton_saturday);
         toggleButtonSaturday.setOnCheckedChangeListener(onCheckedChangeListener);
-        toggleButtonSunday = (ToggleButton) rootView.findViewById(R.id.toggleButton_sunday);
+        toggleButtonSunday = rootView.findViewById(R.id.toggleButton_sunday);
         toggleButtonSunday.setOnCheckedChangeListener(onCheckedChangeListener);
 
         Bundle args = getArguments();

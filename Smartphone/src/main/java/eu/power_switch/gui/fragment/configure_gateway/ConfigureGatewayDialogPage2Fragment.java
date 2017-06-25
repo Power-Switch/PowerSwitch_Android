@@ -86,7 +86,7 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_gateway_page_2, container, false);
 
-        recyclerViewSsids = (RecyclerView) rootView.findViewById(R.id.recyclerView_ssids);
+        recyclerViewSsids = rootView.findViewById(R.id.recyclerView_ssids);
         ssidRecyclerViewAdapter = new SsidRecyclerViewAdapter(getActivity(), ssids);
         recyclerViewSsids.setAdapter(ssidRecyclerViewAdapter);
         ssidRecyclerViewAdapter.setOnDeleteClickListener(new SsidRecyclerViewAdapter.OnItemClickListener() {
@@ -114,7 +114,7 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewSsids.setLayoutManager(layoutManager);
 
-        addSsidFAB = (FloatingActionButton) rootView.findViewById(R.id.add_ssid_fab);
+        addSsidFAB = rootView.findViewById(R.id.add_ssid_fab);
         addSsidFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final Fragment fragment = this;
         addSsidFAB.setOnClickListener(new View.OnClickListener() {

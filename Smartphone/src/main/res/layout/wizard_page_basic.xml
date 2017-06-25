@@ -17,21 +17,22 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/appIntroBottomBarHeight"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+              android:id="@+id/main"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/appIntroBottomBarHeight"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin">
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/icon"
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:scaleType="centerInside"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,12 +43,13 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/WizardPageTitle" />
+            style="@style/WizardPageTitle"/>
 
         <TextView
             android:id="@+id/description"
             style="@style/WizardPageDescription"
-            android:layout_weight="1" />
+            android:layout_width="wrap_content"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 

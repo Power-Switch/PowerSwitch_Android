@@ -41,6 +41,13 @@
     <string name="wizard_advanced_features_title">Geofences, NFC &amp; more</string>
     <string name="wizard_advanced_features_description">For advanced users thers much more: Geofences for position based actions, NFC for wall switch replacements and a Plugin for Tasker, LLama and similar applications for unlimited possibilities.</string>
 
+
+    <string name="wizard_setup_apartment_hint_home">Home</string>
+    <string name="wizard_setup_apartment_explanation">Enter the name of your first apartment</string>
+
+    <string name="wizard_setup_room_hint">Living room</string>
+    <string name="wizard_setup_room_description">Enter the name of the first room in your Apartment</string>
+
     <string name="wizard_finish_success">Great! Your now all set to add your first receiver :)</string>
     <string name="wizard_finish_failure">Somethings not right yet :/\nPlease check your input again.</string>
 

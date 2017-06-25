@@ -94,8 +94,8 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
         rootView = inflater.inflate(R.layout.dialog_fragment_configure_room_page_1, container, false);
 
         // restore name
-        floatingName = (TextInputLayout) rootView.findViewById(R.id.room_name_text_input_layout);
-        name = (EditText) rootView.findViewById(R.id.editText_room_name);
+        floatingName = rootView.findViewById(R.id.room_name_text_input_layout);
+        name = rootView.findViewById(R.id.editText_room_name);
         name.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -113,7 +113,7 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
         });
 
         receivers = new ArrayList<>();
-        listOfReceivers = (RecyclerView) rootView.findViewById(R.id.recyclerview_list_of_receivers);
+        listOfReceivers = rootView.findViewById(R.id.recyclerview_list_of_receivers);
         receiverNameRecyclerViewAdapter = new ReceiverNameRecyclerViewAdapter(getContext(), receivers, this);
         receiverNameRecyclerViewAdapter.setOnItemMovedListener(new OnItemMovedListener() {
             @Override

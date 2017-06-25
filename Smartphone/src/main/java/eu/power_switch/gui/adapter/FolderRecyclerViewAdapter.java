@@ -78,7 +78,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.name = (TextView) itemView.findViewById(R.id.textView_Path);
+            this.name = itemView.findViewById(R.id.textView_Path);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

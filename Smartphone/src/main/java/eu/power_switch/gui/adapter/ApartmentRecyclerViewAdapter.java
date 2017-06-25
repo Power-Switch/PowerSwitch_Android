@@ -137,10 +137,10 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.active = (RadioButton) itemView.findViewById(R.id.radioButton_active);
-            this.name = (TextView) itemView.findViewById(R.id.txt_apartment_name);
-            this.contentSummary = (TextView) itemView.findViewById(R.id.txt_content_summary);
-            this.footer = (LinearLayout) itemView.findViewById(R.id.list_footer);
+            this.active = itemView.findViewById(R.id.radioButton_active);
+            this.name = itemView.findViewById(R.id.txt_apartment_name);
+            this.contentSummary = itemView.findViewById(R.id.txt_content_summary);
+            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -86,8 +86,8 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
             }
         };
 
-        textViewContacts = (TextView) rootView.findViewById(R.id.textView_contacts);
-        textViewActions = (TextView) rootView.findViewById(R.id.textView_actions);
+        textViewContacts = rootView.findViewById(R.id.textView_contacts);
+        textViewActions = rootView.findViewById(R.id.textView_actions);
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureCallEventDialog.CALL_EVENT_ID_KEY)) {

@@ -94,7 +94,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
 
         rootView = inflater.inflate(R.layout.dialog_configuration_tabbed, container);
 
-        tabViewPager = (ViewPager) rootView.findViewById(R.id.tabHost);
+        tabViewPager = rootView.findViewById(R.id.tabHost);
         tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -112,9 +112,9 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         });
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-        tabLayout = (TabLayout) rootView.findViewById(R.id.tabLayout_configure_dialog);
+        tabLayout = rootView.findViewById(R.id.tabLayout_configure_dialog);
 
-        imageButtonDelete = (ImageButton) rootView.findViewById(R.id.imageButton_delete);
+        imageButtonDelete = rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), R.color.delete_color)));
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +123,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
             }
         });
 
-        imageButtonCancel = (ImageButton) rootView.findViewById(R.id.imageButton_cancel);
+        imageButtonCancel = rootView.findViewById(R.id.imageButton_cancel);
         imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +146,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
             }
         });
 
-        imageButtonNext = (ImageButton) rootView.findViewById(R.id.imageButton_next);
+        imageButtonNext = rootView.findViewById(R.id.imageButton_next);
         imageButtonNext.setImageDrawable(IconicsHelper.getNextIcon(getActivity()));
         imageButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +156,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
             }
         });
 
-        imageButtonSave = (ImageButton) rootView.findViewById(R.id.imageButton_save);
+        imageButtonSave = rootView.findViewById(R.id.imageButton_save);
         imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
