@@ -30,6 +30,7 @@ import android.widget.TextView;
 import java.util.Iterator;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.phone.sms.SmsEvent;
@@ -42,7 +43,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
  */
 public class SmsEventRecyclerViewAdapter extends RecyclerView.Adapter<SmsEventRecyclerViewAdapter.ViewHolder> {
     private List<SmsEvent> smsEvents;
-    private Context context;
+    private Context        context;
 
     public SmsEventRecyclerViewAdapter(Context context, List<SmsEvent> smsEvents) {
         this.smsEvents = smsEvents;
@@ -51,7 +52,8 @@ public class SmsEventRecyclerViewAdapter extends RecyclerView.Adapter<SmsEventRe
 
     @Override
     public SmsEventRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_sms_event, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_sms_event, parent, false);
         return new SmsEventRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -60,7 +62,8 @@ public class SmsEventRecyclerViewAdapter extends RecyclerView.Adapter<SmsEventRe
         final SmsEvent smsEvent = smsEvents.get(position);
 
         String phoneNumbers = "";
-        Iterator<String> iterator = smsEvent.getPhoneNumbers(PhoneConstants.SmsType.INCOMING).iterator();
+        Iterator<String> iterator = smsEvent.getPhoneNumbers(PhoneConstants.SmsType.INCOMING)
+                .iterator();
         while (iterator.hasNext()) {
             phoneNumbers += iterator.next();
 
@@ -94,16 +97,16 @@ public class SmsEventRecyclerViewAdapter extends RecyclerView.Adapter<SmsEventRe
         void onItemClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout footer;
-        public TextView phoneNumbers;
-        public LinearLayout linearLayoutActions;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.list_footer)
+        LinearLayout footer;
+        @BindView(R.id.txt_phoneNumbers)
+        TextView     phoneNumbers;
+        @BindView(R.id.linearLayout_actions)
+        LinearLayout linearLayoutActions;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.phoneNumbers = itemView.findViewById(R.id.txt_phoneNumbers);
-            this.linearLayoutActions = itemView.findViewById(R.id.linearLayout_actions);
-            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

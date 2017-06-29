@@ -30,6 +30,7 @@ import android.widget.TextView;
 import java.util.Iterator;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.phone.call.CallEvent;
@@ -41,9 +42,9 @@ import eu.power_switch.shared.constants.PhoneConstants;
  * Created by Markus on 05.04.2016.
  */
 public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEventRecyclerViewAdapter.ViewHolder> {
-    private List<CallEvent> callEvents;
-    private Context context;
-    private OnItemClickListener onItemClickListener;
+    private List<CallEvent>         callEvents;
+    private Context                 context;
+    private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public CallEventRecyclerViewAdapter(Context context, List<CallEvent> callEvents) {
@@ -61,7 +62,8 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
 
     @Override
     public CallEventRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_call_event, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_call_event, parent, false);
         return new CallEventRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -70,7 +72,8 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
         final CallEvent callEvent = callEvents.get(position);
 
         String phoneNumbers = "";
-        Iterator<String> iterator = callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING).iterator();
+        Iterator<String> iterator = callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING)
+                .iterator();
         while (iterator.hasNext()) {
             phoneNumbers += iterator.next();
 
@@ -108,16 +111,16 @@ public class CallEventRecyclerViewAdapter extends RecyclerView.Adapter<CallEvent
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout footer;
-        public TextView phoneNumbers;
-        public LinearLayout linearLayoutActions;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_phoneNumbers)
+        TextView     phoneNumbers;
+        @BindView(R.id.linearLayout_actions)
+        LinearLayout linearLayoutActions;
+        @BindView(R.id.list_footer)
+        LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.phoneNumbers = itemView.findViewById(R.id.txt_phoneNumbers);
-            this.linearLayoutActions = itemView.findViewById(R.id.linearLayout_actions);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

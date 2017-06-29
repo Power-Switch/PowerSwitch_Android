@@ -18,7 +18,6 @@
 
 package eu.power_switch.widget.activity;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -35,9 +34,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.ButterKnifeActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -48,12 +49,17 @@ import eu.power_switch.widget.WidgetIntentReceiver;
 /**
  * Configuration Activity for Room widgets
  */
-public class ConfigureRoomWidgetActivity extends Activity {
+public class ConfigureRoomWidgetActivity extends ButterKnifeActivity {
 
     public static final int ROOM_INTENT_ID_OFFSET = 20000;
 
-    private Spinner spinnerApartment;
-    private Spinner spinnerRoom;
+    @BindView(R.id.spinner_widgetApartment)
+    Spinner spinnerApartment;
+    @BindView(R.id.spinner_room)
+    Spinner spinnerRoom;
+
+    @BindView(R.id.button_widgetSave)
+    Button buttonSave;
 
     private List<Apartment> apartmentList = new ArrayList<>();
     private List<Room>      roomList      = new ArrayList<>();
@@ -72,10 +78,6 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.widget_dialog_configure_room);
-
-        spinnerApartment = (Spinner) findViewById(R.id.Spinner_widgetApartment);
-
         adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
         adapterApartments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerApartment.setAdapter(adapterApartments);
@@ -88,13 +90,12 @@ public class ConfigureRoomWidgetActivity extends Activity {
         spinnerApartment.setOnItemSelectedListener(apartmentSpinnerInteractionListener);
         spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);
 
-        spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
+        spinnerRoom = (Spinner) findViewById(R.id.spinner_widgetRoom);
         adapterRooms = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roomNameList);
         adapterRooms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapterRooms);
 
-        Button save = (Button) findViewById(R.id.button_widgetSave);
-        save.setOnClickListener(new OnClickListener() {
+        buttonSave.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -103,6 +104,11 @@ public class ConfigureRoomWidgetActivity extends Activity {
         });
 
         updateUI();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.widget_dialog_configure_room;
     }
 
     private Apartment getSelectedApartment() throws Exception {

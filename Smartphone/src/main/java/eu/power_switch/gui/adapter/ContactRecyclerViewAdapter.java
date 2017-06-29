@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.phone.Contact;
@@ -41,9 +42,9 @@ import eu.power_switch.phone.Contact;
  * Created by Markus on 04.12.2015.
  */
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
-    private Context context;
+    private Context       context;
     private List<Contact> contacts;
-    private Set<String> checkedNumbers;
+    private Set<String>   checkedNumbers;
 
     private CheckBoxInteractionListener checkBoxInteractionListener;
 
@@ -60,7 +61,8 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     @Override
 
     public ContactRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_contact, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_contact, parent, false);
         return new ContactRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -70,7 +72,8 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         holder.name.setText(contact.getName());
 
         holder.numbers.removeAllViews();
-        Iterator<String> iterator = contact.getPhoneNumbers().iterator();
+        Iterator<String> iterator = contact.getPhoneNumbers()
+                .iterator();
         while (iterator.hasNext()) {
             final String number = iterator.next();
 
@@ -113,16 +116,16 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         void onItemClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-        public LinearLayout numbers;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_name)
+        TextView     name;
+        @BindView(R.id.linearLayout_numbers)
+        LinearLayout numbers;
+        @BindView(R.id.list_footer)
+        LinearLayout footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.name = itemView.findViewById(R.id.txt_name);
-            this.numbers = itemView.findViewById(R.id.linearLayout_numbers);
-            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

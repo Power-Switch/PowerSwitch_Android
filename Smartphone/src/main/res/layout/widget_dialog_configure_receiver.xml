@@ -29,7 +29,7 @@
         android:text="@string/apartment"/>
 
     <Spinner
-        android:id="@+id/Spinner_widgetApartment"
+        android:id="@+id/spinner_widgetApartment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -38,7 +38,7 @@
         android:text="@string/room"/>
 
     <Spinner
-        android:id="@+id/Spinner_widgetRoom"
+        android:id="@+id/spinner_widgetRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -47,7 +47,7 @@
         android:text="@string/receiver"/>
 
     <Spinner
-        android:id="@+id/spinner_widgetSwitch"
+        android:id="@+id/spinner_widgetReceiver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

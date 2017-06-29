@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -43,9 +44,9 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  */
 public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<ApartmentRecyclerViewAdapter.ViewHolder> {
     private static final DecimalFormat decimalFormat = new DecimalFormat("##.00000");
-    private ArrayList<Apartment> apartments;
-    private Context context;
-    private OnItemClickListener onItemClickListener;
+    private ArrayList<Apartment>    apartments;
+    private Context                 context;
+    private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public ApartmentRecyclerViewAdapter(Context context, ArrayList<Apartment> apartments) {
@@ -63,7 +64,8 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
 
     @Override
     public ApartmentRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_apartment, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_apartment, parent, false);
         return new ApartmentRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -78,7 +80,8 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
                 SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                 for (Apartment currentApartment : apartments) {
-                    if (currentApartment.getId().equals(apartment.getId())) {
+                    if (currentApartment.getId()
+                            .equals(apartment.getId())) {
                         currentApartment.setActive(true);
                     } else {
                         currentApartment.setActive(false);
@@ -92,18 +95,22 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         holder.name.setText(apartment.getName());
 
         String contentSummary = "";
-        contentSummary += context.getString(R.string.rooms) + ": " + apartment.getRooms().size() + "\n";
-        contentSummary += context.getString(R.string.scenes) + ": " + apartment.getScenes().size() + "\n";
-        contentSummary += context.getString(R.string.associated_gateways) + ": " + apartment.getAssociatedGateways().size();
-        if (apartment.getAssociatedGateways().isEmpty()) {
+        contentSummary += context.getString(R.string.rooms) + ": " + apartment.getRooms()
+                .size() + "\n";
+        contentSummary += context.getString(R.string.scenes) + ": " + apartment.getScenes()
+                .size() + "\n";
+        contentSummary += context.getString(R.string.associated_gateways) + ": " + apartment.getAssociatedGateways()
+                .size();
+        if (apartment.getAssociatedGateways()
+                .isEmpty()) {
             contentSummary += " (!)";
         }
         contentSummary += "\n";
         contentSummary += context.getString(R.string.location) + ": ";
         if (apartment.getGeofence() != null) {
-            LatLng location = apartment.getGeofence().getCenterLocation();
-            contentSummary += decimalFormat.format(location.latitude) + ", " +
-                    decimalFormat.format(location.longitude);
+            LatLng location = apartment.getGeofence()
+                    .getCenterLocation();
+            contentSummary += decimalFormat.format(location.latitude) + ", " + decimalFormat.format(location.longitude);
         } else {
             contentSummary += context.getString(R.string.none);
         }
@@ -129,18 +136,18 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public RadioButton active;
-        public TextView name;
-        public TextView contentSummary;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.radioButton_active)
+        RadioButton  active;
+        @BindView(R.id.txt_apartment_name)
+        TextView     name;
+        @BindView(R.id.txt_content_summary)
+        TextView     contentSummary;
+        @BindView(R.id.list_footer)
+        LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.active = itemView.findViewById(R.id.radioButton_active);
-            this.name = itemView.findViewById(R.id.txt_apartment_name);
-            this.contentSummary = itemView.findViewById(R.id.txt_content_summary);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

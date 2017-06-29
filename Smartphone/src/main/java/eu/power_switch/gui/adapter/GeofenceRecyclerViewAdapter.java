@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -46,11 +47,11 @@ import eu.power_switch.shared.permission.PermissionHelper;
  * Created by Markus on 27.07.2015.
  */
 public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRecyclerViewAdapter.ViewHolder> {
-    private GeofenceApiHandler geofenceApiHandler;
+    private GeofenceApiHandler  geofenceApiHandler;
     private ArrayList<Geofence> geofences;
-    private Context context;
+    private Context             context;
 
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public GeofenceRecyclerViewAdapter(Context context, ArrayList<Geofence> geofences, GeofenceApiHandler geofenceApiHandler) {
@@ -69,7 +70,8 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
 
     @Override
     public GeofenceRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_geofence, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_geofence, parent, false);
         return new GeofenceRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -157,25 +159,25 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView geofenceState;
-        public TextView geofenceName;
-        public android.support.v7.widget.SwitchCompat geofenceSwitchActive;
-        public ImageView geofenceSnapshot;
-        public LinearLayout linearLayoutEnterActions;
-        public LinearLayout linearLayoutExitActions;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_geofence_state)
+        TextView                               geofenceState;
+        @BindView(R.id.txt_geofence_name)
+        TextView                               geofenceName;
+        @BindView(R.id.switch_geofence_active)
+        android.support.v7.widget.SwitchCompat geofenceSwitchActive;
+        @BindView(R.id.imageView_locationSnapshot)
+        ImageView                              geofenceSnapshot;
+        @BindView(R.id.linearLayout_enterActions)
+        LinearLayout                           linearLayoutEnterActions;
+        @BindView(R.id.linearLayout_exitActions)
+        LinearLayout                           linearLayoutExitActions;
 
-        public LinearLayout footer;
+        @BindView(R.id.list_footer)
+        LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.geofenceState = itemView.findViewById(R.id.txt_geofence_state);
-            this.geofenceName = itemView.findViewById(R.id.txt_geofence_name);
-            this.geofenceSwitchActive = itemView.findViewById(R.id.switch_geofence_active);
-            this.geofenceSnapshot = itemView.findViewById(R.id.imageView_locationSnapshot);
-            this.linearLayoutEnterActions = itemView.findViewById(R.id.linearLayout_enterActions);
-            this.linearLayoutExitActions = itemView.findViewById(R.id.linearLayout_exitActions);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

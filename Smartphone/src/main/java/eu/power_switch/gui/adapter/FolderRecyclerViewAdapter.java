@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 
 /**
@@ -38,7 +39,7 @@ import eu.power_switch.R;
  */
 public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecyclerViewAdapter.ViewHolder> {
     private ArrayList<File> folders;
-    private Context context;
+    private Context         context;
 
     private OnItemClickListener onItemClickListener;
 
@@ -53,7 +54,8 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
 
     @Override
     public FolderRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_folder, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_folder, parent, false);
         return new FolderRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -73,12 +75,12 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
         void onItemClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.textView_Path)
+        TextView name;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.name = itemView.findViewById(R.id.textView_Path);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

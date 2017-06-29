@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.Locale;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.history.HistoryItem;
 
@@ -40,8 +41,8 @@ import eu.power_switch.history.HistoryItem;
  */
 public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<HistoryItemRecyclerViewAdapter.ViewHolder> {
     private LinkedList<HistoryItem> historyItems;
-    private Context context;
-    private OnItemClickListener onItemClickListener;
+    private Context                 context;
+    private OnItemClickListener     onItemClickListener;
 
     public HistoryItemRecyclerViewAdapter(Context context, LinkedList<HistoryItem> historyItems) {
         this.historyItems = historyItems;
@@ -54,7 +55,8 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
 
     @Override
     public HistoryItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_history_item, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_history_item, parent, false);
         return new HistoryItemRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -63,7 +65,8 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
         final HistoryItem historyItem = historyItems.get(position);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss", Locale.getDefault());
-        holder.time.setText(simpleDateFormat.format(historyItem.getTime().getTime()));
+        holder.time.setText(simpleDateFormat.format(historyItem.getTime()
+                .getTime()));
         holder.description.setText(historyItem.getShortDescription());
 
         if (position == getItemCount() - 1) {
@@ -83,16 +86,16 @@ public class HistoryItemRecyclerViewAdapter extends RecyclerView.Adapter<History
         void onItemClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView time;
-        public TextView description;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_time)
+        TextView     time;
+        @BindView(R.id.txt_description)
+        TextView     description;
+        @BindView(R.id.list_footer)
+        LinearLayout footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.time = itemView.findViewById(R.id.txt_time);
-            this.description = itemView.findViewById(R.id.txt_description);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

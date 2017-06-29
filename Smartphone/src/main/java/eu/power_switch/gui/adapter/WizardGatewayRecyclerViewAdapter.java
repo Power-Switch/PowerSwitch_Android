@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.obj.gateway.Gateway;
 
@@ -83,14 +84,14 @@ public class WizardGatewayRecyclerViewAdapter extends RecyclerView.Adapter<Wizar
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView model;
-        public TextView host;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.textView_gatewayType)
+        TextView model;
+        @BindView(R.id.textView_gatewayHost)
+        TextView host;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            model = itemView.findViewById(R.id.textView_gatewayType);
-            host = itemView.findViewById(R.id.textView_gatewayHost);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

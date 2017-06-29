@@ -18,7 +18,6 @@
 
 package eu.power_switch.widget.activity;
 
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -35,9 +34,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.ButterKnifeActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
@@ -48,12 +49,17 @@ import eu.power_switch.widget.WidgetIntentReceiver;
 /**
  * Configuration Activity for Scene widgets
  */
-public class ConfigureSceneWidgetActivity extends Activity {
+public class ConfigureSceneWidgetActivity extends ButterKnifeActivity {
 
     public static final int SCENE_INTENT_ID_OFFSET = 10000;
 
-    private Spinner spinnerApartment;
-    private Spinner spinnerScene;
+    @BindView(R.id.spinner_widgetApartment)
+    Spinner spinnerApartment;
+    @BindView(R.id.spinner_widgetScene)
+    Spinner spinnerScene;
+
+    @BindView(R.id.button_widgetSave)
+    Button buttonSave;
 
     private List<Apartment> apartmentList = new ArrayList<>();
     private List<Scene>     sceneList     = new ArrayList<>();
@@ -72,11 +78,6 @@ public class ConfigureSceneWidgetActivity extends Activity {
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.widget_dialog_configure_scene);
-
-        spinnerApartment = (Spinner) findViewById(R.id.Spinner_widgetApartment);
-        spinnerScene = (Spinner) findViewById(R.id.Spinner_widgetScene);
-
         adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
         adapterApartments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerApartment.setAdapter(adapterApartments);
@@ -93,8 +94,7 @@ public class ConfigureSceneWidgetActivity extends Activity {
         adapterScenes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerScene.setAdapter(adapterScenes);
 
-        Button save = (Button) findViewById(R.id.button_widgetSave);
-        save.setOnClickListener(new OnClickListener() {
+        buttonSave.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -103,6 +103,11 @@ public class ConfigureSceneWidgetActivity extends Activity {
         });
 
         updateUI();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.widget_dialog_configure_scene;
     }
 
     private void updateUI() {

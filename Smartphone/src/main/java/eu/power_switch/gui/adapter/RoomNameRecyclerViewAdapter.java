@@ -33,6 +33,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.animation.AnimationHandler;
@@ -45,8 +46,8 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 13.10.2015.
  */
 public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperAdapter {
-    private ArrayList<Room> rooms;
-    private Context context;
+    private ArrayList<Room>     rooms;
+    private Context             context;
     private OnStartDragListener onStartDragListener;
 
     public RoomNameRecyclerViewAdapter(Context context, ArrayList<Room> rooms, OnStartDragListener onStartDragListener) {
@@ -57,7 +58,8 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
 
     @Override
     public RoomNameRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_receiver_name, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_receiver_name, parent, false);
         return new RoomNameRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -69,8 +71,7 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
         holder.dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) ==
-                        MotionEvent.ACTION_DOWN) {
+                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
                     onStartDragListener.onStartDrag(holder);
                 }
                 return false;
@@ -105,23 +106,24 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
         rooms.remove(position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
-        public LinearLayout mainLayout;
-        public TextView roomName;
-        public ImageView dragHandle;
+    public class ViewHolder extends ButterKnifeViewHolder implements ItemTouchHelperViewHolder {
+        @BindView(R.id.linear_layout_main)
+        LinearLayout mainLayout;
+        @BindView(R.id.txt_name)
+        TextView     roomName;
+        @BindView(R.id.drag_handle)
+        ImageView    dragHandle;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.mainLayout = itemView.findViewById(R.id.linear_layout_main);
-            this.roomName = itemView.findViewById(R.id.txt_name);
-            this.dragHandle = itemView.findViewById(R.id.drag_handle);
             this.dragHandle.setImageDrawable(IconicsHelper.getReorderHandleIcon(context));
         }
 
         @Override
         public void onItemSelected() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                float toElevation = context.getResources().getDimension(R.dimen.list_element_elevation_while_moving);
+                float toElevation = context.getResources()
+                        .getDimension(R.dimen.list_element_elevation_while_moving);
                 AnimationHandler.animateElevation(mainLayout, 0, toElevation, 200);
             }
         }
@@ -129,7 +131,8 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
         @Override
         public void onItemClear() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                float fromElevation = context.getResources().getDimension(R.dimen.list_element_elevation_while_moving);
+                float fromElevation = context.getResources()
+                        .getDimension(R.dimen.list_element_elevation_while_moving);
                 AnimationHandler.animateElevation(mainLayout, fromElevation, 0, 200);
             }
         }

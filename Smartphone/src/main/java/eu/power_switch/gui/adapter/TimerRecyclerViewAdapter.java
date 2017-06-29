@@ -31,6 +31,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -47,9 +48,9 @@ import eu.power_switch.timer.alarm.AlarmHandler;
  */
 public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Timer> timers;
-    private Context context;
+    private Context          context;
 
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public TimerRecyclerViewAdapter(Context context, ArrayList<Timer> timers) {
@@ -67,7 +68,8 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
     @Override
     public TimerRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_timer, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_timer, parent, false);
         return new TimerRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -102,8 +104,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
 
         holder.name.setText(timer.getName());
 
-        long hourOfDay = timer.getExecutionTime().get(Calendar.HOUR_OF_DAY);
-        long minute = timer.getExecutionTime().get(Calendar.MINUTE);
+        long hourOfDay = timer.getExecutionTime()
+                .get(Calendar.HOUR_OF_DAY);
+        long minute = timer.getExecutionTime()
+                .get(Calendar.MINUTE);
 
         String executionTimeText = "";
         if (hourOfDay < 10) {
@@ -158,8 +162,8 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
             }
         });
 
-        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(inflaterString);
+        String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater       = (LayoutInflater) context.getSystemService(inflaterString);
 
         holder.linearLayoutTimerActions.removeAllViews();
         for (Action action : timer.getActions()) {
@@ -194,25 +198,25 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout linearLayoutTimerDescription;
-        public LinearLayout linearLayoutTimerActions;
-        public TextView name;
-        public TextView executionTime;
-        public TextView executionDays;
-        public android.support.v7.widget.SwitchCompat timerStatus;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.linearLayout_timerDescription)
+        LinearLayout linearLayoutTimerDescription;
+        @BindView(R.id.linearLayout_timerActions)
+        LinearLayout linearLayoutTimerActions;
+        @BindView(R.id.txt_timer_name)
+        TextView     name;
+        @BindView(R.id.txt_timer_execution_time)
+        TextView     executionTime;
+        @BindView(R.id.txt_timer_execution_days)
+        TextView     executionDays;
+        @BindView(R.id.list_footer)
+        LinearLayout footer;
+
+        @BindView(R.id.switch_timer_status)
+        android.support.v7.widget.SwitchCompat timerStatus;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.linearLayoutTimerDescription = itemView.findViewById(R.id
-                    .linearLayout_timerDescription);
-            this.linearLayoutTimerActions = itemView.findViewById(R.id.linearLayout_timerActions);
-            this.name = itemView.findViewById(R.id.txt_timer_name);
-            this.executionTime = itemView.findViewById(R.id.txt_timer_execution_time);
-            this.executionDays = itemView.findViewById(R.id.txt_timer_execution_days);
-            this.timerStatus = itemView.findViewById(R.id.switch_timer_status);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

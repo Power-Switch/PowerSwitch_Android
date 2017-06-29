@@ -30,6 +30,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 
 /**
@@ -79,16 +80,16 @@ public class SsidRecyclerViewAdapter extends RecyclerView.Adapter<SsidRecyclerVi
         void onItemClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView ssid;
-        public IconicsImageView delete;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_ssid)
+        TextView         ssid;
+        @BindView(R.id.delete)
+        IconicsImageView delete;
+        @BindView(R.id.list_footer)
+        LinearLayout     footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.ssid = itemView.findViewById(R.id.txt_ssid);
-            this.delete = itemView.findViewById(R.id.delete);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             this.delete.setOnClickListener(new View.OnClickListener() {
                 @Override

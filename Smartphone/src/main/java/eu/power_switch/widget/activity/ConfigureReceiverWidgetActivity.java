@@ -18,7 +18,6 @@
 
 package eu.power_switch.widget.activity;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -40,9 +39,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.ButterKnifeActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -56,11 +57,16 @@ import eu.power_switch.widget.WidgetIntentReceiver;
 /**
  * Configuration Activity for Receiver widgets
  */
-public class ConfigureReceiverWidgetActivity extends Activity {
+public class ConfigureReceiverWidgetActivity extends ButterKnifeActivity {
 
-    private Spinner spinnerApartment;
-    private Spinner spinnerRoom;
-    private Spinner spinnerReceiver;
+    @BindView(R.id.spinner_widgetApartment)
+    Spinner               spinnerApartment;
+    @BindView(R.id.spinner_widgetRoom)
+    Spinner               spinnerRoom;
+    @BindView(R.id.spinner_widgetReceiver)
+    Spinner               spinnerReceiver;
+    @BindView(R.id.button_widgetSave)
+    android.widget.Button buttonSave;
 
     private List<Apartment> apartmentList = new ArrayList<>();
 
@@ -79,11 +85,6 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.widget_dialog_configure_receiver);
-
-        spinnerApartment = (Spinner) findViewById(R.id.Spinner_widgetApartment);
-        spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
-        spinnerReceiver = (Spinner) findViewById(R.id.spinner_widgetSwitch);
 
         adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
         adapterApartments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -113,8 +114,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerReceiver.setAdapter(adapterReceiver);
 
-        android.widget.Button save = (android.widget.Button) findViewById(R.id.button_widgetSave);
-        save.setOnClickListener(new OnClickListener() {
+        buttonSave.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveCurrentConfiguration();
@@ -122,6 +122,11 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         });
 
         updateUI();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.widget_dialog_configure_receiver;
     }
 
     private void updateUI() {

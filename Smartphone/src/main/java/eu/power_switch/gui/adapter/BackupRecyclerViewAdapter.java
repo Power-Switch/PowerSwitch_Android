@@ -36,6 +36,8 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import java.io.File;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
@@ -53,10 +55,10 @@ import eu.power_switch.shared.log.Log;
  */
 public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecyclerViewAdapter.ViewHolder> {
     private RecyclerViewFragment recyclerViewFragment;
-    private ArrayList<Backup> backups;
-    private Context context;
+    private ArrayList<Backup>    backups;
+    private Context              context;
 
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public BackupRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, Context context, ArrayList<Backup> backups) {
@@ -75,7 +77,8 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
     @Override
     public BackupRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_backup, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_backup, parent, false);
         return new BackupRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -83,7 +86,8 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     public void onBindViewHolder(final BackupRecyclerViewAdapter.ViewHolder holder, int position) {
         final Backup backup = backups.get(position);
 
-        holder.backupDate.setText(backup.getDate().toLocaleString());
+        holder.backupDate.setText(backup.getDate()
+                .toLocaleString());
         holder.backupName.setText(backup.getName());
         holder.backupSize.setText(backup.getSizeInMb(2) + " MB");
 
@@ -124,13 +128,16 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                                     Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
                             Log.e(e);
-                            StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
+                                    R.string.backup_not_found,
+                                    Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
                     }
-                }).setNeutralButton(android.R.string.cancel, null).setTitle(context.getString(R.string
-                        .are_you_sure))
+                })
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .setTitle(context.getString(R.string.are_you_sure))
                         .setMessage(R.string.remove_backup_message);
                 AlertDialog dialog = builder.create();
                 dialog.show();
@@ -157,27 +164,27 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView backupName;
-        public TextView backupDate;
-        public TextView backupSize;
-        public IconicsImageView restore;
-        public IconicsImageView share;
-        public IconicsImageView delete;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_backup_name)
+        TextView         backupName;
+        @BindView(R.id.txt_backup_date)
+        TextView         backupDate;
+        @BindView(R.id.txt_backup_size)
+        TextView         backupSize;
+        @BindView(R.id.restore)
+        IconicsImageView restore;
+        @BindView(R.id.share)
+        IconicsImageView share;
+        @BindView(R.id.delete)
+        IconicsImageView delete;
+        @BindView(R.id.list_footer)
+        LinearLayout     footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.backupName = itemView.findViewById(R.id.txt_backup_name);
-            this.backupDate = itemView.findViewById(R.id.txt_backup_date);
-            this.backupSize = itemView.findViewById(R.id.txt_backup_size);
-            this.restore = itemView.findViewById(R.id.restore);
-            this.share = itemView.findViewById(R.id.share);
-            this.delete = itemView.findViewById(R.id.delete);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             // workaround for not being able to set background color using "?attr/xxx" notation in XML
-            RelativeLayout controls = itemView.findViewById(R.id.relativeLayout_controls);
+            RelativeLayout controls = ButterKnife.findById(itemView, R.id.relativeLayout_controls);
             controls.setBackgroundColor(ThemeHelper.getThemeAttrColor(context, R.attr.colorPrimaryHalf));
 
             itemView.setOnClickListener(new View.OnClickListener() {

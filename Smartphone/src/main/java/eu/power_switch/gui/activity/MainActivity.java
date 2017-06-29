@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.application.PowerSaverHelper;
 import eu.power_switch.application.PowerSwitch;
@@ -106,35 +107,36 @@ import eu.power_switch.wizard.gui.WizardActivity;
 /**
  * Main entry Activity for the app
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ButterKnifeActivity {
 
-    public static final int IDENTIFIER_ROOMS_SCENES = 10;
-    public static final int IDENTIFIER_APARTMENTS = 11;
-    public static final int IDENTIFIER_GEOFENCES = 12;
-    public static final int IDENTIFIER_ALARM_CLOCK = 13;
-    public static final int IDENTIFIER_TIMERS = 14;
+    public static final int IDENTIFIER_ROOMS_SCENES   = 10;
+    public static final int IDENTIFIER_APARTMENTS     = 11;
+    public static final int IDENTIFIER_GEOFENCES      = 12;
+    public static final int IDENTIFIER_ALARM_CLOCK    = 13;
+    public static final int IDENTIFIER_TIMERS         = 14;
     public static final int IDENTIFIER_BACKUP_RESTORE = 15;
-    public static final int IDENTIFIER_SETTINGS = 16;
-    public static final int IDENTIFIER_ABOUT = 17;
-    public static final int IDENTIFIER_PHONE = 18;
-    public static final int IDENTIFIER_NFC = 19;
+    public static final int IDENTIFIER_SETTINGS       = 16;
+    public static final int IDENTIFIER_ABOUT          = 17;
+    public static final int IDENTIFIER_PHONE          = 18;
+    public static final int IDENTIFIER_NFC            = 19;
 
-    public static boolean appIsInForeground = false;
-    private static Stack<Class> lastFragmentClasses = new Stack<>();
-    private static Stack<String> lastFragmentTitles = new Stack<>();
+    public static  boolean        appIsInForeground   = false;
+    private static Stack<Class>   lastFragmentClasses = new Stack<>();
+    private static Stack<String>  lastFragmentTitles  = new Stack<>();
     private static Stack<Integer> drawerPositionStack = new Stack<>();
 
     private static AppBarLayout appBarLayout;
     private static MainActivity activity;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private LinkedList<HistoryItem> historyItems = new LinkedList<>();
-    private RecyclerView recyclerViewHistory;
+    private RecyclerView                   recyclerViewHistory;
     private HistoryItemRecyclerViewAdapter historyItemArrayAdapter;
-    private BroadcastReceiver broadcastReceiver;
-    private Toolbar toolbar;
-    private Drawer navigationDrawer;
-    private Drawer historyDrawer;
-    private MiniDrawer miniDrawer;
-    private LinearLayout layoutLoadingHistory;
+    private BroadcastReceiver              broadcastReceiver;
+    private Drawer                         navigationDrawer;
+    private Drawer                         historyDrawer;
+    private MiniDrawer                     miniDrawer;
+    private LinearLayout                   layoutLoadingHistory;
 
     /**
      * Add class to Backstack
@@ -215,12 +217,10 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Load first Fragment
@@ -230,8 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = ApartmentFragment.class.newInstance();
                 drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
-                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(
-                        SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
             lastFragmentClasses.push(fragment.getClass());
@@ -253,35 +252,29 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA,
-                                    true);
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA,
-                                    false);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, true);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .setNegativeButton(R.string.disable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA,
-                                    false);
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA,
-                                    false);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, false);
+                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .show();
         }
 
-        if (Build.VERSION.SDK_INT >= 23 && !PowerSaverHelper.isIgnoringBatteryOptimizations(
-                getActivity())) {
+        if (Build.VERSION.SDK_INT >= 23 && !PowerSaverHelper.isIgnoringBatteryOptimizations(getActivity())) {
             new AlertDialog.Builder(this).setTitle(R.string.disable_battery_optimizations_title)
                     .setMessage(R.string.disable_battery_optimizations_message)
-                    .setPositiveButton(R.string.open_settings,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    PowerSaverHelper.openIgnoreOptimizationSettings(getActivity());
-                                }
-                            })
+                    .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            PowerSaverHelper.openIgnoreOptimizationSettings(getActivity());
+                        }
+                    })
                     .show();
         }
 
@@ -299,10 +292,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_main;
+    }
+
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (NetworkHandler
-                .isWifiConnected() || NetworkHandler.isEthernetConnected())) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected())) {
             new AsyncTask<Context, Void, AsyncTaskResult<Gateway>>() {
 
                 @Override
@@ -329,9 +326,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways()
                                     .isEmpty()) {
-                                StatusMessageHandler.showInfoMessage(getActivity(),
-                                        R.string.no_gateway_found,
-                                        Snackbar.LENGTH_LONG);
+                                StatusMessageHandler.showInfoMessage(getActivity(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                             } else {
                                 for (Gateway gateway : foundGateways) {
                                     if (gateway == null) {
@@ -339,15 +334,11 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     try {
                                         DatabaseHandler.addGateway(gateway);
-                                        StatusMessageHandler.showInfoMessage(getActivity(),
-                                                R.string.gateway_found,
-                                                Snackbar.LENGTH_LONG);
+                                        StatusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                     } catch (GatewayAlreadyExistsException e) {
                                         try {
                                             DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
-                                            StatusMessageHandler.showInfoMessage(getActivity(),
-                                                    R.string.gateway_found,
-                                                    Snackbar.LENGTH_LONG);
+                                            StatusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
                                             Log.e(e1);
                                             StatusMessageHandler.showInfoMessage(getActivity(),
@@ -372,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
         if (DeveloperPreferencesHandler.getForceLanguage()) {
             Resources res = getResources();
             // Change locale settings in the app.
-            DisplayMetrics dm = res.getDisplayMetrics();
+            DisplayMetrics                    dm   = res.getDisplayMetrics();
             android.content.res.Configuration conf = res.getConfiguration();
             conf.locale = DeveloperPreferencesHandler.getLocale();
             res.updateConfiguration(conf, dm);
@@ -388,15 +379,14 @@ public class MainActivity extends AppCompatActivity {
         final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
         // if you want to update the items at a later time it is recommended to keep it in a variable
         final IDrawerItem itemHome = new PrimaryDrawerItem().withName(R.string.menu_home)
-                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back).color(
-                        accentColor).sizeDp(24))
+                .withIcon(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_arrow_back).color(accentColor)
+                        .sizeDp(24))
                 .withSelectable(false)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            getSupportFragmentManager().popBackStack(null,
-                                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             while (drawerPositionStack.size() > 1) {
                                 drawerPositionStack.pop();
                             }
@@ -429,8 +419,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES,
                                     getString(R.string.menu_rooms_scenes),
-                                    RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(
-                                            SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
+                                    RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -509,8 +498,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_PHONE, getString(R.string.phone),
-                                    PhoneTabFragment.class.newInstance());
+                            startFragmentTransaction(IDENTIFIER_PHONE, getString(R.string.phone), PhoneTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -529,8 +517,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_TIMERS, getString(R.string.timers),
-                                    TimersFragment.class.newInstance());
+                            startFragmentTransaction(IDENTIFIER_TIMERS, getString(R.string.timers), TimersFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -566,8 +553,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_NFC, getString(R.string.nfc),
-                                    NfcFragment.class.newInstance());
+                            startFragmentTransaction(IDENTIFIER_NFC, getString(R.string.nfc), NfcFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -605,9 +591,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
-                            startFragmentTransaction(IDENTIFIER_SETTINGS,
-                                    getString(R.string.menu_settings),
-                                    SettingsTabFragment.class.newInstance());
+                            startFragmentTransaction(IDENTIFIER_SETTINGS, getString(R.string.menu_settings), SettingsTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -625,8 +609,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         try {
                             String url = "http://power-switch.eu/faq/";
-                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(),
-                                    url));
+                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                             return true;
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -662,8 +645,7 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        String aboutAppName = getString(R.string.powerswitch_app_name) + "\n(" + PowerSwitch
-                                .getAppBuildTime() + ")";
+                        String aboutAppName = getString(R.string.powerswitch_app_name) + "\n(" + PowerSwitch.getAppBuildTime() + ")";
                         if (eu.power_switch.BuildConfig.DEBUG) {
                             aboutAppName += "\n" + "DEBUG";
                         }
@@ -687,9 +669,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onIconClicked(View v) {
                                         String url = "https://power-switch.eu/";
-                                        startActivity(ChromeCustomTabHelper.getBrowserIntent(
-                                                getActivity(),
-                                                url));
+                                        startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                     }
 
                                     @Override
@@ -711,15 +691,11 @@ public class MainActivity extends AppCompatActivity {
                                     public boolean onExtraClicked(View v, Libs.SpecialButton specialButton) {
                                         if (specialButton == Libs.SpecialButton.SPECIAL1) {
                                             String url = "https://power-switch.eu/download/";
-                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(
-                                                    getActivity(),
-                                                    url));
+                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL2) {
                                             String url = "https://github.com/Power-Switch/PowerSwitch_Android";
-                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(
-                                                    getActivity(),
-                                                    url));
+                                            startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                                             return true;
                                         } else if (specialButton == Libs.SpecialButton.SPECIAL3) {
                                             return false;
@@ -750,9 +726,7 @@ public class MainActivity extends AppCompatActivity {
                                 })
                                 .supportFragment();
                         fragment.setHasOptionsMenu(true);
-                        startFragmentTransaction(IDENTIFIER_ABOUT,
-                                getString(R.string.menu_about),
-                                fragment);
+                        startFragmentTransaction(IDENTIFIER_ABOUT, getString(R.string.menu_about), fragment);
 
                         navigationDrawer.closeDrawer();
                         return true;
@@ -766,7 +740,9 @@ public class MainActivity extends AppCompatActivity {
 
         navigationDrawer = new DrawerBuilder(this).withToolbar(toolbar)
                 .withTranslucentStatusBar(true)
-                .withAccountHeader(accountHeader).withHeaderPadding(true).addDrawerItems(itemHome,
+                .withAccountHeader(accountHeader)
+                .withHeaderPadding(true)
+                .addDrawerItems(itemHome,
                         itemHistory,
                         new DividerDrawerItem(),
                         itemApartments,
@@ -788,7 +764,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initHistoryDrawer(Drawer navigationDrawer) {
         // parent HAS to be null, so it can be attached to navigationDrawer later on
-        View historyView = LayoutInflater.from(this).inflate(R.layout.drawer_history, null, false);
+        View historyView = LayoutInflater.from(this)
+                .inflate(R.layout.drawer_history, null, false);
 
         IconicsImageView clearHistory = historyView.findViewById(R.id.buttonClear);
         clearHistory.setOnClickListener(new View.OnClickListener() {
@@ -796,37 +773,34 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity()).setTitle(R.string.clear)
                         .setMessage(R.string.clear_history_message)
-                        .setPositiveButton(android.R.string.yes,
-                                new DialogInterface.OnClickListener() {
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new AsyncTask<Void, Void, Exception>() {
+
                                     @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        new AsyncTask<Void, Void, Exception>() {
+                                    protected Exception doInBackground(Void... params) {
+                                        try {
+                                            DatabaseHandler.clearHistory();
+                                        } catch (Exception e) {
+                                            return e;
+                                        }
 
-                                            @Override
-                                            protected Exception doInBackground(Void... params) {
-                                                try {
-                                                    DatabaseHandler.clearHistory();
-                                                } catch (Exception e) {
-                                                    return e;
-                                                }
-
-                                                return null;
-                                            }
-
-                                            @Override
-                                            protected void onPostExecute(Exception exception) {
-                                                updateHistory();
-
-                                                if (exception != null) {
-                                                    StatusMessageHandler.showErrorMessage(
-                                                            getActivity(),
-                                                            exception);
-                                                }
-
-                                            }
-                                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                        return null;
                                     }
-                                })
+
+                                    @Override
+                                    protected void onPostExecute(Exception exception) {
+                                        updateHistory();
+
+                                        if (exception != null) {
+                                            StatusMessageHandler.showErrorMessage(getActivity(), exception);
+                                        }
+
+                                    }
+                                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        })
                         .setNeutralButton(android.R.string.cancel, null)
                         .show();
             }
@@ -841,20 +815,16 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(View itemView, int position) {
                 HistoryItem historyItem = historyItems.get(position);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss",
-                        Locale.getDefault());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy - HH:mm:ss", Locale.getDefault());
                 new AlertDialog.Builder(getActivity()).setTitle(R.string.details)
                         .setMessage(simpleDateFormat.format(historyItem.getTime()
-                                .getTime()) + "\n\n" +
-                                historyItem.getShortDescription() + "\n\n" +
-                                historyItem.getLongDescription())
+                                .getTime()) + "\n\n" + historyItem.getShortDescription() + "\n\n" + historyItem.getLongDescription())
                         .setNeutralButton(R.string.close, null)
                         .show();
             }
         });
         recyclerViewHistory.setAdapter(historyItemArrayAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1,
-                StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewHistory.setLayoutManager(layoutManager);
 
         historyDrawer = new DrawerBuilder().withActivity(this)
@@ -899,10 +869,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // send permission change to possible listeners via local broadcast
-        PermissionHelper.sendPermissionChangedBroadcast(this,
-                requestCode,
-                permissions,
-                grantResults);
+        PermissionHelper.sendPermissionChangedBroadcast(this, requestCode, permissions, grantResults);
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -941,7 +908,8 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -963,7 +931,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

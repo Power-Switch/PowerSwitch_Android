@@ -30,6 +30,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 
@@ -39,8 +40,8 @@ import eu.power_switch.action.Action;
  * Created by Markus on 04.12.2015.
  */
 public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecyclerViewAdapter.ViewHolder> {
-    private List<Action> actions;
-    private Context context;
+    private List<Action>        actions;
+    private Context             context;
     private OnItemClickListener onDeleteClickListener;
 
 
@@ -55,7 +56,8 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
 
     @Override
     public ActionRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_action, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_action, parent, false);
         return new ActionRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -81,16 +83,16 @@ public class ActionRecyclerViewAdapter extends RecyclerView.Adapter<ActionRecycl
         void onItemClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView description;
-        public IconicsImageView delete;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_action_description)
+        TextView         description;
+        @BindView(R.id.delete)
+        IconicsImageView delete;
+        @BindView(R.id.list_footer)
+        LinearLayout     footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.description = itemView.findViewById(R.id.txt_action_description);
-            this.delete = itemView.findViewById(R.id.delete);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             this.delete.setOnClickListener(new View.OnClickListener() {
                 @Override

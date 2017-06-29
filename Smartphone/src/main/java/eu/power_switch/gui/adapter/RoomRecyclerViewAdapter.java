@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
@@ -55,8 +56,8 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
     // Store a member variable for the users
     private RecyclerViewFragment recyclerViewFragment;
-    private ArrayList<Room> rooms;
-    private FragmentActivity fragmentActivity;
+    private ArrayList<Room>      rooms;
+    private FragmentActivity     fragmentActivity;
 
     // Pass in the context and users array into the constructor
     public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Room> rooms) {
@@ -171,8 +172,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     }
 
     private void updateReceiverViews(final RoomRecyclerViewAdapter.ViewHolder holder, final Room room) {
-        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) fragmentActivity.getSystemService(inflaterString);
+        String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater       = (LayoutInflater) fragmentActivity.getSystemService(inflaterString);
 
         // clear previous items
         holder.linearLayoutOfReceivers.removeAllViews();
@@ -202,7 +203,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             receiverName.setTextSize(18);
 
             TableLayout buttonLayout = receiverLayout.findViewById(R.id.buttonLayout);
-            int buttonsPerRow;
+            int         buttonsPerRow;
             if (receiver.getButtons()
                     .size() % 3 == 0) {
                 buttonsPerRow = 3;
@@ -210,13 +211,13 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 buttonsPerRow = 2;
             }
 
-            int i = 0;
-            final ArrayList<android.widget.Button> buttonViews = new ArrayList<>();
-            long lastActivatedButtonId = receiver.getLastActivatedButtonId();
-            TableRow buttonRow = null;
+            int                                    i                     = 0;
+            final ArrayList<android.widget.Button> buttonViews           = new ArrayList<>();
+            long                                   lastActivatedButtonId = receiver.getLastActivatedButtonId();
+            TableRow                               buttonRow             = null;
             for (final Button button : receiver.getButtons()) {
-                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, buttonRow, false);
-                final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
+                final android.widget.Button buttonView       = (android.widget.Button) inflater.inflate(R.layout.simple_button, buttonRow, false);
+                final ColorStateList        defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
                 final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
@@ -289,26 +290,26 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
     // Provide a direct reference to each of the views within a data item
     // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends ButterKnifeViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView roomName;
-        public android.widget.Button buttonAllOn;
-        public android.widget.Button buttonAllOff;
-        public LinearLayout linearLayoutOfReceivers;
-        public TextView empty;
-        public LinearLayout footer;
+        @BindView(R.id.txt_room_name)
+        TextView              roomName;
+        @BindView(R.id.button_AllOn)
+        android.widget.Button buttonAllOn;
+        @BindView(R.id.button_AllOff)
+        android.widget.Button buttonAllOff;
+        @BindView(R.id.layout_of_receivers)
+        LinearLayout          linearLayoutOfReceivers;
+        @BindView(R.id.textview_empty)
+        TextView              empty;
+        @BindView(R.id.list_footer)
+        LinearLayout          footer;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView) {
             super(itemView);
-            this.roomName = itemView.findViewById(R.id.txt_room_name);
-            this.buttonAllOn = itemView.findViewById(R.id.button_AllOn);
-            this.buttonAllOff = itemView.findViewById(R.id.button_AllOff);
-            this.linearLayoutOfReceivers = itemView.findViewById(R.id.layout_of_receivers);
-            this.empty = itemView.findViewById(R.id.textview_empty);
-            this.footer = itemView.findViewById(R.id.list_footer);
         }
     }
 }

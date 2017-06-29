@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
@@ -45,9 +46,9 @@ import eu.power_switch.shared.log.Log;
  */
 public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecyclerViewAdapter.ViewHolder> {
     private ArrayList<Gateway> gateways;
-    private Context context;
+    private Context            context;
 
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public GatewayRecyclerViewAdapter(Context context, ArrayList<Gateway> gateways) {
@@ -65,7 +66,8 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
 
     @Override
     public GatewayRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_gateway, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_gateway, parent, false);
         return new GatewayRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -105,8 +107,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         holder.attention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(context)
-                        .setTitle(R.string.attention)
+                new AlertDialog.Builder(context).setTitle(R.string.attention)
                         .setMessage(R.string.gateway_not_associated_with_any_apartment)
                         .setNeutralButton(R.string.close, null)
                         .show();
@@ -154,29 +155,28 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView attention;
-        public TextView name;
-        public TextView model;
-        public LinearLayout layoutLocalAddress;
-        public TextView localAddress;
-        public LinearLayout layoutWanAddress;
-        public TextView wanAddress;
-        public android.support.v7.widget.SwitchCompat gatewaySwitchStatus;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.imageView_attention)
+        ImageView                              attention;
+        @BindView(R.id.txt_gateway_name)
+        TextView                               name;
+        @BindView(R.id.txt_gateway_model)
+        TextView                               model;
+        @BindView(R.id.layout_local_address)
+        LinearLayout                           layoutLocalAddress;
+        @BindView(R.id.txt_gateway_local_address)
+        TextView                               localAddress;
+        @BindView(R.id.layout_wan_address)
+        LinearLayout                           layoutWanAddress;
+        @BindView(R.id.txt_gateway_wan_address)
+        TextView                               wanAddress;
+        @BindView(R.id.switch_gateway_status)
+        android.support.v7.widget.SwitchCompat gatewaySwitchStatus;
+        @BindView(R.id.list_footer)
+        LinearLayout                           footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            attention = itemView.findViewById(R.id.imageView_attention);
-            name = itemView.findViewById(R.id.txt_gateway_name);
-            model = itemView.findViewById(R.id.txt_gateway_model);
-            layoutLocalAddress = itemView.findViewById(R.id.layout_local_address);
-            localAddress = itemView.findViewById(R.id.txt_gateway_local_address);
-            layoutWanAddress = itemView.findViewById(R.id.layout_wan_address);
-            wanAddress = itemView.findViewById(R.id.txt_gateway_wan_address);
-
-            gatewaySwitchStatus = itemView.findViewById(R.id.switch_gateway_status);
-            footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

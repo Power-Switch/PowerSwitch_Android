@@ -30,6 +30,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 
 /**
@@ -38,8 +39,8 @@ import eu.power_switch.R;
  * Created by Markus on 04.12.2015.
  */
 public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNumberRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<String> phoneNumbers;
-    private Context context;
+    private ArrayList<String>   phoneNumbers;
+    private Context             context;
     private OnItemClickListener onDeleteClickListener;
 
     public PhoneNumberRecyclerViewAdapter(Context context, ArrayList<String> phoneNumbers) {
@@ -53,7 +54,8 @@ public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNu
 
     @Override
     public PhoneNumberRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.list_item_phone_number, parent, false);
+        View itemView = LayoutInflater.from(context)
+                .inflate(R.layout.list_item_phone_number, parent, false);
         return new PhoneNumberRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -79,16 +81,16 @@ public class PhoneNumberRecyclerViewAdapter extends RecyclerView.Adapter<PhoneNu
         void onItemClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView phoneNumber;
-        public IconicsImageView delete;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_phoneNumber)
+        TextView         phoneNumber;
+        @BindView(R.id.delete)
+        IconicsImageView delete;
+        @BindView(R.id.list_footer)
+        LinearLayout     footer;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            this.phoneNumber = itemView.findViewById(R.id.txt_phoneNumber);
-            this.delete = itemView.findViewById(R.id.delete);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             this.delete.setOnClickListener(new View.OnClickListener() {
                 @Override

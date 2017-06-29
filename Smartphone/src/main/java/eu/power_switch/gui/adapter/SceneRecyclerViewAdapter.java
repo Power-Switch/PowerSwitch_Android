@@ -36,6 +36,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -53,14 +54,13 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
  */
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
     private RecyclerViewFragment recyclerViewFragment;
-    private ArrayList<Scene> scenes;
-    private FragmentActivity fragmentActivity;
+    private ArrayList<Scene>     scenes;
+    private FragmentActivity     fragmentActivity;
 
-    private OnItemClickListener onItemClickListener;
+    private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity,
-                                    ArrayList<Scene> scenes) {
+    public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Scene> scenes) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
@@ -76,7 +76,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
     @Override
     public SceneRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(fragmentActivity).inflate(R.layout.list_item_scene, parent, false);
+        View itemView = LayoutInflater.from(fragmentActivity)
+                .inflate(R.layout.list_item_scene, parent, false);
         return new SceneRecyclerViewAdapter.ViewHolder(itemView);
     }
 
@@ -84,8 +85,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Scene scene = scenes.get(position);
 
-        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) fragmentActivity.getSystemService(inflaterString);
+        String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater       = (LayoutInflater) fragmentActivity.getSystemService(inflaterString);
 
         holder.sceneName.setText(scene.getName());
         holder.sceneName.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +116,8 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
             @Override
             public void onClick(View v) {
                 if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    VibrationHandler.vibrate(fragmentActivity, SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                    VibrationHandler.vibrate(fragmentActivity,
+                            SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                 }
 
                 new AsyncTask<Void, Void, Void>() {
@@ -143,29 +145,30 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
             // setup TextView to display receiver name
             AppCompatTextView receiverName = new AppCompatTextView(fragmentActivity);
-            receiverName.setText(sceneItem.getReceiver().getName());
+            receiverName.setText(sceneItem.getReceiver()
+                    .getName());
             receiverName.setTextSize(18);
             receiverName.setTextColor(ThemeHelper.getThemeAttrColor(fragmentActivity, android.R.attr.textColorPrimary));
             receiverName.setGravity(Gravity.CENTER_VERTICAL);
-            receiverRow.addView(receiverName, new LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.MATCH_PARENT, 1.0f));
+            receiverRow.addView(receiverName, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1.0f));
 
             TableLayout buttonLayout = new TableLayout(fragmentActivity);
-            receiverRow.addView(buttonLayout, new LayoutParams(LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT));
+            receiverRow.addView(buttonLayout, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
             int buttonsPerRow;
-            if (sceneItem.getReceiver().getButtons().size() % 3 == 0) {
+            if (sceneItem.getReceiver()
+                    .getButtons()
+                    .size() % 3 == 0) {
                 buttonsPerRow = 3;
             } else {
                 buttonsPerRow = 2;
             }
 
-            int i = 0;
+            int      i         = 0;
             TableRow buttonRow = null;
-            for (final Button button : sceneItem.getReceiver().getButtons()) {
-                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button,
-                        buttonRow, false);
+            for (final Button button : sceneItem.getReceiver()
+                    .getButtons()) {
+                final android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button, buttonRow, false);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     buttonView.setElevation(0);
                     buttonView.setStateListAnimator(null);
@@ -173,9 +176,10 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 buttonView.setText(button.getName());
                 buttonView.setEnabled(false);
 
-                final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
+                final int accentColor   = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
                 final int inactiveColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.textColorInactive);
-                if (sceneItem.getActiveButton().equals(button)) {
+                if (sceneItem.getActiveButton()
+                        .equals(button)) {
                     buttonView.setTextColor(accentColor);
                 } else {
                     buttonView.setTextColor(inactiveColor);
@@ -183,8 +187,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
                 if (i == 0 || i % buttonsPerRow == 0) {
                     buttonRow = new TableRow(fragmentActivity);
-                    buttonRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT));
+                    buttonRow.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
                     buttonRow.addView(buttonView);
                     buttonLayout.addView(buttonRow);
                 } else {
@@ -215,18 +218,18 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         void onItemLongClick(View itemView, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView sceneName;
-        public android.widget.Button buttonActivateScene;
-        public LinearLayout linearLayoutSceneItems;
-        public LinearLayout footer;
+    public class ViewHolder extends ButterKnifeViewHolder {
+        @BindView(R.id.txt_scene_name)
+        TextView              sceneName;
+        @BindView(R.id.btn_activate_scene)
+        android.widget.Button buttonActivateScene;
+        @BindView(R.id.layout_of_scene_items)
+        LinearLayout          linearLayoutSceneItems;
+        @BindView(R.id.list_footer)
+        LinearLayout          footer;
 
         public ViewHolder(final View itemView) {
             super(itemView);
-            this.sceneName = itemView.findViewById(R.id.txt_scene_name);
-            this.buttonActivateScene = itemView.findViewById(R.id.btn_activate_scene);
-            this.linearLayoutSceneItems = itemView.findViewById(R.id.layout_of_scene_items);
-            this.footer = itemView.findViewById(R.id.list_footer);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
