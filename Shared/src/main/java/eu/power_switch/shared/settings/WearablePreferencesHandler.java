@@ -40,26 +40,25 @@ import eu.power_switch.shared.log.Log;
 public class WearablePreferencesHandler {
 
     // SharedPreferences
-    public static final String WEARABLE_SHARED_PREFS_NAME = "eu.power_switch.wearable.prefs";
+    public static final String  WEARABLE_SHARED_PREFS_NAME                    = "eu.power_switch.wearable.prefs";
     // default values
-    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
+    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF            = true;
     public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
-    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
-    public static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
-    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
-    public static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants
-            .DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
-    public static final int DEFAULT_VALUE_STARTUP_TAB = 0;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS             = false;
+    public static final int     DEFAULT_VALUE_THEME                           = SettingsConstants.THEME_DARK_BLUE;
+    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS         = true;
+    public static final int     DEFAULT_VALUE_VIBRATION_DURATION              = SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
+    public static final int     DEFAULT_VALUE_STARTUP_TAB                     = 0;
     // setting keys
-    public static String KEY_SHOW_ROOM_ALL_ON_OFF;
-    public static String KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
-    public static String KEY_AUTO_COLLAPSE_ROOMS;
-    public static String KEY_STARTUP_DEFAULT_TAB;
-    public static String KEY_THEME;
-    public static String KEY_VIBRATE_ON_BUTTON_PRESS;
-    public static String KEY_VIBRATION_DURATION;
+    public static  String            KEY_SHOW_ROOM_ALL_ON_OFF;
+    public static  String            KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON;
+    public static  String            KEY_AUTO_COLLAPSE_ROOMS;
+    public static  String            KEY_STARTUP_DEFAULT_TAB;
+    public static  String            KEY_THEME;
+    public static  String            KEY_VIBRATE_ON_BUTTON_PRESS;
+    public static  String            KEY_VIBRATION_DURATION;
     private static SharedPreferences sharedPreferences;
-    private static Map<String, ?> cachedValues;
+    private static Map<String, ?>    cachedValues;
 
     // default values for each settings key
     private static Map<String, Object> defaultValueMap;
@@ -90,8 +89,7 @@ public class WearablePreferencesHandler {
      * @param context any suitable context
      */
     public static void init(@NonNull Context context) {
-        sharedPreferences = context.getSharedPreferences(
-                WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(WEARABLE_SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         forceRefresh();
 
         initializePublicKeys(context);
@@ -140,6 +138,7 @@ public class WearablePreferencesHandler {
      *
      * @param settingsKey Key of setting
      * @param <T>         expected type of return value
+     *
      * @return value
      */
     public static <T> T get(String settingsKey) throws ClassCastException {

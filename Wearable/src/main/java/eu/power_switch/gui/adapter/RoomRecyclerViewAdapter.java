@@ -50,13 +50,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
     // Store a member variable for the users
     private ArrayList<Room> rooms;
-    private Context context;
-    private DataApiHandler dataApiHandler;
-    private RecyclerView parentRecyclerView;
+    private Context         context;
+    private DataApiHandler  dataApiHandler;
+    private RecyclerView    parentRecyclerView;
 
     // Pass in the context and users array into the constructor
-    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Room> rooms,
-                                   DataApiHandler dataApiHandler) {
+    public RoomRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Room> rooms, DataApiHandler dataApiHandler) {
         this.rooms = rooms;
         this.context = context;
         this.parentRecyclerView = parentRecyclerView;
@@ -67,7 +66,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     @Override
     public RoomRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate the custom layout
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_room, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_room, parent, false);
         // Return a new holder instance
         return new RoomRecyclerViewAdapter.ViewHolder(itemView);
     }
@@ -79,7 +79,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         final Room room = rooms.get(position);
 
         String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) parentRecyclerView.getContext().getSystemService(inflaterString);
+        LayoutInflater inflater = (LayoutInflater) parentRecyclerView.getContext()
+                .getSystemService(inflaterString);
 
         // Set item views based on the data model
         holder.roomName.setText(room.getName());
@@ -133,7 +134,8 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                 for (Receiver receiver : room.getReceivers()) {
                     for (Button currentButton : receiver.getButtons()) {
-                        if (button.getText().equals(currentButton.getName())) {
+                        if (button.getText()
+                                .equals(currentButton.getName())) {
                             receiver.setLastActivatedButtonId(currentButton.getId());
                             break;
                         }
@@ -154,8 +156,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.linearLayoutOfReceivers.removeAllViews();
         // add items
         for (final Receiver receiver : room.getReceivers()) {
-            LinearLayout receiverLayout = (LinearLayout) inflater.inflate(R.layout.list_item_receiver, holder
-                    .linearLayoutOfReceivers, false);
+            LinearLayout receiverLayout = (LinearLayout) inflater.inflate(R.layout.list_item_receiver, holder.linearLayoutOfReceivers, false);
             holder.linearLayoutOfReceivers.addView(receiverLayout);
 
             // setup TextView to display device name
@@ -166,21 +167,19 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
             // Setup Buttons
             TableLayout buttonLayout = (TableLayout) receiverLayout.findViewById(R.id.buttonLayout);
 
-            int buttonsPerRow = 2;
-            int i = 0;
-            final ArrayList<android.widget.Button> buttonViews = new ArrayList<>();
-            TableRow buttonRow = null;
+            int                                    buttonsPerRow = 2;
+            int                                    i             = 0;
+            final ArrayList<android.widget.Button> buttonViews   = new ArrayList<>();
+            TableRow                               buttonRow     = null;
             for (final Button button : receiver.getButtons()) {
-                android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button_wear,
-                        buttonRow, false);
+                android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.standard_button_wear, buttonRow, false);
                 buttonViews.add(buttonView);
                 final ColorStateList defaultTextColor = buttonView.getTextColors(); //save original colors
                 buttonView.setText(button.getName());
 
                 final int accentColor = ThemeHelper.getThemeAttrColor(context, R.attr.colorAccent);
 
-                if (button.getId() == receiver.getLastActivatedButtonId()
-                        && WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                if (button.getId() == receiver.getLastActivatedButtonId() && WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                     buttonView.setTextColor(accentColor);
                 }
 
@@ -189,12 +188,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                     public void onClick(View v) {
                         // Vibration Feedback
                         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                            VibrationHandler.vibrate(context, WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
+                            VibrationHandler.vibrate(context,
+                                    WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_VIBRATION_DURATION));
                         }
 
                         // Send Action to Smartphone app
-                        String actionString = DataApiHandler.buildReceiverActionString(room,
-                                receiver, button);
+                        String actionString = DataApiHandler.buildReceiverActionString(room, receiver, button);
                         dataApiHandler.sendReceiverActionTrigger(actionString);
 
                         receiver.setLastActivatedButtonId(button.getId());
@@ -243,12 +242,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView roomName;
-        public LinearLayout linearLayout_AllOnOffButtons;
+        public TextView              roomName;
+        public LinearLayout          linearLayout_AllOnOffButtons;
         public android.widget.Button buttonAllOn;
         public android.widget.Button buttonAllOff;
-        public LinearLayout linearLayoutOfReceivers;
-        public LinearLayout footer;
+        public LinearLayout          linearLayoutOfReceivers;
+        public LinearLayout          footer;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview

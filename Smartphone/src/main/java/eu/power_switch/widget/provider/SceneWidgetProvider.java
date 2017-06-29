@@ -53,8 +53,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, SceneWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
-                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
-                        SceneWidgetProvider.class));
+                .getAppWidgetIds(new ComponentName(context.getApplicationContext(), SceneWidgetProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         context.sendBroadcast(intent);
     }
@@ -72,13 +71,16 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                 SceneWidget sceneWidget = DatabaseHandler.getSceneWidget(appWidgetId);
                 // update UI
                 try {
-                    Scene scene = DatabaseHandler.getScene(sceneWidget.getSceneId());
+                    Scene     scene     = DatabaseHandler.getScene(sceneWidget.getSceneId());
                     Apartment apartment = DatabaseHandler.getApartment(scene.getApartmentId());
 
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, apartment.getName() + ": " + scene.getName());
                     // set button action
                     remoteViews.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
-                            WidgetIntentReceiver.buildSceneWidgetPendingIntent(context, apartment, scene, ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
+                            WidgetIntentReceiver.buildSceneWidgetPendingIntent(context,
+                                    apartment,
+                                    scene,
+                                    ConfigureSceneWidgetActivity.SCENE_INTENT_ID_OFFSET + appWidgetId));
                     remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.VISIBLE);
                 } catch (NoSuchElementException e) {
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.scene_not_found));

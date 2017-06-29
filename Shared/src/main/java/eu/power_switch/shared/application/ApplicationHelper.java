@@ -42,12 +42,14 @@ public class ApplicationHelper {
      * Get a text representation of application version name and build number
      *
      * @param context any suitable context
+     *
      * @return app version as text (or "unknown" if failed to retrieve), never null
      */
     @NonNull
     public static String getAppVersionDescription(@NonNull Context context) {
         try {
-            PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            PackageInfo pInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
             return pInfo.versionName + " (" + pInfo.versionCode + ")";
         } catch (Exception e) {
             Log.e(e);
@@ -62,31 +64,23 @@ public class ApplicationHelper {
      * @param icon
      */
     public static void setLauncherIcon(Context ctx, LauncherIcon icon) {
-        PackageManager pm = ctx.getPackageManager();
+        PackageManager  pm = ctx.getPackageManager();
         ActivityManager am = (ActivityManager) ctx.getSystemService(Activity.ACTIVITY_SERVICE);
 
         ComponentName materialIconComponent = new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-MaterialIcon");
-        ComponentName oldIconComponent = new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-OldIcon");
+        ComponentName oldIconComponent      = new ComponentName(ctx, "eu.power_switch.gui.activity.MainActivity-OldIcon");
 
         switch (icon) {
             case Old:
-                pm.setComponentEnabledSetting(materialIconComponent,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(materialIconComponent, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
 
-                pm.setComponentEnabledSetting(oldIconComponent,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(oldIconComponent, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
                 break;
             case Material:
             default:
-                pm.setComponentEnabledSetting(materialIconComponent,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(materialIconComponent, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
-                pm.setComponentEnabledSetting(oldIconComponent,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(oldIconComponent, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                 break;
         }
 
@@ -106,8 +100,7 @@ public class ApplicationHelper {
      * Launcher Icons
      */
     public enum LauncherIcon {
-        Material,
-        Old;
+        Material, Old;
 
         public static LauncherIcon valueOf(int ordinal) {
             for (LauncherIcon value : values()) {

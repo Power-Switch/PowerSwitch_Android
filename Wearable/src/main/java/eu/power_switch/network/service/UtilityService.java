@@ -84,30 +84,34 @@ public class UtilityService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
             Log.d("Pushing Wearable Settings to Cloud...");
-            GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Wearable.API).build();
+            GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API)
+                    .build();
 
             // It's OK to use blockingConnect() here as we are running in an
             // IntentService that executes work on a separate (background) thread.
-            ConnectionResult connectionResult = googleApiClient.blockingConnect(
-                    SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
+            ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
-            ArrayList<DataMap> settings = new ArrayList<>();
-            DataMap settingsDataMap = CommunicationHelper.getSettingsDataMap();
+            ArrayList<DataMap> settings        = new ArrayList<>();
+            DataMap            settingsDataMap = CommunicationHelper.getSettingsDataMap();
             settings.add(settingsDataMap);
 
             if (connectionResult.isSuccess() && googleApiClient.isConnected()) {
 
                 PutDataMapRequest dataMap = PutDataMapRequest.create(WearableConstants.SETTINGS_PATH);
-                dataMap.getDataMap().putDataMapArrayList(WearableConstants.EXTRA_SETTINGS, settings);
+                dataMap.getDataMap()
+                        .putDataMapArrayList(WearableConstants.EXTRA_SETTINGS, settings);
                 PutDataRequest request = dataMap.asPutDataRequest();
 
                 // Send the data over
-                DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request).await();
+                DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request)
+                        .await();
 
-                if (!result.getStatus().isSuccess()) {
-                    Log.e("", String.format("Error sending settings using DataApi (error code = %d)",
-                            result.getStatus().getStatusCode()));
+                if (!result.getStatus()
+                        .isSuccess()) {
+                    Log.e("",
+                            String.format("Error sending settings using DataApi (error code = %d)",
+                                    result.getStatus()
+                                            .getStatusCode()));
                 } else {
                     Log.d("Updated settings sent");
                 }

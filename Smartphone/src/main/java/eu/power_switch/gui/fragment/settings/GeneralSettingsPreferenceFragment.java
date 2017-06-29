@@ -50,7 +50,6 @@ import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
-import eu.power_switch.gui.activity.WizardActivity;
 import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
 import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
@@ -66,6 +65,7 @@ import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.shared.permission.PermissionHelper;
+import eu.power_switch.wizard.gui.WizardActivity;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**

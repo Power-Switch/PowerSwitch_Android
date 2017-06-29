@@ -72,9 +72,12 @@ public class Log {
         if (source == null) {
             logMessage.append("null");
         } else if (source instanceof String) {
-            logMessage.append(source).append(" : ");
+            logMessage.append(source)
+                    .append(" : ");
         } else if (source instanceof Class) {
-            logMessage.append("{").append(((Class) source).getCanonicalName()).append("}");
+            logMessage.append("{")
+                    .append(((Class) source).getCanonicalName())
+                    .append("}");
         } else if (source instanceof Intent) {
             logMessage.append(getIntentDescription((Intent) source));
         } else {
@@ -132,9 +135,11 @@ public class Log {
         log += intent.getAction();
         log += "( ";
         if (intent.getData() != null) {
-            log += intent.getData().getScheme();
+            log += intent.getData()
+                    .getScheme();
             log += "://";
-            log += intent.getData().getHost();
+            log += intent.getData()
+                    .getHost();
         }
         log += " ) ";
         Bundle extras = intent.getExtras();
@@ -274,6 +279,7 @@ public class Log {
      * Returns a human readable String containing the stacktrace of a throwable
      *
      * @param throwable throwable
+     *
      * @return StackTrace string
      */
     @NonNull

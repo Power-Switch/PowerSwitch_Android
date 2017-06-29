@@ -56,10 +56,10 @@ public class ConfigureRoomWidgetActivity extends Activity {
     private Spinner spinnerRoom;
 
     private List<Apartment> apartmentList = new ArrayList<>();
-    private List<Room> roomList = new ArrayList<>();
+    private List<Room>      roomList      = new ArrayList<>();
 
     private ArrayList<String> apartmentNameList = new ArrayList<>();
-    private ArrayList<String> roomNameList = new ArrayList<>();
+    private ArrayList<String> roomNameList      = new ArrayList<>();
 
     private ArrayAdapter<String> adapterApartments;
     private ArrayAdapter<String> adapterRooms;
@@ -76,8 +76,7 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
         spinnerApartment = (Spinner) findViewById(R.id.Spinner_widgetApartment);
 
-        adapterApartments = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
+        adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
         adapterApartments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerApartment.setAdapter(adapterApartments);
         SpinnerInteractionListener apartmentSpinnerInteractionListener = new SpinnerInteractionListener() {
@@ -90,8 +89,7 @@ public class ConfigureRoomWidgetActivity extends Activity {
         spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);
 
         spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
-        adapterRooms = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, roomNameList);
+        adapterRooms = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roomNameList);
         adapterRooms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapterRooms);
 
@@ -157,7 +155,8 @@ public class ConfigureRoomWidgetActivity extends Activity {
 
                 // Abort if no rooms are defined in main app
                 if (roomNameList.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_room_in_main_app), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_room_in_main_app), Toast.LENGTH_LONG)
+                            .show();
                     finish();
                 }
             }
@@ -170,11 +169,10 @@ public class ConfigureRoomWidgetActivity extends Activity {
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
             if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        AppWidgetManager.INVALID_APPWIDGET_ID);
+                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
                 // Perform your App Widget configuration:
                 Apartment apartment = getSelectedApartment();
-                Room room = roomList.get(spinnerRoom.getSelectedItemPosition());
+                Room      room      = roomList.get(spinnerRoom.getSelectedItemPosition());
                 // save new widget data to database
                 RoomWidget roomWidget = new RoomWidget(appWidgetId, room.getId());
                 try {
@@ -193,11 +191,17 @@ public class ConfigureRoomWidgetActivity extends Activity {
                 views.setTextViewText(R.id.textView_room_widget_name, apartment.getName() + ": " + room.getName());
                 // set button action
                 views.setOnClickPendingIntent(R.id.button_on,
-                        WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(), apartment, room,
-                                getString(R.string.on), ROOM_INTENT_ID_OFFSET + appWidgetId));
+                        WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(),
+                                apartment,
+                                room,
+                                getString(R.string.on),
+                                ROOM_INTENT_ID_OFFSET + appWidgetId));
                 views.setOnClickPendingIntent(R.id.button_off,
                         WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(getApplicationContext(),
-                                apartment, room, getString(R.string.off), ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
+                                apartment,
+                                room,
+                                getString(R.string.off),
+                                ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                 views.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
 
                 appWidgetManager.updateAppWidget(appWidgetId, views);

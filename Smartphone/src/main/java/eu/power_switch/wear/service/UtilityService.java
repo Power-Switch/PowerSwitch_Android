@@ -92,6 +92,7 @@ public class UtilityService extends IntentService {
      * Puts a Apartment into a DataMap
      *
      * @param apartment Apartment to convert
+     *
      * @return DataMap
      */
     private DataMap convertToDataMap(Apartment apartment) {
@@ -107,6 +108,7 @@ public class UtilityService extends IntentService {
      * Puts a Room into a DataMap
      *
      * @param room Room to convert
+     *
      * @return DataMap
      */
     private DataMap convertToDataMap(Room room) {
@@ -123,6 +125,7 @@ public class UtilityService extends IntentService {
      * Puts a Receiver into a DataMap
      *
      * @param receiver Receiver to convert
+     *
      * @return DataMap
      */
     private DataMap convertToDataMap(Receiver receiver) {
@@ -141,6 +144,7 @@ public class UtilityService extends IntentService {
      * Puts a Button into a DataMap
      *
      * @param button Button to convert
+     *
      * @return DataMap
      */
     private DataMap convertToDataMap(Button button) {
@@ -157,6 +161,7 @@ public class UtilityService extends IntentService {
      * Puts a Scene into a DataMap
      *
      * @param scene Scene to convert
+     *
      * @return DataMap
      */
     private DataMap convertToDataMap(Scene scene) {
@@ -187,7 +192,8 @@ public class UtilityService extends IntentService {
 
                     List<Apartment> apartments = playStoreModeDataModel.getApartments();
 
-                    List<Room> rooms = playStoreModeDataModel.getActiveApartment().getRooms();
+                    List<Room> rooms = playStoreModeDataModel.getActiveApartment()
+                            .getRooms();
                     List<Receiver> receivers = new ArrayList<>();
                     for (Room room : rooms) {
                         receivers.addAll(room.getReceivers());
@@ -198,7 +204,8 @@ public class UtilityService extends IntentService {
                         buttons.addAll(receiver.getButtons());
                     }
 
-                    List<Scene> scenes = playStoreModeDataModel.getActiveApartment().getScenes();
+                    List<Scene> scenes = playStoreModeDataModel.getActiveApartment()
+                            .getScenes();
 
                     sendDataToWearable(apartments, rooms, receivers, buttons, scenes);
                     return;
@@ -239,16 +246,15 @@ public class UtilityService extends IntentService {
      * @param rooms     List containing Rooms from Database
      * @param receivers List containing Receivers from Database
      */
-    private void sendDataToWearable(List<Apartment> apartments, List<Room> rooms, List<Receiver> receivers, List<Button> buttons, List<Scene>
-            scenes) {
+    private void sendDataToWearable(List<Apartment> apartments, List<Room> rooms, List<Receiver> receivers, List<Button> buttons,
+                                    List<Scene> scenes) {
         Log.d("Sending new Data to Wearable...");
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API).build();
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API)
+                .build();
 
         // It's OK to use blockingConnect() here as we are running in an
         // IntentService that executes work on a separate (background) thread.
-        ConnectionResult connectionResult = googleApiClient.blockingConnect(
-                SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
+        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
         ArrayList<DataMap> data = new ArrayList<>();
 
@@ -276,15 +282,21 @@ public class UtilityService extends IntentService {
         if (connectionResult.isSuccess() && googleApiClient.isConnected()) {
 
             PutDataMapRequest dataMap = PutDataMapRequest.create(WearableConstants.DATA_PATH);
-            dataMap.getDataMap().putDataMapArrayList(WearableConstants.EXTRA_DATA, data);
+            dataMap.getDataMap()
+                    .putDataMapArrayList(WearableConstants.EXTRA_DATA, data);
             PutDataRequest request = dataMap.asPutDataRequest();
 
             // Send the data over
-            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request).await();
+            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request)
+                    .await();
 
-            if (!result.getStatus().isSuccess()) {
-                Log.e("", String.format(Locale.getDefault(), "Error sending data using DataApi (error code = %d)",
-                        result.getStatus().getStatusCode()));
+            if (!result.getStatus()
+                    .isSuccess()) {
+                Log.e("",
+                        String.format(Locale.getDefault(),
+                                "Error sending data using DataApi (error code = %d)",
+                                result.getStatus()
+                                        .getStatusCode()));
             } else {
                 Log.d("Update data sent");
             }
@@ -300,30 +312,35 @@ public class UtilityService extends IntentService {
      */
     private void sendSettingsToWearable() {
         Log.d("Sending Settings to Wearable...");
-        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Wearable.API).build();
+        GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API)
+                .build();
 
         // It's OK to use blockingConnect() here as we are running in an
         // IntentService that executes work on a separate (background) thread.
-        ConnectionResult connectionResult = googleApiClient.blockingConnect(
-                SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
+        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
-        ArrayList<DataMap> settings = new ArrayList<>();
-        DataMap settingsDataMap = CommunicationHelper.getSettingsDataMap();
+        ArrayList<DataMap> settings        = new ArrayList<>();
+        DataMap            settingsDataMap = CommunicationHelper.getSettingsDataMap();
         settings.add(settingsDataMap);
 
         if (connectionResult.isSuccess() && googleApiClient.isConnected()) {
 
             PutDataMapRequest dataMap = PutDataMapRequest.create(WearableConstants.SETTINGS_PATH);
-            dataMap.getDataMap().putDataMapArrayList(WearableConstants.EXTRA_SETTINGS, settings);
+            dataMap.getDataMap()
+                    .putDataMapArrayList(WearableConstants.EXTRA_SETTINGS, settings);
             PutDataRequest request = dataMap.asPutDataRequest();
 
             // Send the data over
-            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request).await();
+            DataApi.DataItemResult result = Wearable.DataApi.putDataItem(googleApiClient, request)
+                    .await();
 
-            if (!result.getStatus().isSuccess()) {
-                Log.e("", String.format(Locale.getDefault(), "Error sending settings using DataApi (error code = %d)",
-                        result.getStatus().getStatusCode()));
+            if (!result.getStatus()
+                    .isSuccess()) {
+                Log.e("",
+                        String.format(Locale.getDefault(),
+                                "Error sending settings using DataApi (error code = %d)",
+                                result.getStatus()
+                                        .getStatusCode()));
             } else {
                 Log.d("Updated settings sent");
             }

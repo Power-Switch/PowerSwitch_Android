@@ -83,8 +83,7 @@ public class CommunicationHelper {
                 WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON));
         settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF,
                 WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF));
-        settingsDataMap.putInt(WearablePreferencesHandler.KEY_THEME,
-                WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME));
+        settingsDataMap.putInt(WearablePreferencesHandler.KEY_THEME, WearablePreferencesHandler.<Integer>get(WearablePreferencesHandler.KEY_THEME));
         settingsDataMap.putBoolean(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS,
                 WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS));
         settingsDataMap.putInt(WearablePreferencesHandler.KEY_VIBRATION_DURATION,

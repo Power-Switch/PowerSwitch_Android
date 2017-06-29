@@ -56,10 +56,10 @@ public class ConfigureSceneWidgetActivity extends Activity {
     private Spinner spinnerScene;
 
     private List<Apartment> apartmentList = new ArrayList<>();
-    private List<Scene> sceneList = new ArrayList<>();
+    private List<Scene>     sceneList     = new ArrayList<>();
 
     private ArrayList<String> apartmentNameList = new ArrayList<>();
-    private ArrayList<String> sceneNamesList = new ArrayList<>();
+    private ArrayList<String> sceneNamesList    = new ArrayList<>();
 
     private ArrayAdapter<String> adapterApartments;
     private ArrayAdapter<String> adapterScenes;
@@ -77,8 +77,7 @@ public class ConfigureSceneWidgetActivity extends Activity {
         spinnerApartment = (Spinner) findViewById(R.id.Spinner_widgetApartment);
         spinnerScene = (Spinner) findViewById(R.id.Spinner_widgetScene);
 
-        adapterApartments = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
+        adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
         adapterApartments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerApartment.setAdapter(adapterApartments);
         SpinnerInteractionListener apartmentSpinnerInteractionListener = new SpinnerInteractionListener() {
@@ -90,8 +89,7 @@ public class ConfigureSceneWidgetActivity extends Activity {
         spinnerApartment.setOnItemSelectedListener(apartmentSpinnerInteractionListener);
         spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);
 
-        adapterScenes = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, sceneNamesList);
+        adapterScenes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, sceneNamesList);
         adapterScenes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerScene.setAdapter(adapterScenes);
 
@@ -134,7 +132,8 @@ public class ConfigureSceneWidgetActivity extends Activity {
 
                 // Abort if no rooms are defined in main app
                 if (sceneList.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_scene_in_main_app), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_scene_in_main_app), Toast.LENGTH_LONG)
+                            .show();
                     finish();
                 }
             }
@@ -190,11 +189,10 @@ public class ConfigureSceneWidgetActivity extends Activity {
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
             if (extras != null && extras.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID)) {
-                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                        AppWidgetManager.INVALID_APPWIDGET_ID);
+                int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
                 // Perform your App Widget configuration:
                 Apartment apartment = getSelectedApartment();
-                Scene scene = getSelectedScene();
+                Scene     scene     = getSelectedScene();
                 // save new widget data to database
                 SceneWidget sceneWidget = new SceneWidget(appWidgetId, scene.getId());
                 try {
@@ -212,7 +210,10 @@ public class ConfigureSceneWidgetActivity extends Activity {
                 views.setTextViewText(R.id.buttonActivate_scene_widget, getString(R.string.activate));
                 views.setTextViewText(R.id.textView_scene_widget_name, apartment.getName() + ": " + scene.getName());
                 views.setOnClickPendingIntent(R.id.buttonActivate_scene_widget,
-                        WidgetIntentReceiver.buildSceneWidgetPendingIntent(getApplicationContext(), apartment, scene, SCENE_INTENT_ID_OFFSET + appWidgetId));
+                        WidgetIntentReceiver.buildSceneWidgetPendingIntent(getApplicationContext(),
+                                apartment,
+                                scene,
+                                SCENE_INTENT_ID_OFFSET + appWidgetId));
                 appWidgetManager.updateAppWidget(appWidgetId, views);
 
                 // Finally, create the return Intent, set it with the

@@ -68,12 +68,13 @@ public class Sets {
      * <p>{@code Set<Base> set = Sets.<Base>newHashSet(sub1, sub2);}
      *
      * @param elements the elements that the set should contain
+     *
      * @return a newly-created {@code HashSet} containing those elements (minus
      * duplicates)
      */
     public static <E> HashSet<E> newHashSet(E... elements) {
-        int capacity = elements.length * 4 / 3 + 1;
-        HashSet<E> set = new HashSet<>(capacity);
+        int        capacity = elements.length * 4 / 3 + 1;
+        HashSet<E> set      = new HashSet<>(capacity);
         Collections.addAll(set, elements);
         return set;
     }
@@ -91,6 +92,7 @@ public class Sets {
      * Creates a {@code SortedSet} instance containing the given elements.
      *
      * @param elements the elements that the set should contain
+     *
      * @return a newly-created {@code SortedSet} containing those elements (minus
      * duplicates)
      */

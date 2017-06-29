@@ -73,26 +73,6 @@ public class Apartment {
      */
     private Geofence geofence;
 
-    public Apartment(@NonNull Long id, boolean isActive, @NonNull String name) {
-        this.id = id;
-        this.isActive = isActive;
-        this.name = name;
-        this.rooms = Collections.EMPTY_LIST;
-        this.scenes = Collections.EMPTY_LIST;
-        this.associatedGateways = Collections.EMPTY_LIST;
-    }
-
-    public Apartment(@NonNull Long id, boolean isActive, @NonNull String name, @NonNull List<Gateway> associatedGateways,
-                     @Nullable Geofence geofence) {
-        this.id = id;
-        this.isActive = isActive;
-        this.name = name;
-        this.rooms = Collections.EMPTY_LIST;
-        this.scenes = Collections.EMPTY_LIST;
-        this.associatedGateways = associatedGateways;
-        this.geofence = geofence;
-    }
-
     public Apartment(@NonNull Long id, boolean isActive, @NonNull String name, @NonNull List<Room> rooms, @NonNull List<Scene> scenes,
                      @NonNull List<Gateway> associatedGateways, @Nullable Geofence geofence) {
         this.id = id;
@@ -102,6 +82,11 @@ public class Apartment {
         this.scenes = scenes;
         this.associatedGateways = associatedGateways;
         this.geofence = geofence;
+    }
+
+    public Apartment(@NonNull Long id, boolean isActive, @NonNull String name, @NonNull List<Gateway> associatedGateways,
+                     @Nullable Geofence geofence) {
+        this(id, isActive, name, Collections.EMPTY_LIST, Collections.EMPTY_LIST, associatedGateways, geofence);
     }
 
     /**

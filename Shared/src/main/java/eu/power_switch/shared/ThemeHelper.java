@@ -35,14 +35,15 @@ public class ThemeHelper {
      *
      * @param context Activity context
      * @param attr    Attribute ressource ID
+     *
      * @return Color as Int
      */
     @ColorInt
     public static int getThemeAttrColor(@NonNull Context context, @AttrRes int attr) {
         TypedValue typedValue = new TypedValue();
-        if (context.getTheme().resolveAttribute(attr, typedValue, true)) {
-            if (typedValue.type >= TypedValue.TYPE_FIRST_INT
-                    && typedValue.type <= TypedValue.TYPE_LAST_INT) {
+        if (context.getTheme()
+                .resolveAttribute(attr, typedValue, true)) {
+            if (typedValue.type >= TypedValue.TYPE_FIRST_INT && typedValue.type <= TypedValue.TYPE_LAST_INT) {
                 return typedValue.data;
             } else if (typedValue.type == TypedValue.TYPE_STRING) {
                 return ContextCompat.getColor(context, typedValue.resourceId);

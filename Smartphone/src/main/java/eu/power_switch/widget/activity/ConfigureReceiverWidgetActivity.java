@@ -65,8 +65,8 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     private List<Apartment> apartmentList = new ArrayList<>();
 
     private ArrayList<String> apartmentNameList = new ArrayList<>();
-    private ArrayList<String> roomNameList = new ArrayList<>();
-    private ArrayList<String> receiverNameList = new ArrayList<>();
+    private ArrayList<String> roomNameList      = new ArrayList<>();
+    private ArrayList<String> receiverNameList  = new ArrayList<>();
 
     private ArrayAdapter<String> adapterApartments;
     private ArrayAdapter<String> adapterRooms;
@@ -85,8 +85,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         spinnerRoom = (Spinner) findViewById(R.id.Spinner_widgetRoom);
         spinnerReceiver = (Spinner) findViewById(R.id.spinner_widgetSwitch);
 
-        adapterApartments = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
+        adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
         adapterApartments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerApartment.setAdapter(adapterApartments);
         SpinnerInteractionListener apartmentSpinnerInteractionListener = new SpinnerInteractionListener() {
@@ -98,8 +97,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         spinnerApartment.setOnItemSelectedListener(apartmentSpinnerInteractionListener);
         spinnerApartment.setOnTouchListener(apartmentSpinnerInteractionListener);
 
-        adapterRooms = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_dropdown_item, roomNameList);
+        adapterRooms = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, roomNameList);
         adapterRooms.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerRoom.setAdapter(adapterRooms);
         SpinnerInteractionListener roomSpinnerInteractionListener = new SpinnerInteractionListener() {
@@ -111,8 +109,7 @@ public class ConfigureReceiverWidgetActivity extends Activity {
         spinnerRoom.setOnItemSelectedListener(roomSpinnerInteractionListener);
         spinnerRoom.setOnTouchListener(roomSpinnerInteractionListener);
 
-        adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this,
-                android.R.layout.simple_spinner_dropdown_item, receiverNameList);
+        adapterReceiver = new ArrayAdapter<>(ConfigureReceiverWidgetActivity.this, android.R.layout.simple_spinner_dropdown_item, receiverNameList);
         adapterReceiver.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerReceiver.setAdapter(adapterReceiver);
 
@@ -154,7 +151,8 @@ public class ConfigureReceiverWidgetActivity extends Activity {
 
                 // Abort if no rooms are defined in main app
                 if (receiverNameList.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_receiver_in_main_app), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.please_define_receiver_in_main_app), Toast.LENGTH_LONG)
+                            .show();
                     finish();
                 }
             }
@@ -166,7 +164,8 @@ public class ConfigureReceiverWidgetActivity extends Activity {
     }
 
     private Room getSelectedRoom() throws Exception {
-        return getSelectedApartment().getRoom(spinnerRoom.getSelectedItem().toString());
+        return getSelectedApartment().getRoom(spinnerRoom.getSelectedItem()
+                .toString());
     }
 
     private void updateRoomList() {
@@ -213,21 +212,20 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                 int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
                 // Perform your App Widget configuration:
                 Apartment selectedApartment = getSelectedApartment();
-                Room selectedRoom = selectedApartment.getRoom(spinnerRoom.getSelectedItem().toString());
-                Receiver selectedReceiver = selectedRoom.getReceiver(spinnerReceiver.getSelectedItem().toString());
+                Room selectedRoom = selectedApartment.getRoom(spinnerRoom.getSelectedItem()
+                        .toString());
+                Receiver selectedReceiver = selectedRoom.getReceiver(spinnerReceiver.getSelectedItem()
+                        .toString());
 
                 // save new widget data to database
-                ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId,
-                        selectedRoom.getId(), selectedReceiver.getId());
+                ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId, selectedRoom.getId(), selectedReceiver.getId());
                 DatabaseHandler.addReceiverWidget(receiverWidget);
                 // When the configuration is complete, get an instance of
                 // the AppWidgetManager by calling getInstance(Context):
-                AppWidgetManager appWidgetManager = AppWidgetManager
-                        .getInstance(ConfigureReceiverWidgetActivity.this);
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ConfigureReceiverWidgetActivity.this);
                 // Update the App Widget with a RemoteViews layout by
                 // calling updateAppWidget(int, RemoteViews):
-                RemoteViews remoteViews = new RemoteViews(
-                        getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
+                RemoteViews remoteViews = new RemoteViews(getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
 
                 LinkedList<Button> buttons = selectedReceiver.getButtons();
 
@@ -237,20 +235,28 @@ public class ConfigureReceiverWidgetActivity extends Activity {
                 int buttonOffset = 0;
                 for (Button button : buttons) {
                     // set button action
-                    RemoteViews buttonView = new RemoteViews(
-                            getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
+                    RemoteViews buttonView = new RemoteViews(getString(eu.power_switch.shared.R.string.PACKAGE_NAME),
+                            R.layout.widget_receiver_button_layout);
                     SpannableString s = new SpannableString(button.getName());
-                    s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
+                    s.setSpan(new StyleSpan(Typeface.BOLD),
+                            0,
+                            button.getName()
+                                    .length(),
+                            0);
                     buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                    if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) &&
-                            selectedReceiver.getLastActivatedButtonId().equals(button.getId())) {
+                    if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && selectedReceiver.getLastActivatedButtonId()
+                            .equals(button.getId())) {
                         buttonView.setTextColor(R.id.button_widget_universal,
                                 ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));
                     }
 
-                    PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(), selectedApartment, selectedRoom,
-                            selectedReceiver, button, appWidgetId * 15 + buttonOffset);
+                    PendingIntent pendingIntent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(getApplicationContext(),
+                            selectedApartment,
+                            selectedRoom,
+                            selectedReceiver,
+                            button,
+                            appWidgetId * 15 + buttonOffset);
 
                     buttonView.setOnClickPendingIntent(R.id.button_widget_universal, pendingIntent);
 

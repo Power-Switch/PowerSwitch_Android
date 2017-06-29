@@ -27,7 +27,7 @@ public class GeofenceConstants {
 
     // Tabs
     public static final int APARTMENTS_TAB_INDEX = 0;
-    public static final int CUSTOM_TAB_INDEX = 1;
+    public static final int CUSTOM_TAB_INDEX     = 1;
 
     public static final int DEFAULT_LOITERING_DELAY = 30;
 

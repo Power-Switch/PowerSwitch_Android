@@ -41,13 +41,12 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
 
     // Store a member variable for the users
     private ArrayList<Scene> scenes;
-    private Context context;
-    private DataApiHandler dataApiHandler;
-    private RecyclerView parentRecyclerView;
+    private Context          context;
+    private DataApiHandler   dataApiHandler;
+    private RecyclerView     parentRecyclerView;
 
     // Pass in the context and users array into the constructor
-    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Scene> scenes,
-                                    DataApiHandler dataApiHandler) {
+    public SceneRecyclerViewAdapter(Context context, RecyclerView parentRecyclerView, ArrayList<Scene> scenes, DataApiHandler dataApiHandler) {
         this.scenes = scenes;
         this.context = context;
         this.parentRecyclerView = parentRecyclerView;
@@ -103,9 +102,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        public TextView sceneName;
+        public TextView              sceneName;
         public android.widget.Button buttonActivate;
-        public LinearLayout footer;
+        public LinearLayout          footer;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview

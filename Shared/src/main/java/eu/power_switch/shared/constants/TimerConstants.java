@@ -27,7 +27,7 @@ public class TimerConstants {
 
     // Timer
     public static final String TIMER_ACTIVATION_INTENT = "eu.power_switch.alarm";
-    public static final String TIMER_URI_SCHEME = "timer";
+    public static final String TIMER_URI_SCHEME        = "timer";
 
     /**
      * Private Constructor

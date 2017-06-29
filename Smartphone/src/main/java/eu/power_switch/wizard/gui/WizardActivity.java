@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.activity;
+package eu.power_switch.wizard.gui;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,15 +29,6 @@ import android.support.v7.app.AlertDialog;
 import com.github.paolorotolo.appintro.AppIntro;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.wizard.AdvancedFeaturesPage;
-import eu.power_switch.gui.fragment.wizard.ApartmentsPage;
-import eu.power_switch.gui.fragment.wizard.FinishPage;
-import eu.power_switch.gui.fragment.wizard.RoomsScenesPage;
-import eu.power_switch.gui.fragment.wizard.SetupApartmentPage;
-import eu.power_switch.gui.fragment.wizard.SetupGatewayPage;
-import eu.power_switch.gui.fragment.wizard.SetupRoomPage;
-import eu.power_switch.gui.fragment.wizard.TimerAlarmClockPage;
-import eu.power_switch.gui.fragment.wizard.WelcomePage;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
@@ -49,10 +40,13 @@ public class WizardActivity extends AppIntro {
 
     private static final int INITIAL_SETUP_PAGE_INDEX = 5;
 
+    private final ConfigurationHolder configurationHolder = new ConfigurationHolder();
+
     /**
      * Get launch Intent for the Wizard
      *
      * @param context application context
+     *
      * @return intent
      */
     public static Intent getLaunchIntent(Context context) {
@@ -76,9 +70,9 @@ public class WizardActivity extends AppIntro {
         addSlide(AdvancedFeaturesPage.newInstance());
 
         // initial setup pages
-        addSlide(SetupApartmentPage.newInstance());
-        addSlide(SetupRoomPage.newInstance());
-        addSlide(SetupGatewayPage.newInstance());
+        addSlide(SetupApartmentPage.newInstance(configurationHolder));
+        addSlide(SetupRoomPage.newInstance(configurationHolder));
+        addSlide(SetupGatewayPage.newInstance(configurationHolder));
 
         // finish page
         addSlide(FinishPage.newInstance());
@@ -138,6 +132,9 @@ public class WizardActivity extends AppIntro {
 
         if (newFragment instanceof FinishPage) {
             FinishPage finishPage = (FinishPage) newFragment;
+
+            configurationHolder.writeToDatabase();
+
             finishPage.onSuccess(R.string.wizard_finish_success);
             finishPage.onFailure(R.string.wizard_finish_failure);
         }
@@ -148,8 +145,7 @@ public class WizardActivity extends AppIntro {
         if (pager == null) {
             super.onBackPressed();
         } else if (pager.getCurrentItem() <= 0) {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.wizard_close)
+            new AlertDialog.Builder(this).setTitle(R.string.wizard_close)
                     .setMessage(R.string.wizard_close_message)
                     .setNeutralButton(android.R.string.cancel, null)
                     .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {

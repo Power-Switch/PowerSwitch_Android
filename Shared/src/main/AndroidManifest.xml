@@ -17,8 +17,8 @@
   -->
 
 <manifest
-    package="eu.power_switch.shared"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="eu.power_switch.shared">
 
     <application android:allowBackup="true"/>
 

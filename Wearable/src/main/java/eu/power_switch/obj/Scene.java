@@ -20,24 +20,24 @@ package eu.power_switch.obj;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Created by Markus on 11.07.2015.
  */
+@AllArgsConstructor
+@Getter
 public class Scene implements Serializable {
 
+    /**
+     * Scene id
+     */
     private long id;
+
+    /**
+     * Scene name
+     */
     private String name;
 
-    public Scene(long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

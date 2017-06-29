@@ -65,13 +65,10 @@ public class PowerSwitchWear extends Application {
 
         // Configure Fabric
         Fabric.with(this,
-                new Crashlytics.Builder().core(
-                        new CrashlyticsCore.Builder()
-                                .disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds
-                                .build())
+                new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds
+                        .build())
                         .build(),
-                new Answers()
-        );
+                new Answers());
 
         // One time initialization of handlers for static access
         WearablePreferencesHandler.init(this);

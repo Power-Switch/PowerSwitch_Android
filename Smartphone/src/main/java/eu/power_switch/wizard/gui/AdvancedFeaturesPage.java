@@ -16,24 +16,23 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.os.Bundle;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.IconicsHelper;
 
 /**
- * Setup page for entering a Apartment name
+ * "Advanced" page explaining the possibilities with Geofences, NFC and the locale Plugin
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public class SetupApartmentPage extends SingleLineTextInputPage {
+public class AdvancedFeaturesPage extends BasicPage {
 
-    private boolean isValid = false;
-
-    public static SetupApartmentPage newInstance() {
-        Bundle args = new Bundle();
-        SetupApartmentPage fragment = new SetupApartmentPage();
+    public static AdvancedFeaturesPage newInstance() {
+        Bundle               args     = new Bundle();
+        AdvancedFeaturesPage fragment = new AdvancedFeaturesPage();
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,35 +40,14 @@ public class SetupApartmentPage extends SingleLineTextInputPage {
     @Override
     protected void onSetUiValues() {
         super.onSetUiValues();
-
-        setTitle(R.string.configure_apartment);
-        setHint(R.string.wizard_setup_apartment_hint_home);
-        setDescription(R.string.wizard_setup_apartment_explanation);
+        setIcon(IconicsHelper.getNfcIcon(getActivity()));
+        setTitle(R.string.wizard_advanced_features_title);
+        setDescription(R.string.wizard_advanced_features_description);
     }
 
     @Override
     public int getDefaultBackgroundColor() {
-        return getResources().getColor(R.color.md_blue_700);
-    }
-
-    @Override
-    public void onInputChanged(CharSequence s, int start, int before, int count) {
-        if (s.length() <= 0) {
-            isValid = false;
-        } else {
-            isValid = true;
-        }
-    }
-
-    @Override
-    public boolean isPolicyRespected() {
-        return isValid;
-    }
-
-    @Override
-    public void onUserIllegallyRequestedNextPage() {
-        flashBackground(R.color.color_red_a700, 1000);
-        showErrorMessage(getString(R.string.please_enter_name));
+        return getResources().getColor(R.color.md_red_700);
     }
 
 }

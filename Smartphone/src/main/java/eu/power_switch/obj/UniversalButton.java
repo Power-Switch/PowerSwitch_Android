@@ -20,11 +20,13 @@ package eu.power_switch.obj;
 
 import eu.power_switch.obj.button.Button;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
  * Created by Markus on 28.08.2015.
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @ToString
 public class UniversalButton extends Button {

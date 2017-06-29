@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -93,8 +93,7 @@ public abstract class WizardPage extends Fragment implements ISlideBackgroundCol
      * @param durationMilliseconds time window from normal to flash to normal color in milliseconds
      */
     protected void flashBackground(@ColorRes int flashColor, int durationMilliseconds) {
-        ValueAnimator colorAnimator = ValueAnimator.ofObject(
-                new ArgbEvaluator(), getResources().getColor(flashColor), getDefaultBackgroundColor());
+        ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), getResources().getColor(flashColor), getDefaultBackgroundColor());
         colorAnimator.setDuration(durationMilliseconds);
         colorAnimator.setInterpolator(new DecelerateInterpolator());
         colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -112,7 +111,8 @@ public abstract class WizardPage extends Fragment implements ISlideBackgroundCol
      * @param messageRes error message resource
      */
     protected void showErrorMessage(@StringRes int messageRes) {
-        Snackbar.make(getMainView(), messageRes, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getMainView(), messageRes, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     /**
@@ -121,6 +121,7 @@ public abstract class WizardPage extends Fragment implements ISlideBackgroundCol
      * @param message error message
      */
     protected void showErrorMessage(String message) {
-        Snackbar.make(getMainView(), message, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(getMainView(), message, Snackbar.LENGTH_LONG)
+                .show();
     }
 }

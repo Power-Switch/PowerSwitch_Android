@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,20 +48,21 @@ import eu.power_switch.shared.log.Log;
  * <p>
  * Created by Markus on 05.11.2016.
  */
-public class SetupGatewayPage extends WizardPage {
+public class SetupGatewayPage extends ConfigurationPage {
 
     private LinearLayout layoutLoading;
 
     private ArrayList<Gateway> foundGateways = new ArrayList<>();
-    private RecyclerView recyclerViewGateways;
+    private RecyclerView                     recyclerViewGateways;
     private WizardGatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
-    private TextView textViewEmpty;
-    private IconicsImageView refreshIcon;
+    private TextView                         textViewEmpty;
+    private IconicsImageView                 refreshIcon;
 
-    public static SetupGatewayPage newInstance() {
-        Bundle args = new Bundle();
+    public static SetupGatewayPage newInstance(ConfigurationHolder configurationHolder) {
+        Bundle           args     = new Bundle();
         SetupGatewayPage fragment = new SetupGatewayPage();
         fragment.setArguments(args);
+        fragment.setConfigurationHolder(configurationHolder);
         return fragment;
     }
 
@@ -131,8 +132,10 @@ public class SetupGatewayPage extends WizardPage {
 
                 if (foundGateways.isEmpty()) {
                     showEmpty();
+                    setValid(false);
                 } else {
                     showResult();
+                    setValid(true);
                 }
 
                 refreshIcon.clearAnimation();

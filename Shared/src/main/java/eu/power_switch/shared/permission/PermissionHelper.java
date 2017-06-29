@@ -66,7 +66,8 @@ public class PermissionHelper {
         intent.putExtra(PermissionConstants.KEY_PERMISSIONS, permissions);
         intent.putExtra(PermissionConstants.KEY_RESULTS, grantResults);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     /**
@@ -91,8 +92,7 @@ public class PermissionHelper {
             }
         }
 
-        new AlertDialog.Builder(activity)
-                .setTitle(R.string.missing_permission)
+        new AlertDialog.Builder(activity).setTitle(R.string.missing_permission)
                 .setMessage(message)
                 .setPositiveButton(R.string.grant, new DialogInterface.OnClickListener() {
                     @Override
@@ -109,13 +109,14 @@ public class PermissionHelper {
      *
      * @param context    any suitable context
      * @param permission permission constant string
+     *
      * @return Name of permission, permission constant if no matching permission was found
      */
     public static String getPermissionName(@NonNull Context context, @NonNull String permission) {
         PackageManager packageManager = context.getPackageManager();
 
         try {
-            PermissionInfo permissionInfo = packageManager.getPermissionInfo(permission, PackageManager.GET_META_DATA);
+            PermissionInfo      permissionInfo      = packageManager.getPermissionInfo(permission, PackageManager.GET_META_DATA);
             PermissionGroupInfo permissionGroupInfo = packageManager.getPermissionGroupInfo(permissionInfo.group, PackageManager.GET_META_DATA);
             return String.valueOf(permissionGroupInfo.loadLabel(packageManager));
         } catch (Exception e) {
@@ -127,6 +128,7 @@ public class PermissionHelper {
      * Check if ExternalStorage write permission is available
      *
      * @param context any suitable context
+     *
      * @return true if write permission is available, false otherwise
      */
     public static boolean isWriteExternalStoragePermissionAvailable(@NonNull Context context) {
@@ -144,6 +146,7 @@ public class PermissionHelper {
      * Check if Location permission is available
      *
      * @param context any suitable context
+     *
      * @return true if location permission is available, false otherwise
      */
     public static boolean isLocationPermissionAvailable(@NonNull Context context) {
@@ -155,6 +158,7 @@ public class PermissionHelper {
      * Check if Phone permission is available
      *
      * @param context any suitable context
+     *
      * @return true if phone permission is available, false otherwise
      */
     public static boolean isPhonePermissionAvailable(@NonNull Context context) {
@@ -166,6 +170,7 @@ public class PermissionHelper {
      * Check if SMS permission is available
      *
      * @param context any suitable context
+     *
      * @return true if SMS permission is available, false otherwise
      */
     public static boolean isSmsPermissionAvailable(@NonNull Context context) {
@@ -177,6 +182,7 @@ public class PermissionHelper {
      * Check if Contact permission is available
      *
      * @param context any suitable context
+     *
      * @return true if contact permission is available, false otherwise
      */
     public static boolean isContactPermissionAvailable(@NonNull Context context) {
@@ -188,6 +194,7 @@ public class PermissionHelper {
      * Get "missing permission" message
      *
      * @param permissions permission constant(s)
+     *
      * @return string resource
      */
     @StringRes

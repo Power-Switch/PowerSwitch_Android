@@ -108,8 +108,8 @@ public class LogHandler {
 
     public static void configureInternalLogger() {
         LogConfigurator internalLogConfigurator = new LogConfigurator();
-        internalLogConfigurator.setFileName(context.getFilesDir().getParent() + File.separator +
-                LOG_FOLDER_NAME_INTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
+        internalLogConfigurator.setFileName(context.getFilesDir()
+                .getParent() + File.separator + LOG_FOLDER_NAME_INTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
         String filePattern = "%d{dd-MM-yyyy HH:mm:ss,SSS} [%-5p] %m%n";
         internalLogConfigurator.setFilePattern(filePattern);
         String logCatPattern = "[%-5p] %m%n";
@@ -137,13 +137,10 @@ public class LogHandler {
     }
 
     private static void configureExternalLogger() {
-        if (LogHandler.isExternalStorageReadable() &&
-                LogHandler.isExternalStorageWritable() &&
-                LogHandler.createExternalLogDirectory()) {
+        if (LogHandler.isExternalStorageReadable() && LogHandler.isExternalStorageWritable() && LogHandler.createExternalLogDirectory()) {
             FileAppender fileAppender = new FileAppender();
             fileAppender.setName("ExternalStorageAppender");
-            fileAppender.setFile(Environment.getExternalStorageDirectory() + File.separator +
-                    LOG_FOLDER_NAME_EXTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
+            fileAppender.setFile(Environment.getExternalStorageDirectory() + File.separator + LOG_FOLDER_NAME_EXTERNAL + File.separator + "PowerSwitch__" + getHumanReadableDate() + ".log");
             String filePattern = "%d{dd-MM-yyyy HH:mm:ss,SSS} [%-5p] %m%n";
             fileAppender.setLayout(new PatternLayout(filePattern));
             fileAppender.setThreshold(Level.ALL);
@@ -151,7 +148,8 @@ public class LogHandler {
             fileAppender.setImmediateFlush(true);
             fileAppender.activateOptions();
 
-            Logger.getRootLogger().addAppender(fileAppender);
+            Logger.getRootLogger()
+                    .addAppender(fileAppender);
 
             try {
                 LogHandler.removeOldExternalLogs();
@@ -213,9 +211,8 @@ public class LogHandler {
         }
 
         String tempZipFileName = "logs.zip";
-        String tempZipFilePath = Environment.getExternalStorageDirectory() + File.separator +
-                LOG_FOLDER_NAME_EXTERNAL + File.separator + tempZipFileName;
-        int bufferSize = 1024;
+        String tempZipFilePath = Environment.getExternalStorageDirectory() + File.separator + LOG_FOLDER_NAME_EXTERNAL + File.separator + tempZipFileName;
+        int    bufferSize      = 1024;
 
         // delete previous temp zip file
         File zipFile = new File(tempZipFilePath);
@@ -224,11 +221,11 @@ public class LogHandler {
         }
 
         BufferedInputStream origin = null;
-        FileOutputStream dest = null;
+        FileOutputStream    dest   = null;
         try {
             dest = new FileOutputStream(tempZipFilePath);
-            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-            byte data[] = new byte[bufferSize];
+            ZipOutputStream out    = new ZipOutputStream(new BufferedOutputStream(dest));
+            byte            data[] = new byte[bufferSize];
 
             for (File logFile : getInternalLogFiles()) {
                 FileInputStream fi = new FileInputStream(logFile);
@@ -282,8 +279,7 @@ public class LogHandler {
      */
     public static boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
-        return Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
+        return Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
     /**
@@ -307,13 +303,14 @@ public class LogHandler {
      */
     @NonNull
     private static List<File> getExternalLogFiles() {
-        File logFolder = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + LOG_FOLDER_NAME_EXTERNAL);
+        File logFolder = new File(Environment.getExternalStorageDirectory()
+                .getPath() + File.separator + LOG_FOLDER_NAME_EXTERNAL);
         File[] logFiles = logFolder.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                return dir.getPath().equals(
-                        Environment.getExternalStorageDirectory().getPath() + File.separator + LOG_FOLDER_NAME_EXTERNAL) &&
-                        filename.endsWith(".log");
+                return dir.getPath()
+                        .equals(Environment.getExternalStorageDirectory()
+                                .getPath() + File.separator + LOG_FOLDER_NAME_EXTERNAL) && filename.endsWith(".log");
             }
         });
 
@@ -327,13 +324,14 @@ public class LogHandler {
      */
     @NonNull
     private static List<File> getInternalLogFiles() {
-        File logFolder = new File(context.getFilesDir().getParent() + File.separator + LOG_FOLDER_NAME_INTERNAL);
+        File logFolder = new File(context.getFilesDir()
+                .getParent() + File.separator + LOG_FOLDER_NAME_INTERNAL);
         File[] logFiles = logFolder.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String filename) {
-                return dir.getPath().equals(
-                        context.getFilesDir().getParent() + File.separator + LOG_FOLDER_NAME_INTERNAL) &&
-                        filename.endsWith(".log");
+                return dir.getPath()
+                        .equals(context.getFilesDir()
+                                .getParent() + File.separator + LOG_FOLDER_NAME_INTERNAL) && filename.endsWith(".log");
             }
         });
 
@@ -360,8 +358,8 @@ public class LogHandler {
         if (throwable == null) {
             subject = "PowerSwitch Logs";
         } else {
-            subject = "Unknown Error - " + throwable.getClass().getSimpleName() +
-                    ": " + throwable.getMessage();
+            subject = "Unknown Error - " + throwable.getClass()
+                    .getSimpleName() + ": " + throwable.getMessage();
         }
 
         String content;
@@ -371,7 +369,8 @@ public class LogHandler {
             content = context.getString(R.string.send_unknown_error_log_template);
             content += "\n\n\n";
             content += "<<<<<<<<<< DEVELOPER INFOS >>>>>>>>>>\n";
-            content += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance().format(timeRaised) + "\n";
+            content += "Exception was raised at: " + SimpleDateFormat.getDateTimeInstance()
+                    .format(timeRaised) + "\n";
             content += "\n";
             content += "PowerSwitch Application Version: " + ApplicationHelper.getAppVersionDescription(context) + "\n";
             content += "Device API Level: " + android.os.Build.VERSION.SDK_INT + "\n";
@@ -421,7 +420,7 @@ public class LogHandler {
      */
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
+        String model        = Build.MODEL;
         if (model.startsWith(manufacturer)) {
             return capitalize(model);
         }
@@ -432,9 +431,9 @@ public class LogHandler {
         if (TextUtils.isEmpty(str)) {
             return str;
         }
-        char[] arr = str.toCharArray();
+        char[]  arr            = str.toCharArray();
         boolean capitalizeNext = true;
-        String phrase = "";
+        String  phrase         = "";
         for (char c : arr) {
             if (capitalizeNext && Character.isLetter(c)) {
                 phrase += Character.toUpperCase(c);
@@ -452,6 +451,7 @@ public class LogHandler {
      * Add indentation to a String with multiple lines
      *
      * @param string any text
+     *
      * @return indented string
      */
     public static String addIndentation(String string) {
@@ -461,7 +461,8 @@ public class LogHandler {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             // process the line
-            stringBuilder.append("\t").append(line);
+            stringBuilder.append("\t")
+                    .append(line);
 
             if (scanner.hasNextLine()) {
                 stringBuilder.append("\n");
@@ -473,8 +474,7 @@ public class LogHandler {
     }
 
     private static String getHumanReadableDate() {
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         return simpleDateFormat.format(new Date());
     }
 

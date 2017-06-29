@@ -50,7 +50,8 @@ public class ValueSelectorListItemLayout extends SettingsListItemLayout {
     }
 
     public void setIconVisibility(int alpha) {
-        mCircle.getImageDrawable().setAlpha(alpha);
+        mCircle.getImageDrawable()
+                .setAlpha(alpha);
         mCircle.invalidate();
         invalidate();
     }

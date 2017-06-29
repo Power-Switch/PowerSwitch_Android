@@ -26,7 +26,7 @@ package eu.power_switch.shared.constants;
 public class WearableSettingsConstants {
 
     public static final String WEARABLE_SETTINGS_CHANGED = "WEARABLE_SETTINGS_CHANGED";
-    public static final String WEARABLE_THEME_CHANGED = "WEARABLE_THEME_CHANGED";
+    public static final String WEARABLE_THEME_CHANGED    = "WEARABLE_THEME_CHANGED";
 
     /**
      * Private Constructor

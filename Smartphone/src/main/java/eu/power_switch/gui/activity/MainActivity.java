@@ -101,6 +101,7 @@ import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
+import eu.power_switch.wizard.gui.WizardActivity;
 
 /**
  * Main entry Activity for the app

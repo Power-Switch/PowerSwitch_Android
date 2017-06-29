@@ -36,10 +36,10 @@ import eu.power_switch.settings.SelectOneSettingsItem;
  * Created by Markus on 08.06.2016.
  */
 public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
-    private final LayoutInflater mInflater;
-    private Context context;
-    private ArrayList<Integer> values;
-    private SelectOneSettingsItem settingsItem;
+    private final LayoutInflater        mInflater;
+    private       Context               context;
+    private       ArrayList<Integer>    values;
+    private       SelectOneSettingsItem settingsItem;
 
     public ValueSelectorListAdapter(Context context, SelectOneSettingsItem settingsItem) {
         this.context = context;
@@ -75,7 +75,7 @@ public class ValueSelectorListAdapter<T> extends WearableListView.Adapter {
 
     public static class ItemViewHolder extends WearableListView.ViewHolder {
         public CircledImageView checkmark;
-        public TextView value;
+        public TextView         value;
 
         public ItemViewHolder(View itemView) {
             super(itemView);

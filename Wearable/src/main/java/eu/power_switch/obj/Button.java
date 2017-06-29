@@ -20,11 +20,16 @@ package eu.power_switch.obj;
 
 import java.io.Serializable;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * Represents a Button associated with a Receiver
  * <p/>
  * Created by Markus on 06.06.2015.
  */
+@AllArgsConstructor
+@Data
 public class Button implements Serializable {
 
     /**
@@ -42,61 +47,4 @@ public class Button implements Serializable {
      */
     private long receiverId;
 
-    /**
-     * Default constructor
-     *
-     * @param id
-     * @param name
-     * @param receiverId
-     */
-    public Button(long id, String name, long receiverId) {
-        this.id = id;
-        this.name = name;
-        this.receiverId = receiverId;
-    }
-
-    /**
-     * Get ID of this Button
-     *
-     * @return
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Set ID of this Button
-     *
-     * @param id
-     */
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    /**
-     * Get Name of this Button
-     *
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set Name of this Button
-     *
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Get ID of associated Receiver
-     *
-     * @return
-     */
-    public long getReceiverId() {
-        return receiverId;
-    }
 }

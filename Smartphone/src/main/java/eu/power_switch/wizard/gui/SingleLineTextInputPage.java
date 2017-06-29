@@ -16,52 +16,52 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.TextInputEditText;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mikepenz.iconics.view.IconicsImageView;
+import com.github.paolorotolo.appintro.ISlidePolicy;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.ThemeHelper;
 
 /**
- * Basic wizard page consisting of an icon, a title text and a description text
+ * Basic wizard page consisting of an icon, a title text, a text input field and a description text
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public class BasicPage extends WizardPage {
+public class SingleLineTextInputPage extends ConfigurationPage implements ISlidePolicy {
 
     protected static final String KEY_BACKGROUND_COLOR = "defaultBackgroundColor";
-    protected static final String KEY_ICON = "icon";
-    protected static final String KEY_TITLE = "titleText";
-    protected static final String KEY_DESCRIPTION = "descriptionText";
+    protected static final String KEY_TITLE            = "titleText";
+    protected static final String KEY_HINT             = "hintText";
+    protected static final String KEY_DESCRIPTION      = "descriptionText";
 
     private int defaultBackgroundColor;
 
-    private TextView title;
-    private TextView description;
-    private IconicsImageView icon;
+    private TextView          title;
+    private TextView          description;
+    private TextInputEditText input;
 
-    public static BasicPage newInstance(@ColorInt int color, @DrawableRes int icon, @StringRes int title, @StringRes int description) {
+    public static SingleLineTextInputPage newInstance(@ColorInt int color, @StringRes int title, @StringRes int hint, @StringRes int description) {
         Bundle args = new Bundle();
         args.putInt(KEY_BACKGROUND_COLOR, color);
-        args.putInt(KEY_ICON, icon);
         args.putInt(KEY_TITLE, title);
+        args.putInt(KEY_HINT, hint);
         args.putInt(KEY_DESCRIPTION, description);
-        BasicPage fragment = new BasicPage();
+        SingleLineTextInputPage fragment = new SingleLineTextInputPage();
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,8 +71,23 @@ public class BasicPage extends WizardPage {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        icon = getMainView().findViewById(R.id.icon);
         title = getMainView().findViewById(R.id.title);
+        input = getMainView().findViewById(R.id.input);
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onInputChanged(s, start, before, count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         description = getMainView().findViewById(R.id.description);
 
         onSetUiValues();
@@ -86,41 +101,41 @@ public class BasicPage extends WizardPage {
     @CallSuper
     protected void onSetUiValues() {
         Bundle arguments = getArguments();
-        if (arguments.containsKey(KEY_BACKGROUND_COLOR) && arguments.containsKey(KEY_ICON) && arguments.containsKey(KEY_TITLE) && arguments.containsKey(
+        if (arguments.containsKey(KEY_BACKGROUND_COLOR) && arguments.containsKey(KEY_TITLE) && arguments.containsKey(KEY_HINT) && arguments.containsKey(
                 KEY_DESCRIPTION)) {
             defaultBackgroundColor = arguments.getInt(KEY_BACKGROUND_COLOR, -1);
-            @DrawableRes int iconRes = arguments.getInt(KEY_ICON, -1);
-            @StringRes int titleText = arguments.getInt(KEY_TITLE, -1);
+            @StringRes int titleText       = arguments.getInt(KEY_TITLE, -1);
+            @StringRes int hintText        = arguments.getInt(KEY_HINT, -1);
             @StringRes int descriptionText = arguments.getInt(KEY_DESCRIPTION, -1);
 
             setBackgroundColor(defaultBackgroundColor);
-            setIcon(iconRes);
+            setHint(hintText);
             setTitle(titleText);
             setDescription(descriptionText);
         } else {
             defaultBackgroundColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorPrimary);
-            setIcon(R.drawable.ic_launcher_material);
             setTitle("Title");
             setDescription("Description text...");
+            setHint("example");
         }
     }
 
     /**
-     * Set icon drawable
+     * Set hint text
      *
-     * @param drawableRes drawable
+     * @param hint hint string resource
      */
-    protected void setIcon(@DrawableRes int drawableRes) {
-        setIcon(ContextCompat.getDrawable(getContext(), drawableRes));
+    public void setHint(@StringRes int hint) {
+        setHint(getString(hint));
     }
 
     /**
-     * Set icon drawable
+     * Set hint text
      *
-     * @param drawable drawable
+     * @param hint hint
      */
-    protected void setIcon(Drawable drawable) {
-        icon.setImageDrawable(drawable);
+    public void setHint(String hint) {
+        this.input.setHint(hint);
     }
 
     /**
@@ -159,15 +174,54 @@ public class BasicPage extends WizardPage {
         this.description.setText(description);
     }
 
+    /**
+     * Get the text of the input field
+     *
+     * @return
+     */
+    public String getInput() {
+        return input.getText()
+                .toString();
+    }
+
+    /**
+     * This method is called when the input changes
+     * <p>
+     * Override it if you want to change this behaviour
+     *
+     * @param s
+     * @param start
+     * @param before
+     * @param count
+     */
+    public void onInputChanged(CharSequence s, int start, int before, int count) {
+        if (s.length() <= 0) {
+            setValid(false);
+        } else {
+            setValid(true);
+        }
+    }
+
     @LayoutRes
     @Override
     protected int getLayout() {
-        return R.layout.wizard_page_basic;
+        return R.layout.wizard_page_single_line_text_input;
     }
 
     @Override
     public int getDefaultBackgroundColor() {
         return defaultBackgroundColor;
+    }
+
+    @Override
+    public boolean isPolicyRespected() {
+        return isValid();
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        flashBackground(R.color.color_red_a700, 1000);
+        showErrorMessage(getString(R.string.unknown_error));
     }
 
 }

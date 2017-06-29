@@ -61,8 +61,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, ReceiverWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
-                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
-                        ReceiverWidgetProvider.class));
+                .getAppWidgetIds(new ComponentName(context.getApplicationContext(), ReceiverWidgetProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         context.sendBroadcast(intent);
     }
@@ -85,7 +84,8 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
 
                         Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
                         // update UI
-                        remoteViews.setTextViewText(R.id.textView_receiver_widget_name, apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
+                        remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
+                                apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
 
                         LinkedList<Button> buttons = receiver.getButtons();
 
@@ -99,16 +99,23 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                             RemoteViews buttonView = new RemoteViews(context.getResources()
                                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver_button_layout);
                             SpannableString s = new SpannableString(button.getName());
-                            s.setSpan(new StyleSpan(Typeface.BOLD), 0, button.getName().length(), 0);
+                            s.setSpan(new StyleSpan(Typeface.BOLD),
+                                    0,
+                                    button.getName()
+                                            .length(),
+                                    0);
                             buttonView.setTextViewText(R.id.button_widget_universal, s);
-                            if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) &&
-                                    receiver.getLastActivatedButtonId().equals(button.getId())) {
-                                buttonView.setTextColor(R.id.button_widget_universal,
-                                        ContextCompat.getColor(context, R.color.color_light_blue_a700));
+                            if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && receiver.getLastActivatedButtonId()
+                                    .equals(button.getId())) {
+                                buttonView.setTextColor(R.id.button_widget_universal, ContextCompat.getColor(context, R.color.color_light_blue_a700));
                             }
 
-                            PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context, apartment, room,
-                                    receiver, button, appWidgetId * 15 + buttonOffset);
+                            PendingIntent intent = WidgetIntentReceiver.buildReceiverWidgetActionPendingIntent(context,
+                                    apartment,
+                                    room,
+                                    receiver,
+                                    button,
+                                    appWidgetId * 15 + buttonOffset);
                             buttonView.setOnClickPendingIntent(R.id.button_widget_universal, intent);
 
                             remoteViews.addView(R.id.linearlayout_receiver_widget, buttonView);

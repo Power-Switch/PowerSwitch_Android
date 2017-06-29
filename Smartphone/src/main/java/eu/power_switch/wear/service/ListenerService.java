@@ -61,16 +61,19 @@ public class ListenerService extends WearableListenerService {
     public void onMessageReceived(MessageEvent messageEvent) {
         LogHandler.init(getApplicationContext());
 
-        if (messageEvent.getPath().equals(WearableConstants.RECEIVER_ACTION_TRIGGER_PATH)) {
+        if (messageEvent.getPath()
+                .equals(WearableConstants.RECEIVER_ACTION_TRIGGER_PATH)) {
 
             String messageData = new String(messageEvent.getData());
             Log.d("Wear_ListenerService", "Message received: " + messageData);
 
             // trigger api intent
             parseMessage(messageData);
-        } else if (messageEvent.getPath().equals(WearableConstants.REQUEST_DATA_UPDATE_PATH)) {
+        } else if (messageEvent.getPath()
+                .equals(WearableConstants.REQUEST_DATA_UPDATE_PATH)) {
             UtilityService.forceWearDataUpdate(this);
-        } else if (messageEvent.getPath().equals(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH)) {
+        } else if (messageEvent.getPath()
+                .equals(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH)) {
             UtilityService.forceWearSettingsUpdate(this);
         }
     }
@@ -86,11 +89,10 @@ public class ListenerService extends WearableListenerService {
             Long receiverId;
             Long buttonId;
 
-            if (messageData.contains(WearableConstants.KEY_ROOM_ID) &&
-                    messageData.contains(WearableConstants.KEY_RECEIVER_ID) &&
-                    messageData.contains(WearableConstants.KEY_BUTTON_ID)) {
+            if (messageData.contains(WearableConstants.KEY_ROOM_ID) && messageData.contains(WearableConstants.KEY_RECEIVER_ID) && messageData.contains(
+                    WearableConstants.KEY_BUTTON_ID)) {
                 int start = messageData.indexOf(WearableConstants.KEY_ROOM_ID) + WearableConstants.KEY_ROOM_ID.length();
-                int stop = messageData.indexOf(WearableConstants.KEY_RECEIVER_ID);
+                int stop  = messageData.indexOf(WearableConstants.KEY_RECEIVER_ID);
                 roomId = Long.valueOf(messageData.substring(start, stop));
                 start = stop + WearableConstants.KEY_RECEIVER_ID.length();
                 stop = messageData.indexOf(WearableConstants.KEY_BUTTON_ID);
@@ -99,15 +101,14 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
-                Room room = DatabaseHandler.getRoom(roomId);
+                Room     room     = DatabaseHandler.getRoom(roomId);
                 Receiver receiver = room.getReceiver(receiverId);
-                Button button = receiver.getButton(buttonId);
+                Button   button   = receiver.getButton(buttonId);
 
                 ActionHandler.execute(getApplicationContext(), receiver, button);
-            } else if (messageData.contains(WearableConstants.KEY_ROOM_ID) &&
-                    messageData.contains(WearableConstants.KEY_BUTTON_ID)) {
+            } else if (messageData.contains(WearableConstants.KEY_ROOM_ID) && messageData.contains(WearableConstants.KEY_BUTTON_ID)) {
                 int start = messageData.indexOf(WearableConstants.KEY_ROOM_ID) + WearableConstants.KEY_ROOM_ID.length();
-                int stop = messageData.indexOf(WearableConstants.KEY_BUTTON_ID);
+                int stop  = messageData.indexOf(WearableConstants.KEY_BUTTON_ID);
                 roomId = Long.valueOf(messageData.substring(start, stop));
                 start = stop + WearableConstants.KEY_BUTTON_ID.length();
                 stop = messageData.indexOf(";;");
@@ -117,8 +118,8 @@ public class ListenerService extends WearableListenerService {
 
                 ActionHandler.execute(getApplicationContext(), room, buttonId);
             } else if (messageData.contains(WearableConstants.KEY_SCENE_ID)) {
-                int start = messageData.indexOf(WearableConstants.KEY_SCENE_ID) + WearableConstants.KEY_SCENE_ID.length();
-                int stop = messageData.indexOf(";;");
+                int  start   = messageData.indexOf(WearableConstants.KEY_SCENE_ID) + WearableConstants.KEY_SCENE_ID.length();
+                int  stop    = messageData.indexOf(";;");
                 Long sceneId = Long.valueOf(messageData.substring(start, stop));
 
                 Scene scene = DatabaseHandler.getScene(sceneId);
@@ -127,8 +128,7 @@ public class ListenerService extends WearableListenerService {
             }
         } catch (Exception e) {
             Log.e("parseMessage", e);
-            StatusMessageHandler.showInfoMessage(getApplicationContext(),
-                    R.string.error_executing_wear_action, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.error_executing_wear_action, Snackbar.LENGTH_LONG);
         }
     }
 
@@ -146,7 +146,9 @@ public class ListenerService extends WearableListenerService {
         for (DataEvent event : events) {
             if (event.getDataItem() != null) {
                 if (event.getType() == DataEvent.TYPE_CHANGED) {
-                    if (WearableConstants.SETTINGS_PATH.equals(event.getDataItem().getUri().getPath())) {
+                    if (WearableConstants.SETTINGS_PATH.equals(event.getDataItem()
+                            .getUri()
+                            .getPath())) {
                         DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                         ArrayList<DataMap> settings = dataMapItem.getDataMap()
                                 .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);

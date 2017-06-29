@@ -16,31 +16,23 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.obj;
+package eu.power_switch.wizard.gui;
 
-import java.io.Serializable;
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * Created by Markus on 06.06.2015.
+ * Created by Markus on 27.06.2017.
  */
-@AllArgsConstructor
-@Data
-public class Room implements Serializable {
+public abstract class ConfigurationPage extends WizardPage {
 
-    private long id;
-    private String name;
-    private List<Receiver> receivers;
+    @Getter
+    protected ConfigurationHolder configurationHolder;
+
+    @Getter
+    @Setter
     /**
-     * Specifies if this room should be rendered collapsed
-     */
-    private boolean collapsed;
-
-    public void addReceiver(Receiver receiver) {
-        receivers.add(receiver);
-    }
+     * The current validity of this page
+     */ private boolean isValid = false;
 
 }

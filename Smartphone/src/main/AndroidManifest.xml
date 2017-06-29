@@ -59,7 +59,7 @@
 
 
         <activity
-            android:name=".gui.activity.WizardActivity"
+            android:name=".wizard.gui.WizardActivity"
             android:theme="@style/WizardTheme"/>
         <!-- The SplashTheme is just used for the initial SpashScreen Background.
              The real Theme is loaded in onCreate of the Activity

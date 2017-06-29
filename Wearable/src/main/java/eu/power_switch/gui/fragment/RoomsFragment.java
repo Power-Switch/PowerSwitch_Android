@@ -50,13 +50,13 @@ public class RoomsFragment extends Fragment {
 
     private static final String REFRESH_VIEW = "eu.power_switch.rooms.refresh_view";
 
-    private RecyclerView roomsRecyclerView;
+    private RecyclerView            roomsRecyclerView;
     private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
-    private DataApiHandler dataApiHandler;
+    private DataApiHandler          dataApiHandler;
 
     private BroadcastReceiver broadcastReceiver;
-    private LinearLayout layoutLoading;
-    private LinearLayout layoutEmpty;
+    private LinearLayout      layoutLoading;
+    private LinearLayout      layoutEmpty;
 
     /**
      * Used to notify Rooms Fragment (this) that data has changed
@@ -66,7 +66,8 @@ public class RoomsFragment extends Fragment {
     public static void notifyDataChanged(Context context) {
         Intent intent = new Intent(REFRESH_VIEW);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
@@ -96,12 +97,10 @@ public class RoomsFragment extends Fragment {
         layoutEmpty.setVisibility(View.GONE);
 
         roomsRecyclerView = (RecyclerView) rootView.findViewById(R.id.rooms_recyclerView);
-        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getActivity(), roomsRecyclerView,
-                MainActivity.roomList, dataApiHandler);
+        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getActivity(), roomsRecyclerView, MainActivity.roomList, dataApiHandler);
         roomsRecyclerView.setAdapter(roomsRecyclerViewAdapter);
 
-        SnappingLinearLayoutManager layoutManager = new SnappingLinearLayoutManager(getActivity(),
-                LinearLayoutManager.VERTICAL, false);
+        SnappingLinearLayoutManager layoutManager = new SnappingLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         roomsRecyclerView.setLayoutManager(layoutManager);
 
         if (MainActivity.isInitialized()) {
@@ -134,7 +133,8 @@ public class RoomsFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(REFRESH_VIEW);
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -143,7 +143,8 @@ public class RoomsFragment extends Fragment {
             dataApiHandler.disconnect();
         }
 
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

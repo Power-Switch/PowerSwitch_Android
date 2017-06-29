@@ -36,11 +36,11 @@ import android.util.SparseIntArray;
 @TargetApi(21)
 public class ConfirmationActivityClone extends Activity implements ConfirmationOverlay.FinishedAnimationListener {
 
-    public static final String EXTRA_MESSAGE = "android.support.wearable.activity.extra.MESSAGE";
-    public static final String EXTRA_ANIMATION_TYPE = "android.support.wearable.activity.extra.ANIMATION_TYPE";
-    public static final int SUCCESS_ANIMATION = 1;
-    public static final int OPEN_ON_PHONE_ANIMATION = 2;
-    public static final int FAILURE_ANIMATION = 3;
+    public static final  String         EXTRA_MESSAGE              = "android.support.wearable.activity.extra.MESSAGE";
+    public static final  String         EXTRA_ANIMATION_TYPE       = "android.support.wearable.activity.extra.ANIMATION_TYPE";
+    public static final  int            SUCCESS_ANIMATION          = 1;
+    public static final  int            OPEN_ON_PHONE_ANIMATION    = 2;
+    public static final  int            FAILURE_ANIMATION          = 3;
     private static final SparseIntArray CONFIRMATION_OVERLAY_TYPES = new SparseIntArray();
 
     static {
@@ -55,14 +55,14 @@ public class ConfirmationActivityClone extends Activity implements ConfirmationO
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTheme(android.support.wearable.R.style.ConfirmationActivity);
-        Intent intent = this.getIntent();
-        int requestedType = intent.getIntExtra("android.support.wearable.activity.extra.ANIMATION_TYPE", SUCCESS_ANIMATION);
+        Intent intent        = this.getIntent();
+        int    requestedType = intent.getIntExtra("android.support.wearable.activity.extra.ANIMATION_TYPE", SUCCESS_ANIMATION);
         if (CONFIRMATION_OVERLAY_TYPES.indexOfKey(requestedType) < 0) {
             throw new IllegalArgumentException((new StringBuilder(38)).append("Unknown type of animation: ")
                     .append(requestedType)
                     .toString());
         } else {
-            int type = CONFIRMATION_OVERLAY_TYPES.get(requestedType);
+            int    type    = CONFIRMATION_OVERLAY_TYPES.get(requestedType);
             String message = intent.getStringExtra("android.support.wearable.activity.extra.MESSAGE");
             (new ConfirmationOverlay()).setType(type)
                     .setMessage(message)

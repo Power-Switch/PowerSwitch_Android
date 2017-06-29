@@ -16,38 +16,44 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.os.Bundle;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.IconicsHelper;
 
 /**
- * Rooms/Scenes page explaining the rooms and scenes functionality
+ * Setup Page for entering a Room name
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public class RoomsScenesPage extends BasicPage {
+public class SetupRoomPage extends SingleLineTextInputPage {
 
-    public static RoomsScenesPage newInstance() {
-        Bundle args = new Bundle();
-        RoomsScenesPage fragment = new RoomsScenesPage();
+    public static SetupRoomPage newInstance(ConfigurationHolder configurationHolder) {
+        Bundle        args     = new Bundle();
+        SetupRoomPage fragment = new SetupRoomPage();
         fragment.setArguments(args);
+        fragment.setConfigurationHolder(configurationHolder);
         return fragment;
     }
 
     @Override
     protected void onSetUiValues() {
         super.onSetUiValues();
-        setIcon(IconicsHelper.getRoomsScenesIcon(getActivity()));
-        setTitle(R.string.wizard_rooms_scenes_title);
-        setDescription(R.string.wizard_rooms_scenes_description);
+
+        setTitle(R.string.configure_room);
+        setHint(R.string.wizard_setup_room_hint);
+        setDescription(R.string.wizard_setup_room_description);
     }
 
     @Override
     public int getDefaultBackgroundColor() {
-        return getResources().getColor(R.color.md_red_700);
+        return getResources().getColor(R.color.md_yellow_800);
     }
 
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        flashBackground(R.color.color_red_a700, 1000);
+        showErrorMessage(getString(R.string.please_enter_name));
+    }
 }

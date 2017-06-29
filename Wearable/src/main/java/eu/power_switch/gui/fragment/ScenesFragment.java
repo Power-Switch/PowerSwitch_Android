@@ -50,13 +50,13 @@ public class ScenesFragment extends Fragment {
 
     private static final String REFRESH_VIEW = "eu.power_switch.scenes.refresh_view";
 
-    private RecyclerView scenesRecyclerView;
+    private RecyclerView             scenesRecyclerView;
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
-    private DataApiHandler dataApiHandler;
+    private DataApiHandler           dataApiHandler;
 
     private BroadcastReceiver broadcastReceiver;
-    private LinearLayout layoutLoading;
-    private LinearLayout layoutEmpty;
+    private LinearLayout      layoutLoading;
+    private LinearLayout      layoutEmpty;
 
     /**
      * Used to notify Scenes Fragment (this) that data has changed
@@ -66,7 +66,8 @@ public class ScenesFragment extends Fragment {
     public static void notifyDataChanged(Context context) {
         Intent intent = new Intent(REFRESH_VIEW);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
@@ -96,12 +97,10 @@ public class ScenesFragment extends Fragment {
         layoutEmpty.setVisibility(View.GONE);
 
         scenesRecyclerView = (RecyclerView) rootView.findViewById(R.id.scenes_recyclerView);
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(), scenesRecyclerView,
-                MainActivity.sceneList, dataApiHandler);
+        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(), scenesRecyclerView, MainActivity.sceneList, dataApiHandler);
         scenesRecyclerView.setAdapter(sceneRecyclerViewAdapter);
 
-        SnappingLinearLayoutManager layoutManager = new SnappingLinearLayoutManager(getActivity(),
-                LinearLayoutManager.VERTICAL, false);
+        SnappingLinearLayoutManager layoutManager = new SnappingLinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         scenesRecyclerView.setLayoutManager(layoutManager);
 
         if (MainActivity.isInitialized()) {
@@ -134,7 +133,8 @@ public class ScenesFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(REFRESH_VIEW);
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -143,7 +143,8 @@ public class ScenesFragment extends Fragment {
             dataApiHandler.disconnect();
         }
 
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

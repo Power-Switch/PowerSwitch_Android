@@ -29,10 +29,10 @@ public class DeveloperSettingsConstants {
     public static final String DEVELOPER_SHARED_PREFS_NAME = "eu.power_switch.developer.prefs";
 
     // developer settings
-    public static final String KEY_PLAY_STORE_MODE = "playStoreMode";
-    public static final String KEY_FORCE_LANGUAGE = "forceLanguage";
+    public static final String KEY_PLAY_STORE_MODE     = "playStoreMode";
+    public static final String KEY_FORCE_LANGUAGE      = "forceLanguage";
     public static final String KEY_FORCE_ENABLE_FABRIC = "forceEnableFabric";
-    public static final String KEY_LOCALE = "locale";
+    public static final String KEY_LOCALE              = "locale";
 
     /**
      * Private Constructor

@@ -19,14 +19,18 @@
 package eu.power_switch.obj;
 
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * Represents a Receiver
  * <p/>
  * Created by Markus on 06.06.2015.
  */
+@AllArgsConstructor
+@Data
 public class Receiver implements Serializable {
 
     /**
@@ -59,59 +63,7 @@ public class Receiver implements Serializable {
      */
     private long lastActivatedButtonId;
 
-    /**
-     * Default constructor
-     *
-     * @param id
-     * @param name
-     * @param roomId ID of the Room this Receiver is contained in
-     */
-    public Receiver(long id, String name, long roomId, long lastActivatedButtonId, int positionInRoom) {
-        this.id = id;
-        this.name = name;
-        this.roomId = roomId;
-        this.buttons = new LinkedList<>();
-        this.lastActivatedButtonId = lastActivatedButtonId;
-        this.positionInRoom = positionInRoom;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Button> getButtons() {
-        return buttons;
-    }
-
     public void addButton(Button button) {
         buttons.add(button);
-    }
-
-    public long getRoomId() {
-        return roomId;
-    }
-
-    public long getLastActivatedButtonId() {
-        return lastActivatedButtonId;
-    }
-
-    public void setLastActivatedButtonId(long lastActivatedButtonId) {
-        this.lastActivatedButtonId = lastActivatedButtonId;
-    }
-
-    public int getPositionInRoom() {
-        return positionInRoom;
     }
 }

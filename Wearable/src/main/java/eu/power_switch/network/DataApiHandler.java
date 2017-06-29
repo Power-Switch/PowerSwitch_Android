@@ -49,10 +49,10 @@ import eu.power_switch.shared.wearable.CommunicationHelper;
  */
 public class DataApiHandler {
 
-    private static GoogleApiClient googleApiClient;
-    protected boolean googleApiClientIsConnected;
-    private MessageApiHandler messageApiHandler;
-    private Context context;
+    private static GoogleApiClient   googleApiClient;
+    protected      boolean           googleApiClientIsConnected;
+    private        MessageApiHandler messageApiHandler;
+    private        Context           context;
 
     public DataApiHandler(Context context) {
         this.context = context;
@@ -61,15 +61,12 @@ public class DataApiHandler {
 
     @NonNull
     public static String buildReceiverActionString(Room room, Receiver receiver, Button button) {
-        return WearableConstants.KEY_ROOM_ID + room.getId() +
-                WearableConstants.KEY_RECEIVER_ID + receiver.getId() +
-                WearableConstants.KEY_BUTTON_ID + button.getId() + ";;";
+        return WearableConstants.KEY_ROOM_ID + room.getId() + WearableConstants.KEY_RECEIVER_ID + receiver.getId() + WearableConstants.KEY_BUTTON_ID + button.getId() + ";;";
     }
 
     @NonNull
     public static String buildRoomActionString(Room room, Long buttonId) {
-        return WearableConstants.KEY_ROOM_ID + room.getId() +
-                WearableConstants.KEY_BUTTON_ID + buttonId + ";;";
+        return WearableConstants.KEY_ROOM_ID + room.getId() + WearableConstants.KEY_BUTTON_ID + buttonId + ";;";
     }
 
     @NonNull
@@ -78,22 +75,21 @@ public class DataApiHandler {
     }
 
     private void initPlayServices() {
-        googleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(Bundle bundle) {
-                        Log.d("", "googleApi connected");
-                        googleApiClientIsConnected = true;
-                        // now usable
-                    }
+        googleApiClient = new GoogleApiClient.Builder(context).addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(Bundle bundle) {
+                Log.d("", "googleApi connected");
+                googleApiClientIsConnected = true;
+                // now usable
+            }
 
-                    @Override
-                    public void onConnectionSuspended(int i) {
-                        Log.d("", "googleApi connection suspended");
-                        googleApiClientIsConnected = false;
-                        // not usable anymore
-                    }
-                })
+            @Override
+            public void onConnectionSuspended(int i) {
+                Log.d("", "googleApi connection suspended");
+                googleApiClientIsConnected = false;
+                // not usable anymore
+            }
+        })
                 .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -113,13 +109,10 @@ public class DataApiHandler {
     }
 
     public boolean blockingConnect() {
-        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit
-                .SECONDS);
+        ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
         if (!connectionResult.isSuccess() || !googleApiClient.isConnected()) {
-            Log.e("FetchDataAsyncTask",
-                    String.format("Failed to connect to GoogleApiClient (error code = %d)",
-                            connectionResult.getErrorCode()));
+            Log.e("FetchDataAsyncTask", String.format("Failed to connect to GoogleApiClient (error code = %d)", connectionResult.getErrorCode()));
             return false;
         }
         Log.e("FetchDataAsyncTask", "GoogleApiClient connected using blocking connect method");
@@ -198,12 +191,15 @@ public class DataApiHandler {
         }
 
         ArrayList<DataMap> data;
-        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient).await();
+        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
+                .await();
 
-        if (dataItemBuffer.getStatus().isSuccess()) {
+        if (dataItemBuffer.getStatus()
+                .isSuccess()) {
             for (DataItem dataItem : dataItemBuffer) {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                data = dataMapItem.getDataMap()
+                        .getDataMapArrayList(WearableConstants.EXTRA_DATA);
                 if (data != null) {
                     apartmentName = ListenerService.extractApartmentDataMapItems(data);
                     break;
@@ -230,12 +226,15 @@ public class DataApiHandler {
         }
 
         ArrayList<DataMap> data;
-        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient).await();
+        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
+                .await();
 
-        if (dataItemBuffer.getStatus().isSuccess()) {
+        if (dataItemBuffer.getStatus()
+                .isSuccess()) {
             for (DataItem dataItem : dataItemBuffer) {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                data = dataMapItem.getDataMap()
+                        .getDataMapArrayList(WearableConstants.EXTRA_DATA);
                 if (data != null) {
                     rooms = ListenerService.extractRoomDataMapItems(data);
                     break;
@@ -262,12 +261,15 @@ public class DataApiHandler {
         }
 
         ArrayList<DataMap> data;
-        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient).await();
+        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
+                .await();
 
-        if (dataItemBuffer.getStatus().isSuccess()) {
+        if (dataItemBuffer.getStatus()
+                .isSuccess()) {
             for (DataItem dataItem : dataItemBuffer) {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_DATA);
+                data = dataMapItem.getDataMap()
+                        .getDataMapArrayList(WearableConstants.EXTRA_DATA);
                 if (data != null) {
                     scenes = ListenerService.extractSceneDataMapItems(data);
                     break;
@@ -290,12 +292,15 @@ public class DataApiHandler {
         }
 
         ArrayList<DataMap> data;
-        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient).await();
+        DataItemBuffer dataItemBuffer = Wearable.DataApi.getDataItems(googleApiClient)
+                .await();
 
-        if (dataItemBuffer.getStatus().isSuccess()) {
+        if (dataItemBuffer.getStatus()
+                .isSuccess()) {
             for (DataItem dataItem : dataItemBuffer) {
                 DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem);
-                data = dataMapItem.getDataMap().getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
+                data = dataMapItem.getDataMap()
+                        .getDataMapArrayList(WearableConstants.EXTRA_SETTINGS);
                 if (data != null) {
                     CommunicationHelper.extractSettings(data);
                     break;

@@ -44,7 +44,7 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class ValueSelectorActivity<T> extends WearableActivity {
 
-    public static final String KEY_VALUES = "values";
+    public static final String KEY_VALUES         = "values";
     public static final String KEY_SELECTED_VALUE = "selectedValue";
 
     private ArrayList<T> values;
@@ -67,8 +67,10 @@ public class ValueSelectorActivity<T> extends WearableActivity {
         // allow always-on screen
         setAmbientEnabled();
 
-        values = (ArrayList<T>) getIntent().getExtras().get(KEY_VALUES);
-        T selectedValue = (T) getIntent().getExtras().get(KEY_SELECTED_VALUE);
+        values = (ArrayList<T>) getIntent().getExtras()
+                .get(KEY_VALUES);
+        T selectedValue = (T) getIntent().getExtras()
+                .get(KEY_SELECTED_VALUE);
 
         WearableListView wearableListView = (WearableListView) findViewById(R.id.listView);
         final SelectOneSettingsItem selectOneSettingsItem = new SelectOneSettingsItem(this,
@@ -87,7 +89,7 @@ public class ValueSelectorActivity<T> extends WearableActivity {
                 }
 
                 ValueSelectorListAdapter.ItemViewHolder holder = (ValueSelectorListAdapter.ItemViewHolder) viewHolder;
-                T value = values.get(viewHolder.getAdapterPosition());
+                T                                       value  = values.get(viewHolder.getAdapterPosition());
 
                 selectOneSettingsItem.setValue(holder.getAdapterPosition());
                 Log.d("selected value: " + value);

@@ -43,12 +43,13 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
 
     private static final float NO_ALPHA = 1f, PARTIAL_ALPHA = 0.40f;
     private static final int ANIMATION_DURATION = 250;
+
     private final int mUnselectedCircleColor, mSelectedCircleColor;
     private final int mUnselectedCircleBorderColor, mSelectedCircleBorderColor;
     protected CircledImageView mCircle;
     private float mBigCircleRadius;
     private float mSmallCircleRadius;
-    private boolean isCentered = false;
+    private boolean isCentered   = false;
     private boolean initialSetup = true;
     private int currentCircleBorderColor;
 
@@ -103,8 +104,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
     }
 
     private void animateCenterPosition() {
-        ValueAnimator alphaAnimation = ValueAnimator.ofObject(
-                new FloatEvaluator(), getAlpha(), NO_ALPHA);
+        ValueAnimator alphaAnimation = ValueAnimator.ofObject(new FloatEvaluator(), getAlpha(), NO_ALPHA);
         alphaAnimation.setDuration(ANIMATION_DURATION);
         alphaAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -113,8 +113,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
             }
         });
 
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(
-                new ArgbEvaluator(), currentCircleBorderColor, mSelectedCircleBorderColor);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), currentCircleBorderColor, mSelectedCircleBorderColor);
         colorAnimation.setDuration(ANIMATION_DURATION);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -123,8 +122,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
             }
         });
 
-        ValueAnimator radiusAnimator = ValueAnimator.ofObject(
-                new FloatEvaluator(), mCircle.getCircleRadius(), mBigCircleRadius);
+        ValueAnimator radiusAnimator = ValueAnimator.ofObject(new FloatEvaluator(), mCircle.getCircleRadius(), mBigCircleRadius);
         radiusAnimator.setDuration(ANIMATION_DURATION);
         radiusAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -157,8 +155,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
     }
 
     private void animateNonCenterPosition() {
-        ValueAnimator alphaAnimation = ValueAnimator.ofObject(
-                new FloatEvaluator(), getAlpha(), PARTIAL_ALPHA);
+        ValueAnimator alphaAnimation = ValueAnimator.ofObject(new FloatEvaluator(), getAlpha(), PARTIAL_ALPHA);
         alphaAnimation.setDuration(ANIMATION_DURATION);
         alphaAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -167,8 +164,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
             }
         });
 
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(
-                new ArgbEvaluator(), currentCircleBorderColor, mUnselectedCircleBorderColor);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), currentCircleBorderColor, mUnselectedCircleBorderColor);
         colorAnimation.setDuration(ANIMATION_DURATION);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -177,8 +173,7 @@ public class SettingsListItemLayout extends LinearLayout implements WearableList
             }
         });
 
-        ValueAnimator radiusAnimator = ValueAnimator.ofObject(
-                new FloatEvaluator(), mCircle.getCircleRadius(), mSmallCircleRadius);
+        ValueAnimator radiusAnimator = ValueAnimator.ofObject(new FloatEvaluator(), mCircle.getCircleRadius(), mSmallCircleRadius);
         radiusAnimator.setDuration(ANIMATION_DURATION);
         radiusAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

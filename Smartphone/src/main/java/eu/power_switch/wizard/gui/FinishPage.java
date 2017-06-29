@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,10 +39,10 @@ public class FinishPage extends WizardPage {
 
     private IconicsImageView successImage;
     private IconicsImageView errorImage;
-    private TextView resultText;
+    private TextView         resultText;
 
     public static FinishPage newInstance() {
-        Bundle args = new Bundle();
+        Bundle     args     = new Bundle();
         FinishPage fragment = new FinishPage();
         fragment.setArguments(args);
         return fragment;

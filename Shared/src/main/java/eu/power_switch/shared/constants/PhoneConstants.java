@@ -29,7 +29,7 @@ public class PhoneConstants {
 
     // Tabs
     public static final int CALL_TAB_INDEX = 0;
-    public static final int SMS_TAB_INDEX = 1;
+    public static final int SMS_TAB_INDEX  = 1;
 
     /**
      * Private Constructor
@@ -41,8 +41,7 @@ public class PhoneConstants {
     }
 
     public enum CallType {
-        INCOMING(0),
-        OUTGOING(1);
+        INCOMING(0), OUTGOING(1);
 
         private final int id;
 
@@ -65,8 +64,7 @@ public class PhoneConstants {
     }
 
     public enum SmsType {
-        INCOMING(0),
-        OUTGOING(1);
+        INCOMING(0), OUTGOING(1);
 
         private final int id;
 

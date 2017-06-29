@@ -28,7 +28,7 @@ public class SleepAsAndroidConstants {
     public static final String PACKAGE_NAME = "com.urbandroid.sleep";
 
     private static final String ALARM_TRIGGERED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_START";
-    private static final String ALARM_SNOOZED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION";
+    private static final String ALARM_SNOOZED_INTENT   = "com.urbandroid.sleep.alarmclock.ALARM_SNOOZE_CLICKED_ACTION";
     private static final String ALARM_DISMISSED_INTENT = "com.urbandroid.sleep.alarmclock.ALARM_ALERT_DISMISS";
 
     /**
@@ -42,11 +42,9 @@ public class SleepAsAndroidConstants {
 
     // Sleep As Android
     public enum Event {
-        ALARM_TRIGGERED(0, ALARM_TRIGGERED_INTENT),
-        ALARM_SNOOZED(1, ALARM_SNOOZED_INTENT),
-        ALARM_DISMISSED(2, ALARM_DISMISSED_INTENT);
+        ALARM_TRIGGERED(0, ALARM_TRIGGERED_INTENT), ALARM_SNOOZED(1, ALARM_SNOOZED_INTENT), ALARM_DISMISSED(2, ALARM_DISMISSED_INTENT);
 
-        private final int id;
+        private final int    id;
         private final String intentAction;
 
         Event(int id, String intentAction) {

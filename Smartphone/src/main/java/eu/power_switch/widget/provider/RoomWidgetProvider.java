@@ -53,8 +53,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
         Intent intent = new Intent(context, RoomWidgetProvider.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
         int ids[] = AppWidgetManager.getInstance(context.getApplicationContext())
-                .getAppWidgetIds(new ComponentName(context.getApplicationContext(),
-                        RoomWidgetProvider.class));
+                .getAppWidgetIds(new ComponentName(context.getApplicationContext(), RoomWidgetProvider.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         context.sendBroadcast(intent);
     }
@@ -71,7 +70,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
             try {
                 RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
                 try {
-                    Room room = DatabaseHandler.getRoom(roomWidget.getRoomId());
+                    Room      room      = DatabaseHandler.getRoom(roomWidget.getRoomId());
                     Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
 
                     // update UI
@@ -82,8 +81,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                             WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R.string.on),
                                     ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId));
                     remoteViews.setOnClickPendingIntent(R.id.button_off,
-                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R
-                                            .string.off),
+                            WidgetIntentReceiver.buildRoomWidgetButtonPendingIntent(context, apartment, room, context.getString(R.string.off),
                                     ConfigureRoomWidgetActivity.ROOM_INTENT_ID_OFFSET + appWidgetId + 1));
                     remoteViews.setViewVisibility(R.id.linearlayout_room_widget, View.VISIBLE);
                 } catch (NoSuchElementException e) {

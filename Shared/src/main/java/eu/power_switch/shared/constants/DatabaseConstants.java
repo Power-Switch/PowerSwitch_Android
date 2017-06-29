@@ -26,9 +26,9 @@ public class DatabaseConstants {
     /**
      * ID Constants used to identify static Buttons (not used for Universal Buttons)
      */
-    public static final long BUTTON_ON_ID = -10; // negative values to prevent database conflicts
-    public static final long BUTTON_OFF_ID = BUTTON_ON_ID - 1;
-    public static final long BUTTON_UP_ID = BUTTON_ON_ID - 2;
+    public static final long BUTTON_ON_ID   = -10; // negative values to prevent database conflicts
+    public static final long BUTTON_OFF_ID  = BUTTON_ON_ID - 1;
+    public static final long BUTTON_UP_ID   = BUTTON_ON_ID - 2;
     public static final long BUTTON_STOP_ID = BUTTON_ON_ID - 3;
     public static final long BUTTON_DOWN_ID = BUTTON_ON_ID - 4;
 

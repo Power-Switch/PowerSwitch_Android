@@ -37,8 +37,7 @@ public class SnappingLinearLayoutManager extends LinearLayoutManager {
     }
 
     @Override
-    public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state,
-                                       int position) {
+    public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
         RecyclerView.SmoothScroller smoothScroller = new TopSnappedSmoothScroller(recyclerView.getContext()) {
             //This controls the direction in which smoothScroll looks for your view
             @Override
@@ -64,8 +63,7 @@ public class SnappingLinearLayoutManager extends LinearLayoutManager {
 
         @Override
         public PointF computeScrollVectorForPosition(int targetPosition) {
-            return SnappingLinearLayoutManager.this
-                    .computeScrollVectorForPosition(targetPosition);
+            return SnappingLinearLayoutManager.this.computeScrollVectorForPosition(targetPosition);
         }
 
         @Override

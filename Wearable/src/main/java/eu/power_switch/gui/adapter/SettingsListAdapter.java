@@ -35,9 +35,9 @@ import eu.power_switch.settings.SettingsItem;
  * Created by Markus on 08.06.2016.
  */
 public class SettingsListAdapter extends WearableListView.Adapter {
-    private final LayoutInflater mInflater;
-    private Context context;
-    private ArrayList<SettingsItem> settings;
+    private final LayoutInflater          mInflater;
+    private       Context                 context;
+    private       ArrayList<SettingsItem> settings;
 
     public SettingsListAdapter(Context context, ArrayList<SettingsItem> settings) {
         this.context = context;
@@ -68,8 +68,8 @@ public class SettingsListAdapter extends WearableListView.Adapter {
 
     public static class ItemViewHolder extends WearableListView.ViewHolder {
         public CircledImageView icon;
-        public TextView description;
-        public TextView value;
+        public TextView         description;
+        public TextView         value;
 
         public ItemViewHolder(View itemView) {
             super(itemView);

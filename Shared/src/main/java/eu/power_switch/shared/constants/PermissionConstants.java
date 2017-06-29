@@ -24,13 +24,13 @@ package eu.power_switch.shared.constants;
 public class PermissionConstants {
 
     public static final String KEY_REQUEST_CODE = "requestCode";
-    public static final String KEY_PERMISSIONS = "permissions";
-    public static final String KEY_RESULTS = "results";
+    public static final String KEY_PERMISSIONS  = "permissions";
+    public static final String KEY_RESULTS      = "results";
 
-    public static final int REQUEST_CODE_STORAGE_PERMISSION = 123;
+    public static final int REQUEST_CODE_STORAGE_PERMISSION  = 123;
     public static final int REQUEST_CODE_LOCATION_PERMISSION = 124;
-    public static final int REQUEST_CODE_PHONE_PERMISSION = 125;
-    public static final int REQUEST_CODE_SMS_PERMISSION = 126;
+    public static final int REQUEST_CODE_PHONE_PERMISSION    = 125;
+    public static final int REQUEST_CODE_SMS_PERMISSION      = 126;
 
     /**
      * Private Constructor

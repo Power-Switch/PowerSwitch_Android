@@ -39,7 +39,7 @@ public class WearableHelper {
     public static boolean isAndroidWearInstalled(@NonNull Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
-            PackageInfo info = packageManager.getPackageInfo(WearableConstants.ANDROID_WEAR_PACKAGE_NAME, 0);
+            PackageInfo    info           = packageManager.getPackageInfo(WearableConstants.ANDROID_WEAR_PACKAGE_NAME, 0);
             return info != null;
         } catch (PackageManager.NameNotFoundException e) {
             return false;

@@ -30,7 +30,7 @@ public class ApiConstants {
      * Intent used to switch on a Receiver
      */
     @Deprecated
-    public static final String intent_switch_on = "de.ressel.powerswitch.action.Switch.ON";
+    public static final String intent_switch_on  = "de.ressel.powerswitch.action.Switch.ON";
     /**
      * Intent used to switch off a Receiver
      */
@@ -40,31 +40,31 @@ public class ApiConstants {
      * Intent used to switch on all Receivers in a Room
      */
     @Deprecated
-    public static final String intent_room_on = "de.ressel.powerswitch.action.Room.ON";
+    public static final String intent_room_on    = "de.ressel.powerswitch.action.Room.ON";
     /**
      * Intent used to switch off all Receivers in a Room
      */
     @Deprecated
-    public static final String intent_room_off = "de.ressel.powerswitch.action.Room.OFF";
+    public static final String intent_room_off   = "de.ressel.powerswitch.action.Room.OFF";
 
 
     // NEW:
 
     public static final String UNIVERSAL_ACTION_INTENT = "eu.power_switch.action";
 
-    public static final String KEY_BUTTON = "Button";
-    public static final String KEY_RECEIVER = "Receiver";
-    public static final String KEY_ROOM = "Room";
-    public static final String KEY_SCENE = "Scene";
+    public static final String KEY_BUTTON    = "Button";
+    public static final String KEY_RECEIVER  = "Receiver";
+    public static final String KEY_ROOM      = "Room";
+    public static final String KEY_SCENE     = "Scene";
     public static final String KEY_APARTMENT = "Apartment";
 
 
     // Tasker Plugin
     public static final String KEY_REPLACE_VARIABLES_APARTMENT = "KEY_REPLACE_VARIABLES_APARTMENT";
-    public static final String KEY_REPLACE_VARIABLES_ROOM = "KEY_REPLACE_VARIABLES_ROOM";
-    public static final String KEY_REPLACE_VARIABLES_RECEIVER = "KEY_REPLACE_VARIABLES_RECEIVER";
-    public static final String KEY_REPLACE_VARIABLES_BUTTON = "KEY_REPLACE_VARIABLES_BUTTON";
-    public static final String KEY_REPLACE_VARIABLES_SCENE = "KEY_REPLACE_VARIABLES_SCENE";
+    public static final String KEY_REPLACE_VARIABLES_ROOM      = "KEY_REPLACE_VARIABLES_ROOM";
+    public static final String KEY_REPLACE_VARIABLES_RECEIVER  = "KEY_REPLACE_VARIABLES_RECEIVER";
+    public static final String KEY_REPLACE_VARIABLES_BUTTON    = "KEY_REPLACE_VARIABLES_BUTTON";
+    public static final String KEY_REPLACE_VARIABLES_SCENE     = "KEY_REPLACE_VARIABLES_SCENE";
 
 
     /**

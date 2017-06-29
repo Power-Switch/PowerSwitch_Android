@@ -37,8 +37,8 @@ import eu.power_switch.gui.fragment.SettingsFragment;
  */
 public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNavigationDrawerAdapter {
 
-    private static final int INDEX_ROOMS = 0;
-    private static final int INDEX_SCENES = 1;
+    private static final int INDEX_ROOMS    = 0;
+    private static final int INDEX_SCENES   = 1;
     private static final int INDEX_SETTINGS = 2;
 
     private final Activity activity;
@@ -71,7 +71,8 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
             case INDEX_SETTINGS:
                 return IconicsHelper.getSettingsIcon(activity);
             default:
-                return activity.getResources().getDrawable(R.drawable.wearable_ic_launcher);
+                return activity.getResources()
+                        .getDrawable(R.drawable.wearable_ic_launcher);
         }
     }
 
@@ -95,7 +96,9 @@ public class NavigationDrawerAdapter extends WearableNavigationDrawer.WearableNa
         }
 
         FragmentManager fragmentManager = activity.getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
     @Override

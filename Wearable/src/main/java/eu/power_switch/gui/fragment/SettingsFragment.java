@@ -54,7 +54,7 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
 public class SettingsFragment extends Fragment {
 
     private BroadcastReceiver broadcastReceiver;
-    private DataApiHandler dataApiHandler;
+    private DataApiHandler    dataApiHandler;
 
     private ArrayList<SettingsItem> settings = new ArrayList<>();
     private SettingsListAdapter settingsListAdapter;
@@ -91,18 +91,15 @@ public class SettingsFragment extends Fragment {
 
         };
 
-        SettingsItem item1 = new BooleanSettingsItem(
-                getActivity(),
+        SettingsItem item1 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getAutocollapseRoomsIcon(getActivity()),
                 R.string.title_autoCollapseRooms,
                 WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
-        SettingsItem item2 = new BooleanSettingsItem(
-                getActivity(),
+        SettingsItem item2 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getHistoryIcon(getActivity()),
                 R.string.title_highlightLastActivatedButton,
                 WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
-        SettingsItem item3 = new BooleanSettingsItem(
-                getActivity(),
+        SettingsItem item3 = new BooleanSettingsItem(getActivity(),
                 IconicsHelper.getVibrationIcon(getActivity()),
                 R.string.title_vibrateOnButtonPress,
                 WearablePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS);
@@ -164,7 +161,8 @@ public class SettingsFragment extends Fragment {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -175,7 +173,8 @@ public class SettingsFragment extends Fragment {
 
         ListenerService.sendSettingsChangedBroadcast(getActivity());
 
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

@@ -16,38 +16,45 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.os.Bundle;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.IconicsHelper;
 
 /**
- * "Time based actions" page, showing the possibilities of timers and alarm clock actions.
+ * Setup page for entering a Apartment name
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public class TimerAlarmClockPage extends BasicPage {
+public class SetupApartmentPage extends SingleLineTextInputPage {
 
-    public static TimerAlarmClockPage newInstance() {
-        Bundle args = new Bundle();
-        TimerAlarmClockPage fragment = new TimerAlarmClockPage();
+    public static SetupApartmentPage newInstance(ConfigurationHolder configurationHolder) {
+        Bundle             args     = new Bundle();
+        SetupApartmentPage fragment = new SetupApartmentPage();
         fragment.setArguments(args);
+        fragment.setConfigurationHolder(configurationHolder);
         return fragment;
     }
 
     @Override
     protected void onSetUiValues() {
         super.onSetUiValues();
-        setIcon(IconicsHelper.getAlarmClockIcon(getActivity()));
-        setTitle(R.string.wizard_timer_alarm_clock_title);
-        setDescription(R.string.wizard_timer_alarm_clock_description);
+
+        setTitle(R.string.configure_apartment);
+        setHint(R.string.wizard_setup_apartment_hint_home);
+        setDescription(R.string.wizard_setup_apartment_explanation);
     }
 
     @Override
     public int getDefaultBackgroundColor() {
-        return getResources().getColor(R.color.md_red_700);
+        return getResources().getColor(R.color.md_blue_700);
+    }
+
+    @Override
+    public void onUserIllegallyRequestedNextPage() {
+        flashBackground(R.color.color_red_a700, 1000);
+        showErrorMessage(getString(R.string.please_enter_name));
     }
 
 }

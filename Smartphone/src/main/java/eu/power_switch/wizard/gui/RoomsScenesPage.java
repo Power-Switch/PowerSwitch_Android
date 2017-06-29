@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.os.Bundle;
 
@@ -24,15 +24,15 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 
 /**
- * "Advanced" page explaining the possibilities with Geofences, NFC and the locale Plugin
+ * Rooms/Scenes page explaining the rooms and scenes functionality
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public class AdvancedFeaturesPage extends BasicPage {
+public class RoomsScenesPage extends BasicPage {
 
-    public static AdvancedFeaturesPage newInstance() {
-        Bundle args = new Bundle();
-        AdvancedFeaturesPage fragment = new AdvancedFeaturesPage();
+    public static RoomsScenesPage newInstance() {
+        Bundle          args     = new Bundle();
+        RoomsScenesPage fragment = new RoomsScenesPage();
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,9 +40,9 @@ public class AdvancedFeaturesPage extends BasicPage {
     @Override
     protected void onSetUiValues() {
         super.onSetUiValues();
-        setIcon(IconicsHelper.getNfcIcon(getActivity()));
-        setTitle(R.string.wizard_advanced_features_title);
-        setDescription(R.string.wizard_advanced_features_description);
+        setIcon(IconicsHelper.getRoomsScenesIcon(getActivity()));
+        setTitle(R.string.wizard_rooms_scenes_title);
+        setDescription(R.string.wizard_rooms_scenes_description);
     }
 
     @Override

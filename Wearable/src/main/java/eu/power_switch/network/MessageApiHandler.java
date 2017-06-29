@@ -43,9 +43,9 @@ import eu.power_switch.shared.log.Log;
  */
 public class MessageApiHandler {
 
-    private Context context;
-    private GoogleApiClient googleApiClient;
-    private Set<Node> connectedNodes;
+    private final Context         context;
+    private final GoogleApiClient googleApiClient;
+    private       Set<Node>       connectedNodes;
 
     public MessageApiHandler(Context context, GoogleApiClient googleApiClient) {
         this.context = context;
@@ -121,7 +121,6 @@ public class MessageApiHandler {
 //                    .show();
         }
     }
-
 
     private void setupReachableReceiverActionTrigger() {
         CapabilityApi.GetCapabilityResult result = Wearable.CapabilityApi.getCapability(

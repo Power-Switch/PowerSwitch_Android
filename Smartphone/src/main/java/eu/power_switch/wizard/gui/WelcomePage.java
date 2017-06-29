@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.wizard;
+package eu.power_switch.wizard.gui;
 
 import android.os.Bundle;
 
@@ -30,7 +30,7 @@ import eu.power_switch.R;
 public class WelcomePage extends BasicPage {
 
     public static WelcomePage newInstance() {
-        Bundle args = new Bundle();
+        Bundle      args     = new Bundle();
         WelcomePage fragment = new WelcomePage();
         fragment.setArguments(args);
         return fragment;

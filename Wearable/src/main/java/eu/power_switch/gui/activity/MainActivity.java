@@ -64,21 +64,21 @@ import eu.power_switch.shared.settings.WearablePreferencesHandler;
  */
 public class MainActivity extends WearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
 
-    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
-    public static String apartmentName = "";
-    public static ArrayList<Room> roomList = new ArrayList<>();
-    public static ArrayList<Scene> sceneList = new ArrayList<>();
-    private static boolean isInitialized = false;
-    private DataApiHandler dataApiHandler;
+    private static final int              MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 10;
+    public static        String           apartmentName                                 = "";
+    public static        ArrayList<Room>  roomList                                      = new ArrayList<>();
+    public static        ArrayList<Scene> sceneList                                     = new ArrayList<>();
+    private static       boolean          isInitialized                                 = false;
+    private DataApiHandler    dataApiHandler;
     private BroadcastReceiver broadcastReceiver;
 
-    private WearableDrawerLayout mWearableDrawerLayout;
+    private WearableDrawerLayout     mWearableDrawerLayout;
     private WearableNavigationDrawer mWearableNavigationDrawer;
-    private WearableActionDrawer mWearableActionDrawer;
+    private WearableActionDrawer     mWearableActionDrawer;
 
-    private TextView textViewStatus;
+    private TextView       textViewStatus;
     private RelativeLayout relativeLayoutStatus;
-    private FrameLayout contentFrameLayout;
+    private FrameLayout    contentFrameLayout;
 
 //    private DismissOverlayView dismissOverlayView;
 //    private GestureDetector gestureDetector;
@@ -177,8 +177,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
         // Get Room/Receiver/Button/Scene configuration from Smartphone App
         new FetchDataAsyncTask().execute();
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
 //            // Should we show an explanation?
 //            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -236,7 +235,8 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ListenerService.DATA_UPDATED);
         intentFilter.addAction(WearableSettingsConstants.WEARABLE_THEME_CHANGED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -245,7 +245,8 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
             dataApiHandler.disconnect();
         }
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 
@@ -288,19 +289,18 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
      * <p/>
      * Created by Markus on 07.06.2015.
      */
-    private class FetchDataAsyncTask extends
-            AsyncTask<Uri, Void, ArrayList<Object>> {
+    private class FetchDataAsyncTask extends AsyncTask<Uri, Void, ArrayList<Object>> {
 
         @Override
         protected ArrayList<Object> doInBackground(Uri... params) {
             // Get Apartment Data from Smartphone App
-            String apartmentName = dataApiHandler.getApartmentName();
-            ArrayList<String> apartments = new ArrayList<>();
+            String            apartmentName = dataApiHandler.getApartmentName();
+            ArrayList<String> apartments    = new ArrayList<>();
             apartments.add(apartmentName);
 
             // Get Room Data from Smartphone App
-            ArrayList<Room> rooms = dataApiHandler.getRoomData();
-            boolean autoCollapseRooms = WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
+            ArrayList<Room> rooms             = dataApiHandler.getRoomData();
+            boolean         autoCollapseRooms = WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
             for (Room room : rooms) {
                 room.setCollapsed(autoCollapseRooms);
             }
@@ -345,7 +345,8 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
                 isInitialized = true;
             } else {
-                Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG)
+                        .show();
                 isInitialized = true;
             }
         }
