@@ -40,6 +40,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -65,24 +66,25 @@ import eu.power_switch.shared.log.Log;
  */
 public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
+    @BindView(R.id.search_gateway_fab)
+    FloatingActionButton searchGatewayFAB;
+    @BindView(R.id.add_fab)
+    FloatingActionButton addGatewayFAB;
     private BroadcastReceiver broadcastReceiver;
-
     private GatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
-    private RecyclerView recyclerViewGateways;
     private ArrayList<Gateway> gateways = new ArrayList<>();
-    private FloatingActionButton searchGatewayFAB;
-    private FloatingActionButton addGatewayFAB;
 
     public static void sendGatewaysChangedBroadcast(Context context) {
         Log.d(GatewaySettingsFragment.class, "sendGatewaysChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_gateway_settings, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
@@ -106,15 +108,12 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             }
         };
 
-        searchGatewayFAB = rootView.findViewById(R.id.search_gateway_fab);
         searchGatewayFAB.setImageDrawable(IconicsHelper.getRefreshIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         searchGatewayFAB.setOnClickListener(onClickListener);
 
-        addGatewayFAB = rootView.findViewById(R.id.add_fab);
         addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addGatewayFAB.setOnClickListener(onClickListener);
 
-        recyclerViewGateways = rootView.findViewById(R.id.recyclerView);
         gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
@@ -126,10 +125,9 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                 configureGatewayDialog.show(getFragmentManager(), null);
             }
         });
-        recyclerViewGateways.setAdapter(gatewayRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewGateways.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(gatewayRecyclerViewAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -138,17 +136,20 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                 updateListContent();
             }
         };
+
+        updateUI();
+
+        return rootView;
     }
 
     @Override
-    protected void onInitialized() {
-        updateUI();
+    protected int getLayoutRes() {
+        return R.layout.fragment_gateway_settings;
     }
 
     private void startAutoDiscovery() {
         if (!NetworkHandler.isWifiConnected()) {
-            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection,
-                    Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -169,15 +170,13 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                     });
 
                     if (foundGateways == null || foundGateways.isEmpty()) {
-                        StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
-                                R.string.no_gateway_found,
-                                Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                         return null;
                     }
 
-                    int unknownGatewaysCount = 0;
+                    int unknownGatewaysCount  = 0;
                     int existingGatewaysCount = 0;
-                    int newGatewaysCount = 0;
+                    int newGatewaysCount      = 0;
                     for (Gateway newGateway : foundGateways) {
                         if (newGateway == null) {
                             unknownGatewaysCount++;
@@ -197,8 +196,8 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                     }
 
                     StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
-                            getString(R.string.autodiscover_response_message, newGatewaysCount, existingGatewaysCount,
-                                    unknownGatewaysCount), Snackbar.LENGTH_LONG);
+                            getString(R.string.autodiscover_response_message, newGatewaysCount, existingGatewaysCount, unknownGatewaysCount),
+                            Snackbar.LENGTH_LONG);
 
                     sendGatewaysChangedBroadcast(recyclerViewFragment.getContext());
                 } catch (Exception e) {
@@ -254,11 +253,15 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.gateway_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_gateway).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
-        menu.findItem(R.id.search_gateways).setIcon(IconicsHelper.getRefreshIcon(getActivity(), color));
+        menu.findItem(R.id.create_gateway)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.search_gateways)
+                .setIcon(IconicsHelper.getRefreshIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_gateway).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_gateway)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -267,18 +270,15 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewGateways;
     }
 
     @Override

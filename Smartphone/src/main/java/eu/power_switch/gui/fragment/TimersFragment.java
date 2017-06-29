@@ -62,9 +62,10 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 public class TimersFragment extends RecyclerViewFragment<Timer> {
 
     private ArrayList<Timer> timers = new ArrayList<>();
+
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
-    private RecyclerView recyclerViewTimers;
-    private BroadcastReceiver broadcastReceiver;
+
+    private BroadcastReceiver    broadcastReceiver;
     private FloatingActionButton addTimerFAB;
 
     /**
@@ -76,23 +77,23 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
         Log.d("TimersFragment", "sendTimersChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_timers, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
         timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), timers);
-        recyclerViewTimers = rootView.findViewById(R.id.recyclerView);
-        recyclerViewTimers.setAdapter(timerRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewTimers.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(timerRecyclerViewAdapter);
+
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
         timerRecyclerViewAdapter.setOnItemLongClickListener(new TimerRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
@@ -135,16 +136,19 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
                 updateUI();
             }
         };
+
+        updateUI();
+
+        return rootView;
     }
 
     @Override
-    protected void onInitialized() {
-        updateUI();
+    protected int getLayoutRes() {
+        return R.layout.fragment_timers;
     }
 
     private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(addTimerFAB)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(addTimerFAB)
                 .setUseAutoRadius(true)
                 .setDismissOnTouch(true)
                 .setDismissText(getString(R.string.tutorial__got_it))
@@ -186,10 +190,13 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.timer_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_timer).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_timer)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_timer).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_timer)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -198,7 +205,8 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -209,13 +217,9 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewTimers;
     }
 
     @Override

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -58,14 +59,15 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  */
 public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
-    private View rootView;
-
-    private TextInputLayout floatingName;
-    private EditText name;
+    @BindView(R.id.apartment_name_text_input_layout)
+    TextInputLayout floatingName;
+    @BindView(R.id.txt_edit_apartment_name)
+    EditText        name;
+    @BindView(R.id.linearLayout_gateways)
+    LinearLayout    linearLayoutSelectableGateways;
 
     private List<Apartment> existingApartments;
-    private String originalName;
-    private LinearLayout linearLayoutSelectableGateways;
+    private String          originalName;
 
     private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
@@ -75,7 +77,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_apartment_page_1, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         try {
             existingApartments = DatabaseHandler.getAllApartments();
@@ -101,11 +103,8 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
                 }
             }
         };
-        floatingName = rootView.findViewById(R.id.apartment_name_text_input_layout);
-        name = rootView.findViewById(R.id.txt_edit_apartment_name);
         name.addTextChangedListener(textWatcher);
 
-        linearLayoutSelectableGateways = rootView.findViewById(R.id.linearLayout_gateways);
         addGatewaysToLayout();
 
         Bundle args = getArguments();
@@ -125,6 +124,11 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_apartment_page_1;
+    }
+
     /**
      * Loads existing apartment data into fields
      *
@@ -139,7 +143,8 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
             for (Gateway gateway : apartment.getAssociatedGateways()) {
                 for (CheckBox checkBox : gatewayCheckboxList) {
                     Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
-                    if (gateway.getId().equals(checkBoxGateway.getId())) {
+                    if (gateway.getId()
+                            .equals(checkBoxGateway.getId())) {
                         checkBox.setChecked(true);
                     }
                 }
@@ -154,6 +159,7 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
      * Checks if current name is valid
      *
      * @param name current name value
+     *
      * @return true if valid
      */
     private boolean checkNameValidity(String name) {
@@ -171,7 +177,9 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
 
     private boolean checkNameAlreadyExists() {
         for (Apartment apartment : existingApartments) {
-            if (!apartment.getId().equals(apartmentId) && apartment.getName().equalsIgnoreCase(getCurrentName())) {
+            if (!apartment.getId()
+                    .equals(apartmentId) && apartment.getName()
+                    .equalsIgnoreCase(getCurrentName())) {
                 return true;
             }
         }
@@ -186,7 +194,9 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
      */
     public String getCurrentName() {
         try {
-            return this.name.getText().toString().trim();
+            return this.name.getText()
+                    .toString()
+                    .trim();
         } catch (Exception e) {
             return null;
         }
@@ -196,14 +206,13 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
      * Generate Gateway items and add them to view
      */
     private void addGatewaysToLayout() {
-        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+        String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
             List<Gateway> gateways = DatabaseHandler.getAllGateways();
             for (Gateway gateway : gateways) {
-                @SuppressLint("InflateParams")
-                LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
+                @SuppressLint("InflateParams") LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
                 // every inflated layout has to be added manually, attaching while inflating will only generate every
                 // child one, but not for every gateway
                 linearLayoutSelectableGateways.addView(gatewayLayout);
@@ -270,9 +279,9 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
         if (apartmentId == -1) {
-            boolean isActive = DatabaseHandler.getAllApartmentNames().size() <= 0;
-            Apartment newApartment = new Apartment((long) -1, isActive, getCurrentName(),
-                    getCheckedGateways(), null);
+            boolean isActive = DatabaseHandler.getAllApartmentNames()
+                    .size() <= 0;
+            Apartment newApartment = new Apartment((long) -1, isActive, getCurrentName(), getCheckedGateways(), null);
 
             long newId = DatabaseHandler.addApartment(newApartment);
             // set new apartment as active if it is the first and only one
@@ -282,17 +291,21 @@ public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDial
         } else {
             Apartment apartment = DatabaseHandler.getApartment(apartmentId);
             if (apartment.getGeofence() != null) {
-                apartment.getGeofence().setName(getCurrentName());
+                apartment.getGeofence()
+                        .setName(getCurrentName());
             }
 
-            Apartment updatedApartment = new Apartment(apartmentId, apartment.isActive(), getCurrentName(), getCheckedGateways(), apartment.getGeofence());
+            Apartment updatedApartment = new Apartment(apartmentId,
+                    apartment.isActive(),
+                    getCurrentName(),
+                    getCheckedGateways(),
+                    apartment.getGeofence());
 
             DatabaseHandler.updateApartment(updatedApartment);
         }
 
         ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
-        StatusMessageHandler.showInfoMessage(getTargetFragment()
-                , R.string.apartment_saved, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

@@ -41,6 +41,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -65,16 +66,15 @@ import eu.power_switch.shared.permission.PermissionHelper;
  */
 public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
 
-    private static final String[] NEEDED_PERMISSIONS = {
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_CONTACTS
-    };
+    private static final String[] NEEDED_PERMISSIONS = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CONTACTS};
+
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
 
     private List<CallEvent> callEvents = new ArrayList<>();
     private CallEventRecyclerViewAdapter callEventRecyclerViewAdapter;
-    private RecyclerView recyclerViewCalls;
-    private BroadcastReceiver broadcastReceiver;
-    private FloatingActionButton fab;
+    private BroadcastReceiver            broadcastReceiver;
+
 
     /**
      * Used to notify the apartment geofence page (this) that geofences have changed
@@ -83,23 +83,22 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
      */
     public static void sendCallEventsChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_call_events, container, false);
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        recyclerViewCalls = rootView.findViewById(R.id.recyclerView);
         callEventRecyclerViewAdapter = new CallEventRecyclerViewAdapter(getActivity(), callEvents);
-        recyclerViewCalls.setAdapter(callEventRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewCalls.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(callEventRecyclerViewAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
         callEventRecyclerViewAdapter.setOnItemLongClickListener(new CallEventRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
@@ -112,13 +111,14 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
             }
         });
 
-        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(),
+                            PermissionConstants.REQUEST_CODE_PHONE_PERMISSION,
+                            NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -148,30 +148,37 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
                             }
 
                             if (allGranted) {
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(),
-                                        R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                                 sendCallEventsChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
+                                        getRecyclerView(),
+                                        PermissionConstants.REQUEST_CODE_PHONE_PERMISSION,
+                                        NEEDED_PERMISSIONS);
                             }
                         }
                         break;
                 }
             }
         };
-    }
 
-    @Override
-    protected void onInitialized() {
         if (!PermissionHelper.isPhonePermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                    getRecyclerView(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
+                    getRecyclerView(),
+                    PermissionConstants.REQUEST_CODE_PHONE_PERMISSION,
+                    NEEDED_PERMISSIONS);
         } else {
             refreshCalls();
         }
+
+        return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_call_events;
     }
 
     private void refreshCalls() {
@@ -188,7 +195,9 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
         switch (menuItem.getItemId()) {
             case R.id.create_call_event:
                 if (!PermissionHelper.isPhonePermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_PHONE_PERMISSION, NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(),
+                            PermissionConstants.REQUEST_CODE_PHONE_PERMISSION,
+                            NEEDED_PERMISSIONS);
                     break;
                 }
 
@@ -207,10 +216,13 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.call_event_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_call_event).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_call_event)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_call_event).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_call_event)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -220,7 +232,8 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -235,13 +248,9 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewCalls;
     }
 
     @Override

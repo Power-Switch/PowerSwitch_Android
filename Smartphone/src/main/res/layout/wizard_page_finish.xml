@@ -16,7 +16,8 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,7 +37,7 @@
         android:elevation="4dp"
         android:visibility="gone"
         app:iiv_color="@color/active_green"
-        app:iiv_icon="gmi-check-circle" />
+        app:iiv_icon="gmi-check-circle"/>
 
     <com.mikepenz.iconics.view.IconicsImageView
         android:id="@+id/imageView_error"
@@ -47,7 +48,7 @@
         android:elevation="4dp"
         android:visibility="gone"
         app:iiv_color="@color/color_red_a700"
-        app:iiv_icon="gmi-close-circle" />
+        app:iiv_icon="gmi-close-circle"/>
 
 
     <TextView
@@ -55,6 +56,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center" />
+        android:gravity="center"/>
 
 </LinearLayout>

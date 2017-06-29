@@ -43,6 +43,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
@@ -74,20 +75,22 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialogFragment {
 
-    public static final String KEY_NAME = "name";
+    public static final String KEY_NAME      = "name";
     public static final String KEY_ROOM_NAME = "roomName";
 
-    private View rootView;
+    @BindView(R.id.receiver_name_text_input_layout)
+    TextInputLayout      floatingName;
+    @BindView(R.id.editText_receiver_name)
+    EditText             name;
+    @BindView(R.id.listView_rooms)
+    ListView             roomsListView;
+    @BindView(R.id.add_room_fab)
+    FloatingActionButton addRoomFAB;
 
-    private TextInputLayout floatingName;
-    private EditText name;
-
-    private ListView roomsListView;
     private ArrayAdapter<String> roomNamesAdapter;
     private ArrayList<String> roomList = new ArrayList<>();
 
-    private FloatingActionButton addRoomFAB;
-    private String originalName;
+    private String            originalName;
     private BroadcastReceiver broadcastReceiver;
 
     /**
@@ -123,7 +126,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_1, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -138,8 +141,6 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             }
         };
 
-        floatingName = rootView.findViewById(R.id.receiver_name_text_input_layout);
-        name = rootView.findViewById(R.id.editText_receiver_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,7 +157,6 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
             }
         });
 
-        roomsListView = rootView.findViewById(R.id.listView_rooms);
         roomNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, roomList);
         roomsListView.setAdapter(roomNamesAdapter);
         roomsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -168,7 +168,6 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
 
         updateRoomNamesList();
 
-        addRoomFAB = rootView.findViewById(R.id.add_room_fab);
         addRoomFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final Fragment fragment = this;
         addRoomFAB.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +189,11 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
         createTutorial();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_receiver_page_1;
     }
 
     private void createTutorial() {
@@ -256,7 +260,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
     private void initializeReceiverData(long receiverId) {
         try {
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-            Room room = DatabaseHandler.getRoom(receiver.getRoomId());
+            Room     room     = DatabaseHandler.getRoom(receiver.getRoomId());
 
             originalName = receiver.getName();
             name.setText(receiver.getName());
@@ -283,7 +287,7 @@ public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialo
     private boolean checkValidity() {
         // TODO: Performance Optimierung
         String currentReceiverName = getCurrentName();
-        String currentRoomName = getCheckedRoomName();
+        String currentRoomName     = getCheckedRoomName();
 
         if (currentReceiverName.length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));

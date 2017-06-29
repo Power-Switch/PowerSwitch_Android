@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 
 /**
@@ -37,9 +38,12 @@ import eu.power_switch.R;
  */
 public class FinishPage extends WizardPage {
 
-    private IconicsImageView successImage;
-    private IconicsImageView errorImage;
-    private TextView         resultText;
+    @BindView(R.id.imageView_success)
+    IconicsImageView successImage;
+    @BindView(R.id.imageView_error)
+    IconicsImageView errorImage;
+    @BindView(R.id.resultText)
+    TextView         resultText;
 
     public static FinishPage newInstance() {
         Bundle     args     = new Bundle();
@@ -52,11 +56,6 @@ public class FinishPage extends WizardPage {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        successImage = getMainView().findViewById(R.id.imageView_success);
-        errorImage = getMainView().findViewById(R.id.imageView_error);
-
-        resultText = getMainView().findViewById(R.id.resultText);
 
         onSuccess(android.R.string.ok);
 

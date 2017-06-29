@@ -22,20 +22,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import java.lang.reflect.Constructor;
 
 import eu.power_switch.R;
+import eu.power_switch.gui.fragment.ButterKnifeFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
 /**
  * Created by Markus on 25.03.2016.
  */
-public abstract class ConfigurationDialogFragment extends Fragment {
+public abstract class ConfigurationDialogFragment extends ButterKnifeFragment {
 
     protected ConfigurationDialogTabbed configurationDialogTabbed;
 
@@ -56,8 +56,8 @@ public abstract class ConfigurationDialogFragment extends Fragment {
         }
 
         try {
-            Constructor<T> constructor = clazz.getConstructor();
-            ConfigurationDialogFragment fragment = constructor.newInstance();
+            Constructor<T>              constructor = clazz.getConstructor();
+            ConfigurationDialogFragment fragment    = constructor.newInstance();
             fragment.setParentConfigurationDialog(parentDialog);
             fragment.setArguments(args);
             return fragment;
@@ -71,7 +71,8 @@ public abstract class ConfigurationDialogFragment extends Fragment {
      */
     public void notifyConfigurationChanged() {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(getActivity())
+                .sendBroadcast(intent);
     }
 
     /**
@@ -102,15 +103,6 @@ public abstract class ConfigurationDialogFragment extends Fragment {
     }
 
     /**
-     * Set the parent dialog of this page
-     *
-     * @param configurationDialogTabbed Dialog
-     */
-    public void setParentConfigurationDialog(@NonNull ConfigurationDialogTabbed configurationDialogTabbed) {
-        this.configurationDialogTabbed = configurationDialogTabbed;
-    }
-
-    /**
      * Get the parent dialog of this page
      *
      * @return parent ConfigurationDialogTabbed
@@ -121,5 +113,14 @@ public abstract class ConfigurationDialogFragment extends Fragment {
                     "Missing parent dialog! Did you use ConfigurationDialogFragment.newInstance(Class<T>, ConfigurationDialogTabbed) to instantiate your page?");
         }
         return configurationDialogTabbed;
+    }
+
+    /**
+     * Set the parent dialog of this page
+     *
+     * @param configurationDialogTabbed Dialog
+     */
+    public void setParentConfigurationDialog(@NonNull ConfigurationDialogTabbed configurationDialogTabbed) {
+        this.configurationDialogTabbed = configurationDialogTabbed;
     }
 }

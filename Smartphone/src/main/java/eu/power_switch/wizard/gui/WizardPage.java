@@ -35,6 +35,8 @@ import android.view.animation.DecelerateInterpolator;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import eu.power_switch.R;
 import eu.power_switch.shared.ThemeHelper;
 
@@ -45,14 +47,24 @@ import eu.power_switch.shared.ThemeHelper;
  */
 public abstract class WizardPage extends Fragment implements ISlideBackgroundColorHolder {
 
-    private View mainView;
+    private View     mainView;
+    private Unbinder unbinder;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         mainView = inflater.inflate(getLayout(), container, false);
+
+        unbinder = ButterKnife.bind(this, mainView);
+
         return mainView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override

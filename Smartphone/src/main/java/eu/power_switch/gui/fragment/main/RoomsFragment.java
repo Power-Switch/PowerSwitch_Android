@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -62,13 +63,14 @@ import eu.power_switch.shared.log.Log;
  */
 public class RoomsFragment extends RecyclerViewFragment<Room> {
 
-    private ArrayList<Room> rooms;
+    @BindView(R.id.add_fab)
+    FloatingActionButton addReceiverFAB;
+
+    private ArrayList<Room>            rooms;
+    private RoomRecyclerViewAdapter    roomsRecyclerViewAdapter;
+    private StaggeredGridLayoutManager layoutManager;
 
     private BroadcastReceiver broadcastReceiver;
-    private FloatingActionButton addReceiverFAB;
-    private RoomRecyclerViewAdapter roomsRecyclerViewAdapter;
-    private RecyclerView recyclerViewRooms;
-    private StaggeredGridLayoutManager layoutManager;
 
     /**
      * Used to notify Room Fragment (this) that Rooms have changed
@@ -78,7 +80,8 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
     public static void sendRoomChangedBroadcast(Context context) {
         Log.d("RoomsFragment", "sendRoomChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     /**
@@ -89,24 +92,22 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
     public static void sendReceiverChangedBroadcast(Context context) {
         Log.d("RoomsFragment", "sendReceiverChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_rooms, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
         rooms = new ArrayList<>();
-        recyclerViewRooms = rootView.findViewById(R.id.recyclerView);
         roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms);
-        recyclerViewRooms.setAdapter(roomsRecyclerViewAdapter);
-        layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewRooms.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(roomsRecyclerViewAdapter);
+        layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
-        addReceiverFAB = rootView.findViewById(R.id.add_fab);
         addReceiverFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final RecyclerViewFragment recyclerViewFragment = this;
         addReceiverFAB.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +128,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                     }
 
                     if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(R.string.please_create_or_activate_apartment_first)
+                        new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
                         return;
@@ -150,11 +150,15 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                 updateUI();
             }
         };
+
+        updateUI();
+
+        return rootView;
     }
 
     @Override
-    protected void onInitialized() {
-        updateUI();
+    protected int getLayoutRes() {
+        return R.layout.fragment_rooms;
     }
 
     private void updateUI() {
@@ -170,8 +174,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         switch (menuItem.getItemId()) {
             case R.id.create_receiver:
                 if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
-                    new AlertDialog.Builder(getContext())
-                            .setMessage(R.string.please_create_or_activate_apartment_first)
+                    new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                             .setNeutralButton(android.R.string.ok, null)
                             .show();
                     return true;
@@ -181,7 +184,8 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                 configureReceiverDialog.show(getFragmentManager(), null);
                 break;
             case R.id.reorder_rooms:
-                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(SmartphonePreferencesHandler.<Long>get(
+                        SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
                 editRoomOrderDialog.setTargetFragment(this, 0);
                 editRoomOrderDialog.show(getFragmentManager(), null);
                 break;
@@ -197,11 +201,15 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.room_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_receiver).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
-        menu.findItem(R.id.reorder_rooms).setIcon(IconicsHelper.getReorderIcon(getActivity(), color));
+        menu.findItem(R.id.create_receiver)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.reorder_rooms)
+                .setIcon(IconicsHelper.getReorderIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_receiver).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_receiver)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
 
     }
@@ -223,18 +231,15 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewRooms;
     }
 
     @Override
@@ -251,7 +256,8 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
     public List<Room> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            return playStoreModeDataModel.getActiveApartment().getRooms();
+            return playStoreModeDataModel.getActiveApartment()
+                    .getRooms();
         } else {
             long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {

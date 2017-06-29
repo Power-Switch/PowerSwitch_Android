@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -60,10 +61,15 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
     public static final String KEY_NAME = "name";
     public static final String KEY_RECEIVERS = "receivers";
 
-    private View rootView;
+    @BindView(R.id.editText_room_name)
+    EditText        name;
+    @BindView(R.id.room_name_text_input_layout)
+    TextInputLayout floatingName;
+
+    @BindView(R.id.recyclerview_list_of_receivers)
+    RecyclerView listOfReceivers;
+
     private String originalName;
-    private EditText name;
-    private TextInputLayout floatingName;
 
     private Room currentRoom;
     private LinkedList<String> roomNames;
@@ -71,7 +77,6 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
 
     private ArrayList<Receiver> receivers;
     private ReceiverNameRecyclerViewAdapter receiverNameRecyclerViewAdapter;
-    private RecyclerView listOfReceivers;
 
     /**
      * Used to notify the summary page that some info has changed
@@ -91,11 +96,9 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_room_page_1, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // restore name
-        floatingName = rootView.findViewById(R.id.room_name_text_input_layout);
-        name = rootView.findViewById(R.id.editText_room_name);
         name.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -113,7 +116,6 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
         });
 
         receivers = new ArrayList<>();
-        listOfReceivers = rootView.findViewById(R.id.recyclerview_list_of_receivers);
         receiverNameRecyclerViewAdapter = new ReceiverNameRecyclerViewAdapter(getContext(), receivers, this);
         receiverNameRecyclerViewAdapter.setOnItemMovedListener(new OnItemMovedListener() {
             @Override
@@ -136,6 +138,11 @@ public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragmen
         }
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_room_page_1;
     }
 
     private boolean initExistingData(long roomId) {

@@ -42,6 +42,7 @@ import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.log.Log;
+import eu.power_switch.wizard.config.ConfigurationHolder;
 
 /**
  * Setup page for searching a Gateway

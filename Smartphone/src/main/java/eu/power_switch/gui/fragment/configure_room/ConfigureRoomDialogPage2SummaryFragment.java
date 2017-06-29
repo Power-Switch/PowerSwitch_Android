@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -63,29 +64,31 @@ import eu.power_switch.widget.provider.RoomWidgetProvider;
  */
 public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
-    private View rootView;
-
-    private long roomId;
-
-    private String currentRoomName;
+    @BindView(R.id.checkbox_use_custom_gateway_selection)
+    CheckBox     checkBoxUseCustomGatewaySelection;
+    @BindView(R.id.apartmentGateways)
+    LinearLayout apartmentGateways;
+    @BindView(R.id.otherGateways)
+    LinearLayout otherGateways;
+    @BindView(R.id.linearLayoutOfApartmentGateways)
+    LinearLayout linearLayoutOfApartmentGateways;
+    @BindView(R.id.linearLayoutOfOtherGateways)
+    LinearLayout linearLayoutOfOtherGateways;
+    @BindView(R.id.textView_custom_selection_description)
+    TextView     textViewCustomSelectionDescription;
+    private long                roomId;
+    private String              currentRoomName;
     private ArrayList<Receiver> currentReceivers;
-
-    private CheckBox checkBoxUseCustomGatewaySelection;
-    private LinearLayout apartmentGateways;
-    private LinearLayout otherGateways;
-    private LinearLayout linearLayoutOfApartmentGateways;
-    private LinearLayout linearLayoutOfOtherGateways;
-
-    private Apartment apartment;
-    private List<Gateway> gateways = new ArrayList<>();
+    private Apartment           apartment;
+    private List<Gateway>  gateways            = new ArrayList<>();
     private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
     private BroadcastReceiver broadcastReceiver;
-    private TextView textViewCustomSelectionDescription;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_room_page_2, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -100,7 +103,6 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             }
         };
 
-        checkBoxUseCustomGatewaySelection = rootView.findViewById(R.id.checkbox_use_custom_gateway_selection);
         CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
             @Override
             public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
@@ -112,21 +114,13 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
-        textViewCustomSelectionDescription = rootView.findViewById(R.id.textView_custom_selection_description);
-
-        apartmentGateways = rootView.findViewById(R.id.apartmentGateways);
-        otherGateways = rootView.findViewById(R.id.otherGateways);
-
-        linearLayoutOfApartmentGateways = rootView.findViewById(R.id.linearLayoutOfApartmentGateways);
-        linearLayoutOfOtherGateways = rootView.findViewById(R.id.linearLayoutOfOtherGateways);
-
         try {
             apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             gateways = DatabaseHandler.getAllGateways();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
-        
+
         updateGatewayViews();
 
         Bundle args = getArguments();
@@ -140,6 +134,11 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_room_page_2;
+    }
+
     private void initExistingData(long roomId) {
         try {
             Room room = DatabaseHandler.getRoom(roomId);
@@ -147,14 +146,16 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             currentRoomName = room.getName();
             currentReceivers = room.getReceivers();
 
-            if (!room.getAssociatedGateways().isEmpty()) {
+            if (!room.getAssociatedGateways()
+                    .isEmpty()) {
                 checkBoxUseCustomGatewaySelection.setChecked(true);
             }
 
             for (Gateway gateway : room.getAssociatedGateways()) {
                 for (CheckBox checkBox : gatewayCheckboxList) {
                     Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
-                    if (gateway.getId().equals(checkBoxGateway.getId())) {
+                    if (gateway.getId()
+                            .equals(checkBoxGateway.getId())) {
                         checkBox.setChecked(true);
                     }
                 }
@@ -171,8 +172,8 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
 
             gateways = DatabaseHandler.getAllGateways();
 
-            String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+            String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+            LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
             // clear previous items
             linearLayoutOfApartmentGateways.removeAllViews();
@@ -200,7 +201,8 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
                 checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
                 if (!previouslyCheckedGateways.isEmpty()) {
                     for (Gateway previousGateway : previouslyCheckedGateways) {
-                        if (previousGateway.getId().equals(gateway.getId())) {
+                        if (previousGateway.getId()
+                                .equals(gateway.getId())) {
                             checkBox.setChecked(true);
                             break;
                         }
@@ -334,8 +336,7 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
 
-        StatusMessageHandler.showInfoMessage(getTargetFragment()
-                , R.string.room_saved, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -343,12 +344,14 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_NAME_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

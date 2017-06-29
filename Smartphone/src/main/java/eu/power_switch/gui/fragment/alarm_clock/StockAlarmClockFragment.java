@@ -46,6 +46,7 @@ import android.widget.Switch;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -71,22 +72,24 @@ import eu.power_switch.shared.log.Log;
 public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
     private static Event currentEventType = Event.ALARM_TRIGGERED;
+    @BindView(R.id.spinner_sleep_as_android_event)
+    Spinner              spinnerEventType;
+    @BindView(R.id.add_fab)
+    FloatingActionButton addActionFAB;
+    @BindView(R.id.switch_on_off)
+    Switch               switchOnOff;
     private BroadcastReceiver broadcastReceiver;
     private ArrayList<Action> actions = new ArrayList<>();
-    private RecyclerView recyclerViewActions;
     private ActionRecyclerViewAdapter recyclerViewAdapter;
-    private Spinner spinnerEventType;
-    private FloatingActionButton addActionFAB;
 
     @Override
-    public void onCreateViewEvent(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_stock_alarm_clock, container, false);
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        Switch switchOnOff = rootView.findViewById(R.id.switch_on_off);
         switchOnOff.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED));
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -97,9 +100,9 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
             }
         });
 
-        spinnerEventType = rootView.findViewById(R.id.spinner_sleep_as_android_event);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.stock_alarm_clock_event_names, android.R.layout.simple_spinner_item);
+                R.array.stock_alarm_clock_event_names,
+                android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEventType.setAdapter(adapter);
         SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
@@ -111,13 +114,11 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         spinnerEventType.setOnItemSelectedListener(spinnerInteractionListener);
         spinnerEventType.setOnTouchListener(spinnerInteractionListener);
 
-        recyclerViewActions = rootView.findViewById(R.id.recyclerView);
         recyclerViewAdapter = new ActionRecyclerViewAdapter(getContext(), actions);
         recyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int position) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle(R.string.delete)
+                new AlertDialog.Builder(getContext()).setTitle(R.string.delete)
                         .setMessage(R.string.are_you_sure)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
@@ -126,7 +127,8 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
                                     actions.remove(position);
                                     DatabaseHandler.setAlarmActions(currentEventType, actions);
                                     StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
-                                            R.string.action_removed, Snackbar.LENGTH_LONG);
+                                            R.string.action_removed,
+                                            Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                                 }
@@ -138,18 +140,16 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
                         .show();
             }
         });
-        recyclerViewActions.setAdapter(recyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewActions.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(recyclerViewAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
-        addActionFAB = rootView.findViewById(R.id.add_fab);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddStockAlarmClockEventActionDialog addStockAlarmClockEventActionDialog =
-                        AddStockAlarmClockEventActionDialog.newInstance(currentEventType.getId());
+                AddStockAlarmClockEventActionDialog addStockAlarmClockEventActionDialog = AddStockAlarmClockEventActionDialog.newInstance(
+                        currentEventType.getId());
                 addStockAlarmClockEventActionDialog.setTargetFragment(recyclerViewFragment, 0);
                 addStockAlarmClockEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
@@ -168,11 +168,15 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
                 }
             }
         };
+
+        updateUI();
+
+        return rootView;
     }
 
     @Override
-    protected void onInitialized() {
-        updateUI();
+    protected int getLayoutRes() {
+        return R.layout.fragment_stock_alarm_clock;
     }
 
     private void updateUI() {
@@ -198,7 +202,8 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -213,7 +218,8 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 
@@ -225,8 +231,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
         switch (menuItem.getItemId()) {
             case R.id.add_action:
-                AddStockAlarmClockEventActionDialog addAlarmEventActionDialog = AddStockAlarmClockEventActionDialog.newInstance(
-                        spinnerEventType.getSelectedItemPosition());
+                AddStockAlarmClockEventActionDialog addAlarmEventActionDialog = AddStockAlarmClockEventActionDialog.newInstance(spinnerEventType.getSelectedItemPosition());
                 addAlarmEventActionDialog.setTargetFragment(this, 0);
                 addAlarmEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             default:
@@ -241,16 +246,14 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.sleep_as_android_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.add_action).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.add_action)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.add_action).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.add_action)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewActions;
     }
 
     @Override

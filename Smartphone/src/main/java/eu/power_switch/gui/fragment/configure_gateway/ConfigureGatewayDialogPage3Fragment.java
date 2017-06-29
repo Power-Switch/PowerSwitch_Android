@@ -35,6 +35,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -53,12 +54,12 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
 
     public static final String KEY_APARTMENT_IDS = "apartment_ids";
 
-    private View rootView;
+    @BindView(R.id.linearLayout_Apartments)
+    LinearLayout linearLayoutSelectableApartments;
+
     private long gatewayId = -1;
 
     private List<CheckBox> apartmentCheckboxList = new ArrayList<>();
-
-    private LinearLayout linearLayoutSelectableApartments;
 
     /**
      * Used to notify the setup page that some info has changed
@@ -69,15 +70,14 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_APARTMENTS_CHANGED);
         intent.putExtra(KEY_APARTMENT_IDS, apartmentIds);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_gateway_page_3, container, false);
-
-        linearLayoutSelectableApartments = rootView.findViewById(R.id.linearLayout_Apartments);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         addApartmentsToLayout();
 
@@ -88,6 +88,11 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
         }
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_gateway_page_3;
     }
 
     /**
@@ -104,7 +109,8 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
             for (CheckBox checkBox : apartmentCheckboxList) {
                 Apartment checkBoxApartment = (Apartment) checkBox.getTag(R.string.apartments);
                 for (Apartment associatedApartment : associatedApartments) {
-                    if (checkBoxApartment.getId().equals(associatedApartment.getId())) {
+                    if (checkBoxApartment.getId()
+                            .equals(associatedApartment.getId())) {
                         checkBox.setChecked(true);
                     }
                 }
@@ -119,14 +125,13 @@ public class ConfigureGatewayDialogPage3Fragment extends ConfigurationDialogFrag
      * Generate Apartment items and add them to view
      */
     private void addApartmentsToLayout() {
-        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+        String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
             List<Apartment> apartments = DatabaseHandler.getAllApartments();
             for (Apartment apartment : apartments) {
-                @SuppressLint("InflateParams")
-                LinearLayout apartmentLayout = (LinearLayout) inflater.inflate(R.layout.apartment_overview, null);
+                @SuppressLint("InflateParams") LinearLayout apartmentLayout = (LinearLayout) inflater.inflate(R.layout.apartment_overview, null);
                 // every inflated layout has to be added manually, attaching while inflating will only generate every
                 // child once
                 linearLayoutSelectableApartments.addView(apartmentLayout);

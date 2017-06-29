@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -59,31 +60,38 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDialogFragment {
 
-    public static final String KEY_REPEAT_AMOUNT = "repetitionAmount";
+    public static final String KEY_REPEAT_AMOUNT       = "repetitionAmount";
     public static final String KEY_ASSOCIATED_GATEWAYS = "gateways";
-
-    private View rootView;
-
-    private int repetitionAmount = Receiver.MIN_REPETITIONS;
-    private List<Gateway> gateways = new ArrayList<>();
-
-    private BroadcastReceiver broadcastReceiver;
-    private TextView textView_repetitionAmount;
-    private Button buttonPlus;
-    private Button buttonMinus;
-    private LinearLayout linearLayoutOfApartmentGateways;
-    private LinearLayout linearLayoutOfRoomGateways;
-    private LinearLayout linearLayoutOfOtherGateways;
-
+    @BindView(R.id.textView_repeatAmount)
+    TextView     textView_repetitionAmount;
+    @BindView(R.id.button_plus)
+    Button       buttonPlus;
+    @BindView(R.id.button_minus)
+    Button       buttonMinus;
+    @BindView(R.id.linearLayoutOfApartmentGateways)
+    LinearLayout linearLayoutOfApartmentGateways;
+    @BindView(R.id.linearLayoutOfRoomGateways)
+    LinearLayout linearLayoutOfRoomGateways;
+    @BindView(R.id.linearLayoutOfOtherGateways)
+    LinearLayout linearLayoutOfOtherGateways;
+    @BindView(R.id.apartmentGateways)
+    LinearLayout apartmentGateways;
+    @BindView(R.id.roomGateways)
+    LinearLayout roomGateways;
+    @BindView(R.id.otherGateways)
+    LinearLayout otherGateways;
+    @BindView(R.id.checkbox_use_custom_gateway_selection)
+    CheckBox     checkBoxUseCustomGatewaySelection;
+    @BindView(R.id.textView_custom_selection_description)
+    TextView     textViewCustomSelectionDescription;
+    private int            repetitionAmount    = Receiver.MIN_REPETITIONS;
+    private List<Gateway>  gateways            = new ArrayList<>();
     private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
     private Apartment apartment;
-    private Room room;
-    private long receiverId;
-    private LinearLayout apartmentGateways;
-    private LinearLayout roomGateways;
-    private LinearLayout otherGateways;
-    private CheckBox checkBoxUseCustomGatewaySelection;
-    private TextView textViewCustomSelectionDescription;
+    private Room      room;
+    private long      receiverId;
+
+    private BroadcastReceiver broadcastReceiver;
 
 
     /**
@@ -93,19 +101,19 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
      * @param repeatAmount repeat amount
      * @param gateways     list of gateways
      */
-    public static void sendGatewayDetailsChangedBroadcast(Context context, Integer repeatAmount,
-                                                          List<Gateway> gateways) {
+    public static void sendGatewayDetailsChangedBroadcast(Context context, Integer repeatAmount, List<Gateway> gateways) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_DETAILS_CHANGED);
         intent.putExtra(KEY_REPEAT_AMOUNT, repeatAmount);
         intent.putExtra(KEY_ASSOCIATED_GATEWAYS, new ArrayList<>(gateways));
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_4, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -130,10 +138,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             }
         };
 
-        textView_repetitionAmount = rootView.findViewById(R.id.textView_repeatAmount);
         textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
-        buttonPlus = rootView.findViewById(R.id.button_plus);
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +157,6 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             }
         });
 
-        buttonMinus = rootView.findViewById(R.id.button_minus);
         buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +174,6 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             }
         });
 
-        checkBoxUseCustomGatewaySelection = rootView.findViewById(R.id.checkbox_use_custom_gateway_selection);
         CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
             @Override
             public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
@@ -180,16 +184,6 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         };
         checkBoxUseCustomGatewaySelection.setOnCheckedChangeListener(checkBoxInteractionListener);
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
-
-        textViewCustomSelectionDescription = rootView.findViewById(R.id.textView_custom_selection_description);
-
-        apartmentGateways = rootView.findViewById(R.id.apartmentGateways);
-        roomGateways = rootView.findViewById(R.id.roomGateways);
-        otherGateways = rootView.findViewById(R.id.otherGateways);
-
-        linearLayoutOfApartmentGateways = rootView.findViewById(R.id.linearLayoutOfApartmentGateways);
-        linearLayoutOfRoomGateways = rootView.findViewById(R.id.linearLayoutOfRoomGateways);
-        linearLayoutOfOtherGateways = rootView.findViewById(R.id.linearLayoutOfOtherGateways);
 
         try {
             apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
@@ -211,6 +205,11 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_receiver_page_4;
+    }
+
     private void initializeReceiverData(long receiverId) {
         try {
             Receiver receiver = DatabaseHandler.getReceiver(receiverId);
@@ -229,14 +228,16 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 
             room = DatabaseHandler.getRoom(receiver.getRoomId());
 
-            if (!receiver.getAssociatedGateways().isEmpty()) {
+            if (!receiver.getAssociatedGateways()
+                    .isEmpty()) {
                 checkBoxUseCustomGatewaySelection.setChecked(true);
             }
 
             for (Gateway gateway : receiver.getAssociatedGateways()) {
                 for (CheckBox checkBox : gatewayCheckboxList) {
                     Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
-                    if (gateway.getId().equals(checkBoxGateway.getId())) {
+                    if (gateway.getId()
+                            .equals(checkBoxGateway.getId())) {
                         checkBox.setChecked(true);
                     }
                 }
@@ -251,8 +252,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
             List<Gateway> previouslyCheckedGateways = new ArrayList<>();
             previouslyCheckedGateways.addAll(getCheckedGateways());
 
-            String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+            String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+            LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
             // clear previous items
             linearLayoutOfApartmentGateways.removeAllViews();
@@ -284,7 +285,8 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
                 checkBox.setOnCheckedChangeListener(checkBoxInteractionListener);
                 for (Gateway previousGateway : previouslyCheckedGateways) {
-                    if (previousGateway.getId().equals(gateway.getId())) {
+                    if (previousGateway.getId()
+                            .equals(gateway.getId())) {
                         checkBox.setChecked(true);
                         break;
                     }
@@ -392,12 +394,14 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_ADDED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

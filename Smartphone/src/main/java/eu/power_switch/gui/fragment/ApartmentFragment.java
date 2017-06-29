@@ -38,6 +38,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -60,10 +61,13 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  */
 public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
 
-    private RecyclerView recyclerViewApartments;
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
+
     private ApartmentRecyclerViewAdapter apartmentArrayAdapter;
     private ArrayList<Apartment> apartments = new ArrayList<>();
-    private FloatingActionButton fab;
+
+
     private BroadcastReceiver broadcastReceiver;
 
     /**
@@ -75,23 +79,23 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         Log.d("ApartmentFragment", "sendApartmentChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
         UtilityService.forceWearDataUpdate(context);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_apartment, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
-        recyclerViewApartments = rootView.findViewById(R.id.recyclerView);
         apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
 
-        recyclerViewApartments.setAdapter(apartmentArrayAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewApartments.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(apartmentArrayAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
         apartmentArrayAdapter.setOnItemClickListener(new ApartmentRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
@@ -101,7 +105,8 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                     SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                     for (Apartment currentApartment : apartments) {
-                        if (currentApartment.getId().equals(apartment.getId())) {
+                        if (currentApartment.getId()
+                                .equals(apartment.getId())) {
                             currentApartment.setActive(true);
                         } else {
                             currentApartment.setActive(false);
@@ -120,8 +125,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 try {
                     Apartment apartment = apartments.get(position);
 
-                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(
-                            apartment.getId());
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment.getId());
                     configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
@@ -130,7 +134,6 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
             }
         });
 
-        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getContext(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,16 +156,14 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 updateUI();
             }
         };
-    }
 
-    @Override
-    protected void onInitialized() {
         updateUI();
+
+        return rootView;
     }
 
     private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(fab)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(fab)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)
@@ -181,10 +182,13 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.apartment_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_apartment).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_apartment)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_apartment).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_apartment)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -208,11 +212,6 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         }
 
         return super.onOptionsItemSelected(menuItem);
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewApartments;
     }
 
     @Override
@@ -258,12 +257,19 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_apartment;
     }
 }

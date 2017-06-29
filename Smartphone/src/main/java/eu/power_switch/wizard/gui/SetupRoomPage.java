@@ -21,6 +21,7 @@ package eu.power_switch.wizard.gui;
 import android.os.Bundle;
 
 import eu.power_switch.R;
+import eu.power_switch.wizard.config.ConfigurationHolder;
 
 /**
  * Setup Page for entering a Room name

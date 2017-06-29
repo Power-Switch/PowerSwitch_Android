@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +35,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -60,10 +60,13 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
     private static ArrayList<Action> actions = new ArrayList<>();
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
 
+    @BindView(R.id.recyclerview_list_of_actions)
+    RecyclerView recyclerViewActions;
+
     private long callEventId = -1;
 
-    private View rootView;
     private BroadcastReceiver broadcastReceiver;
+
 
     /**
      * Used to notify the setup page that some info has changed
@@ -74,7 +77,8 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED);
         intent.putExtra(KEY_ACTIONS, actions);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     public static void addAction(Action action) {
@@ -85,7 +89,7 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_event_page_2, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         actions.clear();
         broadcastReceiver = new BroadcastReceiver() {
@@ -98,14 +102,13 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
             }
         };
 
-        final Fragment fragment = this;
         FloatingActionButton addActionFAB = rootView.findViewById(R.id.add_action);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddCallEventActionDialog addCallEventActionDialog = new AddCallEventActionDialog();
-                addCallEventActionDialog.setTargetFragment(fragment, 0);
+                addCallEventActionDialog.setTargetFragment(ConfigureCallEventDialogPage2ActionsFragment.this, 0);
                 addCallEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
@@ -119,7 +122,6 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
                 sendActionsChangedBroadcast(getContext(), actions);
             }
         });
-        RecyclerView recyclerViewActions = rootView.findViewById(R.id.recyclerview_list_of_actions);
         recyclerViewActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewActions.setLayoutManager(layoutManager);
@@ -131,6 +133,11 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
         }
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_call_event_page_2;
     }
 
     private void initializeCallData(long callEventId) {
@@ -150,12 +157,14 @@ public class ConfigureCallEventDialogPage2ActionsFragment extends ConfigurationD
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

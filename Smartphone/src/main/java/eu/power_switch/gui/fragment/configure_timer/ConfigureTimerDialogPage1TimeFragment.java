@@ -37,6 +37,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -51,15 +52,20 @@ import eu.power_switch.timer.Timer;
  */
 public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFragment {
 
-    public static final String KEY_NAME = "name";
-    public static final String KEY_EXECUTION_TIME = "executionTime";
+    public static final String KEY_NAME             = "name";
+    public static final String KEY_EXECUTION_TIME   = "executionTime";
     public static final String KEY_RANDOMIZER_VALUE = "randomizerValue";
 
-    private TextInputLayout floatingName;
-    private EditText name;
-    private TimePicker timePicker;
-    private TextView textViewRandomizer;
-    private SeekBar seekBarRandomizer;
+    @BindView(R.id.timer_name_text_input_layout)
+    TextInputLayout floatingName;
+    @BindView(R.id.editText_timer_name)
+    EditText        name;
+    @BindView(R.id.timePicker)
+    TimePicker      timePicker;
+    @BindView(R.id.textViewRandomizer)
+    TextView        textViewRandomizer;
+    @BindView(R.id.seekbarRandomizer)
+    SeekBar         seekBarRandomizer;
 
     /**
      * Used to notify the setup page that some info has changed
@@ -73,16 +79,15 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
         intent.putExtra(KEY_EXECUTION_TIME, calendar);
         intent.putExtra(KEY_RANDOMIZER_VALUE, randomizerValue);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_1, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        floatingName = rootView.findViewById(R.id.timer_name_text_input_layout);
-        name = rootView.findViewById(R.id.editText_timer_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,7 +105,6 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
             }
         });
 
-        timePicker = rootView.findViewById(R.id.timePicker);
         timePicker.setIs24HourView(DateFormat.is24HourFormat(getContext()));
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -115,9 +119,6 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
             }
         });
 
-        textViewRandomizer = rootView.findViewById(R.id.textViewRandomizer);
-
-        seekBarRandomizer = rootView.findViewById(R.id.seekbarRandomizer);
         seekBarRandomizer.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -146,6 +147,11 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_timer_page_1;
+    }
+
     private void initializeTimerData(long timerId) {
         try {
             Timer timer = DatabaseHandler.getTimer(timerId);
@@ -163,7 +169,9 @@ public class ConfigureTimerDialogPage1TimeFragment extends ConfigurationDialogFr
     }
 
     private String getCurrentName() {
-        return name.getText().toString().trim();
+        return name.getText()
+                .toString()
+                .trim();
     }
 
     private Calendar getCurrentTime() {

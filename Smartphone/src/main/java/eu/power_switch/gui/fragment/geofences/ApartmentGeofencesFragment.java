@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -68,18 +69,16 @@ import eu.power_switch.shared.permission.PermissionHelper;
  */
 public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
-    private static final String[] NEEDED_PERMISSIONS = {
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
+    private static final String[] NEEDED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
+
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
 
     private HashMap<Long, Apartment> geofenceIdApartmentMap = new HashMap<>();
-    private ArrayList<Geofence> geofences = new ArrayList<>();
+    private ArrayList<Geofence>      geofences              = new ArrayList<>();
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
-    private RecyclerView recyclerViewGeofences;
-    private BroadcastReceiver broadcastReceiver;
-    private GeofenceApiHandler geofenceApiHandler;
-    private FloatingActionButton fab;
-    private List<Apartment> apartments;
+    private GeofenceApiHandler          geofenceApiHandler;
+    private BroadcastReceiver           broadcastReceiver;
 
     /**
      * Used to notify the apartment geofence page (this) that geofences have changed
@@ -88,23 +87,22 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
      */
     public static void sendApartmentGeofencesChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_apartment_geofences, container, false);
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
-        recyclerViewGeofences = rootView.findViewById(R.id.recyclerView);
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
-        recyclerViewGeofences.setAdapter(geofenceRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewGeofences.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(geofenceRecyclerViewAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         geofenceRecyclerViewAdapter.setOnItemLongClickListener(new GeofenceRecyclerViewAdapter.OnItemLongClickListener() {
@@ -112,8 +110,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             public void onItemLongClick(View itemView, int position) {
                 final Geofence geofence = geofences.get(position);
 
-                ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog =
-                        ConfigureApartmentGeofenceDialog.newInstance(geofenceIdApartmentMap.get(geofence.getId())
+                ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog = ConfigureApartmentGeofenceDialog.newInstance(
+                        geofenceIdApartmentMap.get(geofence.getId())
                                 .getId());
                 configureApartmentGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureApartmentGeofenceDialog.show(getFragmentManager(), null);
@@ -126,22 +124,24 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION, NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(),
+                            PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
+                            NEEDED_PERMISSIONS);
                     return;
                 }
 
                 try {
-                    int apartmentsCount = DatabaseHandler.getAllApartments().size();
+                    int apartmentsCount = DatabaseHandler.getAllApartments()
+                            .size();
 
                     if (apartmentsCount == 0) {
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(R.string.please_create_or_activate_apartment_first)
+                        new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
                         return;
-                    } else if (DatabaseHandler.getAllApartments().size() == geofences.size()) {
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(R.string.all_apartments_have_geofence)
+                    } else if (DatabaseHandler.getAllApartments()
+                            .size() == geofences.size()) {
+                        new AlertDialog.Builder(getContext()).setMessage(R.string.all_apartments_have_geofence)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
                         return;
@@ -173,14 +173,13 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
                         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
                             if (result[0] == PackageManager.PERMISSION_GRANTED) {
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(),
-                                        R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                                 sendApartmentGeofencesChangedBroadcast(context);
                             } else {
-                                StatusMessageHandler.showPermissionMissingMessage(
-                                        getActivity(),
-                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
+                                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                                        getRecyclerView(),
+                                        PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                                         Manifest.permission.ACCESS_FINE_LOCATION);
                             }
                         }
@@ -188,19 +187,21 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
                 }
             }
         };
-    }
 
-    @Override
-    protected void onInitialized() {
         if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
             showEmpty();
-            StatusMessageHandler.showPermissionMissingMessage(
-                    getActivity(),
-                    getRecyclerView(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                     Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             refreshGeofences();
         }
+
+        return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_apartment_geofences;
     }
 
     private void refreshGeofences() {
@@ -217,15 +218,20 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
         switch (menuItem.getItemId()) {
             case R.id.create_geofence:
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION, NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(),
+                            PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
+                            NEEDED_PERMISSIONS);
                     break;
                 }
 
                 try {
-                    int apartmentsCount = DatabaseHandler.getAllApartments().size();
+                    int apartmentsCount = DatabaseHandler.getAllApartments()
+                            .size();
 
                     if (apartmentsCount == 0) {
-                        StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.please_create_or_activate_apartment_first, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage(getRecyclerView(),
+                                R.string.please_create_or_activate_apartment_first,
+                                Snackbar.LENGTH_LONG);
                         return true;
                     } else if (apartmentsCount == geofences.size()) {
                         StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.all_apartments_have_geofence, Snackbar.LENGTH_LONG);
@@ -249,10 +255,13 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.apartment_geofences_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_geofence)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_geofence).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_geofence)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -262,7 +271,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
         geofenceApiHandler.onStart();
     }
 
@@ -278,14 +288,10 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         geofenceApiHandler.onStop();
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewGeofences;
     }
 
     @Override
@@ -303,7 +309,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
         geofenceIdApartmentMap.clear();
 
         ArrayList<Geofence> geofences = new ArrayList<>();
-        List<Apartment> apartments;
+        List<Apartment>     apartments;
 
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
@@ -316,7 +322,8 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             // apartment can have no associated Geofence, so we just ignore it
             if (apartment.getGeofence() != null) {
                 geofences.add(apartment.getGeofence());
-                geofenceIdApartmentMap.put(apartment.getGeofence().getId(), apartment);
+                geofenceIdApartmentMap.put(apartment.getGeofence()
+                        .getId(), apartment);
             }
         }
 

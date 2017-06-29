@@ -50,6 +50,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.BindView;
 import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
@@ -90,34 +91,53 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDialogFragment {
 
-    public static final String KEY_CHANNEL_MASTER = "channelMaster";
-    public static final String KEY_CHANNEL_SLAVE = "channelSlave";
-    public static final String KEY_DIPS = "dips";
-    public static final String KEY_SEED = "seed";
+    public static final String KEY_CHANNEL_MASTER    = "channelMaster";
+    public static final String KEY_CHANNEL_SLAVE     = "channelSlave";
+    public static final String KEY_DIPS              = "dips";
+    public static final String KEY_SEED              = "seed";
     public static final String KEY_UNIVERSAL_BUTTONS = "universalButtons";
 
-    private View rootView;
+    @BindView(R.id.listView_channelMaster)
+    ListView channelMasterListView;
+    @BindView(R.id.listView_channelSlave)
+    ListView channelSlaveListView;
 
-    private ListView channelMasterListView;
+    @BindView(R.id.tableLayout_MasterSlave)
+    TableLayout      layoutMasterSlave;
+    @BindView(R.id.scrollView_dip)
+    NestedScrollView layoutDip;
+    @BindView(R.id.scrollView_autoPair)
+    NestedScrollView layoutAutoPair;
+    @BindView(R.id.linearLayout_universalButtons)
+    LinearLayout     layoutUniversal;
+    @BindView(R.id.universalButtons_List)
+    LinearLayout     buttonsList;
+
+    @BindView(R.id.editText_seed)
+    TextInputEditText editTextSeed;
+    @BindView(R.id.textInputEditText_seed)
+    TextInputLayout   textInputEditTextSeed;
+
+    @BindView(R.id.button_paste)
+    android.widget.Button buttonPaste;
+    @BindView(R.id.button_pair)
+    android.widget.Button buttonPair;
+    @BindView(R.id.button_unpair)
+    android.widget.Button buttonUnpair;
+    @BindView(R.id.button_unpairAll)
+    android.widget.Button buttonUnpairAll;
+
+    @BindView(R.id.add_universalButton_fab)
+    FloatingActionButton addUniversalButtonFAB;
+
     private ArrayAdapter<String> channelMasterNamesAdapter;
-
-    private ListView channelSlaveListView;
     private ArrayAdapter<String> channelSlaveNamesAdapter;
 
-    private TableLayout layoutMasterSlave;
-    private NestedScrollView layoutDip;
-    private NestedScrollView layoutAutoPair;
-    private LinearLayout layoutUniversal;
-    private LinearLayout buttonsList;
-
     private ArrayList<SwitchCompat> dipViewList;
-    private BroadcastReceiver broadcastReceiver;
-    private ArrayList<DipSwitch> dipSwitchArrayList;
+    private BroadcastReceiver       broadcastReceiver;
+    private ArrayList<DipSwitch>    dipSwitchArrayList;
 
     private Receiver currentAutoPairReceiver;
-    private TextInputEditText editTextSeed;
-    private TextInputLayout textInputEditTextSeed;
-
 
     /**
      * Used to notify the summary page that some info has changed
@@ -144,7 +164,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_3, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -172,8 +192,6 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         };
 
         // Master/Slave
-        layoutMasterSlave = rootView.findViewById(R.id.tableLayout_MasterSlave);
-        channelMasterListView = rootView.findViewById(R.id.listView_channelMaster);
         channelMasterNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice);
         channelMasterListView.setAdapter(channelMasterNamesAdapter);
         channelMasterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -189,7 +207,6 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             }
         });
 
-        channelSlaveListView = rootView.findViewById(R.id.listView_channelSlave);
         channelSlaveNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice);
         channelSlaveListView.setAdapter(channelSlaveNamesAdapter);
         channelSlaveListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -206,7 +223,6 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         });
 
         // Dips
-        layoutDip = rootView.findViewById(R.id.scrollView_dip);
         dipViewList = new ArrayList<>();
         SwitchCompat dip0 = rootView.findViewById(R.id.switch_dip0);
         SwitchCompat dip1 = rootView.findViewById(R.id.switch_dip1);
@@ -250,10 +266,6 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
 
 
         // AutoPair
-        layoutAutoPair = rootView.findViewById(R.id.scrollView_autoPair);
-
-        textInputEditTextSeed = rootView.findViewById(R.id.textInputEditText_seed);
-        editTextSeed = rootView.findViewById(R.id.editText_seed);
         editTextSeed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -289,13 +301,12 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             }
         });
 
-        android.widget.Button buttonPaste = rootView.findViewById(R.id.button_paste);
         buttonPaste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    String content = ClipboardHelper.getClipboardContent(getActivity());
-                    Long longValue = Long.parseLong(content);
+                    String content   = ClipboardHelper.getClipboardContent(getActivity());
+                    Long   longValue = Long.parseLong(content);
                     editTextSeed.setText(String.valueOf(longValue));
                     StatusMessageHandler.showInfoMessage(getContentView(), R.string.pasted_from_clipboard, Snackbar.LENGTH_LONG);
                 } catch (EmptyClipboardException e) {
@@ -309,7 +320,6 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             }
         });
 
-        android.widget.Button buttonPair = rootView.findViewById(R.id.button_pair);
         buttonPair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,7 +349,6 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                 }
             }
         });
-        android.widget.Button buttonUnpair = rootView.findViewById(R.id.button_unpair);
         buttonUnpair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,7 +377,6 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
                 }
             }
         });
-        android.widget.Button buttonUnpairAll = rootView.findViewById(R.id.button_unpairAll);
         buttonUnpairAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -399,10 +407,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         });
 
         // Universal
-        layoutUniversal = rootView.findViewById(R.id.linearLayout_universalButtons);
-        FloatingActionButton addUniversalButtonFAB = rootView.findViewById(R.id.add_universalButton_fab);
         addUniversalButtonFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        buttonsList = rootView.findViewById(R.id.universalButtons_List);
 
         addUniversalButtonFAB.setOnClickListener(new View.OnClickListener() {
 
@@ -424,6 +429,11 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         createTutorial();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_receiver_page_3;
     }
 
     private void createTutorial() {
@@ -697,8 +707,8 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
         for (int i = 0; i < buttonsList.getChildCount(); i++) {
             LinearLayout universalButtonLayout = (LinearLayout) buttonsList.getChildAt(i);
 
-            LinearLayout nameLayout = (LinearLayout) universalButtonLayout.getChildAt(0);
-            AppCompatEditText nameEditText = (AppCompatEditText) nameLayout.getChildAt(0);
+            LinearLayout      nameLayout     = (LinearLayout) universalButtonLayout.getChildAt(0);
+            AppCompatEditText nameEditText   = (AppCompatEditText) nameLayout.getChildAt(0);
             AppCompatEditText signalEditText = (AppCompatEditText) universalButtonLayout.getChildAt(1);
 
             buttons.add(new UniversalButton(null,

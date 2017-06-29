@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
@@ -63,15 +64,16 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
     public static final String KEY_BRAND = "brand";
     public static final String KEY_MODEL = "model";
 
-    private View rootView;
+    @BindView(R.id.listView_brands)
+    ListView brandListView;
+    @BindView(R.id.listView_models)
+    ListView modelListView;
+    @BindView(R.id.textView_model)
+    TextView modelTextView;
 
-    private ListView brandListView;
     private ArrayAdapter<String> brandNamesAdapter;
-
-    private ListView modelListView;
     private ArrayAdapter<String> modelNamesAdapter;
 
-    private TextView modelTextView;
 
     /**
      * Used to notify the summary page that some info has changed
@@ -92,9 +94,8 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_receiver_page_2, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        brandListView = rootView.findViewById(R.id.listView_brands);
         brandNamesAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_single_choice,
                 getResources().getStringArray(R.array.brand_array));
@@ -107,9 +108,6 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
             }
         });
 
-        modelTextView = rootView.findViewById(R.id.textView_model);
-
-        modelListView = rootView.findViewById(R.id.listView_models);
         modelNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice, new ArrayList<String>());
         modelListView.setAdapter(modelNamesAdapter);
         modelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -120,7 +118,6 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
             }
         });
 
-
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
             long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
@@ -130,6 +127,11 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
         createTutorial();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_receiver_page_2;
     }
 
     private void createTutorial() {
@@ -180,8 +182,8 @@ public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialo
 
     private String getSelectedBrand() {
         try {
-            int position = brandListView.getCheckedItemPosition();
-            String brand = brandNamesAdapter.getItem(position);
+            int    position = brandListView.getCheckedItemPosition();
+            String brand    = brandNamesAdapter.getItem(position);
             return brand;
         } catch (Exception e) {
             return null;

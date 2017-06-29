@@ -42,6 +42,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -63,16 +64,15 @@ import eu.power_switch.shared.permission.PermissionHelper;
  */
 public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
-    private static final String[] NEEDED_PERMISSIONS = {
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
+    private static final String[] NEEDED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
+
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
 
     private ArrayList<Geofence> geofences = new ArrayList<>();
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
-    private RecyclerView recyclerViewGeofences;
-    private BroadcastReceiver broadcastReceiver;
-    private FloatingActionButton fab;
-    private GeofenceApiHandler geofenceApiHandler;
+    private GeofenceApiHandler          geofenceApiHandler;
+    private BroadcastReceiver           broadcastReceiver;
 
     /**
      * Used to notify the custom geofence page (this) that geofences have changed
@@ -81,23 +81,22 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
      */
     public static void sendCustomGeofencesChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CUSTOM_GEOFENCE_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_custom_geofences, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
-        recyclerViewGeofences = rootView.findViewById(R.id.recyclerView);
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
-        recyclerViewGeofences.setAdapter(geofenceRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewGeofences.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(geofenceRecyclerViewAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         geofenceRecyclerViewAdapter.setOnItemLongClickListener(new GeofenceRecyclerViewAdapter.OnItemLongClickListener() {
@@ -111,13 +110,14 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
             }
         });
 
-        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION, NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(),
+                            PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
+                            NEEDED_PERMISSIONS);
                     return;
                 }
 
@@ -143,13 +143,11 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
                         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
                             if (result[0] == PackageManager.PERMISSION_GRANTED) {
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(),
-                                        R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                                 sendCustomGeofencesChangedBroadcast(context);
                             } else {
-                                StatusMessageHandler.showPermissionMissingMessage(
-                                        getActivity(),
+                                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                                         getRecyclerView(),
                                         PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                                         Manifest.permission.ACCESS_FINE_LOCATION);
@@ -160,20 +158,23 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
             }
         };
-    }
 
-    @Override
-    protected void onInitialized() {
         if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
             showEmpty();
-            StatusMessageHandler.showPermissionMissingMessage(
-                    getActivity(),
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
                     PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                     Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             refreshGeofences();
         }
+
+        return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_custom_geofences;
     }
 
     @UiThread
@@ -191,7 +192,9 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
         switch (menuItem.getItemId()) {
             case R.id.create_geofence:
                 if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
-                    PermissionHelper.showMissingPermissionDialog(getActivity(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION, NEEDED_PERMISSIONS);
+                    PermissionHelper.showMissingPermissionDialog(getActivity(),
+                            PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
+                            NEEDED_PERMISSIONS);
                     break;
                 }
 
@@ -209,10 +212,13 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.custom_geofences_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_geofence).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_geofence)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_geofence).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_geofence)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -232,20 +238,17 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CUSTOM_GEOFENCE_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
         geofenceApiHandler.onStart();
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         geofenceApiHandler.onStop();
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewGeofences;
     }
 
     @Override

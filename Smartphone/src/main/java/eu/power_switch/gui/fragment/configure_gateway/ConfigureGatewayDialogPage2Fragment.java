@@ -26,7 +26,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -38,6 +37,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
@@ -58,15 +58,18 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
 
     public static final String KEY_SSIDS = "ssids";
 
-    private View rootView;
+    @BindView(R.id.add_ssid_fab)
+    FloatingActionButton addSsidFAB;
+    @BindView(R.id.recyclerView_ssids)
+    RecyclerView         recyclerViewSsids;
+
     private long gatewayId = -1;
 
     private ArrayList<String> ssids = new ArrayList<>();
 
     private BroadcastReceiver broadcastReceiver;
 
-    private FloatingActionButton addSsidFAB;
-    private RecyclerView recyclerViewSsids;
+
     private SsidRecyclerViewAdapter ssidRecyclerViewAdapter;
 
     /**
@@ -78,22 +81,21 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SSIDS_CHANGED);
         intent.putExtra(KEY_SSIDS, ssids);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_gateway_page_2, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        recyclerViewSsids = rootView.findViewById(R.id.recyclerView_ssids);
         ssidRecyclerViewAdapter = new SsidRecyclerViewAdapter(getActivity(), ssids);
         recyclerViewSsids.setAdapter(ssidRecyclerViewAdapter);
         ssidRecyclerViewAdapter.setOnDeleteClickListener(new SsidRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int position) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle(R.string.delete)
+                new AlertDialog.Builder(getContext()).setTitle(R.string.delete)
                         .setMessage(R.string.are_you_sure)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
@@ -114,14 +116,12 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewSsids.setLayoutManager(layoutManager);
 
-        addSsidFAB = rootView.findViewById(R.id.add_ssid_fab);
         addSsidFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-        final Fragment fragment = this;
         addSsidFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddSsidDialog addSsidDialog = new AddSsidDialog();
-                addSsidDialog.setTargetFragment(fragment, 0);
+                addSsidDialog.setTargetFragment(ConfigureGatewayDialogPage2Fragment.this, 0);
                 addSsidDialog.show(getFragmentManager(), null);
             }
         });
@@ -148,6 +148,11 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_gateway_page_2;
+    }
+
     /**
      * Loads existing gateway data into fields
      *
@@ -170,12 +175,14 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_SSID_ADDED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

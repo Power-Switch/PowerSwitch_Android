@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -56,20 +57,20 @@ import eu.power_switch.shared.constants.PhoneConstants;
  */
 public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
-    private long callEventId = -1;
-
-    private View rootView;
-    private BroadcastReceiver broadcastReceiver;
-    private TextView textViewContacts;
-    private TextView textViewActions;
-
+    @BindView(R.id.textView_contacts)
+    TextView textViewContacts;
+    @BindView(R.id.textView_actions)
+    TextView textViewActions;
+    private long              callEventId         = -1;
     private ArrayList<String> currentPhoneNumbers = new ArrayList<>();
-    private ArrayList<Action> currentActions = new ArrayList<>();
+    private ArrayList<Action> currentActions      = new ArrayList<>();
+
+    private BroadcastReceiver broadcastReceiver;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_event_page_3_summary, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -86,9 +87,6 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
             }
         };
 
-        textViewContacts = rootView.findViewById(R.id.textView_contacts);
-        textViewActions = rootView.findViewById(R.id.textView_actions);
-
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureCallEventDialog.CALL_EVENT_ID_KEY)) {
             callEventId = args.getLong(ConfigureCallEventDialog.CALL_EVENT_ID_KEY);
@@ -96,6 +94,11 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
         }
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_call_event_page_3_summary;
     }
 
     private void initializeCallData(long callEventId) {
@@ -176,8 +179,7 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
         }
 
         CallEventsFragment.sendCallEventsChangedBroadcast(getContext());
-        StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                R.string.call_event_saved, Snackbar.LENGTH_LONG);
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -186,12 +188,14 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

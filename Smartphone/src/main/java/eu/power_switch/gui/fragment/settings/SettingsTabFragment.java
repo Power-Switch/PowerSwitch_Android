@@ -33,8 +33,10 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
+import eu.power_switch.gui.fragment.ButterKnifeFragment;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import eu.power_switch.wear.service.WearableHelper;
@@ -45,13 +47,16 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  * <p/>
  * Created by Markus on 30.08.2015.
  */
-public class SettingsTabFragment extends Fragment {
+public class SettingsTabFragment extends ButterKnifeFragment {
 
     public static final String TAB_INDEX_KEY = "tabIndex";
 
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+    @BindView(R.id.tabHost)
+    ViewPager tabViewPager;
+
     private CustomTabAdapter customTabAdapter;
-    private TabLayout tabLayout;
-    private ViewPager tabViewPager;
 
     public static SettingsTabFragment newInstance(int tabIndex) {
         Bundle args = new Bundle();
@@ -64,7 +69,8 @@ public class SettingsTabFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.settings_tabs, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+
         setHasOptionsMenu(true);
 
         // Create the adapter that will return a fragment
@@ -73,7 +79,6 @@ public class SettingsTabFragment extends Fragment {
 
         // Set up the tabViewPager, attaching the adapter and setting up a listener
         // for when the user swipes between sections.
-        tabViewPager = rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
 
@@ -95,7 +100,6 @@ public class SettingsTabFragment extends Fragment {
             }
         });
 
-        tabLayout = rootView.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();
@@ -105,6 +109,11 @@ public class SettingsTabFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.settings_tabs;
     }
 
     private void showTutorial(int tabIndex) {
@@ -119,7 +128,8 @@ public class SettingsTabFragment extends Fragment {
             dummyView = new View(getContext());
         }
 
-        String showcaseKey = TutorialHelper.getSettingsTabKey(customTabAdapter.getPageTitle(tabIndex).toString());
+        String showcaseKey = TutorialHelper.getSettingsTabKey(customTabAdapter.getPageTitle(tabIndex)
+                .toString());
 
         String contentText;
         switch (tabIndex) {
@@ -137,8 +147,7 @@ public class SettingsTabFragment extends Fragment {
                 return;
         }
 
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(dummyView)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(dummyView)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)

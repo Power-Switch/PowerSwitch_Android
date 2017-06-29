@@ -30,6 +30,7 @@ import com.github.paolorotolo.appintro.AppIntro;
 
 import eu.power_switch.R;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
+import eu.power_switch.wizard.config.ConfigurationHolder;
 
 /**
  * Wizard main activity
@@ -114,6 +115,8 @@ public class WizardActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
 
+        configurationHolder.writeToDatabase();
+
         // disable wizard for future launches
         SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD, false);
 
@@ -132,8 +135,6 @@ public class WizardActivity extends AppIntro {
 
         if (newFragment instanceof FinishPage) {
             FinishPage finishPage = (FinishPage) newFragment;
-
-            configurationHolder.writeToDatabase();
 
             finishPage.onSuccess(R.string.wizard_finish_success);
             finishPage.onFailure(R.string.wizard_finish_failure);

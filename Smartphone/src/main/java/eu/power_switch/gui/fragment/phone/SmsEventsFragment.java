@@ -41,6 +41,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -61,16 +62,14 @@ import eu.power_switch.shared.permission.PermissionHelper;
  */
 public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
 
-    private static final String[] NEEDED_PERMISSIONS = {
-            Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.READ_CONTACTS
-    };
+    private static final String[] NEEDED_PERMISSIONS = {Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS};
+
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
 
     private List<SmsEvent> smsEvents = new ArrayList<>();
     private SmsEventRecyclerViewAdapter smsEventRecyclerViewAdapter;
-    private RecyclerView recyclerViewSmsEvents;
-    private BroadcastReceiver broadcastReceiver;
-    private FloatingActionButton fab;
+    private BroadcastReceiver           broadcastReceiver;
 
     /**
      * Used to notify the apartment geofence page (this) that geofences have changed
@@ -79,25 +78,21 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
      */
     public static void sendCallEventsChangedBroadcast(Context context) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_sms_events, container, false);
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
-        recyclerViewSmsEvents = rootView.findViewById(R.id.recyclerView);
         smsEventRecyclerViewAdapter = new SmsEventRecyclerViewAdapter(getActivity(), smsEvents);
-        recyclerViewSmsEvents.setAdapter(smsEventRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewSmsEvents.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(smsEventRecyclerViewAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
-        final RecyclerViewFragment recyclerViewFragment = this;
-
-        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,32 +130,36 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
                             }
 
                             if (allGranted) {
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(),
-                                        R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                                 sendCallEventsChangedBroadcast(context);
                             } else {
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_SMS_PERMISSION, NEEDED_PERMISSIONS);
+                                        getRecyclerView(),
+                                        PermissionConstants.REQUEST_CODE_SMS_PERMISSION,
+                                        NEEDED_PERMISSIONS);
                             }
                         }
                         break;
                 }
             }
         };
-    }
 
-    @Override
-    protected void onInitialized() {
         if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
-                    PermissionConstants.REQUEST_CODE_SMS_PERMISSION,
-                    Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
+                    PermissionConstants.REQUEST_CODE_SMS_PERMISSION, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
         } else {
             refreshSmsEvents();
         }
+
+        return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_sms_events;
     }
 
     private void refreshSmsEvents() {
@@ -192,10 +191,13 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.sms_event_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_sms_event).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_sms_event)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_sms_event).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_sms_event)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -205,7 +207,8 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -220,13 +223,9 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewSmsEvents;
     }
 
     @Override

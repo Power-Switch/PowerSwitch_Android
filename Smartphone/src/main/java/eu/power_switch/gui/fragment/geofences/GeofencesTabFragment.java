@@ -31,7 +31,9 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.gui.fragment.ButterKnifeFragment;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -41,14 +43,17 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  * <p/>
  * Created by Markus on 25.06.2015.
  */
-public class GeofencesTabFragment extends Fragment {
+public class GeofencesTabFragment extends ButterKnifeFragment {
 
     public static final String TAB_INDEX_KEY = "tabIndex";
 
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+    @BindView(R.id.tabHost)
+    ViewPager tabViewPager;
+
     private CustomTabAdapter customTabAdapter;
-    private TabLayout tabLayout;
-    private ViewPager tabViewPager;
-    private int currentTab = 0;
+    private int     currentTab   = 0;
     private boolean skipTutorial = false;
 
     /**
@@ -63,7 +68,7 @@ public class GeofencesTabFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.geofences_tabs, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // Create the adapter that will return a fragment
         // for each of the two primary sections of the app.
@@ -71,7 +76,6 @@ public class GeofencesTabFragment extends Fragment {
 
         // Set up the tabViewPager, attaching the adapter and setting up a listener
         // for when the user swipes between sections.
-        tabViewPager = rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
 
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
@@ -97,7 +101,6 @@ public class GeofencesTabFragment extends Fragment {
 
         skipTutorial = true;
 
-        tabLayout = rootView.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();
@@ -109,6 +112,11 @@ public class GeofencesTabFragment extends Fragment {
         skipTutorial = false;
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.geofences_tabs;
     }
 
     private void showTutorial(int tabIndex) {
@@ -123,7 +131,8 @@ public class GeofencesTabFragment extends Fragment {
             dummyView = new View(getContext());
         }
 
-        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(tabIndex).toString());
+        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(tabIndex)
+                .toString());
 
         String contentText;
         switch (tabIndex) {
@@ -137,8 +146,7 @@ public class GeofencesTabFragment extends Fragment {
                 return;
         }
 
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(dummyView)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(dummyView)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)

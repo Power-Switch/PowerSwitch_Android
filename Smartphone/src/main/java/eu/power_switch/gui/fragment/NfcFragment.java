@@ -22,7 +22,6 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +41,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
@@ -65,7 +65,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Created by Markus on 09.04.2016.
  */
-public class NfcFragment extends Fragment {
+public class NfcFragment extends ButterKnifeFragment {
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override
@@ -73,48 +73,62 @@ public class NfcFragment extends Fragment {
             return lhs.compareToIgnoreCase(rhs);
         }
     };
-
-    private View rootView;
-
-    private String currentActionType = Action.ACTION_TYPE_RECEIVER;
-    private RadioButton radioButtonReceiverAction;
-    private RadioButton radioButtonRoomAction;
-    private RadioButton radioButtonSceneAction;
-
-    private LinearLayout linearLayoutReceiver;
-    private LinearLayout linearLayoutRoom;
-    private LinearLayout linearLayoutButton;
-    private LinearLayout linearLayoutScene;
-    private Spinner spinner_apartment;
-    private Spinner spinner_room;
-    private Spinner spinner_receiver;
-    private Spinner spinner_button;
-    private Spinner spinner_scene;
-
+    @BindView(R.id.radioButton_receiver_action)
+    RadioButton   radioButtonReceiverAction;
+    @BindView(R.id.radioButton_room_action)
+    RadioButton   radioButtonRoomAction;
+    @BindView(R.id.radioButton_scene_action)
+    RadioButton   radioButtonSceneAction;
+    @BindView(R.id.linearLayout_receiver)
+    LinearLayout  linearLayoutReceiver;
+    @BindView(R.id.linearLayout_room)
+    LinearLayout  linearLayoutRoom;
+    @BindView(R.id.linearLayout_button)
+    LinearLayout  linearLayoutButton;
+    @BindView(R.id.linearLayout_scene)
+    LinearLayout  linearLayoutScene;
+    @BindView(R.id.spinner_apartment)
+    Spinner       spinner_apartment;
+    @BindView(R.id.spinner_room)
+    Spinner       spinner_room;
+    @BindView(R.id.spinner_receiver)
+    Spinner       spinner_receiver;
+    @BindView(R.id.spinner_button)
+    Spinner       spinner_button;
+    @BindView(R.id.spinner_scene)
+    Spinner       spinner_scene;
+    @BindView(R.id.progressApartment)
+    ProgressBar   progressApartment;
+    @BindView(R.id.progressRoom)
+    ProgressBar   progressRoom;
+    @BindView(R.id.progressReceiver)
+    ProgressBar   progressReceiver;
+    @BindView(R.id.progressButton)
+    ProgressBar   progressButton;
+    @BindView(R.id.progressScene)
+    ProgressBar   progressScene;
+    @BindView(R.id.button_write_nfc_tag)
+    IconicsButton buttonWriteTag;
+    private View      rootView;
     private Apartment currentApartment;
+    private String currentActionType = Action.ACTION_TYPE_RECEIVER;
 
     private ArrayList<String> apartmentNames = new ArrayList<>();
-    private ArrayList<String> roomNames = new ArrayList<>();
-    private ArrayList<String> receiverNames = new ArrayList<>();
-    private ArrayList<String> buttonNames = new ArrayList<>();
-    private ArrayList<String> sceneNames = new ArrayList<>();
+    private ArrayList<String> roomNames      = new ArrayList<>();
+    private ArrayList<String> receiverNames  = new ArrayList<>();
+    private ArrayList<String> buttonNames    = new ArrayList<>();
+    private ArrayList<String> sceneNames     = new ArrayList<>();
 
+    private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
     private ArrayAdapter<String> receiverSpinnerArrayAdapter;
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
-    private ProgressBar progressApartment;
-    private ProgressBar progressRoom;
-    private ProgressBar progressReceiver;
-    private ProgressBar progressButton;
-    private ProgressBar progressScene;
-    private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
-    private IconicsButton buttonWriteTag;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_nfc, container, false);
+        rootView = super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
@@ -140,14 +154,10 @@ public class NfcFragment extends Fragment {
         };
 
         // Action Type Selection
-        radioButtonReceiverAction = rootView.findViewById(R.id.radioButton_receiver_action);
         radioButtonReceiverAction.setOnClickListener(onClickListener);
-        radioButtonRoomAction = rootView.findViewById(R.id.radioButton_room_action);
         radioButtonRoomAction.setOnClickListener(onClickListener);
-        radioButtonSceneAction = rootView.findViewById(R.id.radioButton_scene_action);
         radioButtonSceneAction.setOnClickListener(onClickListener);
 
-        spinner_apartment = rootView.findViewById(R.id.spinner_apartment);
         apartmentSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, apartmentNames);
         apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_apartment.setAdapter(apartmentSpinnerArrayAdapter);
@@ -160,18 +170,6 @@ public class NfcFragment extends Fragment {
         spinner_apartment.setOnTouchListener(spinnerInteractionListener);
         spinner_apartment.setOnItemSelectedListener(spinnerInteractionListener);
 
-        linearLayoutRoom = rootView.findViewById(R.id.linearLayout_room);
-        linearLayoutReceiver = rootView.findViewById(R.id.linearLayout_receiver);
-        linearLayoutButton = rootView.findViewById(R.id.linearLayout_button);
-        linearLayoutScene = rootView.findViewById(R.id.linearLayout_scene);
-
-        progressApartment = rootView.findViewById(R.id.progressApartment);
-        progressRoom = rootView.findViewById(R.id.progressRoom);
-        progressReceiver = rootView.findViewById(R.id.progressReceiver);
-        progressButton = rootView.findViewById(R.id.progressButton);
-        progressScene = rootView.findViewById(R.id.progressScene);
-
-        spinner_room = rootView.findViewById(R.id.spinner_room);
         roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room.setAdapter(roomSpinnerArrayAdapter);
@@ -184,7 +182,6 @@ public class NfcFragment extends Fragment {
         spinner_room.setOnTouchListener(spinnerInteractionListener2);
         spinner_room.setOnItemSelectedListener(spinnerInteractionListener2);
 
-        spinner_receiver = rootView.findViewById(R.id.spinner_receiver);
         receiverSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, receiverNames);
         receiverSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver.setAdapter(receiverSpinnerArrayAdapter);
@@ -197,7 +194,6 @@ public class NfcFragment extends Fragment {
         spinner_receiver.setOnTouchListener(spinnerInteractionListener3);
         spinner_receiver.setOnItemSelectedListener(spinnerInteractionListener3);
 
-        spinner_button = rootView.findViewById(R.id.spinner_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNames);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_button.setAdapter(buttonSpinnerArrayAdapter);
@@ -210,7 +206,6 @@ public class NfcFragment extends Fragment {
         spinner_button.setOnTouchListener(spinnerInteractionListener4);
         spinner_button.setOnItemSelectedListener(spinnerInteractionListener4);
 
-        spinner_scene = rootView.findViewById(R.id.spinner_scene);
         sceneSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sceneNames);
         sceneSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_scene.setAdapter(sceneSpinnerArrayAdapter);
@@ -223,7 +218,6 @@ public class NfcFragment extends Fragment {
         spinner_scene.setOnTouchListener(spinnerInteractionListener7);
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener7);
 
-        buttonWriteTag = rootView.findViewById(R.id.button_write_nfc_tag);
         buttonWriteTag.setText(R.string.write_nfc_tag_image);
         buttonWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,8 +225,7 @@ public class NfcFragment extends Fragment {
                 if (NfcHandler.isNfcEnabled(getActivity())) {
                     startActivity(WriteNfcTagDialog.getNewInstanceIntent(getNfcActionContent(getCurrentSelection())));
                 } else {
-                    new AlertDialog.Builder(getActivity())
-                            .setTitle(R.string.nfc_disabled)
+                    new AlertDialog.Builder(getActivity()).setTitle(R.string.nfc_disabled)
                             .setMessage(R.string.nfc_disabled_please_enable)
                             .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
                                 @Override
@@ -252,9 +245,13 @@ public class NfcFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_nfc;
+    }
+
     private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(buttonWriteTag)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(buttonWriteTag)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)
@@ -269,19 +266,18 @@ public class NfcFragment extends Fragment {
         switch (action.getActionType()) {
             case Action.ACTION_TYPE_RECEIVER:
                 ReceiverAction receiverAction = (ReceiverAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() +
-                        HiddenReceiverActivity.KEY_ROOM + receiverAction.getRoom().getId() +
-                        HiddenReceiverActivity.KEY_RECEIVER + receiverAction.getReceiver().getId() +
-                        HiddenReceiverActivity.KEY_BUTTON + receiverAction.getButton().getId();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_ROOM + receiverAction.getRoom()
+                        .getId() + HiddenReceiverActivity.KEY_RECEIVER + receiverAction.getReceiver()
+                        .getId() + HiddenReceiverActivity.KEY_BUTTON + receiverAction.getButton()
+                        .getId();
             case Action.ACTION_TYPE_ROOM:
                 RoomAction roomAction = (RoomAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() +
-                        HiddenReceiverActivity.KEY_ROOM + roomAction.getRoom().getId() +
-                        HiddenReceiverActivity.KEY_BUTTON + roomAction.getButtonName();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_ROOM + roomAction.getRoom()
+                        .getId() + HiddenReceiverActivity.KEY_BUTTON + roomAction.getButtonName();
             case Action.ACTION_TYPE_SCENE:
                 SceneAction sceneAction = (SceneAction) action;
-                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() +
-                        HiddenReceiverActivity.KEY_SCENE + sceneAction.getScene().getId();
+                return HiddenReceiverActivity.KEY_APARTMENT + currentApartment.getId() + HiddenReceiverActivity.KEY_SCENE + sceneAction.getScene()
+                        .getId();
         }
 
         return null;
@@ -548,7 +544,8 @@ public class NfcFragment extends Fragment {
 
     private Apartment getSelectedApartment() {
         try {
-            return DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
+            return DatabaseHandler.getApartment(spinner_apartment.getSelectedItem()
+                    .toString());
         } catch (Exception e) {
             Log.e(e);
         }
@@ -557,7 +554,8 @@ public class NfcFragment extends Fragment {
     }
 
     private Room getSelectedRoom() throws Exception {
-        return currentApartment.getRoom(spinner_room.getSelectedItem().toString());
+        return currentApartment.getRoom(spinner_room.getSelectedItem()
+                .toString());
     }
 
     private void updateActionType(String timerActionType) {
@@ -598,33 +596,45 @@ public class NfcFragment extends Fragment {
 
         try {
             if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem().toString());
-                Log.d(spinner_receiver.getSelectedItem().toString());
-                Log.d(spinner_button.getSelectedItem().toString());
+                Log.d(spinner_room.getSelectedItem()
+                        .toString());
+                Log.d(spinner_receiver.getSelectedItem()
+                        .toString());
+                Log.d(spinner_button.getSelectedItem()
+                        .toString());
 
                 Room selectedRoom = getSelectedRoom();
                 Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver.getSelectedItem()
                         .toString());
                 Button selectedButton = null;
                 for (Button button : selectedReceiver.getButtons()) {
-                    if (button.getName().equals(spinner_button.getSelectedItem().toString())) {
+                    if (button.getName()
+                            .equals(spinner_button.getSelectedItem()
+                                    .toString())) {
                         selectedButton = button;
                     }
                 }
 
                 action = new ReceiverAction(-1, currentApartment.getName(), selectedRoom, selectedReceiver, selectedButton);
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem().toString());
-                Log.d(spinner_button.getSelectedItem().toString());
+                Log.d(spinner_room.getSelectedItem()
+                        .toString());
+                Log.d(spinner_button.getSelectedItem()
+                        .toString());
 
                 Room selectedRoom = getSelectedRoom();
 
-                action = new RoomAction(-1, currentApartment.getName(), selectedRoom, spinner_button.getSelectedItem()
-                        .toString());
+                action = new RoomAction(-1,
+                        currentApartment.getName(),
+                        selectedRoom,
+                        spinner_button.getSelectedItem()
+                                .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-                Log.d(spinner_scene.getSelectedItem().toString());
+                Log.d(spinner_scene.getSelectedItem()
+                        .toString());
 
-                Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem().toString());
+                Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem()
+                        .toString());
 
                 action = new SceneAction(-1, currentApartment.getName(), selectedScene);
             }
@@ -642,14 +652,11 @@ public class NfcFragment extends Fragment {
         }
 
         if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            if (spinner_room.getSelectedItem() == null
-                    || spinner_receiver.getSelectedItem() == null
-                    || spinner_button.getSelectedItem() == null) {
+            if (spinner_room.getSelectedItem() == null || spinner_receiver.getSelectedItem() == null || spinner_button.getSelectedItem() == null) {
                 return false;
             }
         } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            if (spinner_room.getSelectedItem() == null
-                    || spinner_button.getSelectedItem() == null) {
+            if (spinner_room.getSelectedItem() == null || spinner_button.getSelectedItem() == null) {
                 return false;
             }
         } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {

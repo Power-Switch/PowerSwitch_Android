@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -60,11 +61,12 @@ import eu.power_switch.shared.log.Log;
  */
 public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
+
     private ArrayList<Scene> scenes = new ArrayList<>();
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
-    private RecyclerView recyclerViewScenes;
-    private BroadcastReceiver broadcastReceiver;
-    private FloatingActionButton fab;
+    private BroadcastReceiver        broadcastReceiver;
 
     /**
      * Used to notify Scene Fragment (this) that Scenes have changed
@@ -74,21 +76,20 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     public static void sendScenesChangedBroadcast(Context context) {
         Log.d("ScenesFragment", "sendScenesChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_scenes, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
 
-        recyclerViewScenes = rootView.findViewById(R.id.recyclerView);
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes);
-        recyclerViewScenes.setAdapter(sceneRecyclerViewAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewScenes.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(sceneRecyclerViewAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
         final RecyclerViewFragment recyclerViewFragment = this;
         sceneRecyclerViewAdapter.setOnItemLongClickListener(new SceneRecyclerViewAdapter.OnItemLongClickListener() {
@@ -102,15 +103,13 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             }
         });
 
-        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
-                        new AlertDialog.Builder(getContext())
-                                .setMessage(R.string.please_create_or_activate_apartment_first)
+                        new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
                         return;
@@ -134,11 +133,15 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
                 updateUI();
             }
         };
+
+        updateUI();
+
+        return rootView;
     }
 
     @Override
-    protected void onInitialized() {
-        updateUI();
+    protected int getLayoutRes() {
+        return R.layout.fragment_scenes;
     }
 
     private void updateUI() {
@@ -155,8 +158,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
         switch (menuItem.getItemId()) {
             case R.id.create_scene:
                 if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
-                    new AlertDialog.Builder(getContext())
-                            .setMessage(R.string.please_create_or_activate_apartment_first)
+                    new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                             .setNeutralButton(android.R.string.ok, null)
                             .show();
                     return true;
@@ -177,10 +179,13 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.scene_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_scene).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_scene)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_scene).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_scene)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -200,18 +205,15 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewScenes;
     }
 
     @Override
@@ -228,7 +230,8 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     public List<Scene> loadListData() throws Exception {
         if (DeveloperPreferencesHandler.getPlayStoreMode()) {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            return playStoreModeDataModel.getActiveApartment().getScenes();
+            return playStoreModeDataModel.getActiveApartment()
+                    .getScenes();
         } else {
             return DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         }

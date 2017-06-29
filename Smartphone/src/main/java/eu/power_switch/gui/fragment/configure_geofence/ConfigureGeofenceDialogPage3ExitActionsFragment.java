@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -54,13 +55,14 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 public class ConfigureGeofenceDialogPage3ExitActionsFragment extends ConfigurationDialogFragment {
 
     public static final String KEY_ACTIONS = "actions";
-
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
-    private static ArrayList<Action> currentExitActions;
+    private static ArrayList<Action>         currentExitActions;
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
-
+    @BindView(R.id.add_action)
+    FloatingActionButton addActionFAB;
+    @BindView(R.id.recyclerview_list_of_actions)
+    RecyclerView         recyclerViewTimerActions;
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
 
     /**
      * Used to notify the setup page that some info has changed
@@ -71,7 +73,8 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED);
         intent.putExtra(KEY_ACTIONS, actions);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     /**
@@ -87,7 +90,7 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_3, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -97,7 +100,6 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
         };
 
         final Fragment fragment = this;
-        FloatingActionButton addActionFAB = rootView.findViewById(R.id.add_action);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +120,6 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
                 sendActionsChangedBroadcast(getContext(), currentExitActions);
             }
         });
-        RecyclerView recyclerViewTimerActions = rootView.findViewById(R.id.recyclerview_list_of_actions);
         recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);
@@ -134,10 +135,16 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_geofence_page_3;
+    }
+
     private void initializeData(long geofenceId) {
         try {
             currentExitActions.clear();
-            currentExitActions.addAll(DatabaseHandler.getGeofence(geofenceId).getActions(Geofence.EventType.EXIT));
+            currentExitActions.addAll(DatabaseHandler.getGeofence(geofenceId)
+                    .getActions(Geofence.EventType.EXIT));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -148,12 +155,14 @@ public class ConfigureGeofenceDialogPage3ExitActionsFragment extends Configurati
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

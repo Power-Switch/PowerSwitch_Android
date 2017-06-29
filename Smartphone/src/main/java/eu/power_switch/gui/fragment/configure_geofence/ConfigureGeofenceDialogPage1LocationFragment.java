@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -69,38 +70,46 @@ import eu.power_switch.shared.log.Log;
  */
 public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationDialogFragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
-    public static final String KEY_NAME = "name";
-    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_NAME      = "name";
+    public static final String KEY_LATITUDE  = "latitude";
     public static final String KEY_LONGITUDE = "longitude";
-    public static final String KEY_RADIUS = "radius";
-    public static final String KEY_SNAPSHOT = "snapshot";
+    public static final String KEY_RADIUS    = "radius";
+    public static final String KEY_SNAPSHOT  = "snapshot";
+
+    @BindView(R.id.geofenceRadiusSeekbar)
+    SeekBar         geofenceRadiusSeekbar;
+    @BindView(R.id.geofenceRadiusEditText)
+    EditText        geofenceRadiusEditText;
+    @BindView(R.id.searchAddressImageButton)
+    ImageButton     searchAddressButton;
+    @BindView(R.id.searchAddressTextInputLayout)
+    TextInputLayout searchAddressTextInputLayout;
+    @BindView(R.id.searchAddressEditText)
+    EditText        searchAddressEditText;
+
+    @BindView(R.id.searchAddressProgress)
+    ProgressBar searchAddressProgress;
+    @BindView(R.id.mapView)
+    MapView     mapView;
 
     private long geofenceId = -1;
 
     private String name = "";
-    private View rootView;
-    private MapViewHandler mapViewHandler;
+    private MapViewHandler                   mapViewHandler;
     private eu.power_switch.gui.map.Geofence geofenceView;
-    private SeekBar geofenceRadiusSeekbar;
-    private EditText geofenceRadiusEditText;
-    private ImageButton searchAddressButton;
-    private TextInputLayout searchAddressTextInputLayout;
-    private EditText searchAddressEditText;
 
     private double currentGeofenceRadius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
     private Bitmap currentSnapshot;
 
     private boolean cameraChangedBySystem = true;
-    private boolean isFirstTimeMapInit = true;
-    private ProgressBar searchAddressProgress;
+    private boolean isFirstTimeMapInit    = true;
 
     /**
      * Used to notify parent Dialog that configuration has changed
      *
      * @param context any suitable context
      */
-    public static void sendSetupGeofenceChangedBroadcast(Context context, String name, LatLng location, double
-            geofenceRadius, Bitmap snapShot) {
+    public static void sendSetupGeofenceChangedBroadcast(Context context, String name, LatLng location, double geofenceRadius, Bitmap snapShot) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
         intent.putExtra(KEY_NAME, name);
         intent.putExtra(KEY_LATITUDE, location.latitude);
@@ -108,27 +117,21 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
         intent.putExtra(KEY_RADIUS, geofenceRadius);
         intent.putExtra(KEY_SNAPSHOT, snapShot);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_geofence_page_1, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        MapView mapView = rootView.findViewById(R.id.mapView);
         mapViewHandler = new MapViewHandler(getContext(), mapView, savedInstanceState);
         mapViewHandler.addOnMapReadyListener(this);
         mapViewHandler.initMapAsync();
 
-        searchAddressProgress = rootView.findViewById(R.id.searchAddressProgress);
-        searchAddressTextInputLayout = rootView.findViewById(R.id.searchAddressTextInputLayout);
-        searchAddressEditText = rootView.findViewById(R.id.searchAddressEditText);
-
-        searchAddressButton = rootView.findViewById(R.id.searchAddressImageButton);
-        searchAddressButton.setImageDrawable(
-                IconicsHelper.getSearchIcon(
-                        getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
+        searchAddressButton.setImageDrawable(IconicsHelper.getSearchIcon(getActivity(),
+                ContextCompat.getColor(getActivity(), android.R.color.white)));
         searchAddressButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,15 +156,18 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
                             searchAddressTextInputLayout.setError(null);
 
                             if (geofenceView == null) {
-                                geofenceView = mapViewHandler.addGeofence(result.getResult().get(0), currentGeofenceRadius);
+                                geofenceView = mapViewHandler.addGeofence(result.getResult()
+                                        .get(0), currentGeofenceRadius);
                             } else {
-                                geofenceView.setCenter(result.getResult().get(0));
+                                geofenceView.setCenter(result.getResult()
+                                        .get(0));
                                 geofenceView.setRadius(currentGeofenceRadius);
                             }
 
                             cameraChangedBySystem = true;
 
-                            LatLng location = result.getResult().get(0);
+                            LatLng location = result.getResult()
+                                    .get(0);
                             mapViewHandler.moveCamera(location, 14, true);
 
                             findAddress(location);
@@ -176,11 +182,12 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
                         searchAddressEditText.setEnabled(true);
                         searchAddressProgress.setVisibility(View.GONE);
                     }
-                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, searchAddressEditText.getText().toString());
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                        searchAddressEditText.getText()
+                                .toString());
             }
         });
 
-        geofenceRadiusEditText = rootView.findViewById(R.id.geofenceRadiusEditText);
         geofenceRadiusEditText.setText(String.valueOf((int) currentGeofenceRadius));
         geofenceRadiusEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -209,15 +216,15 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
             }
         });
 
-        geofenceRadiusSeekbar = rootView.findViewById(R.id.geofenceRadiusSeekbar);
         geofenceRadiusSeekbar.setMax(2000);
         geofenceRadiusSeekbar.setProgress((int) currentGeofenceRadius);
         geofenceRadiusSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 updateGeofenceRadius(progress);
-                if (geofenceRadiusEditText.getText().length() > 0 &&
-                        Integer.valueOf(geofenceRadiusEditText.getText().toString()) != progress) {
+                if (geofenceRadiusEditText.getText()
+                        .length() > 0 && Integer.valueOf(geofenceRadiusEditText.getText()
+                        .toString()) != progress) {
                     geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
                 }
             }
@@ -225,8 +232,9 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 updateGeofenceRadius(seekBar.getProgress());
-                if (geofenceRadiusEditText.getText().length() > 0 &&
-                        Integer.valueOf(geofenceRadiusEditText.getText().toString()) != seekBar.getProgress()) {
+                if (geofenceRadiusEditText.getText()
+                        .length() > 0 && Integer.valueOf(geofenceRadiusEditText.getText()
+                        .toString()) != seekBar.getProgress()) {
                     geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
                 }
             }
@@ -234,8 +242,9 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 updateGeofenceRadius(seekBar.getProgress());
-                if (geofenceRadiusEditText.getText().length() > 0 &&
-                        Integer.valueOf(geofenceRadiusEditText.getText().toString()) != seekBar.getProgress()) {
+                if (geofenceRadiusEditText.getText()
+                        .length() > 0 && Integer.valueOf(geofenceRadiusEditText.getText()
+                        .toString()) != seekBar.getProgress()) {
                     geofenceRadiusEditText.setText(String.valueOf(seekBar.getProgress()));
                 }
 
@@ -252,6 +261,11 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
         initializeData();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_geofence_page_1;
     }
 
     private void initializeData() {
@@ -285,7 +299,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
 
     private LatLng getCurrentLocation() {
         try {
-            return geofenceView.getMarker().getPosition();
+            return geofenceView.getMarker()
+                    .getPosition();
         } catch (Exception e) {
             return null;
         }
@@ -302,9 +317,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         if (ActivityCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
         } else {
             googleMap.setMyLocationEnabled(true);
         }
@@ -350,21 +364,27 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
         googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
             public void onMarkerDragStart(Marker marker) {
-                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                if (geofenceView.getMarker()
+                        .getId()
+                        .equals(marker.getId())) {
                     geofenceView.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDrag(Marker marker) {
-                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                if (geofenceView.getMarker()
+                        .getId()
+                        .equals(marker.getId())) {
                     geofenceView.setCenter(marker.getPosition());
                 }
             }
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                if (geofenceView.getMarker().getId().equals(marker.getId())) {
+                if (geofenceView.getMarker()
+                        .getId()
+                        .equals(marker.getId())) {
                     geofenceView.setCenter(marker.getPosition());
 
                     findAddress(marker.getPosition());
@@ -378,7 +398,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
             @Override
             public boolean onMarkerClick(Marker marker) {
                 cameraChangedBySystem = true;
-                mapViewHandler.moveCamera(geofenceView.getMarker().getPosition(), true);
+                mapViewHandler.moveCamera(geofenceView.getMarker()
+                        .getPosition(), true);
                 return true;
             }
         });
@@ -425,7 +446,8 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
                 if (result.isSuccess()) {
                     searchAddressTextInputLayout.setError(null);
 
-                    String firstMatch = result.getResult().get(0);
+                    String firstMatch = result.getResult()
+                            .get(0);
                     searchAddressEditText.setText(firstMatch);
                     name = firstMatch;
                 } else {
@@ -462,19 +484,22 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
     @Override
     public void onResume() {
         super.onResume();
-        mapViewHandler.getMapView().onResume();
+        mapViewHandler.getMapView()
+                .onResume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapViewHandler.getMapView().onDestroy();
+        mapViewHandler.getMapView()
+                .onDestroy();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mapViewHandler.getMapView().onPause();
+        mapViewHandler.getMapView()
+                .onPause();
     }
 
     @Override
@@ -485,6 +510,7 @@ public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationD
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapViewHandler.getMapView().onLowMemory();
+        mapViewHandler.getMapView()
+                .onLowMemory();
     }
 }

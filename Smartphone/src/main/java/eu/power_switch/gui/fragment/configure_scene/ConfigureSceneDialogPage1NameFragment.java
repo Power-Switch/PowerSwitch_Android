@@ -38,6 +38,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.TutorialTooltipBuilder;
@@ -68,15 +69,16 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  */
 public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFragment {
 
-    private View rootView;
+    @BindView(R.id.scene_name_text_input_layout)
+    TextInputLayout floatingName;
+    @BindView(R.id.editText_scene_name)
+    EditText        name;
 
-    private TextInputLayout floatingName;
-    private EditText name;
-
-    private LinearLayout linearLayout_selectableReceivers;
+    @BindView(R.id.linearLayout_selectableReceivers)
+    LinearLayout linearLayout_selectableReceivers;
 
     private ArrayList<CheckBox> receiverCheckboxList = new ArrayList<>();
-    private long sceneId;
+    private long        sceneId;
     private List<Scene> existingScenes;
 
 
@@ -99,10 +101,8 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_scene_page_1, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        floatingName = rootView.findViewById(R.id.scene_name_text_input_layout);
-        name = rootView.findViewById(R.id.editText_scene_name);
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,7 +125,6 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
-        linearLayout_selectableReceivers = rootView.findViewById(R.id.linearLayout_selectableReceivers);
         addReceiversToLayout();
 
         Bundle args = getArguments();
@@ -139,6 +138,11 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
         createTutorial();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_scene_page_1;
     }
 
     private void createTutorial() {
@@ -188,8 +192,8 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
     }
 
     private void addReceiversToLayout() {
-        String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(inflaterString);
+        String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+        LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
             for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID))) {
@@ -253,7 +257,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
             for (Receiver receiver : activeReceivers) {
                 for (CheckBox checkBox : receiverCheckboxList) {
                     Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
-                    Room associatedRoom = (Room) checkBox.getTag(R.string.room);
+                    Room     associatedRoom     = (Room) checkBox.getTag(R.string.room);
                     if (associatedReceiver.getId()
                             .equals(receiver.getId()) && associatedRoom.getId()
                             .equals(receiver.getRoomId())) {
@@ -309,7 +313,7 @@ public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFr
         for (CheckBox checkBox : receiverCheckboxList) {
             if (checkBox.isChecked()) {
                 Room originalRoom = (Room) checkBox.getTag(R.string.room);
-                Room room = null;
+                Room room         = null;
                 for (Room currentRoom : checkedReceivers) {
                     if (currentRoom.getName()
                             .equals(originalRoom.getName())) {

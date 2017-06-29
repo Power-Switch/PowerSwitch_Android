@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.wizard.gui;
+package eu.power_switch.wizard.config;
 
 import java.util.ArrayList;
 import java.util.Collections;

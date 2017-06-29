@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
 import eu.power_switch.backup.BackupHandler;
@@ -72,23 +73,20 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  */
 public class BackupFragment extends RecyclerViewFragment<Backup> {
 
-    private static final String[] NEEDED_PERMISSIONS = new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
-
-    private static final Comparator<Backup> BACKUP_COMPARATOR = new Comparator<Backup>() {
+    private static final String[]           NEEDED_PERMISSIONS = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private static final Comparator<Backup> BACKUP_COMPARATOR  = new Comparator<Backup>() {
         @Override
         public int compare(Backup lhs, Backup rhs) {
             return lhs.compareDate(rhs);
         }
     };
-
+    @BindView(R.id.textView_backupPath)
+    TextView             textViewBackupPath;
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
     private ArrayList<Backup> backups = new ArrayList<>();
-    private RecyclerView recyclerViewBackups;
     private BackupRecyclerViewAdapter backupArrayAdapter;
-    private BroadcastReceiver broadcastReceiver;
-    private FloatingActionButton fab;
-    private TextView textViewBackupPath;
+    private BroadcastReceiver         broadcastReceiver;
 
     /**
      * Used to notify Backup Fragment (this) that Backups have changed
@@ -99,29 +97,29 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         Log.d("AddReceiverDialog", "sendReceiverChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
-    public void onCreateViewEvent(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_backup, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         setHasOptionsMenu(true);
 
-        final RecyclerViewFragment recyclerViewFragment = this;
-
-        textViewBackupPath = rootView.findViewById(R.id.textView_backupPath);
         textViewBackupPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
                         PermissionHelper.showMissingPermissionDialog(getActivity(),
-                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
+                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                                NEEDED_PERMISSIONS);
                         return;
                     }
 
                     PathChooserDialog pathChooserDialog = PathChooserDialog.newInstance();
-                    pathChooserDialog.setTargetFragment(recyclerViewFragment, 0);
+                    pathChooserDialog.setTargetFragment(BackupFragment.this, 0);
                     pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -129,7 +127,6 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             }
         });
 
-        recyclerViewBackups = rootView.findViewById(R.id.recyclerView);
         backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
 //        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
 //            @Override
@@ -151,19 +148,17 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                     final Backup backup = backups.get(position);
 
                     EditBackupDialog editBackupDialog = EditBackupDialog.newInstance(backup.getName());
-                    editBackupDialog.setTargetFragment(recyclerViewFragment, 0);
+                    editBackupDialog.setTargetFragment(BackupFragment.this, 0);
                     editBackupDialog.show(getActivity().getSupportFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
-        recyclerViewBackups.setAdapter(backupArrayAdapter);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(
-                getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewBackups.setLayoutManager(layoutManager);
+        getRecyclerView().setAdapter(backupArrayAdapter);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
+        getRecyclerView().setLayoutManager(layoutManager);
 
-        fab = rootView.findViewById(R.id.add_fab);
         fab.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,12 +166,13 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                 try {
                     if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
                         PermissionHelper.showMissingPermissionDialog(getActivity(),
-                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
+                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                                NEEDED_PERMISSIONS);
                         return;
                     }
 
                     CreateBackupDialog createBackupDialog = new CreateBackupDialog();
-                    createBackupDialog.setTargetFragment(recyclerViewFragment, 0);
+                    createBackupDialog.setTargetFragment(BackupFragment.this, 0);
                     createBackupDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -199,12 +195,12 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                             if (results[0] == PackageManager.PERMISSION_GRANTED) {
                                 // Permission Granted
                                 updateUI();
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(),
-                                        R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
                             } else {
                                 // Permission Denied
                                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                                        getRecyclerView(),
+                                        PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
                                         NEEDED_PERMISSIONS);
                             }
                         }
@@ -216,6 +212,9 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             }
         };
 
+        updateUI();
+
+
         // TODO: Cloud Backups
         // FirebaseStorageHandler firebaseStorageHandler = new FirebaseStorageHandler(getActivity());
 
@@ -224,16 +223,17 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         for (Backup backup : backups) {
 
         }
+
+        return rootView;
     }
 
     @Override
-    protected void onInitialized() {
-        updateUI();
+    protected int getLayoutRes() {
+        return R.layout.fragment_backup;
     }
 
     private void showTutorial() {
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(fab)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(fab)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)
@@ -249,32 +249,31 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
             showEmpty();
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                    getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
                     NEEDED_PERMISSIONS);
         } else {
             updateListContent();
 
             if (BackupHandler.oldBackupFormatsExist()) {
-                final AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.old_backups_found_title)
+                final AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.old_backups_found_title)
                         .setMessage(R.string.old_backups_found_message)
                         .setView(R.layout.dialog_old_backup_format)
                         .setPositiveButton(R.string.convert, null)
                         .setNeutralButton(R.string.close, null)
                         .show();
 
-                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.checkbox_delete_old_format);
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                        .setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                CheckBox checkBox = (CheckBox) dialog.findViewById(R.id.checkbox_delete_old_format);
 
-                        UpgradeBackupsProcessingDialog upgradeBackupsProcessingDialog = UpgradeBackupsProcessingDialog.newInstance(checkBox.isChecked());
-                        upgradeBackupsProcessingDialog.show(getFragmentManager(), null);
+                                UpgradeBackupsProcessingDialog upgradeBackupsProcessingDialog = UpgradeBackupsProcessingDialog.newInstance(checkBox.isChecked());
+                                upgradeBackupsProcessingDialog.show(getFragmentManager(), null);
 
-                        dialog.dismiss();
-                    }
-                });
+                                dialog.dismiss();
+                            }
+                        });
             }
         }
     }
@@ -290,7 +289,8 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                 try {
                     if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
                         PermissionHelper.showMissingPermissionDialog(getActivity(),
-                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION, NEEDED_PERMISSIONS);
+                                PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                                NEEDED_PERMISSIONS);
                         break;
                     }
 
@@ -312,10 +312,13 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.backup_fragment_menu, menu);
         final int color = ThemeHelper.getThemeAttrColor(getActivity(), android.R.attr.textColorPrimary);
-        menu.findItem(R.id.create_backup).setIcon(IconicsHelper.getAddIcon(getActivity(), color));
+        menu.findItem(R.id.create_backup)
+                .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            menu.findItem(R.id.create_backup).setVisible(false).setEnabled(false);
+            menu.findItem(R.id.create_backup)
+                    .setVisible(false)
+                    .setEnabled(false);
         }
     }
 
@@ -337,18 +340,15 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
-    }
-
-    @Override
-    public RecyclerView getRecyclerView() {
-        return recyclerViewBackups;
     }
 
     @Override

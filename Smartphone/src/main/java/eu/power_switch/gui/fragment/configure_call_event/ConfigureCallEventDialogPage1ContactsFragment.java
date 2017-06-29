@@ -38,6 +38,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
@@ -57,14 +58,16 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
 
     public static final String KEY_PHONE_NUMBERS = "phone_numbers";
 
-    private View rootView;
-    private BroadcastReceiver broadcastReceiver;
+    @BindView(R.id.recyclerView_phoneNumbers)
+    RecyclerView         recyclerViewContacts;
+    @BindView(R.id.add_contact_fab)
+    FloatingActionButton addContactFAB;
 
+    private BroadcastReceiver broadcastReceiver;
     private long callEventId = -1;
 
     private ArrayList<String> phoneNumbers = new ArrayList<>();
     private PhoneNumberRecyclerViewAdapter phoneNumberRecyclerViewAdapter;
-    private RecyclerView recyclerViewContacts;
 
     /**
      * Used to notify the summary page that some info has changed
@@ -76,13 +79,14 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED);
         intent.putExtra(KEY_PHONE_NUMBERS, phoneNumbers);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_call_event_page_1, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -102,14 +106,12 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
             }
         };
 
-        recyclerViewContacts = rootView.findViewById(R.id.recyclerView_phoneNumbers);
         phoneNumberRecyclerViewAdapter = new PhoneNumberRecyclerViewAdapter(getActivity(), phoneNumbers);
         recyclerViewContacts.setAdapter(phoneNumberRecyclerViewAdapter);
         phoneNumberRecyclerViewAdapter.setOnDeleteClickListener(new PhoneNumberRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, final int position) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle(R.string.delete)
+                new AlertDialog.Builder(getContext()).setTitle(R.string.delete)
                         .setMessage(R.string.are_you_sure)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
@@ -131,7 +133,6 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewContacts.setLayoutManager(layoutManager);
 
-        final FloatingActionButton addContactFAB = rootView.findViewById(R.id.add_contact_fab);
         addContactFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         final Fragment fragment = this;
         addContactFAB.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +153,11 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_call_event_page_1;
+    }
+
     private void initializeCallData(long callEventId) {
         try {
             CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
@@ -167,12 +173,14 @@ public class ConfigureCallEventDialogPage1ContactsFragment extends Configuration
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

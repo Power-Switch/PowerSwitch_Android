@@ -48,7 +48,7 @@
     <string name="wizard_setup_room_hint">Living room</string>
     <string name="wizard_setup_room_description">Enter the name of the first room in your Apartment</string>
 
-    <string name="wizard_finish_success">Great! Your now all set to add your first receiver :)</string>
+    <string name="wizard_finish_success">Great! You\'re now all set to add your first receiver :)</string>
     <string name="wizard_finish_failure">Somethings not right yet :/\nPlease check your input again.</string>
 
 </resources>

@@ -81,12 +81,16 @@ dependencies {
 
     // External Libraries
 
+    // Dexter (Permissions)
+    compile 'com.karumi:dexter:4.1.0'
+
+    // Butterknife View Annotation
+    compile 'com.jakewharton:butterknife:8.6.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
+
     // MaterialShowcaseView (Fullscreen tutorial messages)
     compile 'com.github.deano2390:MaterialShowcaseView:wip-SNAPSHOT'
     //compile project(':ShowcaseViewLibrary')
-
-    // Dexter (Permissions)
-    compile 'com.karumi:dexter:4.1.0'
 
     // AboutLibraries ("About" screen)
     compile('com.mikepenz:aboutlibraries:5.9.6@aar') {
@@ -127,6 +131,11 @@ dependencies {
 
     // AppIntro (Intro Wizard)
     compile 'com.github.apl-devs:appintro:v4.2.0'
+
+    // Konfetti Animation View (min API 15)
+//    compile('nl.dionsegijn:konfetti:1.0.2') {
+//        exclude module: 'app'
+//    }
 
     // PowerSwitch Modules
     compile project(':Shared')

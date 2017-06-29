@@ -34,6 +34,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -52,27 +53,31 @@ import eu.power_switch.timer.WeekdayTimer;
  */
 public class ConfigureTimerDialogPage4TabbedSummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
+    @BindView(R.id.textView_name)
+    TextView textViewName;
+    @BindView(R.id.textView_time)
+    TextView textViewTime;
+    @BindView(R.id.textView_execution_days)
+    TextView textViewDays;
+    @BindView(R.id.textView_action)
+    TextView textViewAction;
+
     private long currentId = -1;
     private boolean currentIsActive;
-    private String currentName = "";
-    private Calendar currentExecutionTime = Calendar.getInstance();
-    private int currentRandomizerValue = 0;
-    private long currentExecutionInterval = -1;
+    private String   currentName              = "";
+    private Calendar currentExecutionTime     = Calendar.getInstance();
+    private int      currentRandomizerValue   = 0;
+    private long     currentExecutionInterval = -1;
     private ArrayList<WeekdayTimer.Day> currentExecutionDays;
-    private String currentExecutionType;
-    private ArrayList<Action> currentActions;
+    private String                      currentExecutionType;
+    private ArrayList<Action>           currentActions;
 
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
-    private TextView textViewName;
-    private TextView textViewTime;
-    private TextView textViewDays;
-    private TextView textViewAction;
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_4_summary, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -98,11 +103,6 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             }
         };
 
-        textViewName = rootView.findViewById(R.id.textView_name);
-        textViewTime = rootView.findViewById(R.id.textView_time);
-        textViewDays = rootView.findViewById(R.id.textView_execution_days);
-        textViewAction = rootView.findViewById(R.id.textView_action);
-
         Bundle args = getArguments();
         if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
             currentId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
@@ -113,6 +113,11 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
         updateUi();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_timer_page_4_summary;
     }
 
     private void initializeTimerData(long timerId) {
@@ -151,7 +156,7 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
 
         if (currentExecutionTime != null) {
             long hourOfDay = currentExecutionTime.get(Calendar.HOUR_OF_DAY);
-            long minute = currentExecutionTime.get(Calendar.MINUTE);
+            long minute    = currentExecutionTime.get(Calendar.MINUTE);
 
             String executionTime = "";
             if (hourOfDay < 10) {
@@ -209,19 +214,28 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
                 }
             } else {
                 if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-                    Timer timer = new IntervalTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionInterval,
+                    Timer timer = new IntervalTimer(currentId,
+                            currentIsActive,
+                            currentName,
+                            currentExecutionTime,
+                            currentRandomizerValue,
+                            currentExecutionInterval,
                             currentActions);
                     DatabaseHandler.updateTimer(timer);
                 } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-                    Timer timer = new WeekdayTimer(currentId, currentIsActive, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionDays,
+                    Timer timer = new WeekdayTimer(currentId,
+                            currentIsActive,
+                            currentName,
+                            currentExecutionTime,
+                            currentRandomizerValue,
+                            currentExecutionDays,
                             currentActions);
                     DatabaseHandler.updateTimer(timer);
                 }
             }
 
             TimersFragment.sendTimersChangedBroadcast(getContext());
-            StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                    R.string.timer_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -259,12 +273,14 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
         intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

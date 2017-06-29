@@ -18,6 +18,7 @@
 
 package eu.power_switch.wizard.gui;
 
+import eu.power_switch.wizard.config.ConfigurationHolder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,13 +27,18 @@ import lombok.Setter;
  */
 public abstract class ConfigurationPage extends WizardPage {
 
-    @Getter
-    protected ConfigurationHolder configurationHolder;
-
+    /**
+     * Configuration holder where to store the configuration of this page
+     */
     @Getter
     @Setter
+    protected ConfigurationHolder configurationHolder;
+
     /**
      * The current validity of this page
-     */ private boolean isValid = false;
+     */
+    @Getter
+    @Setter
+    private boolean isValid = false;
 
 }

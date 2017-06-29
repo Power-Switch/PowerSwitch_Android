@@ -42,6 +42,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import butterknife.BindView;
 import de.markusressel.android.library.tutorialtooltip.TutorialTooltip;
 import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
@@ -77,19 +78,21 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  */
 public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
 
+    @BindView(R.id.recyclerview_list_of_receivers)
+    RecyclerView recyclerViewSelectedReceivers;
+
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
-    private RecyclerView recyclerViewSelectedReceivers;
-    private ArrayList<Room> rooms;
+
+    private ArrayList<Room>           rooms;
     private CustomRecyclerViewAdapter customRecyclerViewAdapter;
 
-    private long currentId = -1;
+    private long   currentId   = -1;
     private String currentName = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_scene_page_2, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -106,7 +109,6 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
         rooms = new ArrayList<>();
         customRecyclerViewAdapter = new CustomRecyclerViewAdapter(getActivity(), rooms);
-        recyclerViewSelectedReceivers = rootView.findViewById(R.id.recyclerview_list_of_receivers);
         recyclerViewSelectedReceivers.setAdapter(customRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getResources().getInteger(R.integer.scene_grid_span_count),
                 StaggeredGridLayoutManager.VERTICAL);
@@ -122,6 +124,11 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
         createTutorial();
 
         return rootView;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_scene_page_2;
     }
 
     private void createTutorial() {
@@ -168,8 +175,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
 
             currentName = scene.getName();
 
-            ArrayList<Room> checkedReceivers = new ArrayList<>();
-            HashMap<Long, SceneItem> map = new HashMap<>();
+            ArrayList<Room>          checkedReceivers = new ArrayList<>();
+            HashMap<Long, SceneItem> map              = new HashMap<>();
 
             for (SceneItem sceneItem : scene.getSceneItems()) {
                 map.put(sceneItem.getReceiver()
@@ -264,8 +271,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
     }
 
     private class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder> {
-        private Context context;
-        private ArrayList<Room> rooms;
+        private Context                  context;
+        private ArrayList<Room>          rooms;
         private HashMap<Long, SceneItem> receiverSceneItemHashMap;
 
         public CustomRecyclerViewAdapter(Context context, ArrayList<Room> rooms) {
@@ -299,8 +306,8 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
         public void onBindViewHolder(CustomRecyclerViewAdapter.ViewHolder holder, int position) {
             final Room room = rooms.get(position);
 
-            String inflaterString = Context.LAYOUT_INFLATER_SERVICE;
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(inflaterString);
+            String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
+            LayoutInflater inflater       = (LayoutInflater) context.getSystemService(inflaterString);
 
             holder.roomName.setText(room.getName());
 
@@ -336,7 +343,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
                     buttonsPerRow = 2;
                 }
 
-                int i = 0;
+                int      i         = 0;
                 TableRow buttonRow = null;
 
                 if (!receiverSceneItemHashMap.containsKey(receiver.getId())) {
@@ -352,7 +359,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
                             false);
                     buttonList.add(buttonView);
 
-                    final int accentColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
+                    final int accentColor   = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.colorAccent);
                     final int inactiveColor = ThemeHelper.getThemeAttrColor(getActivity(), R.attr.textColorInactive);
                     if (receiverSceneItemHashMap.get(receiver.getId())
                             .getActiveButton()
@@ -408,7 +415,7 @@ public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationD
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView roomName;
+            public TextView     roomName;
             public LinearLayout linearLayoutOfReceivers;
 
             public ViewHolder(final View itemView) {

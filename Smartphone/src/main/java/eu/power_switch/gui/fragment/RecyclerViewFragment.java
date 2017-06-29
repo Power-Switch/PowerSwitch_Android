@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -37,6 +36,7 @@ import android.widget.LinearLayout;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 
@@ -47,33 +47,30 @@ import eu.power_switch.gui.StatusMessageHandler;
  * <p/>
  * Created by Markus on 25.11.2015.
  */
-public abstract class RecyclerViewFragment<T> extends Fragment implements LoaderManager.LoaderCallbacks<RecyclerViewUpdateResult<T>> {
+public abstract class RecyclerViewFragment<T> extends ButterKnifeFragment implements LoaderManager.LoaderCallbacks<RecyclerViewUpdateResult<T>> {
 
-    protected View rootView;
-    private LinearLayout layoutLoading;
-    private FrameLayout layoutEmpty;
-    private LinearLayout layoutError;
+    @BindView(R.id.layoutLoading)
+    LinearLayout layoutLoading;
+    @BindView(R.id.layoutEmpty)
+    FrameLayout  layoutEmpty;
+    @BindView(R.id.layoutError)
+    LinearLayout layoutError;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     private Loader dataLoader;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        onCreateViewEvent(inflater, container, savedInstanceState);
-
-        layoutLoading = rootView.findViewById(R.id.layoutLoading);
-        layoutEmpty = rootView.findViewById(R.id.layoutEmpty);
-        layoutError = rootView.findViewById(R.id.layoutError);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // use loaderManager of fragment, so unique ID across app is not required (only across this fragment)
         dataLoader = getLoaderManager().initLoader(0, null, this);
 
-        onInitialized();
-
         return rootView;
     }
-
-    protected abstract void onInitialized();
 
     @Override
     public Loader<RecyclerViewUpdateResult<T>> onCreateLoader(int id, Bundle args) {
@@ -187,16 +184,16 @@ public abstract class RecyclerViewFragment<T> extends Fragment implements Loader
         }
     }
 
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
     /**
      * Override this Method to set Span Count should be used for different screen resolutions
      *
      * @return span count
      */
     protected abstract int getSpanCount();
-
-    protected abstract void onCreateViewEvent(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
-
-    public abstract RecyclerView getRecyclerView();
 
     public abstract RecyclerView.Adapter getRecyclerViewAdapter();
 

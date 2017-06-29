@@ -36,6 +36,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -53,13 +54,15 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialogFragment {
 
     public static final String KEY_ACTIONS = "actions";
-
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static ArrayList<Action> currentActions;
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
-
+    @BindView(R.id.add_timer_action)
+    FloatingActionButton addTimerActionFAB;
+    @BindView(R.id.recyclerview_list_of_actions)
+    RecyclerView         recyclerViewTimerActions;
     private BroadcastReceiver broadcastReceiver;
-    private View rootView;
+
 
     /**
      * Used to notify the setup page that some info has changed
@@ -70,7 +73,8 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
         intent.putExtra(KEY_ACTIONS, actions);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     /**
@@ -86,7 +90,7 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_fragment_configure_timer_page_3, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // BroadcastReceiver to get notifications from background service if room data has changed
         broadcastReceiver = new BroadcastReceiver() {
@@ -97,7 +101,6 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
         };
 
         final Fragment fragment = this;
-        FloatingActionButton addTimerActionFAB = rootView.findViewById(R.id.add_timer_action);
         addTimerActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addTimerActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,8 +121,6 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
                 sendTimerActionChangedBroadcast(getContext(), currentActions);
             }
         });
-        RecyclerView recyclerViewTimerActions = rootView.findViewById(R.id
-                .recyclerview_list_of_actions);
         recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);
@@ -135,10 +136,16 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_fragment_configure_timer_page_3;
+    }
+
     private void initializeTimerData(long timerId) {
         try {
             currentActions.clear();
-            currentActions.addAll(DatabaseHandler.getTimer(timerId).getActions());
+            currentActions.addAll(DatabaseHandler.getTimer(timerId)
+                    .getActions());
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -149,12 +156,14 @@ public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialog
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

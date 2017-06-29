@@ -37,10 +37,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
+import eu.power_switch.gui.fragment.ButterKnifeFragment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -54,16 +56,25 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  * <p/>
  * Created by Markus on 25.06.2015.
  */
-public class RoomSceneTabFragment extends Fragment {
+public class RoomSceneTabFragment extends ButterKnifeFragment {
 
     public static final String TAB_INDEX_KEY = "tabIndex";
 
+    @BindView(R.id.tabHost)
+    ViewPager tabViewPager;
+    @BindView(R.id.tabLayout)
+    TabLayout tabLayout;
+
+    @BindView(R.id.textView_currentApartmentInfo)
+    TextView textView_currentApartmentInfo;
+
+    @BindView(R.id.linearLayout_currentApartmentInfo)
+    LinearLayout linearLayout_currentApartmentInfo;
+
     private CustomTabAdapter customTabAdapter;
-    private TabLayout tabLayout;
-    private ViewPager tabViewPager;
-    private int currentTab = 0;
+    private int     currentTab   = 0;
     private boolean skipTutorial = false;
-    private TextView textView_currentApartmentInfo;
+
     private BroadcastReceiver broadcastReceiver;
 
     public static RoomSceneTabFragment newInstance(int tabIndex) {
@@ -77,7 +88,7 @@ public class RoomSceneTabFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.main_tabs, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // Create the adapter that will return a fragment
         // for each of the two primary sections of the app.
@@ -85,11 +96,8 @@ public class RoomSceneTabFragment extends Fragment {
 
         // Set up the tabViewPager, attaching the adapter and setting up a listener
         // for when the user swipes between sections.
-        tabViewPager = rootView.findViewById(R.id.tabHost);
         tabViewPager.setAdapter(customTabAdapter);
 
-        LinearLayout linearLayout_currentApartmentInfo = rootView.findViewById(R.id
-                .linearLayout_currentApartmentInfo);
         linearLayout_currentApartmentInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +106,6 @@ public class RoomSceneTabFragment extends Fragment {
             }
         });
 
-        textView_currentApartmentInfo = rootView.findViewById(R.id.textView_currentApartmentInfo);
         updateCurrentApartmentInfo();
 
         tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
@@ -132,7 +139,6 @@ public class RoomSceneTabFragment extends Fragment {
 
         skipTutorial = true;
 
-        tabLayout = rootView.findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(tabViewPager);
 
         Bundle args = getArguments();
@@ -146,12 +152,18 @@ public class RoomSceneTabFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.main_tabs;
+    }
+
     private void updateCurrentApartmentInfo() {
         try {
             if (DeveloperPreferencesHandler.getPlayStoreMode()) {
                 PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-                textView_currentApartmentInfo.setText(
-                        playStoreModeDataModel.getApartments().get(0).getName());
+                textView_currentApartmentInfo.setText(playStoreModeDataModel.getApartments()
+                        .get(0)
+                        .getName());
             } else {
                 long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
                 if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
@@ -178,7 +190,8 @@ public class RoomSceneTabFragment extends Fragment {
             dummyView = new View(getContext());
         }
 
-        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(tabIndex).toString());
+        String showcaseKey = TutorialHelper.getMainTabKey(customTabAdapter.getPageTitle(tabIndex)
+                .toString());
 
         String contentText;
         switch (tabIndex) {
@@ -192,8 +205,7 @@ public class RoomSceneTabFragment extends Fragment {
                 return;
         }
 
-        new MaterialShowcaseView.Builder(getActivity())
-                .setTarget(dummyView)
+        new MaterialShowcaseView.Builder(getActivity()).setTarget(dummyView)
                 .setUseAutoRadius(false)
                 .setRadius(64 * 3)
                 .setDismissOnTouch(true)
@@ -215,12 +227,14 @@ public class RoomSceneTabFragment extends Fragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 
