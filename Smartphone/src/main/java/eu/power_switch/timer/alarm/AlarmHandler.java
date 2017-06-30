@@ -53,10 +53,11 @@ public abstract class AlarmHandler {
      * Creates an Intent that will be sent when a Timer alarm goes off
      *
      * @param timer Timer this intent will activate
+     *
      * @return Intent
      */
-    public static Intent createAlarmIntent(Timer timer) {
-        Intent intent = new Intent();
+    public static Intent createAlarmIntent(Context context, Timer timer) {
+        Intent intent = new Intent(context, AlarmIntentReceiver.class);
         intent.setAction(TimerConstants.TIMER_ACTIVATION_INTENT);
         intent.setData(Uri.parse(TimerConstants.TIMER_URI_SCHEME + "://" + timer.getId()));
 
@@ -71,11 +72,13 @@ public abstract class AlarmHandler {
      */
     public static void createAlarm(Context context, Timer timer) {
         Log.d("AlarmHandler", "activating alarm of timer: " + timer.getId());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(timer), PendingIntent
-                .FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(context, timer), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.d("AlarmHandler", "intent: " + createAlarmIntent(timer));
-        Log.d("AlarmHandler", "exactTime: " + timer.getExecutionTime().getTime().toLocaleString());
+        Log.d("AlarmHandler", "intent: " + createAlarmIntent(context, timer));
+        Log.d("AlarmHandler",
+                "exactTime: " + timer.getExecutionTime()
+                        .getTime()
+                        .toLocaleString());
 
         if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
             createAlarm(context, (WeekdayTimer) timer, pendingIntent);
@@ -89,7 +92,10 @@ public abstract class AlarmHandler {
 
         if (timer.getExecutionInterval() == -1) {
             // one time alarm
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, timer.getRandomizedExecutionTime().getTimeInMillis(), pendingIntent);
+            alarmMgr.set(AlarmManager.RTC_WAKEUP,
+                    timer.getRandomizedExecutionTime()
+                            .getTimeInMillis(),
+                    pendingIntent);
         } else {
             // repeating alarm
             Calendar currentTime = Calendar.getInstance();
@@ -117,7 +123,9 @@ public abstract class AlarmHandler {
                 }
             }
 
-            Log.d("AlarmHandler", "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime().toLocaleString());
+            Log.d("AlarmHandler",
+                    "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime()
+                            .toLocaleString());
 
             if (Build.VERSION.SDK_INT >= 23) {
                 alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
@@ -136,7 +144,10 @@ public abstract class AlarmHandler {
 
         if (timer.getExecutionInterval() == -1) {
             // one time alarm
-            alarmMgr.set(AlarmManager.RTC_WAKEUP, timer.getRandomizedExecutionTime().getTimeInMillis(), pendingIntent);
+            alarmMgr.set(AlarmManager.RTC_WAKEUP,
+                    timer.getRandomizedExecutionTime()
+                            .getTimeInMillis(),
+                    pendingIntent);
         } else {
             // repeating alarm
             Calendar currentTime = Calendar.getInstance();
@@ -153,7 +164,9 @@ public abstract class AlarmHandler {
                 nextExecutionTime.add(Calendar.MILLISECOND, (int) timer.getExecutionInterval());
             }
 
-            Log.d("AlarmHandler", "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime().toLocaleString());
+            Log.d("AlarmHandler",
+                    "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime()
+                            .toLocaleString());
 
             if (Build.VERSION.SDK_INT >= 23) {
                 alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
@@ -175,11 +188,14 @@ public abstract class AlarmHandler {
      */
     public static void cancelAlarm(Context context, Timer timer) {
         Log.d("AlarmHandler", "cancelling alarm of timer: " + timer.getId());
-        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(timer), PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager  alarmMgr      = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(context, timer), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.d("AlarmHandler", "cancelling intent: " + createAlarmIntent(timer));
-        Log.d("AlarmHandler", "cancelling time: " + timer.getExecutionTime().getTime().toLocaleString());
+        Log.d("AlarmHandler", "cancelling intent: " + createAlarmIntent(context, timer));
+        Log.d("AlarmHandler",
+                "cancelling time: " + timer.getExecutionTime()
+                        .getTime()
+                        .toLocaleString());
         alarmMgr.cancel(pendingIntent);
     }
 }
