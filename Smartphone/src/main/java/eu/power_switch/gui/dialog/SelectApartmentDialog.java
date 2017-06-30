@@ -44,7 +44,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  * <p/>
  * Created by Markus on 08.01.2016.
  */
-public class SelectApartmentDialog extends ButterKnifeDialogFragment {
+public class SelectApartmentDialog extends ButterKnifeSupportDialogFragment {
 
     @BindView(R.id.listview_apartments)
     ListView listViewApartments;

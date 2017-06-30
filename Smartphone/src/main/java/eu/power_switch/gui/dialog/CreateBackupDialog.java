@@ -38,7 +38,7 @@ import eu.power_switch.R;
 /**
  * Dialog to create a new Backup
  */
-public class CreateBackupDialog extends ButterKnifeDialogFragment {
+public class CreateBackupDialog extends ButterKnifeSupportDialogFragment {
 
     @BindView(R.id.txt_backup_name)
     EditText name;

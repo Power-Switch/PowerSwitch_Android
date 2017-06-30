@@ -59,7 +59,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 /**
  * Created by Markus on 08.04.2016.
  */
-public class AddPhoneNumberDialog extends ButterKnifeDialogFragment {
+public class AddPhoneNumberDialog extends ButterKnifeSupportDialogFragment {
 
     public static final String KEY_PHONE_NUMBERS = "phoneNumbers";
 

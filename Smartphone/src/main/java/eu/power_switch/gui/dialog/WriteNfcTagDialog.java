@@ -21,24 +21,21 @@ package eu.power_switch.gui.dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.SmartphoneThemeHelper;
+import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.nfc.NfcHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -46,17 +43,21 @@ import eu.power_switch.shared.log.Log;
  * <p>
  * Created by mre on 08.04.2016.
  */
-public class WriteNfcTagDialog extends AppCompatActivity {
+public class WriteNfcTagDialog extends ButterKnifeDialogActivity {
 
     public static final String KEY_CONTENT = "content";
 
-    private String content;
-    private NfcAdapter nfcAdapter;
-    private TextView textViewStatus;
-    private LinearLayout layoutLoading;
-    private IconicsImageView successImage;
-    private IconicsImageView errorImage;
+    @BindView(R.id.txt_nfc_status)
+    TextView         textViewStatus;
+    @BindView(R.id.layoutLoading)
+    LinearLayout     layoutLoading;
+    @BindView(R.id.imageView_success)
+    IconicsImageView successImage;
+    @BindView(R.id.imageView_error)
+    IconicsImageView errorImage;
 
+    private String     content;
+    private NfcAdapter nfcAdapter;
 
     public static Intent getNewInstanceIntent(String content) {
         Intent intent = new Intent();
@@ -68,13 +69,8 @@ public class WriteNfcTagDialog extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate();
-        SmartphoneThemeHelper.applyDialogTheme(this);
-        // apply forced locale (if set in developer options)
-        applyLocale();
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_write_nfc_tag);
+
         setFinishOnTouchOutside(false); // prevent close dialog on touch outside window
         setTitle(R.string.write_nfc_tag);
 
@@ -85,31 +81,21 @@ public class WriteNfcTagDialog extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        textViewStatus = (TextView) findViewById(R.id.txt_nfc_status);
         textViewStatus.setText(R.string.waiting_for_tag);
-
-        layoutLoading = (LinearLayout) findViewById(R.id.layoutLoading);
-
-        successImage = (IconicsImageView) findViewById(R.id.imageView_success);
-        errorImage = (IconicsImageView) findViewById(R.id.imageView_error);
     }
 
-    private void applyLocale() {
-        if (DeveloperPreferencesHandler.getForceLanguage()) {
-            Resources res = getResources();
-            // Change locale settings in the app.
-            DisplayMetrics dm = res.getDisplayMetrics();
-            android.content.res.Configuration conf = res.getConfiguration();
-            conf.locale = DeveloperPreferencesHandler.getLocale();
-            res.updateConfiguration(conf, dm);
-        }
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_write_nfc_tag;
     }
 
     private void enableTagWriteMode() {
-        IntentFilter intentFilter = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        IntentFilter   intentFilter     = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter[] mWriteTagFilters = new IntentFilter[]{intentFilter};
-        PendingIntent nfcPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        PendingIntent nfcPendingIntent = PendingIntent.getActivity(this,
+                0,
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                0);
         nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, mWriteTagFilters, null);
     }
 

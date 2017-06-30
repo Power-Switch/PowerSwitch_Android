@@ -30,10 +30,10 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1LocationFragment;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActionsFragment;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActionsFragment;
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4SummaryFragment;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1Location;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActions;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4Summary;
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.obj.Apartment;
 
@@ -169,16 +169,16 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage1LocationFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage1Location.class, parentDialog);
                     break;
                 case 1:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage2EnterActionsFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage2EnterActions.class, parentDialog);
                     break;
                 case 2:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage3ExitActionsFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage3ExitActions.class, parentDialog);
                     break;
                 case 3:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGeofenceDialogPage4SummaryFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage4Summary.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

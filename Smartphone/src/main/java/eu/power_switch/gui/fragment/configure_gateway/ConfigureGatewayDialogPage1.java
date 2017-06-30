@@ -38,7 +38,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.gateway.Gateway;
@@ -50,7 +50,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage1Fragment extends ConfigurationDialogFragment {
+public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
 
     public static final String KEY_NAME          = "name";
     public static final String KEY_MODEL         = "model";

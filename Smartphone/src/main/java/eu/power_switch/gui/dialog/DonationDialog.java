@@ -50,7 +50,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 01.10.2015.
  */
-public class DonationDialog extends ButterKnifeDialogFragment {
+public class DonationDialog extends ButterKnifeSupportDialogFragment {
 
     public static IabHelper iapHelper;
 

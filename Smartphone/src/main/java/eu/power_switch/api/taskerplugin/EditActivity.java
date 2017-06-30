@@ -85,40 +85,40 @@ public class EditActivity extends AbstractPluginActivity {
         }
     };
     private BroadcastReceiver broadcastReceiver;
-    private RadioButton radioButtonReceiverAction;
-    private RadioButton radioButtonRoomAction;
-    private RadioButton radioButtonSceneAction;
+    private RadioButton       radioButtonReceiverAction;
+    private RadioButton       radioButtonRoomAction;
+    private RadioButton       radioButtonSceneAction;
     private ArrayList<String> apartmentNames = new ArrayList<>();
-    private ArrayList<String> roomNames = new ArrayList<>();
-    private ArrayList<String> receiverNames = new ArrayList<>();
-    private ArrayList<String> buttonNames = new ArrayList<>();
-    private ArrayList<String> sceneNames = new ArrayList<>();
-    private Spinner spinner_apartment;
-    private EditText editText_apartment;
-    private LinearLayout linearLayoutRoom;
-    private LinearLayout linearLayoutReceiver;
-    private LinearLayout linearLayoutButton;
-    private LinearLayout linearLayoutScene;
-    private Spinner spinner_room;
-    private EditText editText_room;
-    private Spinner spinner_receiver;
-    private EditText editText_receiver;
-    private Spinner spinner_button;
-    private EditText editText_button;
-    private Spinner spinner_scene;
-    private EditText editText_scene;
+    private ArrayList<String> roomNames      = new ArrayList<>();
+    private ArrayList<String> receiverNames  = new ArrayList<>();
+    private ArrayList<String> buttonNames    = new ArrayList<>();
+    private ArrayList<String> sceneNames     = new ArrayList<>();
+    private Spinner              spinner_apartment;
+    private EditText             editText_apartment;
+    private LinearLayout         linearLayoutRoom;
+    private LinearLayout         linearLayoutReceiver;
+    private LinearLayout         linearLayoutButton;
+    private LinearLayout         linearLayoutScene;
+    private Spinner              spinner_room;
+    private EditText             editText_room;
+    private Spinner              spinner_receiver;
+    private EditText             editText_receiver;
+    private Spinner              spinner_button;
+    private EditText             editText_button;
+    private Spinner              spinner_scene;
+    private EditText             editText_scene;
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
     private ArrayAdapter<String> receiverSpinnerArrayAdapter;
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
-    private Apartment currentApartment;
-    private String currentActionType = Action.ACTION_TYPE_RECEIVER;
-    private boolean useManualApartmentInput = false;
-    private boolean useManualRoomInput = false;
-    private boolean useManualReceiverInput = false;
-    private boolean useManualButtonInput = false;
-    private boolean useManualSceneInput = false;
-    private final TextWatcher editTextTextWatcher = new TextWatcher() {
+    private Apartment            currentApartment;
+    private       String       currentActionType       = Action.ACTION_TYPE_RECEIVER;
+    private       boolean      useManualApartmentInput = false;
+    private       boolean      useManualRoomInput      = false;
+    private       boolean      useManualReceiverInput  = false;
+    private       boolean      useManualButtonInput    = false;
+    private       boolean      useManualSceneInput     = false;
+    private final TextWatcher  editTextTextWatcher     = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -134,7 +134,7 @@ public class EditActivity extends AbstractPluginActivity {
             setPositiveButtonVisibility(checkValidity());
         }
     };
-    private List<String> relevantVariables = new ArrayList<>();
+    private       List<String> relevantVariables       = new ArrayList<>();
     private ImageButton imageButtonApartmentVariablePicker;
     private ImageButton imageButtonReceiverVariablePicker;
     private ImageButton imageButtonRoomVariablePicker;
@@ -150,7 +150,7 @@ public class EditActivity extends AbstractPluginActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_VARIABLE_SELECTED.equals(intent.getAction())) {
-                    Field field = Field.valueOf(intent.getStringExtra(SelectVariableDialog.KEY_FIELD));
+                    Field  field            = Field.valueOf(intent.getStringExtra(SelectVariableDialog.KEY_FIELD));
                     String selectedVariable = intent.getStringExtra(SelectVariableDialog.KEY_SELECTED_VARIABLE);
 
                     switch (field) {
@@ -191,11 +191,11 @@ public class EditActivity extends AbstractPluginActivity {
         };
 
         // Action Type Selection
-        radioButtonReceiverAction = (RadioButton) findViewById(R.id.radioButton_receiver_action);
+        radioButtonReceiverAction = findViewById(R.id.radioButton_receiver_action);
         radioButtonReceiverAction.setOnClickListener(actionTypeOnClickListener);
-        radioButtonRoomAction = (RadioButton) findViewById(R.id.radioButton_room_action);
+        radioButtonRoomAction = findViewById(R.id.radioButton_room_action);
         radioButtonRoomAction.setOnClickListener(actionTypeOnClickListener);
-        radioButtonSceneAction = (RadioButton) findViewById(R.id.radioButton_scene_action);
+        radioButtonSceneAction = findViewById(R.id.radioButton_scene_action);
         radioButtonSceneAction.setOnClickListener(actionTypeOnClickListener);
 
         try {
@@ -208,9 +208,8 @@ public class EditActivity extends AbstractPluginActivity {
             StatusMessageHandler.showErrorMessage(this, e);
         }
 
-        imageButtonApartmentVariablePicker = (ImageButton) findViewById(R.id.imageButton_apartmentVariablePicker);
-        imageButtonApartmentVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
-                .sizeDp(24)
+        imageButtonApartmentVariablePicker = findViewById(R.id.imageButton_apartmentVariablePicker);
+        imageButtonApartmentVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonApartmentVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,9 +219,8 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        ImageButton imageButtonSwitchApartment = (ImageButton) findViewById(R.id.imageButton_switchApartment);
-        imageButtonSwitchApartment.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
-                .sizeDp(24)
+        ImageButton imageButtonSwitchApartment = findViewById(R.id.imageButton_switchApartment);
+        imageButtonSwitchApartment.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonSwitchApartment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +237,7 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        spinner_apartment = (Spinner) findViewById(R.id.spinner_apartment);
+        spinner_apartment = findViewById(R.id.spinner_apartment);
         ArrayAdapter<String> apartmentSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, apartmentNames);
         apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_apartment.setAdapter(apartmentSpinnerArrayAdapter);
@@ -258,17 +256,16 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_apartment.setOnTouchListener(spinnerInteractionListener);
         spinner_apartment.setOnItemSelectedListener(spinnerInteractionListener);
 
-        editText_apartment = (EditText) findViewById(R.id.editText_apartment);
+        editText_apartment = findViewById(R.id.editText_apartment);
         editText_apartment.addTextChangedListener(editTextTextWatcher);
 
-        linearLayoutRoom = (LinearLayout) findViewById(R.id.linearLayout_room);
-        linearLayoutReceiver = (LinearLayout) findViewById(R.id.linearLayout_receiver);
-        linearLayoutButton = (LinearLayout) findViewById(R.id.linearLayout_button);
-        linearLayoutScene = (LinearLayout) findViewById(R.id.linearLayout_scene);
+        linearLayoutRoom = findViewById(R.id.linearLayout_room);
+        linearLayoutReceiver = findViewById(R.id.linearLayout_receiver);
+        linearLayoutButton = findViewById(R.id.linearLayout_button);
+        linearLayoutScene = findViewById(R.id.linearLayout_scene);
 
-        imageButtonRoomVariablePicker = (ImageButton) findViewById(R.id.imageButton_roomVariablePicker);
-        imageButtonRoomVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
-                .sizeDp(24)
+        imageButtonRoomVariablePicker = findViewById(R.id.imageButton_roomVariablePicker);
+        imageButtonRoomVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonRoomVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,9 +275,8 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        ImageButton imageButtonSwitchRoom = (ImageButton) findViewById(R.id.imageButton_switchRoom);
-        imageButtonSwitchRoom.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
-                .sizeDp(24)
+        ImageButton imageButtonSwitchRoom = findViewById(R.id.imageButton_switchRoom);
+        imageButtonSwitchRoom.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonSwitchRoom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,7 +293,7 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        spinner_room = (Spinner) findViewById(R.id.spinner_room);
+        spinner_room = findViewById(R.id.spinner_room);
         roomSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room.setAdapter(roomSpinnerArrayAdapter);
@@ -316,12 +312,11 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_room.setOnTouchListener(spinnerInteractionListener);
         spinner_room.setOnItemSelectedListener(spinnerInteractionListener);
 
-        editText_room = (EditText) findViewById(R.id.editText_room);
+        editText_room = findViewById(R.id.editText_room);
         editText_room.addTextChangedListener(editTextTextWatcher);
 
-        imageButtonReceiverVariablePicker = (ImageButton) findViewById(R.id.imageButton_receiverVariablePicker);
-        imageButtonReceiverVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
-                .sizeDp(24)
+        imageButtonReceiverVariablePicker = findViewById(R.id.imageButton_receiverVariablePicker);
+        imageButtonReceiverVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonReceiverVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -331,9 +326,8 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        ImageButton imageButtonSwitchReceiver = (ImageButton) findViewById(R.id.imageButton_switchReceiver);
-        imageButtonSwitchReceiver.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
-                .sizeDp(24)
+        ImageButton imageButtonSwitchReceiver = findViewById(R.id.imageButton_switchReceiver);
+        imageButtonSwitchReceiver.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonSwitchReceiver.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,7 +344,7 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        spinner_receiver = (Spinner) findViewById(R.id.spinner_receiver);
+        spinner_receiver = findViewById(R.id.spinner_receiver);
         receiverSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, receiverNames);
         receiverSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver.setAdapter(receiverSpinnerArrayAdapter);
@@ -369,12 +363,11 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_receiver.setOnTouchListener(spinnerInteractionListener);
         spinner_receiver.setOnItemSelectedListener(spinnerInteractionListener);
 
-        editText_receiver = (EditText) findViewById(R.id.editText_receiver);
+        editText_receiver = findViewById(R.id.editText_receiver);
         editText_receiver.addTextChangedListener(editTextTextWatcher);
 
-        imageButtonButtonVariablePicker = (ImageButton) findViewById(R.id.imageButton_buttonVariablePicker);
-        imageButtonButtonVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
-                .sizeDp(24)
+        imageButtonButtonVariablePicker = findViewById(R.id.imageButton_buttonVariablePicker);
+        imageButtonButtonVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonButtonVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -384,9 +377,8 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        ImageButton imageButtonSwitchButton = (ImageButton) findViewById(R.id.imageButton_switchButton);
-        imageButtonSwitchButton.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
-                .sizeDp(24)
+        ImageButton imageButtonSwitchButton = findViewById(R.id.imageButton_switchButton);
+        imageButtonSwitchButton.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonSwitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -403,7 +395,7 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        spinner_button = (Spinner) findViewById(R.id.spinner_button);
+        spinner_button = findViewById(R.id.spinner_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, buttonNames);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_button.setAdapter(buttonSpinnerArrayAdapter);
@@ -421,12 +413,11 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_button.setOnTouchListener(spinnerInteractionListener);
         spinner_button.setOnItemSelectedListener(spinnerInteractionListener);
 
-        editText_button = (EditText) findViewById(R.id.editText_button);
+        editText_button = findViewById(R.id.editText_button);
         editText_button.addTextChangedListener(editTextTextWatcher);
 
-        imageButtonSceneVariablePicker = (ImageButton) findViewById(R.id.imageButton_sceneVariablePicker);
-        imageButtonSceneVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more)
-                .sizeDp(24)
+        imageButtonSceneVariablePicker = findViewById(R.id.imageButton_sceneVariablePicker);
+        imageButtonSceneVariablePicker.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_tag_more).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonSceneVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -436,9 +427,8 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        ImageButton imageButtonSwitchScene = (ImageButton) findViewById(R.id.imageButton_switchScene);
-        imageButtonSwitchScene.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle)
-                .sizeDp(24)
+        ImageButton imageButtonSwitchScene = findViewById(R.id.imageButton_switchScene);
+        imageButtonSwitchScene.setImageDrawable(new IconicsDrawable(this, MaterialDesignIconic.Icon.gmi_shuffle).sizeDp(24)
                 .color(ContextCompat.getColor(this, android.R.color.white)));
         imageButtonSwitchScene.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -455,7 +445,7 @@ public class EditActivity extends AbstractPluginActivity {
             }
         });
 
-        spinner_scene = (Spinner) findViewById(R.id.spinner_scene);
+        spinner_scene = findViewById(R.id.spinner_scene);
         sceneSpinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sceneNames);
         sceneSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_scene.setAdapter(sceneSpinnerArrayAdapter);
@@ -473,7 +463,7 @@ public class EditActivity extends AbstractPluginActivity {
         spinner_scene.setOnTouchListener(spinnerInteractionListener);
         spinner_scene.setOnItemSelectedListener(spinnerInteractionListener);
 
-        editText_scene = (EditText) findViewById(R.id.editText_scene);
+        editText_scene = findViewById(R.id.editText_scene);
         editText_scene.addTextChangedListener(editTextTextWatcher);
 
 
@@ -506,7 +496,8 @@ public class EditActivity extends AbstractPluginActivity {
             updateLists();
         }
 
-        if (localeBundle.containsKey(ApiConstants.KEY_ROOM) && localeBundle.containsKey(ApiConstants.KEY_RECEIVER) && localeBundle.containsKey(ApiConstants.KEY_BUTTON)) {
+        if (localeBundle.containsKey(ApiConstants.KEY_ROOM) && localeBundle.containsKey(ApiConstants.KEY_RECEIVER) && localeBundle.containsKey(
+                ApiConstants.KEY_BUTTON)) {
             updateActionType(Action.ACTION_TYPE_RECEIVER);
 
             if (localeBundle.getBoolean(ApiConstants.KEY_REPLACE_VARIABLES_ROOM)) {
@@ -722,8 +713,8 @@ public class EditActivity extends AbstractPluginActivity {
 
     private void updateReceiverButtonList() throws Exception {
         Room selectedRoom = getSelectedRoom();
-        Receiver selectedReceiver = selectedRoom.getReceiver(
-                spinner_receiver.getSelectedItem().toString());
+        Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver.getSelectedItem()
+                .toString());
 
         if (selectedReceiver != null) {
             for (Button button : selectedReceiver.getButtons()) {
@@ -750,9 +741,11 @@ public class EditActivity extends AbstractPluginActivity {
 
     private Room getSelectedRoom() throws Exception {
         if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            return currentApartment.getRoom(spinner_room.getSelectedItem().toString());
+            return currentApartment.getRoom(spinner_room.getSelectedItem()
+                    .toString());
         } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            return currentApartment.getRoom(spinner_room.getSelectedItem().toString());
+            return currentApartment.getRoom(spinner_room.getSelectedItem()
+                    .toString());
         } else {
             return null;
         }
@@ -845,65 +838,90 @@ public class EditActivity extends AbstractPluginActivity {
 
     private String getApartmentName() {
         if (useManualApartmentInput) {
-            return editText_apartment.getText().toString().trim();
+            return editText_apartment.getText()
+                    .toString()
+                    .trim();
         } else {
             Object selectedItem = spinner_apartment.getSelectedItem();
             if (selectedItem != null) {
-                return selectedItem.toString().trim();
+                return selectedItem.toString()
+                        .trim();
             } else {
-                return spinner_apartment.getItemAtPosition(0).toString().trim();
+                return spinner_apartment.getItemAtPosition(0)
+                        .toString()
+                        .trim();
             }
         }
     }
 
     private String getRoomName() {
         if (useManualRoomInput) {
-            return editText_room.getText().toString().trim();
+            return editText_room.getText()
+                    .toString()
+                    .trim();
         } else {
             Object selectedItem = spinner_room.getSelectedItem();
             if (selectedItem != null) {
-                return selectedItem.toString().trim();
+                return selectedItem.toString()
+                        .trim();
             } else {
-                return spinner_room.getItemAtPosition(0).toString().trim();
+                return spinner_room.getItemAtPosition(0)
+                        .toString()
+                        .trim();
             }
         }
     }
 
     private String getReceiverName() {
         if (useManualReceiverInput) {
-            return editText_receiver.getText().toString().trim();
+            return editText_receiver.getText()
+                    .toString()
+                    .trim();
         } else {
             Object selectedItem = spinner_receiver.getSelectedItem();
             if (selectedItem != null) {
-                return selectedItem.toString().trim();
+                return selectedItem.toString()
+                        .trim();
             } else {
-                return spinner_receiver.getItemAtPosition(0).toString().trim();
+                return spinner_receiver.getItemAtPosition(0)
+                        .toString()
+                        .trim();
             }
         }
     }
 
     private String getButtonName() {
         if (useManualButtonInput) {
-            return editText_button.getText().toString().trim();
+            return editText_button.getText()
+                    .toString()
+                    .trim();
         } else {
             Object selectedItem = spinner_button.getSelectedItem();
             if (selectedItem != null) {
-                return selectedItem.toString().trim();
+                return selectedItem.toString()
+                        .trim();
             } else {
-                return spinner_button.getItemAtPosition(0).toString().trim();
+                return spinner_button.getItemAtPosition(0)
+                        .toString()
+                        .trim();
             }
         }
     }
 
     private String getSceneName() {
         if (useManualSceneInput) {
-            return editText_scene.getText().toString().trim();
+            return editText_scene.getText()
+                    .toString()
+                    .trim();
         } else {
             Object selectedItem = spinner_scene.getSelectedItem();
             if (selectedItem != null) {
-                return selectedItem.toString().trim();
+                return selectedItem.toString()
+                        .trim();
             } else {
-                return spinner_scene.getItemAtPosition(0).toString().trim();
+                return spinner_scene.getItemAtPosition(0)
+                        .toString()
+                        .trim();
             }
         }
     }
@@ -966,12 +984,7 @@ public class EditActivity extends AbstractPluginActivity {
 
             if (TaskerPlugin.Setting.hostSupportsOnFireVariableReplacement(this)) {
                 TaskerPlugin.Setting.setVariableReplaceKeys(resultBundle,
-                        new String[]{
-                                ApiConstants.KEY_APARTMENT,
-                                ApiConstants.KEY_ROOM,
-                                ApiConstants.KEY_RECEIVER,
-                                ApiConstants.KEY_BUTTON,
-                                ApiConstants.KEY_SCENE});
+                        new String[]{ApiConstants.KEY_APARTMENT, ApiConstants.KEY_ROOM, ApiConstants.KEY_RECEIVER, ApiConstants.KEY_BUTTON, ApiConstants.KEY_SCENE});
             }
 
             resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
@@ -988,25 +1001,22 @@ public class EditActivity extends AbstractPluginActivity {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_VARIABLE_SELECTED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(this)
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 
     public enum Field {
-        Apartment,
-        Room,
-        Receiver,
-        Button,
-        Scene
+        Apartment, Room, Receiver, Button, Scene
     }
 
     private enum InputType {
-        LIST,
-        MANUAL
+        LIST, MANUAL
     }
 }

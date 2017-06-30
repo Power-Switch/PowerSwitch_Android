@@ -53,7 +53,10 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public abstract class ConfigurationDialog extends ButterKnifeDialogFragment {
+public abstract class ConfigurationDialog extends ButterKnifeSupportDialogFragment {
+
+    @BindView(R.id.contentView)
+    FrameLayout contentViewContainer;
 
     @BindView(R.id.imageButton_delete)
     protected ImageButton imageButtonDelete;
@@ -62,11 +65,11 @@ public abstract class ConfigurationDialog extends ButterKnifeDialogFragment {
     @BindView(R.id.imageButton_save)
     protected ImageButton imageButtonSave;
 
+    private View contentView;
+
     private boolean modified;
 
     private BroadcastReceiver broadcastReceiver;
-
-    private View contentView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,8 +91,6 @@ public abstract class ConfigurationDialog extends ButterKnifeDialogFragment {
 
         getDialog().setTitle(getDialogTitle());
 
-        FrameLayout contentViewContainer = rootView.findViewById(R.id.contentView);
-
         contentView = initContentView(inflater, contentViewContainer, savedInstanceState);
 
         imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), R.color.delete_color)));
@@ -100,7 +101,6 @@ public abstract class ConfigurationDialog extends ButterKnifeDialogFragment {
             }
         });
 
-        imageButtonCancel = rootView.findViewById(R.id.imageButton_cancel);
         imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +123,6 @@ public abstract class ConfigurationDialog extends ButterKnifeDialogFragment {
             }
         });
 
-        imageButtonSave = rootView.findViewById(R.id.imageButton_save);
         imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override

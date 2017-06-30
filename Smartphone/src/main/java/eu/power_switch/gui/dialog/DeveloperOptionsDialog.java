@@ -44,7 +44,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Hidden Dialog Menu to access developer options
  */
-public class DeveloperOptionsDialog extends ButterKnifeDialogFragment {
+public class DeveloperOptionsDialog extends ButterKnifeSupportDialogFragment {
 
     private GeofenceApiHandler geofenceApiHandler;
     @BindView(R.id.checkBox_playStoreMode)

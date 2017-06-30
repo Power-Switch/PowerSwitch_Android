@@ -56,7 +56,7 @@ import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
@@ -76,7 +76,7 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogTabbedPage2SetupFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.recyclerview_list_of_receivers)
     RecyclerView recyclerViewSelectedReceivers;

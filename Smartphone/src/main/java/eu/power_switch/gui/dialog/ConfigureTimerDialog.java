@@ -32,10 +32,10 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.TimersFragment;
-import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1TimeFragment;
-import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2DaysFragment;
-import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
-import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4TabbedSummaryFragment;
+import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1Time;
+import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2Days;
+import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3Action;
+import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4TabbedSummary;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -169,16 +169,16 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureTimerDialogPage1TimeFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureTimerDialogPage1Time.class, parentDialog);
                     break;
                 case 1:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureTimerDialogPage2DaysFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureTimerDialogPage2Days.class, parentDialog);
                     break;
                 case 2:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureTimerDialogPage3ActionFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureTimerDialogPage3Action.class, parentDialog);
                     break;
                 case 3:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureTimerDialogPage4TabbedSummaryFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureTimerDialogPage4TabbedSummary.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }

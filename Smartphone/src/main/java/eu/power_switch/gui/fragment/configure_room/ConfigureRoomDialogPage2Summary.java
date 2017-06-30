@@ -43,7 +43,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureRoomDialog;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
@@ -62,7 +62,7 @@ import eu.power_switch.widget.provider.RoomWidgetProvider;
 /**
  * Dialog to edit a Room
  */
-public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.checkbox_use_custom_gateway_selection)
     CheckBox     checkBoxUseCustomGatewaySelection;
@@ -95,8 +95,8 @@ public class ConfigureRoomDialogPage2SummaryFragment extends ConfigurationDialog
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_ROOM_NAME_CHANGED.equals(intent.getAction())) {
-                    currentRoomName = intent.getStringExtra(ConfigureRoomDialogPage1Fragment.KEY_NAME);
-                    currentReceivers = (ArrayList<Receiver>) intent.getSerializableExtra(ConfigureRoomDialogPage1Fragment.KEY_RECEIVERS);
+                    currentRoomName = intent.getStringExtra(ConfigureRoomDialogPage1.KEY_NAME);
+                    currentReceivers = (ArrayList<Receiver>) intent.getSerializableExtra(ConfigureRoomDialogPage1.KEY_RECEIVERS);
                 }
 
                 notifyConfigurationChanged();

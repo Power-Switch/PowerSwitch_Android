@@ -39,7 +39,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.TimersFragment;
@@ -51,7 +51,7 @@ import eu.power_switch.timer.WeekdayTimer;
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage4TabbedSummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_name)
     TextView textViewName;
@@ -84,17 +84,17 @@ public class ConfigureTimerDialogPage4TabbedSummaryFragment extends Configuratio
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED.equals(intent.getAction())) {
-                    currentExecutionTime = (Calendar) intent.getSerializableExtra(ConfigureTimerDialogPage1TimeFragment.KEY_EXECUTION_TIME);
-                    currentName = intent.getStringExtra(ConfigureTimerDialogPage1TimeFragment.KEY_NAME);
-                    currentRandomizerValue = intent.getIntExtra(ConfigureTimerDialogPage1TimeFragment.KEY_RANDOMIZER_VALUE, 0);
+                    currentExecutionTime = (Calendar) intent.getSerializableExtra(ConfigureTimerDialogPage1Time.KEY_EXECUTION_TIME);
+                    currentName = intent.getStringExtra(ConfigureTimerDialogPage1Time.KEY_NAME);
+                    currentRandomizerValue = intent.getIntExtra(ConfigureTimerDialogPage1Time.KEY_RANDOMIZER_VALUE, 0);
 
                 } else if (LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED.equals(intent.getAction())) {
-                    currentExecutionInterval = intent.getLongExtra(ConfigureTimerDialogPage2DaysFragment.KEY_EXECUTION_INTERVAL, -1);
-                    currentExecutionDays = (ArrayList<WeekdayTimer.Day>) intent.getSerializableExtra(ConfigureTimerDialogPage2DaysFragment.KEY_EXECUTION_DAYS);
-                    currentExecutionType = intent.getStringExtra(ConfigureTimerDialogPage2DaysFragment.KEY_EXECUTION_TYPE);
+                    currentExecutionInterval = intent.getLongExtra(ConfigureTimerDialogPage2Days.KEY_EXECUTION_INTERVAL, -1);
+                    currentExecutionDays = (ArrayList<WeekdayTimer.Day>) intent.getSerializableExtra(ConfigureTimerDialogPage2Days.KEY_EXECUTION_DAYS);
+                    currentExecutionType = intent.getStringExtra(ConfigureTimerDialogPage2Days.KEY_EXECUTION_TYPE);
 
                 } else if (LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureTimerDialogPage3ActionFragment.KEY_ACTIONS);
+                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureTimerDialogPage3Action.KEY_ACTIONS);
                 }
 
                 updateUi();

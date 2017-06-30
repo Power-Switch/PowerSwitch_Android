@@ -31,10 +31,10 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1Fragment;
-import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage2Fragment;
-import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage3Fragment;
-import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage4SummaryFragment;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage2;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage3;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage4Summary;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.shared.log.Log;
 
@@ -152,19 +152,19 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage1Fragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage1.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 1:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage2Fragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage2.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 2:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage3Fragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage3.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 3:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureGatewayDialogPage4SummaryFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage4Summary.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

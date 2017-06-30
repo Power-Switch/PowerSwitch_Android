@@ -54,7 +54,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.map.MapViewHandler;
@@ -68,7 +68,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.01.2016.
  */
-public class ConfigureGeofenceDialogPage1LocationFragment extends ConfigurationDialogFragment implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
+public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPage implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     public static final String KEY_NAME      = "name";
     public static final String KEY_LATITUDE  = "latitude";

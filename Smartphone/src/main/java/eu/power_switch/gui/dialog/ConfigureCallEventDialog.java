@@ -32,9 +32,9 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1ContactsFragment;
-import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2ActionsFragment;
-import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3SummaryFragment;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1Contacts;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3Summary;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.shared.log.Log;
 
@@ -163,13 +163,13 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureCallEventDialogPage1ContactsFragment();
+                    fragment = new ConfigureCallEventDialogPage1Contacts();
                     break;
                 case 1:
-                    fragment = new ConfigureCallEventDialogPage2ActionsFragment();
+                    fragment = new ConfigureCallEventDialogPage2Actions();
                     break;
                 case 2:
-                    fragment = new ConfigureCallEventDialogPage3SummaryFragment();
+                    fragment = new ConfigureCallEventDialogPage3Summary();
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

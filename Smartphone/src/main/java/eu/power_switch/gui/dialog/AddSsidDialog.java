@@ -60,7 +60,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Dialog to create a new Room
  */
-public class AddSsidDialog extends ButterKnifeDialogFragment {
+public class AddSsidDialog extends ButterKnifeSupportDialogFragment {
 
     public static final String KEY_SSID = "SSID";
 

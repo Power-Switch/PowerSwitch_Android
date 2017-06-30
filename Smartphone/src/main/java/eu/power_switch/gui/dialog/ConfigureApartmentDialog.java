@@ -34,7 +34,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.ApartmentFragment;
-import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1NameFragment;
+import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1Name;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -172,7 +172,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureApartmentDialogPage1NameFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureApartmentDialogPage1Name.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

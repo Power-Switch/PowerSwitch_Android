@@ -20,20 +20,17 @@ package eu.power_switch.gui.dialog;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Date;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.activity.SmartphoneThemeHelper;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
+import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
@@ -46,13 +43,26 @@ import eu.power_switch.shared.permission.PermissionHelper;
  * <p/>
  * Created by Markus on 05.02.2016.
  */
-public class UnknownErrorDialog extends AppCompatActivity {
+public class UnknownErrorDialog extends ButterKnifeDialogActivity {
 
     private static final String THROWABLE_KEY = "throwable";
-    private static final String TIME_KEY = "time";
+    private static final String TIME_KEY      = "time";
 
     private Throwable throwable;
-    private Date timeRaised;
+    private Date      timeRaised;
+
+    @BindView(R.id.textView_automaticCrashReportingEnabledInfo)
+    TextView textView_automaticCrashReportingEnabledInfo;
+    @BindView(R.id.textView_automaticCrashReportingDisabledInfo)
+    TextView textView_automaticCrashReportingDisabledInfo;
+    @BindView(R.id.button_share_via_mail)
+    Button   buttonShareEmail;
+    @BindView(R.id.button_share_plain_text)
+    Button   buttonShareText;
+    @BindView(R.id.editText_error_description)
+    TextView textViewErrorDescription;
+    @BindView(R.id.button_close)
+    Button   buttonClose;
 
     /**
      * Create a new instance of this Dialog while providing an argument.
@@ -73,13 +83,8 @@ public class UnknownErrorDialog extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // do everything in a try statement to prevent repeating errors if something goes wrong while reporting the previous error
         try {
-            // set Theme before anything else in onCreate();
-            SmartphoneThemeHelper.applyDialogTheme(this);
-            // apply forced locale (if set in developer options)
-            applyLocale();
-
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.dialog_unknown_error);
+
             setFinishOnTouchOutside(false); // prevent close dialog on touch outside window
 
             Intent intent = getIntent();
@@ -90,18 +95,13 @@ public class UnknownErrorDialog extends AppCompatActivity {
                 timeRaised = new Date(intent.getLongExtra(TIME_KEY, 0));
             }
 
-            TextView textView_automaticCrashReportingEnabledInfo = (TextView) findViewById(R.id.textView_automaticCrashReportingEnabledInfo);
-            TextView textView_automaticCrashReportingDisabledInfo = (TextView) findViewById(R.id.textView_automaticCrashReportingDisabledInfo);
-
-            Button buttonShareEmail = (Button) findViewById(R.id.button_share_via_mail);
             buttonShareEmail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     try {
                         reportExceptionViaMail();
                     } catch (MissingPermissionException e) {
-                        PermissionHelper.showMissingPermissionDialog(
-                                UnknownErrorDialog.this,
+                        PermissionHelper.showMissingPermissionDialog(UnknownErrorDialog.this,
                                 PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     } catch (Exception e) {
@@ -111,7 +111,6 @@ public class UnknownErrorDialog extends AppCompatActivity {
                 }
             });
 
-            Button buttonShareText = (Button) findViewById(R.id.button_share_plain_text);
             buttonShareText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -123,7 +122,6 @@ public class UnknownErrorDialog extends AppCompatActivity {
                 }
             });
 
-            TextView textViewErrorDescription = (TextView) findViewById(R.id.editText_error_description);
             textViewErrorDescription.setText(Log.getStackTraceText(throwable));
 
             if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
@@ -134,7 +132,6 @@ public class UnknownErrorDialog extends AppCompatActivity {
                 textView_automaticCrashReportingDisabledInfo.setVisibility(View.VISIBLE);
             }
 
-            Button buttonClose = (Button) findViewById(R.id.button_close);
             buttonClose.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -146,15 +143,9 @@ public class UnknownErrorDialog extends AppCompatActivity {
         }
     }
 
-    private void applyLocale() {
-        if (DeveloperPreferencesHandler.getForceLanguage()) {
-            Resources res = getResources();
-            // Change locale settings in the app.
-            DisplayMetrics dm = res.getDisplayMetrics();
-            android.content.res.Configuration conf = res.getConfiguration();
-            conf.locale = DeveloperPreferencesHandler.getLocale();
-            res.updateConfiguration(conf, dm);
-        }
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_unknown_error;
     }
 
     private void reportExceptionViaMail() throws Exception {

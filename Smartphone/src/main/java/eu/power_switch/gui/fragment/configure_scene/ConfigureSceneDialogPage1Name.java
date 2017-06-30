@@ -52,7 +52,7 @@ import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureSceneDialog;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -67,7 +67,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogPage1NameFragment extends ConfigurationDialogFragment {
+public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
 
     @BindView(R.id.scene_name_text_input_layout)
     TextInputLayout floatingName;

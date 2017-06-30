@@ -20,18 +20,15 @@ package eu.power_switch.gui.dialog;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.SmartphoneThemeHelper;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
+import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.shared.log.Log;
 
 /**
@@ -40,7 +37,12 @@ import eu.power_switch.shared.log.Log;
  * Created by Markus on 27.09.2016.
  */
 
-public class RestoreBackupFromFileActivity extends AppCompatActivity {
+public class RestoreBackupFromFileActivity extends ButterKnifeDialogActivity {
+
+    @BindView(R.id.button_restore)
+    Button buttonRestore;
+    @BindView(R.id.button_cancel)
+    Button buttonCancel;
 
     /**
      * Start new instance of this activity
@@ -56,13 +58,8 @@ public class RestoreBackupFromFileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate();
-        SmartphoneThemeHelper.applyDialogTheme(this);
-        // apply forced locale (if set in developer options)
-        applyLocale();
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_restore_backup_confirm);
+
         setFinishOnTouchOutside(false); // prevent close dialog on touch outside window
         setTitle(R.string.are_you_sure);
 
@@ -73,11 +70,11 @@ public class RestoreBackupFromFileActivity extends AppCompatActivity {
         Log.d("Uri: " + String.valueOf(fileUri));
 
         if (fileUri == null) {
-            Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG)
+                    .show();
             finish();
         }
 
-        Button buttonRestore = (Button) findViewById(R.id.button_restore);
         buttonRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +83,6 @@ public class RestoreBackupFromFileActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonCancel = (Button) findViewById(R.id.button_cancel);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,15 +91,9 @@ public class RestoreBackupFromFileActivity extends AppCompatActivity {
         });
     }
 
-    private void applyLocale() {
-        if (DeveloperPreferencesHandler.getForceLanguage()) {
-            Resources res = getResources();
-            // Change locale settings in the app.
-            DisplayMetrics dm = res.getDisplayMetrics();
-            android.content.res.Configuration conf = res.getConfiguration();
-            conf.locale = DeveloperPreferencesHandler.getLocale();
-            res.updateConfiguration(conf, dm);
-        }
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_restore_backup_confirm;
     }
 
 }

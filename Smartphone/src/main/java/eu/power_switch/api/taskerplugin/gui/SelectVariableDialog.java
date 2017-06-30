@@ -20,13 +20,11 @@ package eu.power_switch.api.taskerplugin.gui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,9 +33,11 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.api.taskerplugin.EditActivity;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.ButterKnifeDialogFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.log.Log;
 
@@ -46,16 +46,18 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 24.05.2016.
  */
-public class SelectVariableDialog extends DialogFragment {
+public class SelectVariableDialog extends ButterKnifeDialogFragment {
 
-    public static final String KEY_FIELD = "field";
+    public static final String KEY_FIELD             = "field";
     public static final String KEY_SELECTED_VARIABLE = "selectedVariable";
 
     private static final String KEY_RELEVANT_VARIABLES = "relevantVariables";
 
-    private View rootView;
-    private ArrayList<String> relevantVariables;
+    private ArrayList<String>  relevantVariables;
     private EditActivity.Field field;
+
+    @BindView(R.id.listview_variable_names)
+    ListView listViewApartments;
 
     public static SelectVariableDialog newInstance(List<String> relevantVariables, EditActivity.Field field) {
         Bundle args = new Bundle();
@@ -73,14 +75,14 @@ public class SelectVariableDialog extends DialogFragment {
         intent.putExtra(KEY_SELECTED_VARIABLE, variable);
         intent.putExtra(KEY_FIELD, field.toString());
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_variable_chooser, null);
+        super.onCreateDialog(savedInstanceState);
 
         if (getArguments().containsKey(KEY_RELEVANT_VARIABLES)) {
             relevantVariables = getArguments().getStringArrayList(KEY_RELEVANT_VARIABLES);
@@ -89,10 +91,7 @@ public class SelectVariableDialog extends DialogFragment {
         }
         field = EditActivity.Field.valueOf(getArguments().getString(KEY_FIELD));
 
-        ListView listViewApartments = (ListView) rootView.findViewById(R.id.listview_variable_names);
-
-        ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_list_item_1, relevantVariables);
+        ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, relevantVariables);
         listViewApartments.setAdapter(apartmentNamesAdapter);
         listViewApartments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -118,4 +117,8 @@ public class SelectVariableDialog extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_variable_chooser;
+    }
 }

@@ -74,7 +74,7 @@ public class PowerSwitch extends MultiDexApplication {
 
     // Default System Handler for uncaught Exceptions
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
-    private Handler mHandler;
+    private Handler                         mHandler;
 
     public PowerSwitch() {
         // save original uncaught exception handler
@@ -93,8 +93,7 @@ public class PowerSwitch extends MultiDexApplication {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                StatusMessageHandler.showErrorDialog(getApplicationContext(),
-                                        throwable);
+                                StatusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
                             }
                         });
                     }
@@ -122,7 +121,8 @@ public class PowerSwitch extends MultiDexApplication {
     public static String getAppBuildTime() {
         try {
             Date date = new Date(BuildConfig.BUILD_TIMESTAMP);
-            return SimpleDateFormat.getInstance().format(date);
+            return SimpleDateFormat.getInstance()
+                    .format(date);
         } catch (Exception e) {
             return "unknown";
         }
@@ -134,7 +134,8 @@ public class PowerSwitch extends MultiDexApplication {
      * @return true if the current thread is the same as the UI thread
      */
     public boolean isUIThread() {
-        return Looper.getMainLooper().getThread() == Thread.currentThread();
+        return Looper.getMainLooper()
+                .getThread() == Thread.currentThread();
     }
 
     @Override
@@ -152,8 +153,7 @@ public class PowerSwitch extends MultiDexApplication {
         LogHandler.init(this);
 
         // Configure Log4J Logger
-        if (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)
-                .equals(Integer.valueOf(getString(R.string.value_internal)))) {
+        if (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION).equals(Integer.valueOf(getString(R.string.value_internal)))) {
             LogHandler.configureInternalLogger();
         } else {
             LogHandler.configureLogger();
@@ -176,15 +176,14 @@ public class PowerSwitch extends MultiDexApplication {
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric
-        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(
-                SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler
-                .getForceFabricEnabled();
+        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler.getForceFabricEnabled();
 
         if (enableFabric) {
             Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(
                     // disable Crashlytics on debug builds
                     BuildConfig.DEBUG && !DeveloperPreferencesHandler.getForceFabricEnabled())
-                    .build()).build(), new Answers());
+                    .build())
+                    .build(), new Answers());
         }
 
         // Initialize Firebase
@@ -290,16 +289,11 @@ public class PowerSwitch extends MultiDexApplication {
 
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,
-                0,
-                intent,
-                PendingIntent.FLAG_CANCEL_CURRENT);
-        long executionTime = System.currentTimeMillis() + 1000;
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        long          executionTime = System.currentTimeMillis() + 1000;
 
         if (Build.VERSION.SDK_INT >= 23) {
-            alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-                    executionTime,
-                    pendingIntent);
+            alarmMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, executionTime, pendingIntent);
         } else if (Build.VERSION.SDK_INT >= 19 && Build.VERSION.SDK_INT < 23) {
             alarmMgr.setExact(AlarmManager.RTC_WAKEUP, executionTime, pendingIntent);
         } else if (Build.VERSION.SDK_INT < 19) {

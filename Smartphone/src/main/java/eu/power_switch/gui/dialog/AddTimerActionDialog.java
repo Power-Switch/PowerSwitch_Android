@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3ActionFragment;
+import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3Action;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -44,7 +44,7 @@ public class AddTimerActionDialog extends AddActionDialog {
 
     @Override
     protected void addCurrentSelection() {
-        ConfigureTimerDialogPage3ActionFragment.addTimerAction(getCurrentSelection());
+        ConfigureTimerDialogPage3Action.addTimerAction(getCurrentSelection());
     }
 
     @Override

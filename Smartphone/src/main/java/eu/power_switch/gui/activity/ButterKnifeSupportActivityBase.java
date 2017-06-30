@@ -20,22 +20,29 @@ package eu.power_switch.gui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+
+import butterknife.ButterKnife;
 
 /**
  * Base class for a ButterKnife backed activity
  * <p>
  * Created by Markus on 30.06.2017.
  */
-public abstract class ButterKnifeActivity extends ButterKnifeSupportActivityBase {
+public abstract class ButterKnifeSupportActivityBase extends SupportActivityBase {
 
     @Override
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate();
-        SmartphoneThemeHelper.applyTheme(this);
-
         super.onCreate(savedInstanceState);
+
+        setContentView(getLayoutRes());
+        ButterKnife.bind(this);
     }
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
+
 
 }

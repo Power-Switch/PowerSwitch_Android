@@ -67,7 +67,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
@@ -89,7 +89,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDialogFragment {
+public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
 
     public static final String KEY_CHANNEL_MASTER    = "channelMaster";
     public static final String KEY_CHANNEL_SLAVE     = "channelSlave";
@@ -172,7 +172,7 @@ public class ConfigureReceiverDialogPage3SetupFragment extends ConfigurationDial
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction()
                         .equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
-                    String model = intent.getStringExtra(ConfigureReceiverDialogPage2TypeFragment.KEY_MODEL);
+                    String model = intent.getStringExtra(ConfigureReceiverDialogPage2Type.KEY_MODEL);
 
                     try {
                         Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));

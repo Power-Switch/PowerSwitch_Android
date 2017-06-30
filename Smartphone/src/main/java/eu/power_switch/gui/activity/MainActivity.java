@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +91,6 @@ import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.phone.PhoneHelper;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -204,12 +201,6 @@ public class MainActivity extends ButterKnifeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate();
-        SmartphoneThemeHelper.applyTheme(this);
-
-        // apply forced locale (if set in developer options)
-        applyLocale();
-
         // set Iconics LayoutInflater for XML Icon support
         // currently disabled because of text font issues
 //        LayoutInflaterCompat.setFactory(getLayoutInflater(), new IconicsLayoutInflater(getDelegate()));
@@ -356,17 +347,6 @@ public class MainActivity extends ButterKnifeActivity {
                     }
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
-        }
-    }
-
-    private void applyLocale() {
-        if (DeveloperPreferencesHandler.getForceLanguage()) {
-            Resources res = getResources();
-            // Change locale settings in the app.
-            DisplayMetrics                    dm   = res.getDisplayMetrics();
-            android.content.res.Configuration conf = res.getConfiguration();
-            conf.locale = DeveloperPreferencesHandler.getLocale();
-            res.updateConfiguration(conf, dm);
         }
     }
 

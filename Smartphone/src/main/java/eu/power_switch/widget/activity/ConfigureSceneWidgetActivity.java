@@ -38,7 +38,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.activity.ButterKnifeActivity;
+import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
@@ -49,7 +49,7 @@ import eu.power_switch.widget.WidgetIntentReceiver;
 /**
  * Configuration Activity for Scene widgets
  */
-public class ConfigureSceneWidgetActivity extends ButterKnifeActivity {
+public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
 
     public static final int SCENE_INTENT_ID_OFFSET = 10000;
 
@@ -73,9 +73,6 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(this);
-        // set Theme before anything else in onCreate();
-        // SmartphoneThemeHelper.applyTheme(this); // not yet ready, missing theme definitions for dialogs
-
         super.onCreate(savedInstanceState);
 
         adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);

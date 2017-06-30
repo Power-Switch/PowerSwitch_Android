@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActionsFragment;
+import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -44,7 +44,7 @@ public class AddGeofenceExitActionDialog extends AddActionDialog {
 
     @Override
     protected void addCurrentSelection() {
-        ConfigureGeofenceDialogPage3ExitActionsFragment.addAction(getCurrentSelection());
+        ConfigureGeofenceDialogPage3ExitActions.addAction(getCurrentSelection());
     }
 
     @Override

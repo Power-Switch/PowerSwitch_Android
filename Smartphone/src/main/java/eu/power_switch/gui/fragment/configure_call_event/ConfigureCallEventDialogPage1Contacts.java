@@ -45,7 +45,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.PhoneNumberRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddPhoneNumberDialog;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -54,7 +54,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
 /**
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallEventDialogPage1ContactsFragment extends ConfigurationDialogFragment {
+public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPage {
 
     public static final String KEY_PHONE_NUMBERS = "phone_numbers";
 

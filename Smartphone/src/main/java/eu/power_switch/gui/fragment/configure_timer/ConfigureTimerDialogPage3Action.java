@@ -44,14 +44,14 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage3ActionFragment extends ConfigurationDialogFragment {
+public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage {
 
     public static final String KEY_ACTIONS = "actions";
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead

@@ -40,7 +40,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
@@ -64,7 +64,7 @@ import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GA
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_name)
     TextView name;
@@ -98,19 +98,19 @@ public class ConfigureGatewayDialogPage4SummaryFragment extends ConfigurationDia
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (INTENT_GATEWAY_SSIDS_CHANGED.equals(intent.getAction())) {
-                    ArrayList<String> changedSsids = intent.getStringArrayListExtra(ConfigureGatewayDialogPage2Fragment.KEY_SSIDS);
+                    ArrayList<String> changedSsids = intent.getStringArrayListExtra(ConfigureGatewayDialogPage2.KEY_SSIDS);
                     currentSsids.clear();
                     currentSsids.addAll(changedSsids);
                 } else if (INTENT_GATEWAY_SETUP_CHANGED.equals(intent.getAction())) {
-                    currentName = intent.getStringExtra(ConfigureGatewayDialogPage1Fragment.KEY_NAME);
-                    currentModel = intent.getStringExtra(ConfigureGatewayDialogPage1Fragment.KEY_MODEL);
-                    currentLocalAddress = intent.getStringExtra(ConfigureGatewayDialogPage1Fragment.KEY_LOCAL_ADDRESS);
-                    currentLocalPort = intent.getIntExtra(ConfigureGatewayDialogPage1Fragment.KEY_LOCAL_PORT, -1);
-                    currentWanAddress = intent.getStringExtra(ConfigureGatewayDialogPage1Fragment.KEY_WAN_ADDRESS);
-                    currentWanPort = intent.getIntExtra(ConfigureGatewayDialogPage1Fragment.KEY_WAN_PORT, -1);
+                    currentName = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_NAME);
+                    currentModel = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_MODEL);
+                    currentLocalAddress = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_LOCAL_ADDRESS);
+                    currentLocalPort = intent.getIntExtra(ConfigureGatewayDialogPage1.KEY_LOCAL_PORT, -1);
+                    currentWanAddress = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_WAN_ADDRESS);
+                    currentWanPort = intent.getIntExtra(ConfigureGatewayDialogPage1.KEY_WAN_PORT, -1);
                 } else if (INTENT_GATEWAY_APARTMENTS_CHANGED.equals(intent.getAction())) {
                     currentApartmentIds.clear();
-                    currentApartmentIds.addAll((ArrayList<Long>) intent.getSerializableExtra(ConfigureGatewayDialogPage3Fragment.KEY_APARTMENT_IDS));
+                    currentApartmentIds.addAll((ArrayList<Long>) intent.getSerializableExtra(ConfigureGatewayDialogPage3.KEY_APARTMENT_IDS));
                 }
 
                 updateUI();

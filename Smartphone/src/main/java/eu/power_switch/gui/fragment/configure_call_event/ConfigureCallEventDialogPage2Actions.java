@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment.configure_geofence;
+package eu.power_switch.gui.fragment.configure_call_event;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -25,7 +25,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,29 +39,34 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.AddGeofenceEnterActionDialog;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
-import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
+import eu.power_switch.gui.dialog.AddCallEventActionDialog;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
+import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.constants.PhoneConstants;
 
 /**
- * Created by Markus on 12.09.2015.
+ * Created by Markus on 05.04.2016.
  */
-public class ConfigureGeofenceDialogPage2EnterActionsFragment extends ConfigurationDialogFragment {
+public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPage {
 
     public static final String KEY_ACTIONS = "actions";
+
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
-    private static ArrayList<Action>         currentEnterActions;
+    private static ArrayList<Action> actions = new ArrayList<>();
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
-    @BindView(R.id.add_action)
-    FloatingActionButton addActionFAB;
+
     @BindView(R.id.recyclerview_list_of_actions)
-    RecyclerView         recyclerViewTimerActions;
+    RecyclerView recyclerViewActions;
+
+    private long callEventId = -1;
+
     private BroadcastReceiver broadcastReceiver;
+
 
     /**
      * Used to notify the setup page that some info has changed
@@ -70,20 +74,15 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
      * @param context any suitable context
      */
     public static void sendActionsChangedBroadcast(Context context, ArrayList<Action> actions) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED);
+        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED);
         intent.putExtra(KEY_ACTIONS, actions);
 
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(intent);
     }
 
-    /**
-     * Used to add Actions from AddActionDialog
-     *
-     * @param action Action
-     */
     public static void addAction(Action action) {
-        currentEnterActions.add(action);
+        actions.add(action);
         actionRecyclerViewAdapter.notifyDataSetChanged();
     }
 
@@ -92,59 +91,62 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
+        actions.clear();
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                sendActionsChangedBroadcast(getContext(), currentEnterActions);
+                if (LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED.equals(intent.getAction())) {
+//                    actions.add((Action) intent.getSerializableExtra("action"));
+                    sendActionsChangedBroadcast(getContext(), actions);
+                }
             }
         };
 
-        final Fragment fragment = this;
+        FloatingActionButton addActionFAB = rootView.findViewById(R.id.add_action);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddGeofenceEnterActionDialog addGeofenceEnterActionDialog = new AddGeofenceEnterActionDialog();
-                addGeofenceEnterActionDialog.setTargetFragment(fragment, 0);
-                addGeofenceEnterActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                AddCallEventActionDialog addCallEventActionDialog = new AddCallEventActionDialog();
+                addCallEventActionDialog.setTargetFragment(ConfigureCallEventDialogPage2Actions.this, 0);
+                addCallEventActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
 
-        currentEnterActions = new ArrayList<>();
-        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), currentEnterActions);
+        actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), actions);
         actionRecyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                currentEnterActions.remove(position);
+                actions.remove(position);
                 actionRecyclerViewAdapter.notifyDataSetChanged();
-                sendActionsChangedBroadcast(getContext(), currentEnterActions);
+                sendActionsChangedBroadcast(getContext(), actions);
             }
         });
-        recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
+        recyclerViewActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        recyclerViewTimerActions.setLayoutManager(layoutManager);
+        recyclerViewActions.setLayoutManager(layoutManager);
 
         Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
-            long geofenceId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
-            initializeData(geofenceId);
+        if (args != null && args.containsKey(ConfigureCallEventDialog.CALL_EVENT_ID_KEY)) {
+            callEventId = args.getLong(ConfigureCallEventDialog.CALL_EVENT_ID_KEY);
+            initializeCallData(callEventId);
         }
-
-        sendActionsChangedBroadcast(getContext(), currentEnterActions);
 
         return rootView;
     }
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.dialog_fragment_configure_geofence_page_2;
+        return R.layout.dialog_fragment_configure_call_event_page_2;
     }
 
-    private void initializeData(long geofenceId) {
+    private void initializeCallData(long callEventId) {
         try {
-            currentEnterActions.clear();
-            currentEnterActions.addAll(DatabaseHandler.getGeofence(geofenceId)
-                    .getActions(Geofence.EventType.ENTER));
+            CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
+
+
+            actions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));
+
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -154,7 +156,7 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTION_ADDED);
+        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -165,5 +167,4 @@ public class ConfigureGeofenceDialogPage2EnterActionsFragment extends Configurat
                 .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
-
 }

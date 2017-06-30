@@ -32,8 +32,8 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1Fragment;
-import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2SummaryFragment;
+import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1;
+import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Summary;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.log.Log;
@@ -168,10 +168,10 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureRoomDialogPage1Fragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage1.class, parentDialog);
                     break;
                 case 1:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureRoomDialogPage2SummaryFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage2Summary.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

@@ -58,7 +58,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.obj.Room;
@@ -73,7 +73,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage1NameFragment extends ConfigurationDialogFragment {
+public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
 
     public static final String KEY_NAME      = "name";
     public static final String KEY_ROOM_NAME = "roomName";

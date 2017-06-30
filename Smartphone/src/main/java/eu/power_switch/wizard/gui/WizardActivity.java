@@ -26,8 +26,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 
-import com.github.paolorotolo.appintro.AppIntro;
-
 import eu.power_switch.R;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wizard.config.ConfigurationHolder;
@@ -37,7 +35,7 @@ import eu.power_switch.wizard.config.ConfigurationHolder;
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public class WizardActivity extends AppIntro {
+public class WizardActivity extends WizardActivityBase {
 
     private static final int INITIAL_SETUP_PAGE_INDEX = 5;
 

@@ -41,7 +41,7 @@ import eu.power_switch.R;
  * <p/>
  * Created by Markus on 03.09.2016.
  */
-public abstract class ProcessingDialog extends ButterKnifeDialogFragment {
+public abstract class ProcessingDialog extends ButterKnifeSupportDialogFragment {
 
     @BindView(R.id.imageView_success)
     IconicsImageView imageViewSuccess;

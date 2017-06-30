@@ -43,7 +43,7 @@ import eu.power_switch.shared.log.Log;
 /**
  * Dialog to rename a Backup
  */
-public class EditBackupDialog extends ButterKnifeDialogFragment {
+public class EditBackupDialog extends ButterKnifeSupportDialogFragment {
 
     public static final String NAME_KEY = "name";
 

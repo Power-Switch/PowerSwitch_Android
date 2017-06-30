@@ -44,7 +44,7 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SsidRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSsidDialog;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -54,7 +54,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFragment {
+public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage {
 
     public static final String KEY_SSIDS = "ssids";
 
@@ -121,7 +121,7 @@ public class ConfigureGatewayDialogPage2Fragment extends ConfigurationDialogFrag
             @Override
             public void onClick(View v) {
                 AddSsidDialog addSsidDialog = new AddSsidDialog();
-                addSsidDialog.setTargetFragment(ConfigureGatewayDialogPage2Fragment.this, 0);
+                addSsidDialog.setTargetFragment(ConfigureGatewayDialogPage2.this, 0);
                 addSsidDialog.show(getFragmentManager(), null);
             }
         });

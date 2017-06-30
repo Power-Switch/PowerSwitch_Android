@@ -47,7 +47,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
@@ -60,7 +60,7 @@ import eu.power_switch.shared.permission.PermissionHelper;
 /**
  * Created by Markus on 29.01.2016.
  */
-public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_name)
     TextView  textViewName;
@@ -95,21 +95,21 @@ public class ConfigureGeofenceDialogPage4SummaryFragment extends ConfigurationDi
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED.equals(intent.getAction())) {
-                    currentName = intent.getStringExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_NAME);
+                    currentName = intent.getStringExtra(ConfigureGeofenceDialogPage1Location.KEY_NAME);
 
-                    double latitude  = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_LATITUDE, Geofence.INVALID_LAT);
-                    double longitude = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_LONGITUDE, Geofence.INVALID_LON);
+                    double latitude  = intent.getDoubleExtra(ConfigureGeofenceDialogPage1Location.KEY_LATITUDE, Geofence.INVALID_LAT);
+                    double longitude = intent.getDoubleExtra(ConfigureGeofenceDialogPage1Location.KEY_LONGITUDE, Geofence.INVALID_LON);
                     currentLocation = new LatLng(latitude, longitude);
 
-                    currentGeofenceRadius = intent.getDoubleExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_RADIUS, -1);
+                    currentGeofenceRadius = intent.getDoubleExtra(ConfigureGeofenceDialogPage1Location.KEY_RADIUS, -1);
 
-                    currentSnapshot = intent.getParcelableExtra(ConfigureGeofenceDialogPage1LocationFragment.KEY_SNAPSHOT);
+                    currentSnapshot = intent.getParcelableExtra(ConfigureGeofenceDialogPage1Location.KEY_SNAPSHOT);
 
                 } else if (LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentEnterActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage2EnterActionsFragment.KEY_ACTIONS);
+                    currentEnterActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage2EnterActions.KEY_ACTIONS);
 
                 } else if (LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentExitActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage3ExitActionsFragment.KEY_ACTIONS);
+                    currentExitActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage3ExitActions.KEY_ACTIONS);
 
                 }
 

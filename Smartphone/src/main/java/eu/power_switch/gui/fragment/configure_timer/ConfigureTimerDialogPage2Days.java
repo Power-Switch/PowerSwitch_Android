@@ -36,7 +36,7 @@ import butterknife.OnCheckedChanged;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.Timer;
@@ -45,7 +45,7 @@ import eu.power_switch.timer.WeekdayTimer;
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage2DaysFragment extends ConfigurationDialogFragment {
+public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage {
 
     public static final String KEY_EXECUTION_INTERVAL = "executionInterval";
     public static final String KEY_EXECUTION_DAYS     = "executionDays";

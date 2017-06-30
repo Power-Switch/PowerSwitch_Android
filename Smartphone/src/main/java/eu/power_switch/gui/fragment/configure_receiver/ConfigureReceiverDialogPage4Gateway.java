@@ -42,7 +42,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
@@ -58,7 +58,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 24.04.2016.
  */
-public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDialogFragment {
+public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage {
 
     public static final String KEY_REPEAT_AMOUNT       = "repetitionAmount";
     public static final String KEY_ASSOCIATED_GATEWAYS = "gateways";
@@ -125,7 +125,7 @@ public class ConfigureReceiverDialogPage4GatewayFragment extends ConfigurationDi
 //                    gatewayInfoRecyclerViewAdapter.notifyDataSetChanged();
                     sendGatewayDetailsChangedBroadcast(getContext(), repetitionAmount, gateways);
                 } else if (LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED.equals(intent.getAction())) {
-                    String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME);
+                    String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1Name.KEY_ROOM_NAME);
                     try {
                         // dont use apartment.getRoom(roomName) because existing rooms might have changed (and apartment object is not updated)
                         room = DatabaseHandler.getRoom(roomName);

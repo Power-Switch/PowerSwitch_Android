@@ -47,7 +47,7 @@ import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -59,7 +59,7 @@ import static eu.power_switch.obj.receiver.Receiver.Brand;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage2TypeFragment extends ConfigurationDialogFragment {
+public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
 
     public static final String KEY_BRAND = "brand";
     public static final String KEY_MODEL = "model";

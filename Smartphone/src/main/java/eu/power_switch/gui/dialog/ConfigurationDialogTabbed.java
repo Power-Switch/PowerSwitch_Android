@@ -30,7 +30,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -42,6 +41,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -57,20 +57,25 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public abstract class ConfigurationDialogTabbed extends DialogFragment {
+public abstract class ConfigurationDialogTabbed extends ButterKnifeSupportDialogFragment {
 
+    @BindView(R.id.imageButton_delete)
     protected ImageButton imageButtonDelete;
+    @BindView(R.id.imageButton_cancel)
     protected ImageButton imageButtonCancel;
+    @BindView(R.id.imageButton_save)
     protected ImageButton imageButtonSave;
 
-    private boolean modified;
-    private View rootView;
-    private TabLayout tabLayout;
-    private ViewPager tabViewPager;
-    private FragmentPagerAdapter customTabAdapter;
-    private ImageButton imageButtonNext;
+    @BindView(R.id.tabLayout_configure_dialog)
+    TabLayout   tabLayout;
+    @BindView(R.id.tabHost)
+    ViewPager   tabViewPager;
+    @BindView(R.id.imageButton_next)
+    ImageButton imageButtonNext;
 
-    private BroadcastReceiver broadcastReceiver;
+    private boolean              modified;
+    private FragmentPagerAdapter customTabAdapter;
+    private BroadcastReceiver    broadcastReceiver;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,9 +97,6 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
 
         getDialog().setTitle(getDialogTitle());
 
-        rootView = inflater.inflate(R.layout.dialog_configuration_tabbed, container);
-
-        tabViewPager = rootView.findViewById(R.id.tabHost);
         tabViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -112,9 +114,6 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         });
         tabViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
-        tabLayout = rootView.findViewById(R.id.tabLayout_configure_dialog);
-
-        imageButtonDelete = rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), R.color.delete_color)));
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,7 +122,6 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
             }
         });
 
-        imageButtonCancel = rootView.findViewById(R.id.imageButton_cancel);
         imageButtonCancel.setImageDrawable(IconicsHelper.getCancelIcon(getActivity()));
         imageButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +144,6 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
             }
         });
 
-        imageButtonNext = rootView.findViewById(R.id.imageButton_next);
         imageButtonNext.setImageDrawable(IconicsHelper.getNextIcon(getActivity()));
         imageButtonNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +153,6 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
             }
         });
 
-        imageButtonSave = rootView.findViewById(R.id.imageButton_save);
         imageButtonSave.setImageDrawable(IconicsHelper.getSaveIcon(getActivity()));
         imageButtonSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,6 +182,11 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_configuration_tabbed;
+    }
+
     /**
      * Initialize this dialog
      *
@@ -199,6 +200,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      * Initialize your dialog in here using passed in arguments
      *
      * @param arguments arguments passed in via setArguments()
+     *
      * @return true if an existing object was initialized (which can be deleted), false if the dialog was not
      * initialized with existing data.
      */
@@ -238,6 +240,8 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
+
         // ask to really close
         Dialog dialog = new Dialog(getActivity()) {
             @Override
@@ -261,14 +265,17 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         };
         dialog.setTitle(getDialogTitle());
         dialog.setCanceledOnTouchOutside(isCancelableOnTouchOutside());
-        dialog.getWindow().setSoftInputMode(getSoftInputMode());
+        dialog.getWindow()
+                .setSoftInputMode(getSoftInputMode());
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(dialog.getWindow()
+                .getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         dialog.show();
-        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow()
+                .setAttributes(lp);
 
         dialog.show();
 
@@ -300,9 +307,8 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      */
     protected boolean isValid() {
         try {
-            ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-            ConfigurationDialogTabbedSummaryFragment setupFragment =
-                    customTabAdapter.getSummaryFragment();
+            ConfigurationDialogTabAdapter            customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
+            ConfigurationDialogTabbedSummaryFragment setupFragment    = customTabAdapter.getSummaryFragment();
             return setupFragment.checkSetupValidity();
         } catch (Exception e) {
             Log.e(e);
@@ -330,8 +336,7 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      * @return integer representing the mode
      */
     protected int getSoftInputMode() {
-        return WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN |
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
+        return WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
     }
 
     /**
@@ -365,12 +370,10 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      */
     protected void setSaveButtonState(boolean enabled) {
         if (enabled) {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .active_green));
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color.active_green));
             imageButtonSave.setClickable(true);
         } else {
-            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color
-                    .inactive_gray));
+            imageButtonSave.setColorFilter(ContextCompat.getColor(getActivity(), eu.power_switch.shared.R.color.inactive_gray));
             imageButtonSave.setClickable(false);
         }
     }
@@ -380,8 +383,8 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
      * Save the current configuration of your object to database in this method
      */
     protected void saveCurrentConfigurationToDatabase() {
-        ConfigurationDialogTabAdapter customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment setupFragment = customTabAdapter.getSummaryFragment();
+        ConfigurationDialogTabAdapter            customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
+        ConfigurationDialogTabbedSummaryFragment setupFragment    = customTabAdapter.getSummaryFragment();
         try {
             setupFragment.saveCurrentConfigurationToDatabase();
         } catch (Exception e) {
@@ -402,13 +405,15 @@ public abstract class ConfigurationDialogTabbed extends DialogFragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     @CallSuper
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 

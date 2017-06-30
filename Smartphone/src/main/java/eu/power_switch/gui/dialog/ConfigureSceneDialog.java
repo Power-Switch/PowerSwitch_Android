@@ -31,8 +31,8 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1NameFragment;
-import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2SetupFragment;
+import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Name;
+import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2Setup;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
@@ -170,10 +170,10 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureSceneDialogPage1NameFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureSceneDialogPage1Name.class, parentDialog);
                     break;
                 case 1:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureSceneDialogTabbedPage2SetupFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureSceneDialogTabbedPage2Setup.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

@@ -31,11 +31,11 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1NameFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2TypeFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3SetupFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4GatewayFragment;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage5TabbedSummaryFragment;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1Name;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2Type;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3Setup;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4Gateway;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage5TabbedSummary;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.shared.log.Log;
@@ -183,19 +183,19 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage1NameFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage1Name.class, parentDialog);
                     break;
                 case 1:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage2TypeFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage2Type.class, parentDialog);
                     break;
                 case 2:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage3SetupFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage3Setup.class, parentDialog);
                     break;
                 case 3:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage4GatewayFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage4Gateway.class, parentDialog);
                     break;
                 case 4:
-                    fragment = ConfigurationDialogFragment.newInstance(ConfigureReceiverDialogPage5TabbedSummaryFragment.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage5TabbedSummary.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;

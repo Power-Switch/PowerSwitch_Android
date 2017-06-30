@@ -46,7 +46,7 @@ import eu.power_switch.clipboard.ClipboardHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
@@ -71,7 +71,7 @@ import eu.power_switch.wear.service.UtilityService;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_name)
     TextView              name;
@@ -127,8 +127,8 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction()
                         .equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
-                    String brand = intent.getStringExtra(ConfigureReceiverDialogPage2TypeFragment.KEY_BRAND);
-                    String model = intent.getStringExtra(ConfigureReceiverDialogPage2TypeFragment.KEY_MODEL);
+                    String brand = intent.getStringExtra(ConfigureReceiverDialogPage2Type.KEY_BRAND);
+                    String model = intent.getStringExtra(ConfigureReceiverDialogPage2Type.KEY_MODEL);
 
                     currentBrand = Receiver.Brand.getEnum(brand);
                     currentModel = model;
@@ -141,21 +141,21 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
                     }
                 } else if (intent.getAction()
                         .equals(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED)) {
-                    String name     = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_NAME);
-                    String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1NameFragment.KEY_ROOM_NAME);
+                    String name     = intent.getStringExtra(ConfigureReceiverDialogPage1Name.KEY_NAME);
+                    String roomName = intent.getStringExtra(ConfigureReceiverDialogPage1Name.KEY_ROOM_NAME);
 
                     currentName = name;
                     currentRoomName = roomName;
                 } else if (intent.getAction()
                         .equals(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED)) {
-                    char                 channelMaster = intent.getCharExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_CHANNEL_MASTER, 'A');
-                    int                  channelSlave  = intent.getIntExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_CHANNEL_SLAVE, 0);
-                    ArrayList<DipSwitch> dips          = (ArrayList<DipSwitch>) intent.getSerializableExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_DIPS);
+                    char                 channelMaster = intent.getCharExtra(ConfigureReceiverDialogPage3Setup.KEY_CHANNEL_MASTER, 'A');
+                    int                  channelSlave  = intent.getIntExtra(ConfigureReceiverDialogPage3Setup.KEY_CHANNEL_SLAVE, 0);
+                    ArrayList<DipSwitch> dips          = (ArrayList<DipSwitch>) intent.getSerializableExtra(ConfigureReceiverDialogPage3Setup.KEY_DIPS);
 
-                    long seed = intent.getLongExtra(ConfigureReceiverDialogPage3SetupFragment.KEY_SEED, -1);
+                    long seed = intent.getLongExtra(ConfigureReceiverDialogPage3Setup.KEY_SEED, -1);
 
                     ArrayList<UniversalButton> universalButtons = (ArrayList<UniversalButton>) intent.getSerializableExtra(
-                            ConfigureReceiverDialogPage3SetupFragment.KEY_UNIVERSAL_BUTTONS);
+                            ConfigureReceiverDialogPage3Setup.KEY_UNIVERSAL_BUTTONS);
 
                     currentMaster = channelMaster;
                     currentSlave = channelSlave;
@@ -164,9 +164,8 @@ public class ConfigureReceiverDialogPage5TabbedSummaryFragment extends Configura
                     currentUniversalButtons = universalButtons;
                 } else if (intent.getAction()
                         .equals(LocalBroadcastConstants.INTENT_GATEWAY_DETAILS_CHANGED)) {
-                    int repeatAmount = intent.getIntExtra(ConfigureReceiverDialogPage4GatewayFragment.KEY_REPEAT_AMOUNT, 0);
-                    ArrayList<Gateway> associatedGateways = (ArrayList<Gateway>) intent.getSerializableExtra(
-                            ConfigureReceiverDialogPage4GatewayFragment.KEY_ASSOCIATED_GATEWAYS);
+                    int repeatAmount = intent.getIntExtra(ConfigureReceiverDialogPage4Gateway.KEY_REPEAT_AMOUNT, 0);
+                    ArrayList<Gateway> associatedGateways = (ArrayList<Gateway>) intent.getSerializableExtra(ConfigureReceiverDialogPage4Gateway.KEY_ASSOCIATED_GATEWAYS);
 
                     currentRepetitionAmount = repeatAmount;
                     currentAssociatedGateways = associatedGateways;

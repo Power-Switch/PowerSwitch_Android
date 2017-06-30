@@ -43,7 +43,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
@@ -57,7 +57,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage1NameFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.apartment_name_text_input_layout)
     TextInputLayout floatingName;

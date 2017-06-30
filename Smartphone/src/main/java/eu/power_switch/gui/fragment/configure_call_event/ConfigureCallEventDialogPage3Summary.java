@@ -44,7 +44,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
@@ -55,7 +55,7 @@ import eu.power_switch.shared.constants.PhoneConstants;
 /**
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationDialogFragment implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_contacts)
     TextView textViewContacts;
@@ -76,9 +76,9 @@ public class ConfigureCallEventDialogPage3SummaryFragment extends ConfigurationD
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED.equals(intent.getAction())) {
-                    currentPhoneNumbers = intent.getStringArrayListExtra(ConfigureCallEventDialogPage1ContactsFragment.KEY_PHONE_NUMBERS);
+                    currentPhoneNumbers = intent.getStringArrayListExtra(ConfigureCallEventDialogPage1Contacts.KEY_PHONE_NUMBERS);
                 } else if (LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureCallEventDialogPage2ActionsFragment.KEY_ACTIONS);
+                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureCallEventDialogPage2Actions.KEY_ACTIONS);
                 }
 
                 updateUi();

@@ -46,7 +46,7 @@ import eu.power_switch.gui.adapter.OnItemMovedListener;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
-import eu.power_switch.gui.dialog.ConfigurationDialogFragment;
+import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureRoomDialog;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
@@ -56,7 +56,7 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 /**
  * Dialog to edit a Room
  */
-public class ConfigureRoomDialogPage1Fragment extends ConfigurationDialogFragment implements OnStartDragListener {
+public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements OnStartDragListener {
 
     public static final String KEY_NAME = "name";
     public static final String KEY_RECEIVERS = "receivers";

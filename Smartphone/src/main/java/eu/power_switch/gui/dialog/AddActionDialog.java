@@ -62,7 +62,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 28.09.2015.
  */
-public abstract class AddActionDialog extends ButterKnifeDialogFragment {
+public abstract class AddActionDialog extends ButterKnifeSupportDialogFragment {
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override

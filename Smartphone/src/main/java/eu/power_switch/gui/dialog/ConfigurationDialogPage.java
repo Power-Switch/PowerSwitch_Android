@@ -27,6 +27,7 @@ import android.view.View;
 
 import java.lang.reflect.Constructor;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.ButterKnifeFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -35,9 +36,12 @@ import eu.power_switch.shared.log.Log;
 /**
  * Created by Markus on 25.03.2016.
  */
-public abstract class ConfigurationDialogFragment extends ButterKnifeFragment {
+public abstract class ConfigurationDialogPage extends ButterKnifeFragment {
 
     protected ConfigurationDialogTabbed configurationDialogTabbed;
+
+    @BindView(R.id.contentView)
+    View contentView;
 
     /**
      * Use this method to instantiate a page used in a (multipage) configuration dialog
@@ -47,17 +51,17 @@ public abstract class ConfigurationDialogFragment extends ButterKnifeFragment {
      *
      * @return Instance of the configuration dialog page
      */
-    public static <T extends ConfigurationDialogFragment> ConfigurationDialogFragment newInstance(@NonNull Class<T> clazz,
-                                                                                                  ConfigurationDialogTabbed parentDialog) {
+    public static <T extends ConfigurationDialogPage> ConfigurationDialogPage newInstance(@NonNull Class<T> clazz,
+                                                                                          ConfigurationDialogTabbed parentDialog) {
         Bundle args = new Bundle();
 
-        if (!ConfigurationDialogFragment.class.isAssignableFrom(clazz)) {
-            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogFragment.class.getName() + " or subclass it!");
+        if (!ConfigurationDialogPage.class.isAssignableFrom(clazz)) {
+            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogPage.class.getName() + " or subclass it!");
         }
 
         try {
-            Constructor<T>              constructor = clazz.getConstructor();
-            ConfigurationDialogFragment fragment    = constructor.newInstance();
+            Constructor<T>          constructor = clazz.getConstructor();
+            ConfigurationDialogPage fragment    = constructor.newInstance();
             fragment.setParentConfigurationDialog(parentDialog);
             fragment.setArguments(args);
             return fragment;
@@ -76,7 +80,7 @@ public abstract class ConfigurationDialogFragment extends ButterKnifeFragment {
     }
 
     /**
-     * Get content view of this ConfigurationDialogFragment
+     * Get content view of this ConfigurationDialogPage
      * <p/>
      * This view should be declared with the id "contentView" in the layout definition of this
      * content fragment.
@@ -87,15 +91,12 @@ public abstract class ConfigurationDialogFragment extends ButterKnifeFragment {
      */
     @Nullable
     public View getContentView() {
-        if (getView() == null) {
-            Log.w("View is null!");
-            return null;
-        }
-
-        View contentView = getView().findViewById(R.id.contentView);
-
         if (contentView == null) {
             Log.w("ContentView is null! Did you define a view with id \"contentView\" in your layout? Using getView() as fallback.");
+
+            if (getView() == null) {
+                Log.w("View is null!");
+            }
             return getView();
         } else {
             return contentView;
@@ -110,7 +111,7 @@ public abstract class ConfigurationDialogFragment extends ButterKnifeFragment {
     public ConfigurationDialogTabbed getParentConfigurationDialog() {
         if (configurationDialogTabbed == null) {
             throw new IllegalStateException(
-                    "Missing parent dialog! Did you use ConfigurationDialogFragment.newInstance(Class<T>, ConfigurationDialogTabbed) to instantiate your page?");
+                    "Missing parent dialog! Did you use ConfigurationDialogPage.newInstance(Class<T>, ConfigurationDialogTabbed) to instantiate your page?");
         }
         return configurationDialogTabbed;
     }
