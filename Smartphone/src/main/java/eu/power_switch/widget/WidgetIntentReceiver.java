@@ -60,13 +60,12 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
     public static PendingIntent buildReceiverWidgetActionPendingIntent(Context context, Apartment apartment, Room room, Receiver receiver,
                                                                        Button button, int uniqueRequestCode) {
         return PendingIntent.getBroadcast(context,
-                uniqueRequestCode,
-                createReceiverButtonIntent(apartment.getName(), room.getName(), receiver.getName(), button.getName()),
+                uniqueRequestCode, createReceiverButtonIntent(context, apartment.getName(), room.getName(), receiver.getName(), button.getName()),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private static Intent createReceiverButtonIntent(String apartmentName, String roomName, String receiverName, String buttonName) {
-        Intent intent = new Intent();
+    private static Intent createReceiverButtonIntent(Context context, String apartmentName, String roomName, String receiverName, String buttonName) {
+        Intent intent = new Intent(context, WidgetIntentReceiver.class);
         intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
         intent.putExtra(WidgetConstants.KEY_APARTMENT, apartmentName);
         intent.putExtra(WidgetConstants.KEY_ROOM, roomName);
@@ -88,12 +87,14 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
      */
     public static PendingIntent buildRoomWidgetButtonPendingIntent(Context context, Apartment apartment, Room room, String buttonName,
                                                                    int uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context, uniqueRequestCode, createRoomButtonIntent(apartment.getName(), room.getName(), buttonName),
+        return PendingIntent.getBroadcast(context,
+                uniqueRequestCode,
+                createRoomButtonIntent(context, apartment.getName(), room.getName(), buttonName),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private static Intent createRoomButtonIntent(String apartmentName, String roomName, String buttonName) {
-        Intent intent = new Intent();
+    private static Intent createRoomButtonIntent(Context context, String apartmentName, String roomName, String buttonName) {
+        Intent intent = new Intent(context, WidgetIntentReceiver.class);
         intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
         intent.putExtra(WidgetConstants.KEY_APARTMENT, apartmentName);
         intent.putExtra(WidgetConstants.KEY_ROOM, roomName);
@@ -113,13 +114,12 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
      */
     public static PendingIntent buildSceneWidgetPendingIntent(Context context, Apartment apartment, Scene scene, int uniqueRequestCode) {
         return PendingIntent.getBroadcast(context,
-                uniqueRequestCode,
-                createSceneIntent(apartment.getName(), scene.getName()),
+                uniqueRequestCode, createSceneIntent(context, apartment.getName(), scene.getName()),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private static Intent createSceneIntent(String apartmentName, String sceneName) {
-        Intent intent = new Intent();
+    private static Intent createSceneIntent(Context context, String apartmentName, String sceneName) {
+        Intent intent = new Intent(context, WidgetIntentReceiver.class);
         intent.setAction(WidgetConstants.WIDGET_ACTION_INTENT);
         intent.putExtra(WidgetConstants.KEY_APARTMENT, apartmentName);
         intent.putExtra(WidgetConstants.KEY_SCENE, sceneName);

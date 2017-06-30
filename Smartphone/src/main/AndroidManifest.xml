@@ -322,9 +322,7 @@
         </receiver>
         <receiver android:name=".widget.WidgetIntentReceiver">
             <!-- Widgets -->
-            <intent-filter>
-                <action android:name="eu.power_switch.widget_action"/>
-            </intent-filter>
+            <!-- Intents are sent explicitly to this class, no need to specify an intent filter -->
         </receiver>
         <receiver android:name=".api.IntentReceiver">
             <!-- Tasker/LLama interface -->
@@ -340,6 +338,9 @@
         </receiver>
         <receiver android:name=".timer.alarm.AlarmIntentReceiver">
             <!-- Timer alarms -->
+
+            <!-- Intents are sent explicitly to this class, no need to specify an intent filter -->
+            <!-- This is an exception for updating timers after a device reboot -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
