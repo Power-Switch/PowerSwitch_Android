@@ -271,7 +271,7 @@ public class StatusMessageHandler {
      * @param timeInMilliseconds time when the exception was thrown
      */
     public static void showErrorDialog(Context context, Throwable t, long timeInMilliseconds) {
-        context.startActivity(UnknownErrorDialog.getNewInstanceIntent(t, timeInMilliseconds));
+        context.startActivity(UnknownErrorDialog.getNewInstanceIntent(context, t, timeInMilliseconds));
     }
 
     /**

@@ -223,7 +223,7 @@ public class NfcFragment extends ButterKnifeFragment {
             @Override
             public void onClick(View v) {
                 if (NfcHandler.isNfcEnabled(getActivity())) {
-                    startActivity(WriteNfcTagDialog.getNewInstanceIntent(getNfcActionContent(getCurrentSelection())));
+                    startActivity(WriteNfcTagDialog.getNewInstanceIntent(getContext(), getNfcActionContent(getCurrentSelection())));
                 } else {
                     new AlertDialog.Builder(getActivity()).setTitle(R.string.nfc_disabled)
                             .setMessage(R.string.nfc_disabled_please_enable)

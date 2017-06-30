@@ -19,6 +19,7 @@
 package eu.power_switch.gui.dialog;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
@@ -59,9 +60,8 @@ public class WriteNfcTagDialog extends ButterKnifeDialogActivity {
     private String     content;
     private NfcAdapter nfcAdapter;
 
-    public static Intent getNewInstanceIntent(String content) {
-        Intent intent = new Intent();
-        intent.setAction("eu.power_switch.write_nfc_tag_activity");
+    public static Intent getNewInstanceIntent(Context context, String content) {
+        Intent intent = new Intent(context, WriteNfcTagDialog.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(KEY_CONTENT, content);
         return intent;

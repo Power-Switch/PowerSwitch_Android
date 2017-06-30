@@ -19,6 +19,7 @@
 package eu.power_switch.gui.dialog;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -67,12 +68,12 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
     /**
      * Create a new instance of this Dialog while providing an argument.
      *
+     * @param context
      * @param t                        any throwable
      * @param timeRaisedInMilliseconds time when the throwable was raised
      */
-    public static Intent getNewInstanceIntent(Throwable t, long timeRaisedInMilliseconds) {
-        Intent intent = new Intent();
-        intent.setAction("eu.power_switch.unknown_error_activity");
+    public static Intent getNewInstanceIntent(Context context, Throwable t, long timeRaisedInMilliseconds) {
+        Intent intent = new Intent(context, UnknownErrorDialog.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(THROWABLE_KEY, t);
         intent.putExtra(TIME_KEY, timeRaisedInMilliseconds);

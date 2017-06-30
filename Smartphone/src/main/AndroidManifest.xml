@@ -188,10 +188,7 @@
             android:label="@string/gateway_found"
             android:theme="@style/Theme.AppCompat.Dialog"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="eu.power_switch.gateway_detected_activity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+            <!-- Intents are sent explicitly to this class, no need to specify an intent filter -->
         </activity>
         <activity
             android:name=".gui.dialog.WriteNfcTagDialog"
@@ -200,10 +197,7 @@
             android:noHistory="true"
             android:theme="@style/Theme.AppCompat.Dialog"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="eu.power_switch.write_nfc_tag_activity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+            <!-- Intents are sent explicitly to this class, no need to specify an intent filter -->
         </activity>
         <activity
             android:name=".nfc.HiddenReceiverActivity"
@@ -225,10 +219,7 @@
             android:process=":UnknownErrorDialog"
             android:theme="@style/Theme.AppCompat.Dialog"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="eu.power_switch.unknown_error_activity"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+            <!-- Intents are sent explicitly to this class, no need to specify an intent filter -->
         </activity>
         <activity
             android:name=".widget.activity.ConfigureReceiverWidgetActivity"

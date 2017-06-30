@@ -18,6 +18,7 @@
 
 package eu.power_switch.gui.dialog;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -39,9 +40,8 @@ public class GatewayDetectedDialog extends ButterKnifeDialogActivity {
 
     private ArrayList<Gateway> gateways;
 
-    public static Intent getNewInstanceIntent(List<Gateway> gateways) {
-        Intent intent = new Intent();
-        intent.setAction("eu.power_switch.gateway_detected_activity");
+    public static Intent getNewInstanceIntent(Context context, List<Gateway> gateways) {
+        Intent intent = new Intent(context, GatewayDetectedDialog.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(KEY_GATEWAYS, new ArrayList<>(gateways));
         return intent;
