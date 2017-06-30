@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.github.paolorotolo.appintro.ISlidePolicy;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.shared.ThemeHelper;
 
@@ -51,9 +52,12 @@ public class SingleLineTextInputPage extends ConfigurationPage implements ISlide
 
     private int defaultBackgroundColor;
 
-    private TextView          title;
-    private TextView          description;
-    private TextInputEditText input;
+    @BindView(R.id.title)
+    TextView          title;
+    @BindView(R.id.input)
+    TextInputEditText input;
+    @BindView(R.id.description)
+    TextView          description;
 
     public static SingleLineTextInputPage newInstance(@ColorInt int color, @StringRes int title, @StringRes int hint, @StringRes int description) {
         Bundle args = new Bundle();
@@ -71,8 +75,6 @@ public class SingleLineTextInputPage extends ConfigurationPage implements ISlide
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        title = getMainView().findViewById(R.id.title);
-        input = getMainView().findViewById(R.id.input);
         input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -88,7 +90,6 @@ public class SingleLineTextInputPage extends ConfigurationPage implements ISlide
 
             }
         });
-        description = getMainView().findViewById(R.id.description);
 
         onSetUiValues();
 
@@ -204,7 +205,7 @@ public class SingleLineTextInputPage extends ConfigurationPage implements ISlide
 
     @LayoutRes
     @Override
-    protected int getLayout() {
+    protected int getLayoutRes() {
         return R.layout.wizard_page_single_line_text_input;
     }
 

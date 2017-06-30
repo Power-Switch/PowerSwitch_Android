@@ -34,6 +34,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.adapter.WizardGatewayRecyclerViewAdapter;
@@ -51,13 +52,23 @@ import eu.power_switch.wizard.config.ConfigurationHolder;
  */
 public class SetupGatewayPage extends ConfigurationPage {
 
-    private LinearLayout layoutLoading;
+    @BindView(R.id.layoutLoading)
+    LinearLayout     layoutLoading;
+    @BindView(R.id.layoutRefresh)
+    LinearLayout     layoutRefresh;
+    @BindView(R.id.button_refresh)
+    IconicsImageView refreshIcon;
+
+    @BindView(R.id.recyclerViewGateways)
+    RecyclerView recyclerViewGateways;
+    @BindView(R.id.textViewEmpty)
+    TextView     textViewEmpty;
+
 
     private ArrayList<Gateway> foundGateways = new ArrayList<>();
-    private RecyclerView                     recyclerViewGateways;
+
     private WizardGatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
-    private TextView                         textViewEmpty;
-    private IconicsImageView                 refreshIcon;
+
 
     public static SetupGatewayPage newInstance(ConfigurationHolder configurationHolder) {
         Bundle           args     = new Bundle();
@@ -72,9 +83,6 @@ public class SetupGatewayPage extends ConfigurationPage {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        layoutLoading = getMainView().findViewById(R.id.layoutLoading);
-
-        LinearLayout layoutRefresh = getMainView().findViewById(R.id.layoutRefresh);
         layoutRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,11 +90,6 @@ public class SetupGatewayPage extends ConfigurationPage {
             }
         });
 
-        refreshIcon = getMainView().findViewById(R.id.button_refresh);
-
-        textViewEmpty = getMainView().findViewById(R.id.textViewEmpty);
-
-        recyclerViewGateways = getMainView().findViewById(R.id.recyclerViewGateways);
         gatewayRecyclerViewAdapter = new WizardGatewayRecyclerViewAdapter(getActivity(), foundGateways);
         recyclerViewGateways.setAdapter(gatewayRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -163,7 +166,7 @@ public class SetupGatewayPage extends ConfigurationPage {
     }
 
     @Override
-    protected int getLayout() {
+    protected int getLayoutRes() {
         return R.layout.wizard_page_setup_gateway;
     }
 

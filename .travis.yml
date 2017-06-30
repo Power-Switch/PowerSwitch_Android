@@ -26,8 +26,9 @@ android:
     - sys-img-armeabi-v7a-android-17
 
 before_install:
-  - chmod +x gradlew
+  - chmod +x gradlew  # to prevent "Permission Denied" error
 
+# Remove old local cache files befor and cache again after the build
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

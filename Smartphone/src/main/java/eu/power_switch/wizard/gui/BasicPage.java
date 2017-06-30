@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.shared.ThemeHelper;
 
@@ -51,9 +52,12 @@ public class BasicPage extends WizardPage {
 
     private int defaultBackgroundColor;
 
-    private TextView         title;
-    private TextView         description;
-    private IconicsImageView icon;
+    @BindView(R.id.title)
+    TextView         title;
+    @BindView(R.id.description)
+    TextView         description;
+    @BindView(R.id.icon)
+    IconicsImageView icon;
 
     public static BasicPage newInstance(@ColorInt int color, @DrawableRes int icon, @StringRes int title, @StringRes int description) {
         Bundle args = new Bundle();
@@ -70,10 +74,6 @@ public class BasicPage extends WizardPage {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        icon = getMainView().findViewById(R.id.icon);
-        title = getMainView().findViewById(R.id.title);
-        description = getMainView().findViewById(R.id.description);
 
         onSetUiValues();
 
@@ -161,7 +161,7 @@ public class BasicPage extends WizardPage {
 
     @LayoutRes
     @Override
-    protected int getLayout() {
+    protected int getLayoutRes() {
         return R.layout.wizard_page_basic;
     }
 

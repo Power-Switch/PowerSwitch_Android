@@ -51,7 +51,7 @@ public class ApartmentsPage extends BasicPage {
     }
 
     @Override
-    protected int getLayout() {
+    protected int getLayoutRes() {
         return R.layout.wizard_page_basic;
     }
 

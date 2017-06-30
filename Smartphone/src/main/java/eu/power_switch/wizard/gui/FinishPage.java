@@ -85,7 +85,7 @@ public class FinishPage extends WizardPage {
     }
 
     @Override
-    protected int getLayout() {
+    protected int getLayoutRes() {
         return R.layout.wizard_page_finish;
     }
 }

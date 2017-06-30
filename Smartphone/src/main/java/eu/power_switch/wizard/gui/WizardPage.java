@@ -20,24 +20,17 @@ package eu.power_switch.wizard.gui;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import eu.power_switch.R;
+import eu.power_switch.gui.fragment.ButterKnifeFragment;
 import eu.power_switch.shared.ThemeHelper;
 
 /**
@@ -45,27 +38,7 @@ import eu.power_switch.shared.ThemeHelper;
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public abstract class WizardPage extends Fragment implements ISlideBackgroundColorHolder {
-
-    private View     mainView;
-    private Unbinder unbinder;
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        mainView = inflater.inflate(getLayout(), container, false);
-
-        unbinder = ButterKnife.bind(this, mainView);
-
-        return mainView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
+public abstract class WizardPage extends ButterKnifeFragment implements ISlideBackgroundColorHolder {
 
     @Override
     public void setBackgroundColor(@ColorInt int backgroundColor) {
@@ -76,21 +49,13 @@ public abstract class WizardPage extends Fragment implements ISlideBackgroundCol
     }
 
     /**
-     * Returns the layout resource file for this page
-     *
-     * @return layout resource
-     */
-    @LayoutRes
-    protected abstract int getLayout();
-
-    /**
      * Get the main view of this page
      * This view will be used to set the background color
      *
      * @return view
      */
     public View getMainView() {
-        return mainView;
+        return rootView;
     }
 
     @Override
