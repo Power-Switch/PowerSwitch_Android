@@ -24,36 +24,34 @@ import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
 import java.util.Calendar;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 
 /**
  * Dialog to create a new Backup
  */
-public class CreateBackupDialog extends DialogFragment {
+public class CreateBackupDialog extends ButterKnifeDialogFragment {
+
+    @BindView(R.id.txt_backup_name)
+    EditText name;
 
     private Dialog dialog;
-    private EditText name;
-    private int defaultTextColor;
-    private View rootView;
+    private int    defaultTextColor;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        super.onCreateDialog(savedInstanceState);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_create_backup, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView);
 
         TextWatcher textWatcher = new TextWatcher() {
@@ -75,7 +73,6 @@ public class CreateBackupDialog extends DialogFragment {
                 }
             }
         };
-        name = rootView.findViewById(R.id.txt_backup_name);
         name.requestFocus();
         name.addTextChangedListener(textWatcher);
 
@@ -84,39 +81,52 @@ public class CreateBackupDialog extends DialogFragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                CreateBackupProcessingDialog createBackupProcessingDialog = CreateBackupProcessingDialog.newInstance(name.getText().toString().trim(), true);
+                CreateBackupProcessingDialog createBackupProcessingDialog = CreateBackupProcessingDialog.newInstance(name.getText()
+                        .toString()
+                        .trim(), true);
                 createBackupProcessingDialog.show(getFragmentManager(), null);
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
 
         dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         dialog.show();
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).getTextColors()
+        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                .getTextColors()
                 .getDefaultColor();
         setPositiveButtonVisibility(false);
 
         return dialog;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_create_backup;
+    }
+
     private void setPositiveButtonVisibility(boolean visibility) {
         if (dialog != null) {
             if (visibility) {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(defaultTextColor);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(defaultTextColor);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(true);
             } else {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(Color.GRAY);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(false);
             }
         }
     }
 
     private String getDateTime() {
-        String dateTime = "[";
-        Calendar c = Calendar.getInstance();
+        String   dateTime = "[";
+        Calendar c        = Calendar.getInstance();
         dateTime += c.get(Calendar.DAY_OF_MONTH) + ".";
         dateTime += (c.get(Calendar.MONTH) + 1) + ".";
         dateTime += c.get(Calendar.YEAR) + " - ";

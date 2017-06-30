@@ -22,9 +22,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.playstore.Base64;
 import eu.power_switch.google_play_services.playstore.IabHelper;
@@ -51,37 +50,42 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 01.10.2015.
  */
-public class DonationDialog extends DialogFragment {
+public class DonationDialog extends ButterKnifeDialogFragment {
+
+    public static IabHelper iapHelper;
+
+    @BindView(R.id.button_donate_10)
+    Button       donate10;
+    @BindView(R.id.button_donate_5)
+    Button       donate5;
+    @BindView(R.id.button_donate_2)
+    Button       donate2;
+    @BindView(R.id.button_donate_1)
+    Button       donate1;
+    @BindView(R.id.layout_donate_buttons)
+    LinearLayout layoutDonationButtons;
+    @BindView(R.id.layoutLoading)
+    LinearLayout layoutLoading;
 
     private static final String SKU_DONATE_10 = "donate_10";
-    private static final String SKU_DONATE_5 = "donate_5";
-    private static final String SKU_DONATE_2 = "donate_2";
-    private static final String SKU_DONATE_1 = "donate_1";
+    private static final String SKU_DONATE_5  = "donate_5";
+    private static final String SKU_DONATE_2  = "donate_2";
+    private static final String SKU_DONATE_1  = "donate_1";
 
-    private static final String SKU_TEST_PURCHASED = "android.test.purchased";
-    private static final String SKU_TEST_CANCELED = "android.test.canceled";
-    private static final String SKU_TEST_REFUNDED = "android.test.refunded";
+    private static final String SKU_TEST_PURCHASED        = "android.test.purchased";
+    private static final String SKU_TEST_CANCELED         = "android.test.canceled";
+    private static final String SKU_TEST_REFUNDED         = "android.test.refunded";
     private static final String SKU_TEST_ITEM_UNAVAILABLE = "android.test.item_unavailable";
 
     private static final List<String> IAP_IDS_LIST = Arrays.asList(SKU_DONATE_10, SKU_DONATE_5, SKU_DONATE_2, SKU_DONATE_1);
 
     private static final int requestCode = 123;
 
-    public static IabHelper iapHelper;
-    private View rootView;
-
-    private Button donate10;
-    private Button donate5;
-    private Button donate2;
-    private Button donate1;
-    private LinearLayout layoutDonationButtons;
-    private LinearLayout layoutLoading;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_donation, null);
+        super.onCreateDialog(savedInstanceState);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
@@ -110,16 +114,9 @@ public class DonationDialog extends DialogFragment {
             }
         };
 
-        layoutLoading = rootView.findViewById(R.id.layoutLoading);
-
-        layoutDonationButtons = rootView.findViewById(R.id.layout_donate_buttons);
-        donate10 = rootView.findViewById(R.id.button_donate_10);
         donate10.setOnClickListener(onClickListener);
-        donate5 = rootView.findViewById(R.id.button_donate_5);
         donate5.setOnClickListener(onClickListener);
-        donate2 = rootView.findViewById(R.id.button_donate_2);
         donate2.setOnClickListener(onClickListener);
-        donate1 = rootView.findViewById(R.id.button_donate_1);
         donate1.setOnClickListener(onClickListener);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -135,63 +132,63 @@ public class DonationDialog extends DialogFragment {
     }
 
     @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_donation;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try {
-            String key = SmartphonePreferencesHandler.getPublicKeyString();
+            String key                    = SmartphonePreferencesHandler.getPublicKeyString();
             String base64EncodedPublicKey = new String(Base64.decode(key));
             iapHelper = new IabHelper(getActivity(), base64EncodedPublicKey);
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    iapHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-                        public void onIabSetupFinished(IabResult result) {
-                            if (!result.isSuccess()) {
-                                // Oh noes, there was a problem.
-                                StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " +
-                                        result.getMessage(), Snackbar.LENGTH_LONG);
-                                Log.d("Problem setting up In-app Billing: " + result);
+            iapHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result) {
+                    if (!result.isSuccess()) {
+                        // Oh noes, there was a problem.
+                        StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
+                        Log.e("Problem setting up In-app Billing: " + result);
+                        dismiss();
+                        return;
+                    }
+                    // Hooray, IAB is fully set up!
+
+                    iapHelper.queryInventoryAsync(true, IAP_IDS_LIST, new IabHelper.QueryInventoryFinishedListener() {
+                        @Override
+                        public void onQueryInventoryFinished(final IabResult result, final Inventory inventory) {
+                            if (result.isFailure()) {
+                                // handle error
+                                StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
+                                dismiss();
+                                return;
                             }
-                            // Hooray, IAB is fully set up!
 
-                            iapHelper.queryInventoryAsync(true, IAP_IDS_LIST, new IabHelper.QueryInventoryFinishedListener() {
+                            final SkuDetails skuDetails10 = inventory.getSkuDetails(SKU_DONATE_10);
+                            final SkuDetails skuDetails5  = inventory.getSkuDetails(SKU_DONATE_5);
+                            final SkuDetails skuDetails2  = inventory.getSkuDetails(SKU_DONATE_2);
+                            final SkuDetails skuDetails1  = inventory.getSkuDetails(SKU_DONATE_1);
+
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
-                                public void onQueryInventoryFinished(final IabResult result, final Inventory inventory) {
-                                    if (result.isFailure()) {
-                                        // handle error
-                                        StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " +
-                                                result.getMessage(), Snackbar.LENGTH_LONG);
-                                        dismiss();
-                                        return;
-                                    }
+                                public void run() {
+                                    donate10.setText(skuDetails10.getPrice());
+                                    donate5.setText(skuDetails5.getPrice());
+                                    donate2.setText(skuDetails2.getPrice());
+                                    donate1.setText(skuDetails1.getPrice());
 
-                                    final SkuDetails skuDetails10 = inventory.getSkuDetails(SKU_DONATE_10);
-                                    final SkuDetails skuDetails5 = inventory.getSkuDetails(SKU_DONATE_5);
-                                    final SkuDetails skuDetails2 = inventory.getSkuDetails(SKU_DONATE_2);
-                                    final SkuDetails skuDetails1 = inventory.getSkuDetails(SKU_DONATE_1);
-
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            donate10.setText(skuDetails10.getPrice());
-                                            donate5.setText(skuDetails5.getPrice());
-                                            donate2.setText(skuDetails2.getPrice());
-                                            donate1.setText(skuDetails1.getPrice());
-
-                                            layoutLoading.setVisibility(View.GONE);
-                                            layoutDonationButtons.setVisibility(View.VISIBLE);
-                                        }
-                                    });
-
-                                    consumePreviousPurchases();
+                                    layoutLoading.setVisibility(View.GONE);
+                                    layoutDonationButtons.setVisibility(View.VISIBLE);
                                 }
                             });
+
+                            consumePreviousPurchases();
                         }
                     });
                 }
-            }).start();
+            });
 
         } catch (Exception e) {
             Log.e(e);
@@ -210,15 +207,13 @@ public class DonationDialog extends DialogFragment {
                 // As a further security precaution, you should perform the verification on your own secure server.
 
                 if (result.isFailure()) {
-                    StatusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " +
-                            result.getMessage(), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
                     return;
                 }
 
                 consumePurchase(purchase);
 
-                StatusMessageHandler.showInfoMessage(getContext(), R.string.thank_you, Snackbar
-                        .LENGTH_LONG);
+                StatusMessageHandler.showInfoMessage(getContext(), R.string.thank_you, Snackbar.LENGTH_LONG);
                 getDialog().cancel();
             }
         };
@@ -233,8 +228,7 @@ public class DonationDialog extends DialogFragment {
             @Override
             public void onConsumeFinished(Purchase purchase, IabResult result) {
                 if (result.isFailure()) {
-                    StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " +
-                            result.getMessage(), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
                 }
             }
         });
@@ -245,8 +239,7 @@ public class DonationDialog extends DialogFragment {
             @Override
             public void onQueryInventoryFinished(IabResult result, Inventory inv) {
                 if (result.isFailure()) {
-                    StatusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " +
-                            result.getMessage(), Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
                     return;
                 }
 
@@ -262,8 +255,7 @@ public class DonationDialog extends DialogFragment {
                     public void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results) {
                         for (IabResult r : results) {
                             if (r.isFailure()) {
-                                StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " +
-                                        r.getMessage(), Snackbar.LENGTH_LONG);
+                                StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + r.getMessage(), Snackbar.LENGTH_LONG);
                                 return;
                             }
                         }
@@ -274,15 +266,15 @@ public class DonationDialog extends DialogFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
+
         if (iapHelper != null) {
-            iapHelper.dispose();
+            try {
+                iapHelper.dispose();
+            } catch (Exception e) {
+                Log.e("Error disposing In-App purchase helper", e);
+            }
         }
         iapHelper = null;
     }

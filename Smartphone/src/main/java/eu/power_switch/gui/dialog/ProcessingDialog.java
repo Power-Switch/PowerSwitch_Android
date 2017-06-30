@@ -23,9 +23,7 @@ import android.os.Bundle;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -35,6 +33,7 @@ import android.widget.TextView;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 
 /**
@@ -42,43 +41,36 @@ import eu.power_switch.R;
  * <p/>
  * Created by Markus on 03.09.2016.
  */
-public abstract class ProcessingDialog extends DialogFragment {
+public abstract class ProcessingDialog extends ButterKnifeDialogFragment {
 
-    private View rootView;
+    @BindView(R.id.imageView_success)
+    IconicsImageView imageViewSuccess;
+    @BindView(R.id.imageView_error)
+    IconicsImageView imageViewError;
+    @BindView(R.id.progressIndicator)
+    ProgressBar      progressIndicator;
 
-    private IconicsImageView imageViewSuccess;
-    private IconicsImageView imageViewError;
-    private ProgressBar progressIndicator;
+    @BindView(R.id.textView_statusMessage_main)
+    TextView          textViewMainStatusMessage;
+    @BindView(R.id.progressBar_main)
+    NumberProgressBar progressBarMain;
 
-    private TextView textViewMainStatusMessage;
-    private NumberProgressBar progressBarMain;
+    @BindView(R.id.layout_subprocess)
+    LinearLayout      layoutSubProcess;
+    @BindView(R.id.textView_statusMessage_sub)
+    TextView          textViewSubStatusMessage;
+    @BindView(R.id.progressBar_sub)
+    NumberProgressBar progressBarSub;
 
-    private LinearLayout layoutSubProcess;
-    private TextView textViewSubStatusMessage;
-    private NumberProgressBar progressBarSub;
-
-    private Button buttonStart;
-    private Button buttonClose;
-    private Button buttonCancel;
+    Button buttonStart;
+    Button buttonClose;
+    Button buttonCancel;
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_processing, null);
-
-        progressIndicator = rootView.findViewById(R.id.progressIndicator);
-
-        progressBarMain = rootView.findViewById(R.id.progressBar_main);
-        textViewMainStatusMessage = rootView.findViewById(R.id.textView_statusMessage_main);
-
-        layoutSubProcess = rootView.findViewById(R.id.layout_subprocess);
-        progressBarSub = rootView.findViewById(R.id.progressBar_sub);
-        textViewSubStatusMessage = rootView.findViewById(R.id.textView_statusMessage_sub);
-
-        imageViewSuccess = rootView.findViewById(R.id.imageView_success);
-        imageViewError = rootView.findViewById(R.id.imageView_error);
+        super.onCreateDialog(savedInstanceState);
 
         if (!hasSubProcess()) {
             layoutSubProcess.setVisibility(View.GONE);
@@ -135,6 +127,11 @@ public abstract class ProcessingDialog extends DialogFragment {
         setMainStatusMessage(R.string.ready);
 
         return dialog;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_processing;
     }
 
     /**

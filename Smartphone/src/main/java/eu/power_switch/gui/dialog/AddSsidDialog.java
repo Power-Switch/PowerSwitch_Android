@@ -31,14 +31,12 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -52,6 +50,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.animation.AnimationHandler;
@@ -61,22 +60,28 @@ import eu.power_switch.shared.log.Log;
 /**
  * Dialog to create a new Room
  */
-public class AddSsidDialog extends DialogFragment {
+public class AddSsidDialog extends ButterKnifeDialogFragment {
 
     public static final String KEY_SSID = "SSID";
 
+    @BindView(R.id.listView)
+    ListView          listView;
+    @BindView(R.id.layoutLoading)
+    LinearLayout      layoutLoading;
+    @BindView(R.id.editText_ssid)
+    TextInputEditText editText_ssid;
+    @BindView(R.id.button_refresh)
+    IconicsImageView  refresh;
+
     private Dialog dialog;
-    private int defaultTextColor;
-    private View contentView;
+    private int    defaultTextColor;
 
     private ArrayList<String> ssids = new ArrayList<>();
-    private ListView listView;
 
-    private BroadcastReceiver broadcastReceiver;
-    private WifiManager mainWifi;
+    private BroadcastReceiver    broadcastReceiver;
+    private WifiManager          mainWifi;
     private ArrayAdapter<String> ssidAdapter;
-    private LinearLayout layoutLoading;
-    private TextInputEditText editText_ssid;
+
 
     /**
      * Used to notify the setup page that some info has changed
@@ -86,12 +91,15 @@ public class AddSsidDialog extends DialogFragment {
     public static void sendSsidAddedBroadcast(Context context, ArrayList<String> ssid) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SSID_ADDED);
         intent.putStringArrayListExtra(KEY_SSID, ssid);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         broadcastReceiver = new BroadcastReceiver() {
@@ -122,11 +130,8 @@ public class AddSsidDialog extends DialogFragment {
         mainWifi = (WifiManager) getActivity().getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        contentView = inflater.inflate(R.layout.dialog_add_ssid, null);
-        builder.setView(contentView);
+        builder.setView(rootView);
 
-        editText_ssid = contentView.findViewById(R.id.editText_ssid);
         editText_ssid.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -142,7 +147,6 @@ public class AddSsidDialog extends DialogFragment {
             }
         });
 
-        final IconicsImageView refresh = contentView.findViewById(R.id.button_refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,14 +154,12 @@ public class AddSsidDialog extends DialogFragment {
                     refresh.startAnimation(AnimationHandler.getRotationClockwiseAnimation(getContext()));
                     refreshSsids();
                 } else {
-                    Toast.makeText(getActivity(), "WiFi disabled!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "WiFi disabled!", Toast.LENGTH_LONG)
+                            .show();
                 }
             }
         });
 
-        layoutLoading = contentView.findViewById(R.id.layoutLoading);
-
-        listView = contentView.findViewById(R.id.listView);
         ssidAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_multiple_choice, ssids);
         listView.setAdapter(ssidAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -174,7 +176,8 @@ public class AddSsidDialog extends DialogFragment {
                 try {
                     sendSsidAddedBroadcast(getContext(), getSelectedSSIDs());
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView().findViewById(R.id.listView), e);
+                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView()
+                            .findViewById(R.id.listView), e);
                 }
             }
         });
@@ -185,10 +188,12 @@ public class AddSsidDialog extends DialogFragment {
 
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        dialog.getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         dialog.show();
 
-        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).getTextColors()
+        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                .getTextColors()
                 .getDefaultColor();
 
         checkValidity();
@@ -198,17 +203,24 @@ public class AddSsidDialog extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_add_ssid;
+    }
+
     private ArrayList<String> getSelectedSSIDs() {
         ArrayList<String> selectedSSIDs = new ArrayList<>();
 
         // manual
-        String manualSsid = editText_ssid.getText().toString().trim();
+        String manualSsid = editText_ssid.getText()
+                .toString()
+                .trim();
         if (!TextUtils.isEmpty(manualSsid)) {
             selectedSSIDs.add(manualSsid);
         }
 
         // available networks
-        int len = listView.getCount();
+        int                len     = listView.getCount();
         SparseBooleanArray checked = listView.getCheckedItemPositions();
         for (int i = 0; i < len; i++) {
             if (checked.get(i)) {
@@ -247,11 +259,15 @@ public class AddSsidDialog extends DialogFragment {
     private void setPositiveButtonVisibility(boolean visibility) {
         if (dialog != null) {
             if (visibility) {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(defaultTextColor);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(defaultTextColor);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(true);
             } else {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(Color.GRAY);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(false);
             }
         }
     }

@@ -21,9 +21,7 @@ package eu.power_switch.gui.dialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,6 +32,7 @@ import android.widget.Spinner;
 
 import java.util.Locale;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -45,20 +44,35 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Hidden Dialog Menu to access developer options
  */
-public class DeveloperOptionsDialog extends DialogFragment {
+public class DeveloperOptionsDialog extends ButterKnifeDialogFragment {
 
-    private View rootView;
     private GeofenceApiHandler geofenceApiHandler;
+    @BindView(R.id.checkBox_playStoreMode)
+    CheckBox checkBox_playStoreMode;
+    @BindView(R.id.button_resetShowcases)
+    Button   resetShowcasesButton;
+    @BindView(R.id.button_removeAllGeofences)
+    Button   removeAllGeofences;
+    @BindView(R.id.button_forceUnknownExceptionDialog)
+    Button   forceUnknownExceptionDialog;
+    @BindView(R.id.button_forceUnhandledException)
+    Button   forceUnhandledException;
+    @BindView(R.id.spinner_language)
+    Spinner  spinnerLanguage;
+    @BindView(R.id.checkBox_forceLanguage)
+    CheckBox checkBoxForceLanguage;
+    @BindView(R.id.checkBox_forceFabricEnabled)
+    CheckBox checkBox_forceFabricEnabled;
+    @BindView(R.id.button_testNotification)
+    Button   buttonTestNotification;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_developer_options, null);
+        super.onCreateDialog(savedInstanceState);
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
-        CheckBox checkBox_playStoreMode = rootView.findViewById(R.id.checkBox_playStoreMode);
         checkBox_playStoreMode.setChecked(DeveloperPreferencesHandler.getPlayStoreMode());
         checkBox_playStoreMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -67,7 +81,6 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button resetShowcasesButton = rootView.findViewById(R.id.button_resetShowcases);
         resetShowcasesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +89,6 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button removeAllGeofences = rootView.findViewById(R.id.button_removeAllGeofences);
         removeAllGeofences.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +96,6 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button forceUnknownExceptionDialog = rootView.findViewById(R.id.button_forceUnknownExceptionDialog);
         forceUnknownExceptionDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +103,6 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button forceUnhandledException = rootView.findViewById(R.id.button_forceUnhandledException);
         forceUnhandledException.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,16 +110,17 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        final Spinner spinnerLanguage = rootView.findViewById(R.id.spinner_language);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.locales, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.locales, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLanguage.setAdapter(adapter);
-        spinnerLanguage.setSelection(getIndex(spinnerLanguage, DeveloperPreferencesHandler.getLocale().toString()));
+        spinnerLanguage.setSelection(getIndex(spinnerLanguage,
+                DeveloperPreferencesHandler.getLocale()
+                        .toString()));
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String localeString = spinnerLanguage.getItemAtPosition(position).toString();
+                String localeString = spinnerLanguage.getItemAtPosition(position)
+                        .toString();
                 DeveloperPreferencesHandler.setLocale(new Locale(localeString));
             }
 
@@ -118,7 +129,6 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        CheckBox checkBoxForceLanguage = rootView.findViewById(R.id.checkBox_forceLanguage);
         checkBoxForceLanguage.setChecked(DeveloperPreferencesHandler.getForceLanguage());
         checkBoxForceLanguage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -127,7 +137,6 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        CheckBox checkBox_forceFabricEnabled = rootView.findViewById(R.id.checkBox_forceFabricEnabled);
         checkBox_forceFabricEnabled.setChecked(DeveloperPreferencesHandler.getForceFabricEnabled());
         checkBox_forceFabricEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -136,7 +145,6 @@ public class DeveloperOptionsDialog extends DialogFragment {
             }
         });
 
-        Button buttonTestNotification = rootView.findViewById(R.id.button_testNotification);
         buttonTestNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,12 +164,19 @@ public class DeveloperOptionsDialog extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_developer_options;
+    }
+
     //private method of your class
     private int getIndex(Spinner spinner, String myString) {
         int index = 0;
 
         for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)) {
+            if (spinner.getItemAtPosition(i)
+                    .toString()
+                    .equalsIgnoreCase(myString)) {
                 index = i;
                 break;
             }

@@ -30,6 +30,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -50,14 +52,13 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
      */
     public static final String APARTMENT_ID_KEY = "ApartmentId";
 
-    private View rootView;
-
     private long apartmentId = -1;
 
     private ArrayList<Room> rooms = new ArrayList<>();
     private RoomNameRecyclerViewAdapter roomNameRecyclerViewAdapter;
-    private ItemTouchHelper itemTouchHelper;
-    private RecyclerView recyclerViewRooms;
+    private ItemTouchHelper             itemTouchHelper;
+
+    private ButterKnifeViewHolder viewHolder = new ButterKnifeViewHolder();
 
     public static EditRoomOrderDialog newInstance(long apartmentId) {
         Bundle args = new Bundle();
@@ -70,19 +71,19 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
 
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_edit_room_order_content, container);
+        View contentView = inflater.inflate(R.layout.dialog_edit_room_order_content, container);
+        ButterKnife.bind(viewHolder, contentView);
 
-        recyclerViewRooms = rootView.findViewById(R.id.recyclerView);
         roomNameRecyclerViewAdapter = new RoomNameRecyclerViewAdapter(getContext(), rooms, this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerViewRooms.setLayoutManager(linearLayoutManager);
-        recyclerViewRooms.setAdapter(roomNameRecyclerViewAdapter);
+        viewHolder.recyclerViewRooms.setLayoutManager(linearLayoutManager);
+        viewHolder.recyclerViewRooms.setAdapter(roomNameRecyclerViewAdapter);
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(roomNameRecyclerViewAdapter);
         itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(recyclerViewRooms);
+        itemTouchHelper.attachToRecyclerView(viewHolder.recyclerViewRooms);
 
-        return rootView;
+        return contentView;
     }
 
     @Override
@@ -132,8 +133,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
             // update wear data
             UtilityService.forceWearDataUpdate(getActivity());
 
-            StatusMessageHandler.showInfoMessage(getTargetFragment()
-                    , R.string.room_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
             getDialog().dismiss();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -143,5 +143,10 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
         // nothing to delete here
+    }
+
+    class ButterKnifeViewHolder {
+        @BindView(R.id.recyclerView)
+        RecyclerView recyclerViewRooms;
     }
 }

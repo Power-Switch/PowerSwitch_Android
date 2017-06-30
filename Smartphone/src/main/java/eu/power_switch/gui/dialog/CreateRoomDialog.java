@@ -27,12 +27,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
@@ -40,6 +37,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -53,13 +51,15 @@ import eu.power_switch.wear.service.UtilityService;
 /**
  * Dialog to create a new Room
  */
-public class CreateRoomDialog extends DialogFragment {
+public class CreateRoomDialog extends ButterKnifeDialogFragment {
 
-    private Dialog dialog;
-    private int defaultTextColor;
-    private View view;
-    private EditText name;
-    private TextInputLayout floatingName;
+    @BindView(R.id.editText_room_name)
+    EditText        name;
+    @BindView(R.id.room_name_text_input_layout)
+    TextInputLayout floatingName;
+
+    private Dialog             dialog;
+    private int                defaultTextColor;
     private LinkedList<String> roomNames;
 
     @Override
@@ -70,6 +70,7 @@ public class CreateRoomDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
 
         try {
             List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
@@ -82,14 +83,8 @@ public class CreateRoomDialog extends DialogFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(rootView);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        view = inflater.inflate(R.layout.dialog_add_room, null);
-        builder.setView(view);
-
-        floatingName = view.findViewById(R.id.room_name_text_input_layout);
-
-        name = view.findViewById(R.id.editText_room_name);
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -110,7 +105,12 @@ public class CreateRoomDialog extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    DatabaseHandler.addRoom(new Room(null, SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID), getRoomName(), 0, false, new ArrayList<Gateway>()));
+                    DatabaseHandler.addRoom(new Room(null,
+                            SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
+                            getRoomName(),
+                            0,
+                            false,
+                            new ArrayList<Gateway>()));
 
                     ConfigureReceiverDialogPage1NameFragment.sendRoomAddedBroadcast(getActivity(), getRoomName());
 
@@ -119,9 +119,11 @@ public class CreateRoomDialog extends DialogFragment {
                     // update wear data
                     UtilityService.forceWearDataUpdate(getActivity());
 
-                    StatusMessageHandler.showInfoMessage(getTargetFragment().getView().findViewById(R.id.listView_rooms), R.string.room_saved, Snackbar.LENGTH_LONG);
+                    StatusMessageHandler.showInfoMessage(getTargetFragment().getView()
+                            .findViewById(R.id.listView_rooms), R.string.room_saved, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView().findViewById(R.id.listView_rooms), e);
+                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView()
+                            .findViewById(R.id.listView_rooms), e);
                 }
             }
         });
@@ -132,10 +134,12 @@ public class CreateRoomDialog extends DialogFragment {
 
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        dialog.getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         dialog.show();
 
-        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).getTextColors()
+        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                .getTextColors()
                 .getDefaultColor();
 
         checkValidity();
@@ -143,8 +147,15 @@ public class CreateRoomDialog extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_add_room;
+    }
+
     private String getRoomName() {
-        return name.getText().toString().trim();
+        return name.getText()
+                .toString()
+                .trim();
     }
 
     private void checkValidity() {
@@ -173,11 +184,15 @@ public class CreateRoomDialog extends DialogFragment {
     private void setPositiveButtonVisibility(boolean visibility) {
         if (dialog != null) {
             if (visibility) {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(defaultTextColor);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(defaultTextColor);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(true);
             } else {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(Color.GRAY);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(false);
             }
         }
     }

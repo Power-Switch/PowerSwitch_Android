@@ -42,6 +42,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import eu.power_switch.R;
 import eu.power_switch.gui.treeview.FolderTreeNode;
 import eu.power_switch.gui.treeview.FolderTreeNodeViewHolder;
@@ -59,10 +61,9 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
 
     private String currentPath = "";
 
-    private TextView textViewCurrentPath;
-    private LinearLayout containerView;
-    private LinearLayout loadingLayout;
     private AndroidTreeView treeView;
+
+    private ButterKnifeViewHolder viewHolder = new ButterKnifeViewHolder();
 
     public static PathChooserDialog newInstance() {
         Bundle args = new Bundle();
@@ -81,25 +82,22 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
         Log.d(PathChooserDialog.class, "sendBackupPathChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @Override
     protected View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.dialog_path_chooser, container);
+        View contentView = inflater.inflate(R.layout.dialog_path_chooser, container);
+        ButterKnife.bind(viewHolder, contentView);
 
         currentPath = SmartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
 
-        textViewCurrentPath = rootView.findViewById(R.id.textView_currentPath);
-        textViewCurrentPath.setText(currentPath);
-
-        containerView = rootView.findViewById(R.id.containerView);
-
-        loadingLayout = rootView.findViewById(R.id.layoutLoading);
+        viewHolder.textViewCurrentPath.setText(currentPath);
 
         getLoaderManager().initLoader(0, null, this);
 
-        return rootView;
+        return contentView;
     }
 
     private ArrayList<File> getVisibleSubFolders(String currentPath) {
@@ -120,7 +118,8 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
         Collections.sort(subFolders, new Comparator<File>() {
             @Override
             public int compare(File file1, File file2) {
-                return file1.getName().compareToIgnoreCase(file2.getName());
+                return file1.getName()
+                        .compareToIgnoreCase(file2.getName());
             }
         });
 
@@ -174,7 +173,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
                     TreeItemFolder treeItemFolder = (TreeItemFolder) value;
 
                     currentPath = treeItemFolder.getPath();
-                    textViewCurrentPath.setText(currentPath);
+                    viewHolder.textViewCurrentPath.setText(currentPath);
 
                     treeView.deselectAll();
                     treeView.selectNode(node, true);
@@ -190,7 +189,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
     private void addChildFoldersRecursive(String path, TreeNode parentFolderNode) {
         for (File folder : getVisibleSubFolders(path)) {
             TreeItemFolder treeItemFolder = new TreeItemFolder(getActivity(), folder.getName(), path);
-            FolderTreeNode folderNode = new FolderTreeNode(treeItemFolder);
+            FolderTreeNode folderNode     = new FolderTreeNode(treeItemFolder);
 
             // expand path to currently set directory
             if (currentPath.contains(path + "/" + folder.getName())) {
@@ -215,7 +214,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
 
             @Override
             protected void onStartLoading() {
-                loadingLayout.setVisibility(View.VISIBLE);
+                viewHolder.loadingLayout.setVisibility(View.VISIBLE);
                 forceLoad();
             }
 
@@ -238,13 +237,22 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<View> loader, View view) {
-        containerView.addView(view);
-        loadingLayout.setVisibility(View.GONE);
+        viewHolder.containerView.addView(view);
+        viewHolder.loadingLayout.setVisibility(View.GONE);
     }
 
     @Override
     public void onLoaderReset(Loader<View> loader) {
 
+    }
+
+    class ButterKnifeViewHolder {
+        @BindView(R.id.textView_currentPath)
+        TextView     textViewCurrentPath;
+        @BindView(R.id.containerView)
+        LinearLayout containerView;
+        @BindView(R.id.layoutLoading)
+        LinearLayout loadingLayout;
     }
 
 }

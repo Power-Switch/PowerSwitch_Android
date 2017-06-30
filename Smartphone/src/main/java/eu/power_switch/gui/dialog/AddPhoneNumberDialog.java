@@ -27,7 +27,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +34,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
@@ -48,6 +46,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
@@ -60,25 +59,31 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 /**
  * Created by Markus on 08.04.2016.
  */
-public class AddPhoneNumberDialog extends DialogFragment {
+public class AddPhoneNumberDialog extends ButterKnifeDialogFragment {
 
     public static final String KEY_PHONE_NUMBERS = "phoneNumbers";
 
     public static final Comparator<Contact> ALPHABETIC = new Comparator<Contact>() {
         @Override
         public int compare(Contact lhs, Contact rhs) {
-            return lhs.getName().compareToIgnoreCase(rhs.getName());
+            return lhs.getName()
+                    .compareToIgnoreCase(rhs.getName());
         }
     };
 
+    @BindView(R.id.layoutLoading)
+    LinearLayout      layoutLoading;
+    @BindView(R.id.editText_phoneNumber)
+    TextInputEditText editText_phoneNumber;
+    @BindView(R.id.recyclerView_phoneNumbers)
+    RecyclerView      recyclerViewContacts;
+
     private Dialog dialog;
-    private int defaultTextColor;
-    private View contentView;
-    private LinearLayout layoutLoading;
-    private TextInputEditText editText_phoneNumber;
+    private int    defaultTextColor;
+
     private ArrayList<Contact> contacts = new ArrayList<>();
     private ContactRecyclerViewAdapter contactRecyclerViewAdapter;
-    private RecyclerView recyclerViewContacts;
+
     private Set<String> checkedNumbers = new HashSet<>();
 
     public static AddPhoneNumberDialog newInstance(ArrayList<String> preselectedPhoneNumbers) {
@@ -98,19 +103,18 @@ public class AddPhoneNumberDialog extends DialogFragment {
     public static void sendPhoneNumbersAddedBroadcast(Context context, Set<String> phoneNumbers) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED);
         intent.putStringArrayListExtra(KEY_PHONE_NUMBERS, new ArrayList<>(phoneNumbers));
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(context)
+                .sendBroadcast(intent);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(rootView);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        contentView = inflater.inflate(R.layout.dialog_add_phone_number, null);
-        builder.setView(contentView);
-
-        editText_phoneNumber = contentView.findViewById(R.id.editText_phoneNumber);
         editText_phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,9 +130,6 @@ public class AddPhoneNumberDialog extends DialogFragment {
             }
         });
 
-        layoutLoading = contentView.findViewById(R.id.layoutLoading);
-
-        recyclerViewContacts = contentView.findViewById(R.id.recyclerView_phoneNumbers);
         contactRecyclerViewAdapter = new ContactRecyclerViewAdapter(getActivity(), contacts, checkedNumbers);
         contactRecyclerViewAdapter.setCheckBoxInteractionListener(new CheckBoxInteractionListener() {
             @Override
@@ -157,7 +158,8 @@ public class AddPhoneNumberDialog extends DialogFragment {
                 try {
                     sendPhoneNumbersAddedBroadcast(getContext(), getSelectedPhoneNumbers());
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView().findViewById(R.id.listView), e);
+                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView()
+                            .findViewById(R.id.listView), e);
                 }
             }
         });
@@ -168,10 +170,12 @@ public class AddPhoneNumberDialog extends DialogFragment {
 
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        dialog.getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         dialog.show();
 
-        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).getTextColors()
+        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                .getTextColors()
                 .getDefaultColor();
 
         checkValidity();
@@ -185,6 +189,11 @@ public class AddPhoneNumberDialog extends DialogFragment {
         refreshContacts();
 
         return dialog;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_add_phone_number;
     }
 
     private void refreshContacts() {
@@ -226,16 +235,21 @@ public class AddPhoneNumberDialog extends DialogFragment {
     }
 
     private Set<String> getSelectedPhoneNumbers() {
-        if (!TextUtils.isEmpty(editText_phoneNumber.getText().toString().trim())) {
-            checkedNumbers.add(editText_phoneNumber.getText().toString().trim());
+        if (!TextUtils.isEmpty(editText_phoneNumber.getText()
+                .toString()
+                .trim())) {
+            checkedNumbers.add(editText_phoneNumber.getText()
+                    .toString()
+                    .trim());
         }
 
         return checkedNumbers;
     }
 
     private void checkValidity() {
-        if (TextUtils.isEmpty(editText_phoneNumber.getText().toString().trim()) &&
-                checkedNumbers.isEmpty()) {
+        if (TextUtils.isEmpty(editText_phoneNumber.getText()
+                .toString()
+                .trim()) && checkedNumbers.isEmpty()) {
             setPositiveButtonVisibility(false);
         } else {
             setPositiveButtonVisibility(true);
@@ -245,11 +259,15 @@ public class AddPhoneNumberDialog extends DialogFragment {
     private void setPositiveButtonVisibility(boolean visibility) {
         if (dialog != null) {
             if (visibility) {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(defaultTextColor);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(defaultTextColor);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(true);
             } else {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(Color.GRAY);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(false);
             }
         }
     }

@@ -29,7 +29,6 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -40,6 +39,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
@@ -53,17 +53,20 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public abstract class ConfigurationDialog extends DialogFragment {
+public abstract class ConfigurationDialog extends ButterKnifeDialogFragment {
 
+    @BindView(R.id.imageButton_delete)
     protected ImageButton imageButtonDelete;
+    @BindView(R.id.imageButton_cancel)
     protected ImageButton imageButtonCancel;
+    @BindView(R.id.imageButton_save)
     protected ImageButton imageButtonSave;
 
     private boolean modified;
-    private View rootView;
-    private View contentView;
 
     private BroadcastReceiver broadcastReceiver;
+
+    private View contentView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,13 +88,10 @@ public abstract class ConfigurationDialog extends DialogFragment {
 
         getDialog().setTitle(getDialogTitle());
 
-        rootView = inflater.inflate(R.layout.dialog_configuration, null);
-
         FrameLayout contentViewContainer = rootView.findViewById(R.id.contentView);
 
         contentView = initContentView(inflater, contentViewContainer, savedInstanceState);
 
-        imageButtonDelete = rootView.findViewById(R.id.imageButton_delete);
         imageButtonDelete.setImageDrawable(IconicsHelper.getDeleteIcon(getActivity(), ContextCompat.getColor(getActivity(), R.color.delete_color)));
         imageButtonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +156,11 @@ public abstract class ConfigurationDialog extends DialogFragment {
         return rootView;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_configuration;
+    }
+
     /**
      * Initialize the content view of this configuration dialog in here.
      * Inflate your custom layout, find its views and bind their logic
@@ -163,6 +168,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
      * @param inflater           Layoutinflater
      * @param container
      * @param savedInstanceState
+     *
      * @return
      */
     protected abstract View initContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
@@ -171,6 +177,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
      * Initialize your dialog in here using passed in arguments
      *
      * @param arguments arguments passed in via setArguments()
+     *
      * @return true if existing data was initialized, false otherwise
      */
     protected abstract boolean initExistingData(Bundle arguments);
@@ -178,6 +185,8 @@ public abstract class ConfigurationDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
+
         Dialog dialog = new Dialog(getActivity()) {
             @Override
             public void onBackPressed() {
@@ -200,7 +209,8 @@ public abstract class ConfigurationDialog extends DialogFragment {
         };
         dialog.setTitle(getDialogTitle());
         dialog.setCanceledOnTouchOutside(isCancelableOnTouchOutside());
-        dialog.getWindow().setSoftInputMode(getSoftInputMode());
+        dialog.getWindow()
+                .setSoftInputMode(getSoftInputMode());
         dialog.show();
         return dialog;
     }
@@ -250,8 +260,7 @@ public abstract class ConfigurationDialog extends DialogFragment {
      * @return integer representing the mode
      */
     protected int getSoftInputMode() {
-        return WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN |
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
+        return WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
     }
 
     /**
@@ -308,13 +317,15 @@ public abstract class ConfigurationDialog extends DialogFragment {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity())
+                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     @CallSuper
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity())
+                .unregisterReceiver(broadcastReceiver);
         super.onStop();
     }
 }

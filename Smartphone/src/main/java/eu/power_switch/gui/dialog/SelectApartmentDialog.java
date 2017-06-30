@@ -21,9 +21,7 @@ package eu.power_switch.gui.dialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -31,6 +29,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
@@ -45,31 +44,28 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  * <p/>
  * Created by Markus on 08.01.2016.
  */
-public class SelectApartmentDialog extends DialogFragment {
+public class SelectApartmentDialog extends ButterKnifeDialogFragment {
+
+    @BindView(R.id.listview_apartments)
+    ListView listViewApartments;
 
     private ArrayList<String> apartmentNames = new ArrayList<>();
-    private View rootView;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_apartment_chooser, null);
-
-        ListView listViewApartments = rootView.findViewById(R.id.listview_apartments);
+        super.onCreateDialog(savedInstanceState);
 
         // should be called async but since its still very fast it doesn't make that much of a difference
         apartmentNames.addAll(getApartmentNames());
 
-        ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_list_item_1, apartmentNames);
+        ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, apartmentNames);
         listViewApartments.setAdapter(apartmentNamesAdapter);
         listViewApartments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    onApartmentClicked(
-                            DatabaseHandler.getApartmentId(apartmentNames.get(position)));
+                    onApartmentClicked(DatabaseHandler.getApartmentId(apartmentNames.get(position)));
                 } catch (Exception e) {
                     dismiss();
                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -86,6 +82,11 @@ public class SelectApartmentDialog extends DialogFragment {
         dialog.show();
 
         return dialog;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_apartment_chooser;
     }
 
     /**

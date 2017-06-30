@@ -25,9 +25,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -43,6 +41,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
@@ -63,7 +62,7 @@ import eu.power_switch.shared.log.Log;
  * <p/>
  * Created by Markus on 28.09.2015.
  */
-public abstract class AddActionDialog extends DialogFragment {
+public abstract class AddActionDialog extends ButterKnifeDialogFragment {
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override
@@ -72,51 +71,69 @@ public abstract class AddActionDialog extends DialogFragment {
         }
     };
 
+    @BindView(R.id.radioButton_receiver_action)
+    RadioButton radioButtonReceiverAction;
+    @BindView(R.id.radioButton_room_action)
+    RadioButton radioButtonRoomAction;
+    @BindView(R.id.radioButton_scene_action)
+    RadioButton radioButtonSceneAction;
+
+    @BindView(R.id.linearLayout_receiver)
+    LinearLayout linearLayoutReceiver;
+    @BindView(R.id.linearLayout_room)
+    LinearLayout linearLayoutRoom;
+    @BindView(R.id.linearLayout_button)
+    LinearLayout linearLayoutButton;
+    @BindView(R.id.linearLayout_scene)
+    LinearLayout linearLayoutScene;
+
+    @BindView(R.id.spinner_apartment)
+    Spinner spinner_apartment;
+    @BindView(R.id.spinner_room)
+    Spinner spinner_room;
+    @BindView(R.id.spinner_receiver)
+    Spinner spinner_receiver;
+    @BindView(R.id.spinner_button)
+    Spinner spinner_button;
+    @BindView(R.id.spinner_scene)
+    Spinner spinner_scene;
+
+    @BindView(R.id.progressApartment)
+    ProgressBar progressApartment;
+    @BindView(R.id.progressRoom)
+    ProgressBar progressRoom;
+    @BindView(R.id.progressReceiver)
+    ProgressBar progressReceiver;
+    @BindView(R.id.progressButton)
+    ProgressBar progressButton;
+    @BindView(R.id.progressScene)
+    ProgressBar progressScene;
+
     private Dialog dialog;
-    private View rootView;
 
     private int defaultTextColor;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
-    private RadioButton radioButtonReceiverAction;
-    private RadioButton radioButtonRoomAction;
-    private RadioButton radioButtonSceneAction;
-
-    private LinearLayout linearLayoutReceiver;
-    private LinearLayout linearLayoutRoom;
-    private LinearLayout linearLayoutButton;
-    private LinearLayout linearLayoutScene;
-    private Spinner spinner_apartment;
-    private Spinner spinner_room;
-    private Spinner spinner_receiver;
-    private Spinner spinner_button;
-    private Spinner spinner_scene;
 
     private Apartment currentApartment;
 
     private ArrayList<String> apartmentNames = new ArrayList<>();
-    private ArrayList<String> roomNames = new ArrayList<>();
-    private ArrayList<String> receiverNames = new ArrayList<>();
-    private ArrayList<String> buttonNames = new ArrayList<>();
-    private ArrayList<String> sceneNames = new ArrayList<>();
+    private ArrayList<String> roomNames      = new ArrayList<>();
+    private ArrayList<String> receiverNames  = new ArrayList<>();
+    private ArrayList<String> buttonNames    = new ArrayList<>();
+    private ArrayList<String> sceneNames     = new ArrayList<>();
 
     private ArrayAdapter<String> receiverSpinnerArrayAdapter;
     private ArrayAdapter<String> buttonSpinnerArrayAdapter;
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
-    private ProgressBar progressApartment;
-    private ProgressBar progressRoom;
-    private ProgressBar progressReceiver;
-    private ProgressBar progressButton;
-    private ProgressBar progressScene;
     private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        super.onCreateDialog(savedInstanceState);
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_add_action, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -141,14 +158,10 @@ public abstract class AddActionDialog extends DialogFragment {
         };
 
         // Action Type Selection
-        radioButtonReceiverAction = rootView.findViewById(R.id.radioButton_receiver_action);
         radioButtonReceiverAction.setOnClickListener(onClickListener);
-        radioButtonRoomAction = rootView.findViewById(R.id.radioButton_room_action);
         radioButtonRoomAction.setOnClickListener(onClickListener);
-        radioButtonSceneAction = rootView.findViewById(R.id.radioButton_scene_action);
         radioButtonSceneAction.setOnClickListener(onClickListener);
 
-        spinner_apartment = rootView.findViewById(R.id.spinner_apartment);
         apartmentSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, apartmentNames);
         apartmentSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_apartment.setAdapter(apartmentSpinnerArrayAdapter);
@@ -161,18 +174,6 @@ public abstract class AddActionDialog extends DialogFragment {
         spinner_apartment.setOnTouchListener(spinnerInteractionListener);
         spinner_apartment.setOnItemSelectedListener(spinnerInteractionListener);
 
-        linearLayoutRoom = rootView.findViewById(R.id.linearLayout_room);
-        linearLayoutReceiver = rootView.findViewById(R.id.linearLayout_receiver);
-        linearLayoutButton = rootView.findViewById(R.id.linearLayout_button);
-        linearLayoutScene = rootView.findViewById(R.id.linearLayout_scene);
-
-        progressApartment = rootView.findViewById(R.id.progressApartment);
-        progressRoom = rootView.findViewById(R.id.progressRoom);
-        progressReceiver = rootView.findViewById(R.id.progressReceiver);
-        progressButton = rootView.findViewById(R.id.progressButton);
-        progressScene = rootView.findViewById(R.id.progressScene);
-
-        spinner_room = rootView.findViewById(R.id.spinner_room);
         roomSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roomNames);
         roomSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_room.setAdapter(roomSpinnerArrayAdapter);
@@ -185,7 +186,6 @@ public abstract class AddActionDialog extends DialogFragment {
         spinner_room.setOnTouchListener(spinnerInteractionListener2);
         spinner_room.setOnItemSelectedListener(spinnerInteractionListener2);
 
-        spinner_receiver = rootView.findViewById(R.id.spinner_receiver);
         receiverSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, receiverNames);
         receiverSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_receiver.setAdapter(receiverSpinnerArrayAdapter);
@@ -198,7 +198,6 @@ public abstract class AddActionDialog extends DialogFragment {
         spinner_receiver.setOnTouchListener(spinnerInteractionListener3);
         spinner_receiver.setOnItemSelectedListener(spinnerInteractionListener3);
 
-        spinner_button = rootView.findViewById(R.id.spinner_button);
         buttonSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, buttonNames);
         buttonSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_button.setAdapter(buttonSpinnerArrayAdapter);
@@ -211,7 +210,6 @@ public abstract class AddActionDialog extends DialogFragment {
         spinner_button.setOnTouchListener(spinnerInteractionListener4);
         spinner_button.setOnItemSelectedListener(spinnerInteractionListener4);
 
-        spinner_scene = rootView.findViewById(R.id.spinner_scene);
         sceneSpinnerArrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, sceneNames);
         sceneSpinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_scene.setAdapter(sceneSpinnerArrayAdapter);
@@ -240,13 +238,20 @@ public abstract class AddActionDialog extends DialogFragment {
 
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.show();
 
-        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).getTextColors()
+        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                .getTextColors()
                 .getDefaultColor();
 
         return dialog;
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_add_action;
     }
 
     protected void updateLists() {
@@ -510,7 +515,8 @@ public abstract class AddActionDialog extends DialogFragment {
 
     private Apartment getSelectedApartment() {
         try {
-            return DatabaseHandler.getApartment(spinner_apartment.getSelectedItem().toString());
+            return DatabaseHandler.getApartment(spinner_apartment.getSelectedItem()
+                    .toString());
         } catch (Exception e) {
             Log.e(e);
         }
@@ -519,7 +525,8 @@ public abstract class AddActionDialog extends DialogFragment {
     }
 
     private Room getSelectedRoom() throws Exception {
-        return currentApartment.getRoom(spinner_room.getSelectedItem().toString());
+        return currentApartment.getRoom(spinner_room.getSelectedItem()
+                .toString());
     }
 
     private void updateActionType(String timerActionType) {
@@ -560,34 +567,46 @@ public abstract class AddActionDialog extends DialogFragment {
 
         try {
             if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem().toString());
-                Log.d(spinner_receiver.getSelectedItem().toString());
-                Log.d(spinner_button.getSelectedItem().toString());
+                Log.d(spinner_room.getSelectedItem()
+                        .toString());
+                Log.d(spinner_receiver.getSelectedItem()
+                        .toString());
+                Log.d(spinner_button.getSelectedItem()
+                        .toString());
 
                 Apartment selectedApartment = currentApartment;
-                Room selectedRoom = getSelectedRoom();
+                Room      selectedRoom      = getSelectedRoom();
                 Receiver selectedReceiver = selectedRoom.getReceiver(spinner_receiver.getSelectedItem()
                         .toString());
                 Button selectedButton = null;
                 for (Button button : selectedReceiver.getButtons()) {
-                    if (button.getName().equals(spinner_button.getSelectedItem().toString())) {
+                    if (button.getName()
+                            .equals(spinner_button.getSelectedItem()
+                                    .toString())) {
                         selectedButton = button;
                     }
                 }
 
                 action = new ReceiverAction(-1, currentApartment.getName(), selectedRoom, selectedReceiver, selectedButton);
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem().toString());
-                Log.d(spinner_button.getSelectedItem().toString());
+                Log.d(spinner_room.getSelectedItem()
+                        .toString());
+                Log.d(spinner_button.getSelectedItem()
+                        .toString());
 
                 Room selectedRoom = getSelectedRoom();
 
-                action = new RoomAction(-1, currentApartment.getName(), selectedRoom, spinner_button.getSelectedItem()
-                        .toString());
+                action = new RoomAction(-1,
+                        currentApartment.getName(),
+                        selectedRoom,
+                        spinner_button.getSelectedItem()
+                                .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-                Log.d(spinner_scene.getSelectedItem().toString());
+                Log.d(spinner_scene.getSelectedItem()
+                        .toString());
 
-                Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem().toString());
+                Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem()
+                        .toString());
 
                 action = new SceneAction(-1, currentApartment.getName(), selectedScene);
             }
@@ -605,14 +624,11 @@ public abstract class AddActionDialog extends DialogFragment {
         }
 
         if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-            if (spinner_room.getSelectedItem() == null
-                    || spinner_receiver.getSelectedItem() == null
-                    || spinner_button.getSelectedItem() == null) {
+            if (spinner_room.getSelectedItem() == null || spinner_receiver.getSelectedItem() == null || spinner_button.getSelectedItem() == null) {
                 return false;
             }
         } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-            if (spinner_room.getSelectedItem() == null
-                    || spinner_button.getSelectedItem() == null) {
+            if (spinner_room.getSelectedItem() == null || spinner_button.getSelectedItem() == null) {
                 return false;
             }
         } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
@@ -639,11 +655,15 @@ public abstract class AddActionDialog extends DialogFragment {
     private void setPositiveButtonVisibility(boolean visibility) {
         if (dialog != null) {
             if (visibility) {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(defaultTextColor);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(defaultTextColor);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(true);
             } else {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(Color.GRAY);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(false);
             }
         }
     }

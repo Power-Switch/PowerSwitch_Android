@@ -25,15 +25,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -45,16 +43,18 @@ import eu.power_switch.shared.log.Log;
 /**
  * Dialog to rename a Backup
  */
-public class EditBackupDialog extends DialogFragment {
+public class EditBackupDialog extends ButterKnifeDialogFragment {
 
     public static final String NAME_KEY = "name";
+
+    @BindView(R.id.editText_backup_name)
+    EditText name;
 
     private boolean modified = false;
 
     private Dialog dialog;
-    private int defaultTextColor;
-    private View rootView;
-    private EditText name;
+    private int    defaultTextColor;
+
 
     public static EditBackupDialog newInstance(String backupName) {
         Bundle args = new Bundle();
@@ -68,18 +68,15 @@ public class EditBackupDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        super.onCreateDialog(savedInstanceState);
 
-        Bundle roomData = getArguments();
+        Bundle       roomData   = getArguments();
         final String backupName = roomData.getString(NAME_KEY);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        rootView = inflater.inflate(R.layout.dialog_edit_backup, null);
         builder.setView(rootView);
 
         // restore name
-        name = rootView.findViewById(R.id.editText_backup_name);
         name.setText(backupName);
         name.addTextChangedListener(new TextWatcher() {
 
@@ -104,18 +101,18 @@ public class EditBackupDialog extends DialogFragment {
                 if (modified) {
                     try {
                         BackupHandler backupHandler = new BackupHandler(getActivity());
-                        backupHandler.renameBackup(backupName, name.getText().toString().trim());
+                        backupHandler.renameBackup(backupName,
+                                name.getText()
+                                        .toString()
+                                        .trim());
                         BackupFragment.sendBackupsChangedBroadcast(getActivity());
-                        StatusMessageHandler.showInfoMessage(getTargetFragment()
-                                , R.string.backup_saved, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
                     } catch (BackupAlreadyExistsException e) {
                         Log.e(e);
-                        StatusMessageHandler.showInfoMessage(getTargetFragment()
-                                , R.string.backup_already_exists, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
                     } catch (BackupNotFoundException e) {
                         Log.e(e);
-                        StatusMessageHandler.showInfoMessage(getTargetFragment()
-                                , R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
                     }
                 }
             }
@@ -125,23 +122,34 @@ public class EditBackupDialog extends DialogFragment {
 
         dialog = builder.create();
         dialog.setCanceledOnTouchOutside(false); // prevent close dialog on touch outside window
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialog.getWindow()
+                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         dialog.show();
 
-        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).getTextColors()
+        defaultTextColor = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                .getTextColors()
                 .getDefaultColor();
 
         return dialog;
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.dialog_edit_backup;
+    }
+
     private void setPositiveButtonVisibility(boolean visibility) {
         if (dialog != null) {
             if (visibility) {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(defaultTextColor);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(true);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(defaultTextColor);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(true);
             } else {
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.GRAY);
-                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setClickable(false);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setTextColor(Color.GRAY);
+                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                        .setClickable(false);
             }
         }
     }

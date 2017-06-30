@@ -37,9 +37,8 @@ import butterknife.Unbinder;
  */
 public abstract class ButterKnifeFragment extends Fragment {
 
-    protected View rootView;
-
-    private Unbinder unbinder;
+    protected View     rootView;
+    private   Unbinder unbinder;
 
     @Nullable
     @Override
