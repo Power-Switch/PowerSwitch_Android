@@ -25,7 +25,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
@@ -159,7 +158,6 @@ public class IabHelper {
      * Returns a human-readable description for the given response code.
      *
      * @param code The response code
-     *
      * @return A human-readable string explaining the result code.
      * It also includes the result code numerically.
      */
@@ -420,7 +418,6 @@ public class IabHelper {
      * @param requestCode The requestCode as you received it.
      * @param resultCode  The resultCode as you received it.
      * @param data        The data (Intent) as you received it.
-     *
      * @return Returns true if the result was related to a purchase flow and was handled;
      * false if the result was not related to a purchase, in which case you should
      * handle it normally.
@@ -534,7 +531,6 @@ public class IabHelper {
      *                        Ignored if null or if querySkuDetails is false.
      * @param moreSubsSkus    additional SUBSCRIPTIONS skus to query information on, regardless of ownership.
      *                        Ignored if null or if querySkuDetails is false.
-     *
      * @throws IabException if a problem occurs while refreshing the inventory.
      */
     public Inventory queryInventory(boolean querySkuDetails, List<String> moreItemSkus, List<String> moreSubsSkus) throws IabException {
@@ -588,7 +584,6 @@ public class IabHelper {
      * @param listener        The listener to notify when the refresh operation completes.
      */
     public void queryInventoryAsync(final boolean querySkuDetails, final List<String> moreSkus, final QueryInventoryFinishedListener listener) {
-        Looper.prepare();
         final Handler handler = new Handler();
         checkNotDisposed();
         checkSetupDone("queryInventory");
@@ -633,7 +628,6 @@ public class IabHelper {
      * For that, see {@link #consumeAsync}.
      *
      * @param itemInfo The PurchaseInfo that represents the item to consume.
-     *
      * @throws IabException if there is a problem during consumption.
      */
     void consume(Purchase itemInfo) throws IabException {
@@ -778,9 +772,9 @@ public class IabHelper {
                 return IABHELPER_BAD_RESPONSE;
             }
 
-            ArrayList<String> ownedSkus        = ownedItems.getStringArrayList(RESPONSE_INAPP_ITEM_LIST);
+            ArrayList<String> ownedSkus = ownedItems.getStringArrayList(RESPONSE_INAPP_ITEM_LIST);
             ArrayList<String> purchaseDataList = ownedItems.getStringArrayList(RESPONSE_INAPP_PURCHASE_DATA_LIST);
-            ArrayList<String> signatureList    = ownedItems.getStringArrayList(RESPONSE_INAPP_SIGNATURE_LIST);
+            ArrayList<String> signatureList = ownedItems.getStringArrayList(RESPONSE_INAPP_SIGNATURE_LIST);
 
             for (int i = 0; i < purchaseDataList.size(); ++i) {
                 String purchaseData = purchaseDataList.get(i);
