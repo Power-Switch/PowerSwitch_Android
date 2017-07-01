@@ -37,8 +37,6 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 
-import org.apache.log4j.LogManager;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -206,7 +204,7 @@ public class PowerSwitch extends MultiDexApplication {
         };
 
 
-        // Log4JLog configuration and update widgets, wear, etc.
+        // Log configuration and update widgets, wear, etc.
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -274,8 +272,6 @@ public class PowerSwitch extends MultiDexApplication {
 
     @Override
     public void onTerminate() {
-        LogManager.shutdown();
-
         super.onTerminate();
     }
 

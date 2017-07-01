@@ -27,7 +27,7 @@ import java.util.Calendar;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log4JLog;
+import eu.power_switch.shared.log.LogHelper;
 import timber.log.Timber;
 
 /**
@@ -54,9 +54,7 @@ public class HistoryHelper {
 
     public static void add(Context context, Exception e) throws Exception {
         DatabaseHandler.addHistoryItem(new HistoryItem((long) -1,
-                Calendar.getInstance(),
-                context.getString(R.string.unknown_error),
-                Log4JLog.getStackTraceText(e)));
+                Calendar.getInstance(), context.getString(R.string.unknown_error), LogHelper.getStackTraceText(e)));
         sendHistoryChangedBroadcast(context);
     }
 }

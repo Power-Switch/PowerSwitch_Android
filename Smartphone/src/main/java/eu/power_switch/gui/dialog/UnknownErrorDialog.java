@@ -35,7 +35,6 @@ import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
-import eu.power_switch.shared.log.Log4JLog;
 import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
@@ -118,13 +117,13 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_TEXT, Log4JLog.getStackTraceText(throwable));
+                    intent.putExtra(Intent.EXTRA_TEXT, LogHelper.getStackTraceText(throwable));
                     intent.setType("text/plain");
                     startActivity(Intent.createChooser(intent, getString(R.string.send_to)));
                 }
             });
 
-            textViewErrorDescription.setText(Log4JLog.getStackTraceText(throwable));
+            textViewErrorDescription.setText(LogHelper.getStackTraceText(throwable));
 
             if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
                 textView_automaticCrashReportingEnabledInfo.setVisibility(View.VISIBLE);

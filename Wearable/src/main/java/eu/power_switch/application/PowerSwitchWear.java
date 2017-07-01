@@ -63,6 +63,10 @@ public class PowerSwitchWear extends Application {
     public void onCreate() {
         super.onCreate();
 
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+
         // Configure Fabric
         Fabric.with(this,
                 new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG) // disable Crashlytics on debug builds

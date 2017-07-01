@@ -23,7 +23,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
@@ -174,7 +176,7 @@ public class LogHelper {
             content += "\n";
             content += "Exception stacktrace:\n";
             content += "\n";
-            content += Log4JLog.getStackTraceText(throwable) + "\n";
+            content += getStackTraceText(throwable) + "\n";
         }
 
         Intent emailIntent = new Intent();
@@ -268,5 +270,48 @@ public class LogHelper {
         return stringBuilder.toString();
     }
 
+    /**
+     * Returns a human readable String containing the stacktrace of a throwable
+     *
+     * @param throwable throwable
+     *
+     * @return StackTrace string
+     */
+    @NonNull
+    public static String getStackTraceText(@Nullable Throwable throwable) {
+        return android.util.Log.getStackTraceString(throwable);
+    }
+
+
+    /**
+     * Intent to string
+     *
+     * @param intent
+     *
+     * @return
+     */
+    public static String getIntentDescription(Intent intent) {
+        String log = "Action: ";
+        log += intent.getAction();
+        log += "( ";
+        if (intent.getData() != null) {
+            log += intent.getData()
+                    .getScheme();
+            log += "://";
+            log += intent.getData()
+                    .getHost();
+        }
+        log += " ) ";
+        Bundle extras = intent.getExtras();
+        log += "{ ";
+        if (extras != null) {
+            for (String extra : extras.keySet()) {
+                log += extra + "[" + extras.get(extra) + "], ";
+            }
+        }
+        log += " }";
+
+        return log;
+    }
 
 }
