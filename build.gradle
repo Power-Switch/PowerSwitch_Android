@@ -48,5 +48,5 @@ ext {
     buildToolsVersion = "26.0.0"
 
     supportLibVersion = "25.4.0"
-    playServicesVersion = "11.0.1"
+    playServicesVersion = "11.0.2"
 }
