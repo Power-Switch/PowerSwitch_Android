@@ -41,6 +41,7 @@ public abstract class ConfigurationDialogPage extends ButterKnifeFragment {
     protected ConfigurationDialogTabbed configurationDialogTabbed;
 
     @BindView(R.id.contentView)
+    @Nullable
     View contentView;
 
     /**
