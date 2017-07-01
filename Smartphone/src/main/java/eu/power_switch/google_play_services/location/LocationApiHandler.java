@@ -37,7 +37,7 @@ import com.google.android.gms.location.LocationServices;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Class used to access device Location using Google Location API
@@ -62,20 +62,20 @@ public class LocationApiHandler {
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(@Nullable Bundle bundle) {
-                        Log.d("GoogleApiClient connected");
+                        Timber.d("GoogleApiClient connected");
                         isGoogleApiConnected = true;
                     }
 
                     @Override
                     public void onConnectionSuspended(int i) {
-                        Log.d("GoogleApiClient connection suspended");
+                        Timber.d("GoogleApiClient connection suspended");
                         isGoogleApiConnected = false;
                     }
                 })
                 .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.e("GoogleApiClient connection failed");
+                        Timber.e("GoogleApiClient connection failed");
                         isGoogleApiConnected = false;
                     }
                 })
@@ -89,7 +89,7 @@ public class LocationApiHandler {
             // Provide an additional rationale to the user if the permission was not granted
             // and the user would benefit from additional context for the use of the permission.
             // For example if the user has previously denied the permission.
-            Log.d("Displaying location permission rationale to provide additional context.");
+            Timber.d("Displaying location permission rationale to provide additional context.");
 
             StatusMessageHandler.showInfoMessage(activity, R.string.missing_location_permission, android.R.string.ok, new Runnable() {
                 @Override
@@ -99,7 +99,7 @@ public class LocationApiHandler {
                 }
             }, Snackbar.LENGTH_INDEFINITE);
         } else {
-            Log.d("Displaying default location permission dialog to request permission");
+            Timber.d("Displaying default location permission dialog to request permission");
             ActivityCompat.requestPermissions(activity, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION}, PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION);
         }

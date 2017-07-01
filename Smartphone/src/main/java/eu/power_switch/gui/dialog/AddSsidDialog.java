@@ -55,7 +55,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to create a new Room
@@ -119,7 +119,7 @@ public class AddSsidDialog extends ButterKnifeSupportDialogFragment {
                 } catch (SecurityException e) {
                     StatusMessageHandler.showInfoToast(getContext(), getString(R.string.missing_location_permission), Toast.LENGTH_LONG);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
 
                 layoutLoading.setVisibility(View.GONE);

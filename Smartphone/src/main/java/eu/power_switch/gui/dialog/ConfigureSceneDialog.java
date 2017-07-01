@@ -34,9 +34,9 @@ import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Name;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2Setup;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
+import timber.log.Timber;
 
 /**
  * Dialog to create or modify a Scene
@@ -63,7 +63,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening " + getClass().getSimpleName() + "...");
+        Timber.d("Opening " + getClass().getSimpleName() + "...");
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        Log.d("Saving scene");
+        Timber.d("Saving scene");
         super.saveCurrentConfigurationToDatabase();
     }
 

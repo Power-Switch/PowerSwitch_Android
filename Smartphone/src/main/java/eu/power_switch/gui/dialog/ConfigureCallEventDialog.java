@@ -36,7 +36,7 @@ import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialo
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3Summary;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to create or modify a Call Event
@@ -63,7 +63,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening " + getClass().getSimpleName() + "...");
+        Timber.d("Opening " + getClass().getSimpleName() + "...");
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        Log.d(this, "Saving call event");
+        Timber.d("Saving call event");
         super.saveCurrentConfigurationToDatabase();
     }
 

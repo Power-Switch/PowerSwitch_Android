@@ -37,8 +37,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ApiConstants;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
+import timber.log.Timber;
 
 /**
  * BroadcastReceiver for action API via Intents
@@ -47,13 +46,11 @@ public class IntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogHandler.init(context);
-
-        Log.d(this, intent);
+        Timber.d("Received intent: ", intent);
 
         try {
             if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
-                Log.d("IntentReceiver", "appwidget update");
+                Timber.d("IntentReceiver", "appwidget update");
             } else if (ApiConstants.UNIVERSAL_ACTION_INTENT.equals(intent.getAction())) {
                 parseActionIntent(context, intent);
             } else if (ApiConstants.intent_switch_on.equals(intent.getAction())
@@ -62,10 +59,10 @@ public class IntentReceiver extends BroadcastReceiver {
                     || ApiConstants.intent_room_off.equals(intent.getAction())) {
                 parseActionIntentOld(context, intent);
             } else {
-                Log.d("Received unknown intent: " + intent.getAction());
+                Timber.d("Received unknown intent: " + intent.getAction());
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -120,10 +117,10 @@ public class IntentReceiver extends BroadcastReceiver {
                 Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG).show();
             }
         } catch (NoSuchElementException e) {
-            Log.e(this, e);
+            Timber.e(e);
             Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG).show();
         } catch (Exception e) {
-            Log.e("Error parsing intent!", e);
+            Timber.e("Error parsing intent!", e);
             Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
         }
     }
@@ -150,7 +147,7 @@ public class IntentReceiver extends BroadcastReceiver {
                     if (extras.containsKey("Switch")) {
                         String switchProperties = extras.getString("Switch");
                         try {
-                            Log.d("IntentReceiver", "Switch: " + switchProperties);
+                            Timber.d("IntentReceiver", "Switch: " + switchProperties);
 
                             start = switchProperties.indexOf("room:") + 5;
                             end = switchProperties.indexOf(";switch");
@@ -173,7 +170,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
                             ActionHandler.execute(context, receiver, button);
                         } catch (Exception e) {
-                            Log.e("invalid intent string: " + switchProperties + "\n", e);
+                            Timber.e("invalid intent string: " + switchProperties + "\n", e);
                             Toast.makeText(context,
                                     "PowerSwitch - Error: invalid intent string: " + switchProperties,
                                     Toast.LENGTH_LONG).show();
@@ -184,7 +181,7 @@ public class IntentReceiver extends BroadcastReceiver {
                     if (extras.containsKey("Room")) {
                         String roomProperties = extras.getString("Room");
                         try {
-                            Log.d("IntentReceiver", "Room: " + roomProperties);
+                            Timber.d("IntentReceiver", "Room: " + roomProperties);
 
                             start = 0;
                             end = roomProperties.indexOf(";;");
@@ -201,7 +198,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
                             ActionHandler.execute(context, room, buttonName);
                         } catch (Exception e) {
-                            Log.e("invalid intent string" + "\n", e);
+                            Timber.e("invalid intent string" + "\n", e);
                             Toast.makeText(context,
                                     "PowerSwitch - Error: invalid intent string: " + roomProperties,
                                     Toast.LENGTH_LONG).show();
@@ -212,7 +209,7 @@ public class IntentReceiver extends BroadcastReceiver {
                 }
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
         }
     }

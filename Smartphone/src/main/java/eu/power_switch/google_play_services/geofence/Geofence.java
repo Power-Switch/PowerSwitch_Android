@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.log.LogHelper;
 
 /**
  * Internal representation of a Geofence
@@ -252,11 +252,12 @@ public class Geofence {
         for (EventType eventType : actionsMap.keySet()) {
             eventActions.append("EventType: ").append(eventType.toString()).append(" {\n");
             for (Action action : actionsMap.get(eventType)) {
-                eventActions.append(LogHandler.addIndentation(action.toString())).append("\n");
+                eventActions.append(LogHelper.addIndentation(action.toString()))
+                        .append("\n");
             }
             eventActions.append("}\n");
         }
-        stringBuilder.append(LogHandler.addIndentation(eventActions.toString()));
+        stringBuilder.append(LogHelper.addIndentation(eventActions.toString()));
 
         stringBuilder.append("\n}");
         return stringBuilder.toString();

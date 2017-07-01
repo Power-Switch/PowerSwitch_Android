@@ -35,9 +35,9 @@ import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 31.07.2016.
@@ -68,7 +68,7 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 updateUI();
             }

@@ -28,7 +28,7 @@ import java.util.List;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.phone.call.CallEventActionTable;
 import eu.power_switch.shared.constants.PhoneConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 12.04.2016.
@@ -52,7 +52,7 @@ abstract class CallEventActionHandler {
      */
     protected static void add(List<Action> actions, long callEventId, PhoneConstants.CallType callType) throws Exception {
         if (actions == null) {
-            Log.w("actions was null! nothing added to database");
+            Timber.w("actions was null! nothing added to database");
             return;
         }
 

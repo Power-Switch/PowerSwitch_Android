@@ -59,7 +59,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.TutorialConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -295,7 +295,7 @@ public class NfcFragment extends ButterKnifeFragment {
                 updateRoomList();
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -547,7 +547,7 @@ public class NfcFragment extends ButterKnifeFragment {
             return DatabaseHandler.getApartment(spinner_apartment.getSelectedItem()
                     .toString());
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         return null;
@@ -596,11 +596,11 @@ public class NfcFragment extends ButterKnifeFragment {
 
         try {
             if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem()
+                Timber.d(spinner_room.getSelectedItem()
                         .toString());
-                Log.d(spinner_receiver.getSelectedItem()
+                Timber.d(spinner_receiver.getSelectedItem()
                         .toString());
-                Log.d(spinner_button.getSelectedItem()
+                Timber.d(spinner_button.getSelectedItem()
                         .toString());
 
                 Room selectedRoom = getSelectedRoom();
@@ -617,9 +617,9 @@ public class NfcFragment extends ButterKnifeFragment {
 
                 action = new ReceiverAction(-1, currentApartment.getName(), selectedRoom, selectedReceiver, selectedButton);
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem()
+                Timber.d(spinner_room.getSelectedItem()
                         .toString());
-                Log.d(spinner_button.getSelectedItem()
+                Timber.d(spinner_button.getSelectedItem()
                         .toString());
 
                 Room selectedRoom = getSelectedRoom();
@@ -630,7 +630,7 @@ public class NfcFragment extends ButterKnifeFragment {
                         spinner_button.getSelectedItem()
                                 .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-                Log.d(spinner_scene.getSelectedItem()
+                Timber.d(spinner_scene.getSelectedItem()
                         .toString());
 
                 Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem()

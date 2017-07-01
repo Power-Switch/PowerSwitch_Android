@@ -50,8 +50,8 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
+import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -74,7 +74,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
      * @param context any suitable context
      */
     public static void sendTimersChangedBroadcast(Context context) {
-        Log.d("TimersFragment", "sendTimersChangedBroadcast");
+        Timber.d("TimersFragment", "sendTimersChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
 
         LocalBroadcastManager.getInstance(context)
@@ -132,7 +132,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("TimersFragment", "received intent: " + intent.getAction());
+                Timber.d("TimersFragment", "received intent: " + intent.getAction());
                 updateUI();
             }
         };
@@ -159,7 +159,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
     }
 
     private void updateUI() {
-        Log.d("TimersFragment", "updateUI");
+        Timber.d("TimersFragment", "updateUI");
         updateListContent();
     }
 

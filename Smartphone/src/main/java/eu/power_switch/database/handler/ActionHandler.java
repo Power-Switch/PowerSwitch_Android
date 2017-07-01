@@ -42,7 +42,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Provides database methods for managing Actions
@@ -139,7 +139,7 @@ abstract class ActionHandler {
      * @param receiverId ID of Receiver
      */
     protected static void deleteByReceiverId(@NonNull Long receiverId) throws Exception {
-        Log.d(TimerActionHandler.class, "Delete TimerActions by ReceiverId: " + receiverId);
+        Timber.d("Delete TimerActions by ReceiverId: " + receiverId);
         String[] columns = {ReceiverActionTable.COLUMN_ID, ReceiverActionTable.COLUMN_ACTION_ID};
         Cursor cursor = DatabaseHandler.database.query(ReceiverActionTable.TABLE_NAME, columns,
                 ReceiverActionTable.COLUMN_RECEIVER_ID + "=" + receiverId, null, null, null, null);
@@ -277,7 +277,7 @@ abstract class ActionHandler {
             cursor1.close();
             return new SceneAction(actionId, apartmentName, scene);
         } else {
-            Log.e("Unknown ActionType!");
+            Timber.e("Unknown ActionType!");
             throw new RuntimeException("Unknown ActionType: " + actionType);
         }
     }

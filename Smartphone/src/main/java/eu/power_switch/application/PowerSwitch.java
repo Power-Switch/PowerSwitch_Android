@@ -54,8 +54,8 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.application.ApplicationHelper;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.log.LogHelper;
+import eu.power_switch.shared.log.TimberHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.timer.Timer;
@@ -64,6 +64,7 @@ import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 /**
  * Entry Point for the Application
@@ -84,7 +85,7 @@ public class PowerSwitch extends MultiDexApplication {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, final Throwable throwable) {
-                Log.e("FATAL EXCEPTION", throwable);
+                Timber.e("FATAL EXCEPTION", throwable);
 
                 try {
                     if (isUIThread()) {
@@ -98,7 +99,7 @@ public class PowerSwitch extends MultiDexApplication {
                         });
                     }
                 } catch (Exception e) {
-                    Log.e("Error showing \"Unknown Error\" AlertDialog", e);
+                    Timber.e("Error showing \"Unknown Error\" AlertDialog", e);
                 }
 
                 // not possible without killing all app processes, including the UnkownErrorDialog!?
@@ -150,21 +151,23 @@ public class PowerSwitch extends MultiDexApplication {
 
         // needs to be initialized before logging framework is up to get settings for that
         SmartphonePreferencesHandler.init(this);
-        LogHandler.init(this);
 
         // Configure Log4J Logger
+        boolean internalFileLoggingOnly;
         if (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION).equals(Integer.valueOf(getString(R.string.value_internal)))) {
-            LogHandler.configureInternalLogger();
+            internalFileLoggingOnly = true;
         } else {
-            LogHandler.configureLogger();
+            internalFileLoggingOnly = false;
         }
 
-        Log.d("Application init...");
-        Log.d("App version: " + ApplicationHelper.getAppVersionDescription(this));
-        Log.d("App build time: " + getAppBuildTime());
-        Log.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
-        Log.d("Device OS Version name: " + Build.VERSION.RELEASE);
-        Log.d("Device brand/model: " + LogHandler.getDeviceName());
+        TimberHelper.plantTrees(this, BuildConfig.DEBUG, internalFileLoggingOnly);
+
+        Timber.d("Application init...");
+        Timber.d("App version: " + ApplicationHelper.getAppVersionDescription(this));
+        Timber.d("App build time: " + getAppBuildTime());
+        Timber.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
+        Timber.d("Device OS Version name: " + Build.VERSION.RELEASE);
+        Timber.d("Device brand/model: " + LogHelper.getDeviceName());
 
         // Onetime initialization of handlers for static access
         DatabaseHandler.init(this);
@@ -203,7 +206,7 @@ public class PowerSwitch extends MultiDexApplication {
         };
 
 
-        // Log configuration and update widgets, wear, etc.
+        // Log4JLog configuration and update widgets, wear, etc.
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -218,9 +221,9 @@ public class PowerSwitch extends MultiDexApplication {
                     if (!PermissionHelper.isLocationPermissionAvailable(getApplicationContext())) {
                         try {
                             DatabaseHandler.disableGeofences();
-                            Log.d("Disabled all Geofences because of missing location permission");
+                            Timber.d("Disabled all Geofences because of missing location permission");
                         } catch (Exception e) {
-                            Log.e(e);
+                            Timber.e(e);
                         }
                     }
 
@@ -235,7 +238,7 @@ public class PowerSwitch extends MultiDexApplication {
                     // update scene widgets
                     SceneWidgetProvider.forceWidgetUpdate(getApplicationContext());
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
 
                 try {
@@ -246,22 +249,22 @@ public class PowerSwitch extends MultiDexApplication {
 //                    mHandler.obtainMessage(0, "Logging database...").sendToTarget();
 
                     for (Apartment apartment : DatabaseHandler.getAllApartments()) {
-                        Log.d(apartment.toString());
+                        Timber.d(apartment.toString());
                     }
 
                     for (Timer timer : DatabaseHandler.getAllTimers()) {
-                        Log.d(timer.toString());
+                        Timber.d(timer.toString());
                     }
 
                     for (Geofence geofence : DatabaseHandler.getAllGeofences()) {
-                        Log.d(geofence.toString());
+                        Timber.d(geofence.toString());
                     }
 
                     for (Gateway gateway : DatabaseHandler.getAllGateways()) {
-                        Log.d(gateway.toString() + "\n");
+                        Timber.d(gateway.toString() + "\n");
                     }
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
 
                 return null;

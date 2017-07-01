@@ -27,7 +27,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 public class UniversalReceiver extends Receiver {
 
@@ -50,7 +50,7 @@ public class UniversalReceiver extends Receiver {
 
             throw new ActionNotSupportedException(action);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             return null;
         }
     }

@@ -24,46 +24,39 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.crashlytics.android.Crashlytics;
-
 import org.apache.log4j.Logger;
-
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Common Logger Class used by all classes in this application
  * <p/>
- * Be careful to import the correct "Log" class when using.
+ * Be careful to import the correct "Log4JLog" class when using.
  * <p/>
  * Created by Markus on 11.08.2015.
  */
-public class Log {
+public class Log4JLog {
 
-    private static final Logger LOGGER = Logger.getLogger("Log");
+    private static final Logger LOGGER = Logger.getLogger("Log4JLog");
 
     /**
      * Private Constructor
      *
      * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
-    private Log() {
+    private Log4JLog() {
         throw new UnsupportedOperationException("This class is non-instantiable");
     }
 
     /**
-     * Log Debug
+     * Log4JLog Debug
      *
      * @param message any text message
      */
     public static void d(@Nullable String message) {
         LOGGER.debug(message);
-        if (Fabric.isInitialized()) {
-            Crashlytics.log(message);
-        }
     }
 
     /**
-     * Log Debug
+     * Log4JLog Debug
      *
      * @param source any object
      */
@@ -85,13 +78,10 @@ public class Log {
         }
 
         LOGGER.debug(logMessage.toString());
-        if (Fabric.isInitialized()) {
-            Crashlytics.log(logMessage.toString());
-        }
     }
 
     /**
-     * Log Debug
+     * Log4JLog Debug
      *
      * @param source  a source object
      * @param message any object used as description
@@ -125,9 +115,6 @@ public class Log {
         }
 
         LOGGER.debug(logMessage.toString());
-        if (Fabric.isInitialized()) {
-            Crashlytics.log(logMessage.toString());
-        }
     }
 
     private static String getIntentDescription(Intent intent) {
@@ -155,33 +142,27 @@ public class Log {
     }
 
     /**
-     * Log Error
+     * Log4JLog Error
      *
      * @param message any text message
      */
     public static void e(@Nullable String message) {
         LOGGER.error(message);
-        if (Fabric.isInitialized()) {
-            Crashlytics.log(message);
-        }
     }
 
     /**
-     * Log Error
+     * Log4JLog Error
      *
      * @param throwable any throwable
      */
     public static void e(@Nullable Throwable throwable) {
         if (throwable != null) {
             LOGGER.error("Error", throwable);
-            if (Fabric.isInitialized()) {
-                Crashlytics.logException(throwable);
-            }
         }
     }
 
     /**
-     * Log Error
+     * Log4JLog Error
      *
      * @param source  source of log message
      * @param message any text message
@@ -207,13 +188,10 @@ public class Log {
 
         logMessage.append(message);
         LOGGER.error(logMessage.toString());
-        if (Fabric.isInitialized()) {
-            Crashlytics.log(logMessage.toString());
-        }
     }
 
     /**
-     * Log Error
+     * Log4JLog Error
      *
      * @param source    source of log message
      * @param throwable any throwable
@@ -238,13 +216,10 @@ public class Log {
         }
 
         LOGGER.error(logMessage, throwable);
-        if (Fabric.isInitialized()) {
-            Crashlytics.logException(throwable);
-        }
     }
 
     /**
-     * Log Error
+     * Log4JLog Error
      *
      * @param message   any text message
      * @param throwable any throwable
@@ -252,27 +227,18 @@ public class Log {
     public static void e(@Nullable String message, @Nullable Throwable throwable) {
         if (throwable != null) {
             LOGGER.error(message, throwable);
-            if (Fabric.isInitialized()) {
-                Crashlytics.logException(throwable);
-            }
         } else {
             LOGGER.error(message);
-            if (Fabric.isInitialized()) {
-                Crashlytics.log(message);
-            }
         }
     }
 
     /**
-     * Log Warn
+     * Log4JLog Warn
      *
      * @param message any text message
      */
     public static void w(@Nullable String message) {
         LOGGER.warn(message);
-        if (Fabric.isInitialized()) {
-            Crashlytics.log(message);
-        }
     }
 
     /**

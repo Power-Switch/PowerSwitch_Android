@@ -61,7 +61,7 @@ import eu.power_switch.gui.map.MapViewHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.location.CoordinatesNotFoundException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * "Location" Fragment used in Configure Geofence Dialog
@@ -286,7 +286,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                 }
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -342,7 +342,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(final LatLng latLng) {
-                Log.d(latLng.toString());
+                Timber.d(latLng.toString());
 
                 if (geofenceView == null) {
                     geofenceView = mapViewHandler.addGeofence(latLng, currentGeofenceRadius);
@@ -417,7 +417,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     mapViewHandler.moveCamera(getCurrentLocation(), 14, false);
                 }
             } catch (Exception e) {
-                Log.e(e);
+                Timber.e(e);
             }
         }
     }
@@ -434,7 +434,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     String address = mapViewHandler.findAddress(addresses[0]);
                     return new AsyncTaskResult<>(address);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                     return new AsyncTaskResult<>(e);
                 }
             }
@@ -461,11 +461,11 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
 
     @Override
     public void onMapLoaded() {
-        Log.d("Map fully loaded");
+        Timber.d("Map fully loaded");
         mapViewHandler.takeSnapshot(new GoogleMap.SnapshotReadyCallback() {
             @Override
             public void onSnapshotReady(Bitmap bitmap) {
-                Log.d("Snapshot Ready");
+                Timber.d("Snapshot Ready");
                 currentSnapshot = bitmap;
 
                 try {
@@ -475,7 +475,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                         sendSetupGeofenceChangedBroadcast(getContext(), name, getCurrentLocation(), currentGeofenceRadius, currentSnapshot);
                     }
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
             }
         });

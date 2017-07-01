@@ -62,10 +62,10 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.wizard.gui.WizardActivity;
+import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -74,30 +74,30 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private IntListPreference startupDefaultTab;
-    private SwitchPreference autodiscover;
-    private SwitchPreference autoCollapseRooms;
-    private SwitchPreference autoCollapseTimers;
-    private SwitchPreference showRoomOnOff;
-    private SwitchPreference hideFab;
-    private SwitchPreference highlightLastActivatedButton;
-    private SwitchPreference showBackgroundActionToast;
-    private SwitchPreference vibrateOnButtonPress;
-    private SliderPreference vibrationDuration;
-    private SwitchPreference showGeofenceNotifications;
-    private SwitchPreference showTimerNotifications;
+    private SwitchPreference  autodiscover;
+    private SwitchPreference  autoCollapseRooms;
+    private SwitchPreference  autoCollapseTimers;
+    private SwitchPreference  showRoomOnOff;
+    private SwitchPreference  hideFab;
+    private SwitchPreference  highlightLastActivatedButton;
+    private SwitchPreference  showBackgroundActionToast;
+    private SwitchPreference  vibrateOnButtonPress;
+    private SliderPreference  vibrationDuration;
+    private SwitchPreference  showGeofenceNotifications;
+    private SwitchPreference  showTimerNotifications;
     private IntListPreference keepHistoryDuration;
-    private Preference backupPath;
+    private Preference        backupPath;
     private IntListPreference theme;
     private IntListPreference launcherIcon;
-    private Preference resetTutorial;
-    private Preference relaunchWizard;
-    private SwitchPreference sendAnonymousCrashData;
+    private Preference        resetTutorial;
+    private Preference        relaunchWizard;
+    private SwitchPreference  sendAnonymousCrashData;
     private IntListPreference logDestination;
-    private Preference sendLogsEmail;
+    private Preference        sendLogsEmail;
 
-    private BroadcastReceiver broadcastReceiver;
-    private Calendar devMenuFirstClickTime;
-    private int devMenuClickCounter;
+    private BroadcastReceiver    broadcastReceiver;
+    private Calendar             devMenuFirstClickTime;
+    private int                  devMenuClickCounter;
     private Map<Integer, String> mainTabsMap;
     private Map<Integer, String> keepHistoryMap;
     private Map<Integer, String> themeMap;
@@ -119,7 +119,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 if (LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED.equals(intent.getAction())) {
                     backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
@@ -287,7 +287,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
                                     @Override
                                     protected AsyncTaskResult<Boolean> doInBackground(Void... params) {
                                         try {
-                                            LogHandler.sendLogsAsMail();
+                                            LogHelper.sendLogsAsMail(getActivity());
                                             return new AsyncTaskResult<>(true);
                                         } catch (Exception e) {
                                             return new AsyncTaskResult<>(e);
@@ -388,7 +388,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         Map<Integer, String> map = new HashMap<>();
 
         String[] values = getResources().getStringArray(valueRes);
-        String[] names = getResources().getStringArray(nameRes);
+        String[] names  = getResources().getStringArray(nameRes);
 
         for (int i = 0; i < values.length; i++) {
             map.put(Integer.valueOf(values[i]), names[i]);

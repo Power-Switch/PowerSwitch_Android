@@ -36,7 +36,7 @@ import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1Tim
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2Days;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3Action;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4TabbedSummary;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to create or modify a Timer
@@ -63,7 +63,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening " + getClass().getSimpleName() + "...");
+        Timber.d("Opening " + getClass().getSimpleName() + "...");
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        Log.d("Saving timer");
+        Timber.d("Saving timer");
         super.saveCurrentConfigurationToDatabase();
     }
 

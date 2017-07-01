@@ -44,7 +44,7 @@ import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.obj.sensor.Sensor;
 import eu.power_switch.shared.constants.DatabaseConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Class to handle all network related actions such as sending button actions and searching for gateways
@@ -93,7 +93,7 @@ public abstract class NetworkHandler {
             e.printStackTrace();
         }
 
-        Log.d("isInternetConnected: " + isInternetconnected);
+        Timber.d("isInternetConnected: " + isInternetconnected);
         return isInternetconnected;
     }
 
@@ -108,7 +108,7 @@ public abstract class NetworkHandler {
 
         boolean isWifiConnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_WIFI == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isWifiConnected: " + isWifiConnected);
+        Timber.d("isWifiConnected: " + isWifiConnected);
         return isWifiConnected;
     }
 
@@ -123,7 +123,7 @@ public abstract class NetworkHandler {
 
         boolean isEthernetConnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_ETHERNET == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isEthernetConnected: " + isEthernetConnected);
+        Timber.d("isEthernetConnected: " + isEthernetConnected);
         return isEthernetConnected;
     }
 
@@ -138,7 +138,7 @@ public abstract class NetworkHandler {
 
         boolean isGprsConnected = (networkInfo != null &&
                 ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
-        Log.d("isGprsConnected: " + isGprsConnected);
+        Timber.d("isGprsConnected: " + isGprsConnected);
         return isGprsConnected;
     }
 
@@ -152,7 +152,7 @@ public abstract class NetworkHandler {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         boolean isNetworkConnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
-        Log.d("isNetworkConnected: " + isNetworkConnected);
+        Timber.d("isNetworkConnected: " + isNetworkConnected);
         return isNetworkConnected;
     }
 
@@ -172,7 +172,7 @@ public abstract class NetworkHandler {
                 ssid = ssid.substring(1, ssid.length() - 1);
             }
 
-            Log.d("connected SSID: " + ssid);
+            Timber.d("connected SSID: " + ssid);
             return ssid;
         } else {
             return "";
@@ -220,7 +220,7 @@ public abstract class NetworkHandler {
     @WorkerThread
     public static List<Gateway> searchGateways() {
         List<Gateway> foundGateways = new ArrayList<>();
-        Log.d("NetworkManager", "searchGateways");
+        Timber.d("NetworkManager", "searchGateways");
 
         synchronized (lockObject) {
             try {
@@ -235,7 +235,7 @@ public abstract class NetworkHandler {
                     foundGateways.add(newGateway);
                 }
             } catch (Exception e) {
-                Log.e(e);
+                Timber.e(e);
             }
         }
 
@@ -251,7 +251,7 @@ public abstract class NetworkHandler {
      */
 
     private static Gateway parseMessageToGateway(String message) {
-        Log.d("parsing Gateway Message: " + message);
+        Timber.d("parsing Gateway Message: " + message);
 
         int start;
         int end;
@@ -269,7 +269,7 @@ public abstract class NetworkHandler {
                     end = message.indexOf(";MC");
                     brand = message.substring(start, end);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                     e.printStackTrace();
                 }
 
@@ -279,7 +279,7 @@ public abstract class NetworkHandler {
                     end = message.indexOf(";FW");
                     model = message.substring(start, end);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                     e.printStackTrace();
                 }
 
@@ -289,7 +289,7 @@ public abstract class NetworkHandler {
                     end = message.indexOf(";IP");
                     firmware = message.substring(start, end);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                     e.printStackTrace();
                 }
                 try {
@@ -298,7 +298,7 @@ public abstract class NetworkHandler {
                     end = message.indexOf(";;");
                     host = message.substring(start, end);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                     e.printStackTrace();
                 }
 
@@ -330,7 +330,7 @@ public abstract class NetworkHandler {
             }
             return null;
         } catch (Exception e) {
-            Log.e("Error parsing Gateway AutoDiscover message: " + message, e);
+            Timber.e("Error parsing Gateway AutoDiscover message: " + message, e);
             return null;
         }
     }

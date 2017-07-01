@@ -30,7 +30,7 @@ import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Provides database methods for managing SceneItems
@@ -136,7 +136,7 @@ abstract class SceneItemHandler {
      * @param sceneItemId ID of SceneItem
      */
     protected static void delete(Long sceneItemId) throws Exception {
-        Log.d(SceneItemHandler.class, "Delete SceneItem by Id: " + sceneItemId);
+        Timber.d("Delete SceneItem by Id: " + sceneItemId);
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_ID + "=" + sceneItemId, null);
     }
 
@@ -146,7 +146,7 @@ abstract class SceneItemHandler {
      * @param receiverId ID of Receiver
      */
     protected static void deleteByReceiverId(Long receiverId) throws Exception {
-        Log.d(SceneItemHandler.class, "Delete SceneItem by ReceiverId: " + receiverId);
+        Timber.d("Delete SceneItem by ReceiverId: " + receiverId);
         DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
 

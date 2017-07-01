@@ -36,7 +36,7 @@ import java.util.Set;
 import eu.power_switch.R;
 import eu.power_switch.gui.animation.ActionResponse;
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 03.06.2015.
@@ -74,10 +74,10 @@ public class MessageApiHandler {
                                 public void onResult(MessageApi.SendMessageResult sendMessageResult) {
                                     if (!sendMessageResult.getStatus().isSuccess()) {
                                         // Failed to send message
-                                        Log.e("", "Failed to send Message");
+                                        Timber.e("Failed to send Message");
                                         ActionResponse.showFailureAnimation(context, R.string.unknown_error);
                                     } else {
-                                        Log.d("", "Message sent");
+                                        Timber.d("", "Message sent");
                                         ActionResponse.showSuccessAnimation(context);
                                     }
                                 }
@@ -85,7 +85,7 @@ public class MessageApiHandler {
                     );
                 } else {
                     // Unable to retrieve node with transcription capability
-                    Log.d("", "Unable to retrieve node with transcription capability");
+                    Timber.d("", "Unable to retrieve node with transcription capability");
                     ActionResponse.showFailureAnimation(context, R.string.smartphone_not_connected);
                 }
             }
@@ -105,17 +105,17 @@ public class MessageApiHandler {
                         public void onResult(MessageApi.SendMessageResult sendMessageResult) {
                             if (!sendMessageResult.getStatus().isSuccess()) {
                                 // Failed to send message
-                                Log.e("", "Failed to send Message");
+                                Timber.e("Failed to send Message");
                                 Toast.makeText(context, "Failed to send Message", Toast.LENGTH_LONG).show();
                             } else {
-                                Log.d("", "Message sent");
+                                Timber.d("", "Message sent");
                             }
                         }
                     }
             );
         } else {
             // Unable to retrieve node with transcription capability
-            Log.d("", "Unable to retrieve node with transcription capability");
+            Timber.d("", "Unable to retrieve node with transcription capability");
             ActionResponse.showFailureAnimation(context, R.string.smartphone_not_connected);
 //            Toast.makeText(context.getApplicationContext(), R.string.smartphone_not_connected, Toast.LENGTH_LONG)
 //                    .show();

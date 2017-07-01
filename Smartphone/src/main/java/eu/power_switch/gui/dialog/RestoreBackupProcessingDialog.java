@@ -30,8 +30,8 @@ import eu.power_switch.backup.OnZipProgressChangedListener;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import timber.log.Timber;
 
 /**
  * Dialog to restore a Backup
@@ -95,7 +95,7 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
                     // restart app to apply
                     PowerSwitch.restart(getActivity().getApplicationContext());
                 } else {
-                    Log.e(RestoreBackupProcessingDialog.class, voidAsyncTaskResult.getException());
+                    Timber.e(voidAsyncTaskResult.getException());
                     onFinishedFailure(voidAsyncTaskResult.getException());
                 }
             }

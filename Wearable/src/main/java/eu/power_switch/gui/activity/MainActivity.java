@@ -56,8 +56,8 @@ import eu.power_switch.network.service.ListenerService;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import timber.log.Timber;
 
 /**
  * Main Activity holding all app related views
@@ -104,7 +104,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("MainActivity", "received intent: " + intent.getAction());
+                Timber.d("MainActivity", "received intent: " + intent.getAction());
 
                 if (ListenerService.DATA_UPDATED.equals(intent.getAction())) {
                     apartmentName = intent.getStringExtra(ListenerService.KEY_APARTMENT_DATA);
@@ -143,11 +143,11 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 //        });
 
         // Main Wearable Drawer Layout that wraps all content
-        mWearableDrawerLayout = (WearableDrawerLayout) findViewById(R.id.drawer_layout);
-        contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        mWearableDrawerLayout = findViewById(R.id.drawer_layout);
+        contentFrameLayout = findViewById(R.id.content_frame);
 
         // Top Navigation Drawer
-        mWearableNavigationDrawer = (WearableNavigationDrawer) findViewById(R.id.top_navigation_drawer);
+        mWearableNavigationDrawer = findViewById(R.id.top_navigation_drawer);
         NavigationDrawerAdapter navigationDrawerAdapter = new NavigationDrawerAdapter(this);
         mWearableNavigationDrawer.setAdapter(navigationDrawerAdapter);
 
@@ -171,8 +171,8 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 //        mWearableDrawerLayout.peekDrawer(Gravity.BOTTOM);
 
         // Status layout
-        relativeLayoutStatus = (RelativeLayout) findViewById(R.id.relativeLayout_status);
-        textViewStatus = (TextView) findViewById(R.id.textView_Status);
+        relativeLayoutStatus = findViewById(R.id.relativeLayout_status);
+        textViewStatus = findViewById(R.id.textView_Status);
 
         // Get Room/Receiver/Button/Scene configuration from Smartphone App
         new FetchDataAsyncTask().execute();
@@ -188,12 +188,12 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 //            } else {
 //                // No explanation needed, we can request the permission.
 
-            Log.d("Write external storage permission is missing, asking for it...");
+            Timber.d("Write external storage permission is missing, asking for it...");
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
 //            }
         } else {
-            Log.d("Write external storage permission already granted");
+            Timber.d("Write external storage permission already granted");
         }
     }
 
@@ -205,9 +205,9 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    Log.d("Write external storage permission GRANTED");
+                    Timber.d("Write external storage permission GRANTED");
                 } else {
-                    Log.d("Write external storage permission DENIED");
+                    Timber.d("Write external storage permission DENIED");
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }

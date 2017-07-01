@@ -48,7 +48,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Abstract class defining a configuration Dialog with multiple tabs
@@ -311,7 +311,7 @@ public abstract class ConfigurationDialogTabbed extends ButterKnifeSupportDialog
             ConfigurationDialogTabbedSummaryFragment setupFragment    = customTabAdapter.getSummaryFragment();
             return setupFragment.checkSetupValidity();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             return false;
         }
     }
@@ -349,7 +349,7 @@ public abstract class ConfigurationDialogTabbed extends ButterKnifeSupportDialog
         try {
             setSaveButtonState(isValid());
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 

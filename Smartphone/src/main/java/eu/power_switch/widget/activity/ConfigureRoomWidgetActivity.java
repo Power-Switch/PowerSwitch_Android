@@ -42,9 +42,9 @@ import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
+import timber.log.Timber;
 
 /**
  * Configuration Activity for Room widgets
@@ -72,7 +72,6 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(this);
         super.onCreate(savedInstanceState);
 
         adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
@@ -125,7 +124,7 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
 
             spinnerRoom.setSelection(0);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         adapterRooms.notifyDataSetChanged();
@@ -181,7 +180,7 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
                 try {
                     DatabaseHandler.addRoomWidget(roomWidget);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
 
                 // When the configuration is complete, get an instance of

@@ -57,7 +57,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Fragment containing all settings related to Gateways
@@ -75,7 +75,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     private ArrayList<Gateway> gateways = new ArrayList<>();
 
     public static void sendGatewaysChangedBroadcast(Context context) {
-        Log.d(GatewaySettingsFragment.class, "sendGatewaysChangedBroadcast");
+        Timber.d("sendGatewaysChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
 
         LocalBroadcastManager.getInstance(context)
@@ -201,7 +201,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
                     sendGatewaysChangedBroadcast(recyclerViewFragment.getContext());
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
 
                 return null;

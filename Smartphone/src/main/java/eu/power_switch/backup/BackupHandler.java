@@ -43,7 +43,7 @@ import eu.power_switch.shared.exception.backup.BackupNotFoundException;
 import eu.power_switch.shared.exception.backup.CreateBackupException;
 import eu.power_switch.shared.exception.backup.RemoveBackupException;
 import eu.power_switch.shared.exception.backup.RestoreBackupException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Database Handler to access/modify Backups stored on device or external storage
@@ -170,7 +170,7 @@ public class BackupHandler {
                             throw new CreateBackupException("Error deleting existing Backup");
                         }
                     } catch (Exception e) {
-                        Log.e(e);
+                        Timber.e(e);
                         throw new CreateBackupException(e);
                     }
                 } else {
@@ -185,7 +185,7 @@ public class BackupHandler {
                         onZipProgressChangedListener,
                         context.getFilesDir().getParent());
             } catch (Exception e) {
-                Log.e(e);
+                Timber.e(e);
                 throw new CreateBackupException(e);
             }
         }
@@ -213,7 +213,7 @@ public class BackupHandler {
                 throw new BackupNotFoundException();
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw new RemoveBackupException(e);
         }
     }
@@ -263,7 +263,7 @@ public class BackupHandler {
                     BACKUP_PASSWORD,
                     onZipProgressChangedListener);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw new RestoreBackupException(e);
         }
     }

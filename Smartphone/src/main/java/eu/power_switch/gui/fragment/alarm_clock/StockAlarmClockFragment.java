@@ -62,7 +62,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.AlarmClockConstants.Event;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Fragment containing all settings related to stock alarm clock event handling
@@ -159,7 +159,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 if (LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED.equals(intent.getAction())) {
                     updateUI();

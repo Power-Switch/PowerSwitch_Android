@@ -34,8 +34,8 @@ import eu.power_switch.gui.WearableThemeHelper;
 import eu.power_switch.gui.adapter.ValueSelectorListAdapter;
 import eu.power_switch.network.service.UtilityService;
 import eu.power_switch.settings.SelectOneSettingsItem;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import timber.log.Timber;
 
 /**
  * Activity used to select a value out of a collection of values
@@ -92,7 +92,7 @@ public class ValueSelectorActivity<T> extends WearableActivity {
                 T                                       value  = values.get(viewHolder.getAdapterPosition());
 
                 selectOneSettingsItem.setValue(holder.getAdapterPosition());
-                Log.d("selected value: " + value);
+                Timber.d("selected value: " + value);
 
                 listAdapter.notifyDataSetChanged();
                 UtilityService.forceWearSettingsUpdate(getApplicationContext());

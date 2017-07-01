@@ -61,8 +61,8 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * Fragment containing a List of all Apartment related Geofences
@@ -161,7 +161,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 switch (intent.getAction()) {
                     case LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED:
@@ -205,7 +205,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     }
 
     private void refreshGeofences() {
-        Log.d(this, "refreshGeofences");
+        Timber.d("refreshGeofences");
         updateListContent();
     }
 
@@ -238,7 +238,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
                         return true;
                     }
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
 
                 SelectApartmentForGeofenceDialog selectApartmentForGeofenceDialog = new SelectApartmentForGeofenceDialog();

@@ -36,7 +36,7 @@ import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage3;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage4Summary;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to edit a Gateway
@@ -61,7 +61,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening " + getClass().getSimpleName() + "...");
+        Timber.d("Opening " + getClass().getSimpleName() + "...");
     }
 
     @Override

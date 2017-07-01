@@ -45,11 +45,11 @@ import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.SceneWidget;
+import timber.log.Timber;
 
 /**
  * This class handles all database related operations used anywhere in the app.
@@ -107,7 +107,7 @@ public final class DatabaseHandler {
             // dont init again
             return;
         }
-        Log.d(DatabaseHandler.class, "Init Database Handler...");
+        Timber.d("Init Database Handler...");
 
         lock = new ReentrantLock();
 
@@ -123,7 +123,7 @@ public final class DatabaseHandler {
         try {
             database = dbHelper.getReadableDatabase();
         } catch (Exception e) {
-            Log.e("Error getting read-only Database", e);
+            Timber.e("Error getting read-only Database", e);
             lock.unlock();
             throw e;
         }
@@ -138,7 +138,7 @@ public final class DatabaseHandler {
             database = dbHelper.getWritableDatabase();
             database.beginTransaction();
         } catch (Exception e) {
-            Log.e("Error getting writable Database", e);
+            Timber.e("Error getting writable Database", e);
             lock.unlock();
             throw e;
         }
@@ -156,7 +156,7 @@ public final class DatabaseHandler {
                 dbHelper.close();
             }
         } catch (Exception e) {
-            Log.e("Error closing Database", e);
+            Timber.e("Error closing Database", e);
         } finally {
             lock.unlock();
         }
@@ -182,7 +182,7 @@ public final class DatabaseHandler {
             id = ApartmentHandler.add(apartment);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -203,7 +203,7 @@ public final class DatabaseHandler {
             ApartmentHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -222,7 +222,7 @@ public final class DatabaseHandler {
             ApartmentHandler.update(apartment);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -243,7 +243,7 @@ public final class DatabaseHandler {
         try {
             apartment = ApartmentHandler.get(name);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -265,7 +265,7 @@ public final class DatabaseHandler {
         try {
             apartment = ApartmentHandler.getCaseInsensitive(name);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -287,7 +287,7 @@ public final class DatabaseHandler {
         try {
             apartment = ApartmentHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -309,7 +309,7 @@ public final class DatabaseHandler {
         try {
             apartmentId = ApartmentHandler.getId(name);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -331,7 +331,7 @@ public final class DatabaseHandler {
         try {
             apartmentName = ApartmentHandler.getName(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -353,7 +353,7 @@ public final class DatabaseHandler {
         try {
             apartmentNames = ApartmentHandler.getAllNames();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -375,7 +375,7 @@ public final class DatabaseHandler {
         try {
             apartments = ApartmentHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -397,7 +397,7 @@ public final class DatabaseHandler {
         try {
             apartments = ApartmentHandler.getAssociated(gatewayId);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -419,7 +419,7 @@ public final class DatabaseHandler {
         try {
             apartment = ApartmentHandler.get(receiver);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -441,7 +441,7 @@ public final class DatabaseHandler {
         try {
             apartment = ApartmentHandler.get(room);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -463,7 +463,7 @@ public final class DatabaseHandler {
         try {
             apartment = ApartmentHandler.get(scene);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -493,7 +493,7 @@ public final class DatabaseHandler {
             id = RoomHandler.add(room);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -515,7 +515,7 @@ public final class DatabaseHandler {
             RoomHandler.update(id, newName, associatedGateways);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -535,7 +535,7 @@ public final class DatabaseHandler {
             RoomHandler.updateCollapsed(id, isCollapsed);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -555,7 +555,7 @@ public final class DatabaseHandler {
             RoomHandler.setPosition(roomId, position);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -574,7 +574,7 @@ public final class DatabaseHandler {
             RoomHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -595,7 +595,7 @@ public final class DatabaseHandler {
         try {
             room = RoomHandler.get(name);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -617,7 +617,7 @@ public final class DatabaseHandler {
         try {
             room = RoomHandler.getCaseInsensitive(name);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -639,7 +639,7 @@ public final class DatabaseHandler {
         try {
             room = RoomHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -660,7 +660,7 @@ public final class DatabaseHandler {
         try {
             rooms = RoomHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -681,7 +681,7 @@ public final class DatabaseHandler {
         try {
             rooms = RoomHandler.getByApartment(apartmentId);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -702,7 +702,7 @@ public final class DatabaseHandler {
         try {
             roomIds = RoomHandler.getIdsByApartment(apartmentId);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -730,7 +730,7 @@ public final class DatabaseHandler {
             ReceiverHandler.add(receiver);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -749,7 +749,7 @@ public final class DatabaseHandler {
             ReceiverHandler.update(receiver);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -770,7 +770,7 @@ public final class DatabaseHandler {
         try {
             receiver = ReceiverHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -792,7 +792,7 @@ public final class DatabaseHandler {
         try {
             receivers = ReceiverHandler.getByRoom(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -815,7 +815,7 @@ public final class DatabaseHandler {
         try {
             receiver = ReceiverHandler.getByRoom(roomId, receiverName);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -836,7 +836,7 @@ public final class DatabaseHandler {
             ReceiverHandler.setPositionInRoom(receiverId, position);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -856,7 +856,7 @@ public final class DatabaseHandler {
         try {
             receivers = ReceiverHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -876,7 +876,7 @@ public final class DatabaseHandler {
             ReceiverHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -897,7 +897,7 @@ public final class DatabaseHandler {
         try {
             button = UniversalButtonHandler.getUniversalButton(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -919,7 +919,7 @@ public final class DatabaseHandler {
         try {
             buttons = UniversalButtonHandler.getUniversalButtons(receiverId);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -940,7 +940,7 @@ public final class DatabaseHandler {
             ReceiverHandler.setLastActivatedButtonId(receiverId, buttonId);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -967,7 +967,7 @@ public final class DatabaseHandler {
             SceneHandler.add(scene);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -986,7 +986,7 @@ public final class DatabaseHandler {
             SceneHandler.update(scene);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1005,7 +1005,7 @@ public final class DatabaseHandler {
             SceneHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1026,7 +1026,7 @@ public final class DatabaseHandler {
         try {
             scene = SceneHandler.get(name);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1048,7 +1048,7 @@ public final class DatabaseHandler {
         try {
             scene = SceneHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1069,7 +1069,7 @@ public final class DatabaseHandler {
         try {
             scenes = SceneHandler.getByApartment(apartmentId);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1090,7 +1090,7 @@ public final class DatabaseHandler {
         try {
             scenes = SceneHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1123,7 +1123,7 @@ public final class DatabaseHandler {
         } catch (GatewayAlreadyExistsException e) {
             throw e;
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1143,7 +1143,7 @@ public final class DatabaseHandler {
             GatewayHandler.enable(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1162,7 +1162,7 @@ public final class DatabaseHandler {
             GatewayHandler.disable(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1187,7 +1187,7 @@ public final class DatabaseHandler {
             GatewayHandler.update(id, name, model, localAddress, localPort, wanAddress, wanPort, ssids);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1206,7 +1206,7 @@ public final class DatabaseHandler {
             GatewayHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1227,7 +1227,7 @@ public final class DatabaseHandler {
         try {
             gateway = GatewayHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1248,7 +1248,7 @@ public final class DatabaseHandler {
         try {
             gateways = GatewayHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1270,7 +1270,7 @@ public final class DatabaseHandler {
         try {
             gateways = GatewayHandler.getAll(isActive);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1291,7 +1291,7 @@ public final class DatabaseHandler {
         try {
             isAssociatedWithApartment = GatewayHandler.isAssociatedWithAnyApartment(gateway.getId());
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1319,7 +1319,7 @@ public final class DatabaseHandler {
             WidgetHandler.addReceiverWidget(receiverWidget);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1338,7 +1338,7 @@ public final class DatabaseHandler {
             WidgetHandler.deleteReceiverWidget(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1358,7 +1358,7 @@ public final class DatabaseHandler {
         try {
             receiverWidget = WidgetHandler.getReceiverWidget(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1378,7 +1378,7 @@ public final class DatabaseHandler {
             WidgetHandler.addRoomWidget(roomWidget);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1397,7 +1397,7 @@ public final class DatabaseHandler {
             WidgetHandler.deleteRoomWidget(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1417,7 +1417,7 @@ public final class DatabaseHandler {
         try {
             roomWidget = WidgetHandler.getRoomWidget(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1437,7 +1437,7 @@ public final class DatabaseHandler {
             WidgetHandler.addSceneWidget(sceneWidget);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1456,7 +1456,7 @@ public final class DatabaseHandler {
             WidgetHandler.deleteSceneWidget(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1477,7 +1477,7 @@ public final class DatabaseHandler {
             sceneWidget = WidgetHandler.getSceneWidget(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1500,7 +1500,7 @@ public final class DatabaseHandler {
         try {
             timer = TimerHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1521,7 +1521,7 @@ public final class DatabaseHandler {
         try {
             timers = TimerHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1543,7 +1543,7 @@ public final class DatabaseHandler {
         try {
             timers = TimerHandler.getAll(isActive);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1564,7 +1564,7 @@ public final class DatabaseHandler {
             id = TimerHandler.add(timer);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1585,7 +1585,7 @@ public final class DatabaseHandler {
             TimerHandler.enable(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1604,7 +1604,7 @@ public final class DatabaseHandler {
             TimerHandler.disable(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1623,7 +1623,7 @@ public final class DatabaseHandler {
             TimerHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1642,7 +1642,7 @@ public final class DatabaseHandler {
             TimerHandler.update(timer);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1671,7 +1671,7 @@ public final class DatabaseHandler {
         try {
             actions = AlarmClockHandler.getAlarmActions(event);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1692,7 +1692,7 @@ public final class DatabaseHandler {
             AlarmClockHandler.setAlarmActions(event, actions);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1721,7 +1721,7 @@ public final class DatabaseHandler {
         try {
             actions = SleepAsAndroidHandler.getAlarmActions(event);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1742,7 +1742,7 @@ public final class DatabaseHandler {
             SleepAsAndroidHandler.setAlarmActions(event, actions);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1768,7 +1768,7 @@ public final class DatabaseHandler {
         try {
             historyItems = HistoryHandler.getHistory();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1786,7 +1786,7 @@ public final class DatabaseHandler {
             HistoryHandler.clear();
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1805,7 +1805,7 @@ public final class DatabaseHandler {
             HistoryHandler.add(historyItem);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1832,7 +1832,7 @@ public final class DatabaseHandler {
         try {
             geofence = GeofenceHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1853,7 +1853,7 @@ public final class DatabaseHandler {
         try {
             geofences = GeofenceHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1875,7 +1875,7 @@ public final class DatabaseHandler {
         try {
             geofences = GeofenceHandler.getAll(isActive);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1896,7 +1896,7 @@ public final class DatabaseHandler {
         try {
             geofences = GeofenceHandler.getCustom();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1918,7 +1918,7 @@ public final class DatabaseHandler {
             id = GeofenceHandler.add(geofence);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1938,7 +1938,7 @@ public final class DatabaseHandler {
             GeofenceHandler.update(geofence);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1957,7 +1957,7 @@ public final class DatabaseHandler {
             GeofenceHandler.enable(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1976,7 +1976,7 @@ public final class DatabaseHandler {
             GeofenceHandler.disable(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -1993,7 +1993,7 @@ public final class DatabaseHandler {
             GeofenceHandler.disableAll();
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2010,7 +2010,7 @@ public final class DatabaseHandler {
             GeofenceHandler.updateState(id, state);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2029,7 +2029,7 @@ public final class DatabaseHandler {
             GeofenceHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2056,7 +2056,7 @@ public final class DatabaseHandler {
         try {
             callEvent = CallEventHandler.get(id);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2076,7 +2076,7 @@ public final class DatabaseHandler {
         try {
             callEvents = CallEventHandler.get(phoneNumber);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2096,7 +2096,7 @@ public final class DatabaseHandler {
         try {
             callEvents = CallEventHandler.getAll();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2118,7 +2118,7 @@ public final class DatabaseHandler {
             id = CallEventHandler.add(callEvent);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2138,7 +2138,7 @@ public final class DatabaseHandler {
             CallEventHandler.delete(id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();
@@ -2157,7 +2157,7 @@ public final class DatabaseHandler {
             CallEventHandler.update(callEvent);
             database.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             throw e;
         } finally {
             close();

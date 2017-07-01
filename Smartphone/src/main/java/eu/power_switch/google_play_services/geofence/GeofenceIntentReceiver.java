@@ -26,8 +26,7 @@ import android.os.Bundle;
 import java.util.List;
 
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
+import timber.log.Timber;
 
 /**
  * Geofence IntentReceiver used to reinitialize Geofences after device reboot
@@ -38,8 +37,6 @@ public class GeofenceIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogHandler.init(context);
-
         try {
             String log = "onReceive: Action: ";
             log += intent.getAction();
@@ -58,21 +55,21 @@ public class GeofenceIntentReceiver extends BroadcastReceiver {
                 }
             }
             log += " }";
-            Log.d("AlarmIntentReceiver", log);
+            Timber.d("AlarmIntentReceiver", log);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         try {
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 // restart all active geofences because device rebooted
-                Log.d(this, "restarting all active geofences because device rebooted...");
+                Timber.d("restarting all active geofences because device rebooted...");
                 reinitializeGeofences(context);
             } else {
-                Log.d(this, "Received unknown intent: " + intent.getAction());
+                Timber.d("Received unknown intent: " + intent.getAction());
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -90,7 +87,7 @@ public class GeofenceIntentReceiver extends BroadcastReceiver {
                         geofenceApiHandler.addGeofence(geofence);
                     }
                 } catch (Exception e) {
-                    Log.e(GeofenceIntentReceiver.class, e);
+                    Timber.e(e);
                 }
             }
         }).start();

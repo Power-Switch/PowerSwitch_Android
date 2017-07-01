@@ -52,8 +52,8 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * Fragment holding the Sms Event list
@@ -113,7 +113,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 switch (intent.getAction()) {
                     case LocalBroadcastConstants.INTENT_SMS_EVENTS_CHANGED:
@@ -163,7 +163,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
     }
 
     private void refreshSmsEvents() {
-        Log.d(this, "refreshSmsEvents");
+        Timber.d("refreshSmsEvents");
         updateListContent();
     }
 

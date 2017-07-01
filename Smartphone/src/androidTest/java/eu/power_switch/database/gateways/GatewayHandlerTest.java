@@ -2,7 +2,7 @@
 //
 //import android.test.IsolatedContext;
 //import android.test.suitebuilder.annotation.SmallTest;
-//import eu.power_switch.log.Log;
+//import eu.power_switch.log.Log4JLog;
 //import android.support.test.runnner.AndroidJUnit4;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@
 //        ConnAir gw = new ConnAir(0, true, "dummy", "firmware", "10.10.10.10", 1000);
 //        GatewayHandler handler = new GatewayHandler(context);
 //        long id = handler.add(gw);
-//        Log.d("GatewayHandlerTest", "Gateway ID:" + id);
+//        Log4JLog.d("GatewayHandlerTest", "Gateway ID:" + id);
 ////        Mockito.verify(gw).isActive();
 ////        Mockito.verify(gw).getName();
 ////        Mockito.verify(gw).getModelAsString();

@@ -47,8 +47,8 @@ import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.wearable.CommunicationHelper;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 06.06.2015.
@@ -70,7 +70,7 @@ public class UtilityService extends IntentService {
      * @param context any suitable context
      */
     public static void forceWearDataUpdate(Context context) {
-        Log.d("Updating Data for Wearable");
+        Timber.d("Updating Data for Wearable");
         Intent intent = new Intent(context, UtilityService.class);
         intent.setAction(WearableConstants.REQUEST_DATA_UPDATE_PATH);
         context.startService(intent);
@@ -82,7 +82,7 @@ public class UtilityService extends IntentService {
      * @param context any suitable context
      */
     public static void forceWearSettingsUpdate(Context context) {
-        Log.d("Updating Settings for Wearable");
+        Timber.d("Updating Settings for Wearable");
         Intent intent = new Intent(context, UtilityService.class);
         intent.setAction(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH);
         context.startService(intent);
@@ -180,12 +180,12 @@ public class UtilityService extends IntentService {
      */
     @Override
     synchronized protected void onHandleIntent(Intent intent) {
-        Log.d(this, intent);
+        Timber.d("Received intent: ", intent);
 
         try {
             // Get Room/Receiver/Scene Data from Database and send to wearable
             if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
-                Log.d("Getting Data from Database to send to Wearable...");
+                Timber.d("Getting Data from Database to send to Wearable...");
 
                 if (DeveloperPreferencesHandler.getPlayStoreMode()) {
                     PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
@@ -248,7 +248,7 @@ public class UtilityService extends IntentService {
      */
     private void sendDataToWearable(List<Apartment> apartments, List<Room> rooms, List<Receiver> receivers, List<Button> buttons,
                                     List<Scene> scenes) {
-        Log.d("Sending new Data to Wearable...");
+        Timber.d("Sending new Data to Wearable...");
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API)
                 .build();
 
@@ -292,18 +292,18 @@ public class UtilityService extends IntentService {
 
             if (!result.getStatus()
                     .isSuccess()) {
-                Log.e("",
+                Timber.e("",
                         String.format(Locale.getDefault(),
                                 "Error sending data using DataApi (error code = %d)",
                                 result.getStatus()
                                         .getStatusCode()));
             } else {
-                Log.d("Update data sent");
+                Timber.d("Update data sent");
             }
 
         } else {
             // GoogleApiClient connection error
-            Log.e("Error connecting GoogleApiClient");
+            Timber.e("Error connecting GoogleApiClient");
         }
     }
 
@@ -311,7 +311,7 @@ public class UtilityService extends IntentService {
      * Sends current Wearable Settings made in Smartphone app over to the Wearable companion app
      */
     private void sendSettingsToWearable() {
-        Log.d("Sending Settings to Wearable...");
+        Timber.d("Sending Settings to Wearable...");
         GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API)
                 .build();
 
@@ -336,18 +336,18 @@ public class UtilityService extends IntentService {
 
             if (!result.getStatus()
                     .isSuccess()) {
-                Log.e("",
+                Timber.e("",
                         String.format(Locale.getDefault(),
                                 "Error sending settings using DataApi (error code = %d)",
                                 result.getStatus()
                                         .getStatusCode()));
             } else {
-                Log.d("Updated settings sent");
+                Timber.d("Updated settings sent");
             }
 
         } else {
             // GoogleApiClient connection error
-            Log.e("Error connecting GoogleApiClient");
+            Timber.e("Error connecting GoogleApiClient");
         }
     }
 }

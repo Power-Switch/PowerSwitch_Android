@@ -28,7 +28,7 @@ import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Handler for History related Database actions
@@ -101,7 +101,7 @@ abstract class HistoryHandler {
                 calendar.add(Calendar.DAY_OF_YEAR, -14);
                 break;
             default:
-                Log.w("Unknown \"Keep History\" duration selection! Nothing will be deleted.");
+                Timber.w("Unknown \"Keep History\" duration selection! Nothing will be deleted.");
                 return;
         }
 

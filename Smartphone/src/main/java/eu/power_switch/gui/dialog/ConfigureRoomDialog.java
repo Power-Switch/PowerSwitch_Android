@@ -36,9 +36,9 @@ import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Summary;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
+import timber.log.Timber;
 
 /**
  * Dialog to configure a Room
@@ -63,7 +63,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening " + getClass().getSimpleName() + "...");
+        Timber.d("Opening " + getClass().getSimpleName() + "...");
     }
 
     @Override

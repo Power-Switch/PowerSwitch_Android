@@ -38,7 +38,7 @@ import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialog
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to configure (create/edit) an Apartment
@@ -88,7 +88,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        Log.d("Saving apartment");
+        Timber.d("Saving apartment");
         super.saveCurrentConfigurationToDatabase();
     }
 

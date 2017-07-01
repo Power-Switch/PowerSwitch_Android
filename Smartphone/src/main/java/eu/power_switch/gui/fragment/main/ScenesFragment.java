@@ -54,7 +54,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Fragment containing a List of all Scenes
@@ -74,7 +74,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
      * @param context any suitable context
      */
     public static void sendScenesChangedBroadcast(Context context) {
-        Log.d("ScenesFragment", "sendScenesChangedBroadcast");
+        Timber.d("ScenesFragment", "sendScenesChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(intent);
@@ -129,7 +129,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("ScenesFragment", "received intent: " + intent.getAction());
+                Timber.d("ScenesFragment", "received intent: " + intent.getAction());
                 updateUI();
             }
         };
@@ -145,7 +145,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     }
 
     private void updateUI() {
-        Log.d("ScenesFragment", "updateUI");
+        Timber.d("ScenesFragment", "updateUI");
         updateListContent();
     }
 

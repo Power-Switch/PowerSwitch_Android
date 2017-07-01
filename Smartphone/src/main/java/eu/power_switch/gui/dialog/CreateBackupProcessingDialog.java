@@ -28,7 +28,7 @@ import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.backup.OnZipProgressChangedListener;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to create a new Backup
@@ -86,7 +86,7 @@ public class CreateBackupProcessingDialog extends ProcessingDialog {
                 if (voidAsyncTaskResult.isSuccess()) {
                     onFinishedSuccess();
                 } else {
-                    Log.e(CreateBackupProcessingDialog.class, voidAsyncTaskResult.getException());
+                    Timber.e(voidAsyncTaskResult.getException());
                     onFinishedFailure(voidAsyncTaskResult.getException());
                 }
 

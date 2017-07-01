@@ -50,9 +50,9 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
+import timber.log.Timber;
 
 /**
  * Configuration Activity for Receiver widgets
@@ -80,7 +80,6 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(this);
         super.onCreate(savedInstanceState);
 
         adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
@@ -181,7 +180,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
             spinnerRoom.setSelection(0);
 
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         adapterRooms.notifyDataSetChanged();

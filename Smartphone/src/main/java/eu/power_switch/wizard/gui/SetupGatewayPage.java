@@ -42,8 +42,8 @@ import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.wizard.config.ConfigurationHolder;
+import timber.log.Timber;
 
 /**
  * Setup page for searching a Gateway
@@ -119,9 +119,9 @@ public class SetupGatewayPage extends ConfigurationPage {
                     try {
                         DatabaseHandler.addGateway(gateway);
                     } catch (GatewayAlreadyExistsException e) {
-                        Log.w("Wizard: ignoring found gateway that already exists in database");
+                        Timber.w("Wizard: ignoring found gateway that already exists in database");
                     } catch (Exception e) {
-                        Log.e(e);
+                        Timber.e(e);
                     }
                 }
 

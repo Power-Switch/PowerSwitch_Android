@@ -26,8 +26,8 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.shared.log.Log;
 import lombok.Data;
+import timber.log.Timber;
 
 /**
  * This class is a container for all values that are configured during the wizard configuration process.
@@ -54,7 +54,7 @@ public class ConfigurationHolder {
 //            DatabaseHandler.addGateway();
 
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 }

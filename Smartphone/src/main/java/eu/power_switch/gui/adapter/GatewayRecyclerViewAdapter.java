@@ -37,7 +37,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * * Adapter to visualize Gateway items in RecyclerView
@@ -89,7 +89,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                         }
                         gateway.setActive(isChecked);
                     } catch (Exception e) {
-                        Log.e(e);
+                        Timber.e(e);
                         StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, 5000);
                     }
                 }
@@ -100,7 +100,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
         try {
             isAssociatedWithApartment = DatabaseHandler.isAssociatedWithAnyApartment(gateway);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         holder.attention.setImageDrawable(IconicsHelper.getAttentionIcon(context));

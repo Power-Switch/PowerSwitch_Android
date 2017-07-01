@@ -28,10 +28,10 @@ import android.os.Build;
 import java.util.Calendar;
 
 import eu.power_switch.shared.constants.TimerConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
+import timber.log.Timber;
 
 /**
  * Class to handle Android Alarms
@@ -71,11 +71,11 @@ public abstract class AlarmHandler {
      * @param timer   Timer that this alarm will activate
      */
     public static void createAlarm(Context context, Timer timer) {
-        Log.d("AlarmHandler", "activating alarm of timer: " + timer.getId());
+        Timber.d("AlarmHandler", "activating alarm of timer: " + timer.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(context, timer), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.d("AlarmHandler", "intent: " + createAlarmIntent(context, timer));
-        Log.d("AlarmHandler",
+        Timber.d("AlarmHandler", "intent: " + createAlarmIntent(context, timer));
+        Timber.d("AlarmHandler",
                 "exactTime: " + timer.getExecutionTime()
                         .getTime()
                         .toLocaleString());
@@ -115,7 +115,7 @@ public abstract class AlarmHandler {
                     i++;
 
                     if (i > 100) {
-                        Log.e("AlarmHandler", "Endlosschleife beim finden der nächsten Alarmzeit!");
+                        Timber.e("AlarmHandler", "Endlosschleife beim finden der nächsten Alarmzeit!");
                         return;
                     }
                 } else {
@@ -123,7 +123,7 @@ public abstract class AlarmHandler {
                 }
             }
 
-            Log.d("AlarmHandler",
+            Timber.d("AlarmHandler",
                     "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime()
                             .toLocaleString());
 
@@ -134,7 +134,7 @@ public abstract class AlarmHandler {
             } else if (Build.VERSION.SDK_INT < 19) {
                 alarmMgr.set(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else {
-                Log.e("AlarmHandler", "Unknown SDK Version!");
+                Timber.e("AlarmHandler", "Unknown SDK Version!");
             }
         }
     }
@@ -164,7 +164,7 @@ public abstract class AlarmHandler {
                 nextExecutionTime.add(Calendar.MILLISECOND, (int) timer.getExecutionInterval());
             }
 
-            Log.d("AlarmHandler",
+            Timber.d("AlarmHandler",
                     "next exactExecutionTime(incl. randomizer): " + nextExecutionTime.getTime()
                             .toLocaleString());
 
@@ -175,7 +175,7 @@ public abstract class AlarmHandler {
             } else if (Build.VERSION.SDK_INT < 19) {
                 alarmMgr.set(AlarmManager.RTC_WAKEUP, nextExecutionTime.getTimeInMillis(), pendingIntent);
             } else {
-                Log.e("AlarmHandler", "Unknown SDK Version!");
+                Timber.e("AlarmHandler", "Unknown SDK Version!");
             }
         }
     }
@@ -187,12 +187,12 @@ public abstract class AlarmHandler {
      * @param timer   Timer that this alarm would activate
      */
     public static void cancelAlarm(Context context, Timer timer) {
-        Log.d("AlarmHandler", "cancelling alarm of timer: " + timer.getId());
+        Timber.d("AlarmHandler", "cancelling alarm of timer: " + timer.getId());
         AlarmManager  alarmMgr      = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(context, timer), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.d("AlarmHandler", "cancelling intent: " + createAlarmIntent(context, timer));
-        Log.d("AlarmHandler",
+        Timber.d("AlarmHandler", "cancelling intent: " + createAlarmIntent(context, timer));
+        Timber.d("AlarmHandler",
                 "cancelling time: " + timer.getExecutionTime()
                         .getTime()
                         .toLocaleString());

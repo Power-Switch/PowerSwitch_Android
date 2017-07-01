@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Receiver table description
@@ -103,8 +103,8 @@ public class ReceiverTable {
                         newClassName = className.replace("eu.power_switch.obj.device.", "eu.power_switch.obj.receiver.device.");
                     }
 
-                    Log.d("old className: " + className);
-                    Log.d("new className: " + newClassName);
+                    Timber.d("old className: " + className);
+                    Timber.d("new className: " + newClassName);
 
                     ContentValues values = new ContentValues();
                     values.put(COLUMN_CLASSNAME, newClassName);

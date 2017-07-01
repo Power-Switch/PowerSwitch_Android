@@ -39,7 +39,7 @@ import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Fragment holding all scenes
@@ -81,7 +81,7 @@ public class ScenesFragment extends Fragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 if (REFRESH_VIEW.equals(intent.getAction())) {
                     refreshUI();
@@ -91,12 +91,12 @@ public class ScenesFragment extends Fragment {
             }
         };
 
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        layoutLoading = rootView.findViewById(R.id.layoutLoading);
 
-        layoutEmpty = (LinearLayout) rootView.findViewById(R.id.layoutEmpty);
+        layoutEmpty = rootView.findViewById(R.id.layoutEmpty);
         layoutEmpty.setVisibility(View.GONE);
 
-        scenesRecyclerView = (RecyclerView) rootView.findViewById(R.id.scenes_recyclerView);
+        scenesRecyclerView = rootView.findViewById(R.id.scenes_recyclerView);
         sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(getActivity(), scenesRecyclerView, MainActivity.sceneList, dataApiHandler);
         scenesRecyclerView.setAdapter(sceneRecyclerViewAdapter);
 

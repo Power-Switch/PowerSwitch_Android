@@ -46,7 +46,7 @@ import eu.power_switch.gui.dialog.RestoreBackupFromFileActivity;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Adapter to visualize Backup items in RecyclerView
@@ -127,7 +127,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                             StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.backup_removed,
                                     Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
-                            Log.e(e);
+                            Timber.e(e);
                             StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                     R.string.backup_not_found,
                                     Snackbar.LENGTH_LONG);

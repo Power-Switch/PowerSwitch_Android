@@ -42,9 +42,9 @@ import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.SceneWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
+import timber.log.Timber;
 
 /**
  * Configuration Activity for Scene widgets
@@ -72,7 +72,6 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(this);
         super.onCreate(savedInstanceState);
 
         adapterApartments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, apartmentNameList);
@@ -179,7 +178,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
 
             spinnerScene.setSelection(0);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         adapterScenes.notifyDataSetChanged();
@@ -200,7 +199,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
                 try {
                     DatabaseHandler.addSceneWidget(sceneWidget);
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
                 }
 
                 // When the configuration is complete, get an instance of

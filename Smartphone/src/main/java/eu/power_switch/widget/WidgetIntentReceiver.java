@@ -36,7 +36,7 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.WidgetConstants;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Intent Receiver for Widgets
@@ -129,7 +129,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(this, intent);
+        Timber.d("Received intent: ", intent);
 
         try {
             if (intent.getAction()
@@ -141,10 +141,10 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
                 parseWidgetActionIntent(context, intent);
             } else {
-                Log.d("Received unknown intent: " + intent.getAction());
+                Timber.d("Received unknown intent: " + intent.getAction());
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -187,7 +187,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
                         .show();
             }
         } catch (Exception e) {
-            Log.e("Error parsing intent!", e);
+            Timber.e("Error parsing intent!", e);
             Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG)
                     .show();
         }

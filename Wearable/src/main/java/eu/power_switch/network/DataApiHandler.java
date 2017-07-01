@@ -41,8 +41,8 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.wearable.CommunicationHelper;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 03.06.2015.
@@ -78,14 +78,14 @@ public class DataApiHandler {
         googleApiClient = new GoogleApiClient.Builder(context).addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
             @Override
             public void onConnected(Bundle bundle) {
-                Log.d("", "googleApi connected");
+                Timber.d("", "googleApi connected");
                 googleApiClientIsConnected = true;
                 // now usable
             }
 
             @Override
             public void onConnectionSuspended(int i) {
-                Log.d("", "googleApi connection suspended");
+                Timber.d("", "googleApi connection suspended");
                 googleApiClientIsConnected = false;
                 // not usable anymore
             }
@@ -93,12 +93,12 @@ public class DataApiHandler {
                 .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(ConnectionResult connectionResult) {
-                        Log.d("", "googleApi connection FAILED!" + " Result: " + connectionResult);
+                        Timber.d("", "googleApi connection FAILED!" + " Result: " + connectionResult);
                         googleApiClientIsConnected = false;
 
                         if (connectionResult.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
                             // The Wearable API is unavailable
-                            Log.d("", "Wear API is unavailable!");
+                            Timber.d("", "Wear API is unavailable!");
                         }
                     }
                 })
@@ -112,10 +112,10 @@ public class DataApiHandler {
         ConnectionResult connectionResult = googleApiClient.blockingConnect(SettingsConstants.GOOGLE_API_CLIENT_TIMEOUT, TimeUnit.SECONDS);
 
         if (!connectionResult.isSuccess() || !googleApiClient.isConnected()) {
-            Log.e("FetchDataAsyncTask", String.format("Failed to connect to GoogleApiClient (error code = %d)", connectionResult.getErrorCode()));
+            Timber.e("FetchDataAsyncTask", String.format("Failed to connect to GoogleApiClient (error code = %d)", connectionResult.getErrorCode()));
             return false;
         }
-        Log.e("FetchDataAsyncTask", "GoogleApiClient connected using blocking connect method");
+        Timber.e("FetchDataAsyncTask", "GoogleApiClient connected using blocking connect method");
         return true;
     }
 
@@ -129,7 +129,7 @@ public class DataApiHandler {
             ActionResponse.showFailureAnimation(context, "GooglePlayServices not connected");
             return;
         }
-        Log.d("", "sending receiver trigger: " + actionString);
+        Timber.d("", "sending receiver trigger: " + actionString);
         messageApiHandler.sendAction(actionString);
     }
 
@@ -143,7 +143,7 @@ public class DataApiHandler {
             ActionResponse.showFailureAnimation(context, "GooglePlayServices not connected");
             return;
         }
-        Log.d("", "sending receiver trigger: " + actionString);
+        Timber.d("", "sending receiver trigger: " + actionString);
         messageApiHandler.sendAction(actionString);
     }
 
@@ -157,7 +157,7 @@ public class DataApiHandler {
             ActionResponse.showFailureAnimation(context, "GooglePlayServices not connected");
             return;
         }
-        Log.d("", "sending scene trigger: " + actionString);
+        Timber.d("", "sending scene trigger: " + actionString);
         messageApiHandler.sendAction(actionString);
     }
 
@@ -169,7 +169,7 @@ public class DataApiHandler {
             ActionResponse.showFailureAnimation(context, "GooglePlayServices not connected");
             return;
         }
-        Log.d("", "requesting data update");
+        Timber.d("", "requesting data update");
         messageApiHandler.sendUpdateRequest();
     }
 

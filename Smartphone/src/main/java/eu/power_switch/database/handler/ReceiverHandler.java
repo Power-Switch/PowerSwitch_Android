@@ -34,7 +34,7 @@ import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Provides database methods for managing Receivers of any type
@@ -227,7 +227,7 @@ abstract class ReceiverHandler {
      * @param id ID of Receiver
      */
     protected static void delete(Long id) throws Exception {
-        Log.d(ReceiverHandler.class, "Delete Receiver: " + id);
+        Timber.d("Delete Receiver: " + id);
         // CAREFUL ABOUT DELETE ORDER, SOME THINGS DEPEND ON EXISTING DATA
         // delete depending things first!
 

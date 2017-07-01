@@ -50,7 +50,7 @@ import eu.power_switch.gui.treeview.FolderTreeNodeViewHolder;
 import eu.power_switch.gui.treeview.TreeItemFolder;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog used to select a Path on SDCard
@@ -79,7 +79,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
      * @param context any suitable context
      */
     public static void sendBackupPathChangedBroadcast(Context context) {
-        Log.d(PathChooserDialog.class, "sendBackupPathChangedBroadcast");
+        Timber.d("sendBackupPathChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED);
 
         LocalBroadcastManager.getInstance(context)

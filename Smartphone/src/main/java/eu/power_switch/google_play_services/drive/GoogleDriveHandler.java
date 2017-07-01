@@ -29,7 +29,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.drive.Drive;
 
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 11.09.2016.
@@ -65,18 +65,18 @@ public class GoogleDriveHandler implements GoogleApiClient.ConnectionCallbacks, 
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(GoogleDriveHandler.class, "Connection established");
+        Timber.d("Connection established");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d(GoogleDriveHandler.class, "Connection suspended");
+        Timber.d("Connection suspended");
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult result) {
         // Called whenever the API client fails to connect.
-        Log.d(GoogleDriveHandler.class, "Connection failed: " + result.toString());
+        Timber.d("Connection failed: " + result.toString());
         if (!result.hasResolution()) {
             // show the localized error dialog.
             GoogleApiAvailability.getInstance().getErrorDialog(activity, result.getErrorCode(), 0).show();
@@ -89,7 +89,7 @@ public class GoogleDriveHandler implements GoogleApiClient.ConnectionCallbacks, 
         try {
             result.startResolutionForResult(activity, REQUEST_CODE_RESOLUTION);
         } catch (IntentSender.SendIntentException e) {
-            Log.e("Exception while starting resolution activity", e);
+            Timber.e("Exception while starting resolution activity", e);
         }
     }
 }

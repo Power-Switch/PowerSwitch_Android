@@ -29,7 +29,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Small Activity that handles opening PowerSwitch backup files from outside of the app
@@ -64,10 +64,10 @@ public class RestoreBackupFromFileActivity extends ButterKnifeDialogActivity {
         setTitle(R.string.are_you_sure);
 
         Intent intent = getIntent();
-        Log.d(intent);
+        Timber.d("Intent: ", intent);
 
         final Uri fileUri = intent.getData();
-        Log.d("Uri: " + String.valueOf(fileUri));
+        Timber.d("Uri: " + String.valueOf(fileUri));
 
         if (fileUri == null) {
             Toast.makeText(getApplicationContext(), R.string.unknown_error, Toast.LENGTH_LONG)

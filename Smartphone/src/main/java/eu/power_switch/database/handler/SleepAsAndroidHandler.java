@@ -27,7 +27,7 @@ import java.util.List;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Provides database methods for managing Sleep As Android related Actions
@@ -71,7 +71,7 @@ abstract class SleepAsAndroidHandler {
 
     private static void addAlarmActions(SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
         if (actions == null) {
-            Log.w("actions was null! nothing added to database");
+            Timber.w("actions was null! nothing added to database");
             return;
         }
 

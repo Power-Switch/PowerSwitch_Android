@@ -65,7 +65,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Tasker Plugin Configuration Activity
@@ -630,7 +630,7 @@ public class EditActivity extends AbstractPluginActivity {
             updateRoomList();
             updateSceneList();
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -644,7 +644,7 @@ public class EditActivity extends AbstractPluginActivity {
 
             spinner_scene.setSelection(0);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         Collections.sort(sceneNames, compareToIgnoreCase);
@@ -661,7 +661,7 @@ public class EditActivity extends AbstractPluginActivity {
 
             spinner_room.setSelection(0);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         Collections.sort(roomNames, compareToIgnoreCase);
@@ -682,7 +682,7 @@ public class EditActivity extends AbstractPluginActivity {
                 spinner_receiver.setSelection(0);
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         Collections.sort(receiverNames, compareToIgnoreCase);
@@ -703,7 +703,7 @@ public class EditActivity extends AbstractPluginActivity {
 
             spinner_button.setSelection(0);
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         Collections.sort(buttonNames, compareToIgnoreCase);
@@ -801,7 +801,7 @@ public class EditActivity extends AbstractPluginActivity {
                 return false;
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             return false;
         }
     }

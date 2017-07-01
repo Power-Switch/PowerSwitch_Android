@@ -25,7 +25,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Helper class for Sleep As Android specific tasks
@@ -57,7 +57,7 @@ public class SleepAsAndroidHelper {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             return false;
         }
     }

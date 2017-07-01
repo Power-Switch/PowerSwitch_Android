@@ -36,7 +36,7 @@ import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveReceiver {
 
@@ -200,7 +200,7 @@ public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveRec
                 master = h + h + h + h;
                 break;
             default:
-                Log.e("Switch", "No Matching Master");
+                Timber.e("Switch", "No Matching Master");
                 break;
         }
 
@@ -256,7 +256,7 @@ public class IT1500 extends Receiver implements AutoPairReceiver, MasterSlaveRec
                 slave = h + h + h + h;
                 break;
             default:
-                Log.e("Switch", "No Matching Slave");
+                Timber.e("Switch", "No Matching Slave");
                 break;
         }
 

@@ -38,8 +38,8 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * * Adapter to visualize Geofence items in RecyclerView
@@ -109,7 +109,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                         }
                         geofence.setActive(isChecked);
                     } catch (Exception e) {
-                        Log.e(e);
+                        Timber.e(e);
                         StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_geofence, 5000);
                     }
                 }

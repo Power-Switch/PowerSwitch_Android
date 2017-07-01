@@ -26,7 +26,7 @@ import eu.power_switch.network.UdpNetworkPackage;
 import eu.power_switch.obj.HeatingControl;
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * ELV FHT80B-2/3 Heating Control
@@ -86,6 +86,6 @@ public class FHT80B extends Communicator implements HeatingControl {
 
     @Override
     public void receiveResponse(String key, String message) {
-        Log.d("received response: ", message);
+        Timber.d("received response: ", message);
     }
 }

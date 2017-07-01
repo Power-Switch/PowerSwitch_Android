@@ -35,8 +35,8 @@ import java.util.concurrent.TimeUnit;
 
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.wearable.CommunicationHelper;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 09.06.2016.
@@ -62,7 +62,7 @@ public class UtilityService extends IntentService {
      * @param context any suitable context
      */
     public static void forceWearSettingsUpdate(Context context) {
-        Log.d("Updating Settings for Wearable");
+        Timber.d("Updating Settings for Wearable");
         Intent intent = new Intent(context, UtilityService.class);
         intent.setAction(WearableConstants.REQUEST_SETTINGS_UPDATE_PATH);
         context.startService(intent);
@@ -83,7 +83,7 @@ public class UtilityService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (WearableConstants.REQUEST_SETTINGS_UPDATE_PATH.equals(intent.getAction())) {
-            Log.d("Pushing Wearable Settings to Cloud...");
+            Timber.d("Pushing Wearable Settings to Cloud...");
             GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this).addApi(Wearable.API)
                     .build();
 
@@ -108,17 +108,17 @@ public class UtilityService extends IntentService {
 
                 if (!result.getStatus()
                         .isSuccess()) {
-                    Log.e("",
+                    Timber.e(
                             String.format("Error sending settings using DataApi (error code = %d)",
                                     result.getStatus()
                                             .getStatusCode()));
                 } else {
-                    Log.d("Updated settings sent");
+                    Timber.d("Updated settings sent");
                 }
 
             } else {
                 // GoogleApiClient connection error
-                Log.e("Error connecting GoogleApiClient");
+                Timber.e("Error connecting GoogleApiClient");
             }
         }
     }

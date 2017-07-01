@@ -40,8 +40,8 @@ import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * This is a helper Class to create and show status messages depending on the app state
@@ -375,7 +375,7 @@ public class StatusMessageHandler {
      * @param duration duration
      */
     private static void showInfoSnackbar(View parent, String message, int duration) {
-        Log.d("Status Snackbar: " + message);
+        Timber.d("Status Snackbar: " + message);
         final Snackbar snackbar = Snackbar.make(parent, message, duration);
 
         snackbar.setAction(R.string.dismiss, new View.OnClickListener() {
@@ -398,7 +398,7 @@ public class StatusMessageHandler {
      * @param e        throwable
      */
     private static void showErrorSnackbar(final FragmentActivity activity, View parent, final Throwable e) {
-        Log.e("Error Snackbar", e);
+        Timber.e("Error Snackbar", e);
 
         // remember the time when the exception was raised
         final Date timeRaised = new Date();
@@ -422,7 +422,7 @@ public class StatusMessageHandler {
      */
     private static void showSnackbar(View parent, String message, String actionButtonMessage,
                                      final Runnable runnable, int duration) {
-        Log.d("Snackbar: [" + message + "] with action: [" + actionButtonMessage + "]");
+        Timber.d("Snackbar: [" + message + "] with action: [" + actionButtonMessage + "]");
 
         if (parent == null) {
             parent = MainActivity.getMainAppView();
@@ -449,11 +449,11 @@ public class StatusMessageHandler {
      */
     public static void showInfoToast(final Context context, final String message, final int duration) {
         if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND)) {
-            Log.w("Toast suppressed (disabled): " + message);
+            Timber.w("Toast suppressed (disabled): " + message);
             return;
         }
 
-        Log.d("Status Toast: " + message);
+        Timber.d("Status Toast: " + message);
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -479,7 +479,7 @@ public class StatusMessageHandler {
      * @param e       throwable
      */
     public static void showErrorToast(final Context context, final Throwable e) {
-        Log.e("Error Toast: ", e);
+        Timber.e("Error Toast: ", e);
 
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -509,7 +509,7 @@ public class StatusMessageHandler {
                 lastToast.cancel();
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -523,7 +523,7 @@ public class StatusMessageHandler {
                 lastSnackbar.dismiss();
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 }

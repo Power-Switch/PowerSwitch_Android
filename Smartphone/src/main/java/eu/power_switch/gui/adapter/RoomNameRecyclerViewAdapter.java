@@ -38,7 +38,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.obj.Room;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * * Adapter to visualize Room name items in RecyclerView for reordering
@@ -102,7 +102,7 @@ public class RoomNameRecyclerViewAdapter extends RecyclerView.Adapter<RoomNameRe
 
     @Override
     public void onItemDismiss(int position) {
-        Log.d("Item " + position + " dismissed");
+        Timber.d("Item " + position + " dismissed");
         rooms.remove(position);
     }
 

@@ -96,10 +96,10 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
 import eu.power_switch.wizard.gui.WizardActivity;
+import timber.log.Timber;
 
 /**
  * Main entry Activity for the app
@@ -195,7 +195,7 @@ public class MainActivity extends ButterKnifeActivity {
             }
 
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -331,7 +331,7 @@ public class MainActivity extends ButterKnifeActivity {
                                             DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
                                             StatusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
-                                            Log.e(e1);
+                                            Timber.e(e1);
                                             StatusMessageHandler.showInfoMessage(getActivity(),
                                                     R.string.error_enabling_gateway,
                                                     Snackbar.LENGTH_LONG);
@@ -878,7 +878,7 @@ public class MainActivity extends ButterKnifeActivity {
                 navigationDrawer.setSelection(drawerPositionStack.peek(), false);
             }
         } catch (Exception e) {
-            Log.e(this, e);
+            Timber.e(e);
         }
     }
 
@@ -918,7 +918,7 @@ public class MainActivity extends ButterKnifeActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(this, "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        Timber.d("onActivityResult(" + requestCode + "," + resultCode + "," + data);
 
         if (DonationDialog.iapHelper == null) {
             return;
@@ -928,7 +928,7 @@ public class MainActivity extends ButterKnifeActivity {
         if (!DonationDialog.iapHelper.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         } else {
-            Log.d(this, "onActivityResult handled by IABUtil.");
+            Timber.d("onActivityResult handled by IABUtil.");
         }
     }
 }

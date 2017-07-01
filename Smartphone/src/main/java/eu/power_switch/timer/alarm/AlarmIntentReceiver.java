@@ -29,10 +29,9 @@ import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.TimerConstants;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
+import timber.log.Timber;
 
 /**
  * IntentReceiver to handle any Alarm/Timer related Intents
@@ -45,23 +44,21 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogHandler.init(context);
-
-        Log.d(this, intent);
+        Timber.d("Received intent: ", intent);
 
         try {
             if (intent.getAction().equals(TimerConstants.TIMER_ACTIVATION_INTENT)) {
-                Log.d(this, "parsing timer activation intent...");
+                Timber.d("parsing timer activation intent...");
                 parseActionIntent(context, intent);
             } else if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 // restart all active alarms because device rebooted
-                Log.d(this, "restarting all active alarms because device rebooted...");
+                Timber.d("restarting all active alarms because device rebooted...");
                 reinitializeAlarms(context);
             } else {
-                Log.d(this, "Received unknown intent: " + intent.getAction());
+                Timber.d("Received unknown intent: " + intent.getAction());
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -75,7 +72,7 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                 int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
                 int executionHour = timer.getExecutionTime().get(Calendar.HOUR_OF_DAY);
                 if (currentHour != executionHour) {
-                    Log.d(this, "Timer hour doesnt match: " + currentHour + " != " + timer
+                    Timber.d("Timer hour doesnt match: " + currentHour + " != " + timer
                             .getExecutionTime().get(Calendar.HOUR_OF_DAY));
                     return;
                 }
@@ -83,13 +80,13 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                 int currentMinute = currentTime.get(Calendar.MINUTE);
                 int executionMinute = timer.getExecutionTime().get(Calendar.MINUTE);
                 if (!(currentMinute >= executionMinute && currentMinute <= executionMinute + 3)) {
-                    Log.d(this, "Timer minute not in valid range: currentMinute: " + currentMinute + " ; executionMinute: " +
+                    Timber.d("Timer minute not in valid range: currentMinute: " + currentMinute + " ; executionMinute: " +
                             executionMinute);
                     return;
                 }
             }
 
-            Log.d(this, "executing timer...");
+            Timber.d("executing timer...");
             switch (timer.getExecutionType()) {
                 case Timer.EXECUTION_TYPE_WEEKDAY:
                     WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
@@ -97,14 +94,14 @@ public class AlarmIntentReceiver extends BroadcastReceiver {
                     if (weekdayTimer.containsExecutionDay(currentTime.get(Calendar.DAY_OF_WEEK))) {
                         ActionHandler.execute(context, timer);
                     } else {
-                        Log.d(this, "timer executionDays doesn't contain current day, not executing timer");
+                        Timber.d("timer executionDays doesn't contain current day, not executing timer");
                     }
                     break;
                 case Timer.EXECUTION_TYPE_INTERVAL:
                     ActionHandler.execute(context, timer);
                     break;
                 default:
-                    Log.e(this, "Unknown Timer executionType: " + timer.getExecutionType());
+                    Timber.e("Unknown Timer executionType: " + timer.getExecutionType());
                     break;
             }
 

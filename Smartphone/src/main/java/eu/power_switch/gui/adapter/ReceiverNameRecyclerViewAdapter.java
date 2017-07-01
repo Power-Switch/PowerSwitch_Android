@@ -38,7 +38,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * * Adapter to visualize Receiver name items in RecyclerView for reordering
@@ -110,7 +110,7 @@ public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<Receiv
 
     @Override
     public void onItemDismiss(int position) {
-        Log.d("Item " + position + " dismissed");
+        Timber.d("Item " + position + " dismissed");
         receivers.remove(position);
     }
 

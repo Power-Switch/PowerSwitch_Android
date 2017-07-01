@@ -51,7 +51,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * "Gateway"/"Network" Fragment used in Configure Receiver Dialog
@@ -130,7 +130,7 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
                         // dont use apartment.getRoom(roomName) because existing rooms might have changed (and apartment object is not updated)
                         room = DatabaseHandler.getRoom(roomName);
                     } catch (Exception e) {
-                        Log.e(e);
+                        Timber.e(e);
                         room = null;
                     }
                     updateGatewayViews();

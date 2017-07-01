@@ -55,9 +55,9 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
+import timber.log.Timber;
 
 /**
  * Dialog to edit a Room
@@ -161,7 +161,7 @@ public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage imp
                 }
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 

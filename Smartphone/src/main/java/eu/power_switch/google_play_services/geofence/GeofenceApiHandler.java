@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Google Geofence API Handler
@@ -64,18 +64,18 @@ public class GeofenceApiHandler {
                 .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                     @Override
                     public void onConnected(@Nullable Bundle bundle) {
-                        Log.d(GeofenceApiHandler.class, "GoogleApiClient connected");
+                        Timber.d("GoogleApiClient connected");
                     }
 
                     @Override
                     public void onConnectionSuspended(int i) {
-                        Log.d(GeofenceApiHandler.class, "GoogleApiClient connection suspended");
+                        Timber.d("GoogleApiClient connection suspended");
                     }
                 })
                 .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.e(GeofenceApiHandler.class, "GoogleApiClient connection failed");
+                        Timber.e("GoogleApiClient connection failed");
                     }
                 })
                 .addApi(LocationServices.API)
@@ -169,7 +169,7 @@ public class GeofenceApiHandler {
                         StatusMessageHandler.showInfoMessage(context, R.string.geofence_enabled, Snackbar.LENGTH_SHORT);
                 }
 
-                Log.d(GeofenceApiHandler.class, status.toString());
+                Timber.d(status.toString());
             }
         });
     }
@@ -198,7 +198,7 @@ public class GeofenceApiHandler {
                         StatusMessageHandler.showInfoMessage(context, R.string.geofence_disabled, Snackbar.LENGTH_SHORT);
                 }
 
-                Log.d(GeofenceApiHandler.class, status.toString());
+                Timber.d(status.toString());
             }
         }); // Result processed in onResult().
     }
@@ -220,7 +220,7 @@ public class GeofenceApiHandler {
                                 .LENGTH_LONG);
                 }
 
-                Log.d(GeofenceApiHandler.class, status.toString());
+                Timber.d(status.toString());
             }
         }); // Result processed in onResult().
     }

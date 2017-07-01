@@ -39,7 +39,7 @@ import eu.power_switch.api.taskerplugin.EditActivity;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ButterKnifeDialogFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog used to quickly select a tasker variable
@@ -70,7 +70,7 @@ public class SelectVariableDialog extends ButterKnifeDialogFragment {
     }
 
     private static void sendVariableSelectedBroadcast(Context context, String variable, EditActivity.Field field) {
-        Log.d(SelectVariableDialog.class, "sendVariableSelectedBroadcast");
+        Timber.d("sendVariableSelectedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_VARIABLE_SELECTED);
         intent.putExtra(KEY_SELECTED_VARIABLE, variable);
         intent.putExtra(KEY_FIELD, field.toString());

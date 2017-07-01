@@ -25,9 +25,9 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.core.CrashlyticsCore;
 
 import eu.power_switch.BuildConfig;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 /**
  * Entry point for the Wearable application
@@ -47,7 +47,7 @@ public class PowerSwitchWear extends Application {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, final Throwable throwable) {
-                Log.e("FATAL EXCEPTION", throwable);
+                Timber.e("FATAL EXCEPTION", throwable);
 
                 if (originalUncaughtExceptionHandler != null) {
                     //Delegates to Android's error handling

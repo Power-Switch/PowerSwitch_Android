@@ -36,9 +36,9 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
-import eu.power_switch.shared.log.Log;
 import lombok.Data;
 import lombok.ToString;
+import timber.log.Timber;
 
 /**
  * Represents any kind of device that can receive network signals
@@ -258,16 +258,16 @@ public abstract class Receiver {
         if (gateway.hasValidLocalAddress()) {
 
             if (NetworkHandler.isWifiConnected()) {
-                Log.d("Using local address");
+                Timber.d("Using local address");
                 host = gateway.getLocalHost();
                 port = gateway.getLocalPort();
             } else {
-                Log.d("Using WAN address");
+                Timber.d("Using WAN address");
                 host = gateway.getWanHost();
                 port = gateway.getWanPort();
             }
         } else {
-            Log.d("Using WAN address");
+            Timber.d("Using WAN address");
             host = gateway.getWanHost();
             port = gateway.getWanPort();
         }

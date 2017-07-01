@@ -39,7 +39,7 @@ import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.SnappingLinearLayoutManager;
 import eu.power_switch.network.DataApiHandler;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Fragment holding all rooms
@@ -81,7 +81,7 @@ public class RoomsFragment extends Fragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 if (REFRESH_VIEW.equals(intent.getAction())) {
                     refreshUI();
@@ -91,12 +91,12 @@ public class RoomsFragment extends Fragment {
             }
         };
 
-        layoutLoading = (LinearLayout) rootView.findViewById(R.id.layoutLoading);
+        layoutLoading = rootView.findViewById(R.id.layoutLoading);
 
-        layoutEmpty = (LinearLayout) rootView.findViewById(R.id.layoutEmpty);
+        layoutEmpty = rootView.findViewById(R.id.layoutEmpty);
         layoutEmpty.setVisibility(View.GONE);
 
-        roomsRecyclerView = (RecyclerView) rootView.findViewById(R.id.rooms_recyclerView);
+        roomsRecyclerView = rootView.findViewById(R.id.rooms_recyclerView);
         roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(getActivity(), roomsRecyclerView, MainActivity.roomList, dataApiHandler);
         roomsRecyclerView.setAdapter(roomsRecyclerViewAdapter);
 

@@ -55,7 +55,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to select an action configuration
@@ -266,7 +266,7 @@ public abstract class AddActionDialog extends ButterKnifeSupportDialogFragment {
                 updateRoomList();
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -518,7 +518,7 @@ public abstract class AddActionDialog extends ButterKnifeSupportDialogFragment {
             return DatabaseHandler.getApartment(spinner_apartment.getSelectedItem()
                     .toString());
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         return null;
@@ -567,11 +567,11 @@ public abstract class AddActionDialog extends ButterKnifeSupportDialogFragment {
 
         try {
             if (Action.ACTION_TYPE_RECEIVER.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem()
+                Timber.d(spinner_room.getSelectedItem()
                         .toString());
-                Log.d(spinner_receiver.getSelectedItem()
+                Timber.d(spinner_receiver.getSelectedItem()
                         .toString());
-                Log.d(spinner_button.getSelectedItem()
+                Timber.d(spinner_button.getSelectedItem()
                         .toString());
 
                 Apartment selectedApartment = currentApartment;
@@ -589,9 +589,9 @@ public abstract class AddActionDialog extends ButterKnifeSupportDialogFragment {
 
                 action = new ReceiverAction(-1, currentApartment.getName(), selectedRoom, selectedReceiver, selectedButton);
             } else if (Action.ACTION_TYPE_ROOM.equals(currentActionType)) {
-                Log.d(spinner_room.getSelectedItem()
+                Timber.d(spinner_room.getSelectedItem()
                         .toString());
-                Log.d(spinner_button.getSelectedItem()
+                Timber.d(spinner_button.getSelectedItem()
                         .toString());
 
                 Room selectedRoom = getSelectedRoom();
@@ -602,7 +602,7 @@ public abstract class AddActionDialog extends ButterKnifeSupportDialogFragment {
                         spinner_button.getSelectedItem()
                                 .toString());
             } else if (Action.ACTION_TYPE_SCENE.equals(currentActionType)) {
-                Log.d(spinner_scene.getSelectedItem()
+                Timber.d(spinner_scene.getSelectedItem()
                         .toString());
 
                 Scene selectedScene = DatabaseHandler.getScene(spinner_scene.getSelectedItem()

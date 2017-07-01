@@ -47,7 +47,7 @@ import java.util.Set;
 import eu.power_switch.R;
 import eu.power_switch.shared.exception.location.AddressNotFoundException;
 import eu.power_switch.shared.exception.location.CoordinatesNotFoundException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * This class is responsible for initializing and managing access to a MapView Object
@@ -259,13 +259,13 @@ public class MapViewHandler implements OnMapReadyCallback {
 
                 String addressAsString = address.getAddressLine(0);
 
-                Log.d("Address; ", addressAsString);
+                Timber.d("Address; ", addressAsString);
                 return addressAsString;
             } else {
                 throw new AddressNotFoundException("latitude: " + latLng.latitude + ", longitude: " + latLng.longitude);
             }
         } catch (IOException e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         return null;
@@ -287,14 +287,14 @@ public class MapViewHandler implements OnMapReadyCallback {
                 Double lat = (addresses.get(0).getLatitude());
                 Double lon = (addresses.get(0).getLongitude());
 
-                Log.d("lat-lon", lat + "......." + lon);
+                Timber.d("lat-lon", lat + "......." + lon);
                 final LatLng location = new LatLng(lat, lon);
                 return location;
             } else {
                 throw new CoordinatesNotFoundException(address);
             }
         } catch (IOException e) {
-            Log.e(e);
+            Timber.e(e);
         }
 
         return null;
@@ -308,7 +308,7 @@ public class MapViewHandler implements OnMapReadyCallback {
      */
     public void moveCamera(LatLng location, boolean animated) {
         if (location == null) {
-            Log.w("location is null!");
+            Timber.w("location is null!");
             return;
         }
 
@@ -330,7 +330,7 @@ public class MapViewHandler implements OnMapReadyCallback {
      */
     public void moveCamera(LatLng location, float zoom, boolean animated) {
         if (location == null) {
-            Log.w("location is null!");
+            Timber.w("location is null!");
             return;
         }
 

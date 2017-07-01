@@ -27,7 +27,7 @@ import java.util.List;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Provides database methods for managing Geofence Actions
@@ -52,7 +52,7 @@ abstract class GeofenceActionHandler {
      */
     protected static void add(List<Action> actions, Long geofenceId, Geofence.EventType eventType) throws Exception {
         if (actions == null) {
-            Log.w("actions was null! nothing added to database");
+            Timber.w("actions was null! nothing added to database");
             return;
         }
 

@@ -33,10 +33,10 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.widget.SceneWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import eu.power_switch.widget.activity.ConfigureSceneWidgetActivity;
+import timber.log.Timber;
 
 /**
  * This class is responsible for updating existing Scene widgets
@@ -60,7 +60,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.d("Updating Scene Widgets...");
+        Timber.d("Updating Scene Widgets...");
         // Perform this loop procedure for each App Widget that belongs to this provider
         for (int i = 0; i < appWidgetIds.length; i++) {
             int appWidgetId = appWidgetIds[i];
@@ -90,7 +90,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                 remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.missing_widget_data));
                 remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
             } catch (Exception e) {
-                Log.e(e);
+                Timber.e(e);
                 remoteViews.setTextViewText(R.id.textView_scene_widget_name, context.getString(R.string.unknown_error));
                 remoteViews.setViewVisibility(R.id.buttonActivate_scene_widget, View.GONE);
             }
@@ -102,13 +102,13 @@ public class SceneWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        Log.d("Deleting Scene Widgets: " + Arrays.toString(appWidgetIds));
+        Timber.d("Deleting Scene Widgets: " + Arrays.toString(appWidgetIds));
 
         for (int appWidgetId : appWidgetIds) {
             try {
                 DatabaseHandler.deleteSceneWidget(appWidgetId);
             } catch (Exception e) {
-                Log.e(e);
+                Timber.e(e);
             }
         }
         super.onDeleted(context, appWidgetIds);

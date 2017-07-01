@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
 import eu.power_switch.database.table.scene.SceneTable;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Provides database methods for managing Scenes
@@ -57,7 +57,7 @@ abstract class SceneHandler {
         values.put(SceneTable.COLUMN_NAME, scene.getName());
         long sceneId = DatabaseHandler.database.insert(SceneTable.TABLE_NAME, null, values);
         if (sceneId == -1) {
-            Log.e("Error inserting Scene to database");
+            Timber.e("Error inserting Scene to database");
         }
         SceneItemHandler.add(sceneId, scene.getSceneItems());
     }

@@ -23,9 +23,9 @@ import android.content.Context;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.DatabaseConstants;
-import eu.power_switch.shared.log.Log;
 import lombok.Getter;
 import lombok.ToString;
+import timber.log.Timber;
 
 /**
  * Represents a button that can be pressed on a receiver remote.
@@ -85,7 +85,7 @@ public class Button {
                 return DatabaseHandler.getButton(buttonId).getName();
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             return null;
         }
     }

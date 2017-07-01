@@ -43,7 +43,7 @@ import eu.power_switch.google_play_services.playstore.Purchase;
 import eu.power_switch.google_play_services.playstore.SkuDetails;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to select a Play Store Donation
@@ -150,7 +150,7 @@ public class DonationDialog extends ButterKnifeSupportDialogFragment {
                     if (!result.isSuccess()) {
                         // Oh noes, there was a problem.
                         StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
-                        Log.e("Problem setting up In-app Billing: " + result);
+                        Timber.e("Problem setting up In-app Billing: " + result);
                         dismiss();
                         return;
                     }
@@ -191,7 +191,7 @@ public class DonationDialog extends ButterKnifeSupportDialogFragment {
             });
 
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             e.printStackTrace();
         }
     }
@@ -273,7 +273,7 @@ public class DonationDialog extends ButterKnifeSupportDialogFragment {
             try {
                 iapHelper.dispose();
             } catch (Exception e) {
-                Log.e("Error disposing In-App purchase helper", e);
+                Timber.e("Error disposing In-App purchase helper", e);
             }
         }
         iapHelper = null;

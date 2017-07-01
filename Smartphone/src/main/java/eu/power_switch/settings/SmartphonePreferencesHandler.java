@@ -31,7 +31,7 @@ import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Preference handler used to store general app settings
@@ -127,7 +127,7 @@ public class SmartphonePreferencesHandler {
         initializeDefaultValueMap();
 
         for (String key : cachedValues.keySet()) {
-            Log.d(SmartphonePreferencesHandler.class, key + ": " + get(key));
+            Timber.d(key + ": " + get(key));
         }
     }
 
@@ -211,13 +211,13 @@ public class SmartphonePreferencesHandler {
      * @return settings value
      */
     public static <T> T get(String settingsKey) throws ClassCastException {
-        // Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
+        // Timber.d("retrieving current value for key \"" + settingsKey + "\"");
 
         Object value = cachedValues.get(settingsKey);
 
         if (value == null) {
             if (!defaultValueMap.containsKey(settingsKey)) {
-                Log.w("Setting \"" + settingsKey + "\" has no associated default value");
+                Timber.w("Setting \"" + settingsKey + "\" has no associated default value");
             } else {
                 // set default value
                 set(settingsKey, getDefaultValue(settingsKey));
@@ -251,7 +251,7 @@ public class SmartphonePreferencesHandler {
      * @param newValue    new value
      */
     public static void set(String settingsKey, Object newValue) {
-        Log.d(SmartphonePreferencesHandler.class, "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
+        Timber.d("setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
 

@@ -82,7 +82,7 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * "Setup" Fragment used in Configure Receiver Dialog
@@ -288,7 +288,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                             getCurrentSeed(),
                             getCurrentUniversalButtons());
                 } catch (Exception e) {
-                    Log.e(e);
+                    Timber.e(e);
 
                     textInputEditTextSeed.setError(e.getMessage());
                     sendChannelDetailsChangedBroadcast(getActivity(),
@@ -310,11 +310,11 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                     editTextSeed.setText(String.valueOf(longValue));
                     StatusMessageHandler.showInfoMessage(getContentView(), R.string.pasted_from_clipboard, Snackbar.LENGTH_LONG);
                 } catch (EmptyClipboardException e) {
-                    Log.w("Tried to paste but clipboard is empty");
+                    Timber.w("Tried to paste but clipboard is empty");
                     StatusMessageHandler.showInfoMessage(getContentView(), R.string.clipboard_is_empty, Snackbar.LENGTH_LONG);
                     // do nothing
                 } catch (NumberFormatException e) {
-                    Log.w("Invalid number format: " + e.getMessage());
+                    Timber.w("Invalid number format: " + e.getMessage());
                     StatusMessageHandler.showInfoMessage(getContentView(), R.string.invalid_format, Snackbar.LENGTH_LONG);
                 }
             }
@@ -337,7 +337,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                             networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
                             networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
                         } catch (Exception e) {
-                            Log.e(e);
+                            Timber.e(e);
                         }
                     }
 
@@ -366,7 +366,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                             networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
                             networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
                         } catch (Exception e) {
-                            Log.e(e);
+                            Timber.e(e);
                         }
                     }
 
@@ -394,7 +394,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                             networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
                             networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
                         } catch (Exception e) {
-                            Log.e(e);
+                            Timber.e(e);
                         }
                     }
 

@@ -32,7 +32,7 @@ import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Intent service used to react to geofence enter/exit events
@@ -60,7 +60,7 @@ public class GeofenceIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
-            Log.e(this, "GeofencingError");
+            Timber.e("GeofencingError %d", geofencingEvent.getErrorCode());
             return;
         }
 
@@ -68,8 +68,7 @@ public class GeofenceIntentService extends IntentService {
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
         // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
             // Get the geofences that were triggered. A single event can trigger
             // multiple geofences.
@@ -80,12 +79,12 @@ public class GeofenceIntentService extends IntentService {
             for (Geofence geofence : triggeringGeofences) {
                 triggeringGeofencesIdsList.add(geofence.getRequestId());
             }
-            Log.d(this, getTransitionString(geofenceTransition) + ": " + TextUtils.join(", ", triggeringGeofencesIdsList));
+            Timber.d(getTransitionString(geofenceTransition) + ": " + TextUtils.join(", ", triggeringGeofencesIdsList));
 
             executeGeofences(triggeringGeofences, geofenceTransition);
         } else {
-            // Log the error.
-            Log.e(this, "Unknown Geofence transition: " + geofenceTransition);
+            // Log4JLog the error.
+            Timber.e("Unknown Geofence transition: " + geofenceTransition);
         }
     }
 
@@ -110,8 +109,7 @@ public class GeofenceIntentService extends IntentService {
             try {
                 Long geofenceId = Long.valueOf(googleGeofence.getRequestId());
 
-                eu.power_switch.google_play_services.geofence.Geofence geofence =
-                        DatabaseHandler.getGeofence(geofenceId);
+                eu.power_switch.google_play_services.geofence.Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
                 if (geofence.isActive() && geofenceStateChanged(geofence.getState(), eventType)) {
                     ActionHandler.execute(getApplicationContext(), geofence, eventType);
 
@@ -128,13 +126,14 @@ public class GeofenceIntentService extends IntentService {
                     }
                 }
             } catch (Exception e) {
-                Log.e(e);
+                Timber.e(e);
             }
         }
         GeofencesTabFragment.sendGeofencesChangedBroadcast(getApplicationContext());
     }
 
-    private boolean geofenceStateChanged(@eu.power_switch.google_play_services.geofence.Geofence.State String state, eu.power_switch.google_play_services.geofence.Geofence.EventType eventType) {
+    private boolean geofenceStateChanged(@eu.power_switch.google_play_services.geofence.Geofence.State String state,
+                                         eu.power_switch.google_play_services.geofence.Geofence.EventType eventType) {
         switch (eventType) {
             case ENTER:
                 if (!eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE.equals(state)) {
@@ -157,6 +156,7 @@ public class GeofenceIntentService extends IntentService {
      * Maps geofence transition types to their human-readable equivalents.
      *
      * @param transitionType A transition type constant defined in Geofence
+     *
      * @return A String indicating the type of transition
      */
     private String getTransitionString(int transitionType) {

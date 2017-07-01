@@ -31,7 +31,7 @@ import android.support.annotation.NonNull;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 08.08.2016.
@@ -52,7 +52,7 @@ public class ApplicationHelper {
                     .getPackageInfo(context.getPackageName(), 0);
             return pInfo.versionName + " (" + pInfo.versionCode + ")";
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             return "unknown (error while retrieving)";
         }
     }

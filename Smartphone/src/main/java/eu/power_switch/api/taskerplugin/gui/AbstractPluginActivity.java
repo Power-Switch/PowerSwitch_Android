@@ -29,7 +29,7 @@ import android.view.MenuItem;
 import com.twofortyfouram.locale.BreadCrumber;
 
 import eu.power_switch.R;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Superclass for plug-in Activities. This class takes care of initializing aspects of the plug-in's UI to
@@ -104,7 +104,7 @@ public abstract class AbstractPluginActivity extends Activity {
                     getPackageManager().getApplicationLabel(getPackageManager().getApplicationInfo(getCallingPackage(),
                             0));
         } catch (final NameNotFoundException e) {
-            Log.e("Calling package couldn't be found", e); //$NON-NLS-1$
+            Timber.e("Calling package couldn't be found", e); //$NON-NLS-1$
         }
         if (null != callingApplicationLabel) {
             setTitle(callingApplicationLabel);
@@ -132,7 +132,7 @@ public abstract class AbstractPluginActivity extends Activity {
         try {
             getActionBar().setIcon(getPackageManager().getApplicationIcon(getCallingPackage()));
         } catch (final NameNotFoundException e) {
-            Log.e("An error occurred loading the localHost's icon", e); //$NON-NLS-1$
+            Timber.e("An error occurred loading the localHost's icon", e); //$NON-NLS-1$
         }
     }
 

@@ -27,7 +27,7 @@ import java.util.Set;
 import eu.power_switch.database.table.phone.PhoneNumberTable;
 import eu.power_switch.database.table.phone.call.CallEventPhoneNumberTable;
 import eu.power_switch.shared.constants.PhoneConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 12.04.2016.
@@ -45,7 +45,7 @@ abstract class CallEventPhoneNumberHandler {
 
     protected static void add(Set<String> phoneNumbers, long callEventId, PhoneConstants.CallType eventCallType) throws Exception {
         if (phoneNumbers == null) {
-            Log.w("phoneNumbers was null! nothing added to database");
+            Timber.w("phoneNumbers was null! nothing added to database");
             return;
         }
 

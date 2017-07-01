@@ -38,7 +38,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to rename a Backup
@@ -108,10 +108,10 @@ public class EditBackupDialog extends ButterKnifeSupportDialogFragment {
                         BackupFragment.sendBackupsChangedBroadcast(getActivity());
                         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
                     } catch (BackupAlreadyExistsException e) {
-                        Log.e(e);
+                        Timber.e(e);
                         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
                     } catch (BackupNotFoundException e) {
-                        Log.e(e);
+                        Timber.e(e);
                         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
                     }
                 }

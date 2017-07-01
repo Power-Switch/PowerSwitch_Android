@@ -44,7 +44,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Abstract class defining a configuration Dialog
@@ -146,7 +146,7 @@ public abstract class ConfigurationDialog extends ButterKnifeSupportDialogFragme
         try {
             setSaveButtonState(isValid());
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             setSaveButtonState(false);
         }
 
@@ -278,7 +278,7 @@ public abstract class ConfigurationDialog extends ButterKnifeSupportDialogFragme
         try {
             setSaveButtonState(isValid());
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             setSaveButtonState(false);
         }
     }

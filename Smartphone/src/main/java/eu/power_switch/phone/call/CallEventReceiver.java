@@ -30,7 +30,7 @@ import java.util.List;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.PhoneConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * BroadcastReceiver to get notified about incoming calls
@@ -45,7 +45,7 @@ public class CallEventReceiver extends BroadcastReceiver {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             if (incomingNumber == null) {
-                Log.w("Missing phone number in Arguments, not executing any actions");
+                Timber.w("Missing phone number in Arguments, not executing any actions");
                 return;
             }
 
@@ -78,10 +78,10 @@ public class CallEventReceiver extends BroadcastReceiver {
                         }
                         break;
                 }
-                Log.d(">>>Broadcast", "onCallStateChanged " + callState);
+                Timber.d(">>>Broadcast", "onCallStateChanged " + callState);
 
             } catch (Exception e) {
-                Log.e("Error receiving call event", e);
+                Timber.e("Error receiving call event", e);
             }
         }
     };
@@ -90,11 +90,11 @@ public class CallEventReceiver extends BroadcastReceiver {
         List<CallEvent> callEvents = DatabaseHandler.getCallEvents(incomingNumber);
 
         if (callEvents.isEmpty()) {
-            Log.w("List of CallEvents was empty for phone number: " + incomingNumber);
+            Timber.w("List of CallEvents was empty for phone number: " + incomingNumber);
             return;
         }
 
-        Log.d("Executing CallEvents...");
+        Timber.d("Executing CallEvents...");
         for (CallEvent callEvent : callEvents) {
             ActionHandler.execute(mContext, callEvent, PhoneConstants.CallType.INCOMING);
         }

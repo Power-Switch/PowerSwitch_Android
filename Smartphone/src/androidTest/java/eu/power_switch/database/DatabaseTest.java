@@ -42,7 +42,7 @@ public class DatabaseTest extends ApplicationTest {
 //                        DatabaseHandler.addGateway(new ConnAir((long) 0, true, "Gateway", "Firmware", "localAddress[" + i + "]",
 //                                49880 + i, "wanAddress[" + i + "]", 49880 + i, Collections.<String>emptySet()));
 //                    } catch (Exception e) {
-//                        Log.e(e);
+//                        Log4JLog.e(e);
 //                    }
 //                }
 //            }
@@ -58,11 +58,11 @@ public class DatabaseTest extends ApplicationTest {
 //                        DatabaseHandler.getAllGateways();
 //                        DatabaseHandler.getAllReceivers();
 //                    } catch (Exception e) {
-//                        Log.e(e);
+//                        Log4JLog.e(e);
 //                    }
 //
 //                    try {
-//                        Log.d(Arrays.toString(DatabaseHandler.getAllGateways().toArray()));
+//                        Log4JLog.d(Arrays.toString(DatabaseHandler.getAllGateways().toArray()));
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                    }
@@ -79,7 +79,7 @@ public class DatabaseTest extends ApplicationTest {
 //    @Test
 //    public void testPerformanceTest() throws Exception {
 //        for (int i = 0; i < 200; i++) {
-//            Log.d("apartment: " + i);
+//            Log4JLog.d("apartment: " + i);
 //            long apartmentId = DatabaseHandler.addApartment(new Apartment((long) 0, true, "Apartment[" + i + "]"));
 //            for (int j = 0; j < 200; j++) {
 //                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]", 0, false, new ArrayList<Gateway>()));

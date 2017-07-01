@@ -24,7 +24,7 @@ import android.content.SharedPreferences;
 import java.util.Locale;
 
 import eu.power_switch.shared.constants.DeveloperSettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Preference handler used to store developer settings
@@ -67,10 +67,10 @@ public class DeveloperPreferencesHandler {
         forceFabricEnabledCache = sharedPreferences.getBoolean(DeveloperSettingsConstants.KEY_FORCE_ENABLE_FABRIC, false);
         localeCache = sharedPreferences.getString(DeveloperSettingsConstants.KEY_LOCALE, Locale.GERMAN.toString());
 
-        Log.d(DeveloperPreferencesHandler.class, "PlayStoreMode: " + playStoreModeCache);
-        Log.d(DeveloperPreferencesHandler.class, "ForceLanguage: " + forceLanguageCache);
-        Log.d(DeveloperPreferencesHandler.class, "ForceEnableFabric: " + forceFabricEnabledCache);
-        Log.d(DeveloperPreferencesHandler.class, "Locale: " + localeCache);
+        Timber.d("PlayStoreMode: " + playStoreModeCache);
+        Timber.d("ForceLanguage: " + forceLanguageCache);
+        Timber.d("ForceEnableFabric: " + forceFabricEnabledCache);
+        Timber.d("Locale: " + localeCache);
     }
 
     /**
@@ -95,7 +95,7 @@ public class DeveloperPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setPlayStoreMode(boolean bool) {
-        Log.d(DeveloperPreferencesHandler.class, "setPlayStoreMode: " + bool);
+        Timber.d("setPlayStoreMode: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(DeveloperSettingsConstants.KEY_PLAY_STORE_MODE, bool);
         editor.apply();
@@ -108,7 +108,7 @@ public class DeveloperPreferencesHandler {
     }
 
     public static void setForceLanguage(boolean bool) {
-        Log.d(DeveloperPreferencesHandler.class, "setForceLanguage: " + bool);
+        Timber.d("setForceLanguage: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(DeveloperSettingsConstants.KEY_FORCE_LANGUAGE, bool);
         editor.apply();
@@ -121,7 +121,7 @@ public class DeveloperPreferencesHandler {
     }
 
     public static void setLocale(Locale locale) {
-        Log.d(DeveloperPreferencesHandler.class, "setLocale: " + locale.toString());
+        Timber.d("setLocale: " + locale.toString());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(DeveloperSettingsConstants.KEY_LOCALE, locale.toString());
         editor.apply();
@@ -144,7 +144,7 @@ public class DeveloperPreferencesHandler {
      * @param bool true if enabled
      */
     public static void setForceFabricEnabled(boolean bool) {
-        Log.d(DeveloperPreferencesHandler.class, "setForceFabricEnabled: " + bool);
+        Timber.d("setForceFabricEnabled: " + bool);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(DeveloperSettingsConstants.KEY_FORCE_ENABLE_FABRIC, bool);
         editor.apply();

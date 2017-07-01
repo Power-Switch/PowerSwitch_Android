@@ -56,8 +56,8 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * Fragment holding the Call event list
@@ -131,7 +131,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 switch (intent.getAction()) {
                     case LocalBroadcastConstants.INTENT_CALL_EVENTS_CHANGED:
@@ -182,7 +182,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
     }
 
     private void refreshCalls() {
-        Log.d(this, "refreshCallEvents");
+        Timber.d("refreshCallEvents");
         updateListContent();
     }
 

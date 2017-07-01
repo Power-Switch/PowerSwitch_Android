@@ -35,7 +35,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ApiConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * BroadcastReceiver responsible for executing actions fired by Tasker (and other locale compatible Apps)
@@ -46,7 +46,7 @@ public class FireReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(FireReceiver.class, intent);
+        Timber.d("Received intent: ", intent);
 
         if (com.twofortyfouram.locale.Intent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
             // no validation check done here,
@@ -59,42 +59,49 @@ public class FireReceiver extends BroadcastReceiver {
         try {
             Bundle extras = intent.getExtras();
 
-            if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
-                    extras.containsKey(ApiConstants.KEY_ROOM) &&
-                    extras.containsKey(ApiConstants.KEY_RECEIVER) &&
-                    extras.containsKey(ApiConstants.KEY_BUTTON)) {
+            if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras.containsKey(
+                    ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
-                Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER).trim());
-                Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                        .trim());
+                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
+                        .trim());
+                Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER)
+                        .trim());
+                Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON)
+                        .trim());
 
                 ActionHandler.execute(context, receiver, button);
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
-                    extras.containsKey(ApiConstants.KEY_ROOM) &&
-                    extras.containsKey(ApiConstants.KEY_BUTTON)) {
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
-                String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                        .trim());
+                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
+                        .trim());
+                String buttonName = extras.getString(ApiConstants.KEY_BUTTON)
+                        .trim();
 
                 ActionHandler.execute(context, room, buttonName);
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
-                    extras.containsKey(ApiConstants.KEY_SCENE)) {
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                        .trim());
+                Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE)
+                        .trim());
 
                 ActionHandler.execute(context, scene);
             } else {
-                Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG)
+                        .show();
             }
         } catch (NoSuchElementException e) {
-            Log.e(this, e);
-            Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG).show();
+            Timber.e(e);
+            Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG)
+                    .show();
         } catch (Exception e) {
-            Log.e("Error parsing intent!", e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
+            Timber.e("Error parsing intent!", e);
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG)
+                    .show();
         }
     }
 }

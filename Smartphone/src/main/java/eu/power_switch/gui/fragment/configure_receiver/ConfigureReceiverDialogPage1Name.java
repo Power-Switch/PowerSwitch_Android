@@ -66,7 +66,7 @@ import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.receiver.ReceiverAlreadyExistsException;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * "Name" Fragment used in Configure Receiver Dialog
@@ -311,12 +311,12 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
                     }
                 }
             } catch (ReceiverAlreadyExistsException e) {
-                Log.e(e);
+                Timber.e(e);
                 floatingName.setError(getString(R.string.receiver_already_exists));
                 sendNameRoomChangedBroadcast(getActivity(), null, getCheckedRoomName());
                 return false;
             } catch (Exception e) {
-                Log.e(e);
+                Timber.e(e);
                 floatingName.setError(getString(R.string.unknown_error));
                 sendNameRoomChangedBroadcast(getActivity(), null, null);
                 return false;

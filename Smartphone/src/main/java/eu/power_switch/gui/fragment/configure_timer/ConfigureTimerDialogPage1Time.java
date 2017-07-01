@@ -44,8 +44,8 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.timer.Timer;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 12.09.2015.
@@ -114,7 +114,7 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
                 c.set(Calendar.MINUTE, minute);
                 c.set(Calendar.SECOND, 0);
                 c.set(Calendar.MILLISECOND, 0);
-                Log.d(ConfigureTimerDialogPage1Time.class, "Time set to: " + hourOfDay + ":" + minute);
+                Timber.d("Time set to: " + hourOfDay + ":" + minute);
                 sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), c, getCurrentRandomizerValue());
             }
         });

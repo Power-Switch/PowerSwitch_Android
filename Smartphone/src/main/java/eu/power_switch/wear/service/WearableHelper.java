@@ -24,7 +24,7 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 26.07.2016.
@@ -44,7 +44,7 @@ public class WearableHelper {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             return false;
         }
     }

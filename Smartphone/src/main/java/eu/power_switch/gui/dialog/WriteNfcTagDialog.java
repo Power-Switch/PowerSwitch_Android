@@ -37,7 +37,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.nfc.NfcHandler;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog used while waiting for an NFC tag to be written
@@ -130,7 +130,7 @@ public class WriteNfcTagDialog extends ButterKnifeDialogActivity {
                         successImage.setVisibility(View.VISIBLE);
                         errorImage.setVisibility(View.GONE);
                     } else {
-                        Log.e(asyncTaskResult.getException());
+                        Timber.e(asyncTaskResult.getException());
                         textViewStatus.setText(R.string.error_writing_tag_please_try_again);
                         layoutLoading.setVisibility(View.GONE);
                         successImage.setVisibility(View.GONE);

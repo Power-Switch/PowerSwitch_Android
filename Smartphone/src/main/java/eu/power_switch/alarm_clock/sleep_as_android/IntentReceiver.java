@@ -25,8 +25,7 @@ import android.content.Intent;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
+import timber.log.Timber;
 
 /**
  * IntentReceiver to handle any Sleep As Android related Intents
@@ -37,9 +36,7 @@ public class IntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogHandler.init(context);
-
-        Log.d(this, intent);
+        Timber.d("Received intent: ", intent);
 
         try {
             if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED)) {
@@ -48,25 +45,25 @@ public class IntentReceiver extends BroadcastReceiver {
 
             if (SleepAsAndroidConstants.Event.ALARM_TRIGGERED.getIntentAction()
                     .equals(intent.getAction())) {
-                Log.d("IntentReceiver", "Alarm triggered!");
+                Timber.d("IntentReceiver", "Alarm triggered!");
                 ActionHandler.execute(context, SleepAsAndroidConstants.Event.ALARM_TRIGGERED);
 
             } else if (SleepAsAndroidConstants.Event.ALARM_SNOOZED.getIntentAction()
                     .equals(intent.getAction())) {
-                Log.d("IntentReceiver", "Alarm snoozed...");
+                Timber.d("IntentReceiver", "Alarm snoozed...");
                 ActionHandler.execute(context, SleepAsAndroidConstants.Event.ALARM_SNOOZED);
 
             } else if (SleepAsAndroidConstants.Event.ALARM_DISMISSED.getIntentAction()
                     .equals(intent.getAction())) {
-                Log.d("IntentReceiver", "Alarm dismissed...");
+                Timber.d("IntentReceiver", "Alarm dismissed...");
                 ActionHandler.execute(context, SleepAsAndroidConstants.Event.ALARM_DISMISSED);
 
             } else {
-                Log.d("IntentReceiver", "Received unknown intent: " + intent.getAction());
+                Timber.d("IntentReceiver", "Received unknown intent: " + intent.getAction());
             }
 
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 }

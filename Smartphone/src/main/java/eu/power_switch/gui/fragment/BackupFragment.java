@@ -64,8 +64,8 @@ import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -94,7 +94,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
      * @param context any suitable context
      */
     public static void sendBackupsChangedBroadcast(Context context) {
-        Log.d("AddReceiverDialog", "sendReceiverChangedBroadcast");
+        Timber.d("AddReceiverDialog", "sendReceiverChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
 
         LocalBroadcastManager.getInstance(context)
@@ -184,7 +184,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("BackupFragment", "received intent: " + intent.getAction());
+                Timber.d("BackupFragment", "received intent: " + intent.getAction());
 
                 switch (intent.getAction()) {
                     case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:

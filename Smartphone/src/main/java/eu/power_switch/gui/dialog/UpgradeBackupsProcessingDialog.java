@@ -35,7 +35,7 @@ import eu.power_switch.backup.ZipHelper;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Backup Upgrade Dialog
@@ -146,7 +146,7 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
                 if (booleanAsyncTaskResult.isSuccess()) {
                     onFinishedSuccess();
                 } else {
-                    Log.e(UpgradeBackupsProcessingDialog.class, booleanAsyncTaskResult.getException());
+                    Timber.e(booleanAsyncTaskResult.getException());
                     onFinishedFailure(booleanAsyncTaskResult.getException());
                 }
 

@@ -40,9 +40,8 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.WearableConstants;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
 import eu.power_switch.shared.wearable.CommunicationHelper;
+import timber.log.Timber;
 
 /**
  * A Wear listener service, used to receive inbound messages from
@@ -59,13 +58,11 @@ public class ListenerService extends WearableListenerService {
      */
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        LogHandler.init(getApplicationContext());
-
         if (messageEvent.getPath()
                 .equals(WearableConstants.RECEIVER_ACTION_TRIGGER_PATH)) {
 
             String messageData = new String(messageEvent.getData());
-            Log.d("Wear_ListenerService", "Message received: " + messageData);
+            Timber.d("Wear_ListenerService", "Message received: " + messageData);
 
             // trigger api intent
             parseMessage(messageData);
@@ -127,7 +124,7 @@ public class ListenerService extends WearableListenerService {
                 ActionHandler.execute(getApplicationContext(), scene);
             }
         } catch (Exception e) {
-            Log.e("parseMessage", e);
+            Timber.e("parseMessage", e);
             StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.error_executing_wear_action, Snackbar.LENGTH_LONG);
         }
     }

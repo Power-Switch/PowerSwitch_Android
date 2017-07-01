@@ -47,8 +47,8 @@ import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.tutorial.TutorialHelper;
+import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -132,7 +132,7 @@ public class RoomSceneTabFragment extends ButterKnifeFragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
                 updateCurrentApartmentInfo();
             }
         };
@@ -174,7 +174,7 @@ public class RoomSceneTabFragment extends ButterKnifeFragment {
                 }
             }
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
             textView_currentApartmentInfo.setText(R.string.unknown_error);
         }
     }

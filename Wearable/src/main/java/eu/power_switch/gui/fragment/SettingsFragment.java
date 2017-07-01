@@ -43,8 +43,8 @@ import eu.power_switch.settings.BooleanSettingsItem;
 import eu.power_switch.settings.SelectOneSettingsItem;
 import eu.power_switch.settings.SettingsItem;
 import eu.power_switch.shared.constants.WearableSettingsConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
+import timber.log.Timber;
 
 /**
  * Fragment holding settings related to wearable
@@ -71,7 +71,7 @@ public class SettingsFragment extends Fragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
 
                 if (WearableSettingsConstants.WEARABLE_SETTINGS_CHANGED.equals(intent.getAction())) {
                     if (!ownModification) {
@@ -109,7 +109,7 @@ public class SettingsFragment extends Fragment {
         settings.add(item2);
         settings.add(item3);
 
-        final WearableListView wearableListView = (WearableListView) rootView.findViewById(R.id.wearable_List);
+        final WearableListView wearableListView = rootView.findViewById(R.id.wearable_List);
         settingsListAdapter = new SettingsListAdapter(getActivity(), settings);
         wearableListView.setAdapter(settingsListAdapter);
         wearableListView.setClickListener(new WearableListView.ClickListener() {

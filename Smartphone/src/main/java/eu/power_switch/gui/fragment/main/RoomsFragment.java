@@ -56,7 +56,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Fragment containing a List of all Rooms and Receivers
@@ -78,7 +78,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
      * @param context any suitable context
      */
     public static void sendRoomChangedBroadcast(Context context) {
-        Log.d("RoomsFragment", "sendRoomChangedBroadcast");
+        Timber.d("RoomsFragment", "sendRoomChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_CHANGED);
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(intent);
@@ -90,7 +90,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
      * @param context any suitable context
      */
     public static void sendReceiverChangedBroadcast(Context context) {
-        Log.d("RoomsFragment", "sendReceiverChangedBroadcast");
+        Timber.d("RoomsFragment", "sendReceiverChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(intent);
@@ -146,7 +146,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("RoomsFragment", "received intent: " + intent.getAction());
+                Timber.d("RoomsFragment", "received intent: " + intent.getAction());
                 updateUI();
             }
         };

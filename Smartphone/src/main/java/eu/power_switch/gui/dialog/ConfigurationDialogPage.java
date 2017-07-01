@@ -31,7 +31,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.fragment.ButterKnifeFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 25.03.2016.
@@ -92,10 +92,10 @@ public abstract class ConfigurationDialogPage extends ButterKnifeFragment {
     @Nullable
     public View getContentView() {
         if (contentView == null) {
-            Log.w("ContentView is null! Did you define a view with id \"contentView\" in your layout? Using getView() as fallback.");
+            Timber.w("ContentView is null! Did you define a view with id \"contentView\" in your layout? Using getView() as fallback.");
 
             if (getView() == null) {
-                Log.w("View is null!");
+                Timber.w("View is null!");
             }
             return getView();
         } else {

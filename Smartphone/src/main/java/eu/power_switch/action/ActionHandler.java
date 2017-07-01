@@ -51,11 +51,11 @@ import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 05.12.2015.
@@ -80,13 +80,13 @@ public class ActionHandler {
 									receiver.getName(),
 									button.getName())));
 		} catch (ActionNotSupportedException e) {
-			Log.e("Action not supported by Receiver!", e);
-			StatusMessageHandler.showInfoMessage(context,
+            Timber.e("Action not supported by Receiver!", e);
+            StatusMessageHandler.showInfoMessage(context,
 					context.getString(R.string.action_not_supported_by_receiver),
 					5000);
 		} catch (GatewayNotSupportedException e) {
-			Log.e("Gateway not supported by Receiver!", e);
-			StatusMessageHandler.showInfoMessage(context,
+            Timber.e("Gateway not supported by Receiver!", e);
+            StatusMessageHandler.showInfoMessage(context,
 					context.getString(R.string.gateway_not_supported_by_receiver),
 					5000);
 		} catch (Exception e) {
@@ -94,8 +94,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -188,8 +188,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -215,8 +215,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -283,13 +283,13 @@ public class ActionHandler {
 							DatabaseHandler.setLastActivatedButtonId(receiver.getId(),
 									button.getId());
 						} catch (ActionNotSupportedException e) {
-							Log.e("Action not supported by Receiver!", e);
-							StatusMessageHandler.showInfoMessage(context,
+                            Timber.e("Action not supported by Receiver!", e);
+                            StatusMessageHandler.showInfoMessage(context,
 									context.getString(R.string.action_not_supported_by_receiver),
 									5000);
 						} catch (GatewayNotSupportedException e) {
-							Log.e("Gateway not supported by Receiver!", e);
-							StatusMessageHandler.showInfoMessage(context,
+                            Timber.e("Gateway not supported by Receiver!", e);
+                            StatusMessageHandler.showInfoMessage(context,
 									context.getString(R.string.gateway_not_supported_by_receiver),
 									5000);
 						}
@@ -301,8 +301,8 @@ public class ActionHandler {
 		}
 
 		if (networkPackages.size() <= 0) {
-			Log.d(context.getString(R.string.no_receiver_supports_this_action));
-			StatusMessageHandler.showInfoMessage(context,
+            Timber.d(context.getString(R.string.no_receiver_supports_this_action));
+            StatusMessageHandler.showInfoMessage(context,
 					context.getString(R.string.no_receiver_supports_this_action),
 					Snackbar.LENGTH_LONG);
 		} else {
@@ -374,13 +374,13 @@ public class ActionHandler {
 								networkPackages.add(networkPackage);
 							}
 						} catch (ActionNotSupportedException e) {
-							Log.e("Action not supported by Receiver!", e);
-							StatusMessageHandler.showInfoMessage(context,
+                            Timber.e("Action not supported by Receiver!", e);
+                            StatusMessageHandler.showInfoMessage(context,
 									context.getString(R.string.action_not_supported_by_receiver),
 									5000);
 						} catch (GatewayNotSupportedException e) {
-							Log.e("Gateway not supported by Receiver!", e);
-							StatusMessageHandler.showInfoMessage(context,
+                            Timber.e("Gateway not supported by Receiver!", e);
+                            StatusMessageHandler.showInfoMessage(context,
 									context.getString(R.string.gateway_not_supported_by_receiver),
 									5000);
 						}
@@ -396,8 +396,8 @@ public class ActionHandler {
 		}
 
 		if (networkPackages.size() <= 0) {
-			Log.d(context.getString(R.string.no_receiver_supports_this_action));
-			StatusMessageHandler.showInfoMessage(context,
+            Timber.d(context.getString(R.string.no_receiver_supports_this_action));
+            StatusMessageHandler.showInfoMessage(context,
 					context.getString(R.string.no_receiver_supports_this_action),
 					Snackbar.LENGTH_LONG);
 		} else {
@@ -432,8 +432,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -537,8 +537,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -563,8 +563,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -589,8 +589,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -639,8 +639,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -665,8 +665,8 @@ public class ActionHandler {
 			try {
 				HistoryHelper.add(context, e);
 			} catch (Exception e1) {
-				Log.e(e1);
-			}
+                Timber.e(e1);
+            }
 		}
 	}
 
@@ -696,42 +696,42 @@ public class ActionHandler {
 
 		if (gateway.hasValidLocalAddress() && !gateway.hasValidWanAddress()) {
 			// only valid local address
-			Log.d("Using local address");
-			return getLocalNetworkPackage(gateway, signal);
+            Timber.d("Using local address");
+            return getLocalNetworkPackage(gateway, signal);
 		} else if (!gateway.hasValidLocalAddress() && gateway.hasValidWanAddress()) {
 			// only valid WAN address
-			Log.d("Using WAN address");
-			return getWanNetworkPackage(gateway, signal);
+            Timber.d("Using WAN address");
+            return getWanNetworkPackage(gateway, signal);
 		} else if (gateway.hasValidLocalAddress() && gateway.hasValidWanAddress()) {
 			// decide if local or WAN address should be used
 			if (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected()) {
 				if (NetworkHandler.isInternetConnected()) {
 					if (!gateway.getSsids().isEmpty()) {
 						if (gateway.getSsids().contains(NetworkHandler.getConnectedWifiSSID())) {
-							Log.d("Using local address, connected to SSID specified in Gateway");
-							return getLocalNetworkPackage(gateway, signal);
+                            Timber.d("Using local address, connected to SSID specified in Gateway");
+                            return getLocalNetworkPackage(gateway, signal);
 						} else {
-							Log.d("Using WAN address, connected to unspecified SSID");
-							return getWanNetworkPackage(gateway, signal);
+                            Timber.d("Using WAN address, connected to unspecified SSID");
+                            return getWanNetworkPackage(gateway, signal);
 						}
 					} else {
 						if (apartment.getGeofence() != null &&
 								apartment.getGeofence().isActive() &&
 								Geofence.STATE_INSIDE.equals(apartment.getGeofence().getState())) {
-							Log.d("Using local address, inside geofence");
-							return getLocalNetworkPackage(gateway, signal);
+                            Timber.d("Using local address, inside geofence");
+                            return getLocalNetworkPackage(gateway, signal);
 						} else {
-							Log.d("Using WAN address, outside or missing geofence data");
-							return getWanNetworkPackage(gateway, signal);
+                            Timber.d("Using WAN address, outside or missing geofence data");
+                            return getWanNetworkPackage(gateway, signal);
 						}
 					}
 				} else {
-					Log.d("Using local address, no WAN (Internet connection) available");
-					return getLocalNetworkPackage(gateway, signal);
+                    Timber.d("Using local address, no WAN (Internet connection) available");
+                    return getLocalNetworkPackage(gateway, signal);
 				}
 			} else {
-				Log.d("Using WAN address, no WiFi or LAN available");
-				return getWanNetworkPackage(gateway, signal);
+                Timber.d("Using WAN address, no WiFi or LAN available");
+                return getWanNetworkPackage(gateway, signal);
 			}
 		} else {
 			throw new Exception("Invalid Gateway configuration!");

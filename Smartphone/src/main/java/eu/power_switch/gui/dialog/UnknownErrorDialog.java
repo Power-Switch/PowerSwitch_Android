@@ -35,9 +35,10 @@ import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
-import eu.power_switch.shared.log.Log;
-import eu.power_switch.shared.log.LogHandler;
+import eu.power_switch.shared.log.Log4JLog;
+import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
+import timber.log.Timber;
 
 /**
  * Shows a Dialog with details about an unknown Exception/Error that occurred during runtime
@@ -117,13 +118,13 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_TEXT, Log.getStackTraceText(throwable));
+                    intent.putExtra(Intent.EXTRA_TEXT, Log4JLog.getStackTraceText(throwable));
                     intent.setType("text/plain");
                     startActivity(Intent.createChooser(intent, getString(R.string.send_to)));
                 }
             });
 
-            textViewErrorDescription.setText(Log.getStackTraceText(throwable));
+            textViewErrorDescription.setText(Log4JLog.getStackTraceText(throwable));
 
             if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
                 textView_automaticCrashReportingEnabledInfo.setVisibility(View.VISIBLE);
@@ -140,7 +141,7 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
                 }
             });
         } catch (Exception e) {
-            Log.e(e);
+            Timber.e(e);
         }
     }
 
@@ -150,7 +151,7 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
     }
 
     private void reportExceptionViaMail() throws Exception {
-        LogHandler.sendLogsAsMail(throwable, timeRaised);
+        LogHelper.sendLogsAsMail(this, throwable, timeRaised);
     }
 
 }

@@ -27,7 +27,7 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.util.LinkedList;
 
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Background thread to search through local network for Gateways
@@ -99,7 +99,7 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
                     }
 
                 } catch (Exception e) {
-                    Log.e("malformed string, couldnt check IP", e);
+                    Timber.e("malformed string, couldnt check IP", e);
                 }
 
                 receivedMessages.add(message);
@@ -108,13 +108,13 @@ public class AutoGatewayDiscover extends AsyncTask<Void, Void, LinkedList<String
             }
 
         } catch (SocketTimeoutException e) {
-            Log.d(this, "AutoDetect Timeout Reached");
+            Timber.d("AutoDetect Timeout Reached");
         } catch (Exception e) {
-            Log.e("AutoGatewayDiscover", e);
+            Timber.e("AutoGatewayDiscover", e);
         } finally {
 
             for (String message : receivedMessages) {
-                Log.d("AutoGatewayDiscover", "Received: " + message);
+                Timber.d("AutoGatewayDiscover", "Received: " + message);
             }
 
             if (socket != null) {

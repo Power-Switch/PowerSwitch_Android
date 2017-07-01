@@ -32,7 +32,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Hidden Activity to receive NFC Tag messages without displaying any user interface
@@ -53,7 +53,7 @@ public class HiddenReceiverActivity extends Activity {
         // Get NFC Tag intent
         Intent intent = getIntent();
 
-        Log.d(this, intent);
+        Timber.d("Intent: ", intent);
 
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
 //            String type = intent.getType();
@@ -62,7 +62,7 @@ public class HiddenReceiverActivity extends Activity {
 
             String payload = readNfcTagPayload(intent);
 
-            Log.d("NFC Data: " + payload);
+            Timber.d("NFC Data: " + payload);
             executeAction(payload);
         }
 

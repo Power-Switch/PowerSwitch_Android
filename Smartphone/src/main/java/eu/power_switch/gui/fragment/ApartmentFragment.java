@@ -52,8 +52,8 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
-import eu.power_switch.shared.log.Log;
 import eu.power_switch.wear.service.UtilityService;
+import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -76,7 +76,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
      * @param context any suitable context
      */
     public static void sendApartmentChangedBroadcast(Context context) {
-        Log.d("ApartmentFragment", "sendApartmentChangedBroadcast");
+        Timber.d("ApartmentFragment", "sendApartmentChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
 
         LocalBroadcastManager.getInstance(context)
@@ -152,7 +152,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d(this, "received intent: " + intent.getAction());
+                Timber.d("received intent: " + intent.getAction());
                 updateUI();
             }
         };

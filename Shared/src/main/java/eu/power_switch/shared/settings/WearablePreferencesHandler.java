@@ -27,7 +27,7 @@ import java.util.Map;
 
 import eu.power_switch.shared.R;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * This class is responsible for accessing and modifying Wear App Settings
@@ -96,7 +96,7 @@ public class WearablePreferencesHandler {
         initializeDefaultValueMap();
 
         for (String key : cachedValues.keySet()) {
-            Log.d(WearablePreferencesHandler.class, key + ": " + get(key));
+            Timber.d(key + ": " + get(key));
         }
     }
 
@@ -142,7 +142,7 @@ public class WearablePreferencesHandler {
      * @return value
      */
     public static <T> T get(String settingsKey) throws ClassCastException {
-        // Log.d(WearablePreferencesHandler.class, "retrieving current value for key \"" + settingsKey + "\"");
+        // Timber.d("retrieving current value for key \"" + settingsKey + "\"");
 
         Object value = cachedValues.get(settingsKey);
 
@@ -164,7 +164,7 @@ public class WearablePreferencesHandler {
      * @param newValue    new value
      */
     public static void set(String settingsKey, Object newValue) {
-        Log.d(WearablePreferencesHandler.class, "setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
+        Timber.d("setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
 

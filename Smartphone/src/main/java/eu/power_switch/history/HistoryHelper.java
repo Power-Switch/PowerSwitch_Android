@@ -27,7 +27,8 @@ import java.util.Calendar;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.log.Log;
+import eu.power_switch.shared.log.Log4JLog;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 20.03.2016.
@@ -40,7 +41,7 @@ public class HistoryHelper {
      * @param context any suitable context
      */
     public static void sendHistoryChangedBroadcast(Context context) {
-        Log.d(HistoryHelper.class, "sendHistoryChangedBroadcast");
+        Timber.d("sendHistoryChangedBroadcast");
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -52,7 +53,10 @@ public class HistoryHelper {
     }
 
     public static void add(Context context, Exception e) throws Exception {
-        DatabaseHandler.addHistoryItem(new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.unknown_error), Log.getStackTraceText(e)));
+        DatabaseHandler.addHistoryItem(new HistoryItem((long) -1,
+                Calendar.getInstance(),
+                context.getString(R.string.unknown_error),
+                Log4JLog.getStackTraceText(e)));
         sendHistoryChangedBroadcast(context);
     }
 }

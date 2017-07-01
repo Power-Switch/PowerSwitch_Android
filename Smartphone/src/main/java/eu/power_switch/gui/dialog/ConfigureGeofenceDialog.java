@@ -38,7 +38,7 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4Summary;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * Dialog to create or modify a Geofence
@@ -66,7 +66,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("Opening " + getClass().getSimpleName() + "...");
+        Timber.d("Opening " + getClass().getSimpleName() + "...");
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
     }

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.shared.log.Log;
+import timber.log.Timber;
 
 /**
  * This Class is responsible for sending NetworkPackages that are queued up to be sent
@@ -55,7 +55,7 @@ public class NetworkPackageQueueHandler extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         // start working
-        Log.d(this, "start working");
+        Timber.d("start working");
 
         try {
             ArrayList<NetworkPackage> networkPackages = (ArrayList<NetworkPackage>) intent.getSerializableExtra(KEY_NETWORK_PACKAGES);
@@ -67,11 +67,11 @@ public class NetworkPackageQueueHandler extends IntentService {
             }
 
         } catch (Exception e) {
-            Log.e("Illegal intent extras");
+            Timber.e("Illegal intent extras");
         }
 
 
-        Log.d(this, "exiting");
+        Timber.d("exiting");
     }
 
     private void processQueue(ArrayList<NetworkPackage> networkPackages) {
@@ -92,7 +92,7 @@ public class NetworkPackageQueueHandler extends IntentService {
                         if (currentNetworkPackage.getHost().equals(nextNetworkPackage.getHost()) &&
                                 currentNetworkPackage.getPort() == nextNetworkPackage.getPort()) {
                             // if same gateway, wait gateway-specific time
-                            Log.d("Waiting Gateway specific time (" + currentNetworkPackage.getTimeout() + "ms) " +
+                            Timber.d("Waiting Gateway specific time (" + currentNetworkPackage.getTimeout() + "ms) " +
                                     "before sending next signal...");
                             delay = currentNetworkPackage.getTimeout();
                         }
@@ -101,29 +101,29 @@ public class NetworkPackageQueueHandler extends IntentService {
                     // remove NetworkPackage from queue
                     networkPackages.remove(0);
 
-                    Log.d("Waiting for Gateway to finish sending Signal before sending next...");
+                    Timber.d("Waiting for Gateway to finish sending Signal before sending next...");
                     Thread.sleep(delay);
                 } catch (UnknownHostException e) {
                     removeQueueHead(networkPackages);
 
                     StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.unknown_host, Snackbar.LENGTH_LONG);
-                    Log.e("UDP Sender", e);
+                    Timber.e("UDP Sender", e);
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
-                        Log.e("UDP Sender", e1);
+                        Timber.e("UDP Sender", e1);
                     }
                 } catch (Exception e) {
                     removeQueueHead(networkPackages);
 
                     StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
-                    Log.e("UDP Sender: Unknown error while sending message in background:", e);
+                    Timber.e("UDP Sender: Unknown error while sending message in background:", e);
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
-                        Log.e("UDP Sender", e1);
+                        Timber.e("UDP Sender", e1);
                     }
                 } finally {
                     if (socket != null) {
@@ -166,7 +166,7 @@ public class NetworkPackageQueueHandler extends IntentService {
             DatagramPacket messagePacket = new DatagramPacket(messageBuffer, messageBuffer.length, host, port);
             socket.send(messagePacket);
 
-            Log.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port
+            Timber.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port
                     + " Message: \"" + new String(messageBuffer) + "\" sent.");
 
             socket.disconnect();
@@ -190,12 +190,12 @@ public class NetworkPackageQueueHandler extends IntentService {
         java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
         if (s.hasNext()) {
             response = s.next();
-            Log.d("HTTP Response", response);
+            Timber.d("HTTP Response", response);
             if (responseCallback != null) {
                 responseCallback.receiveResponse("key", response);
             }
         } else {
-            Log.d("Scanner is empty");
+            Timber.d("Scanner is empty");
             if (responseCallback != null) {
                 responseCallback.receiveResponse("key", null);
             }
