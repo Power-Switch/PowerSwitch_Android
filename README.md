@@ -3,6 +3,13 @@ PowerSwitch - Funksteckdosen auf dem Smartphone
 
 https://power-switch.eu
 
+
+# Build Status
+
+| Master       | Beta | Dev               |
+|--------------|------|-------------------|
+| ![Master](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=master) | ![Beta](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=beta) | ![Dev](https://travis-ci.org/Power-Switch/PowerSwitch_Android.svg?branch=dev) |
+
 # Wieso? Weshalb? Warum?
 
 Schon seit langem gibt es in jedem Baumarkt preiswerte Funksteckdosen, die sich über eine Fernbedienung ein- und ausschalten lassen. Dazu wird eine Fernbedienung mitgeliefert, mit der sich meist ca. 3-4 Steckdosen schalten lassen. Die sieht nicht nur doof aus, sondern man vergisst auch schnell mal wo sie ist und wenn man mehr Steckdosen steuern will, braucht man mehrere Fernbedienungen.
