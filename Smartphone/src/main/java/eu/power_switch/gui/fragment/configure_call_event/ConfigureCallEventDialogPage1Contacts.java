@@ -18,11 +18,9 @@
 
 package eu.power_switch.gui.fragment.configure_call_event;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -36,7 +34,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+import java.util.Set;
 
 import butterknife.BindView;
 import eu.power_switch.R;
@@ -50,6 +52,7 @@ import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
+import eu.power_switch.shared.event.PhoneNumberAddedEvent;
 
 /**
  * Created by Markus on 05.04.2016.
@@ -63,7 +66,6 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
     @BindView(R.id.add_contact_fab)
     FloatingActionButton addContactFAB;
 
-    private BroadcastReceiver broadcastReceiver;
     private long callEventId = -1;
 
     private ArrayList<String> phoneNumbers = new ArrayList<>();
@@ -87,24 +89,6 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED.equals(intent.getAction())) {
-                    ArrayList<String> newPhoneNumbers = intent.getStringArrayListExtra(AddPhoneNumberDialog.KEY_PHONE_NUMBERS);
-
-                    for (String number : newPhoneNumbers) {
-                        if (!phoneNumbers.contains(number)) {
-                            phoneNumbers.add(number);
-                        }
-                    }
-
-                    phoneNumberRecyclerViewAdapter.notifyDataSetChanged();
-                    sendPhoneNumbersChangedBroadcast(getContext(), phoneNumbers);
-                }
-            }
-        };
 
         phoneNumberRecyclerViewAdapter = new PhoneNumberRecyclerViewAdapter(getActivity(), phoneNumbers);
         recyclerViewContacts.setAdapter(phoneNumberRecyclerViewAdapter);
@@ -168,20 +152,19 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onPhoneNumberAdded(PhoneNumberAddedEvent phoneNumberAddedEvent) {
+        Set<String> newPhoneNumbers = phoneNumberAddedEvent.getPhoneNumbers();
 
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
+        for (String number : newPhoneNumbers) {
+            if (!phoneNumbers.contains(number)) {
+                phoneNumbers.add(number);
+            }
+        }
+
+        phoneNumberRecyclerViewAdapter.notifyDataSetChanged();
+        sendPhoneNumbersChangedBroadcast(getContext(), phoneNumbers);
     }
 
 }

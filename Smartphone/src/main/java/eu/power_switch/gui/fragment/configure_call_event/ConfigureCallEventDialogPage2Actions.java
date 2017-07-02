@@ -18,10 +18,8 @@
 
 package eu.power_switch.gui.fragment.configure_call_event;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +30,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ import eu.power_switch.gui.dialog.ConfigureCallEventDialog;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
+import eu.power_switch.shared.event.CallEventActionAddedEvent;
 
 /**
  * Created by Markus on 05.04.2016.
@@ -64,9 +66,6 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
     RecyclerView recyclerViewActions;
 
     private long callEventId = -1;
-
-    private BroadcastReceiver broadcastReceiver;
-
 
     /**
      * Used to notify the setup page that some info has changed
@@ -92,15 +91,6 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
         super.onCreateView(inflater, container, savedInstanceState);
 
         actions.clear();
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED.equals(intent.getAction())) {
-//                    actions.add((Action) intent.getSerializableExtra("action"));
-                    sendActionsChangedBroadcast(getContext(), actions);
-                }
-            }
-        };
 
         FloatingActionButton addActionFAB = rootView.findViewById(R.id.add_action);
         addActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
@@ -140,6 +130,12 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
         return R.layout.dialog_fragment_configure_call_event_page_2;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onCallEventActionAdded(CallEventActionAddedEvent callEventActionAddedEvent) {
+        sendActionsChangedBroadcast(getContext(), actions);
+    }
+
     private void initializeCallData(long callEventId) {
         try {
             CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
@@ -152,19 +148,4 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
-    }
 }
