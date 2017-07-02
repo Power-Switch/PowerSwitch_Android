@@ -69,7 +69,7 @@ dependencies {
     compile "com.android.support:preference-v14:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:design:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:support-annotations:${rootProject.ext.supportLibVersion}"
-    compile 'com.google.android.support:wearable:2.0.3'
+    compile "com.google.android.support:wearable:${rootProject.ext.supportLibWearableVersion}"
 
     // Google Play Services
     compile "com.google.android.gms:play-services-drive:${rootProject.ext.playServicesVersion}"

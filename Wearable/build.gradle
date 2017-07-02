@@ -51,8 +51,8 @@ android {
 }
 
 dependencies {
-    compile 'com.google.android.support:wearable:2.0.3'
-    provided 'com.google.android.wearable:wearable:2.0.3'
+    compile "com.google.android.support:wearable:${rootProject.ext.supportLibWearableVersion}"
+    provided "com.google.android.wearable:wearable:${rootProject.ext.supportLibWearableVersion}"
 
     compile project(':Shared')
 }
