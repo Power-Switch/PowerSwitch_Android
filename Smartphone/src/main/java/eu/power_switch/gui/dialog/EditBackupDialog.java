@@ -106,7 +106,7 @@ public class EditBackupDialog extends EventBusSupportDialogFragment {
                                 name.getText()
                                         .toString()
                                         .trim());
-                        BackupFragment.notifyBackupsChanged(getActivity());
+                        BackupFragment.notifyBackupsChanged();
                         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
                     } catch (BackupAlreadyExistsException e) {
                         Timber.e(e);

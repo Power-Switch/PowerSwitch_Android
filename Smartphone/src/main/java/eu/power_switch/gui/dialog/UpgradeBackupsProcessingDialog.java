@@ -84,8 +84,7 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
                             }
 
                             List<String> subFolders = Arrays.asList(pathname.list());
-                            return pathname.isDirectory() && subFolders.contains("shared_prefs") &&
-                                    subFolders.contains("databases");
+                            return pathname.isDirectory() && subFolders.contains("shared_prefs") && subFolders.contains("databases");
                         }
                     };
 
@@ -95,25 +94,24 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
                             publishProgress(0, i, listFiles.length);
 
                             File oldBackup = listFiles[i];
-                            File target = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldBackup.getName() + BackupHandler.BACKUP_FILE_SUFFIX);
+                            File target    = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldBackup.getName() + BackupHandler.BACKUP_FILE_SUFFIX);
                             if (target.exists()) {
                                 target.delete();
                             }
 
-                            ZipHelper.createZip(target.getAbsolutePath(),
-                                    BackupHandler.BACKUP_PASSWORD,
-                                    new OnZipProgressChangedListener() {
-                                        @Override
-                                        public void onProgressChanged(ProgressMonitor progressMonitor) {
-                                            if (progressMonitor.getState() == ProgressMonitor.RESULT_WORKING) {
-                                                String fileName = progressMonitor.getFileName();
-                                                publishProgress(1, progressMonitor.getPercentDone(), fileName.substring(fileName.lastIndexOf(File.separator) + 1));
-                                            } else if (progressMonitor.getState() == ProgressMonitor.RESULT_SUCCESS) {
-                                                publishProgress(1, 100, getString(R.string.done));
-                                            }
-                                        }
-                                    },
-                                    oldBackup.getAbsolutePath());
+                            ZipHelper.createZip(target.getAbsolutePath(), BackupHandler.BACKUP_PASSWORD, new OnZipProgressChangedListener() {
+                                @Override
+                                public void onProgressChanged(ProgressMonitor progressMonitor) {
+                                    if (progressMonitor.getState() == ProgressMonitor.RESULT_WORKING) {
+                                        String fileName = progressMonitor.getFileName();
+                                        publishProgress(1,
+                                                progressMonitor.getPercentDone(),
+                                                fileName.substring(fileName.lastIndexOf(File.separator) + 1));
+                                    } else if (progressMonitor.getState() == ProgressMonitor.RESULT_SUCCESS) {
+                                        publishProgress(1, 100, getString(R.string.done));
+                                    }
+                                }
+                            }, oldBackup.getAbsolutePath());
 
                             if (getArguments().getBoolean(KEY_REMOVE_OLD_FORMAT)) {
                                 BackupHandler.deleteRecursive(oldBackup);
@@ -150,7 +148,7 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
                     onFinishedFailure(booleanAsyncTaskResult.getException());
                 }
 
-                BackupFragment.notifyBackupsChanged(getActivity());
+                BackupFragment.notifyBackupsChanged();
             }
         }.execute();
     }
