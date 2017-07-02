@@ -314,8 +314,8 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
                 }
             }
 
-            ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(getContext());
-            CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getContext());
+            ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
+            CustomGeofencesFragment.notifyCustomGeofencesChanged();
 
             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {

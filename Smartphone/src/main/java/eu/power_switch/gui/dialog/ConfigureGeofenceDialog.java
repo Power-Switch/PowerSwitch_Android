@@ -106,7 +106,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed {
                                     geofenceApiHandler.removeGeofence(geofenceId);
 
                                     // same for timers
-                                    CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getActivity());
+                                    CustomGeofencesFragment.notifyCustomGeofencesChanged();
 
                                     StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.geofence_deleted, Snackbar.LENGTH_LONG);

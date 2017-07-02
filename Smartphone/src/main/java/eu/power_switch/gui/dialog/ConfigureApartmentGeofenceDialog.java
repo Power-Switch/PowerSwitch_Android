@@ -103,7 +103,7 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                                     geofenceApiHandler.removeGeofence(geofenceId);
 
                                     // same for timers
-                                    ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(getActivity());
+                                    ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
 
                                     StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.geofence_deleted, Snackbar.LENGTH_LONG);

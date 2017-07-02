@@ -129,7 +129,7 @@ public class GeofenceIntentService extends IntentService {
                 Timber.e(e);
             }
         }
-        GeofencesTabFragment.sendGeofencesChangedBroadcast(getApplicationContext());
+        GeofencesTabFragment.notifyGeofencesChanged();
     }
 
     private boolean geofenceStateChanged(@eu.power_switch.google_play_services.geofence.Geofence.State String state,

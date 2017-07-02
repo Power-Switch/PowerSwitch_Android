@@ -10,5 +10,5 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @Value
-public class RoomChangedEvent extends EventBusEvent {
+public class CallEventChangedEvent extends EventBusEvent {
 }

@@ -19,16 +19,11 @@
 package eu.power_switch.gui.fragment.geofences;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -39,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -62,8 +58,8 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
+import eu.power_switch.shared.event.ApartmentGeofenceChangedEvent;
 import eu.power_switch.shared.event.PermissionChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
@@ -82,17 +78,13 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     private ArrayList<Geofence>      geofences              = new ArrayList<>();
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
     private GeofenceApiHandler          geofenceApiHandler;
-    private BroadcastReceiver           broadcastReceiver;
 
     /**
      * Used to notify the apartment geofence page (this) that geofences have changed
-     *
-     * @param context any suitable context
      */
-    public static void sendApartmentGeofencesChangedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED);
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyApartmentGeofencesChanged() {
+        EventBus.getDefault()
+                .post(new ApartmentGeofenceChangedEvent());
     }
 
     @Override
@@ -161,20 +153,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             }
         });
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-
-                switch (intent.getAction()) {
-                    case LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED:
-                        refreshGeofences();
-                        break;
-                }
-            }
-        };
-
         if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
             showEmpty();
             StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
@@ -196,7 +174,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             if (result[0] == PackageManager.PERMISSION_GRANTED) {
                 StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
-                sendApartmentGeofencesChangedBroadcast(getActivity());
+                notifyApartmentGeofencesChanged();
             } else {
                 StatusMessageHandler.showPermissionMissingMessage(getActivity(),
                         getRecyclerView(),
@@ -204,6 +182,12 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
                         Manifest.permission.ACCESS_FINE_LOCATION);
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onApartmentGeofenceChanged(ApartmentGeofenceChangedEvent apartmentGeofenceChangedEvent) {
+        refreshGeofences();
     }
 
     @Override
@@ -275,10 +259,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     @Override
     public void onStart() {
         super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_GEOFENCE_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
         geofenceApiHandler.onStart();
     }
 
@@ -294,8 +274,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
         geofenceApiHandler.onStop();
         super.onStop();
     }

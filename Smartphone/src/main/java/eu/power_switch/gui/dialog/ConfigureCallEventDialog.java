@@ -104,7 +104,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                                     DatabaseHandler.deleteCallEvent(callEventId);
 
                                     // notify scenes fragment
-                                    CallEventsFragment.sendCallEventsChangedBroadcast(getActivity());
+                                    CallEventsFragment.notifyCallEventsChanged();
 
                                     StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.call_event_deleted, Snackbar.LENGTH_LONG);

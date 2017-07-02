@@ -58,12 +58,10 @@ public class GeofencesTabFragment extends EventBusFragment {
 
     /**
      * Used to notify all Geofence Tabs that geofences have changed
-     *
-     * @param context any suitable context
      */
-    public static void sendGeofencesChangedBroadcast(Context context) {
-        ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(context);
-        CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(context);
+    public static void notifyGeofencesChanged() {
+        ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
+        CustomGeofencesFragment.notifyCustomGeofencesChanged();
     }
 
     @Override

@@ -178,7 +178,7 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
             DatabaseHandler.updateCallEvent(callEvent);
         }
 
-        CallEventsFragment.sendCallEventsChangedBroadcast(getContext());
+        CallEventsFragment.notifyCallEventsChanged();
         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
