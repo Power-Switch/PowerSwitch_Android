@@ -104,7 +104,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                                     DatabaseHandler.deleteScene(sceneId);
 
                                     // notify scenes fragment
-                                    ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                                    ScenesFragment.notifySceneChanged();
 
                                     // update scene widgets
                                     SceneWidgetProvider.forceWidgetUpdate(getActivity());

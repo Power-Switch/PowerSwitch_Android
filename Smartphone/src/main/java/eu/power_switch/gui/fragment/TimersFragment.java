@@ -18,14 +18,9 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -34,6 +29,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +47,8 @@ import eu.power_switch.gui.dialog.ConfigureTimerDialog;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
+import eu.power_switch.shared.event.TimerChangedEvent;
 import eu.power_switch.timer.Timer;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -65,20 +64,15 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
 
     private TimerRecyclerViewAdapter timerRecyclerViewAdapter;
 
-    private BroadcastReceiver    broadcastReceiver;
     private FloatingActionButton addTimerFAB;
 
     /**
      * Used to notify Timer Fragment (this) that Timers have changed
-     *
-     * @param context any suitable context
      */
-    public static void sendTimersChangedBroadcast(Context context) {
-        Timber.d("TimersFragment", "sendTimersChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyTimersChanged() {
+        Timber.d("TimersFragment", "notifyTimersChanged");
+        EventBus.getDefault()
+                .post(new TimerChangedEvent());
     }
 
     @Override
@@ -128,18 +122,15 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
             addTimerFAB.setVisibility(View.GONE);
         }
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("TimersFragment", "received intent: " + intent.getAction());
-                updateUI();
-            }
-        };
-
         updateUI();
 
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onConfigurationChanged(TimerChangedEvent timerChangedEvent) {
+        updateUI();
     }
 
     @Override
@@ -201,25 +192,9 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         showTutorial();
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     @Override

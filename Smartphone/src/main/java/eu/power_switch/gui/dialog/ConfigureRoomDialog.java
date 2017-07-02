@@ -99,9 +99,9 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
                             DatabaseHandler.deleteRoom(roomId);
 
                             // notify rooms fragment
-                            RoomsFragment.sendRoomChangedBroadcast(getActivity());
+                            RoomsFragment.notifyRoomChanged();
                             // scenes could change too if room was used in a scene
-                            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                            ScenesFragment.notifySceneChanged();
 
                             // update room widgets
                             RoomWidgetProvider.forceWidgetUpdate(getActivity());

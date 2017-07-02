@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
-import eu.power_switch.gui.fragment.ButterKnifeFragment;
+import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import eu.power_switch.wear.service.WearableHelper;
@@ -47,7 +47,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  * <p/>
  * Created by Markus on 30.08.2015.
  */
-public class SettingsTabFragment extends ButterKnifeFragment {
+public class SettingsTabFragment extends EventBusFragment {
 
     public static final String TAB_INDEX_KEY = "tabIndex";
 

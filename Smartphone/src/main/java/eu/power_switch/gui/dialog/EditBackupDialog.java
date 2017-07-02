@@ -35,6 +35,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
 import eu.power_switch.shared.exception.backup.BackupNotFoundException;
@@ -43,7 +44,7 @@ import timber.log.Timber;
 /**
  * Dialog to rename a Backup
  */
-public class EditBackupDialog extends ButterKnifeSupportDialogFragment {
+public class EditBackupDialog extends EventBusSupportDialogFragment {
 
     public static final String NAME_KEY = "name";
 
@@ -105,7 +106,7 @@ public class EditBackupDialog extends ButterKnifeSupportDialogFragment {
                                 name.getText()
                                         .toString()
                                         .trim());
-                        BackupFragment.sendBackupsChangedBroadcast(getActivity());
+                        BackupFragment.notifyBackupsChanged(getActivity());
                         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
                     } catch (BackupAlreadyExistsException e) {
                         Timber.e(e);

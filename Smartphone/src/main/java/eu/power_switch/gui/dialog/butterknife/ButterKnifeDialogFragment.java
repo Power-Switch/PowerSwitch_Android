@@ -1,11 +1,11 @@
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.dialog.butterknife;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -17,7 +17,7 @@ import butterknife.Unbinder;
  * <p>
  * Created by Markus on 30.06.2017.
  */
-public abstract class ButterKnifeSupportDialogFragment extends DialogFragment {
+public abstract class ButterKnifeDialogFragment extends DialogFragment {
 
     protected View     rootView;
     private   Unbinder unbinder;

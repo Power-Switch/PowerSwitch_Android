@@ -234,7 +234,7 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
                 }
             }
 
-            TimersFragment.sendTimersChangedBroadcast(getContext());
+            TimersFragment.notifyTimersChanged();
             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);

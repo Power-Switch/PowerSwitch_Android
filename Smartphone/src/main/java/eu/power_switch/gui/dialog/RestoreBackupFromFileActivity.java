@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
+import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import timber.log.Timber;
 
 /**

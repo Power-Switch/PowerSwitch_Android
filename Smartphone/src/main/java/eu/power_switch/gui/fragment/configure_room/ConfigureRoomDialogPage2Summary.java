@@ -326,9 +326,9 @@ public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage imp
             DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
         }
 
-        RoomsFragment.sendRoomChangedBroadcast(getActivity());
+        RoomsFragment.notifyRoomChanged();
         // scenes could change too if room was used in a scene
-        ScenesFragment.sendScenesChangedBroadcast(getActivity());
+        ScenesFragment.notifySceneChanged();
 
         // update room widgets
         RoomWidgetProvider.forceWidgetUpdate(getActivity());

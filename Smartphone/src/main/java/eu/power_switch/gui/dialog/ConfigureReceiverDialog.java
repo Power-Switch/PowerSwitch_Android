@@ -111,9 +111,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                                     DatabaseHandler.deleteReceiver(receiverId);
 
                                     // notify rooms fragment
-                                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+                                    RoomsFragment.notifyReceiverChanged();
                                     // scenes could change too if receiver was used in a scene
-                                    ScenesFragment.sendScenesChangedBroadcast(getActivity());
+                                    ScenesFragment.notifySceneChanged();
 
                                     // update receiver widgets
                                     ReceiverWidgetProvider.forceWidgetUpdate(getActivity());

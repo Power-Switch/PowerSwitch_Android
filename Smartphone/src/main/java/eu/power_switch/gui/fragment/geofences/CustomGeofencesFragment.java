@@ -39,6 +39,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +59,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
+import eu.power_switch.shared.event.PermissionChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
@@ -137,23 +141,6 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
                     case LocalBroadcastConstants.INTENT_CUSTOM_GEOFENCE_CHANGED:
                         refreshGeofences();
                         break;
-                    case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:
-                        int permissionRequestCode = intent.getIntExtra(PermissionConstants.KEY_REQUEST_CODE, 0);
-                        int[] result = intent.getIntArrayExtra(PermissionConstants.KEY_RESULTS);
-
-                        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
-                            if (result[0] == PackageManager.PERMISSION_GRANTED) {
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
-
-                                sendCustomGeofencesChangedBroadcast(context);
-                            } else {
-                                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(),
-                                        PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
-                                        Manifest.permission.ACCESS_FINE_LOCATION);
-                            }
-                        }
-                        break;
                 }
 
             }
@@ -170,6 +157,26 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
         }
 
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onPermissionChanged(PermissionChangedEvent permissionChangedEvent) {
+        int   permissionRequestCode = permissionChangedEvent.getRequestCode();
+        int[] result                = permissionChangedEvent.getGrantResults();
+
+        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
+            if (result[0] == PackageManager.PERMISSION_GRANTED) {
+                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+
+                sendCustomGeofencesChangedBroadcast(getActivity());
+            } else {
+                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                        getRecyclerView(),
+                        PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+        }
     }
 
     @Override
@@ -236,7 +243,6 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
         intentFilter.addAction(LocalBroadcastConstants.INTENT_CUSTOM_GEOFENCE_CHANGED);
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(broadcastReceiver, intentFilter);

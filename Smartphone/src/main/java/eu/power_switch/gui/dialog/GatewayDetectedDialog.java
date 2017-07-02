@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
+import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.obj.gateway.Gateway;
 
 /**

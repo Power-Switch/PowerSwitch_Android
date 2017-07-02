@@ -20,11 +20,11 @@ package eu.power_switch.gui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.AlarmEventActionAddedEvent;
 
 /**
  * Dialog to select an action configuration for a stock alarm clock event
@@ -57,12 +57,10 @@ public class AddStockAlarmClockEventActionDialog extends AddActionDialog {
 
     /**
      * Used to notify the setup page that some info has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendAlarmEventActionAddedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    public static void notifyAlarmEventActionAdded() {
+        EventBus.getDefault()
+                .post(new AlarmEventActionAddedEvent());
     }
 
     @NonNull
@@ -83,8 +81,7 @@ public class AddStockAlarmClockEventActionDialog extends AddActionDialog {
             ArrayList<Action> actions = new ArrayList<>(DatabaseHandler.getAlarmActions(currentEventType));
             actions.add(getCurrentSelection());
             DatabaseHandler.setAlarmActions(currentEventType, actions);
-            StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                    R.string.action_saved, Snackbar.LENGTH_LONG);
+            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.action_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
@@ -92,6 +89,6 @@ public class AddStockAlarmClockEventActionDialog extends AddActionDialog {
 
     @Override
     protected void sendDataChangedBroadcast(Context context) {
-        sendAlarmEventActionAddedBroadcast(context);
+        notifyAlarmEventActionAdded();
     }
 }

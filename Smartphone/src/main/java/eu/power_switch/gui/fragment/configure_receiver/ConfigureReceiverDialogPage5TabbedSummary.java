@@ -450,9 +450,9 @@ public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDial
             DatabaseHandler.updateReceiver(receiver);
         }
 
-        RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+        RoomsFragment.notifyReceiverChanged();
         // scenes could change too if room was used in a scene
-        ScenesFragment.sendScenesChangedBroadcast(getActivity());
+        ScenesFragment.notifySceneChanged();
 
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());

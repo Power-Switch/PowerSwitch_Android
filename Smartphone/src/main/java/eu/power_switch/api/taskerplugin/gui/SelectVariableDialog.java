@@ -37,7 +37,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.api.taskerplugin.EditActivity;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ButterKnifeDialogFragment;
+import eu.power_switch.gui.dialog.eventbus.EventBusDialogFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import timber.log.Timber;
 
@@ -46,7 +46,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 24.05.2016.
  */
-public class SelectVariableDialog extends ButterKnifeDialogFragment {
+public class SelectVariableDialog extends EventBusDialogFragment {
 
     public static final String KEY_FIELD             = "field";
     public static final String KEY_SELECTED_VARIABLE = "selectedVariable";

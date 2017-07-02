@@ -150,7 +150,7 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
                     onFinishedFailure(booleanAsyncTaskResult.getException());
                 }
 
-                BackupFragment.sendBackupsChangedBroadcast(getActivity());
+                BackupFragment.notifyBackupsChanged(getActivity());
             }
         }.execute();
     }

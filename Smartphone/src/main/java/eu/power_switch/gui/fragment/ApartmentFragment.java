@@ -18,14 +18,10 @@
 
 package eu.power_switch.gui.fragment;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -34,6 +30,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +50,8 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
+import eu.power_switch.shared.event.ActiveApartmentChangedEvent;
 import eu.power_switch.wear.service.UtilityService;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -67,20 +67,16 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
     private ApartmentRecyclerViewAdapter apartmentArrayAdapter;
     private ArrayList<Apartment> apartments = new ArrayList<>();
 
-
-    private BroadcastReceiver broadcastReceiver;
-
     /**
      * Used to notify other Fragments that the selected Apartment has changed
      *
      * @param context any suitable context
      */
-    public static void sendApartmentChangedBroadcast(Context context) {
-        Timber.d("ApartmentFragment", "sendApartmentChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
+    public static void notifyActiveApartmentChanged(Context context) {
+        Timber.d("ApartmentFragment", "notifyActiveApartmentChanged");
+        EventBus.getDefault()
+                .post(new ActiveApartmentChangedEvent());
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
         UtilityService.forceWearDataUpdate(context);
     }
 
@@ -147,15 +143,6 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 }
             }
         });
-
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-                updateUI();
-            }
-        };
 
         updateUI();
 
@@ -252,20 +239,10 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         showTutorial();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onActiveApartmentChanged(ActiveApartmentChangedEvent activeApartmentChangedEvent) {
+        updateUI();
     }
 
     @Override

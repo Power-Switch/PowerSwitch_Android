@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.activity;
+package eu.power_switch.gui.activity.butterknife;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -24,6 +24,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 
 import butterknife.ButterKnife;
+import eu.power_switch.gui.activity.SupportActivityBase;
 
 /**
  * Base class for a ButterKnife backed activity

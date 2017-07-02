@@ -39,6 +39,7 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy
@@ -47,7 +48,7 @@ import eu.power_switch.gui.StatusMessageHandler;
  * <p/>
  * Created by Markus on 25.11.2015.
  */
-public abstract class RecyclerViewFragment<T> extends ButterKnifeFragment implements LoaderManager.LoaderCallbacks<RecyclerViewUpdateResult<T>> {
+public abstract class RecyclerViewFragment<T> extends EventBusFragment implements LoaderManager.LoaderCallbacks<RecyclerViewUpdateResult<T>> {
 
     @BindView(R.id.layoutLoading)
     LinearLayout layoutLoading;

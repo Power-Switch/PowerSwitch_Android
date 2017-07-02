@@ -128,7 +128,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
             }
 
             // notify rooms fragment
-            RoomsFragment.sendRoomChangedBroadcast(getActivity());
+            RoomsFragment.notifyRoomChanged();
 
             // update wear data
             UtilityService.forceWearDataUpdate(getActivity());

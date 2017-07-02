@@ -19,11 +19,9 @@
 package eu.power_switch.gui.fragment.settings;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -33,13 +31,15 @@ import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 import android.view.View;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -58,14 +58,12 @@ import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.application.ApplicationHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.exception.permission.MissingPermissionException;
 import eu.power_switch.shared.log.LogHelper;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.wizard.gui.WizardActivity;
-import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -95,7 +93,6 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     private IntListPreference logDestination;
     private Preference        sendLogsEmail;
 
-    private BroadcastReceiver    broadcastReceiver;
     private Calendar             devMenuFirstClickTime;
     private int                  devMenuClickCounter;
     private Map<Integer, String> mainTabsMap;
@@ -114,18 +111,12 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         addPreferencesFromResource(R.xml.settings_general);
 
         initializePreferenceItems();
+    }
 
-        // Listen for preference item actions
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-
-                if (LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED.equals(intent.getAction())) {
-                    backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
-                }
-            }
-        };
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onBackupPathChanged() {
+        backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
     }
 
     private void initializePreferenceItems() {
@@ -451,20 +442,12 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_PATH_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     public void onPause() {
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
-
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
 
         super.onPause();
     }

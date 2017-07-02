@@ -91,7 +91,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     DatabaseHandler.deleteGateway(gatewayId);
-                                    GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
+                                    GatewaySettingsFragment.notifyGatewaysChanged();
                                     StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.gateway_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {

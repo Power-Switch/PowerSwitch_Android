@@ -41,6 +41,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1Name;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
@@ -51,7 +52,7 @@ import eu.power_switch.wear.service.UtilityService;
 /**
  * Dialog to create a new Room
  */
-public class CreateRoomDialog extends ButterKnifeSupportDialogFragment {
+public class CreateRoomDialog extends EventBusSupportDialogFragment {
 
     @BindView(R.id.editText_room_name)
     EditText        name;
@@ -114,7 +115,7 @@ public class CreateRoomDialog extends ButterKnifeSupportDialogFragment {
 
                     ConfigureReceiverDialogPage1Name.sendRoomAddedBroadcast(getActivity(), getRoomName());
 
-                    RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+                    RoomsFragment.notifyReceiverChanged();
 
                     // update wear data
                     UtilityService.forceWearDataUpdate(getActivity());

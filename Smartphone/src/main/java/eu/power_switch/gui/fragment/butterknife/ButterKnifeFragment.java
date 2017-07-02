@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.fragment;
+package eu.power_switch.gui.fragment.butterknife;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;

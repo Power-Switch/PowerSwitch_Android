@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.ButterKnifeFragment;
+import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import eu.power_switch.tutorial.TutorialHelper;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -43,7 +43,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  * <p/>
  * Created by Markus on 25.06.2015.
  */
-public class GeofencesTabFragment extends ButterKnifeFragment {
+public class GeofencesTabFragment extends EventBusFragment {
 
     public static final String TAB_INDEX_KEY = "tabIndex";
 

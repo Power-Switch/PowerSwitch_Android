@@ -18,14 +18,9 @@
 
 package eu.power_switch.gui.fragment.main;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -35,6 +30,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +53,10 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.event.ActiveApartmentChangedEvent;
+import eu.power_switch.shared.event.ReceiverChangedEvent;
+import eu.power_switch.shared.event.RoomChangedEvent;
 import timber.log.Timber;
 
 /**
@@ -70,30 +71,22 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
     private RoomRecyclerViewAdapter    roomsRecyclerViewAdapter;
     private StaggeredGridLayoutManager layoutManager;
 
-    private BroadcastReceiver broadcastReceiver;
-
     /**
      * Used to notify Room Fragment (this) that Rooms have changed
-     *
-     * @param context any suitable context
      */
-    public static void sendRoomChangedBroadcast(Context context) {
-        Timber.d("RoomsFragment", "sendRoomChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_CHANGED);
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyRoomChanged() {
+        Timber.d("RoomsFragment", "notifyRoomChanged");
+        EventBus.getDefault()
+                .post(new RoomChangedEvent());
     }
 
     /**
      * Used to notify Room Fragment (this) that Receivers have changed
-     *
-     * @param context any suitable context
      */
-    public static void sendReceiverChangedBroadcast(Context context) {
-        Timber.d("RoomsFragment", "sendReceiverChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyReceiverChanged() {
+        Timber.d("RoomsFragment", "notifyReceiverChanged");
+        EventBus.getDefault()
+                .post(new ReceiverChangedEvent());
     }
 
     @Override
@@ -142,18 +135,27 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
             }
         });
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("RoomsFragment", "received intent: " + intent.getAction());
-                updateUI();
-            }
-        };
-
         updateUI();
 
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onActiveApartmentChanged(ActiveApartmentChangedEvent activeApartmentChangedEvent) {
+        updateUI();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onRoomChanged(RoomChangedEvent roomChangedEvent) {
+        updateUI();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onReceiverChanged(ReceiverChangedEvent receiverChangedEvent) {
+        updateUI();
     }
 
     @Override
@@ -222,24 +224,6 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         } else {
             addReceiverFAB.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_RECEIVER_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     @Override

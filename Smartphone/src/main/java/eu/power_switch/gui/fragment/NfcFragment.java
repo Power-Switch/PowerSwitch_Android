@@ -50,6 +50,7 @@ import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.WriteNfcTagDialog;
+import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.nfc.HiddenReceiverActivity;
 import eu.power_switch.nfc.NfcHandler;
@@ -65,7 +66,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Created by Markus on 09.04.2016.
  */
-public class NfcFragment extends ButterKnifeFragment {
+public class NfcFragment extends EventBusFragment {
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override

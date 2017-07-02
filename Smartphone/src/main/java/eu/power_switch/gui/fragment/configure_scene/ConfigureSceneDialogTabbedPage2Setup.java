@@ -230,7 +230,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
             }
 
             // notify scenes fragment
-            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+            ScenesFragment.notifySceneChanged();
 
             // update scene widgets
             SceneWidgetProvider.forceWidgetUpdate(getActivity());

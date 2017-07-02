@@ -304,7 +304,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
             DatabaseHandler.updateApartment(updatedApartment);
         }
 
-        ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
+        ApartmentFragment.notifyActiveApartmentChanged(getActivity());
         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_saved, Snackbar.LENGTH_LONG);
     }
 

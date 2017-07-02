@@ -351,7 +351,7 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
             }
         }
 
-        GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
+        GatewaySettingsFragment.notifyGatewaysChanged();
         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
     }
 

@@ -18,16 +18,11 @@
 
 package eu.power_switch.gui.fragment.settings;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -36,6 +31,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.GatewayChangedEvent;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import timber.log.Timber;
 
@@ -70,16 +69,13 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     FloatingActionButton searchGatewayFAB;
     @BindView(R.id.add_fab)
     FloatingActionButton addGatewayFAB;
-    private BroadcastReceiver broadcastReceiver;
     private GatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
     private ArrayList<Gateway> gateways = new ArrayList<>();
 
-    public static void sendGatewaysChangedBroadcast(Context context) {
-        Timber.d("sendGatewaysChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyGatewaysChanged() {
+        Timber.d("notifyGatewaysChanged");
+        EventBus.getDefault()
+                .post(new GatewayChangedEvent());
     }
 
     @Override
@@ -129,17 +125,15 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateListContent();
-            }
-        };
-
         updateUI();
 
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onGatewayChanged(GatewayChangedEvent gatewayChangedEvent) {
+        updateListContent();
     }
 
     @Override
@@ -199,7 +193,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                             getString(R.string.autodiscover_response_message, newGatewaysCount, existingGatewaysCount, unknownGatewaysCount),
                             Snackbar.LENGTH_LONG);
 
-                    sendGatewaysChangedBroadcast(recyclerViewFragment.getContext());
+                    notifyGatewaysChanged();
                 } catch (Exception e) {
                     Timber.e(e);
                 }
@@ -263,22 +257,6 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                     .setVisible(false)
                     .setEnabled(false);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     @Override

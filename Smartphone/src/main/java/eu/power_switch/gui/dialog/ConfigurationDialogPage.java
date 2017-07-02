@@ -18,25 +18,25 @@
 
 package eu.power_switch.gui.dialog;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Constructor;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.ButterKnifeFragment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
+import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import timber.log.Timber;
 
 /**
  * Created by Markus on 25.03.2016.
  */
-public abstract class ConfigurationDialogPage extends ButterKnifeFragment {
+public abstract class ConfigurationDialogPage extends EventBusFragment {
 
     protected ConfigurationDialogTabbed configurationDialogTabbed;
 
@@ -75,9 +75,8 @@ public abstract class ConfigurationDialogPage extends ButterKnifeFragment {
      * Used to notify parent Dialog that configuration has changed
      */
     public void notifyConfigurationChanged() {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CONFIGURATION_DIALOG_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .sendBroadcast(intent);
+        EventBus.getDefault()
+                .post(new ConfigurationChangedEvent());
     }
 
     /**

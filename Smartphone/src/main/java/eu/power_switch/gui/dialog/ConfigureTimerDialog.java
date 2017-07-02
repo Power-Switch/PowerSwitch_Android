@@ -106,7 +106,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                                     DatabaseHandler.deleteTimer(timerId);
 
                                     // notify scenes fragment
-                                    TimersFragment.sendTimersChangedBroadcast(getActivity());
+                                    TimersFragment.notifyTimersChanged();
 
                                     StatusMessageHandler.showInfoMessage(getTargetFragment(),
                                             R.string.timer_deleted, Snackbar.LENGTH_LONG);

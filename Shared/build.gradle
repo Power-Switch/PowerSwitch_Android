@@ -66,6 +66,9 @@ dependencies {
         exclude group: 'com.google.android', module: 'android'
     }
 
+    // GreenRobot EventBus - simplifies communication between Activities, Fragments, Threads, Services, etc.
+    compile 'org.greenrobot:eventbus:3.0.0'
+
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.google.android.gms:play-services-wearable:${rootProject.ext.playServicesVersion}"
 

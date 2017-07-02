@@ -36,6 +36,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.notification.NotificationHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -44,7 +45,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Hidden Dialog Menu to access developer options
  */
-public class DeveloperOptionsDialog extends ButterKnifeSupportDialogFragment {
+public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
 
     private GeofenceApiHandler geofenceApiHandler;
     @BindView(R.id.checkBox_playStoreMode)

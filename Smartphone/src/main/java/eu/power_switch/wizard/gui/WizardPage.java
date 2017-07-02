@@ -30,7 +30,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.github.paolorotolo.appintro.ISlideBackgroundColorHolder;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.fragment.ButterKnifeFragment;
+import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.shared.ThemeHelper;
 
 /**
@@ -38,7 +38,7 @@ import eu.power_switch.shared.ThemeHelper;
  * <p>
  * Created by Markus on 04.11.2016.
  */
-public abstract class WizardPage extends ButterKnifeFragment implements ISlideBackgroundColorHolder {
+public abstract class WizardPage extends EventBusFragment implements ISlideBackgroundColorHolder {
 
     @Override
     public void setBackgroundColor(@ColorInt int backgroundColor) {

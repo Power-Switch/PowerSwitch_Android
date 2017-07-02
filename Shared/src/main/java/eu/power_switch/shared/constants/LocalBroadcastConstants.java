@@ -26,27 +26,14 @@ package eu.power_switch.shared.constants;
 public class LocalBroadcastConstants {
 
     // LocalBroadcastConstants
-    public static final String INTENT_CONFIGURATION_DIALOG_CHANGED = "eu.power_switch.configuration_dialog_changed";
-
-    public static final String INTENT_WEARABLE_SETTINGS_CHANGED = "eu.power_switch.wearable_settings_changed";
-
-    public static final String INTENT_GATEWAY_CHANGED            = "eu.power_switch.gateway_changed";
     public static final String INTENT_GATEWAY_SETUP_CHANGED      = "eu.power_switch.gateway_setup_changed";
     public static final String INTENT_GATEWAY_SSID_ADDED         = "eu.power_switch.gateway_ssid_added";
     public static final String INTENT_GATEWAY_SSIDS_CHANGED      = "eu.power_switch.gateway_ssids_changed";
     public static final String INTENT_GATEWAY_APARTMENTS_CHANGED = "eu.power_switch.gateway_apartments_changed";
 
-    public static final String INTENT_RECEIVER_CHANGED           = "eu.power_switch.receiver_changed";
-    public static final String INTENT_APARTMENT_CHANGED          = "eu.power_switch.apartment_changed";
-    public static final String INTENT_ROOM_CHANGED               = "eu.power_switch.room_changed";
     public static final String INTENT_ROOM_ADDED                 = "eu.power_switch.room_added";
-    public static final String INTENT_SCENE_CHANGED              = "eu.power_switch.scene_changed";
-    public static final String INTENT_TIMER_CHANGED              = "eu.power_switch.timer_changed";
     public static final String INTENT_APARTMENT_GEOFENCE_CHANGED = "eu.power_switch.apartment_geofence_changed";
     public static final String INTENT_CUSTOM_GEOFENCE_CHANGED    = "eu.power_switch.custom_geofence_changed";
-    public static final String INTENT_BACKUP_CHANGED             = "eu.power_switch.backup_changed";
-    public static final String INTENT_BACKUP_PATH_CHANGED        = "eu.power_switch.backup_path_changed";
-    public static final String INTENT_HISTORY_CHANGED            = "eu.power_switch.history_changed";
 
     public static final String INTENT_SETUP_APARTMENT_CHANGED = "eu.power_switch.setup_apartment_changed";
 
@@ -74,7 +61,6 @@ public class LocalBroadcastConstants {
     public static final String INTENT_TIMER_ACTIONS_CHANGED             = "eu.power_switch.timer_actions_changed";
 
     public static final String INTENT_TIMER_ACTION_ADDED       = "eu.power_switch.timer_action_added";
-    public static final String INTENT_ALARM_EVENT_ACTION_ADDED = "eu.power_switch.alarm_event_action_added";
 
     public static final String INTENT_CALL_EVENTS_CHANGED              = "eu.power_switch.call_events_changed";
     public static final String INTENT_CALL_EVENT_PHONE_NUMBER_ADDED    = "eu.power_switch.call_event_phone_number_added";
@@ -88,9 +74,6 @@ public class LocalBroadcastConstants {
 
 
     public static final String INTENT_VARIABLE_SELECTED = "eu.power_switch.variable_selected";
-
-    public static final String INTENT_PERMISSION_CHANGED = "eu.power_switch.permission_changed";
-
 
     /**
      * Private Constructor

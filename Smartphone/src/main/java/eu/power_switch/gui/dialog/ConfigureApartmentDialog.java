@@ -116,7 +116,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                                 DatabaseHandler.deleteApartment(apartmentId);
                             }
 
-                            ApartmentFragment.sendApartmentChangedBroadcast(getActivity());
+                            ApartmentFragment.notifyActiveApartmentChanged(getActivity());
                             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_removed, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);

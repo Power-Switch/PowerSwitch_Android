@@ -12,7 +12,6 @@ import eu.power_switch.settings.DeveloperPreferencesHandler;
 /**
  * Created by Markus on 30.06.2017.
  */
-
 public class SupportActivityBase extends AppCompatActivity {
 
     @Override

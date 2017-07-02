@@ -16,24 +16,26 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.activity;
+package eu.power_switch.gui.activity.butterknife;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 
+import eu.power_switch.gui.activity.SmartphoneThemeHelper;
+
 /**
- * Base class for a ButterKnife backed activity
+ * Base class for a ButterKnife backed activity themed like a dialog
  * <p>
  * Created by Markus on 30.06.2017.
  */
-public abstract class ButterKnifeActivity extends ButterKnifeSupportActivityBase {
+public abstract class ButterKnifeDialogActivity extends ButterKnifeSupportActivityBase {
 
     @Override
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // set Theme before anything else in onCreate();
-        SmartphoneThemeHelper.applyTheme(this);
+        SmartphoneThemeHelper.applyDialogTheme(this);
 
         super.onCreate(savedInstanceState);
     }

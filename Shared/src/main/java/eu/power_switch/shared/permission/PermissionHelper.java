@@ -22,7 +22,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
@@ -31,12 +30,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 
+import org.greenrobot.eventbus.EventBus;
+
 import eu.power_switch.shared.R;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.constants.PermissionConstants;
+import eu.power_switch.shared.event.PermissionChangedEvent;
 
 /**
  * Helper class for Permission handling
@@ -57,17 +56,11 @@ public class PermissionHelper {
     /**
      * Send local broadcast to inform listeners about changed permissions
      *
-     * @param context      any suitable context
      * @param grantResults permission change results
      */
-    public static void sendPermissionChangedBroadcast(Context context, int requestCode, String[] permissions, int[] grantResults) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
-        intent.putExtra(PermissionConstants.KEY_REQUEST_CODE, requestCode);
-        intent.putExtra(PermissionConstants.KEY_PERMISSIONS, permissions);
-        intent.putExtra(PermissionConstants.KEY_RESULTS, grantResults);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyPermissionChanged(int requestCode, String[] permissions, int[] grantResults) {
+        EventBus.getDefault()
+                .post(new PermissionChangedEvent(requestCode, permissions, grantResults));
     }
 
     /**
