@@ -85,7 +85,7 @@ public class Scene {
     public void addSceneItem(Receiver receiver) {
         sceneItems.add(new SceneItem(receiver,
                 receiver.getButtons()
-                        .getFirst()));
+                        .get(0)));
     }
 
     /**

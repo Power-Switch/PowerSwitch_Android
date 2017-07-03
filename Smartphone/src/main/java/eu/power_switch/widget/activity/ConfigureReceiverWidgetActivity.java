@@ -36,7 +36,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -228,7 +227,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
                 // calling updateAppWidget(int, RemoteViews):
                 RemoteViews remoteViews = new RemoteViews(getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
 
-                LinkedList<Button> buttons = selectedReceiver.getButtons();
+                List<Button> buttons = selectedReceiver.getButtons();
 
                 remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
                         selectedApartment.getName() + ": " + selectedRoom.getName() + ": " + selectedReceiver.getName());

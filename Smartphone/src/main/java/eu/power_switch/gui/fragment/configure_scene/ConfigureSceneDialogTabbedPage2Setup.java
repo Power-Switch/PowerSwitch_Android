@@ -350,7 +350,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                     receiverSceneItemHashMap.put(receiver.getId(),
                             new SceneItem(receiver,
                                     receiver.getButtons()
-                                            .getFirst()));
+                                            .get(0)));
                 }
                 final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
                 for (Button button : receiver.getButtons()) {

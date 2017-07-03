@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ApartmentConfigurationHolder extends ConfigurationHolder {
 
-    private Long apartmentId;
+    private Long id;
 
     private List<Apartment> existingApartments;
 
@@ -26,7 +26,7 @@ public class ApartmentConfigurationHolder extends ConfigurationHolder {
     public boolean checkNameAlreadyExists() {
         for (Apartment apartment : existingApartments) {
             if (!apartment.getId()
-                    .equals(apartmentId) && apartment.getName()
+                    .equals(id) && apartment.getName()
                     .equalsIgnoreCase(name)) {
                 return true;
             }
@@ -38,6 +38,6 @@ public class ApartmentConfigurationHolder extends ConfigurationHolder {
     @Override
     public boolean isValid() {
         return name != null && name.trim()
-                .length() > 0;
+                .length() > 0 && !checkNameAlreadyExists() && associatedGateways != null;
     }
 }

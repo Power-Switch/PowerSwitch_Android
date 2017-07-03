@@ -137,35 +137,35 @@ public abstract class Receiver {
      */
     public static final int MIN_REPETITIONS = 1;
 
-    protected Context context;
+    protected Context      context;
     /**
      * ID of this Receiver
      */
-    protected Long id;
+    protected Long         id;
     /**
      * Name of this Receiver
      */
-    protected String name;
+    protected String       name;
     /**
      * Brand of this Receiver
      */
-    protected Brand brand;
+    protected Brand        brand;
     /**
      * Model of this Receiver
      */
-    protected String model;
+    protected String       model;
     /**
      * Buttons of this Receiver
      */
-    protected LinkedList<Button> buttons;
+    protected List<Button> buttons;
     /**
      * Room ID of this Receiver
      */
-    protected Long roomId;
+    protected Long         roomId;
     /**
      * Type of this Receiver {@see TYPE}
      */
-    protected Type type;
+    protected Type         type;
 
     /**
      * Position in room (list) of this Receiver

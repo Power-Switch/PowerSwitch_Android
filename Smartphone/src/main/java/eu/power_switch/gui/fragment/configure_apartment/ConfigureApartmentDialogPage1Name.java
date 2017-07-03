@@ -100,15 +100,8 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
 
         addGatewaysToLayout();
 
-        Long apartmentId = getConfiguration().getApartmentId();
-        if (apartmentId != null) {
-            initializeApartmentData(apartmentId);
-        } else {
-            // enable all gateways by default
-            for (CheckBox checkBox : gatewayCheckboxList) {
-                checkBox.setChecked(true);
-            }
-        }
+        Long apartmentId = getConfiguration().getId();
+        initializeApartmentData(apartmentId);
 
         checkSetupValidity();
 
@@ -141,6 +134,11 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                             checkBox.setChecked(true);
                         }
                     }
+                }
+            } else {
+                // enable all gateways by default
+                for (CheckBox checkBox : gatewayCheckboxList) {
+                    checkBox.setChecked(true);
                 }
             }
         } catch (Exception e) {
@@ -208,8 +206,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                     }
 
                     @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        super.onCheckedChanged(buttonView, isChecked);
+                    public void onCheckedChangedBySystem(CompoundButton buttonView, boolean isChecked) {
                         getConfiguration().setAssociatedGateways(getCheckedGateways());
                     }
                 };
@@ -266,7 +263,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        if (getConfiguration().getApartmentId() == null) {
+        if (getConfiguration().getId() == null) {
             boolean isActive = DatabaseHandler.getAllApartmentNames()
                     .size() <= 0;
             Apartment newApartment = new Apartment((long) -1,
@@ -281,14 +278,16 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                 SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
             }
         } else {
-            Apartment apartment = DatabaseHandler.getApartment(getConfiguration().getApartmentId());
+            Apartment apartment = DatabaseHandler.getApartment(getConfiguration().getId());
             if (apartment.getGeofence() != null) {
                 apartment.getGeofence()
                         .setName(getCurrentName());
             }
 
-            Apartment updatedApartment = new Apartment(getConfiguration().getApartmentId(),
-                    apartment.isActive(), getConfiguration().getName(), getConfiguration().getAssociatedGateways(),
+            Apartment updatedApartment = new Apartment(getConfiguration().getId(),
+                    apartment.isActive(),
+                    getConfiguration().getName(),
+                    getConfiguration().getAssociatedGateways(),
                     apartment.getGeofence());
 
             DatabaseHandler.updateApartment(updatedApartment);

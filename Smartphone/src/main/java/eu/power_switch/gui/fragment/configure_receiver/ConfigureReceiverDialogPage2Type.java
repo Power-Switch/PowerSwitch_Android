@@ -18,11 +18,8 @@
 
 package eu.power_switch.gui.fragment.configure_receiver;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +27,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -45,12 +44,10 @@ import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialToolti
 import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
-import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
+import eu.power_switch.shared.event.ReceiverBrandOrModelChangedEvent;
 
 import static eu.power_switch.obj.receiver.Receiver.Brand;
 
@@ -59,10 +56,7 @@ import static eu.power_switch.obj.receiver.Receiver.Brand;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
-
-    public static final String KEY_BRAND = "brand";
-    public static final String KEY_MODEL = "model";
+public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<ReceiverConfigurationHolder> {
 
     @BindView(R.id.listView_brands)
     ListView brandListView;
@@ -73,23 +67,6 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
 
     private ArrayAdapter<String> brandNamesAdapter;
     private ArrayAdapter<String> modelNamesAdapter;
-
-
-    /**
-     * Used to notify the summary page that some info has changed
-     *
-     * @param context any suitable context
-     * @param brand   Current selected Brand name
-     * @param model   Current selected Model name
-     */
-    public static void sendBrandModelChangedBroadcast(Context context, String brand, String model) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED);
-        intent.putExtra(KEY_BRAND, brand);
-        intent.putExtra(KEY_MODEL, model);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
-    }
 
     @Nullable
     @Override
@@ -103,8 +80,11 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
         brandListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                updateModelList(brandNamesAdapter.getItem(position));
-                sendBrandModelChangedBroadcast(getActivity(), getSelectedBrand(), getSelectedModel());
+                Brand selectedBrand = getSelectedBrand();
+//                updateModelList(Brand.getEnum(brandNamesAdapter.getItem(position)));
+                updateModelList(selectedBrand);
+
+                updateConfiguration();
             }
         });
 
@@ -114,15 +94,11 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendBrandModelChangedBroadcast(getActivity(), getSelectedBrand(), getSelectedModel());
+                updateConfiguration();
             }
         });
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
-            long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
-            initializeReceiverData(receiverId);
-        }
+        initializeReceiverData();
 
         createTutorial();
 
@@ -180,11 +156,11 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
                 .execute();
     }
 
-    private String getSelectedBrand() {
+    private Brand getSelectedBrand() {
         try {
             int    position = brandListView.getCheckedItemPosition();
             String brand    = brandNamesAdapter.getItem(position);
-            return brand;
+            return Brand.getEnum(brand);
         } catch (Exception e) {
             return null;
         }
@@ -199,10 +175,8 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
         }
     }
 
-    private void updateModelList(String brandName) {
-        Brand brandEnum = Brand.getEnum(brandName);
-
-        switch (brandEnum) {
+    private void updateModelList(Brand brand) {
+        switch (brand) {
             case BAT: {
                 modelNamesAdapter.clear();
                 String[] array = getResources().getStringArray(R.array.model_bat_array);
@@ -312,27 +286,24 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
         modelNamesAdapter.notifyDataSetChanged();
     }
 
-    private void initializeReceiverData(long receiverId) {
-        if (receiverId == -1) {
+    private void initializeReceiverData() {
+        Long receiverId = getConfiguration().getId();
+        if (receiverId == null) {
             // init blank
             brandListView.setItemChecked(0, true);
-            updateModelList(brandListView.getSelectedItem()
-                    .toString());
+            updateModelList(getSelectedBrand());
 
             modelListView.setItemChecked(0, true);
         } else {
             try {
                 // init existing receiver
-                final Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-
-                int brandPosition = brandNamesAdapter.getPosition(receiver.getBrand()
-                        .getName());
+                Brand brand         = getConfiguration().getBrand();
+                int   brandPosition = brandNamesAdapter.getPosition(brand.getName());
                 brandListView.setItemChecked(brandPosition, true);
                 brandListView.smoothScrollToPosition(brandPosition);
-                updateModelList(receiver.getBrand()
-                        .getName());
+                updateModelList(brand);
 
-                int modelPosition = modelNamesAdapter.getPosition(receiver.getModel());
+                int modelPosition = modelNamesAdapter.getPosition(getConfiguration().getModel());
                 modelListView.setItemChecked(modelPosition, true);
                 modelListView.smoothScrollToPosition(modelPosition);
 
@@ -340,6 +311,16 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage {
                 StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
+    }
+
+    private void updateConfiguration() {
+        getConfiguration().setBrand(getSelectedBrand());
+        getConfiguration().setModel(getSelectedModel());
+
+        EventBus.getDefault()
+                .post(new ReceiverBrandOrModelChangedEvent(getConfiguration().getModel()));
+
+        notifyConfigurationChanged();
     }
 
     private void setModelVisibility(int visibility) {

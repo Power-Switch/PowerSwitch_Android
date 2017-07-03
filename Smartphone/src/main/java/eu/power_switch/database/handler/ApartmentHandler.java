@@ -62,7 +62,7 @@ abstract class ApartmentHandler {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
         long apartmentId = DatabaseHandler.database.insert(ApartmentTable.TABLE_NAME, null, values);
-        // notice that apartmentId here may be different than
+        // notice that id here may be different than
         // apartment.getId() because it was just inserted into database
         addAssociatedGateways(apartmentId, apartment.getAssociatedGateways());
         addGeofence(apartmentId, apartment);

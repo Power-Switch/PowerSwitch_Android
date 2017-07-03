@@ -40,6 +40,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,12 +62,11 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
+import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.Room;
-import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.shared.exception.receiver.ReceiverAlreadyExistsException;
+import eu.power_switch.shared.event.ReceiverParentRoomChangedEvent;
 import timber.log.Timber;
 
 /**
@@ -73,9 +74,8 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
+public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<ReceiverConfigurationHolder> {
 
-    public static final String KEY_NAME      = "name";
     public static final String KEY_ROOM_NAME = "roomName";
 
     @BindView(R.id.receiver_name_text_input_layout)
@@ -93,21 +93,7 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
     private String            originalName;
     private BroadcastReceiver broadcastReceiver;
 
-    /**
-     * Used to notify the summary page that some info has changed
-     *
-     * @param context  any suitable context
-     * @param name     Current name of the Receiver
-     * @param roomName Current name of Room
-     */
-    public static void sendNameRoomChangedBroadcast(Context context, String name, String roomName) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_ROOM_CHANGED);
-        intent.putExtra(KEY_NAME, name);
-        intent.putExtra(KEY_ROOM_NAME, roomName);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
-    }
+    boolean initialized = false;
 
     /**
      * Used to notify this page that a room has been added to the list
@@ -153,7 +139,12 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
 
             @Override
             public void afterTextChanged(Editable s) {
+                getConfiguration().setName(getCurrentName());
+
                 checkValidity();
+                if (initialized) {
+                    notifyConfigurationChanged();
+                }
             }
         });
 
@@ -162,7 +153,11 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
         roomsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getConfiguration().setParentRoomName(getCheckedRoomName());
+                notifyParentRoomChanged();
+
                 checkValidity();
+                notifyConfigurationChanged();
             }
         });
 
@@ -179,16 +174,20 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
             }
         });
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
-            long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
-            initializeReceiverData(receiverId);
-        }
+        initializeReceiverData();
+
         checkValidity();
 
         createTutorial();
 
+        initialized = true;
+
         return rootView;
+    }
+
+    private void notifyParentRoomChanged() {
+        EventBus.getDefault()
+                .post(new ReceiverParentRoomChangedEvent());
     }
 
     @Override
@@ -257,16 +256,11 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
                 .execute();
     }
 
-    private void initializeReceiverData(long receiverId) {
-        try {
-            Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-            Room     room     = DatabaseHandler.getRoom(receiver.getRoomId());
-
-            originalName = receiver.getName();
-            name.setText(receiver.getName());
-            roomsListView.setItemChecked(roomNamesAdapter.getPosition(room.getName()), true);
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+    private void initializeReceiverData() {
+        if (getConfiguration().getId() != null) {
+            originalName = getConfiguration().getName();
+            name.setText(originalName);
+            roomsListView.setItemChecked(roomNamesAdapter.getPosition(getConfiguration().getParentRoomName()), true);
         }
     }
 
@@ -284,50 +278,6 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
         roomNamesAdapter.notifyDataSetChanged();
     }
 
-    private boolean checkValidity() {
-        // TODO: Performance Optimierung
-        String currentReceiverName = getCurrentName();
-        String currentRoomName     = getCheckedRoomName();
-
-        if (currentReceiverName.length() <= 0) {
-            floatingName.setError(getString(R.string.please_enter_name));
-            sendNameRoomChangedBroadcast(getActivity(), null, getCheckedRoomName());
-            return false;
-        }
-
-        if (currentRoomName == null) {
-            floatingName.setError(getString(R.string.no_room_selected));
-            sendNameRoomChangedBroadcast(getActivity(), getCurrentName(), null);
-            return false;
-        }
-
-        if (!currentReceiverName.equalsIgnoreCase(originalName)) {
-            try {
-                Room selectedRoom = DatabaseHandler.getRoom(currentRoomName);
-                for (Receiver receiver : selectedRoom.getReceivers()) {
-                    if (receiver.getName()
-                            .equalsIgnoreCase(currentReceiverName)) {
-                        throw new ReceiverAlreadyExistsException();
-                    }
-                }
-            } catch (ReceiverAlreadyExistsException e) {
-                Timber.e(e);
-                floatingName.setError(getString(R.string.receiver_already_exists));
-                sendNameRoomChangedBroadcast(getActivity(), null, getCheckedRoomName());
-                return false;
-            } catch (Exception e) {
-                Timber.e(e);
-                floatingName.setError(getString(R.string.unknown_error));
-                sendNameRoomChangedBroadcast(getActivity(), null, null);
-                return false;
-            }
-        }
-
-        floatingName.setError(null);
-        sendNameRoomChangedBroadcast(getActivity(), getCurrentName(), getCheckedRoomName());
-        return true;
-    }
-
     private String getCurrentName() {
         return name.getText()
                 .toString()
@@ -342,6 +292,39 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private boolean checkValidity() {
+        // TODO: Performance Optimierung
+        String currentReceiverName = getConfiguration().getName();
+        String currentRoomName     = getConfiguration().getParentRoomName();
+
+        if (currentReceiverName == null || currentReceiverName.length() <= 0) {
+            floatingName.setError(getString(R.string.please_enter_name));
+            return false;
+        }
+
+        if (currentRoomName == null) {
+            floatingName.setError(getString(R.string.no_room_selected));
+            return false;
+        }
+
+        if (!currentReceiverName.equalsIgnoreCase(originalName)) {
+            try {
+                Room selectedRoom = DatabaseHandler.getRoom(currentRoomName);
+                if (getConfiguration().receiverNameAlreadyExists(selectedRoom)) {
+                    floatingName.setError(getString(R.string.receiver_already_exists));
+                    return false;
+                }
+            } catch (Exception e) {
+                Timber.e(e);
+                floatingName.setError(getString(R.string.unknown_error));
+                return false;
+            }
+        }
+
+        floatingName.setError(null);
+        return true;
     }
 
     @Override

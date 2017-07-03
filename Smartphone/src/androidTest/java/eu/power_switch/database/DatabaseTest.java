@@ -80,9 +80,9 @@ public class DatabaseTest extends ApplicationTest {
 //    public void testPerformanceTest() throws Exception {
 //        for (int i = 0; i < 200; i++) {
 //            Log4JLog.d("apartment: " + i);
-//            long apartmentId = DatabaseHandler.addApartment(new Apartment((long) 0, true, "Apartment[" + i + "]"));
+//            long id = DatabaseHandler.addApartment(new Apartment((long) 0, true, "Apartment[" + i + "]"));
 //            for (int j = 0; j < 200; j++) {
-//                long roomId = DatabaseHandler.addRoom(new Room((long) 0, apartmentId, "Room[" + j + "]", 0, false, new ArrayList<Gateway>()));
+//                long roomId = DatabaseHandler.addRoom(new Room((long) 0, id, "Room[" + j + "]", 0, false, new ArrayList<Gateway>()));
 //                for (int k = 0; k < 20; k++) {
 //                    DatabaseHandler.addReceiver(new CMR1000(getContext(), (long) 0, "Receiver[" + k + "]", 'A', 1, roomId, new ArrayList<Gateway>()));
 //                }

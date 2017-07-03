@@ -18,10 +18,6 @@
 
 package eu.power_switch.gui.fragment.configure_receiver;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +25,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
@@ -45,6 +40,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TableLayout;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -68,7 +66,7 @@ import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
+import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.UniversalButton;
@@ -80,7 +78,7 @@ import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
 import timber.log.Timber;
 
@@ -89,7 +87,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
+public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<ReceiverConfigurationHolder> {
 
     public static final String KEY_CHANNEL_MASTER    = "channelMaster";
     public static final String KEY_CHANNEL_SLAVE     = "channelSlave";
@@ -134,7 +132,6 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
     private ArrayAdapter<String> channelSlaveNamesAdapter;
 
     private ArrayList<SwitchCompat> dipViewList;
-    private BroadcastReceiver       broadcastReceiver;
     private ArrayList<DipSwitch>    dipSwitchArrayList;
 
     private Receiver currentAutoPairReceiver;
@@ -142,54 +139,26 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
     /**
      * Used to notify the summary page that some info has changed
      *
-     * @param context          any suitable context
      * @param channelMaster    Current selected Master Channel
      * @param channelSlave     Current selected Slave Channel
      * @param dips             Current Dip configuration
      * @param universalButtons Current Universal Buttons
      */
-    public static void sendChannelDetailsChangedBroadcast(Context context, Character channelMaster, Integer channelSlave, ArrayList<DipSwitch> dips,
-                                                          long seed, ArrayList<UniversalButton> universalButtons) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CHANNEL_DETAILS_CHANGED);
-        intent.putExtra(KEY_CHANNEL_MASTER, channelMaster);
-        intent.putExtra(KEY_CHANNEL_SLAVE, channelSlave);
-        intent.putExtra(KEY_DIPS, dips);
-        intent.putExtra(KEY_SEED, seed);
-        intent.putExtra(KEY_UNIVERSAL_BUTTONS, universalButtons);
+    public void updateConfiguration(Character channelMaster, Integer channelSlave, ArrayList<DipSwitch> dips, Long seed,
+                                    List<UniversalButton> universalButtons) {
+        getConfiguration().setChannelMaster(channelMaster);
+        getConfiguration().setChannelSlave(channelSlave);
+        getConfiguration().setDips(dips);
+        getConfiguration().setSeed(seed);
+        getConfiguration().setUniversalButtons(universalButtons);
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+        notifyConfigurationChanged();
     }
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction()
-                        .equals(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED)) {
-                    String model = intent.getStringExtra(ConfigureReceiverDialogPage2Type.KEY_MODEL);
-
-                    try {
-                        Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));
-                        initType(receiver);
-
-                        sendChannelDetailsChangedBroadcast(getActivity(),
-                                getSelectedChannelMaster(),
-                                getSelectedChannelSlave(),
-                                dipSwitchArrayList,
-                                getCurrentSeed(),
-                                getCurrentUniversalButtons());
-                    } catch (Exception e) {
-                        StatusMessageHandler.showErrorMessage(getContentView(), e);
-                    }
-                }
-            }
-        };
 
         // Master/Slave
         channelMasterNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_single_choice);
@@ -198,12 +167,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendChannelDetailsChangedBroadcast(getActivity(),
-                        getSelectedChannelMaster(),
-                        getSelectedChannelSlave(),
-                        null,
-                        getCurrentSeed(),
-                        null);
+                updateConfiguration(getSelectedChannelMaster(), getSelectedChannelSlave(), null, getCurrentSeed(), null);
             }
         });
 
@@ -213,12 +177,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendChannelDetailsChangedBroadcast(getActivity(),
-                        getSelectedChannelMaster(),
-                        getSelectedChannelSlave(),
-                        null,
-                        getCurrentSeed(),
-                        null);
+                updateConfiguration(getSelectedChannelMaster(), getSelectedChannelSlave(), null, getCurrentSeed(), null);
             }
         });
 
@@ -256,14 +215,13 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                     }
                 }
 
-                sendChannelDetailsChangedBroadcast(getActivity(), '\n', 0, dips, getCurrentSeed(), null);
+                updateConfiguration(null, null, dips, getCurrentSeed(), null);
             }
         };
 
         for (SwitchCompat switchCompat : dipViewList) {
             switchCompat.setOnCheckedChangeListener(dipCheckedChangedListener);
         }
-
 
         // AutoPair
         editTextSeed.addTextChangedListener(new TextWatcher() {
@@ -280,23 +238,22 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                 try {
                     ((AutoPairReceiver) currentAutoPairReceiver).setSeed(Long.valueOf(editable.toString()));
 
-                    textInputEditTextSeed.setError(null);
-                    sendChannelDetailsChangedBroadcast(getActivity(),
-                            getSelectedChannelMaster(),
+                    updateConfiguration(getSelectedChannelMaster(),
                             getSelectedChannelSlave(),
                             dipSwitchArrayList,
                             getCurrentSeed(),
                             getCurrentUniversalButtons());
+
+                    textInputEditTextSeed.setError(null);
                 } catch (Exception e) {
                     Timber.e(e);
 
-                    textInputEditTextSeed.setError(e.getMessage());
-                    sendChannelDetailsChangedBroadcast(getActivity(),
-                            getSelectedChannelMaster(),
+                    updateConfiguration(getSelectedChannelMaster(),
                             getSelectedChannelSlave(),
-                            dipSwitchArrayList,
-                            -1,
+                            dipSwitchArrayList, null,
                             getCurrentUniversalButtons());
+
+                    textInputEditTextSeed.setError(e.getMessage());
                 }
             }
         });
@@ -408,23 +365,19 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
 
         // Universal
         addUniversalButtonFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
-
         addUniversalButtonFAB.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 addUniversalButtonLayoutToDialogView();
-                sendChannelDetailsChangedBroadcast(getActivity(), null, 0, null, -1, getCurrentUniversalButtons());
+
+                updateConfiguration(null, null, null, null, getCurrentUniversalButtons());
             }
         });
 
         updateUi(null);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureReceiverDialog.RECEIVER_ID_KEY)) {
-            long receiverId = args.getLong(ConfigureReceiverDialog.RECEIVER_ID_KEY);
-            initializeReceiverData(receiverId);
-        }
+        initializeReceiverData();
 
         createTutorial();
 
@@ -434,6 +387,29 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
     @Override
     protected int getLayoutRes() {
         return R.layout.dialog_fragment_configure_receiver_page_3;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onBrandOrModelChanged(ReceiverBrandOrModelChangedEvent receiverBrandOrModelChangedEvent) {
+        String model = receiverBrandOrModelChangedEvent.getModel();
+
+        try {
+            Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));
+
+            getConfiguration().setReceiver(receiver);
+            getConfiguration().setType(receiver.getType());
+
+            initType(receiver);
+
+            updateConfiguration(getSelectedChannelMaster(),
+                    getSelectedChannelSlave(),
+                    dipSwitchArrayList,
+                    getCurrentSeed(),
+                    getCurrentUniversalButtons());
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
+        }
     }
 
     private void createTutorial() {
@@ -482,20 +458,16 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
                 .execute();
     }
 
-    private long getCurrentSeed() {
-        try {
-            return ((AutoPairReceiver) currentAutoPairReceiver).getSeed();
-        } catch (Exception e) {
-            return -1;
-        }
-    }
+    private void initializeReceiverData() {
+        Long receiverId = getConfiguration().getId();
 
-    private void initializeReceiverData(long receiverId) {
-        try {
-            Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-            initType(receiver);
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+        if (receiverId != null) {
+            try {
+                Receiver receiver = DatabaseHandler.getReceiver(receiverId);
+                initType(receiver);
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
+            }
         }
     }
 
@@ -634,7 +606,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
 
             @Override
             public void afterTextChanged(Editable s) {
-                sendChannelDetailsChangedBroadcast(getActivity(), null, 0, null, -1, getCurrentUniversalButtons());
+                updateConfiguration(null, null, null, null, getCurrentUniversalButtons());
             }
         };
         LinearLayout newUniversalButtonLayout = new LinearLayout(getActivity());
@@ -657,8 +629,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
             public void onClick(View v) {
                 buttonsList.removeView((View) v.getParent()
                         .getParent());
-                sendChannelDetailsChangedBroadcast(getActivity(), null, 0, null, -1, getCurrentUniversalButtons());
-
+                updateConfiguration(null, null, null, null, getCurrentUniversalButtons());
             }
         });
 
@@ -701,7 +672,15 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
         }
     }
 
-    private ArrayList<UniversalButton> getCurrentUniversalButtons() {
+    private Long getCurrentSeed() {
+        try {
+            return ((AutoPairReceiver) currentAutoPairReceiver).getSeed();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private List<UniversalButton> getCurrentUniversalButtons() {
         ArrayList<UniversalButton> buttons = new ArrayList<>();
 
         for (int i = 0; i < buttonsList.getChildCount(); i++) {
@@ -720,22 +699,6 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage {
         }
 
         return buttons;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_BRAND_MODEL_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
 }

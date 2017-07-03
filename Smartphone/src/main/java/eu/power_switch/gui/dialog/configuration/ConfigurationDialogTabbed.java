@@ -172,7 +172,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
 
         // hide/show delete button if existing data is initialized
         boolean isInitializedFromExistingData = initializeFromExistingData(getArguments());
-        if (isInitializedFromExistingData) {
+        if (isInitializedFromExistingData || getConfiguration().isValid()) {
             imageButtonDelete.setVisibility(View.VISIBLE);
         } else {
             imageButtonDelete.setVisibility(View.GONE);
@@ -290,7 +290,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
         try {
             ConfigurationDialogTabAdapter            customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
             ConfigurationDialogTabbedSummaryFragment setupFragment    = customTabAdapter.getSummaryFragment();
-            return setupFragment.checkSetupValidity();
+            return getConfiguration().isValid() && setupFragment.checkSetupValidity();
         } catch (Exception e) {
             Timber.e(e);
             return false;

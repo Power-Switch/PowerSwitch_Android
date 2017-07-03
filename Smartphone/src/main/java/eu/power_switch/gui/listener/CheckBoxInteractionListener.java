@@ -43,7 +43,7 @@ import android.widget.CompoundButton;
  */
 public abstract class CheckBoxInteractionListener implements CompoundButton.OnCheckedChangeListener, View.OnTouchListener {
 
-    boolean userSelect = false;
+    private boolean userSelect = false;
 
     @Override
     @CallSuper
@@ -59,6 +59,8 @@ public abstract class CheckBoxInteractionListener implements CompoundButton.OnCh
             onCheckedChangedByUser(buttonView, isChecked);
 
             userSelect = false;
+        } else {
+            onCheckedChangedByUser(buttonView, isChecked);
         }
     }
 
@@ -69,5 +71,15 @@ public abstract class CheckBoxInteractionListener implements CompoundButton.OnCh
      * @param isChecked
      */
     public abstract void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked);
+
+    /**
+     * This Method is only called, if the selection was made by the system (from code) and NOT a user
+     *
+     * @param buttonView
+     * @param isChecked
+     */
+    public void onCheckedChangedBySystem(CompoundButton buttonView, boolean isChecked) {
+        // Override this
+    }
 
 }

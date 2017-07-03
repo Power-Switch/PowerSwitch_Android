@@ -39,12 +39,6 @@ public class LocalBroadcastConstants {
     public static final String INTENT_GEOFENCE_EXIT_ACTION_ADDED     = "eu.power_switch.geofence_exit_action_added";
     public static final String INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED  = "eu.power_switch.geofence_exit_actions_changed";
 
-    public static final String INTENT_BRAND_MODEL_CHANGED     = "eu.power_switch.brand_model_changed";
-    public static final String INTENT_NAME_ROOM_CHANGED       = "eu.power_switch.name_room_changed";
-    public static final String INTENT_CHANNEL_DETAILS_CHANGED = "eu.power_switch.channel_details_changed";
-    public static final String INTENT_GATEWAY_DETAILS_CHANGED = "eu.power_switch.gateway_details_changed";
-    public static final String INTENT_GATEWAY_ADDED           = "eu.power_switch.gateway_added";
-
     public static final String INTENT_ROOM_NAME_CHANGED = "eu.power_switch.room_name_changed";
 
     public static final String INTENT_NAME_SCENE_CHANGED = "eu.power_switch.name_scene_changed";

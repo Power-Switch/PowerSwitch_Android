@@ -23,6 +23,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.reflect.Constructor;
 
 import butterknife.BindView;
@@ -73,7 +75,8 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
      * Used to notify parent Dialog that configuration has changed
      */
     public void notifyConfigurationChanged() {
-        parentDialog.onConfigurationChanged(new ConfigurationChangedEvent());
+        EventBus.getDefault()
+                .post(new ConfigurationChangedEvent());
     }
 
     /**

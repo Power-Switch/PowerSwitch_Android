@@ -68,7 +68,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
         ConfigureApartmentDialog     fragment                     = new ConfigureApartmentDialog();
         ApartmentConfigurationHolder apartmentConfigurationHolder = new ApartmentConfigurationHolder();
         if (apartmentId != -1) {
-            apartmentConfigurationHolder.setApartmentId(apartmentId);
+            apartmentConfigurationHolder.setId(apartmentId);
         }
         fragment.setConfiguration(apartmentConfigurationHolder);
         fragment.setArguments(args);
@@ -88,9 +88,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
             StatusMessageHandler.showErrorMessage(getContext(), e);
         }
 
-        Long apartmentId = getConfiguration().getApartmentId();
+        Long apartmentId = getConfiguration().getId();
         if (apartmentId != null) {
-            getConfiguration().setApartmentId(apartmentId);
+            getConfiguration().setId(apartmentId);
 
             try {
                 Apartment apartment = DatabaseHandler.getApartment(apartmentId);
@@ -100,9 +100,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                 dismiss();
                 StatusMessageHandler.showErrorMessage(getContext(), e);
             }
-
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment(), apartmentId));
-            return true;
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
+            return false;
         } else {
             setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
@@ -128,8 +127,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(getConfiguration().getApartmentId())) {
-                                DatabaseHandler.deleteApartment(getConfiguration().getApartmentId());
+                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(getConfiguration().getId())) {
+                                DatabaseHandler.deleteApartment(getConfiguration().getId());
 
                                 // update current Apartment selection
                                 List<Apartment> apartments = DatabaseHandler.getAllApartments();
@@ -142,7 +141,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                                                     .getId());
                                 }
                             } else {
-                                DatabaseHandler.deleteApartment(getConfiguration().getApartmentId());
+                                DatabaseHandler.deleteApartment(getConfiguration().getId());
                             }
 
                             ApartmentFragment.notifyActiveApartmentChanged(getActivity());
@@ -162,22 +161,12 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog;
-        private long                                                    apartmentId;
         private ConfigurationDialogTabbedSummaryFragment                setupFragment;
         private Fragment                                                targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
-            this.apartmentId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment,
-                                long id) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.apartmentId = id;
             this.targetFragment = targetFragment;
         }
 

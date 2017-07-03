@@ -32,7 +32,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
@@ -87,7 +87,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
                                 apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
 
-                        LinkedList<Button> buttons = receiver.getButtons();
+                        List<Button> buttons = receiver.getButtons();
 
                         // remove all previous buttons
                         remoteViews.removeAllViews(R.id.linearlayout_receiver_widget);

@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog.configuration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,10 +28,14 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1Name;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2Type;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3Setup;
@@ -38,6 +43,15 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage5TabbedSummary;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.Room;
+import eu.power_switch.obj.UniversalButton;
+import eu.power_switch.obj.button.Button;
+import eu.power_switch.obj.receiver.AutoPairReceiver;
+import eu.power_switch.obj.receiver.DipReceiver;
+import eu.power_switch.obj.receiver.MasterSlaveReceiver;
+import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
 import timber.log.Timber;
@@ -47,26 +61,21 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
+public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverConfigurationHolder> {
 
-    /**
-     * ID of existing Receiver to Edit
-     */
-    public static final String RECEIVER_ID_KEY = "ReceiverId";
-
-    private long receiverId = -1;
-
-    public static ConfigureReceiverDialog newInstance(Fragment targetFragment) {
-        ConfigureReceiverDialog fragment = new ConfigureReceiverDialog();
-        fragment.setTargetFragment(targetFragment, 0);
-        return fragment;
+    public static ConfigureReceiverDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(-1, targetFragment);
     }
 
-    public static ConfigureReceiverDialog newInstance(long receiverId, Fragment targetFragment) {
+    public static ConfigureReceiverDialog newInstance(long receiverId, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
-        args.putLong(RECEIVER_ID_KEY, receiverId);
 
-        ConfigureReceiverDialog fragment = new ConfigureReceiverDialog();
+        ConfigureReceiverDialog     fragment                    = new ConfigureReceiverDialog();
+        ReceiverConfigurationHolder receiverConfigurationHolder = new ReceiverConfigurationHolder();
+        if (receiverId != -1) {
+            receiverConfigurationHolder.setId(receiverId);
+        }
+        fragment.setConfiguration(receiverConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
@@ -79,17 +88,69 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(RECEIVER_ID_KEY)) {
+        Long receiverId = getConfiguration().getId();
+
+        try {
+            Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            getConfiguration().setParentApartment(apartment);
+        } catch (Exception e) {
+            dismiss();
+            StatusMessageHandler.showErrorMessage(getContext(), e);
+        }
+
+        if (receiverId != null) {
             // init dialog using existing receiver
-            receiverId = arguments.getLong(RECEIVER_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment(), receiverId));
+
+            try {
+                // TODO: optimize database access
+                Receiver receiver = DatabaseHandler.getReceiver(receiverId);
+                Room     room     = DatabaseHandler.getRoom(receiver.getRoomId());
+
+                getConfiguration().setParentRoom(room);
+                getConfiguration().setParentRoomName(room.getName());
+                getConfiguration().setReceiver(receiver);
+                getConfiguration().setName(receiver.getName());
+
+                getConfiguration().setBrand(receiver.getBrand());
+                getConfiguration().setModel(receiver.getModel());
+
+                getConfiguration().setType(receiver.getType());
+                switch (receiver.getType()) {
+                    case DIPS:
+                        getConfiguration().setDips(((DipReceiver) receiver).getDips());
+                        break;
+                    case MASTER_SLAVE:
+                        getConfiguration().setChannelMaster(((MasterSlaveReceiver) receiver).getMaster());
+                        getConfiguration().setChannelSlave(((MasterSlaveReceiver) receiver).getSlave());
+                        break;
+                    case AUTOPAIR:
+                        getConfiguration().setSeed(((AutoPairReceiver) receiver).getSeed());
+                        break;
+                    case UNIVERSAL:
+                        List<UniversalButton> universalButtons = new ArrayList<>(receiver.getButtons()
+                                .size());
+                        for (Button button : receiver.getButtons()) {
+                            universalButtons.add((UniversalButton) button);
+                        }
+
+                        getConfiguration().setUniversalButtons(universalButtons);
+                        break;
+                }
+
+                getConfiguration().setRepetitionAmount(receiver.getRepetitionAmount());
+                getConfiguration().setGateways(receiver.getAssociatedGateways());
+
+            } catch (Exception e) {
+                dismiss();
+                StatusMessageHandler.showErrorMessage(getContext(), e);
+            }
+
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
@@ -101,56 +162,47 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .receiver_will_be_gone_forever)
-                .setPositiveButton
-                        (android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DatabaseHandler.deleteReceiver(receiverId);
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                .setMessage(R.string.receiver_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DatabaseHandler.deleteReceiver(getConfiguration().getId());
 
-                                    // notify rooms fragment
-                                    RoomsFragment.notifyReceiverChanged();
-                                    // scenes could change too if receiver was used in a scene
-                                    ScenesFragment.notifySceneChanged();
+                            // notify rooms fragment
+                            RoomsFragment.notifyReceiverChanged();
+                            // scenes could change too if receiver was used in a scene
+                            ScenesFragment.notifySceneChanged();
 
-                                    // update receiver widgets
-                                    ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
+                            // update receiver widgets
+                            ReceiverWidgetProvider.forceWidgetUpdate(getActivity());
 
-                                    // update wear data
-                                    UtilityService.forceWearDataUpdate(getActivity());
+                            // update wear data
+                            UtilityService.forceWearDataUpdate(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.receiver_deleted, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
-                                }
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_deleted, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        }
 
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private ConfigurationDialogTabbed parentDialog;
-        private long receiverId;
-        private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private Fragment targetFragment;
+        private ConfigurationDialogTabbed<ReceiverConfigurationHolder> parentDialog;
+        private ConfigurationDialogTabbedSummaryFragment               summaryFragment;
+        private Fragment                                               targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<ReceiverConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
-            this.receiverId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.receiverId = id;
             this.targetFragment = targetFragment;
         }
 
@@ -202,12 +254,6 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed {
                     break;
                 default:
                     break;
-            }
-
-            if (fragment != null && receiverId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(RECEIVER_ID_KEY, receiverId);
-                fragment.setArguments(bundle);
             }
 
             return fragment;
