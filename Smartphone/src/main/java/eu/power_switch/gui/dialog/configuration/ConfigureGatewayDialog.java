@@ -16,9 +16,8 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.dialog.configuration;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -32,31 +31,30 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1Contacts;
-import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
-import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3Summary;
-import eu.power_switch.gui.fragment.phone.CallEventsFragment;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage2;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage3;
+import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage4Summary;
+import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import timber.log.Timber;
 
 /**
- * Dialog to create or modify a Call Event
- * <p/>
- * Created by Markus on 05.04.2016.
+ * Dialog to edit a Gateway
  */
-public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
+public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
     /**
-     * ID of existing Call Event to Edit
+     * ID of existing Gateway to Edit
      */
-    public static final String CALL_EVENT_ID_KEY = "CallEventId";
+    public static final String GATEWAY_ID_KEY = "GatewayId";
 
-    private long callEventId = -1;
+    private long gatewayId = -1;
 
-    public static ConfigureCallEventDialog newInstance(long callEventId) {
+    public static ConfigureGatewayDialog newInstance(long gatewayId) {
         Bundle args = new Bundle();
-        args.putLong(CALL_EVENT_ID_KEY, callEventId);
+        args.putLong(GATEWAY_ID_KEY, gatewayId);
 
-        ConfigureCallEventDialog fragment = new ConfigureCallEventDialog();
+        ConfigureGatewayDialog fragment = new ConfigureGatewayDialog();
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,46 +66,34 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(CALL_EVENT_ID_KEY)) {
-            // init dialog using existing scene
-            callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    getTargetFragment(), callEventId));
+        if (arguments != null && arguments.containsKey(GATEWAY_ID_KEY)) {
+            gatewayId = arguments.getLong(GATEWAY_ID_KEY);
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment(), gatewayId));
             return true;
         } else {
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
 
     @Override
     protected int getDialogTitle() {
-        return R.string.configure_call_event;
-    }
-
-    @Override
-    protected void saveCurrentConfigurationToDatabase() {
-        Timber.d("Saving call event");
-        super.saveCurrentConfigurationToDatabase();
+        return R.string.configure_gateway;
     }
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .call_event_will_be_gone_forever)
+                .gateway_will_be_gone_forever)
                 .setPositiveButton
                         (android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    DatabaseHandler.deleteCallEvent(callEventId);
-
-                                    // notify scenes fragment
-                                    CallEventsFragment.notifyCallEventsChanged();
-
+                                    DatabaseHandler.deleteGateway(gatewayId);
+                                    GatewaySettingsFragment.notifyGatewaysChanged();
                                     StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.call_event_deleted, Snackbar.LENGTH_LONG);
+                                            R.string.gateway_removed, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }
@@ -119,22 +105,23 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-        private Context context;
-        private long callEventId;
+
+        private ConfigurationDialogTabbed parentDialog;
+        private long gatewayId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
         private Fragment targetFragment;
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
-            this.context = context;
-            this.callEventId = -1;
+            this.parentDialog = parentDialog;
+            this.gatewayId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
+        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
-            this.context = context;
-            this.callEventId = id;
+            this.parentDialog = parentDialog;
+            this.gatewayId = id;
             this.targetFragment = targetFragment;
         }
 
@@ -147,11 +134,13 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return context.getString(R.string.contacts);
+                    return parentDialog.getString(R.string.address);
                 case 1:
-                    return context.getString(R.string.actions);
+                    return parentDialog.getString(R.string.ssids);
                 case 2:
-                    return context.getString(R.string.summary);
+                    return parentDialog.getString(R.string.apartments);
+                case 3:
+                    return parentDialog.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -163,21 +152,28 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = new ConfigureCallEventDialogPage1Contacts();
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage1.class, parentDialog);
+                    fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 1:
-                    fragment = new ConfigureCallEventDialogPage2Actions();
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage2.class, parentDialog);
+                    fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 2:
-                    fragment = new ConfigureCallEventDialogPage3Summary();
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage3.class, parentDialog);
+                    fragment.setTargetFragment(targetFragment, 0);
+                    break;
+                case 3:
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage4Summary.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
+                    break;
             }
 
-            if (fragment != null && callEventId != -1) {
+            if (fragment != null && gatewayId != -1) {
                 Bundle bundle = new Bundle();
-                bundle.putLong(CALL_EVENT_ID_KEY, callEventId);
+                bundle.putLong(GATEWAY_ID_KEY, gatewayId);
                 fragment.setArguments(bundle);
             }
 
@@ -189,8 +185,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
          */
         @Override
         public int getCount() {
-            return 3;
+            return 4;
         }
     }
-
 }

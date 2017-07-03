@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.configuration.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.obj.Apartment;
 
 /**

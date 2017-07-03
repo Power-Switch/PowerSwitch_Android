@@ -21,7 +21,7 @@ package eu.power_switch.gui.adapter;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 
 /**
  * Created by Markus on 17.02.2016.

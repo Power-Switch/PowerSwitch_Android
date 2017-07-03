@@ -45,7 +45,7 @@ import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.ConfigureSceneDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.settings.DeveloperPreferencesHandler;

@@ -45,7 +45,7 @@ import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -135,7 +135,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
             @Override
             public void onClick(View v) {
                 try {
-                    ConfigureApartmentDialog configureApartmentDialog = new ConfigureApartmentDialog();
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance();
                     configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
@@ -188,7 +188,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         switch (menuItem.getItemId()) {
             case R.id.create_apartment:
                 try {
-                    ConfigureApartmentDialog configureApartmentDialog = new ConfigureApartmentDialog();
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance();
                     configureApartmentDialog.setTargetFragment(this, 0);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {

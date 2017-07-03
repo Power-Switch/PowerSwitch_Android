@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.dialog.configuration;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -42,6 +42,8 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.shared.event.ConfigurationChangedEvent;
+import lombok.Getter;
+import lombok.Setter;
 import timber.log.Timber;
 
 /**
@@ -63,8 +65,11 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
     @BindView(R.id.imageButton_save)
     protected ImageButton imageButtonSave;
 
+    @Getter
     private View contentView;
 
+    @Getter
+    @Setter
     private boolean modified;
 
     @Override
@@ -207,30 +212,8 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
         return dialog;
     }
 
-    public View getContentView() {
-        return contentView;
-    }
-
     @StringRes
     protected abstract int getDialogTitle();
-
-    /**
-     * Get modification state of this Dialog
-     *
-     * @return true if modifications (by user or system) have been made
-     */
-    protected boolean isModified() {
-        return modified;
-    }
-
-    /**
-     * Set the state of this Dialog
-     *
-     * @param modified true if Dialog has been edited
-     */
-    protected void setModified(boolean modified) {
-        this.modified = modified;
-    }
 
     /**
      * Defines if the Dialog is cancelable on touch outside of the dialog

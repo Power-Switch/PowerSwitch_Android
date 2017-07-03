@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.dialog.configuration;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -46,6 +46,8 @@ import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.shared.event.ConfigurationChangedEvent;
+import lombok.Getter;
+import lombok.Setter;
 import timber.log.Timber;
 
 /**
@@ -55,7 +57,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public abstract class ConfigurationDialogTabbed extends EventBusSupportDialogFragment {
+public abstract class ConfigurationDialogTabbed<Configuration extends ConfigurationHolder> extends EventBusSupportDialogFragment {
 
     @BindView(R.id.imageButton_delete)
     protected ImageButton imageButtonDelete;
@@ -71,12 +73,24 @@ public abstract class ConfigurationDialogTabbed extends EventBusSupportDialogFra
     @BindView(R.id.imageButton_next)
     ImageButton imageButtonNext;
 
+    @Getter
+    @Setter
     private boolean              modified;
-    private FragmentPagerAdapter customTabAdapter;
+    @Getter
+    private FragmentPagerAdapter tabAdapter;
+
+    @Getter
+    @Setter
+    private Configuration configuration;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (configuration == null) {
+            throw new IllegalStateException("Missing ConfigurationHolder!");
+        }
+
         SmartphoneThemeHelper.applyDialogTheme(this);
     }
 
@@ -204,24 +218,15 @@ public abstract class ConfigurationDialogTabbed extends EventBusSupportDialogFra
     protected abstract int getDialogTitle();
 
     /**
-     * Get pager adapter of this configuration dialog
-     *
-     * @return FragmentPagerAdapter
-     */
-    protected FragmentPagerAdapter getTabAdapter() {
-        return customTabAdapter;
-    }
-
-    /**
      * Set FragmentPagerAdapter of this configuration dialog
      *
      * @param fragmentPagerAdapter FragmentPagerAdapter
      */
     protected void setTabAdapter(FragmentPagerAdapter fragmentPagerAdapter) {
-        customTabAdapter = fragmentPagerAdapter;
+        tabAdapter = fragmentPagerAdapter;
 
-        tabViewPager.setAdapter(customTabAdapter);
-        tabViewPager.setOffscreenPageLimit(customTabAdapter.getCount());
+        tabViewPager.setAdapter(tabAdapter);
+        tabViewPager.setOffscreenPageLimit(tabAdapter.getCount());
 
         tabLayout.setupWithViewPager(tabViewPager);
 
@@ -274,24 +279,6 @@ public abstract class ConfigurationDialogTabbed extends EventBusSupportDialogFra
         dialog.show();
 
         return dialog;
-    }
-
-    /**
-     * Get modification state of this Dialog
-     *
-     * @return true if modifications (by user or system) have been made
-     */
-    protected boolean isModified() {
-        return modified;
-    }
-
-    /**
-     * Set the state of this Dialog
-     *
-     * @param modified true if Dialog has been edited
-     */
-    protected void setModified(boolean modified) {
-        this.modified = modified;
     }
 
     /**
@@ -348,7 +335,7 @@ public abstract class ConfigurationDialogTabbed extends EventBusSupportDialogFra
     }
 
     private void updateBottomBarButtons() {
-        if (tabViewPager.getCurrentItem() == customTabAdapter.getCount() - 1) {
+        if (tabViewPager.getCurrentItem() == tabAdapter.getCount() - 1) {
             imageButtonSave.setVisibility(View.VISIBLE);
             imageButtonNext.setVisibility(View.GONE);
         } else {

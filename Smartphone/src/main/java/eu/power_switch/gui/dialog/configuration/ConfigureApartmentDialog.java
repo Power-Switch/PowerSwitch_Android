@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.dialog.configuration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -33,6 +33,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHolder;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1Name;
 import eu.power_switch.obj.Apartment;
@@ -45,20 +46,31 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 27.12.2015.
  */
-public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
+public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<ApartmentConfigurationHolder> {
 
     /**
-     * ID of existing Apartment to Edit
+     * Open this dialog without predefined data
+     *
+     * @return An instance of this ConfigurationDialog
      */
-    public static final String APARTMENT_ID_KEY = "ApartmentId";
+    public static ConfigureApartmentDialog newInstance() {
+        return newInstance(-1);
+    }
 
-    private long apartmentId = -1;
-
+    /**
+     * Open this dialog with predefined data
+     *
+     * @return An instance of this ConfigurationDialog
+     */
     public static ConfigureApartmentDialog newInstance(long apartmentId) {
         Bundle args = new Bundle();
-        args.putLong(APARTMENT_ID_KEY, apartmentId);
 
-        ConfigureApartmentDialog fragment = new ConfigureApartmentDialog();
+        ConfigureApartmentDialog     fragment                     = new ConfigureApartmentDialog();
+        ApartmentConfigurationHolder apartmentConfigurationHolder = new ApartmentConfigurationHolder();
+        if (apartmentId != -1) {
+            apartmentConfigurationHolder.setApartmentId(apartmentId);
+        }
+        fragment.setConfiguration(apartmentConfigurationHolder);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,14 +81,30 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle args) {
-        if (args != null && args.containsKey(APARTMENT_ID_KEY)) {
-            apartmentId = args.getLong(APARTMENT_ID_KEY);
+        try {
+            getConfiguration().setExistingApartments(DatabaseHandler.getAllApartments());
+        } catch (Exception e) {
+            dismiss();
+            StatusMessageHandler.showErrorMessage(getContext(), e);
+        }
+
+        Long apartmentId = getConfiguration().getApartmentId();
+        if (apartmentId != null) {
+            getConfiguration().setApartmentId(apartmentId);
+
+            try {
+                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                getConfiguration().setName(apartment.getName());
+                getConfiguration().setAssociatedGateways(apartment.getAssociatedGateways());
+            } catch (Exception e) {
+                dismiss();
+                StatusMessageHandler.showErrorMessage(getContext(), e);
+            }
 
             setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment(), apartmentId));
             return true;
         } else {
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
@@ -100,8 +128,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId)) {
-                                DatabaseHandler.deleteApartment(apartmentId);
+                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(getConfiguration().getApartmentId())) {
+                                DatabaseHandler.deleteApartment(getConfiguration().getApartmentId());
 
                                 // update current Apartment selection
                                 List<Apartment> apartments = DatabaseHandler.getAllApartments();
@@ -110,10 +138,11 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                                             SettingsConstants.INVALID_APARTMENT_ID);
                                 } else {
                                     SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID,
-                                            apartments.get(0).getId());
+                                            apartments.get(0)
+                                                    .getId());
                                 }
                             } else {
-                                DatabaseHandler.deleteApartment(apartmentId);
+                                DatabaseHandler.deleteApartment(getConfiguration().getApartmentId());
                             }
 
                             ApartmentFragment.notifyActiveApartmentChanged(getActivity());
@@ -125,24 +154,27 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
                         // close dialog
                         getDialog().dismiss();
                     }
-                }).setNeutralButton(android.R.string.cancel, null).show();
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private ConfigurationDialogTabbed parentDialog;
-        private long apartmentId;
-        private ConfigurationDialogTabbedSummaryFragment setupFragment;
-        private Fragment targetFragment;
+        private ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog;
+        private long                                                    apartmentId;
+        private ConfigurationDialogTabbedSummaryFragment                setupFragment;
+        private Fragment                                                targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.apartmentId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment,
+                                long id) {
             super(fm);
             this.parentDialog = parentDialog;
             this.apartmentId = id;
@@ -177,12 +209,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed {
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;
-            }
-
-            if (fragment != null && apartmentId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(APARTMENT_ID_KEY, apartmentId);
-                fragment.setArguments(bundle);
             }
 
             return fragment;

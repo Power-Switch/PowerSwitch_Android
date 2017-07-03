@@ -43,9 +43,9 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.ConfigureApartmentDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHolder;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
@@ -57,7 +57,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<ApartmentConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.apartment_name_text_input_layout)
     TextInputLayout floatingName;
@@ -66,24 +66,16 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
     @BindView(R.id.linearLayout_gateways)
     LinearLayout    linearLayoutSelectableGateways;
 
-    private List<Apartment> existingApartments;
-    private String          originalName;
+    private String originalName;
 
     private List<CheckBox> gatewayCheckboxList = new ArrayList<>();
 
-    private long apartmentId = -1;
     private boolean isInitialized;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        try {
-            existingApartments = DatabaseHandler.getAllApartments();
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
 
         TextWatcher textWatcher = new TextWatcher() {
 
@@ -98,7 +90,8 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
             @Override
             public void afterTextChanged(Editable s) {
                 if (isInitialized) {
-                    checkSetupValidity();
+                    getConfiguration().setName(getCurrentName());
+                    checkNameValidity(getCurrentName());
                     notifyConfigurationChanged();
                 }
             }
@@ -107,9 +100,8 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
 
         addGatewaysToLayout();
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureApartmentDialog.APARTMENT_ID_KEY)) {
-            apartmentId = args.getLong(ConfigureApartmentDialog.APARTMENT_ID_KEY);
+        Long apartmentId = getConfiguration().getApartmentId();
+        if (apartmentId != null) {
             initializeApartmentData(apartmentId);
         } else {
             // enable all gateways by default
@@ -117,6 +109,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
                 checkBox.setChecked(true);
             }
         }
+
         checkSetupValidity();
 
         isInitialized = true;
@@ -136,20 +129,20 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
      */
     private void initializeApartmentData(Long apartmentId) {
         try {
-            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-            originalName = apartment.getName();
-            name.setText(originalName);
+            if (apartmentId != null) {
+                originalName = getConfiguration().getName();
+                name.setText(originalName);
 
-            for (Gateway gateway : apartment.getAssociatedGateways()) {
-                for (CheckBox checkBox : gatewayCheckboxList) {
-                    Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
-                    if (gateway.getId()
-                            .equals(checkBoxGateway.getId())) {
-                        checkBox.setChecked(true);
+                for (Gateway gateway : getConfiguration().getAssociatedGateways()) {
+                    for (CheckBox checkBox : gatewayCheckboxList) {
+                        Gateway checkBoxGateway = (Gateway) checkBox.getTag(R.string.gateways);
+                        if (gateway.getId()
+                                .equals(checkBoxGateway.getId())) {
+                            checkBox.setChecked(true);
+                        }
                     }
                 }
             }
-
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -166,25 +159,13 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
         if (name.length() <= 0) {
             floatingName.setError(getString(R.string.please_enter_name));
             return false;
-        } else if (checkNameAlreadyExists()) {
+        } else if (getConfiguration().checkNameAlreadyExists()) {
             floatingName.setError(getString(R.string.apartment_already_exists));
             return false;
         } else {
             floatingName.setError(null);
             return true;
         }
-    }
-
-    private boolean checkNameAlreadyExists() {
-        for (Apartment apartment : existingApartments) {
-            if (!apartment.getId()
-                    .equals(apartmentId) && apartment.getName()
-                    .equalsIgnoreCase(getCurrentName())) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -222,7 +203,14 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
+                        getConfiguration().setAssociatedGateways(getCheckedGateways());
                         notifyConfigurationChanged();
+                    }
+
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        super.onCheckedChanged(buttonView, isChecked);
+                        getConfiguration().setAssociatedGateways(getCheckedGateways());
                     }
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
@@ -278,10 +266,14 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        if (apartmentId == -1) {
+        if (getConfiguration().getApartmentId() == null) {
             boolean isActive = DatabaseHandler.getAllApartmentNames()
                     .size() <= 0;
-            Apartment newApartment = new Apartment((long) -1, isActive, getCurrentName(), getCheckedGateways(), null);
+            Apartment newApartment = new Apartment((long) -1,
+                    isActive,
+                    getConfiguration().getName(),
+                    getConfiguration().getAssociatedGateways(),
+                    null);
 
             long newId = DatabaseHandler.addApartment(newApartment);
             // set new apartment as active if it is the first and only one
@@ -289,16 +281,14 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
                 SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
             }
         } else {
-            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+            Apartment apartment = DatabaseHandler.getApartment(getConfiguration().getApartmentId());
             if (apartment.getGeofence() != null) {
                 apartment.getGeofence()
                         .setName(getCurrentName());
             }
 
-            Apartment updatedApartment = new Apartment(apartmentId,
-                    apartment.isActive(),
-                    getCurrentName(),
-                    getCheckedGateways(),
+            Apartment updatedApartment = new Apartment(getConfiguration().getApartmentId(),
+                    apartment.isActive(), getConfiguration().getName(), getConfiguration().getAssociatedGateways(),
                     apartment.getGeofence());
 
             DatabaseHandler.updateApartment(updatedApartment);
@@ -310,9 +300,6 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage i
 
     @Override
     public boolean checkSetupValidity() {
-        boolean nameIsValid;
-        nameIsValid = checkNameValidity(getCurrentName());
-
-        return nameIsValid;
+        return getConfiguration().isValid();
     }
 }

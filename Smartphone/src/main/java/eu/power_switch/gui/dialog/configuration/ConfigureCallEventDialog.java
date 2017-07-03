@@ -16,8 +16,9 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.dialog.configuration;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -31,32 +32,31 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
-import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Name;
-import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2Setup;
-import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.wear.service.UtilityService;
-import eu.power_switch.widget.provider.SceneWidgetProvider;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1Contacts;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
+import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage3Summary;
+import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import timber.log.Timber;
 
 /**
- * Dialog to create or modify a Scene
+ * Dialog to create or modify a Call Event
  * <p/>
- * Created by Markus on 16.08.2015.
+ * Created by Markus on 05.04.2016.
  */
-public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
+public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
     /**
-     * ID of existing Scene to Edit
+     * ID of existing Call Event to Edit
      */
-    public static final String SCENE_ID_KEY = "SceneId";
+    public static final String CALL_EVENT_ID_KEY = "CallEventId";
 
-    private long sceneId = -1;
+    private long callEventId = -1;
 
-    public static ConfigureSceneDialog newInstance(long sceneId) {
+    public static ConfigureCallEventDialog newInstance(long callEventId) {
         Bundle args = new Bundle();
-        args.putLong(SCENE_ID_KEY, sceneId);
+        args.putLong(CALL_EVENT_ID_KEY, callEventId);
 
-        ConfigureSceneDialog fragment = new ConfigureSceneDialog();
+        ConfigureCallEventDialog fragment = new ConfigureCallEventDialog();
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,14 +68,14 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(SCENE_ID_KEY)) {
+        if (arguments != null && arguments.containsKey(CALL_EVENT_ID_KEY)) {
             // init dialog using existing scene
-            sceneId = arguments.getLong(SCENE_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment(), sceneId));
+            callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
+                    getTargetFragment(), callEventId));
             return true;
         } else {
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
                     getTargetFragment()));
             return false;
         }
@@ -83,37 +83,31 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected int getDialogTitle() {
-        return R.string.configure_scene;
+        return R.string.configure_call_event;
     }
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        Timber.d("Saving scene");
+        Timber.d("Saving call event");
         super.saveCurrentConfigurationToDatabase();
     }
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .scene_will_be_gone_forever)
+                .call_event_will_be_gone_forever)
                 .setPositiveButton
                         (android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
-                                    DatabaseHandler.deleteScene(sceneId);
+                                    DatabaseHandler.deleteCallEvent(callEventId);
 
                                     // notify scenes fragment
-                                    ScenesFragment.notifySceneChanged();
-
-                                    // update scene widgets
-                                    SceneWidgetProvider.forceWidgetUpdate(getActivity());
-
-                                    // update wear data
-                                    UtilityService.forceWearDataUpdate(getActivity());
+                                    CallEventsFragment.notifyCallEventsChanged();
 
                                     StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.scene_deleted, Snackbar.LENGTH_LONG);
+                                            R.string.call_event_deleted, Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getActivity(), e);
                                 }
@@ -125,23 +119,22 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-
-        private ConfigurationDialogTabbed parentDialog;
-        private long sceneId;
+        private Context context;
+        private long callEventId;
         private ConfigurationDialogTabbedSummaryFragment setupFragment;
         private Fragment targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
             super(fm);
-            this.parentDialog = parentDialog;
-            this.sceneId = -1;
+            this.context = context;
+            this.callEventId = -1;
             this.targetFragment = targetFragment;
         }
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
+        public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment, long id) {
             super(fm);
-            this.parentDialog = parentDialog;
-            this.sceneId = id;
+            this.context = context;
+            this.callEventId = id;
             this.targetFragment = targetFragment;
         }
 
@@ -154,11 +147,11 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
             switch (position) {
                 case 0:
-                    return parentDialog.getString(R.string.name);
+                    return context.getString(R.string.contacts);
                 case 1:
-                    return parentDialog.getString(R.string.setup);
+                    return context.getString(R.string.actions);
                 case 2:
-                    return parentDialog.getString(R.string.summary);
+                    return context.getString(R.string.summary);
             }
 
             return "" + (position + 1);
@@ -170,18 +163,21 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
             switch (i) {
                 case 0:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureSceneDialogPage1Name.class, parentDialog);
+                    fragment = new ConfigureCallEventDialogPage1Contacts();
                     break;
                 case 1:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureSceneDialogTabbedPage2Setup.class, parentDialog);
+                    fragment = new ConfigureCallEventDialogPage2Actions();
+                    break;
+                case 2:
+                    fragment = new ConfigureCallEventDialogPage3Summary();
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
             }
 
-            if (fragment != null && sceneId != -1) {
+            if (fragment != null && callEventId != -1) {
                 Bundle bundle = new Bundle();
-                bundle.putLong(SCENE_ID_KEY, sceneId);
+                bundle.putLong(CALL_EVENT_ID_KEY, callEventId);
                 fragment.setArguments(bundle);
             }
 
@@ -193,7 +189,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
          */
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
     }
 

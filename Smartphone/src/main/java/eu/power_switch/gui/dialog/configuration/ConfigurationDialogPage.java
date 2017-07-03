@@ -16,14 +16,12 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog;
+package eu.power_switch.gui.dialog.configuration;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Constructor;
 
@@ -36,13 +34,13 @@ import timber.log.Timber;
 /**
  * Created by Markus on 25.03.2016.
  */
-public abstract class ConfigurationDialogPage extends EventBusFragment {
-
-    protected ConfigurationDialogTabbed configurationDialogTabbed;
+public abstract class ConfigurationDialogPage<Configuration extends ConfigurationHolder> extends EventBusFragment {
 
     @BindView(R.id.contentView)
     @Nullable
     View contentView;
+
+    private ConfigurationDialogTabbed<Configuration> parentDialog;
 
     /**
      * Use this method to instantiate a page used in a (multipage) configuration dialog
@@ -52,17 +50,17 @@ public abstract class ConfigurationDialogPage extends EventBusFragment {
      *
      * @return Instance of the configuration dialog page
      */
-    public static <T extends ConfigurationDialogPage> ConfigurationDialogPage newInstance(@NonNull Class<T> clazz,
-                                                                                          ConfigurationDialogTabbed parentDialog) {
+    public static <T extends ConfigurationDialogPage<Configuration>, Configuration extends ConfigurationHolder> ConfigurationDialogPage newInstance(
+            @NonNull Class<T> clazz, @NonNull ConfigurationDialogTabbed<Configuration> parentDialog) {
         Bundle args = new Bundle();
 
         if (!ConfigurationDialogPage.class.isAssignableFrom(clazz)) {
-            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogPage.class.getName() + " or subclass it!");
+            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogPage.class.getName() + " or subclass!");
         }
 
         try {
-            Constructor<T>          constructor = clazz.getConstructor();
-            ConfigurationDialogPage fragment    = constructor.newInstance();
+            Constructor<T>                         constructor = clazz.getConstructor();
+            ConfigurationDialogPage<Configuration> fragment    = constructor.newInstance();
             fragment.setParentConfigurationDialog(parentDialog);
             fragment.setArguments(args);
             return fragment;
@@ -75,8 +73,7 @@ public abstract class ConfigurationDialogPage extends EventBusFragment {
      * Used to notify parent Dialog that configuration has changed
      */
     public void notifyConfigurationChanged() {
-        EventBus.getDefault()
-                .post(new ConfigurationChangedEvent());
+        parentDialog.onConfigurationChanged(new ConfigurationChangedEvent());
     }
 
     /**
@@ -104,16 +101,25 @@ public abstract class ConfigurationDialogPage extends EventBusFragment {
     }
 
     /**
+     * Get the configuration for this Dialog
+     *
+     * @return configuration
+     */
+    public Configuration getConfiguration() {
+        return getParentConfigurationDialog().getConfiguration();
+    }
+
+    /**
      * Get the parent dialog of this page
      *
      * @return parent ConfigurationDialogTabbed
      */
-    public ConfigurationDialogTabbed getParentConfigurationDialog() {
-        if (configurationDialogTabbed == null) {
+    public ConfigurationDialogTabbed<Configuration> getParentConfigurationDialog() {
+        if (parentDialog == null) {
             throw new IllegalStateException(
                     "Missing parent dialog! Did you use ConfigurationDialogPage.newInstance(Class<T>, ConfigurationDialogTabbed) to instantiate your page?");
         }
-        return configurationDialogTabbed;
+        return parentDialog;
     }
 
     /**
@@ -121,7 +127,7 @@ public abstract class ConfigurationDialogPage extends EventBusFragment {
      *
      * @param configurationDialogTabbed Dialog
      */
-    public void setParentConfigurationDialog(@NonNull ConfigurationDialogTabbed configurationDialogTabbed) {
-        this.configurationDialogTabbed = configurationDialogTabbed;
+    public void setParentConfigurationDialog(@NonNull ConfigurationDialogTabbed<Configuration> configurationDialogTabbed) {
+        this.parentDialog = configurationDialogTabbed;
     }
 }
