@@ -19,11 +19,11 @@
 package eu.power_switch.gui.dialog;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.CallEventActionAddedEvent;
 
 /**
  * Dialog to select a action configuration
@@ -34,12 +34,10 @@ public class AddCallEventActionDialog extends AddActionDialog {
 
     /**
      * Used to notify the setup page that some info has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendCallEventActionAddedBroadcast(Context context) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    public static void sendCallEventActionAddedBroadcast() {
+        EventBus.getDefault()
+                .post(new CallEventActionAddedEvent());
     }
 
     @Override
@@ -49,6 +47,6 @@ public class AddCallEventActionDialog extends AddActionDialog {
 
     @Override
     protected void sendDataChangedBroadcast(Context context) {
-        sendCallEventActionAddedBroadcast(context);
+        sendCallEventActionAddedBroadcast();
     }
 }

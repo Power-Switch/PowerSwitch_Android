@@ -18,16 +18,11 @@
 
 package eu.power_switch.gui.fragment.alarm_clock;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -45,6 +40,9 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.mikepenz.iconics.view.IconicsImageView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +62,8 @@ import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
-import timber.log.Timber;
+import eu.power_switch.shared.event.AlarmEventActionAddedEvent;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling
@@ -91,7 +88,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
     IconicsImageView     getFromPlayStore;
     @BindView(R.id.switch_on_off)
     Switch               switchOnOff;
-    private BroadcastReceiver broadcastReceiver;
     private ArrayList<Action> actions = new ArrayList<>();
 
     @Override
@@ -174,23 +170,15 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
             }
         });
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-
-                if (LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED.equals(intent.getAction())) {
-                    updateUI();
-                } else {
-                    updateUI();
-                }
-            }
-        };
-
         updateUI();
 
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onAlarmEventActionAdded(AlarmEventActionAddedEvent alarmEventActionAddedEvent) {
+        updateUI();
     }
 
     @Override
@@ -218,16 +206,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
         updateListContent();
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_ALARM_EVENT_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -244,13 +222,6 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
             layout_installed.setVisibility(View.GONE);
             layout_not_installed.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     @Override

@@ -19,14 +19,14 @@
 package eu.power_switch.history;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.HistoryUpdatedEvent;
 import eu.power_switch.shared.log.LogHelper;
 import timber.log.Timber;
 
@@ -37,24 +37,23 @@ public class HistoryHelper {
 
     /**
      * Used to notify listening Fragments that History has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendHistoryChangedBroadcast(Context context) {
-        Timber.d("sendHistoryChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    public static void notifyHistoryChanged() {
+        Timber.d("notifyHistoryChanged");
+        EventBus.getDefault()
+                .post(new HistoryUpdatedEvent());
     }
 
     public static void add(Context context, HistoryItem historyItem) throws Exception {
         DatabaseHandler.addHistoryItem(historyItem);
-        sendHistoryChangedBroadcast(context);
+        notifyHistoryChanged();
     }
 
     public static void add(Context context, Exception e) throws Exception {
         DatabaseHandler.addHistoryItem(new HistoryItem((long) -1,
-                Calendar.getInstance(), context.getString(R.string.unknown_error), LogHelper.getStackTraceText(e)));
-        sendHistoryChangedBroadcast(context);
+                Calendar.getInstance(),
+                context.getString(R.string.unknown_error),
+                LogHelper.getStackTraceText(e)));
+        notifyHistoryChanged();
     }
 }

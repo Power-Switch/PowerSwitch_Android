@@ -18,26 +18,23 @@
 
 package eu.power_switch.gui.fragment.settings;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import eu.power_switch.R;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.WearableSettingsChangedEvent;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
-import timber.log.Timber;
 
 /**
  * Created by Markus on 31.07.2016.
@@ -45,14 +42,11 @@ import timber.log.Timber;
 public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private IntListPreference startupDefaultTab;
-    private SwitchPreference autoCollapseRooms;
-    private SwitchPreference highlightLastActivatedButton;
-    private SwitchPreference vibrateOnButtonPress;
-    private SliderPreference vibrationDuration;
+    private SwitchPreference  autoCollapseRooms;
+    private SwitchPreference  highlightLastActivatedButton;
+    private SwitchPreference  vibrateOnButtonPress;
+    private SliderPreference  vibrationDuration;
     private IntListPreference theme;
-
-    private BroadcastReceiver broadcastReceiver;
-
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -63,20 +57,15 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
         addPreferencesFromResource(R.xml.settings_wearable);
 
         initializePreferenceItems();
+    }
 
-        // Listen for preference item actions
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-
-                updateUI();
-            }
-        };
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onWearableSettingsChanged(WearableSettingsChangedEvent wearableSettingsChangedEvent) {
+        updateUI();
     }
 
     private void initializePreferenceItems() {
-
         startupDefaultTab = (IntListPreference) findPreference(WearablePreferencesHandler.KEY_STARTUP_DEFAULT_TAB);
         startupDefaultTab.setDefaultValue(WearablePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
         String[] mainTabNames = getResources().getStringArray(R.array.wear_tab_names);
@@ -139,27 +128,23 @@ public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat
         if (preference instanceof SliderPreference) {
             fragment = SliderPreferenceFragmentCompat.newInstance(preference.getKey());
             fragment.setTargetFragment(this, 0);
-            fragment.show(getFragmentManager(),
-                    "android.support.v7.preference.PreferenceFragment.DIALOG");
-        } else super.onDisplayPreferenceDialog(preference);
+            fragment.show(getFragmentManager(), "android.support.v7.preference.PreferenceFragment.DIALOG");
+        } else
+            super.onDisplayPreferenceDialog(preference);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_WEARABLE_SETTINGS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, intentFilter);
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
 
         super.onPause();
     }

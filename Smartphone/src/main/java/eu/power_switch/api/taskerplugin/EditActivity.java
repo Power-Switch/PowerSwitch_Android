@@ -18,13 +18,9 @@
 
 package eu.power_switch.api.taskerplugin;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -40,6 +36,9 @@ import android.widget.Spinner;
 
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +63,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.ApiConstants;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.VariableSelectedEvent;
 import timber.log.Timber;
 
 /**
@@ -84,10 +83,9 @@ public class EditActivity extends AbstractPluginActivity {
             return lhs.compareToIgnoreCase(rhs);
         }
     };
-    private BroadcastReceiver broadcastReceiver;
-    private RadioButton       radioButtonReceiverAction;
-    private RadioButton       radioButtonRoomAction;
-    private RadioButton       radioButtonSceneAction;
+    private RadioButton radioButtonReceiverAction;
+    private RadioButton radioButtonRoomAction;
+    private RadioButton radioButtonSceneAction;
     private ArrayList<String> apartmentNames = new ArrayList<>();
     private ArrayList<String> roomNames      = new ArrayList<>();
     private ArrayList<String> receiverNames  = new ArrayList<>();
@@ -146,34 +144,6 @@ public class EditActivity extends AbstractPluginActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasker_plugin);
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_VARIABLE_SELECTED.equals(intent.getAction())) {
-                    Field  field            = Field.valueOf(intent.getStringExtra(SelectVariableDialog.KEY_FIELD));
-                    String selectedVariable = intent.getStringExtra(SelectVariableDialog.KEY_SELECTED_VARIABLE);
-
-                    switch (field) {
-                        case Apartment:
-                            editText_apartment.setText(selectedVariable);
-                            break;
-                        case Room:
-                            editText_room.setText(selectedVariable);
-                            break;
-                        case Receiver:
-                            editText_receiver.setText(selectedVariable);
-                            break;
-                        case Button:
-                            editText_button.setText(selectedVariable);
-                            break;
-                        case Scene:
-                            editText_scene.setText(selectedVariable);
-                            break;
-                    }
-                }
-            }
-        };
-
         View.OnClickListener actionTypeOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,7 +184,8 @@ public class EditActivity extends AbstractPluginActivity {
         imageButtonApartmentVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Apartment);
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables,
+                        VariableSelectedEvent.Field.Apartment);
                 selectVariableDialog.show(getFragmentManager(), null);
             }
         });
@@ -270,7 +241,7 @@ public class EditActivity extends AbstractPluginActivity {
         imageButtonRoomVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Room);
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, VariableSelectedEvent.Field.Room);
                 selectVariableDialog.show(getFragmentManager(), null);
             }
         });
@@ -321,7 +292,7 @@ public class EditActivity extends AbstractPluginActivity {
         imageButtonReceiverVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Receiver);
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, VariableSelectedEvent.Field.Receiver);
                 selectVariableDialog.show(getFragmentManager(), null);
             }
         });
@@ -372,7 +343,7 @@ public class EditActivity extends AbstractPluginActivity {
         imageButtonButtonVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Button);
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, VariableSelectedEvent.Field.Button);
                 selectVariableDialog.show(getFragmentManager(), null);
             }
         });
@@ -422,7 +393,7 @@ public class EditActivity extends AbstractPluginActivity {
         imageButtonSceneVariablePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, Field.Scene);
+                SelectVariableDialog selectVariableDialog = SelectVariableDialog.newInstance(relevantVariables, VariableSelectedEvent.Field.Scene);
                 selectVariableDialog.show(getFragmentManager(), null);
             }
         });
@@ -485,6 +456,31 @@ public class EditActivity extends AbstractPluginActivity {
         }
 
         setPositiveButtonVisibility(checkValidity());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onVariableSelected(VariableSelectedEvent variableSelectedEvent) {
+        VariableSelectedEvent.Field field            = variableSelectedEvent.getField();
+        String                      selectedVariable = variableSelectedEvent.getVariable();
+
+        switch (field) {
+            case Apartment:
+                editText_apartment.setText(selectedVariable);
+                break;
+            case Room:
+                editText_room.setText(selectedVariable);
+                break;
+            case Receiver:
+                editText_receiver.setText(selectedVariable);
+                break;
+            case Button:
+                editText_button.setText(selectedVariable);
+                break;
+            case Scene:
+                editText_scene.setText(selectedVariable);
+                break;
+        }
     }
 
     private void initData(Bundle localeBundle) {
@@ -994,26 +990,6 @@ public class EditActivity extends AbstractPluginActivity {
         }
 
         super.finish();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_VARIABLE_SELECTED);
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(this)
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
-    }
-
-    public enum Field {
-        Apartment, Room, Receiver, Button, Scene
     }
 
     private enum InputType {

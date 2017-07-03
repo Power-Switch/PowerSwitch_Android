@@ -35,13 +35,14 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 
 /**
  * Dialog for any kind of processing task which takes some time and can show progress while executing
  * <p/>
  * Created by Markus on 03.09.2016.
  */
-public abstract class ProcessingDialog extends ButterKnifeSupportDialogFragment {
+public abstract class ProcessingDialog extends EventBusSupportDialogFragment {
 
     @BindView(R.id.imageView_success)
     IconicsImageView imageViewSuccess;

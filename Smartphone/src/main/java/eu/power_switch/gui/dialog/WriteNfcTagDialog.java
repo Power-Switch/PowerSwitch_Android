@@ -34,7 +34,7 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.activity.ButterKnifeDialogActivity;
+import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.nfc.NfcHandler;
 import timber.log.Timber;

@@ -18,14 +18,9 @@
 
 package eu.power_switch.gui.fragment.main;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -35,6 +30,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +45,15 @@ import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.ConfigureSceneDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.event.ActiveApartmentChangedEvent;
+import eu.power_switch.shared.event.SceneChangedEvent;
 import timber.log.Timber;
 
 /**
@@ -66,18 +66,14 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
     private ArrayList<Scene> scenes = new ArrayList<>();
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
-    private BroadcastReceiver        broadcastReceiver;
 
     /**
      * Used to notify Scene Fragment (this) that Scenes have changed
-     *
-     * @param context any suitable context
      */
-    public static void sendScenesChangedBroadcast(Context context) {
-        Timber.d("ScenesFragment", "sendScenesChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifySceneChanged() {
+        Timber.d("ScenesFragment", "notifySceneChanged");
+        EventBus.getDefault()
+                .post(new SceneChangedEvent());
     }
 
     @Override
@@ -125,15 +121,6 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             }
         });
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("ScenesFragment", "received intent: " + intent.getAction());
-                updateUI();
-            }
-        };
-
         updateUI();
 
         return rootView;
@@ -142,6 +129,18 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_scenes;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onActiveApartmentChanged(ActiveApartmentChangedEvent activeApartmentChangedEvent) {
+        updateUI();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onSceneChanged(SceneChangedEvent sceneChangedEvent) {
+        updateUI();
     }
 
     private void updateUI() {
@@ -197,23 +196,6 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
         } else {
             fab.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_SCENE_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     @Override

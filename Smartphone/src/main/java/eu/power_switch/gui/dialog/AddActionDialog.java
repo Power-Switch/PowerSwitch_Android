@@ -49,6 +49,7 @@ import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -62,7 +63,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 28.09.2015.
  */
-public abstract class AddActionDialog extends ButterKnifeSupportDialogFragment {
+public abstract class AddActionDialog extends EventBusSupportDialogFragment {
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override

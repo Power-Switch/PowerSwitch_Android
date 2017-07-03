@@ -47,8 +47,8 @@ import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 

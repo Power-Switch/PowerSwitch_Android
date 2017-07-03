@@ -45,8 +45,8 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddGeofenceExitActionDialog;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**

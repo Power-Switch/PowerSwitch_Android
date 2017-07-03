@@ -43,9 +43,9 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.ConfigureRoomDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.ConfigureRoomDialog;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -326,9 +326,9 @@ public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage imp
             DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
         }
 
-        RoomsFragment.sendRoomChangedBroadcast(getActivity());
+        RoomsFragment.notifyRoomChanged();
         // scenes could change too if room was used in a scene
-        ScenesFragment.sendScenesChangedBroadcast(getActivity());
+        ScenesFragment.notifySceneChanged();
 
         // update room widgets
         RoomWidgetProvider.forceWidgetUpdate(getActivity());

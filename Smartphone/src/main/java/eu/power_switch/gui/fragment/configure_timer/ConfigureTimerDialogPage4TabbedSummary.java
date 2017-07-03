@@ -39,9 +39,9 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.ConfigureTimerDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.timer.IntervalTimer;
@@ -234,7 +234,7 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
                 }
             }
 
-            TimersFragment.sendTimersChangedBroadcast(getContext());
+            TimersFragment.notifyTimersChanged();
             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);

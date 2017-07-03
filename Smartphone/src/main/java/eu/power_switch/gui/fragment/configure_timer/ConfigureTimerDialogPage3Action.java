@@ -44,8 +44,8 @@ import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigureTimerDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**

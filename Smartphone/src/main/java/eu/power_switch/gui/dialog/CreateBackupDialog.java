@@ -34,11 +34,12 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 
 /**
  * Dialog to create a new Backup
  */
-public class CreateBackupDialog extends ButterKnifeSupportDialogFragment {
+public class CreateBackupDialog extends EventBusSupportDialogFragment {
 
     @BindView(R.id.txt_backup_name)
     EditText name;

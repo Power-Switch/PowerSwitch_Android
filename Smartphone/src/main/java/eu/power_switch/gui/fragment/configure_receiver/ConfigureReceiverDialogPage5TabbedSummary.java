@@ -46,9 +46,9 @@ import eu.power_switch.clipboard.ClipboardHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.ConfigureReceiverDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Apartment;
@@ -450,9 +450,9 @@ public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDial
             DatabaseHandler.updateReceiver(receiver);
         }
 
-        RoomsFragment.sendReceiverChangedBroadcast(getActivity());
+        RoomsFragment.notifyReceiverChanged();
         // scenes could change too if room was used in a scene
-        ScenesFragment.sendScenesChangedBroadcast(getActivity());
+        ScenesFragment.notifySceneChanged();
 
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());

@@ -34,6 +34,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -44,7 +45,7 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  * <p/>
  * Created by Markus on 08.01.2016.
  */
-public class SelectApartmentDialog extends ButterKnifeSupportDialogFragment {
+public class SelectApartmentDialog extends EventBusSupportDialogFragment {
 
     @BindView(R.id.listview_apartments)
     ListView listViewApartments;
@@ -120,7 +121,7 @@ public class SelectApartmentDialog extends ButterKnifeSupportDialogFragment {
      */
     protected void onApartmentClicked(Long apartmentId) {
         SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartmentId);
-        ApartmentFragment.sendApartmentChangedBroadcast(getContext());
+        ApartmentFragment.notifyActiveApartmentChanged(getContext());
         dismiss();
     }
 }

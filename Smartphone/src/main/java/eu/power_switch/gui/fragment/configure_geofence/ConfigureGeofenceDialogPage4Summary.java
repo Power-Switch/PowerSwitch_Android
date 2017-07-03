@@ -47,10 +47,10 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.ConfigureApartmentGeofenceDialog;
-import eu.power_switch.gui.dialog.ConfigureGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.ConfigureApartmentGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.obj.Apartment;
@@ -314,8 +314,8 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
                 }
             }
 
-            ApartmentGeofencesFragment.sendApartmentGeofencesChangedBroadcast(getContext());
-            CustomGeofencesFragment.sendCustomGeofencesChangedBroadcast(getContext());
+            ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
+            CustomGeofencesFragment.notifyCustomGeofencesChanged();
 
             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {

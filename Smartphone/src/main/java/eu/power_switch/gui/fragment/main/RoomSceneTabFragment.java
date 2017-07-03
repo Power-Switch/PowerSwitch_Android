@@ -18,22 +18,21 @@
 
 package eu.power_switch.gui.fragment.main;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -42,11 +41,11 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
-import eu.power_switch.gui.fragment.ButterKnifeFragment;
+import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.event.ActiveApartmentChangedEvent;
 import eu.power_switch.tutorial.TutorialHelper;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
@@ -56,7 +55,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  * <p/>
  * Created by Markus on 25.06.2015.
  */
-public class RoomSceneTabFragment extends ButterKnifeFragment {
+public class RoomSceneTabFragment extends EventBusFragment {
 
     public static final String TAB_INDEX_KEY = "tabIndex";
 
@@ -74,8 +73,6 @@ public class RoomSceneTabFragment extends ButterKnifeFragment {
     private CustomTabAdapter customTabAdapter;
     private int     currentTab   = 0;
     private boolean skipTutorial = false;
-
-    private BroadcastReceiver broadcastReceiver;
 
     public static RoomSceneTabFragment newInstance(int tabIndex) {
         Bundle args = new Bundle();
@@ -129,14 +126,6 @@ public class RoomSceneTabFragment extends ButterKnifeFragment {
             }
         });
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("received intent: " + intent.getAction());
-                updateCurrentApartmentInfo();
-            }
-        };
-
         skipTutorial = true;
 
         tabLayout.setupWithViewPager(tabViewPager);
@@ -150,6 +139,12 @@ public class RoomSceneTabFragment extends ButterKnifeFragment {
         skipTutorial = false;
 
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onActiveApartmentChanged(ActiveApartmentChangedEvent activeApartmentChangedEvent) {
+        updateCurrentApartmentInfo();
     }
 
     @Override
@@ -220,22 +215,6 @@ public class RoomSceneTabFragment extends ButterKnifeFragment {
     public void onResume() {
         super.onResume();
         showTutorial(tabViewPager.getCurrentItem());
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_APARTMENT_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     private static class CustomTabAdapter extends FragmentPagerAdapter {

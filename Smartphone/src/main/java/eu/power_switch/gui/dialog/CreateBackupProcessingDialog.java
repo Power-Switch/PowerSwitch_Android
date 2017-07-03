@@ -90,7 +90,7 @@ public class CreateBackupProcessingDialog extends ProcessingDialog {
                     onFinishedFailure(voidAsyncTaskResult.getException());
                 }
 
-                BackupFragment.sendBackupsChangedBroadcast(getActivity());
+                BackupFragment.notifyBackupsChanged();
             }
         }.execute();
     }

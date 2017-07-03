@@ -20,25 +20,23 @@ package eu.power_switch.api.taskerplugin.gui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.api.taskerplugin.EditActivity;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ButterKnifeDialogFragment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.gui.dialog.eventbus.EventBusDialogFragment;
+import eu.power_switch.shared.event.VariableSelectedEvent;
 import timber.log.Timber;
 
 /**
@@ -46,20 +44,18 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 24.05.2016.
  */
-public class SelectVariableDialog extends ButterKnifeDialogFragment {
+public class SelectVariableDialog extends EventBusDialogFragment {
 
     public static final String KEY_FIELD             = "field";
     public static final String KEY_SELECTED_VARIABLE = "selectedVariable";
 
     private static final String KEY_RELEVANT_VARIABLES = "relevantVariables";
-
-    private ArrayList<String>  relevantVariables;
-    private EditActivity.Field field;
-
     @BindView(R.id.listview_variable_names)
     ListView listViewApartments;
+    private ArrayList<String>           relevantVariables;
+    private VariableSelectedEvent.Field field;
 
-    public static SelectVariableDialog newInstance(List<String> relevantVariables, EditActivity.Field field) {
+    public static SelectVariableDialog newInstance(List<String> relevantVariables, VariableSelectedEvent.Field field) {
         Bundle args = new Bundle();
         args.putStringArrayList(KEY_RELEVANT_VARIABLES, new ArrayList<>(relevantVariables));
         args.putString(KEY_FIELD, field.toString());
@@ -69,14 +65,10 @@ public class SelectVariableDialog extends ButterKnifeDialogFragment {
         return fragment;
     }
 
-    private static void sendVariableSelectedBroadcast(Context context, String variable, EditActivity.Field field) {
-        Timber.d("sendVariableSelectedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_VARIABLE_SELECTED);
-        intent.putExtra(KEY_SELECTED_VARIABLE, variable);
-        intent.putExtra(KEY_FIELD, field.toString());
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    private static void notifyVariableSelected(String variable, VariableSelectedEvent.Field field) {
+        Timber.d("notifyVariableSelected");
+        EventBus.getDefault()
+                .post(new VariableSelectedEvent(variable, field));
     }
 
     @NonNull
@@ -89,7 +81,7 @@ public class SelectVariableDialog extends ButterKnifeDialogFragment {
         } else {
             relevantVariables = new ArrayList<>();
         }
-        field = EditActivity.Field.valueOf(getArguments().getString(KEY_FIELD));
+        field = VariableSelectedEvent.Field.valueOf(getArguments().getString(KEY_FIELD));
 
         ArrayAdapter<String> apartmentNamesAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, relevantVariables);
         listViewApartments.setAdapter(apartmentNamesAdapter);
@@ -97,7 +89,7 @@ public class SelectVariableDialog extends ButterKnifeDialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    sendVariableSelectedBroadcast(getActivity(), relevantVariables.get(position), field);
+                    notifyVariableSelected(relevantVariables.get(position), field);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getActivity(), e);
                 }
@@ -121,4 +113,6 @@ public class SelectVariableDialog extends ButterKnifeDialogFragment {
     protected int getLayoutRes() {
         return R.layout.dialog_variable_chooser;
     }
+
+
 }

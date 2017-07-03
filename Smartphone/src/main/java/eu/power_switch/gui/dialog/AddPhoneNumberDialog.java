@@ -19,15 +19,12 @@
 package eu.power_switch.gui.dialog;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -38,6 +35,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,16 +49,17 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.phone.Contact;
 import eu.power_switch.phone.ContactHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.PhoneNumberAddedEvent;
 
 /**
  * Created by Markus on 08.04.2016.
  */
-public class AddPhoneNumberDialog extends ButterKnifeSupportDialogFragment {
+public class AddPhoneNumberDialog extends EventBusSupportDialogFragment {
 
     public static final String KEY_PHONE_NUMBERS = "phoneNumbers";
 
@@ -97,14 +97,10 @@ public class AddPhoneNumberDialog extends ButterKnifeSupportDialogFragment {
 
     /**
      * Used to notify the setup page that some info has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendPhoneNumbersAddedBroadcast(Context context, Set<String> phoneNumbers) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBER_ADDED);
-        intent.putStringArrayListExtra(KEY_PHONE_NUMBERS, new ArrayList<>(phoneNumbers));
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void sendPhoneNumbersAddedBroadcast(Set<String> phoneNumbers) {
+        EventBus.getDefault()
+                .post(new PhoneNumberAddedEvent(phoneNumbers));
     }
 
     @NonNull
@@ -156,7 +152,7 @@ public class AddPhoneNumberDialog extends ButterKnifeSupportDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    sendPhoneNumbersAddedBroadcast(getContext(), getSelectedPhoneNumbers());
+                    sendPhoneNumbersAddedBroadcast(getSelectedPhoneNumbers());
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getTargetFragment().getView()
                             .findViewById(R.id.listView), e);

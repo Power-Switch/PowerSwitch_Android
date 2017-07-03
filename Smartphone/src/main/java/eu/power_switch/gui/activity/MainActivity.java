@@ -18,11 +18,9 @@
 
 package eu.power_switch.gui.activity;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,7 +29,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +57,9 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,6 +74,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHelper;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.activity.eventbus.EventBusActivity;
 import eu.power_switch.gui.adapter.HistoryItemRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.DonationDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
@@ -93,8 +94,8 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.phone.PhoneHelper;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.SettingsConstants;
+import eu.power_switch.shared.event.HistoryUpdatedEvent;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
@@ -104,7 +105,7 @@ import timber.log.Timber;
 /**
  * Main entry Activity for the app
  */
-public class MainActivity extends ButterKnifeActivity {
+public class MainActivity extends EventBusActivity {
 
     public static final int IDENTIFIER_ROOMS_SCENES   = 10;
     public static final int IDENTIFIER_APARTMENTS     = 11;
@@ -129,7 +130,6 @@ public class MainActivity extends ButterKnifeActivity {
     private LinkedList<HistoryItem> historyItems = new LinkedList<>();
     private RecyclerView                   recyclerViewHistory;
     private HistoryItemRecyclerViewAdapter historyItemArrayAdapter;
-    private BroadcastReceiver              broadcastReceiver;
     private Drawer                         navigationDrawer;
     private Drawer                         historyDrawer;
     private MiniDrawer                     miniDrawer;
@@ -268,13 +268,6 @@ public class MainActivity extends ButterKnifeActivity {
                     })
                     .show();
         }
-
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateHistory();
-            }
-        };
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
             startActivity(WizardActivity.getLaunchIntent(this));
@@ -814,6 +807,12 @@ public class MainActivity extends ButterKnifeActivity {
                 .append(navigationDrawer);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onHistoryUpdated(HistoryUpdatedEvent historyUpdatedEvent) {
+        updateHistory();
+    }
+
     private void updateHistory() {
         layoutLoadingHistory.setVisibility(View.VISIBLE);
         recyclerViewHistory.setVisibility(View.GONE);
@@ -849,7 +848,7 @@ public class MainActivity extends ButterKnifeActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // send permission change to possible listeners via local broadcast
-        PermissionHelper.sendPermissionChangedBroadcast(this, requestCode, permissions, grantResults);
+        PermissionHelper.notifyPermissionChanged(requestCode, permissions, grantResults);
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -883,16 +882,6 @@ public class MainActivity extends ButterKnifeActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_HISTORY_CHANGED);
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         appIsInForeground = true;
@@ -907,13 +896,6 @@ public class MainActivity extends ButterKnifeActivity {
     protected void onPause() {
         appIsInForeground = false;
         super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        LocalBroadcastManager.getInstance(this)
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     @Override

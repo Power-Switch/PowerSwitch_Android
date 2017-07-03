@@ -54,13 +54,14 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.animation.AnimationHandler;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import timber.log.Timber;
 
 /**
  * Dialog to create a new Room
  */
-public class AddSsidDialog extends ButterKnifeSupportDialogFragment {
+public class AddSsidDialog extends EventBusSupportDialogFragment {
 
     public static final String KEY_SSID = "SSID";
 

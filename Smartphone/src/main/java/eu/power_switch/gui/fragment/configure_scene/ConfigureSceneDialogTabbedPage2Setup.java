@@ -56,9 +56,9 @@ import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.ConfigureSceneDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -230,7 +230,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
             }
 
             // notify scenes fragment
-            ScenesFragment.sendScenesChangedBroadcast(getActivity());
+            ScenesFragment.notifySceneChanged();
 
             // update scene widgets
             SceneWidgetProvider.forceWidgetUpdate(getActivity());

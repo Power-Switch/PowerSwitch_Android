@@ -19,17 +19,11 @@
 package eu.power_switch.gui.fragment;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -41,6 +35,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,11 +59,11 @@ import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.dialog.UpgradeBackupsProcessingDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PermissionConstants;
 import eu.power_switch.shared.constants.TutorialConstants;
+import eu.power_switch.shared.event.BackupChangedEvent;
+import eu.power_switch.shared.event.PermissionChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
-import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 /**
@@ -86,19 +84,13 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     FloatingActionButton fab;
     private ArrayList<Backup> backups = new ArrayList<>();
     private BackupRecyclerViewAdapter backupArrayAdapter;
-    private BroadcastReceiver         broadcastReceiver;
 
     /**
      * Used to notify Backup Fragment (this) that Backups have changed
-     *
-     * @param context any suitable context
      */
-    public static void sendBackupsChangedBroadcast(Context context) {
-        Timber.d("AddReceiverDialog", "sendReceiverChangedBroadcast");
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyBackupsChanged() {
+        EventBus.getDefault()
+                .post(new BackupChangedEvent());
     }
 
     @Override
@@ -180,40 +172,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             }
         });
 
-        // BroadcastReceiver to get notifications from background service if data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Timber.d("BackupFragment", "received intent: " + intent.getAction());
-
-                switch (intent.getAction()) {
-                    case LocalBroadcastConstants.INTENT_PERMISSION_CHANGED:
-                        int permissionRequestCode = intent.getIntExtra(PermissionConstants.KEY_REQUEST_CODE, 0);
-                        int[] results = intent.getIntArrayExtra(PermissionConstants.KEY_RESULTS);
-
-                        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION) {
-                            if (results[0] == PackageManager.PERMISSION_GRANTED) {
-                                // Permission Granted
-                                updateUI();
-                                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
-                            } else {
-                                // Permission Denied
-                                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
-                                        getRecyclerView(),
-                                        PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
-                                        NEEDED_PERMISSIONS);
-                            }
-                        }
-
-                        break;
-                    case LocalBroadcastConstants.INTENT_BACKUP_CHANGED:
-                        updateUI();
-                }
-            }
-        };
-
         updateUI();
-
 
         // TODO: Cloud Backups
         // FirebaseStorageHandler firebaseStorageHandler = new FirebaseStorageHandler(getActivity());
@@ -225,6 +184,32 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         }
 
         return rootView;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onPermissionChanged(PermissionChangedEvent permissionChangedEvent) {
+        int   permissionRequestCode = permissionChangedEvent.getRequestCode();
+        int[] results               = permissionChangedEvent.getGrantResults();
+
+        if (permissionRequestCode == PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION) {
+            if (results[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                updateUI();
+            } else {
+                // Permission Denied
+                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                        getRecyclerView(),
+                        PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+                        NEEDED_PERMISSIONS);
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onBackupChanged(BackupChangedEvent backupChangedEvent) {
+        updateUI();
     }
 
     @Override
@@ -332,23 +317,6 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         }
 
         showTutorial();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_BACKUP_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_PERMISSION_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
     @Override

@@ -42,6 +42,7 @@ import eu.power_switch.google_play_services.playstore.Inventory;
 import eu.power_switch.google_play_services.playstore.Purchase;
 import eu.power_switch.google_play_services.playstore.SkuDetails;
 import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import timber.log.Timber;
 
@@ -50,7 +51,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 01.10.2015.
  */
-public class DonationDialog extends ButterKnifeSupportDialogFragment {
+public class DonationDialog extends EventBusSupportDialogFragment {
 
     public static IabHelper iapHelper;
 

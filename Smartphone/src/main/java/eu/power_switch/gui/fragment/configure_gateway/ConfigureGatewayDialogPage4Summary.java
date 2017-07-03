@@ -40,9 +40,9 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.dialog.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.ConfigureGatewayDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
+import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
+import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.BrematicGWY433;
@@ -351,7 +351,7 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
             }
         }
 
-        GatewaySettingsFragment.sendGatewaysChangedBroadcast(getActivity());
+        GatewaySettingsFragment.notifyGatewaysChanged();
         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
     }
 
