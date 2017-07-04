@@ -39,23 +39,22 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddTimerActionDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
+import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.timer.Timer;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage {
+public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<TimerConfigurationHolder> {
 
-    public static final String KEY_ACTIONS = "actions";
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
-    private static ArrayList<Action> currentActions;
+    private static ArrayList<Action>         currentActions;
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
     @BindView(R.id.add_timer_action)
     FloatingActionButton addTimerActionFAB;
@@ -66,15 +65,20 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage {
 
     /**
      * Used to notify the setup page that some info has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendTimerActionChangedBroadcast(Context context, ArrayList<Action> actions) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
-        intent.putExtra(KEY_ACTIONS, actions);
+    public void updateConfiguration(ArrayList<Action> actions) {
+        getConfiguration().setActions(actions);
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+        notifyConfigurationChanged();
+    }
+
+    /**
+     * Used to notify the setup page that some info has changed
+     */
+    public void updateConfiguration(ArrayList<Action> actions) {
+        getConfiguration().setActions(actions);
+
+        notifyConfigurationChanged();
     }
 
     /**
@@ -96,7 +100,7 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                sendTimerActionChangedBroadcast(getContext(), currentActions);
+                updateConfiguration(currentActions);
             }
         };
 
@@ -118,20 +122,16 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage {
             public void onItemClick(View itemView, int position) {
                 currentActions.remove(position);
                 actionRecyclerViewAdapter.notifyDataSetChanged();
-                sendTimerActionChangedBroadcast(getContext(), currentActions);
+                updateConfiguration(currentActions);
             }
         });
         recyclerViewTimerActions.setAdapter(actionRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
-            long timerId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
-            initializeTimerData(timerId);
-        }
+        initializeTimerData();
 
-        sendTimerActionChangedBroadcast(getContext(), currentActions);
+        updateConfiguration(currentActions);
 
         return rootView;
     }
@@ -141,13 +141,15 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage {
         return R.layout.dialog_fragment_configure_timer_page_3;
     }
 
-    private void initializeTimerData(long timerId) {
-        try {
-            currentActions.clear();
-            currentActions.addAll(DatabaseHandler.getTimer(timerId)
-                    .getActions());
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+    private void initializeTimerData() {
+        Timer timer = getConfiguration().getTimer();
+        if (timer != null) {
+            try {
+                currentActions.clear();
+                currentActions.addAll(timer.getActions());
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
+            }
         }
     }
 

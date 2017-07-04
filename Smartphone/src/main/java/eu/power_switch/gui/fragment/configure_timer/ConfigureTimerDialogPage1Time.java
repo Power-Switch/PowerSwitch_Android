@@ -18,12 +18,9 @@
 
 package eu.power_switch.gui.fragment.configure_timer;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -39,22 +36,15 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
-import eu.power_switch.timer.Timer;
+import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import timber.log.Timber;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
-
-    public static final String KEY_NAME             = "name";
-    public static final String KEY_EXECUTION_TIME   = "executionTime";
-    public static final String KEY_RANDOMIZER_VALUE = "randomizerValue";
+public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<TimerConfigurationHolder> {
 
     @BindView(R.id.timer_name_text_input_layout)
     TextInputLayout floatingName;
@@ -70,23 +60,23 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
     /**
      * Used to notify the setup page that some info has changed
      *
-     * @param context  any suitable context
      * @param calendar The calendar when this timer activates
      */
-    public static void sendTimerNameExecutionTimeChangedBroadcast(Context context, String name, Calendar calendar, int randomizerValue) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
-        intent.putExtra(KEY_NAME, name);
-        intent.putExtra(KEY_EXECUTION_TIME, calendar);
-        intent.putExtra(KEY_RANDOMIZER_VALUE, randomizerValue);
+    public void updateConfiguration(String name, Calendar calendar, int randomizerValue) {
+        getConfiguration().setName(name);
+        getConfiguration().setExecutionTime(calendar);
+        getConfiguration().setRandomizerValue(randomizerValue);
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+        notifyConfigurationChanged();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        initializeTimerData();
+
+        updateRandomizerValue(0);
 
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
@@ -101,7 +91,7 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
             @Override
             public void afterTextChanged(Editable s) {
                 checkValidity();
-                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), getCurrentTime(), getCurrentRandomizerValue());
+                updateConfiguration(getCurrentName(), getCurrentTime(), getCurrentRandomizerValue());
             }
         });
 
@@ -115,7 +105,7 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
                 c.set(Calendar.SECOND, 0);
                 c.set(Calendar.MILLISECOND, 0);
                 Timber.d("Time set to: " + hourOfDay + ":" + minute);
-                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), c, getCurrentRandomizerValue());
+                updateConfiguration(getCurrentName(), c, getCurrentRandomizerValue());
             }
         });
 
@@ -123,7 +113,7 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 updateRandomizerValue(seekBar.getProgress());
-                sendTimerNameExecutionTimeChangedBroadcast(getContext(), getCurrentName(), getCurrentTime(), getCurrentRandomizerValue());
+                updateConfiguration(getCurrentName(), getCurrentTime(), getCurrentRandomizerValue());
             }
 
             @Override
@@ -134,13 +124,6 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        updateRandomizerValue(0);
-
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
-            long timerId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
-            initializeTimerData(timerId);
-        }
 
         checkValidity();
 
@@ -152,19 +135,20 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage {
         return R.layout.dialog_fragment_configure_timer_page_1;
     }
 
-    private void initializeTimerData(long timerId) {
-        try {
-            Timer timer = DatabaseHandler.getTimer(timerId);
+    private void initializeTimerData() {
+        Long timerId = getConfiguration().getId();
+        if (timerId != null) {
+            try {
+                name.setText(getConfiguration().getName());
 
-            name.setText(timer.getName());
+                Calendar c = getConfiguration().getExecutionTime();
+                timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+                timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
 
-            Calendar c = timer.getExecutionTime();
-            timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
-            timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
-
-            updateRandomizerValue(timer.getRandomizerValue());
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+                updateRandomizerValue(getConfiguration().getRandomizerValue());
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
+            }
         }
     }
 

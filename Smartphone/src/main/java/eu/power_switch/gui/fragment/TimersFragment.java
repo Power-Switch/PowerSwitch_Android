@@ -94,8 +94,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
                 try {
                     final Timer timer = timers.get(position);
 
-                    ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer.getId());
-                    configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
+                    ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer.getId(), recyclerViewFragment);
                     configureTimerDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -109,8 +108,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
             @Override
             public void onClick(View v) {
                 try {
-                    ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
-                    configureTimerDialog.setTargetFragment(recyclerViewFragment, 0);
+                    ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(recyclerViewFragment);
                     configureTimerDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -163,8 +161,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
         switch (menuItem.getItemId()) {
             case R.id.create_timer:
                 try {
-                    ConfigureTimerDialog configureTimerDialog = new ConfigureTimerDialog();
-                    configureTimerDialog.setTargetFragment(this, 0);
+                    ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(this);
                     configureTimerDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);

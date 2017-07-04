@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog.configuration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,11 +32,13 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1Time;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2Days;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3Action;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4TabbedSummary;
+import eu.power_switch.timer.Timer;
 import timber.log.Timber;
 
 /**
@@ -43,20 +46,22 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
+public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigurationHolder> {
 
-    /**
-     * ID of existing Timer to Edit
-     */
-    public static final String TIMER_ID_KEY = "TimerId";
+    public static ConfigureTimerDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(-1, targetFragment);
+    }
 
-    private long timerId = -1;
-
-    public static ConfigureTimerDialog newInstance(long timerId) {
+    public static ConfigureTimerDialog newInstance(long timerId, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
-        args.putLong(TIMER_ID_KEY, timerId);
 
-        ConfigureTimerDialog fragment = new ConfigureTimerDialog();
+        ConfigureTimerDialog     fragment                 = new ConfigureTimerDialog();
+        TimerConfigurationHolder timerConfigurationHolder = new TimerConfigurationHolder();
+        if (timerId != -1) {
+            timerConfigurationHolder.setId(timerId);
+        }
+        fragment.setConfiguration(timerConfigurationHolder);
+        fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,17 +73,36 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(TIMER_ID_KEY)) {
+        Long timerId = getConfiguration().getId();
+
+        if (timerId != null) {
+            try {
+                Timer timer = DatabaseHandler.getTimer(timerId);
+                getConfiguration().setTimer(timer);
+
+                getConfiguration().setActive(timer.isActive());
+                getConfiguration().setId(timerId);
+                getConfiguration().setName(timer.getName());
+
+                getConfiguration().setExecutionTime(timer.getExecutionTime());
+                getConfiguration().setRandomizerValue(timer.getRandomizerValue());
+
+                getConfiguration().setExecutionInterval(timer.getExecutionInterval());
+                getConfiguration().setExecutionType(timer.getExecutionType());
+
+                getConfiguration().setActions(timer.getActions());
+
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+
             // init dialog using existing scene
-            timerId = arguments.getLong(TIMER_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment(), timerId));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
@@ -96,49 +120,39 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .timer_will_be_gone_forever)
-                .setPositiveButton
-                        (android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DatabaseHandler.deleteTimer(timerId);
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                .setMessage(R.string.timer_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DatabaseHandler.deleteTimer(getConfiguration().getId());
 
-                                    // notify scenes fragment
-                                    TimersFragment.notifyTimersChanged();
+                            // notify scenes fragment
+                            TimersFragment.notifyTimersChanged();
 
-                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.timer_deleted, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
-                                }
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_deleted, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        }
 
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private ConfigurationDialogTabbed parentDialog;
-        private long timerId;
-        private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private Fragment targetFragment;
+        private ConfigurationDialogTabbed<TimerConfigurationHolder> parentDialog;
+        private ConfigurationDialogTabbedSummaryFragment            summaryFragment;
+        private Fragment                                            targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<TimerConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
-            this.timerId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long
-                id) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.timerId = id;
             this.targetFragment = targetFragment;
         }
 
@@ -181,12 +195,6 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed {
                     fragment = ConfigurationDialogPage.newInstance(ConfigureTimerDialogPage4TabbedSummary.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
                     summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
-            }
-
-            if (fragment != null && timerId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(TIMER_ID_KEY, timerId);
-                fragment.setArguments(bundle);
             }
 
             return fragment;

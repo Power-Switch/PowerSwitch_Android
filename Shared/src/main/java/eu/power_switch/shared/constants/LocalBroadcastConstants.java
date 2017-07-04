@@ -36,10 +36,6 @@ public class LocalBroadcastConstants {
     public static final String INTENT_GEOFENCE_EXIT_ACTION_ADDED     = "eu.power_switch.geofence_exit_action_added";
     public static final String INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED  = "eu.power_switch.geofence_exit_actions_changed";
 
-    public static final String INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED = "eu.power_switch.timer_name_execution_time_changed";
-    public static final String INTENT_TIMER_EXECUTION_INTERVAL_CHANGED  = "eu.power_switch.timer_execution_interval_changed";
-    public static final String INTENT_TIMER_ACTIONS_CHANGED             = "eu.power_switch.timer_actions_changed";
-
     public static final String INTENT_TIMER_ACTION_ADDED       = "eu.power_switch.timer_action_added";
 
     public static final String INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED = "eu.power_switch.call_event_phone_numbers_changed";

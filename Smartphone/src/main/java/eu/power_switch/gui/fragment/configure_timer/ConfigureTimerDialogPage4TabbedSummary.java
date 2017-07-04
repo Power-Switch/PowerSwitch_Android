@@ -18,20 +18,17 @@
 
 package eu.power_switch.gui.fragment.configure_timer;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -41,9 +38,9 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
+import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import eu.power_switch.gui.fragment.TimersFragment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
@@ -51,7 +48,7 @@ import eu.power_switch.timer.WeekdayTimer;
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogPage<TimerConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_name)
     TextView textViewName;
@@ -62,52 +59,10 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
     @BindView(R.id.textView_action)
     TextView textViewAction;
 
-    private long currentId = -1;
-    private boolean currentIsActive;
-    private String   currentName              = "";
-    private Calendar currentExecutionTime     = Calendar.getInstance();
-    private int      currentRandomizerValue   = 0;
-    private long     currentExecutionInterval = -1;
-    private ArrayList<WeekdayTimer.Day> currentExecutionDays;
-    private String                      currentExecutionType;
-    private ArrayList<Action>           currentActions;
-
-    private BroadcastReceiver broadcastReceiver;
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED.equals(intent.getAction())) {
-                    currentExecutionTime = (Calendar) intent.getSerializableExtra(ConfigureTimerDialogPage1Time.KEY_EXECUTION_TIME);
-                    currentName = intent.getStringExtra(ConfigureTimerDialogPage1Time.KEY_NAME);
-                    currentRandomizerValue = intent.getIntExtra(ConfigureTimerDialogPage1Time.KEY_RANDOMIZER_VALUE, 0);
-
-                } else if (LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED.equals(intent.getAction())) {
-                    currentExecutionInterval = intent.getLongExtra(ConfigureTimerDialogPage2Days.KEY_EXECUTION_INTERVAL, -1);
-                    currentExecutionDays = (ArrayList<WeekdayTimer.Day>) intent.getSerializableExtra(ConfigureTimerDialogPage2Days.KEY_EXECUTION_DAYS);
-                    currentExecutionType = intent.getStringExtra(ConfigureTimerDialogPage2Days.KEY_EXECUTION_TYPE);
-
-                } else if (LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureTimerDialogPage3Action.KEY_ACTIONS);
-                }
-
-                updateUi();
-
-                notifyConfigurationChanged();
-            }
-        };
-
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
-            currentId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
-            initializeTimerData(currentId);
-        }
 
         checkSetupValidity();
         updateUi();
@@ -120,27 +75,9 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
         return R.layout.dialog_fragment_configure_timer_page_4_summary;
     }
 
-    private void initializeTimerData(long timerId) {
-        try {
-            final Timer timer = DatabaseHandler.getTimer(timerId);
-
-            currentId = timerId;
-            currentIsActive = timer.isActive();
-            currentName = timer.getName();
-            currentActions = timer.getActions();
-            currentExecutionType = timer.getExecutionType();
-            currentExecutionTime = timer.getExecutionTime();
-            currentExecutionInterval = timer.getExecutionInterval();
-
-            if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
-                WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
-                currentExecutionDays = weekdayTimer.getExecutionDays();
-            }
-
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onConfigurationChanged(ConfigurationChangedEvent e) {
         updateUi();
     }
 
@@ -150,13 +87,15 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
     }
 
     private void updateUiValues() {
-        if (currentName != null) {
-            textViewName.setText(currentName);
+        if (getConfiguration().getName() != null) {
+            textViewName.setText(getConfiguration().getName());
         }
 
-        if (currentExecutionTime != null) {
-            long hourOfDay = currentExecutionTime.get(Calendar.HOUR_OF_DAY);
-            long minute    = currentExecutionTime.get(Calendar.MINUTE);
+        if (getConfiguration().getExecutionTime() != null) {
+            long hourOfDay = getConfiguration().getExecutionTime()
+                    .get(Calendar.HOUR_OF_DAY);
+            long minute = getConfiguration().getExecutionTime()
+                    .get(Calendar.MINUTE);
 
             String executionTime = "";
             if (hourOfDay < 10) {
@@ -168,7 +107,7 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
             }
             executionTime += minute;
 
-            executionTime += " " + getString(R.string.plus_minus_minutes, currentRandomizerValue);
+            executionTime += " " + getString(R.string.plus_minus_minutes, getConfiguration().getRandomizerValue());
 
             textViewTime.setText(executionTime);
         } else {
@@ -176,10 +115,10 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
         }
 
         String executionDaysText = "";
-        if (currentExecutionDays != null) {
+        if (getConfiguration().getExecutionDays() != null) {
 
             boolean first = true;
-            for (WeekdayTimer.Day day : currentExecutionDays) {
+            for (WeekdayTimer.Day day : getConfiguration().getExecutionDays()) {
                 if (first) {
                     first = false;
                 } else {
@@ -191,8 +130,8 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
         textViewDays.setText(executionDaysText);
 
         String actionText = "";
-        if (currentActions != null) {
-            for (Action action : currentActions) {
+        if (getConfiguration().getActions() != null) {
+            for (Action action : getConfiguration().getActions()) {
                 actionText += action.toString() + "\n";
             }
         }
@@ -202,34 +141,33 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
     @Override
     public void saveCurrentConfigurationToDatabase() {
         try {
-            if (currentId == -1) {
-                if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-                    Timer timer = new IntervalTimer(0, true, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionInterval,
-                            currentActions);
+            Timer timer = null;
+            switch (getConfiguration().getExecutionType()) {
+                case Timer.EXECUTION_TYPE_INTERVAL:
+                    timer = new IntervalTimer(getConfiguration().getId(),
+                            getConfiguration().isActive(),
+                            getConfiguration().getName(),
+                            getConfiguration().getExecutionTime(),
+                            getConfiguration().getRandomizerValue(),
+                            getConfiguration().getExecutionInterval(),
+                            getConfiguration().getActions());
+                    break;
+
+                case Timer.EXECUTION_TYPE_WEEKDAY:
+                    timer = new WeekdayTimer(0,
+                            getConfiguration().isActive(),
+                            getConfiguration().getName(),
+                            getConfiguration().getExecutionTime(),
+                            getConfiguration().getRandomizerValue(),
+                            getConfiguration().getExecutionDays(),
+                            getConfiguration().getActions());
+                    break;
+            }
+
+            if (timer != null) {
+                if (getConfiguration().getTimer() == null) {
                     DatabaseHandler.addTimer(timer);
-                } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-                    Timer timer = new WeekdayTimer(0, true, currentName, currentExecutionTime, currentRandomizerValue, currentExecutionDays,
-                            currentActions);
-                    DatabaseHandler.addTimer(timer);
-                }
-            } else {
-                if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-                    Timer timer = new IntervalTimer(currentId,
-                            currentIsActive,
-                            currentName,
-                            currentExecutionTime,
-                            currentRandomizerValue,
-                            currentExecutionInterval,
-                            currentActions);
-                    DatabaseHandler.updateTimer(timer);
-                } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-                    Timer timer = new WeekdayTimer(currentId,
-                            currentIsActive,
-                            currentName,
-                            currentExecutionTime,
-                            currentRandomizerValue,
-                            currentExecutionDays,
-                            currentActions);
+                } else {
                     DatabaseHandler.updateTimer(timer);
                 }
             }
@@ -243,44 +181,7 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
 
     @Override
     public boolean checkSetupValidity() {
-        if (currentName == null || currentName.length() <= 0) {
-            return false;
-        }
-
-        if (currentExecutionTime == null) {
-            return false;
-        }
-
-        if (currentExecutionType == null) {
-            return false;
-        } else if (Timer.EXECUTION_TYPE_INTERVAL.equals(currentExecutionType)) {
-            if (currentExecutionInterval == -1) {
-                return false;
-            }
-        } else if (Timer.EXECUTION_TYPE_WEEKDAY.equals(currentExecutionType)) {
-            if (currentExecutionDays == null || currentExecutionDays.isEmpty()) {
-                return false;
-            }
-        }
-
-        return !(currentActions == null || currentActions.isEmpty());
+        return true;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_NAME_EXECUTION_TIME_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_ACTIONS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
-    }
 }

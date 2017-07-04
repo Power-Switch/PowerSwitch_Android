@@ -18,11 +18,8 @@
 
 package eu.power_switch.gui.fragment.configure_timer;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,24 +29,17 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 
 import butterknife.BindView;
-import butterknife.OnCheckedChanged;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage {
-
-    public static final String KEY_EXECUTION_INTERVAL = "executionInterval";
-    public static final String KEY_EXECUTION_DAYS     = "executionDays";
-    public static final String KEY_EXECUTION_TYPE     = "executionType";
+public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<TimerConfigurationHolder> {
 
     @BindView(R.id.toggleButton_monday)
     ToggleButton toggleButtonMonday;
@@ -69,20 +59,14 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage {
     /**
      * Used to notify the summary page that some info has changed
      *
-     * @param context           any suitable context
      * @param executionInterval time in milliseconds
      * @param executionDays     list of days
      * @param executionType     Timer Type
      */
-    public static void sendTimerExecutionIntervalChangedBroadcast(Context context, long executionInterval, ArrayList<WeekdayTimer.Day> executionDays,
-                                                                  String executionType) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_TIMER_EXECUTION_INTERVAL_CHANGED);
-        intent.putExtra(KEY_EXECUTION_INTERVAL, executionInterval);
-        intent.putExtra(KEY_EXECUTION_DAYS, executionDays);
-        intent.putExtra(KEY_EXECUTION_TYPE, executionType);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public void updateConfiguration(long executionInterval, ArrayList<WeekdayTimer.Day> executionDays, String executionType) {
+        getConfiguration().setExecutionInterval(executionInterval);
+        getConfiguration().setExecutionDays(executionDays);
+        getConfiguration().setExecutionType(executionType);
     }
 
     @Nullable
@@ -93,7 +77,7 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage {
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sendTimerExecutionIntervalChangedBroadcast(getContext(), 1000, getSelectedDays(), Timer.EXECUTION_TYPE_WEEKDAY);
+                updateConfiguration(1000, getSelectedDays(), Timer.EXECUTION_TYPE_WEEKDAY);
             }
         };
 
@@ -105,18 +89,9 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage {
         toggleButtonSaturday.setOnCheckedChangeListener(onCheckedChangeListener);
         toggleButtonSunday.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureTimerDialog.TIMER_ID_KEY)) {
-            long timerId = args.getLong(ConfigureTimerDialog.TIMER_ID_KEY);
-            initializeTimerData(timerId);
-        }
+        initializeTimerData();
 
         return rootView;
-    }
-
-    @OnCheckedChanged(R.id.toggleButton_monday)
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        sendTimerExecutionIntervalChangedBroadcast(getContext(), 1000, getSelectedDays(), Timer.EXECUTION_TYPE_WEEKDAY);
     }
 
     @Override
@@ -124,45 +99,49 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage {
         return R.layout.dialog_fragment_configure_timer_page_2;
     }
 
-    private void initializeTimerData(long timerId) {
-        try {
-            Timer timer = DatabaseHandler.getTimer(timerId);
+    private void initializeTimerData() {
+        Long timerId = getConfiguration().getId();
+
+        if (timerId != null) {
+            try {
+                Timer timer = getConfiguration().getTimer();
 
 //        currentExecutionInterval = timer.getExecutionInterval();
 
-            if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
-                WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
+                if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
+                    WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
 
-                for (WeekdayTimer.Day day : weekdayTimer.getExecutionDays()) {
-                    switch (day) {
-                        case MONDAY:
-                            toggleButtonMonday.setChecked(true);
-                            break;
-                        case TUESDAY:
-                            toggleButtonTuesday.setChecked(true);
-                            break;
-                        case WEDNESDAY:
-                            toggleButtonWednesday.setChecked(true);
-                            break;
-                        case THURSDAY:
-                            toggleButtonThursday.setChecked(true);
-                            break;
-                        case FRIDAY:
-                            toggleButtonFriday.setChecked(true);
-                            break;
-                        case SATURDAY:
-                            toggleButtonSaturday.setChecked(true);
-                            break;
-                        case SUNDAY:
-                            toggleButtonSunday.setChecked(true);
-                            break;
+                    for (WeekdayTimer.Day day : weekdayTimer.getExecutionDays()) {
+                        switch (day) {
+                            case MONDAY:
+                                toggleButtonMonday.setChecked(true);
+                                break;
+                            case TUESDAY:
+                                toggleButtonTuesday.setChecked(true);
+                                break;
+                            case WEDNESDAY:
+                                toggleButtonWednesday.setChecked(true);
+                                break;
+                            case THURSDAY:
+                                toggleButtonThursday.setChecked(true);
+                                break;
+                            case FRIDAY:
+                                toggleButtonFriday.setChecked(true);
+                                break;
+                            case SATURDAY:
+                                toggleButtonSaturday.setChecked(true);
+                                break;
+                            case SUNDAY:
+                                toggleButtonSunday.setChecked(true);
+                                break;
+                        }
                     }
-                }
-            } else if (Timer.EXECUTION_TYPE_INTERVAL.equals(timer.getExecutionType())) {
+                } else if (Timer.EXECUTION_TYPE_INTERVAL.equals(timer.getExecutionType())) {
 
+                }
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
