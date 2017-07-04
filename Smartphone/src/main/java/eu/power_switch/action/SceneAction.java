@@ -22,6 +22,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import eu.power_switch.obj.Scene;
+import eu.power_switch.shared.action.Action;
 
 /**
  * SceneAction that holds a specific scene to activate on execution

@@ -29,11 +29,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import eu.power_switch.action.Action;
 import eu.power_switch.database.table.phone.PhoneNumberTable;
 import eu.power_switch.database.table.phone.call.CallEventPhoneNumberTable;
 import eu.power_switch.database.table.phone.call.CallEventTable;
 import eu.power_switch.phone.call.CallEvent;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.PhoneConstants;
 
 /**

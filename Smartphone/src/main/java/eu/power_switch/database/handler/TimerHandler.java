@@ -28,9 +28,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerTable;
 import eu.power_switch.database.table.timer.TimerWeekdayTable;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;

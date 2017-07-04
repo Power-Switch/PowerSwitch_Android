@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
-import eu.power_switch.action.Action;
+import eu.power_switch.shared.action.Action;
 import lombok.Data;
 import lombok.ToString;
 

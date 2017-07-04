@@ -48,7 +48,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.action.Action;
 import eu.power_switch.api.taskerplugin.bundle.BundleScrubber;
 import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
 import eu.power_switch.api.taskerplugin.gui.AbstractPluginActivity;
@@ -62,6 +61,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.ApiConstants;
 import eu.power_switch.shared.event.VariableSelectedEvent;
 import timber.log.Timber;

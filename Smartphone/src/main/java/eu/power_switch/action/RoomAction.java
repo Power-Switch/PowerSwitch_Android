@@ -22,6 +22,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import eu.power_switch.obj.Room;
+import eu.power_switch.shared.action.Action;
 
 /**
  * RoomAction that holds a specific room/button combination to activate on execution

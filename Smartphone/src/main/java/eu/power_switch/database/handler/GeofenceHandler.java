@@ -32,10 +32,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import eu.power_switch.action.Action;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
 import eu.power_switch.database.table.geofence.GeofenceTable;
 import eu.power_switch.google_play_services.geofence.Geofence;
+import eu.power_switch.shared.action.Action;
 
 /**
  * Provides database methods for managing Geofences

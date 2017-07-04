@@ -43,7 +43,6 @@ import java.util.NoSuchElementException;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
@@ -59,6 +58,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.TutorialConstants;
 import timber.log.Timber;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;

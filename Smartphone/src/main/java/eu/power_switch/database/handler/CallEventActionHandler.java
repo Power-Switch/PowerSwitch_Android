@@ -25,8 +25,8 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.power_switch.action.Action;
 import eu.power_switch.database.table.phone.call.CallEventActionTable;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.PhoneConstants;
 import timber.log.Timber;
 

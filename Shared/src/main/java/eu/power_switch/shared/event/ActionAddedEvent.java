@@ -16,34 +16,21 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.timer;
-
-import java.util.ArrayList;
-import java.util.Calendar;
+package eu.power_switch.shared.event;
 
 import eu.power_switch.shared.action.Action;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
- * Timer based on just a start time and an interval
- * <p/>
- * Created by Markus on 21.09.2015.
+ * Created by Markus on 02.07.2017.
  */
-@ToString
-public class IntervalTimer extends Timer {
+@EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@Value
+public class ActionAddedEvent extends EventBusEvent {
 
-    private long executionInterval;
-
-    public IntervalTimer(long id, boolean isActive, String name, Calendar executionTime, int randomizerValue, long executionInterval,
-                         ArrayList<Action> actions) {
-        super(id, isActive, name, executionTime, randomizerValue, EXECUTION_TYPE_INTERVAL, new ArrayList<Action>());
-        this.executionInterval = executionInterval;
-        this.actions = actions;
-    }
-
-    @Override
-    public long getExecutionInterval() {
-        return executionInterval;
-    }
+    private Action action;
 
 }

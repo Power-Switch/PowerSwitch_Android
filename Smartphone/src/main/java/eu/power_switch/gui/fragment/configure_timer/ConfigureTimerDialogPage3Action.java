@@ -18,34 +18,32 @@
 
 package eu.power_switch.gui.fragment.configure_timer;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.action.Action;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
-import eu.power_switch.gui.dialog.AddTimerActionDialog;
+import eu.power_switch.gui.dialog.AddActionDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.action.Action;
+import eu.power_switch.shared.event.ActionAddedEvent;
 import eu.power_switch.timer.Timer;
 
 /**
@@ -60,17 +58,6 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
     FloatingActionButton addTimerActionFAB;
     @BindView(R.id.recyclerview_list_of_actions)
     RecyclerView         recyclerViewTimerActions;
-    private BroadcastReceiver broadcastReceiver;
-
-
-    /**
-     * Used to notify the setup page that some info has changed
-     */
-    public void updateConfiguration(ArrayList<Action> actions) {
-        getConfiguration().setActions(actions);
-
-        notifyConfigurationChanged();
-    }
 
     /**
      * Used to notify the setup page that some info has changed
@@ -86,7 +73,7 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
      *
      * @param action TimerAction
      */
-    public static void addTimerAction(Action action) {
+    private void addTimerAction(Action action) {
         currentActions.add(action);
         actionRecyclerViewAdapter.notifyDataSetChanged();
     }
@@ -96,22 +83,13 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateConfiguration(currentActions);
-            }
-        };
-
         final Fragment fragment = this;
         addTimerActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addTimerActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddTimerActionDialog addTimerActionDialog = new AddTimerActionDialog();
-                addTimerActionDialog.setTargetFragment(fragment, 0);
-                addTimerActionDialog.show(getActivity().getSupportFragmentManager(), null);
+                AddActionDialog addActionDialog = AddActionDialog.newInstance(fragment);
+                addActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
 
@@ -141,6 +119,14 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
         return R.layout.dialog_fragment_configure_timer_page_3;
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onActionAdded(ActionAddedEvent e) {
+        addTimerAction(e.getAction());
+
+        updateConfiguration(currentActions);
+    }
+
     private void initializeTimerData() {
         Timer timer = getConfiguration().getTimer();
         if (timer != null) {
@@ -151,22 +137,6 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
                 StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_TIMER_ACTION_ADDED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
 }

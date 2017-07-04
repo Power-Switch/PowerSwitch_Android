@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import eu.power_switch.action.Action;
 import eu.power_switch.database.Database;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.history.HistoryItem;
@@ -42,6 +41,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.phone.call.CallEvent;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;

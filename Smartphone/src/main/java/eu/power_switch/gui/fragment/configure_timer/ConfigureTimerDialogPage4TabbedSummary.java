@@ -33,13 +33,13 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import eu.power_switch.gui.fragment.TimersFragment;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;

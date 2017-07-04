@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import eu.power_switch.action.Action;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.log.LogHelper;
 
 /**

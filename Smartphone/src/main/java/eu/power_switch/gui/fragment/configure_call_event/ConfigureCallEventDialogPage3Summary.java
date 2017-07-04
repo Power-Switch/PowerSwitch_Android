@@ -41,7 +41,6 @@ import java.util.Set;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -49,6 +48,7 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummary
 import eu.power_switch.gui.dialog.configuration.ConfigureCallEventDialog;
 import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.phone.call.CallEvent;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
 

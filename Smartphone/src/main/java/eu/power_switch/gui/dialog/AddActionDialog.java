@@ -25,6 +25,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,6 +36,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,7 +46,6 @@ import java.util.NoSuchElementException;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
@@ -56,6 +58,8 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.action.Action;
+import eu.power_switch.shared.event.ActionAddedEvent;
 import timber.log.Timber;
 
 /**
@@ -63,7 +67,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 28.09.2015.
  */
-public abstract class AddActionDialog extends EventBusSupportDialogFragment {
+public class AddActionDialog extends EventBusSupportDialogFragment {
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override
@@ -128,6 +132,12 @@ public abstract class AddActionDialog extends EventBusSupportDialogFragment {
     private ArrayAdapter<String> roomSpinnerArrayAdapter;
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
     private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
+
+    public static AddActionDialog newInstance(@NonNull Fragment targetFragment) {
+        AddActionDialog addActionDialog = new AddActionDialog();
+        addActionDialog.setTargetFragment(targetFragment, 0);
+        return addActionDialog;
+    }
 
     @NonNull
     @Override
@@ -643,9 +653,18 @@ public abstract class AddActionDialog extends EventBusSupportDialogFragment {
         return true;
     }
 
-    protected abstract void addCurrentSelection();
+    /**
+     * Notifies listeners of the action to be added
+     */
+    protected void addCurrentSelection() {
+        EventBus.getDefault()
+                .post(new ActionAddedEvent(getCurrentSelection()));
+    }
 
-    protected abstract void sendDataChangedBroadcast(Context context);
+    @Deprecated
+    protected void sendDataChangedBroadcast(Context context) {
+        Timber.w("deprecated method");
+    }
 
     @Override
     public void onResume() {
@@ -682,4 +701,5 @@ public abstract class AddActionDialog extends EventBusSupportDialogFragment {
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
 }

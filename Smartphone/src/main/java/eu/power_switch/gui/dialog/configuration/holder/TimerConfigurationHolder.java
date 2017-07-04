@@ -23,8 +23,8 @@ import android.text.TextUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import eu.power_switch.action.Action;
 import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 import lombok.Data;

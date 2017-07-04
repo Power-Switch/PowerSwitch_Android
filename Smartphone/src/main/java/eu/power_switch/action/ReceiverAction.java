@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.action.Action;
 
 /**
  * ReceiverAction that holds a specific room/receiver/button combination to activate on execution

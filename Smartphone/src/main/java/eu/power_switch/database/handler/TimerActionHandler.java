@@ -23,8 +23,8 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 
-import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerActionTable;
+import eu.power_switch.shared.action.Action;
 import eu.power_switch.timer.Timer;
 
 /**
