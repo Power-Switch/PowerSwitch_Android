@@ -66,7 +66,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    onApartmentClicked(DatabaseHandler.getApartmentId(apartmentNames.get(position)));
+                    onApartmentClicked(DatabaseHandler.getApartment(apartmentNames.get(position)));
                 } catch (Exception e) {
                     dismiss();
                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -117,10 +117,10 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
     /**
      * This Method is called when an Apartment has been selected from the list
      *
-     * @param apartmentId the selected Apartment
+     * @param apartment the selected Apartment
      */
-    protected void onApartmentClicked(Long apartmentId) {
-        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartmentId);
+    protected void onApartmentClicked(Apartment apartment) {
+        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
         ApartmentFragment.notifyActiveApartmentChanged(getContext());
         dismiss();
     }

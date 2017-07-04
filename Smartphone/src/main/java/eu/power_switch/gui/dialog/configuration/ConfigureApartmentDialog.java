@@ -126,10 +126,11 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(getConfiguration().getApartment()
-                                    .getId())) {
-                                DatabaseHandler.deleteApartment(getConfiguration().getApartment()
-                                        .getId());
+                            Long existingApartmentId = getConfiguration().getApartment()
+                                    .getId();
+                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(
+                                    existingApartmentId)) {
+                                DatabaseHandler.deleteApartment(existingApartmentId);
 
                                 // update current Apartment selection
                                 List<Apartment> apartments = DatabaseHandler.getAllApartments();
@@ -142,8 +143,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                                                     .getId());
                                 }
                             } else {
-                                DatabaseHandler.deleteApartment(getConfiguration().getApartment()
-                                        .getId());
+                                DatabaseHandler.deleteApartment(existingApartmentId);
                             }
 
                             ApartmentFragment.notifyActiveApartmentChanged(getActivity());

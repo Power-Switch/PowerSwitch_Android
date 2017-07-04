@@ -20,6 +20,8 @@ package eu.power_switch.gui.dialog.configuration.holder;
 
 import android.text.TextUtils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,9 +49,9 @@ public class GatewayConfigurationHolder extends ConfigurationHolder {
     private String  wanAddress   = "";
     private Integer wanPort      = DatabaseConstants.INVALID_GATEWAY_PORT;
 
-    private Set<String> ssids;
+    private Set<String> ssids = new HashSet<>(0);
 
-    private List<Long> apartmentIds;
+    private List<Long> apartmentIds = new ArrayList<>(0);
 
     @Override
     public boolean isValid() {

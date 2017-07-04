@@ -45,6 +45,7 @@ import eu.power_switch.gui.adapter.SsidRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.event.GatewaySsidAddedEvent;
 
 /**
@@ -138,12 +139,12 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
      * Loads existing gateway data into fields
      */
     private void initializeGatewayData() {
-        if (getConfiguration().getGateway()
-                .getId() != null)
+        Gateway gateway = getConfiguration().getGateway();
+
+        if (gateway != null)
             try {
                 ssids.clear();
-                ssids.addAll(getConfiguration().getGateway()
-                        .getSsids());
+                ssids.addAll(gateway.getSsids());
                 ssidRecyclerViewAdapter.notifyDataSetChanged();
             } catch (Exception e) {
                 StatusMessageHandler.showErrorMessage(getContentView(), e);

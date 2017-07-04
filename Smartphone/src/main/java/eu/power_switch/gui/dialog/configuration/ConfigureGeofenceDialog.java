@@ -61,11 +61,11 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
         Bundle args = new Bundle();
 
         ConfigureGeofenceDialog     fragment                    = new ConfigureGeofenceDialog();
-        GeofenceConfigurationHolder receiverConfigurationHolder = new GeofenceConfigurationHolder();
+        GeofenceConfigurationHolder geofenceConfigurationHolder = new GeofenceConfigurationHolder();
         if (geofence != null) {
-            receiverConfigurationHolder.setGeofence(geofence);
+            geofenceConfigurationHolder.setGeofence(geofence);
         }
-        fragment.setConfiguration(receiverConfigurationHolder);
+        fragment.setConfiguration(geofenceConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;

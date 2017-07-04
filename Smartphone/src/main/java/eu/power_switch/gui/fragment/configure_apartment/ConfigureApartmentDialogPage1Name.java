@@ -100,9 +100,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
 
         addGatewaysToLayout();
 
-        Long apartmentId = getConfiguration().getApartment()
-                .getId();
-        initializeApartmentData(apartmentId);
+        initializeApartmentData();
 
         checkSetupValidity();
 
@@ -118,12 +116,13 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
 
     /**
      * Loads existing apartment data into fields
-     *
-     * @param apartmentId ID of existing Apartment
      */
-    private void initializeApartmentData(Long apartmentId) {
+    private void initializeApartmentData() {
+        Apartment apartment = getConfiguration().getApartment();
+
         try {
-            if (apartmentId != null) {
+            if (apartment != null) {
+
                 originalName = getConfiguration().getName();
                 name.setText(originalName);
 
@@ -136,6 +135,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                         }
                     }
                 }
+
             } else {
                 // enable all gateways by default
                 for (CheckBox checkBox : gatewayCheckboxList) {

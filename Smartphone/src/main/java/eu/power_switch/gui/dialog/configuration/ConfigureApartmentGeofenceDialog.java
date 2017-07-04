@@ -20,6 +20,8 @@ package eu.power_switch.gui.dialog.configuration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,6 +30,7 @@ import android.view.View;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
@@ -38,8 +41,6 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.obj.Apartment;
 
-import static eu.power_switch.gui.dialog.EditRoomOrderDialog.APARTMENT_ID_KEY;
-
 /**
  * Dialog to create or modify a Geofence related to an Apartment
  * <p/>
@@ -47,11 +48,20 @@ import static eu.power_switch.gui.dialog.EditRoomOrderDialog.APARTMENT_ID_KEY;
  */
 public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
-    public static ConfigureApartmentGeofenceDialog newInstance(long apartmentId) {
-        Bundle args = new Bundle();
-        args.putLong(APARTMENT_ID_KEY, apartmentId);
+    public static ConfigureApartmentGeofenceDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(null, targetFragment);
+    }
 
-        ConfigureApartmentGeofenceDialog fragment = new ConfigureApartmentGeofenceDialog();
+    public static ConfigureApartmentGeofenceDialog newInstance(@Nullable Geofence geofence, @NonNull Fragment targetFragment) {
+        Bundle args = new Bundle();
+
+        ConfigureApartmentGeofenceDialog fragment                    = new ConfigureApartmentGeofenceDialog();
+        GeofenceConfigurationHolder      geofenceConfigurationHolder = new GeofenceConfigurationHolder();
+        if (geofence != null) {
+            geofenceConfigurationHolder.setGeofence(geofence);
+        }
+        fragment.setConfiguration(geofenceConfigurationHolder);
+        fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
     }

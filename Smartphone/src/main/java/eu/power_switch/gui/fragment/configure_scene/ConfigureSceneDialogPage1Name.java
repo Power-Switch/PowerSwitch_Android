@@ -285,6 +285,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
             floatingName.setError(getString(R.string.please_enter_name));
             return false;
         } else {
+            // TODO: nullpointer on getId()
             for (Scene scene : existingScenes) {
                 if (!scene.getId()
                         .equals(getConfiguration().getScene()

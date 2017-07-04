@@ -91,8 +91,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
                 switch (view.getId()) {
                     case R.id.add_fab:
-                        ConfigureGatewayDialog configureGatewayDialog = new ConfigureGatewayDialog();
-                        configureGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
+                        ConfigureGatewayDialog configureGatewayDialog = ConfigureGatewayDialog.newInstance(recyclerViewFragment);
                         configureGatewayDialog.show(getFragmentManager(), null);
                         break;
                     case R.id.search_gateway_fab:

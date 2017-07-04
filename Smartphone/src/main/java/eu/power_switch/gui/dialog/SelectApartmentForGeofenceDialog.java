@@ -48,8 +48,9 @@ public class SelectApartmentForGeofenceDialog extends SelectApartmentDialog {
     }
 
     @Override
-    protected void onApartmentClicked(Long apartmentId) {
-        ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog = ConfigureApartmentGeofenceDialog.newInstance(apartmentId);
+    protected void onApartmentClicked(Apartment apartment) {
+        ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog = ConfigureApartmentGeofenceDialog.newInstance(apartment.getGeofence(),
+                getTargetFragment());
         configureApartmentGeofenceDialog.setTargetFragment(getTargetFragment(), 0);
         configureApartmentGeofenceDialog.show(getFragmentManager(), null);
         dismiss();
