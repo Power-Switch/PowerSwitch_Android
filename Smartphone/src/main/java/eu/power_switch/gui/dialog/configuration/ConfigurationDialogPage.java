@@ -57,8 +57,7 @@ public abstract class ConfigurationDialogPage<Configuration extends Configuratio
         Bundle args = new Bundle();
 
         if (!ConfigurationDialogPage.class.isAssignableFrom(clazz)) {
-            // TODO: Make this mandatory
-//            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogPage.class.getName() + " or subclass!");
+            throw new IllegalArgumentException("Invalid class type! Must be of type " + ConfigurationDialogPage.class.getName() + " or subclass!");
         }
 
         try {

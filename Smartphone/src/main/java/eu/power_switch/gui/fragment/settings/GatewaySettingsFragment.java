@@ -116,8 +116,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             public void onItemLongClick(View itemView, int position) {
                 Gateway gateway = gateways.get(position);
 
-                ConfigureGatewayDialog configureGatewayDialog = ConfigureGatewayDialog.newInstance(gateway.getId());
-                configureGatewayDialog.setTargetFragment(recyclerViewFragment, 0);
+                ConfigureGatewayDialog configureGatewayDialog = ConfigureGatewayDialog.newInstance(gateway.getId(), recyclerViewFragment);
                 configureGatewayDialog.show(getFragmentManager(), null);
             }
         });
@@ -231,8 +230,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
         switch (menuItem.getItemId()) {
             case R.id.create_gateway:
-                ConfigureGatewayDialog configureGatewayDialog = new ConfigureGatewayDialog();
-                configureGatewayDialog.setTargetFragment(this, 0);
+                ConfigureGatewayDialog configureGatewayDialog = ConfigureGatewayDialog.newInstance(this);
                 configureGatewayDialog.show(getFragmentManager(), null);
             case R.id.search_gateways:
                 startAutoDiscovery();

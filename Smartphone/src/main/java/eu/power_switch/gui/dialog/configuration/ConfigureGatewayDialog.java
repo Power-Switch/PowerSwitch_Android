@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog.configuration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,34 +28,41 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage2;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage3;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage4Summary;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.gateway.Gateway;
 import timber.log.Timber;
 
 /**
  * Dialog to edit a Gateway
  */
-public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
+public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayConfigurationHolder> {
 
-    /**
-     * ID of existing Gateway to Edit
-     */
-    public static final String GATEWAY_ID_KEY = "GatewayId";
+    public static ConfigureGatewayDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(-1, targetFragment);
+    }
 
-    private long gatewayId = -1;
-
-    public static ConfigureGatewayDialog newInstance(long gatewayId) {
+    public static ConfigureGatewayDialog newInstance(long gatewayId, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
-        args.putLong(GATEWAY_ID_KEY, gatewayId);
 
-        ConfigureGatewayDialog fragment = new ConfigureGatewayDialog();
+        ConfigureGatewayDialog     fragment                   = new ConfigureGatewayDialog();
+        GatewayConfigurationHolder gatewayConfigurationHolder = new GatewayConfigurationHolder();
+        if (gatewayId != -1) {
+            gatewayConfigurationHolder.setId(gatewayId);
+        }
+        fragment.setConfiguration(gatewayConfigurationHolder);
+        fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,9 +74,32 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(GATEWAY_ID_KEY)) {
-            gatewayId = arguments.getLong(GATEWAY_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment(), gatewayId));
+        Long gatewayId = getConfiguration().getId();
+
+        if (arguments != null) {
+            try {
+                Gateway gateway = DatabaseHandler.getGateway(gatewayId);
+                getConfiguration().setId(gatewayId);
+                getConfiguration().setGateway(gateway);
+                getConfiguration().setName(gateway.getName());
+
+                getConfiguration().setLocalAddress(gateway.getLocalHost());
+                getConfiguration().setLocalPort(gateway.getLocalPort());
+                getConfiguration().setWanAddress(gateway.getWanHost());
+                getConfiguration().setWanPort(gateway.getWanPort());
+
+                getConfiguration().setSsids(gateway.getSsids());
+
+                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gatewayId);
+                for (Apartment associatedApartment : associatedApartments) {
+                    getConfiguration().getApartmentIds()
+                            .add(associatedApartment.getId());
+                }
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return true;
         } else {
             setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
@@ -83,45 +114,36 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .gateway_will_be_gone_forever)
-                .setPositiveButton
-                        (android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DatabaseHandler.deleteGateway(gatewayId);
-                                    GatewaySettingsFragment.notifyGatewaysChanged();
-                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.gateway_removed, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
-                                }
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                .setMessage(R.string.gateway_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DatabaseHandler.deleteGateway(getConfiguration().getId());
+                            GatewaySettingsFragment.notifyGatewaysChanged();
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_removed, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        }
 
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private ConfigurationDialogTabbed parentDialog;
-        private long gatewayId;
-        private ConfigurationDialogTabbedSummaryFragment setupFragment;
-        private Fragment targetFragment;
+        private ConfigurationDialogTabbed<GatewayConfigurationHolder> parentDialog;
+        private ConfigurationDialogTabbedSummaryFragment              setupFragment;
+        private Fragment                                              targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<GatewayConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
-            this.gatewayId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.gatewayId = id;
             this.targetFragment = targetFragment;
         }
 
@@ -169,12 +191,6 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed {
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;
-            }
-
-            if (fragment != null && gatewayId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(GATEWAY_ID_KEY, gatewayId);
-                fragment.setArguments(bundle);
             }
 
             return fragment;

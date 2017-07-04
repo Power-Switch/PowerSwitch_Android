@@ -18,22 +18,18 @@
 
 package eu.power_switch.gui.fragment.configure_gateway;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,7 +38,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
+import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.BrematicGWY433;
@@ -52,19 +48,16 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.shared.constants.DatabaseConstants;
+import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
-
-import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GATEWAY_APARTMENTS_CHANGED;
-import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GATEWAY_SETUP_CHANGED;
-import static eu.power_switch.shared.constants.LocalBroadcastConstants.INTENT_GATEWAY_SSIDS_CHANGED;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<GatewayConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_name)
     TextView name;
@@ -78,51 +71,12 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
     TextView ssids;
     @BindView(R.id.textView_associatedApartments)
     TextView associatedApartments;
-    private long gatewayId = -1;
-    private String currentName;
-    private String currentModel;
-    private String currentLocalAddress;
-    private int currentLocalPort = -1;
-    private String currentWanAddress;
-    private int               currentWanPort      = -1;
-    private ArrayList<String> currentSsids        = new ArrayList<>();
-    private ArrayList<Long>   currentApartmentIds = new ArrayList<>();
-    private BroadcastReceiver broadcastReceiver;
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (INTENT_GATEWAY_SSIDS_CHANGED.equals(intent.getAction())) {
-                    ArrayList<String> changedSsids = intent.getStringArrayListExtra(ConfigureGatewayDialogPage2.KEY_SSIDS);
-                    currentSsids.clear();
-                    currentSsids.addAll(changedSsids);
-                } else if (INTENT_GATEWAY_SETUP_CHANGED.equals(intent.getAction())) {
-                    currentName = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_NAME);
-                    currentModel = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_MODEL);
-                    currentLocalAddress = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_LOCAL_ADDRESS);
-                    currentLocalPort = intent.getIntExtra(ConfigureGatewayDialogPage1.KEY_LOCAL_PORT, -1);
-                    currentWanAddress = intent.getStringExtra(ConfigureGatewayDialogPage1.KEY_WAN_ADDRESS);
-                    currentWanPort = intent.getIntExtra(ConfigureGatewayDialogPage1.KEY_WAN_PORT, -1);
-                } else if (INTENT_GATEWAY_APARTMENTS_CHANGED.equals(intent.getAction())) {
-                    currentApartmentIds.clear();
-                    currentApartmentIds.addAll((ArrayList<Long>) intent.getSerializableExtra(ConfigureGatewayDialogPage3.KEY_APARTMENT_IDS));
-                }
-
-                updateUI();
-                notifyConfigurationChanged();
-            }
-        };
-
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGatewayDialog.GATEWAY_ID_KEY)) {
-            gatewayId = args.getLong(ConfigureGatewayDialog.GATEWAY_ID_KEY);
-            initializeGatewayData(gatewayId);
-        }
         updateUI();
 
         return rootView;
@@ -133,72 +87,58 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
         return R.layout.dialog_fragment_configure_gateway_page_4_summary;
     }
 
-    /**
-     * Loads existing gateway data into fields
-     *
-     * @param gatewayId ID of existing Gateway
-     */
-    private void initializeGatewayData(long gatewayId) {
-        try {
-            Gateway gateway = DatabaseHandler.getGateway(gatewayId);
-
-            currentName = gateway.getName();
-            currentModel = gateway.getModel();
-            currentLocalAddress = gateway.getLocalHost();
-            currentLocalPort = gateway.getLocalPort();
-            currentWanAddress = gateway.getWanHost();
-            currentWanPort = gateway.getWanPort();
-
-            List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gatewayId);
-            for (Apartment associatedApartment : associatedApartments) {
-                currentApartmentIds.add(associatedApartment.getId());
-            }
-
-            currentSsids.clear();
-            currentSsids.addAll(gateway.getSsids());
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onConfigurationChanged(ConfigurationChangedEvent e) {
+        updateUI();
     }
 
     private void updateUI() {
-        name.setText(currentName);
-        model.setText(currentModel);
+        name.setText(getConfiguration().getName());
+        model.setText(getConfiguration().getModel());
 
-        if (!TextUtils.isEmpty(currentLocalAddress)) {
-            if (currentLocalPort != DatabaseConstants.INVALID_GATEWAY_PORT) {
-                localAddress.setText(currentLocalAddress + ":" + currentLocalPort);
+        String  localAddr = getConfiguration().getLocalAddress();
+        Integer localPort = getConfiguration().getLocalPort();
+        if (!TextUtils.isEmpty(localAddr)) {
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(localPort)) {
+                localAddress.setText(localAddr + ":" + localPort);
             } else {
-                localAddress.setText(currentLocalAddress);
+                localAddress.setText(localAddr);
             }
         } else {
             localAddress.setText("");
         }
 
-        if (!TextUtils.isEmpty(currentWanAddress)) {
-            if (currentWanPort != DatabaseConstants.INVALID_GATEWAY_PORT) {
-                wanAddress.setText(currentWanAddress + ":" + currentWanPort);
+        String  wanAddr = getConfiguration().getWanAddress();
+        Integer wanPort = getConfiguration().getWanPort();
+        if (!TextUtils.isEmpty(wanAddr)) {
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(wanPort)) {
+                wanAddress.setText(wanAddr + ":" + wanPort);
             } else {
-                wanAddress.setText(currentWanAddress);
+                wanAddress.setText(wanAddr);
             }
         } else {
             wanAddress.setText("");
         }
 
         String ssidText = "";
-        for (int i = 0, currentSsidsSize = currentSsids.size(); i < currentSsidsSize; i++) {
-            String ssid = currentSsids.get(i);
+        String[] ssids = getConfiguration().getSsids()
+                .toArray(new String[0]);
+        for (int i = 0, currentSsidsSize = ssids.length; i < currentSsidsSize; i++) {
+            String ssid = ssids[i];
             ssidText += ssid;
 
             if (i < currentSsidsSize - 1) {
                 ssidText += "\n";
             }
         }
-        ssids.setText(ssidText);
+        this.ssids.setText(ssidText);
 
         String apartmentsText = "";
-        for (int i = 0, currentApartmentNamesSize = currentApartmentIds.size(); i < currentApartmentNamesSize; i++) {
-            Long apartmentId = currentApartmentIds.get(i);
+        for (int i = 0, currentApartmentNamesSize = getConfiguration().getApartmentIds()
+                .size(); i < currentApartmentNamesSize; i++) {
+            Long apartmentId = getConfiguration().getApartmentIds()
+                    .get(i);
 
             try {
                 apartmentsText += DatabaseHandler.getApartmentName(apartmentId);
@@ -215,80 +155,70 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
 
     @Override
     public boolean checkSetupValidity() {
-
-        if (TextUtils.isEmpty(currentName)) {
-            return false;
-        }
-
-        if (TextUtils.isEmpty(currentModel)) {
-            return false;
-        }
-
-        // as long as one of the address fields is filled in its ok
-        return !(TextUtils.isEmpty(currentLocalAddress) && TextUtils.isEmpty(currentWanAddress));
-
+        return true;
     }
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        if (gatewayId == -1) {
+        Long gatewayId = getConfiguration().getId();
+        if (gatewayId == null) {
             Gateway newGateway;
 
-            switch (currentModel) {
+            switch (getConfiguration().getModel()) {
                 case BrematicGWY433.MODEL:
                     newGateway = new BrematicGWY433((long) -1,
                             true,
-                            currentName,
+                            getConfiguration().getName(),
                             "",
-                            currentLocalAddress,
-                            currentLocalPort,
-                            currentWanAddress,
-                            currentWanPort,
-                            new HashSet<>(currentSsids));
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
                     break;
                 case ConnAir.MODEL:
                     newGateway = new ConnAir((long) -1,
                             true,
-                            currentName,
+                            getConfiguration().getName(),
                             "",
-                            currentLocalAddress,
-                            currentLocalPort,
-                            currentWanAddress,
-                            currentWanPort,
-                            new HashSet<>(currentSsids));
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
                     break;
                 case EZControl_XS1.MODEL:
                     newGateway = new EZControl_XS1((long) -1,
                             true,
-                            currentName,
+                            getConfiguration().getName(),
                             "",
-                            currentLocalAddress,
-                            currentLocalPort,
-                            currentWanAddress,
-                            currentWanPort,
-                            new HashSet<>(currentSsids));
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
                     break;
                 case ITGW433.MODEL:
                     newGateway = new ITGW433((long) -1,
                             true,
-                            currentName,
+                            getConfiguration().getName(),
                             "",
-                            currentLocalAddress,
-                            currentLocalPort,
-                            currentWanAddress,
-                            currentWanPort,
-                            new HashSet<>(currentSsids));
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
                     break;
                 case RaspyRFM.MODEL:
                     newGateway = new RaspyRFM((long) -1,
                             true,
-                            currentName,
+                            getConfiguration().getName(),
                             "",
-                            currentLocalAddress,
-                            currentLocalPort,
-                            currentWanAddress,
-                            currentWanPort,
-                            new HashSet<>(currentSsids));
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
                     break;
                 default:
                     throw new GatewayUnknownException();
@@ -298,7 +228,7 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
                 long id = DatabaseHandler.addGateway(newGateway);
 
                 newGateway.setId(id);
-                for (Long apartmentId : currentApartmentIds) {
+                for (Long apartmentId : getConfiguration().getApartmentIds()) {
                     Apartment apartment = DatabaseHandler.getApartment(apartmentId);
 
                     List<Gateway> associatedGateways = apartment.getAssociatedGateways();
@@ -318,19 +248,20 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
             }
         } else {
             DatabaseHandler.updateGateway(gatewayId,
-                    currentName,
-                    currentModel,
-                    currentLocalAddress,
-                    currentLocalPort,
-                    currentWanAddress,
-                    currentWanPort,
-                    new HashSet<>(currentSsids));
+                    getConfiguration().getName(),
+                    getConfiguration().getModel(),
+                    getConfiguration().getLocalAddress(),
+                    getConfiguration().getLocalPort(),
+                    getConfiguration().getWanAddress(),
+                    getConfiguration().getWanPort(),
+                    getConfiguration().getSsids());
             Gateway updatedGateway = DatabaseHandler.getGateway(gatewayId);
 
             List<Apartment> apartments = DatabaseHandler.getAllApartments();
             for (Apartment apartment : apartments) {
                 if (apartment.isAssociatedWith(updatedGateway.getId())) {
-                    if (!currentApartmentIds.contains(apartment.getId())) {
+                    if (!getConfiguration().getApartmentIds()
+                            .contains(apartment.getId())) {
                         for (Gateway gateway : apartment.getAssociatedGateways()) {
                             if (gateway.getId()
                                     .equals(updatedGateway.getId())) {
@@ -342,7 +273,8 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
                         }
                     }
                 } else {
-                    if (currentApartmentIds.contains(apartment.getId())) {
+                    if (getConfiguration().getApartmentIds()
+                            .contains(apartment.getId())) {
                         apartment.getAssociatedGateways()
                                 .add(updatedGateway);
                         DatabaseHandler.updateApartment(apartment);
@@ -353,24 +285,6 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage 
 
         GatewaySettingsFragment.notifyGatewaysChanged();
         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(INTENT_GATEWAY_SSIDS_CHANGED);
-        intentFilter.addAction(INTENT_GATEWAY_SETUP_CHANGED);
-        intentFilter.addAction(INTENT_GATEWAY_APARTMENTS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
     }
 
 }

@@ -20,10 +20,8 @@ package eu.power_switch.gui.fragment.configure_gateway;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,38 +38,29 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
+import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * "Apartments" Fragment used in Configure Apartment Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage {
-
-    public static final String KEY_APARTMENT_IDS = "apartment_ids";
+public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<GatewayConfigurationHolder> {
 
     @BindView(R.id.linearLayout_Apartments)
     LinearLayout linearLayoutSelectableApartments;
-
-    private long gatewayId = -1;
 
     private List<CheckBox> apartmentCheckboxList = new ArrayList<>();
 
     /**
      * Used to notify the setup page that some info has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendApartmentsChangedBroadcast(Context context, ArrayList<Long> apartmentIds) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_APARTMENTS_CHANGED);
-        intent.putExtra(KEY_APARTMENT_IDS, apartmentIds);
+    public void updateConfiguration(List<Long> apartmentIds) {
+        getConfiguration().setApartmentIds(apartmentIds);
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+        notifyConfigurationChanged();
     }
 
     @Nullable
@@ -81,11 +70,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage {
 
         addApartmentsToLayout();
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGatewayDialog.GATEWAY_ID_KEY)) {
-            gatewayId = args.getLong(ConfigureGatewayDialog.GATEWAY_ID_KEY);
-            initializeGatewayData(gatewayId);
-        }
+        initializeGatewayData();
 
         return rootView;
     }
@@ -97,27 +82,27 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage {
 
     /**
      * Loads existing gateway data into fields
-     *
-     * @param gatewayId ID of existing Gateway
      */
-    private void initializeGatewayData(long gatewayId) {
-        try {
-//            Gateway gateway = DatabaseHandler.getGateway(gatewayId);
+    private void initializeGatewayData() {
+        Long gatewayId = getConfiguration().getId();
+        if (gatewayId != null) {
 
-            List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gatewayId);
+            try {
+                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gatewayId);
 
-            for (CheckBox checkBox : apartmentCheckboxList) {
-                Apartment checkBoxApartment = (Apartment) checkBox.getTag(R.string.apartments);
-                for (Apartment associatedApartment : associatedApartments) {
-                    if (checkBoxApartment.getId()
-                            .equals(associatedApartment.getId())) {
-                        checkBox.setChecked(true);
+                for (CheckBox checkBox : apartmentCheckboxList) {
+                    Apartment checkBoxApartment = (Apartment) checkBox.getTag(R.string.apartments);
+                    for (Apartment associatedApartment : associatedApartments) {
+                        if (checkBoxApartment.getId()
+                                .equals(associatedApartment.getId())) {
+                            checkBox.setChecked(true);
+                        }
                     }
                 }
-            }
 
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
+            }
         }
     }
 
@@ -141,7 +126,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage {
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
-                        sendApartmentsChangedBroadcast(getActivity(), getCheckedApartmentIds());
+                        updateConfiguration(getCheckedApartmentIds());
                     }
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);
@@ -152,7 +137,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage {
                     @Override
                     public void onClick(View v) {
                         checkBox.setChecked(!checkBox.isChecked());
-                        sendApartmentsChangedBroadcast(getActivity(), getCheckedApartmentIds());
+                        updateConfiguration(getCheckedApartmentIds());
                     }
                 });
 

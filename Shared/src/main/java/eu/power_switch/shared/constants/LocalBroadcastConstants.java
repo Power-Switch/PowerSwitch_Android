@@ -26,10 +26,7 @@ package eu.power_switch.shared.constants;
 public class LocalBroadcastConstants {
 
     // LocalBroadcastConstants
-    public static final String INTENT_GATEWAY_SETUP_CHANGED      = "eu.power_switch.gateway_setup_changed";
     public static final String INTENT_GATEWAY_SSID_ADDED         = "eu.power_switch.gateway_ssid_added";
-    public static final String INTENT_GATEWAY_SSIDS_CHANGED      = "eu.power_switch.gateway_ssids_changed";
-    public static final String INTENT_GATEWAY_APARTMENTS_CHANGED = "eu.power_switch.gateway_apartments_changed";
 
     public static final String INTENT_ROOM_ADDED                 = "eu.power_switch.room_added";
 

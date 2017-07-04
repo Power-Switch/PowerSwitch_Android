@@ -18,12 +18,9 @@
 
 package eu.power_switch.gui.fragment.configure_gateway;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -36,28 +33,17 @@ import android.widget.Spinner;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
+import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
-import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.DatabaseConstants;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * First Fragment used in Configure Gateway Dialog to set basic gateway settings
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
-
-    public static final String KEY_NAME          = "name";
-    public static final String KEY_MODEL         = "model";
-    public static final String KEY_LOCAL_ADDRESS = "localAddress";
-    public static final String KEY_LOCAL_PORT    = "localPort";
-    public static final String KEY_WAN_ADDRESS   = "wanAddress";
-    public static final String KEY_WAN_PORT      = "wanPort";
+public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<GatewayConfigurationHolder> {
 
     @BindView(R.id.gateway_name_text_input_layout)
     TextInputLayout floatingName;
@@ -86,15 +72,13 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
     @BindView(R.id.txt_edit_gateway_wan_port)
     EditText        wanPort;
 
-    private long gatewayId = -1;
-
     private String originalName;
     private String originalLocalAddress = "";
     private String originalLocalPort    = "";
     private String originalWanAddress   = "";
     private String originalWanPort      = "";
 
-    private void sendAddressChangedBroadcast(Context context) {
+    private void updateConfiguration() {
         String model = this.model.getSelectedItem()
                 .toString();
         String name         = getCurrentName();
@@ -109,16 +93,14 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
             wanPort = Integer.parseInt(getCurrentWanPortText());
         }
 
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SETUP_CHANGED);
-        intent.putExtra(KEY_NAME, name);
-        intent.putExtra(KEY_MODEL, model);
-        intent.putExtra(KEY_LOCAL_ADDRESS, localAddress);
-        intent.putExtra(KEY_LOCAL_PORT, localPort);
-        intent.putExtra(KEY_WAN_ADDRESS, wanAddress);
-        intent.putExtra(KEY_WAN_PORT, wanPort);
+        getConfiguration().setName(name);
+        getConfiguration().setModel(model);
+        getConfiguration().setLocalAddress(localAddress);
+        getConfiguration().setLocalPort(localPort);
+        getConfiguration().setWanAddress(wanAddress);
+        getConfiguration().setWanPort(wanPort);
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+        notifyConfigurationChanged();
     }
 
     @Nullable
@@ -138,7 +120,7 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
             @Override
             public void afterTextChanged(Editable s) {
                 checkSetupValidity();
-                sendAddressChangedBroadcast(getActivity());
+                updateConfiguration();
             }
         };
         name.addTextChangedListener(textWatcher);
@@ -150,7 +132,7 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
         SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
             @Override
             public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                sendAddressChangedBroadcast(getActivity());
+                updateConfiguration();
             }
         };
         model.setOnTouchListener(spinnerInteractionListener);
@@ -161,11 +143,8 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
         wanAddress.addTextChangedListener(textWatcher);
         wanPort.addTextChangedListener(textWatcher);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGatewayDialog.GATEWAY_ID_KEY)) {
-            gatewayId = args.getLong(ConfigureGatewayDialog.GATEWAY_ID_KEY);
-            initializeGatewayData(gatewayId);
-        }
+        initializeGatewayData();
+
         checkSetupValidity();
 
         return rootView;
@@ -178,22 +157,23 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
 
     /**
      * Loads existing gateway data into fields
-     *
-     * @param gatewayId ID of existing Gateway
      */
-    private void initializeGatewayData(long gatewayId) {
-        try {
-            Gateway gateway = DatabaseHandler.getGateway(gatewayId);
-
-            originalName = gateway.getName();
-            originalLocalAddress = gateway.getLocalHost();
-            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(gateway.getLocalPort())) {
-                originalLocalPort = gateway.getLocalPort()
+    private void initializeGatewayData() {
+        Long gatewayId = getConfiguration().getId();
+        if (gatewayId != null) {
+            originalName = getConfiguration().getName();
+            originalLocalAddress = getConfiguration().getLocalAddress();
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(getConfiguration().getGateway()
+                    .getLocalPort())) {
+                originalLocalPort = getConfiguration().getGateway()
+                        .getLocalPort()
                         .toString();
             }
-            originalWanAddress = gateway.getWanHost();
-            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(gateway.getWanPort())) {
-                originalWanPort = gateway.getWanPort()
+            originalWanAddress = getConfiguration().getWanAddress();
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(getConfiguration().getGateway()
+                    .getWanPort())) {
+                originalWanPort = getConfiguration().getGateway()
+                        .getWanPort()
                         .toString();
             }
 
@@ -206,13 +186,11 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage {
             // restore spinner position
             for (int i = 0; i < model.getCount(); i++) {
                 if (model.getItemAtPosition(i)
-                        .equals(gateway.getModel())) {
+                        .equals(getConfiguration().getGateway()
+                                .getModel())) {
                     model.setSelection(i, false);
                 }
             }
-
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

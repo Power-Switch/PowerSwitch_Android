@@ -36,17 +36,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SsidRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
-import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
@@ -54,16 +54,12 @@ import eu.power_switch.shared.constants.LocalBroadcastConstants;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage {
-
-    public static final String KEY_SSIDS = "ssids";
+public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<GatewayConfigurationHolder> {
 
     @BindView(R.id.add_ssid_fab)
     FloatingActionButton addSsidFAB;
     @BindView(R.id.recyclerView_ssids)
     RecyclerView         recyclerViewSsids;
-
-    private long gatewayId = -1;
 
     private ArrayList<String> ssids = new ArrayList<>();
 
@@ -74,15 +70,11 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage {
 
     /**
      * Used to notify the setup page that some info has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendSsidsChangedBroadcast(Context context, ArrayList<String> ssids) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SSIDS_CHANGED);
-        intent.putExtra(KEY_SSIDS, ssids);
+    public void updateConfiguration(List<String> ssids) {
+        getConfiguration().setSsids(new HashSet<>(ssids));
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+        notifyConfigurationChanged();
     }
 
     @Nullable
@@ -103,7 +95,7 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage {
                                 try {
                                     ssids.remove(position);
                                     ssidRecyclerViewAdapter.notifyDataSetChanged();
-                                    sendSsidsChangedBroadcast(getActivity(), ssids);
+                                    updateConfiguration(ssids);
                                 } catch (Exception e) {
                                     StatusMessageHandler.showErrorMessage(getContentView(), e);
                                 }
@@ -134,16 +126,12 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage {
                     ssids.addAll(newSsids);
                     ssidRecyclerViewAdapter.notifyDataSetChanged();
 
-                    sendSsidsChangedBroadcast(getActivity(), ssids);
+                    updateConfiguration(ssids);
                 }
             }
         };
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGatewayDialog.GATEWAY_ID_KEY)) {
-            gatewayId = args.getLong(ConfigureGatewayDialog.GATEWAY_ID_KEY);
-            initializeGatewayData(gatewayId);
-        }
+        initializeGatewayData();
 
         return rootView;
     }
@@ -155,19 +143,18 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage {
 
     /**
      * Loads existing gateway data into fields
-     *
-     * @param gatewayId ID of existing Gateway
      */
-    private void initializeGatewayData(long gatewayId) {
-        try {
-            Gateway gateway = DatabaseHandler.getGateway(gatewayId);
-
-            ssids.clear();
-            ssids.addAll(gateway.getSsids());
-            ssidRecyclerViewAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
+    private void initializeGatewayData() {
+        if (getConfiguration().getGateway()
+                .getId() != null)
+            try {
+                ssids.clear();
+                ssids.addAll(getConfiguration().getGateway()
+                        .getSsids());
+                ssidRecyclerViewAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
+            }
     }
 
     @Override
