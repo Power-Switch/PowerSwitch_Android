@@ -93,8 +93,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             public void onItemLongClick(View itemView, int position) {
                 final Scene scene = scenes.get(position);
 
-                ConfigureSceneDialog configureSceneDialog = ConfigureSceneDialog.newInstance(scene.getId());
-                configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
+                ConfigureSceneDialog configureSceneDialog = ConfigureSceneDialog.newInstance(scene.getId(), recyclerViewFragment);
                 configureSceneDialog.show(getFragmentManager(), null);
             }
         });
@@ -112,8 +111,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
                     }
 
 
-                    ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                    configureSceneDialog.setTargetFragment(recyclerViewFragment, 0);
+                    ConfigureSceneDialog configureSceneDialog = ConfigureSceneDialog.newInstance(recyclerViewFragment);
                     configureSceneDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -163,8 +161,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
                     return true;
                 }
 
-                ConfigureSceneDialog configureSceneDialog = new ConfigureSceneDialog();
-                configureSceneDialog.setTargetFragment(this, 0);
+                ConfigureSceneDialog configureSceneDialog = ConfigureSceneDialog.newInstance(this);
                 configureSceneDialog.show(getFragmentManager(), null);
             default:
                 break;

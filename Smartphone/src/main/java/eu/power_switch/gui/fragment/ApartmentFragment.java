@@ -121,8 +121,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 try {
                     Apartment apartment = apartments.get(position);
 
-                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment.getId());
-                    configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment.getId(), recyclerViewFragment);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -135,8 +134,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
             @Override
             public void onClick(View v) {
                 try {
-                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance();
-                    configureApartmentDialog.setTargetFragment(recyclerViewFragment, 0);
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(recyclerViewFragment);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
@@ -188,8 +186,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         switch (menuItem.getItemId()) {
             case R.id.create_apartment:
                 try {
-                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance();
-                    configureApartmentDialog.setTargetFragment(this, 0);
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(this);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);

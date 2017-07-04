@@ -19,14 +19,10 @@
 package eu.power_switch.gui.fragment.configure_scene;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -38,6 +34,9 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +57,7 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
+import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -67,7 +66,7 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.SceneSelectedReceiversChangedEvent;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 
@@ -76,36 +75,18 @@ import eu.power_switch.widget.provider.SceneWidgetProvider;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPage<SceneConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.recyclerview_list_of_receivers)
     RecyclerView recyclerViewSelectedReceivers;
 
-    private BroadcastReceiver broadcastReceiver;
-
-    private ArrayList<Room>           rooms;
     private CustomRecyclerViewAdapter customRecyclerViewAdapter;
-
-    private long   currentId   = -1;
-    private String currentName = null;
+    private ArrayList<Room>           rooms;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                currentName = intent.getStringExtra("name");
-                rooms.clear();
-                rooms.addAll((ArrayList<Room>) intent.getSerializableExtra("selectedReceivers"));
-                updateSceneItemList();
-
-                notifyConfigurationChanged();
-            }
-        };
 
         rooms = new ArrayList<>();
         customRecyclerViewAdapter = new CustomRecyclerViewAdapter(getActivity(), rooms);
@@ -114,11 +95,8 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                 StaggeredGridLayoutManager.VERTICAL);
         recyclerViewSelectedReceivers.setLayoutManager(layoutManager);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureSceneDialog.SCENE_ID_KEY)) {
-            currentId = args.getLong(ConfigureSceneDialog.SCENE_ID_KEY);
-            initializeSceneData(currentId);
-        }
+        initializeSceneData();
+
         checkSetupValidity();
 
         createTutorial();
@@ -129,6 +107,15 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
     @Override
     protected int getLayoutRes() {
         return R.layout.dialog_fragment_configure_scene_page_2;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onSelectedReceiversChanged(SceneSelectedReceiversChangedEvent e) {
+        rooms.clear();
+        rooms.addAll(getConfiguration().getCheckedReceivers());
+
+        updateSceneItemList();
     }
 
     private void createTutorial() {
@@ -169,45 +156,47 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
         return rootView.findViewById(R.id.recyclerview_list_of_receivers);
     }
 
-    private void initializeSceneData(long sceneId) {
-        try {
-            Scene scene = DatabaseHandler.getScene(sceneId);
+    private void initializeSceneData() {
+        Long sceneId = getConfiguration().getId();
 
-            currentName = scene.getName();
+        if (sceneId != null) {
+            try {
+                Scene scene = DatabaseHandler.getScene(sceneId);
 
-            ArrayList<Room>          checkedReceivers = new ArrayList<>();
-            HashMap<Long, SceneItem> map              = new HashMap<>();
+                ArrayList<Room>          checkedReceivers = new ArrayList<>();
+                HashMap<Long, SceneItem> map              = new HashMap<>();
 
-            for (SceneItem sceneItem : scene.getSceneItems()) {
-                map.put(sceneItem.getReceiver()
-                        .getId(), sceneItem);
+                for (SceneItem sceneItem : scene.getSceneItems()) {
+                    map.put(sceneItem.getReceiver()
+                            .getId(), sceneItem);
 
-                boolean roomFound = false;
-                for (Room room : checkedReceivers) {
-                    if (room.getId()
-                            .equals(sceneItem.getReceiver()
-                                    .getRoomId())) {
+                    boolean roomFound = false;
+                    for (Room room : checkedReceivers) {
+                        if (room.getId()
+                                .equals(sceneItem.getReceiver()
+                                        .getRoomId())) {
+                            room.addReceiver(sceneItem.getReceiver());
+                            roomFound = true;
+                        }
+                    }
+
+                    if (!roomFound) {
+                        Room room = DatabaseHandler.getRoom(sceneItem.getReceiver()
+                                .getRoomId());
+                        room.getReceivers()
+                                .clear();
                         room.addReceiver(sceneItem.getReceiver());
-                        roomFound = true;
+                        checkedReceivers.add(room);
                     }
                 }
 
-                if (!roomFound) {
-                    Room room = DatabaseHandler.getRoom(sceneItem.getReceiver()
-                            .getRoomId());
-                    room.getReceivers()
-                            .clear();
-                    room.addReceiver(sceneItem.getReceiver());
-                    checkedReceivers.add(room);
-                }
+                rooms.clear();
+                rooms.addAll(checkedReceivers);
+
+                customRecyclerViewAdapter.setReceiverSceneItemHashMap(map);
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
-
-            rooms.clear();
-            rooms.addAll(checkedReceivers);
-
-            customRecyclerViewAdapter.setReceiverSceneItemHashMap(map);
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -217,13 +206,12 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
 
     @Override
     public void saveCurrentConfigurationToDatabase() {
-        Scene newScene = new Scene(currentId,
-                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
-                currentName);
+        Scene newScene = new Scene(getConfiguration().getId(),
+                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID), getConfiguration().getName());
         newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
 
         try {
-            if (currentId == -1) {
+            if (getConfiguration().getId() == null) {
                 DatabaseHandler.addScene(newScene);
             } else {
                 DatabaseHandler.updateScene(newScene);
@@ -246,28 +234,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
 
     @Override
     public boolean checkSetupValidity() {
-        if (currentName == null || currentName.trim()
-                .isEmpty()) {
-            return false;
-        }
-
-        return !rooms.isEmpty();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_NAME_SCENE_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
+        return true;
     }
 
     private class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder> {
@@ -275,17 +242,17 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
         private ArrayList<Room>          rooms;
         private HashMap<Long, SceneItem> receiverSceneItemHashMap;
 
-        public CustomRecyclerViewAdapter(Context context, ArrayList<Room> rooms) {
+        CustomRecyclerViewAdapter(Context context, ArrayList<Room> rooms) {
             this.context = context;
             this.rooms = rooms;
             receiverSceneItemHashMap = new HashMap<>();
         }
 
-        public void setReceiverSceneItemHashMap(HashMap<Long, SceneItem> receiverSceneItemHashMap) {
+        void setReceiverSceneItemHashMap(HashMap<Long, SceneItem> receiverSceneItemHashMap) {
             this.receiverSceneItemHashMap = receiverSceneItemHashMap;
         }
 
-        public ArrayList<SceneItem> getSceneItems() {
+        ArrayList<SceneItem> getSceneItems() {
             ArrayList<SceneItem> sceneItems = new ArrayList<>();
             for (Room room : rooms) {
                 for (Receiver receiver : room.getReceivers()) {
@@ -414,9 +381,9 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
             return rooms.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView     roomName;
-            public LinearLayout linearLayoutOfReceivers;
+        class ViewHolder extends RecyclerView.ViewHolder {
+            public TextView roomName;
+            LinearLayout linearLayoutOfReceivers;
 
             public ViewHolder(final View itemView) {
                 super(itemView);

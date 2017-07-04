@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog.configuration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,9 +32,11 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Name;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2Setup;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
+import eu.power_switch.obj.Scene;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 import timber.log.Timber;
@@ -43,20 +46,22 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
+public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigurationHolder> {
 
-    /**
-     * ID of existing Scene to Edit
-     */
-    public static final String SCENE_ID_KEY = "SceneId";
+    public static ConfigureSceneDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(-1, targetFragment);
+    }
 
-    private long sceneId = -1;
-
-    public static ConfigureSceneDialog newInstance(long sceneId) {
+    public static ConfigureSceneDialog newInstance(long sceneId, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
-        args.putLong(SCENE_ID_KEY, sceneId);
 
-        ConfigureSceneDialog fragment = new ConfigureSceneDialog();
+        ConfigureSceneDialog     fragment                 = new ConfigureSceneDialog();
+        SceneConfigurationHolder sceneConfigurationHolder = new SceneConfigurationHolder();
+        if (sceneId != -1) {
+            sceneConfigurationHolder.setId(sceneId);
+        }
+        fragment.setConfiguration(sceneConfigurationHolder);
+        fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,15 +73,24 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(SCENE_ID_KEY)) {
+        Long sceneId = getConfiguration().getId();
+
+        if (sceneId != null) {
             // init dialog using existing scene
-            sceneId = arguments.getLong(SCENE_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment(), sceneId));
+            try {
+                Scene scene = DatabaseHandler.getScene(sceneId);
+
+                getConfiguration().setId(sceneId);
+                getConfiguration().setName(scene.getName());
+
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return true;
         } else {
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
@@ -94,54 +108,45 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .scene_will_be_gone_forever)
-                .setPositiveButton
-                        (android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DatabaseHandler.deleteScene(sceneId);
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                .setMessage(R.string.scene_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DatabaseHandler.deleteScene(getConfiguration().getId());
 
-                                    // notify scenes fragment
-                                    ScenesFragment.notifySceneChanged();
+                            // notify scenes fragment
+                            ScenesFragment.notifySceneChanged();
 
-                                    // update scene widgets
-                                    SceneWidgetProvider.forceWidgetUpdate(getActivity());
+                            // update scene widgets
+                            SceneWidgetProvider.forceWidgetUpdate(getActivity());
 
-                                    // update wear data
-                                    UtilityService.forceWearDataUpdate(getActivity());
+                            // update wear data
+                            UtilityService.forceWearDataUpdate(getActivity());
 
-                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.scene_deleted, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
-                                }
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_deleted, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        }
 
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private ConfigurationDialogTabbed parentDialog;
-        private long sceneId;
-        private ConfigurationDialogTabbedSummaryFragment setupFragment;
-        private Fragment targetFragment;
+        private ConfigurationDialogTabbed<SceneConfigurationHolder> parentDialog;
+        private ConfigurationDialogTabbedSummaryFragment            setupFragment;
+        private Fragment                                            targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<SceneConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
-            this.sceneId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.sceneId = id;
             this.targetFragment = targetFragment;
         }
 
@@ -177,12 +182,6 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed {
                     fragment.setTargetFragment(targetFragment, 0);
 
                     setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
-            }
-
-            if (fragment != null && sceneId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(SCENE_ID_KEY, sceneId);
-                fragment.setArguments(bundle);
             }
 
             return fragment;

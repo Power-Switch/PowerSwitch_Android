@@ -20,6 +20,7 @@ package eu.power_switch.gui.dialog.configuration;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -53,8 +54,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
      *
      * @return An instance of this ConfigurationDialog
      */
-    public static ConfigureApartmentDialog newInstance() {
-        return newInstance(-1);
+    public static ConfigureApartmentDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(-1, targetFragment);
     }
 
     /**
@@ -62,7 +63,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
      *
      * @return An instance of this ConfigurationDialog
      */
-    public static ConfigureApartmentDialog newInstance(long apartmentId) {
+    public static ConfigureApartmentDialog newInstance(long apartmentId, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureApartmentDialog     fragment                     = new ConfigureApartmentDialog();
@@ -71,6 +72,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
             apartmentConfigurationHolder.setId(apartmentId);
         }
         fragment.setConfiguration(apartmentConfigurationHolder);
+        fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
     }

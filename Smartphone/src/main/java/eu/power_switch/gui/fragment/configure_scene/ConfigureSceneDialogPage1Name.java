@@ -19,11 +19,9 @@
 package eu.power_switch.gui.fragment.configure_scene;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -34,6 +32,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,21 +53,21 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
+import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.SceneSelectedReceiversChangedEvent;
 
 /**
  * "Name" Fragment used in Configure Scene Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
+public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<SceneConfigurationHolder> {
 
     @BindView(R.id.scene_name_text_input_layout)
     TextInputLayout floatingName;
@@ -78,24 +78,15 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
     LinearLayout linearLayout_selectableReceivers;
 
     private ArrayList<CheckBox> receiverCheckboxList = new ArrayList<>();
-    private long        sceneId;
     private List<Scene> existingScenes;
 
 
     /**
      * Used to notify the setup page that some info has changed
-     *
-     * @param context           any suitable context
-     * @param name              Current Name of Scene
-     * @param selectedReceivers Currently selected Receivers to include in Scene
      */
-    public static void sendNameSceneChangedBroadcast(Context context, String name, ArrayList<Room> selectedReceivers) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_NAME_SCENE_CHANGED);
-        intent.putExtra("name", name);
-        intent.putExtra("selectedReceivers", selectedReceivers);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public void notifySelectedReceiversChanged() {
+        EventBus.getDefault()
+                .post(new SceneSelectedReceiversChangedEvent());
     }
 
     @Nullable
@@ -115,6 +106,9 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
 
             @Override
             public void afterTextChanged(Editable s) {
+                getConfiguration().setName(s.toString());
+
+                notifyConfigurationChanged();
                 checkValidity();
             }
         });
@@ -127,11 +121,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
 
         addReceiversToLayout();
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureSceneDialog.SCENE_ID_KEY)) {
-            sceneId = args.getLong(ConfigureSceneDialog.SCENE_ID_KEY);
-            initializeSceneData(sceneId);
-        }
+        initializeSceneData();
 
         checkValidity();
 
@@ -219,7 +209,10 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
                     checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            checkValidity();
+                            getConfiguration().setCheckedReceivers(getCheckedReceivers());
+
+                            notifySelectedReceiversChanged();
+                            notifyConfigurationChanged();
                         }
                     });
                     receiverCheckboxList.add(checkBox);
@@ -241,51 +234,51 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
         }
     }
 
-    private void initializeSceneData(long sceneId) {
-        try {
-            Scene scene = DatabaseHandler.getScene(sceneId);
+    private void initializeSceneData() {
+        Long sceneId = getConfiguration().getId();
 
-            name.setText(scene.getName());
+        if (sceneId != null) {
+            try {
+                Scene scene = DatabaseHandler.getScene(sceneId);
 
-            ArrayList<Receiver> activeReceivers = new ArrayList<>();
-            for (SceneItem sceneItem : scene.getSceneItems()) {
-                Receiver receiver = DatabaseHandler.getReceiver(sceneItem.getActiveButton()
-                        .getReceiverId());
-                activeReceivers.add(receiver);
-            }
+                name.setText(scene.getName());
 
-            for (Receiver receiver : activeReceivers) {
-                for (CheckBox checkBox : receiverCheckboxList) {
-                    Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
-                    Room     associatedRoom     = (Room) checkBox.getTag(R.string.room);
-                    if (associatedReceiver.getId()
-                            .equals(receiver.getId()) && associatedRoom.getId()
-                            .equals(receiver.getRoomId())) {
-                        checkBox.setChecked(true);
+                ArrayList<Receiver> activeReceivers = new ArrayList<>();
+                for (SceneItem sceneItem : scene.getSceneItems()) {
+                    Receiver receiver = DatabaseHandler.getReceiver(sceneItem.getActiveButton()
+                            .getReceiverId());
+                    activeReceivers.add(receiver);
+                }
+
+                for (Receiver receiver : activeReceivers) {
+                    for (CheckBox checkBox : receiverCheckboxList) {
+                        Receiver associatedReceiver = (Receiver) checkBox.getTag(R.string.receiver);
+                        Room     associatedRoom     = (Room) checkBox.getTag(R.string.room);
+                        if (associatedReceiver.getId()
+                                .equals(receiver.getId()) && associatedRoom.getId()
+                                .equals(receiver.getRoomId())) {
+                            checkBox.setChecked(true);
+                        }
                     }
                 }
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
     private boolean checkValidity() {
         // TODO: Performance Optimierung
-
         if (!checkNameValidity()) {
-            sendNameSceneChangedBroadcast(getActivity(), null, getCheckedReceivers());
             return false;
         }
 
         if (getCheckedReceivers().isEmpty()) {
             floatingName.setError(getString(R.string.please_select_receivers));
-            sendNameSceneChangedBroadcast(getActivity(), getCurrentSceneName(), getCheckedReceivers());
             return false;
         }
 
         floatingName.setError(null);
-        sendNameSceneChangedBroadcast(getActivity(), getCurrentSceneName(), getCheckedReceivers());
         return true;
     }
 
@@ -296,7 +289,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
         } else {
             for (Scene scene : existingScenes) {
                 if (!scene.getId()
-                        .equals(sceneId) && scene.getName()
+                        .equals(getConfiguration().getId()) && scene.getName()
                         .equalsIgnoreCase(getCurrentSceneName())) {
                     floatingName.setError(getString(R.string.scene_name_already_exists));
                     return false;
@@ -307,7 +300,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage {
         return true;
     }
 
-    private ArrayList<Room> getCheckedReceivers() {
+    private List<Room> getCheckedReceivers() {
         ArrayList<Room> checkedReceivers = new ArrayList<>();
 
         for (CheckBox checkBox : receiverCheckboxList) {
