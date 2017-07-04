@@ -100,8 +100,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
             public void onItemLongClick(View itemView, int position) {
                 final Geofence geofence = geofences.get(position);
 
-                ConfigureGeofenceDialog configureGeofenceDialog = ConfigureGeofenceDialog.newInstance(geofence.getId());
-                configureGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
+                ConfigureGeofenceDialog configureGeofenceDialog = ConfigureGeofenceDialog.newInstance(geofence, recyclerViewFragment);
                 configureGeofenceDialog.show(getFragmentManager(), null);
             }
         });
@@ -117,8 +116,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
                     return;
                 }
 
-                ConfigureGeofenceDialog configureGeofenceDialog = new ConfigureGeofenceDialog();
-                configureGeofenceDialog.setTargetFragment(recyclerViewFragment, 0);
+                ConfigureGeofenceDialog configureGeofenceDialog = ConfigureGeofenceDialog.newInstance(recyclerViewFragment);
                 configureGeofenceDialog.show(getFragmentManager(), null);
             }
         });
@@ -188,8 +186,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
                     break;
                 }
 
-                ConfigureGeofenceDialog configureGeofenceDialog = new ConfigureGeofenceDialog();
-                configureGeofenceDialog.setTargetFragment(this, 0);
+                ConfigureGeofenceDialog configureGeofenceDialog = ConfigureGeofenceDialog.newInstance(this);
                 configureGeofenceDialog.show(getFragmentManager(), null);
             default:
                 break;

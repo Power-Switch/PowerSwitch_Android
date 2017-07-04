@@ -26,11 +26,7 @@ package eu.power_switch.shared.constants;
 public class LocalBroadcastConstants {
 
     // LocalBroadcastConstants
-    public static final String INTENT_GATEWAY_SSID_ADDED         = "eu.power_switch.gateway_ssid_added";
 
-    public static final String INTENT_ROOM_ADDED                 = "eu.power_switch.room_added";
-
-    public static final String INTENT_GEOFENCE_LOCATION_CHANGED      = "eu.power_switch.geofence_location_changed";
     public static final String INTENT_GEOFENCE_ENTER_ACTION_ADDED    = "eu.power_switch.geofence_enter_action_added";
     public static final String INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED = "eu.power_switch.geofence_enter_actions_changed";
     public static final String INTENT_GEOFENCE_EXIT_ACTION_ADDED     = "eu.power_switch.geofence_exit_action_added";

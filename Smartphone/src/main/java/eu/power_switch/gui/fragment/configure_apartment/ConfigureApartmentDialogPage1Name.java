@@ -100,7 +100,8 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
 
         addGatewaysToLayout();
 
-        Long apartmentId = getConfiguration().getId();
+        Long apartmentId = getConfiguration().getApartment()
+                .getId();
         initializeApartmentData(apartmentId);
 
         checkSetupValidity();
@@ -263,7 +264,9 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        if (getConfiguration().getId() == null) {
+        Long apartmentId = getConfiguration().getApartment()
+                .getId();
+        if (apartmentId == null) {
             boolean isActive = DatabaseHandler.getAllApartmentNames()
                     .size() <= 0;
             Apartment newApartment = new Apartment((long) -1,
@@ -278,13 +281,13 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                 SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
             }
         } else {
-            Apartment apartment = DatabaseHandler.getApartment(getConfiguration().getId());
+            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
             if (apartment.getGeofence() != null) {
                 apartment.getGeofence()
                         .setName(getCurrentName());
             }
 
-            Apartment updatedApartment = new Apartment(getConfiguration().getId(),
+            Apartment updatedApartment = new Apartment(apartmentId,
                     apartment.isActive(),
                     getConfiguration().getName(),
                     getConfiguration().getAssociatedGateways(),

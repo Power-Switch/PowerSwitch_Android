@@ -27,8 +27,6 @@ public class ReceiverConfigurationHolder extends ConfigurationHolder {
 
     private Receiver receiver;
 
-    private Long id;
-
     // Name
 
     private String name;
@@ -70,7 +68,8 @@ public class ReceiverConfigurationHolder extends ConfigurationHolder {
      */
     public boolean receiverNameAlreadyExists(Room selectedRoom) {
         for (Receiver receiver : selectedRoom.getReceivers()) {
-            if (receiver.getName()
+            if (!(this.receiver != null && this.receiver.getId()
+                    .equals(receiver.getId())) && receiver.getName()
                     .equalsIgnoreCase(name)) {
                 return true;
             }

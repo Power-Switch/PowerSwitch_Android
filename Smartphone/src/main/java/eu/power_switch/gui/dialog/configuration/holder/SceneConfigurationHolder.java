@@ -19,8 +19,6 @@ public class SceneConfigurationHolder extends ConfigurationHolder {
 
     private Scene scene;
 
-    private Long id;
-
     private String name;
 
     private List<Room> checkedReceivers;

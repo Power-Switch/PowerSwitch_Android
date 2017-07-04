@@ -36,6 +36,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
+import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.constants.DatabaseConstants;
 
 /**
@@ -159,8 +160,8 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<Gateway
      * Loads existing gateway data into fields
      */
     private void initializeGatewayData() {
-        Long gatewayId = getConfiguration().getId();
-        if (gatewayId != null) {
+        Gateway gateway = getConfiguration().getGateway();
+        if (gateway != null) {
             originalName = getConfiguration().getName();
             originalLocalAddress = getConfiguration().getLocalAddress();
             if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(getConfiguration().getGateway()

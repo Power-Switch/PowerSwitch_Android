@@ -55,7 +55,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
      * @return An instance of this ConfigurationDialog
      */
     public static ConfigureApartmentDialog newInstance(@NonNull Fragment targetFragment) {
-        return newInstance(-1, targetFragment);
+        return newInstance(null, targetFragment);
     }
 
     /**
@@ -63,13 +63,13 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
      *
      * @return An instance of this ConfigurationDialog
      */
-    public static ConfigureApartmentDialog newInstance(long apartmentId, @NonNull Fragment targetFragment) {
+    public static ConfigureApartmentDialog newInstance(Apartment apartment, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureApartmentDialog     fragment                     = new ConfigureApartmentDialog();
         ApartmentConfigurationHolder apartmentConfigurationHolder = new ApartmentConfigurationHolder();
-        if (apartmentId != -1) {
-            apartmentConfigurationHolder.setId(apartmentId);
+        if (apartment != null) {
+            apartmentConfigurationHolder.setApartment(apartment);
         }
         fragment.setConfiguration(apartmentConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
@@ -90,12 +90,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
             StatusMessageHandler.showErrorMessage(getContext(), e);
         }
 
-        Long apartmentId = getConfiguration().getId();
-        if (apartmentId != null) {
-            getConfiguration().setId(apartmentId);
-
+        Apartment apartment = getConfiguration().getApartment();
+        if (apartment != null) {
             try {
-                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
                 getConfiguration().setName(apartment.getName());
                 getConfiguration().setAssociatedGateways(apartment.getAssociatedGateways());
             } catch (Exception e) {
@@ -129,8 +126,10 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(getConfiguration().getId())) {
-                                DatabaseHandler.deleteApartment(getConfiguration().getId());
+                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(getConfiguration().getApartment()
+                                    .getId())) {
+                                DatabaseHandler.deleteApartment(getConfiguration().getApartment()
+                                        .getId());
 
                                 // update current Apartment selection
                                 List<Apartment> apartments = DatabaseHandler.getAllApartments();
@@ -143,7 +142,8 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                                                     .getId());
                                 }
                             } else {
-                                DatabaseHandler.deleteApartment(getConfiguration().getId());
+                                DatabaseHandler.deleteApartment(getConfiguration().getApartment()
+                                        .getId());
                             }
 
                             ApartmentFragment.notifyActiveApartmentChanged(getActivity());

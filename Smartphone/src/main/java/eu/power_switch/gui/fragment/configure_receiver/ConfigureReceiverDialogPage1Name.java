@@ -18,10 +18,6 @@
 
 package eu.power_switch.gui.fragment.configure_receiver;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,7 +25,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -41,6 +36,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +62,8 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.event.ReceiverParentRoomChangedEvent;
+import eu.power_switch.shared.event.RoomAddedEvent;
 import timber.log.Timber;
 
 /**
@@ -75,8 +72,6 @@ import timber.log.Timber;
  * Created by Markus on 28.06.2015.
  */
 public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<ReceiverConfigurationHolder> {
-
-    public static final String KEY_ROOM_NAME = "roomName";
 
     @BindView(R.id.receiver_name_text_input_layout)
     TextInputLayout      floatingName;
@@ -90,42 +85,24 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
     private ArrayAdapter<String> roomNamesAdapter;
     private ArrayList<String> roomList = new ArrayList<>();
 
-    private String            originalName;
-    private BroadcastReceiver broadcastReceiver;
+    private String originalName;
 
     boolean initialized = false;
 
     /**
      * Used to notify this page that a room has been added to the list
      *
-     * @param context     any suitable context
      * @param newRoomName name of added room
      */
-    public static void sendRoomAddedBroadcast(Context context, String newRoomName) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_ADDED);
-        intent.putExtra(KEY_ROOM_NAME, newRoomName);
-
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void notifyRoomAdded(String newRoomName) {
+        EventBus.getDefault()
+                .post(new RoomAddedEvent(newRoomName));
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                updateRoomNamesList();
-
-                if (intent.hasExtra(KEY_ROOM_NAME)) {
-                    String newRoomName = intent.getStringExtra(KEY_ROOM_NAME);
-                    roomsListView.setItemChecked(roomNamesAdapter.getPosition(newRoomName), true);
-                }
-            }
-        };
 
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
@@ -256,8 +233,17 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
                 .execute();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onRoomAdded(RoomAddedEvent e) {
+        updateRoomNamesList();
+
+        String newRoomName = e.getRoomName();
+        roomsListView.setItemChecked(roomNamesAdapter.getPosition(newRoomName), true);
+    }
+
     private void initializeReceiverData() {
-        if (getConfiguration().getId() != null) {
+        if (getConfiguration().getReceiver() != null) {
             originalName = getConfiguration().getName();
             name.setText(originalName);
             roomsListView.setItemChecked(roomNamesAdapter.getPosition(getConfiguration().getParentRoomName()), true);
@@ -327,19 +313,4 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
         return true;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_ROOM_ADDED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
-    }
 }

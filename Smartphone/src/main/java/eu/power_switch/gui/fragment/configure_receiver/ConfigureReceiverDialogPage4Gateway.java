@@ -171,8 +171,8 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
     }
 
     private void initializeReceiverData() {
-        Long receiverId = getConfiguration().getId();
-        if (receiverId != null) {
+        Receiver receiver = getConfiguration().getReceiver();
+        if (receiver != null) {
             try {
                 repetitionAmount = getConfiguration().getRepetitionAmount();
 
@@ -187,7 +187,6 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
                 }
                 textView_repetitionAmount.setText(String.valueOf(repetitionAmount));
 
-                Receiver receiver = getConfiguration().getReceiver();
                 if (!receiver.getAssociatedGateways()
                         .isEmpty()) {
                     checkBoxUseCustomGatewaySelection.setChecked(true);

@@ -31,7 +31,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -47,6 +46,8 @@ import android.widget.Toast;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,15 +56,13 @@ import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.GatewaySsidAddedEvent;
 import timber.log.Timber;
 
 /**
  * Dialog to create a new Room
  */
 public class AddSsidDialog extends EventBusSupportDialogFragment {
-
-    public static final String KEY_SSID = "SSID";
 
     @BindView(R.id.listView)
     ListView          listView;
@@ -89,11 +88,9 @@ public class AddSsidDialog extends EventBusSupportDialogFragment {
      *
      * @param context any suitable context
      */
-    public static void sendSsidAddedBroadcast(Context context, ArrayList<String> ssid) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GATEWAY_SSID_ADDED);
-        intent.putStringArrayListExtra(KEY_SSID, ssid);
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+    public static void sendSsidAddedBroadcast(Context context, ArrayList<String> ssids) {
+        EventBus.getDefault()
+                .post(new GatewaySsidAddedEvent(ssids));
     }
 
     @NonNull

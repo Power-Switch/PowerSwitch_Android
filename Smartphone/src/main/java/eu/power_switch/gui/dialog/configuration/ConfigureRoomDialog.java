@@ -51,16 +51,16 @@ import timber.log.Timber;
 public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigurationHolder> {
 
     public static ConfigureRoomDialog newInstance(@NonNull Fragment targetFragment) {
-        return newInstance(-1, targetFragment);
+        return newInstance(null, targetFragment);
     }
 
-    public static ConfigureRoomDialog newInstance(long roomId, @NonNull Fragment targetFragment) {
+    public static ConfigureRoomDialog newInstance(Room room, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureRoomDialog     fragment                = new ConfigureRoomDialog();
         RoomConfigurationHolder roomConfigurationHolder = new RoomConfigurationHolder();
-        if (roomId != -1) {
-            roomConfigurationHolder.setId(roomId);
+        if (room != null) {
+            roomConfigurationHolder.setRoom(room);
         }
         fragment.setConfiguration(roomConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
@@ -75,17 +75,15 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        Long roomId = getConfiguration().getId();
+        Room room = getConfiguration().getRoom();
 
-        if (roomId != null) {
+        if (room != null) {
             // init dialog using existing receiver
             try {
                 List<Room> rooms = DatabaseHandler.getAllRooms();
-                Room       room  = DatabaseHandler.getRoom(roomId);
 
                 getConfiguration().setExistingRooms(rooms);
 
-                getConfiguration().setRoom(room);
                 getConfiguration().setName(room.getName());
                 getConfiguration().setReceivers(room.getReceivers());
                 getConfiguration().setAssociatedGateways(room.getAssociatedGateways());
@@ -117,7 +115,8 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteRoom(getConfiguration().getId());
+                            DatabaseHandler.deleteRoom(getConfiguration().getRoom()
+                                    .getId());
 
                             // notify rooms fragment
                             RoomsFragment.notifyRoomChanged();

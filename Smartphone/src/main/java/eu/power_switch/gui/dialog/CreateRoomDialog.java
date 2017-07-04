@@ -113,7 +113,7 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
                             false,
                             new ArrayList<Gateway>()));
 
-                    ConfigureReceiverDialogPage1Name.sendRoomAddedBroadcast(getActivity(), getRoomName());
+                    ConfigureReceiverDialogPage1Name.notifyRoomAdded(getRoomName());
 
                     RoomsFragment.notifyReceiverChanged();
 

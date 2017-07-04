@@ -47,6 +47,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.event.ReceiverBrandOrModelChangedEvent;
 
 import static eu.power_switch.obj.receiver.Receiver.Brand;
@@ -287,8 +288,8 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
     }
 
     private void initializeReceiverData() {
-        Long receiverId = getConfiguration().getId();
-        if (receiverId == null) {
+        Receiver receiver = getConfiguration().getReceiver();
+        if (receiver == null) {
             // init blank
             brandListView.setItemChecked(0, true);
             updateModelList(getSelectedBrand());

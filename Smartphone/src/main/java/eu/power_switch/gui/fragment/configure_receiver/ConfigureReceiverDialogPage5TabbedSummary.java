@@ -134,7 +134,7 @@ public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDial
     }
 
     private void initializeReceiverData() {
-        if (getConfiguration().getId() == null) {
+        if (getConfiguration().getReceiver() == null) {
             return;
         }
 
@@ -255,6 +255,12 @@ public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDial
 
         Constructor<?> constructor = ReceiverReflectionMagic.getConstructor(className, type);
 
+        long receiverId = -1;
+        if (getConfiguration().getReceiver() != null) {
+            receiverId = getConfiguration().getReceiver()
+                    .getId();
+        }
+
         Receiver receiver = null;
         switch (type) {
             case DIPS:
@@ -263,35 +269,39 @@ public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDial
                     dipValues.add(dipSwitch.isChecked());
                 }
 
-                receiver = (Receiver) constructor.newInstance(getActivity(), getConfiguration().getId(),
+                receiver = (Receiver) constructor.newInstance(getActivity(), receiverId,
                         receiverName,
-                        dipValues,
-                        room.getId(), getConfiguration().getGateways());
+                        dipValues, room.getId(), getConfiguration().getGateways());
                 break;
             case MASTER_SLAVE:
-                receiver = (Receiver) constructor.newInstance(getActivity(), getConfiguration().getId(),
-                        receiverName, getConfiguration().getChannelMaster(), getConfiguration().getChannelSlave(),
-                        room.getId(), getConfiguration().getGateways());
+                receiver = (Receiver) constructor.newInstance(getActivity(),
+                        receiverId,
+                        receiverName,
+                        getConfiguration().getChannelMaster(),
+                        getConfiguration().getChannelSlave(),
+                        room.getId(),
+                        getConfiguration().getGateways());
                 break;
             case UNIVERSAL:
-                receiver = new UniversalReceiver(getActivity(),
-                        getConfiguration().getId(),
+                receiver = new UniversalReceiver(getActivity(), receiverId,
                         getConfiguration().getName(),
                         getConfiguration().getUniversalButtons(),
                         room.getId(),
                         getConfiguration().getGateways());
                 break;
             case AUTOPAIR:
-                receiver = (Receiver) constructor.newInstance(getActivity(), getConfiguration().getId(),
-                        receiverName, getConfiguration().getSeed(),
-                        room.getId(), getConfiguration().getGateways());
+                receiver = (Receiver) constructor.newInstance(getActivity(),
+                        receiverId,
+                        receiverName,
+                        getConfiguration().getSeed(),
+                        room.getId(),
+                        getConfiguration().getGateways());
                 break;
         }
 
         receiver.setRepetitionAmount(getConfiguration().getRepetitionAmount());
 
-
-        if (getConfiguration().getId() == null) {
+        if (getConfiguration().getReceiver() == null) {
             DatabaseHandler.addReceiver(receiver);
         } else {
             DatabaseHandler.updateReceiver(receiver);

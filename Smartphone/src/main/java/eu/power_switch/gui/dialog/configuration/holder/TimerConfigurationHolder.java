@@ -39,8 +39,6 @@ public class TimerConfigurationHolder extends ConfigurationHolder {
 
     private Timer timer;
 
-    private Long id;
-
     private boolean active = true;
 
     private String name;

@@ -41,6 +41,7 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.gateway.Gateway;
 
 /**
  * "Apartments" Fragment used in Configure Apartment Dialog
@@ -84,11 +85,10 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
      * Loads existing gateway data into fields
      */
     private void initializeGatewayData() {
-        Long gatewayId = getConfiguration().getId();
-        if (gatewayId != null) {
-
+        Gateway gateway = getConfiguration().getGateway();
+        if (gateway != null) {
             try {
-                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gatewayId);
+                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gateway.getId());
 
                 for (CheckBox checkBox : apartmentCheckboxList) {
                     Apartment checkBoxApartment = (Apartment) checkBox.getTag(R.string.apartments);

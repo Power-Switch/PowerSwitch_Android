@@ -51,13 +51,13 @@ import eu.power_switch.timer.Timer;
  */
 public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<TimerConfigurationHolder> {
 
-    // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
-    private static ArrayList<Action>         currentActions;
-    private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
     @BindView(R.id.add_timer_action)
     FloatingActionButton addTimerActionFAB;
     @BindView(R.id.recyclerview_list_of_actions)
     RecyclerView         recyclerViewTimerActions;
+
+    private ArrayList<Action>         currentActions;
+    private ActionRecyclerViewAdapter actionRecyclerViewAdapter;
 
     /**
      * Used to notify the setup page that some info has changed

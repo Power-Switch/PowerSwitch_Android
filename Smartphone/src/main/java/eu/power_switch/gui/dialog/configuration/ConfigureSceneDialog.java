@@ -49,16 +49,16 @@ import timber.log.Timber;
 public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigurationHolder> {
 
     public static ConfigureSceneDialog newInstance(@NonNull Fragment targetFragment) {
-        return newInstance(-1, targetFragment);
+        return newInstance(null, targetFragment);
     }
 
-    public static ConfigureSceneDialog newInstance(long sceneId, @NonNull Fragment targetFragment) {
+    public static ConfigureSceneDialog newInstance(Scene scene, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureSceneDialog     fragment                 = new ConfigureSceneDialog();
         SceneConfigurationHolder sceneConfigurationHolder = new SceneConfigurationHolder();
-        if (sceneId != -1) {
-            sceneConfigurationHolder.setId(sceneId);
+        if (scene != null) {
+            sceneConfigurationHolder.setScene(scene);
         }
         fragment.setConfiguration(sceneConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
@@ -73,14 +73,11 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        Long sceneId = getConfiguration().getId();
+        Scene scene = getConfiguration().getScene();
 
-        if (sceneId != null) {
+        if (scene != null) {
             // init dialog using existing scene
             try {
-                Scene scene = DatabaseHandler.getScene(sceneId);
-
-                getConfiguration().setId(sceneId);
                 getConfiguration().setName(scene.getName());
 
             } catch (Exception e) {
@@ -114,7 +111,8 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteScene(getConfiguration().getId());
+                            DatabaseHandler.deleteScene(getConfiguration().getScene()
+                                    .getId());
 
                             // notify scenes fragment
                             ScenesFragment.notifySceneChanged();

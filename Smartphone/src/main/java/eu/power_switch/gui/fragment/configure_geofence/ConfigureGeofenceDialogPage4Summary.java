@@ -18,15 +18,10 @@
 
 package eu.power_switch.gui.fragment.configure_geofence;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +30,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -48,19 +45,18 @@ import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
-import eu.power_switch.gui.dialog.configuration.ConfigureApartmentGeofenceDialog;
-import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.action.Action;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.CustomGeofenceChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
  * Created by Markus on 29.01.2016.
  */
-public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage<GeofenceConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
 
     @BindView(R.id.textView_name)
     TextView  textViewName;
@@ -74,15 +70,7 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
     TextView  textViewExitActions;
     @BindView(R.id.textView_geofence_radius)
     TextView  textViewGeofenceRadius;
-    private BroadcastReceiver broadcastReceiver;
-    private long         apartmentId         = -1;
-    private long         currentId           = -1;
-    private String       currentName         = "";
-    private List<Action> currentEnterActions = new ArrayList<>();
-    private List<Action> currentExitActions  = new ArrayList<>();
-    private LatLng currentLocation;
-    private double currentGeofenceRadius;
-    private Bitmap currentSnapshot;
+
     private GeofenceApiHandler geofenceApiHandler;
 
     @Nullable
@@ -90,48 +78,8 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        // BroadcastReceiver to get notifications from background service if room data has changed
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED.equals(intent.getAction())) {
-                    currentName = intent.getStringExtra(ConfigureGeofenceDialogPage1Location.KEY_NAME);
-
-                    double latitude  = intent.getDoubleExtra(ConfigureGeofenceDialogPage1Location.KEY_LATITUDE, Geofence.INVALID_LAT);
-                    double longitude = intent.getDoubleExtra(ConfigureGeofenceDialogPage1Location.KEY_LONGITUDE, Geofence.INVALID_LON);
-                    currentLocation = new LatLng(latitude, longitude);
-
-                    currentGeofenceRadius = intent.getDoubleExtra(ConfigureGeofenceDialogPage1Location.KEY_RADIUS, -1);
-
-                    currentSnapshot = intent.getParcelableExtra(ConfigureGeofenceDialogPage1Location.KEY_SNAPSHOT);
-
-                } else if (LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentEnterActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage2EnterActions.KEY_ACTIONS);
-
-                } else if (LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentExitActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureGeofenceDialogPage3ExitActions.KEY_ACTIONS);
-
-                }
-
-                updateUi();
-
-                notifyConfigurationChanged();
-            }
-        };
 
         geofenceApiHandler = new GeofenceApiHandler(getActivity());
-
-        Bundle args = getArguments();
-        if (args != null) {
-            if (args.containsKey(ConfigureApartmentGeofenceDialog.APARTMENT_ID_KEY)) {
-                apartmentId = args.getLong(ConfigureApartmentGeofenceDialog.APARTMENT_ID_KEY);
-            }
-
-            if (args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
-                currentId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
-                initializeGeofenceData(currentId);
-            }
-        }
 
         updateUi();
 
@@ -143,49 +91,46 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
         return R.layout.dialog_fragment_configure_geofence_page_4_summary;
     }
 
-    private void initializeGeofenceData(long geofenceId) {
-        try {
-            Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
-
-            currentName = geofence.getName();
-            currentGeofenceRadius = geofence.getRadius();
-            currentLocation = geofence.getCenterLocation();
-            currentSnapshot = geofence.getSnapshot();
-            currentEnterActions = geofence.getActions(Geofence.EventType.ENTER);
-            currentExitActions = geofence.getActions(Geofence.EventType.EXIT);
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onConfigurationChanged(CustomGeofenceChangedEvent customGeofenceChangedEvent) {
+        updateUi();
     }
 
     private void updateUi() {
-        if (currentName != null) {
-            textViewName.setText(currentName);
+        String name = getConfiguration().getName();
+        if (name != null) {
+            textViewName.setText(name);
         }
 
-        if (currentLocation != null) {
-            textViewLocation.setText(currentLocation.toString());
+        LatLng location = getConfiguration().getLocation();
+        if (location != null) {
+            textViewLocation.setText(location.toString());
         }
 
-        if (currentSnapshot != null) {
-            imageViewLocationSnapshot.setImageBitmap(currentSnapshot);
+        Bitmap snapshot = getConfiguration().getSnapshot();
+        if (snapshot != null) {
+            imageViewLocationSnapshot.setImageBitmap(snapshot);
         }
 
-        if (currentGeofenceRadius != -1) {
-            textViewGeofenceRadius.setText(String.format(Locale.getDefault(), "%d m", (int) currentGeofenceRadius));
+        double radius = getConfiguration().getRadius();
+        if (radius != -1) {
+            textViewGeofenceRadius.setText(String.format(Locale.getDefault(), "%d m", (int) radius));
         }
 
-        String enterActionText = "";
-        if (currentEnterActions != null) {
-            for (Action action : currentEnterActions) {
+        String       enterActionText = "";
+        List<Action> enterActions    = getConfiguration().getEnterActions();
+        if (enterActions != null) {
+            for (Action action : enterActions) {
                 enterActionText += action.toString() + "\n";
             }
         }
         textViewEnterActions.setText(enterActionText);
 
-        String exitActionText = "";
-        if (currentExitActions != null) {
-            for (Action action : currentExitActions) {
+        String       exitActionText = "";
+        List<Action> exitActions    = getConfiguration().getExitActions();
+        if (exitActions != null) {
+            for (Action action : exitActions) {
                 exitActionText += action.toString() + "\n";
             }
         }
@@ -194,71 +139,50 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
 
     @Override
     public boolean checkSetupValidity() {
-        if (currentName == null || currentName.length() <= 0) {
-            return false;
-        }
-
-        if (currentGeofenceRadius == -1) {
-            return false;
-        }
-
-        if (currentLocation == null) {
-            return false;
-        }
-
-        if (currentSnapshot == null) {
-            return false;
-        }
-
-        if (currentEnterActions == null || currentExitActions == null) {
-            return false;
-        }
-
-        return !(currentEnterActions.size() == 0 && currentExitActions.size() == 0);
-
+        return true;
     }
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
         try {
             HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
-            actionsMap.put(Geofence.EventType.ENTER, currentEnterActions);
-            actionsMap.put(Geofence.EventType.EXIT, currentExitActions);
+            actionsMap.put(Geofence.EventType.ENTER, getConfiguration().getEnterActions());
+            actionsMap.put(Geofence.EventType.EXIT, getConfiguration().getExitActions());
 
             boolean isLocationPermissionAvailable = PermissionHelper.isLocationPermissionAvailable(getContext());
 
-            if (apartmentId == -1) {
+            Long apartmentId = getConfiguration().getApartmentId();
+            if (apartmentId == null) {
                 // custom geofence
-
-                if (currentId == -1) {
-                    Geofence geofence = new Geofence(currentId,
+                Geofence existingGeofence = getConfiguration().getGeofence();
+                if (existingGeofence == null) {
+                    Geofence newGeofence = new Geofence(-1L,
                             isLocationPermissionAvailable,
-                            currentName,
-                            currentLocation,
-                            currentGeofenceRadius,
-                            currentSnapshot,
+                            getConfiguration().getName(),
+                            getConfiguration().getLocation(),
+                            getConfiguration().getRadius(),
+                            getConfiguration().getSnapshot(),
                             actionsMap,
                             Geofence.STATE_NONE);
-                    long geofenceId = DatabaseHandler.addGeofence(geofence);
+                    long geofenceId = DatabaseHandler.addGeofence(newGeofence);
                     // update ID of Geofence
-                    geofence.setId(geofenceId);
+                    newGeofence.setId(geofenceId);
 
-                    geofenceApiHandler.addGeofence(geofence);
+                    geofenceApiHandler.addGeofence(newGeofence);
                 } else {
-                    Geofence geofence = DatabaseHandler.getGeofence(currentId);
-
-                    Geofence updatedGeofence = new Geofence(currentId,
-                            geofence.isActive(),
-                            currentName,
-                            currentLocation,
-                            currentGeofenceRadius,
-                            currentSnapshot,
+                    Geofence updatedGeofence = new Geofence(getConfiguration().getGeofence()
+                            .getId(),
+                            existingGeofence.isActive(),
+                            getConfiguration().getName(),
+                            getConfiguration().getLocation(),
+                            getConfiguration().getRadius(),
+                            getConfiguration().getSnapshot(),
                             actionsMap,
-                            geofence.getState());
+                            existingGeofence.getState());
                     DatabaseHandler.updateGeofence(updatedGeofence);
 
-                    geofenceApiHandler.removeGeofence(geofence.getId());
-                    if (geofence.isActive()) {
+                    geofenceApiHandler.removeGeofence(existingGeofence.getId());
+                    if (existingGeofence.isActive()) {
                         geofenceApiHandler.addGeofence(updatedGeofence);
                     }
                 }
@@ -272,26 +196,25 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
                     updatedApartment = new Apartment(apartment.getId(),
                             apartment.isActive(),
                             apartment.getName(),
-                            apartment.getAssociatedGateways(),
-                            new Geofence((long) -1,
+                            apartment.getAssociatedGateways(), new Geofence(-1L,
                                     isLocationPermissionAvailable,
                                     apartment.getName(),
-                                    currentLocation,
-                                    currentGeofenceRadius,
-                                    currentSnapshot,
-                                    currentEnterActions,
-                                    currentExitActions,
+                            getConfiguration().getLocation(),
+                            getConfiguration().getRadius(),
+                            getConfiguration().getSnapshot(),
+                            getConfiguration().getEnterActions(),
+                            getConfiguration().getExitActions(),
                                     Geofence.STATE_NONE));
                 } else {
                     Geofence geofence = apartment.getGeofence();
                     Geofence updatedGeofence = new Geofence(geofence.getId(),
                             geofence.isActive(),
                             apartment.getName(),
-                            currentLocation,
-                            currentGeofenceRadius,
-                            currentSnapshot,
-                            currentEnterActions,
-                            currentExitActions,
+                            getConfiguration().getLocation(),
+                            getConfiguration().getRadius(),
+                            getConfiguration().getSnapshot(),
+                            getConfiguration().getEnterActions(),
+                            getConfiguration().getExitActions(),
                             geofence.getState());
 
                     updatedApartment = new Apartment(apartment.getId(),
@@ -323,23 +246,4 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED);
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-        geofenceApiHandler.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        geofenceApiHandler.onStop();
-        super.onStop();
-    }
 }

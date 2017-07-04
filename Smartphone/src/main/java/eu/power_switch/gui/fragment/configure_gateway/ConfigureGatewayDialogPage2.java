@@ -18,22 +18,20 @@
 
 package eu.power_switch.gui.fragment.configure_gateway;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -47,7 +45,7 @@ import eu.power_switch.gui.adapter.SsidRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
+import eu.power_switch.shared.event.GatewaySsidAddedEvent;
 
 /**
  * "SSID" Fragment used in Configure Apartment Dialog
@@ -62,9 +60,6 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
     RecyclerView         recyclerViewSsids;
 
     private ArrayList<String> ssids = new ArrayList<>();
-
-    private BroadcastReceiver broadcastReceiver;
-
 
     private SsidRecyclerViewAdapter ssidRecyclerViewAdapter;
 
@@ -118,19 +113,6 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
             }
         });
 
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (LocalBroadcastConstants.INTENT_GATEWAY_SSID_ADDED.equals(intent.getAction())) {
-                    ArrayList<String> newSsids = intent.getStringArrayListExtra(AddSsidDialog.KEY_SSID);
-                    ssids.addAll(newSsids);
-                    ssidRecyclerViewAdapter.notifyDataSetChanged();
-
-                    updateConfiguration(ssids);
-                }
-            }
-        };
-
         initializeGatewayData();
 
         return rootView;
@@ -139,6 +121,17 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
     @Override
     protected int getLayoutRes() {
         return R.layout.dialog_fragment_configure_gateway_page_2;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onSsidAdded(GatewaySsidAddedEvent e) {
+        List<String> newSsids = e.getSsids();
+
+        ssids.addAll(newSsids);
+        ssidRecyclerViewAdapter.notifyDataSetChanged();
+
+        updateConfiguration(ssids);
     }
 
     /**
@@ -157,19 +150,4 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
             }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(LocalBroadcastConstants.INTENT_GATEWAY_SSID_ADDED);
-        LocalBroadcastManager.getInstance(getActivity())
-                .registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    @Override
-    public void onStop() {
-        LocalBroadcastManager.getInstance(getActivity())
-                .unregisterReceiver(broadcastReceiver);
-        super.onStop();
-    }
 }

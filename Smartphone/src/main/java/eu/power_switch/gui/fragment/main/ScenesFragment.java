@@ -93,7 +93,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             public void onItemLongClick(View itemView, int position) {
                 final Scene scene = scenes.get(position);
 
-                ConfigureSceneDialog configureSceneDialog = ConfigureSceneDialog.newInstance(scene.getId(), recyclerViewFragment);
+                ConfigureSceneDialog configureSceneDialog = ConfigureSceneDialog.newInstance(scene, recyclerViewFragment);
                 configureSceneDialog.show(getFragmentManager(), null);
             }
         });

@@ -99,7 +99,6 @@ import eu.power_switch.shared.event.HistoryUpdatedEvent;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
-import eu.power_switch.wizard.gui.WizardActivity;
 import timber.log.Timber;
 
 /**
@@ -270,7 +269,7 @@ public class MainActivity extends EventBusActivity {
         }
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
-            startActivity(WizardActivity.getLaunchIntent(this));
+//            startActivity(WizardActivity.getLaunchIntent(this));
         } else {
             startGatewayAutoDiscovery();
         }

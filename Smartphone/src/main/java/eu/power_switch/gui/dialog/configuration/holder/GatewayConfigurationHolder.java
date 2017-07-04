@@ -38,8 +38,6 @@ public class GatewayConfigurationHolder extends ConfigurationHolder {
 
     private Gateway gateway;
 
-    private Long id;
-
     private String name;
 
     private String model;

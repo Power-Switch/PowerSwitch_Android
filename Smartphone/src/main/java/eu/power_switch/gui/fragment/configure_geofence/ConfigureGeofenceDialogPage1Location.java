@@ -20,7 +20,6 @@ package eu.power_switch.gui.fragment.configure_geofence;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -29,7 +28,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -51,15 +49,13 @@ import com.google.android.gms.maps.model.Marker;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.map.MapViewHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.exception.location.CoordinatesNotFoundException;
 import timber.log.Timber;
 
@@ -68,13 +64,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 27.01.2016.
  */
-public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPage implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
-
-    public static final String KEY_NAME      = "name";
-    public static final String KEY_LATITUDE  = "latitude";
-    public static final String KEY_LONGITUDE = "longitude";
-    public static final String KEY_RADIUS    = "radius";
-    public static final String KEY_SNAPSHOT  = "snapshot";
+public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPage<GeofenceConfigurationHolder> implements OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
 
     @BindView(R.id.geofenceRadiusSeekbar)
     SeekBar         geofenceRadiusSeekbar;
@@ -92,9 +82,6 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
     @BindView(R.id.mapView)
     MapView     mapView;
 
-    private long geofenceId = -1;
-
-    private String name = "";
     private MapViewHandler                   mapViewHandler;
     private eu.power_switch.gui.map.Geofence geofenceView;
 
@@ -106,19 +93,14 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
 
     /**
      * Used to notify parent Dialog that configuration has changed
-     *
-     * @param context any suitable context
      */
-    public static void sendSetupGeofenceChangedBroadcast(Context context, String name, LatLng location, double geofenceRadius, Bitmap snapShot) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_GEOFENCE_LOCATION_CHANGED);
-        intent.putExtra(KEY_NAME, name);
-        intent.putExtra(KEY_LATITUDE, location.latitude);
-        intent.putExtra(KEY_LONGITUDE, location.longitude);
-        intent.putExtra(KEY_RADIUS, geofenceRadius);
-        intent.putExtra(KEY_SNAPSHOT, snapShot);
+    public void updateConfiguration(String name, LatLng location, double geofenceRadius, Bitmap snapShot) {
+        getConfiguration().setName(name);
+        getConfiguration().setLocation(location);
+        getConfiguration().setRadius(geofenceRadius);
+        getConfiguration().setSnapshot(snapShot);
 
-        LocalBroadcastManager.getInstance(context)
-                .sendBroadcast(intent);
+        notifyConfigurationChanged();
     }
 
     @Nullable
@@ -253,11 +235,6 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
             }
         });
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
-            geofenceId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
-        }
-
         initializeData();
 
         return rootView;
@@ -269,12 +246,10 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
     }
 
     private void initializeData() {
-        try {
-            if (geofenceId != -1) {
-                Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
+        Geofence geofence = getConfiguration().getGeofence();
 
-                name = geofence.getName();
-
+        if (geofence != null) {
+            try {
                 if (geofence.getCenterLocation() != null) {
                     double radius = geofence.getRadius();
                     geofenceRadiusSeekbar.setProgress((int) radius);
@@ -284,9 +259,9 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                 } else {
                     updateGeofenceRadius(GeofenceConstants.DEFAULT_GEOFENCE_RADIUS);
                 }
+            } catch (Exception e) {
+                Timber.e(e);
             }
-        } catch (Exception e) {
-            Timber.e(e);
         }
     }
 
@@ -404,9 +379,9 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
             }
         });
 
-        if (geofenceId != -1) {
+        Geofence geofence = getConfiguration().getGeofence();
+        if (geofence != null) {
             try {
-                Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
                 if (geofenceView != null) {
                     geofenceView.remove();
                 }
@@ -449,7 +424,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     String firstMatch = result.getResult()
                             .get(0);
                     searchAddressEditText.setText(firstMatch);
-                    name = firstMatch;
+                    getConfiguration().setName(firstMatch);
                 } else {
                     searchAddressEditText.setText("");
                 }
@@ -472,7 +447,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     if (isFirstTimeMapInit) {
                         isFirstTimeMapInit = false;
                     } else {
-                        sendSetupGeofenceChangedBroadcast(getContext(), name, getCurrentLocation(), currentGeofenceRadius, currentSnapshot);
+                        updateConfiguration(getConfiguration().getName(), getCurrentLocation(), currentGeofenceRadius, currentSnapshot);
                     }
                 } catch (Exception e) {
                     Timber.e(e);

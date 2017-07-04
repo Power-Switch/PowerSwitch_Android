@@ -38,21 +38,20 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddGeofenceEnterActionDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialogPage {
+public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialogPage<GeofenceConfigurationHolder> {
 
     public static final String KEY_ACTIONS = "actions";
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
@@ -124,11 +123,7 @@ public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialo
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureGeofenceDialog.GEOFENCE_ID_KEY)) {
-            long geofenceId = args.getLong(ConfigureGeofenceDialog.GEOFENCE_ID_KEY);
-            initializeData(geofenceId);
-        }
+        initializeData();
 
         sendActionsChangedBroadcast(getContext(), currentEnterActions);
 
@@ -140,13 +135,15 @@ public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialo
         return R.layout.dialog_fragment_configure_geofence_page_2;
     }
 
-    private void initializeData(long geofenceId) {
-        try {
-            currentEnterActions.clear();
-            currentEnterActions.addAll(DatabaseHandler.getGeofence(geofenceId)
-                    .getActions(Geofence.EventType.ENTER));
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+    private void initializeData() {
+        Geofence geofence = getConfiguration().getGeofence();
+        if (geofence != null) {
+            try {
+                currentEnterActions.clear();
+                currentEnterActions.addAll(geofence.getActions(Geofence.EventType.ENTER));
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
+            }
         }
     }
 

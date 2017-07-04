@@ -249,8 +249,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     Timber.e(e);
 
                     updateConfiguration(getSelectedChannelMaster(),
-                            getSelectedChannelSlave(),
-                            dipSwitchArrayList, null,
+                            getSelectedChannelSlave(), dipSwitchArrayList, null,
                             getCurrentUniversalButtons());
 
                     textInputEditTextSeed.setError(e.getMessage());
@@ -459,11 +458,10 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
     }
 
     private void initializeReceiverData() {
-        Long receiverId = getConfiguration().getId();
+        Receiver receiver = getConfiguration().getReceiver();
 
-        if (receiverId != null) {
+        if (receiver != null) {
             try {
-                Receiver receiver = DatabaseHandler.getReceiver(receiverId);
                 initType(receiver);
             } catch (Exception e) {
                 StatusMessageHandler.showErrorMessage(getContentView(), e);

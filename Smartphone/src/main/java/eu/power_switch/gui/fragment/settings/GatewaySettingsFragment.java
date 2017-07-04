@@ -116,7 +116,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             public void onItemLongClick(View itemView, int position) {
                 Gateway gateway = gateways.get(position);
 
-                ConfigureGatewayDialog configureGatewayDialog = ConfigureGatewayDialog.newInstance(gateway.getId(), recyclerViewFragment);
+                ConfigureGatewayDialog configureGatewayDialog = ConfigureGatewayDialog.newInstance(gateway, recyclerViewFragment);
                 configureGatewayDialog.show(getFragmentManager(), null);
             }
         });

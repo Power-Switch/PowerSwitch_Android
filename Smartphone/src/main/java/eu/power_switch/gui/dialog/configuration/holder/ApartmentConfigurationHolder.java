@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class ApartmentConfigurationHolder extends ConfigurationHolder {
 
-    private Long id;
+    private Apartment apartment;
 
     private List<Apartment> existingApartments;
 
@@ -25,8 +25,8 @@ public class ApartmentConfigurationHolder extends ConfigurationHolder {
 
     public boolean checkNameAlreadyExists() {
         for (Apartment apartment : existingApartments) {
-            if (!apartment.getId()
-                    .equals(id) && apartment.getName()
+            if (!(this.apartment != null && this.apartment.getId()
+                    .equals(apartment.getId())) && apartment.getName()
                     .equalsIgnoreCase(name)) {
                 return true;
             }

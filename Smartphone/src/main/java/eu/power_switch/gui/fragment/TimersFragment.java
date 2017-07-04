@@ -94,7 +94,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
                 try {
                     final Timer timer = timers.get(position);
 
-                    ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer.getId(), recyclerViewFragment);
+                    ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer, recyclerViewFragment);
                     configureTimerDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);

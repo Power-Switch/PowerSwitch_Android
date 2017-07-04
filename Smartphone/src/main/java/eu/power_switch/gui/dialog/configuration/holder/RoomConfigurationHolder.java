@@ -22,8 +22,6 @@ public class RoomConfigurationHolder extends ConfigurationHolder {
 
     private List<Room> existingRooms;
 
-    private Long id;
-
     private String name;
 
     private List<Receiver> receivers;
@@ -32,8 +30,8 @@ public class RoomConfigurationHolder extends ConfigurationHolder {
 
     public boolean checkNameAlreadyExists() {
         for (Room room : existingRooms) {
-            if (!room.getId()
-                    .equals(id) && room.getName()
+            if (!(this.room != null && this.room.getId()
+                    .equals(room.getId())) && room.getName()
                     .equalsIgnoreCase(name)) {
                 return true;
             }

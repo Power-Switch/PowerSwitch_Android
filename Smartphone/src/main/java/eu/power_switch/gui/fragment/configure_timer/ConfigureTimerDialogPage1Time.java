@@ -39,6 +39,7 @@ import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
+import eu.power_switch.timer.Timer;
 import timber.log.Timber;
 
 /**
@@ -135,8 +136,8 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
     }
 
     private void initializeTimerData() {
-        Long timerId = getConfiguration().getId();
-        if (timerId != null) {
+        Timer timer = getConfiguration().getTimer();
+        if (timer != null) {
             try {
                 name.setText(getConfiguration().getName());
 

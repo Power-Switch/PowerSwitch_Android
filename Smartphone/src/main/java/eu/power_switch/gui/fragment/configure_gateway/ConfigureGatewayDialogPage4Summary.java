@@ -160,8 +160,8 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        Long gatewayId = getConfiguration().getId();
-        if (gatewayId == null) {
+        Gateway gateway = getConfiguration().getGateway();
+        if (gateway == null) {
             Gateway newGateway;
 
             switch (getConfiguration().getModel()) {
@@ -247,7 +247,7 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<
                 StatusMessageHandler.showInfoMessage(rootView.getContext(), R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
             }
         } else {
-            DatabaseHandler.updateGateway(gatewayId,
+            DatabaseHandler.updateGateway(gateway.getId(),
                     getConfiguration().getName(),
                     getConfiguration().getModel(),
                     getConfiguration().getLocalAddress(),
@@ -255,18 +255,18 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<
                     getConfiguration().getWanAddress(),
                     getConfiguration().getWanPort(),
                     getConfiguration().getSsids());
-            Gateway updatedGateway = DatabaseHandler.getGateway(gatewayId);
+            Gateway updatedGateway = DatabaseHandler.getGateway(gateway.getId());
 
             List<Apartment> apartments = DatabaseHandler.getAllApartments();
             for (Apartment apartment : apartments) {
                 if (apartment.isAssociatedWith(updatedGateway.getId())) {
                     if (!getConfiguration().getApartmentIds()
                             .contains(apartment.getId())) {
-                        for (Gateway gateway : apartment.getAssociatedGateways()) {
-                            if (gateway.getId()
+                        for (Gateway currentGateway : apartment.getAssociatedGateways()) {
+                            if (currentGateway.getId()
                                     .equals(updatedGateway.getId())) {
                                 apartment.getAssociatedGateways()
-                                        .remove(gateway);
+                                        .remove(currentGateway);
                                 DatabaseHandler.updateApartment(apartment);
                                 break;
                             }

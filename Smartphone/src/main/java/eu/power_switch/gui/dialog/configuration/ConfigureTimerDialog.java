@@ -49,16 +49,16 @@ import timber.log.Timber;
 public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigurationHolder> {
 
     public static ConfigureTimerDialog newInstance(@NonNull Fragment targetFragment) {
-        return newInstance(-1, targetFragment);
+        return newInstance(null, targetFragment);
     }
 
-    public static ConfigureTimerDialog newInstance(long timerId, @NonNull Fragment targetFragment) {
+    public static ConfigureTimerDialog newInstance(Timer timer, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureTimerDialog     fragment                 = new ConfigureTimerDialog();
         TimerConfigurationHolder timerConfigurationHolder = new TimerConfigurationHolder();
-        if (timerId != -1) {
-            timerConfigurationHolder.setId(timerId);
+        if (timer != null) {
+            timerConfigurationHolder.setTimer(timer);
         }
         fragment.setConfiguration(timerConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
@@ -73,15 +73,13 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        Long timerId = getConfiguration().getId();
+        Timer timer = getConfiguration().getTimer();
 
-        if (timerId != null) {
+        if (timer != null) {
             try {
-                Timer timer = DatabaseHandler.getTimer(timerId);
                 getConfiguration().setTimer(timer);
 
                 getConfiguration().setActive(timer.isActive());
-                getConfiguration().setId(timerId);
                 getConfiguration().setName(timer.getName());
 
                 getConfiguration().setExecutionTime(timer.getExecutionTime());
@@ -126,7 +124,8 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteTimer(getConfiguration().getId());
+                            DatabaseHandler.deleteTimer(getConfiguration().getTimer()
+                                    .getId());
 
                             // notify scenes fragment
                             TimersFragment.notifyTimersChanged();

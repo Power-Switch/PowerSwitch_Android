@@ -100,11 +100,10 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
     }
 
     private void initializeTimerData() {
-        Long timerId = getConfiguration().getId();
+        Timer timer = getConfiguration().getTimer();
 
-        if (timerId != null) {
+        if (timer != null) {
             try {
-                Timer timer = getConfiguration().getTimer();
 
 //        currentExecutionInterval = timer.getExecutionInterval();
 

@@ -141,10 +141,15 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
     @Override
     public void saveCurrentConfigurationToDatabase() {
         try {
-            Timer timer = null;
+            Timer timer   = null;
+            long  timerId = -1;
+            if (getConfiguration().getTimer() != null) {
+                timerId = getConfiguration().getTimer()
+                        .getId();
+            }
             switch (getConfiguration().getExecutionType()) {
                 case Timer.EXECUTION_TYPE_INTERVAL:
-                    timer = new IntervalTimer(getConfiguration().getId(),
+                    timer = new IntervalTimer(timerId,
                             getConfiguration().isActive(),
                             getConfiguration().getName(),
                             getConfiguration().getExecutionTime(),
@@ -154,7 +159,7 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
                     break;
 
                 case Timer.EXECUTION_TYPE_WEEKDAY:
-                    timer = new WeekdayTimer(getConfiguration().getId(),
+                    timer = new WeekdayTimer(timerId,
                             getConfiguration().isActive(),
                             getConfiguration().getName(),
                             getConfiguration().getExecutionTime(),

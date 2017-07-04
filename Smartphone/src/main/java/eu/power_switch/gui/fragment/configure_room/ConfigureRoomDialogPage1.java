@@ -132,20 +132,19 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
     }
 
     private void initExistingData() {
-        Long roomId = getConfiguration().getId();
-        if (roomId != null) {
+        Room room = getConfiguration().getRoom();
+        if (room != null) {
             try {
-                Room currentRoom = DatabaseHandler.getRoom(roomId);
-                originalName = currentRoom.getName();
+                originalName = room.getName();
                 name.setText(originalName);
 
-                receivers.addAll(currentRoom.getReceivers());
+                receivers.addAll(room.getReceivers());
                 receiverNameRecyclerViewAdapter.notifyDataSetChanged();
 
                 List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
                 roomNames = new LinkedList<>();
-                for (Room room : rooms) {
-                    roomNames.add(room.getName());
+                for (Room currentRoom : rooms) {
+                    roomNames.add(currentRoom.getName());
                 }
             } catch (Exception e) {
                 StatusMessageHandler.showErrorMessage(getContentView(), e);

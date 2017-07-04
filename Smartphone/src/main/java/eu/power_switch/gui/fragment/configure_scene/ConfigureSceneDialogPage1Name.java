@@ -235,12 +235,10 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
     }
 
     private void initializeSceneData() {
-        Long sceneId = getConfiguration().getId();
+        Scene scene = getConfiguration().getScene();
 
-        if (sceneId != null) {
+        if (scene != null) {
             try {
-                Scene scene = DatabaseHandler.getScene(sceneId);
-
                 name.setText(scene.getName());
 
                 ArrayList<Receiver> activeReceivers = new ArrayList<>();
@@ -289,7 +287,8 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         } else {
             for (Scene scene : existingScenes) {
                 if (!scene.getId()
-                        .equals(getConfiguration().getId()) && scene.getName()
+                        .equals(getConfiguration().getScene()
+                                .getId()) && scene.getName()
                         .equalsIgnoreCase(getCurrentSceneName())) {
                     floatingName.setError(getString(R.string.scene_name_already_exists));
                     return false;

@@ -157,12 +157,10 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
     }
 
     private void initializeSceneData() {
-        Long sceneId = getConfiguration().getId();
+        Scene scene = getConfiguration().getScene();
 
-        if (sceneId != null) {
+        if (scene != null) {
             try {
-                Scene scene = DatabaseHandler.getScene(sceneId);
-
                 ArrayList<Room>          checkedReceivers = new ArrayList<>();
                 HashMap<Long, SceneItem> map              = new HashMap<>();
 
@@ -206,12 +204,14 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
 
     @Override
     public void saveCurrentConfigurationToDatabase() {
-        Scene newScene = new Scene(getConfiguration().getId(),
-                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID), getConfiguration().getName());
+        Scene newScene = new Scene(getConfiguration().getScene()
+                .getId(),
+                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
+                getConfiguration().getName());
         newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
 
         try {
-            if (getConfiguration().getId() == null) {
+            if (getConfiguration().getScene() == null) {
                 DatabaseHandler.addScene(newScene);
             } else {
                 DatabaseHandler.updateScene(newScene);

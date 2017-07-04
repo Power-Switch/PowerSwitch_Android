@@ -50,16 +50,16 @@ import timber.log.Timber;
 public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayConfigurationHolder> {
 
     public static ConfigureGatewayDialog newInstance(@NonNull Fragment targetFragment) {
-        return newInstance(-1, targetFragment);
+        return newInstance(null, targetFragment);
     }
 
-    public static ConfigureGatewayDialog newInstance(long gatewayId, @NonNull Fragment targetFragment) {
+    public static ConfigureGatewayDialog newInstance(Gateway gateway, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureGatewayDialog     fragment                   = new ConfigureGatewayDialog();
         GatewayConfigurationHolder gatewayConfigurationHolder = new GatewayConfigurationHolder();
-        if (gatewayId != -1) {
-            gatewayConfigurationHolder.setId(gatewayId);
+        if (gateway != null) {
+            gatewayConfigurationHolder.setGateway(gateway);
         }
         fragment.setConfiguration(gatewayConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
@@ -74,13 +74,10 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        Long gatewayId = getConfiguration().getId();
+        Gateway gateway = getConfiguration().getGateway();
 
-        if (arguments != null) {
+        if (gateway != null) {
             try {
-                Gateway gateway = DatabaseHandler.getGateway(gatewayId);
-                getConfiguration().setId(gatewayId);
-                getConfiguration().setGateway(gateway);
                 getConfiguration().setName(gateway.getName());
 
                 getConfiguration().setLocalAddress(gateway.getLocalHost());
@@ -90,7 +87,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
 
                 getConfiguration().setSsids(gateway.getSsids());
 
-                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gatewayId);
+                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gateway.getId());
                 for (Apartment associatedApartment : associatedApartments) {
                     getConfiguration().getApartmentIds()
                             .add(associatedApartment.getId());
@@ -120,7 +117,8 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteGateway(getConfiguration().getId());
+                            DatabaseHandler.deleteGateway(getConfiguration().getGateway()
+                                    .getId());
                             GatewaySettingsFragment.notifyGatewaysChanged();
                             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_removed, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {

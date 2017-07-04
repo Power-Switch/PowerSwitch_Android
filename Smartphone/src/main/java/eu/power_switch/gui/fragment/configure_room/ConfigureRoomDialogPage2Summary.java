@@ -45,6 +45,7 @@ import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -113,9 +114,9 @@ public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage<Roo
     }
 
     private void initExistingData() {
-        Long roomId = getConfiguration().getId();
+        Room room = getConfiguration().getRoom();
 
-        if (roomId != null) {
+        if (room != null) {
             try {
                 if (!getConfiguration().getAssociatedGateways()
                         .isEmpty()) {
@@ -281,7 +282,8 @@ public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage<Roo
 
     @Override
     public void saveCurrentConfigurationToDatabase() throws Exception {
-        DatabaseHandler.updateRoom(getConfiguration().getId(), getConfiguration().getName(), getCheckedGateways());
+        DatabaseHandler.updateRoom(getConfiguration().getRoom()
+                .getId(), getConfiguration().getName(), getCheckedGateways());
 
         // save receiver order
         List<Receiver> receivers = getConfiguration().getReceivers();

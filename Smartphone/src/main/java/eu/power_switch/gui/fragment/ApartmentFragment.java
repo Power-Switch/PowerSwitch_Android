@@ -121,7 +121,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 try {
                     Apartment apartment = apartments.get(position);
 
-                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment.getId(), recyclerViewFragment);
+                    ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment, recyclerViewFragment);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getRecyclerView(), e);

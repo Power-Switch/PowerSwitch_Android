@@ -30,6 +30,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1Location;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActions;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
@@ -37,19 +38,14 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.obj.Apartment;
 
+import static eu.power_switch.gui.dialog.EditRoomOrderDialog.APARTMENT_ID_KEY;
+
 /**
  * Dialog to create or modify a Geofence related to an Apartment
  * <p/>
  * Created by Markus on 28.06.2015.
  */
 public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
-
-    /**
-     * ID of existing Geofence to Edit
-     */
-    public static final String APARTMENT_ID_KEY = "ApartmentId";
-
-    private long apartmentId = -1;
 
     public static ConfigureApartmentGeofenceDialog newInstance(long apartmentId) {
         Bundle args = new Bundle();
@@ -62,23 +58,20 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(APARTMENT_ID_KEY)) {
-            apartmentId = arguments.getLong(APARTMENT_ID_KEY);
+        Long apartmentId = getConfiguration().getApartmentId();
 
+        if (apartmentId != null) {
             try {
                 Apartment apartment = DatabaseHandler.getApartment(apartmentId);
                 if (apartment.getGeofence() == null) {
                     // Create the adapter that will return a fragment
                     // for each of the two primary sections of the app.
-                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                            getTargetFragment(), apartmentId));
+                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
                     imageButtonDelete.setVisibility(View.GONE);
                     return false;
                 } else {
                     // init dialog using existing geofence
-                    geofenceId = apartment.getGeofence().getId();
-                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                            getTargetFragment(), apartmentId, geofenceId));
+                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
                     imageButtonDelete.setVisibility(View.VISIBLE);
                     return true;
                 }
@@ -92,53 +85,43 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).
-                setMessage(R.string.geofence_will_be_gone_forever)
-                .setPositiveButton
-                        (android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DatabaseHandler.deleteGeofence(geofenceId);
-                                    geofenceApiHandler.removeGeofence(geofenceId);
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                .
+                        setMessage(R.string.geofence_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DatabaseHandler.deleteGeofence(getConfiguration().getGeofence()
+                                    .getId());
+                            geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
+                                    .getId());
 
-                                    // same for timers
-                                    ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
+                            // same for timers
+                            ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
 
-                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.geofence_deleted, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
-                                }
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_deleted, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        }
 
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     protected static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private ConfigurationDialogTabbed parentDialog;
-        private long apartmentId;
-        private long geofenceId;
-        private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private Fragment targetFragment;
+        private ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog;
+        private ConfigurationDialogTabbedSummaryFragment               summaryFragment;
+        private Fragment                                               targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long apartmentId) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
-            this.apartmentId = apartmentId;
-            this.geofenceId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long apartmentId,
-                                long geofenceId) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.apartmentId = apartmentId;
-            this.geofenceId = geofenceId;
             this.targetFragment = targetFragment;
         }
 
@@ -185,17 +168,6 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                     break;
                 default:
                     break;
-            }
-
-            if (fragment != null && apartmentId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(APARTMENT_ID_KEY, apartmentId);
-
-                if (geofenceId != -1) {
-                    bundle.putLong(GEOFENCE_ID_KEY, geofenceId);
-                }
-
-                fragment.setArguments(bundle);
             }
 
             return fragment;

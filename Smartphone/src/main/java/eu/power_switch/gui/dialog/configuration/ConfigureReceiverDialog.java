@@ -64,16 +64,16 @@ import timber.log.Timber;
 public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverConfigurationHolder> {
 
     public static ConfigureReceiverDialog newInstance(@NonNull Fragment targetFragment) {
-        return newInstance(-1, targetFragment);
+        return newInstance(null, targetFragment);
     }
 
-    public static ConfigureReceiverDialog newInstance(long receiverId, @NonNull Fragment targetFragment) {
+    public static ConfigureReceiverDialog newInstance(Receiver receiver, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
 
         ConfigureReceiverDialog     fragment                    = new ConfigureReceiverDialog();
         ReceiverConfigurationHolder receiverConfigurationHolder = new ReceiverConfigurationHolder();
-        if (receiverId != -1) {
-            receiverConfigurationHolder.setId(receiverId);
+        if (receiver != null) {
+            receiverConfigurationHolder.setReceiver(receiver);
         }
         fragment.setConfiguration(receiverConfigurationHolder);
         fragment.setTargetFragment(targetFragment, 0);
@@ -88,7 +88,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        Long receiverId = getConfiguration().getId();
+        Receiver receiver = getConfiguration().getReceiver();
 
         try {
             Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
@@ -98,17 +98,14 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
             StatusMessageHandler.showErrorMessage(getContext(), e);
         }
 
-        if (receiverId != null) {
+        if (receiver != null) {
             // init dialog using existing receiver
 
             try {
-                // TODO: optimize database access
-                Receiver receiver = DatabaseHandler.getReceiver(receiverId);
-                Room     room     = DatabaseHandler.getRoom(receiver.getRoomId());
+                Room room = DatabaseHandler.getRoom(receiver.getRoomId());
 
                 getConfiguration().setParentRoom(room);
                 getConfiguration().setParentRoomName(room.getName());
-                getConfiguration().setReceiver(receiver);
                 getConfiguration().setName(receiver.getName());
 
                 getConfiguration().setBrand(receiver.getBrand());
@@ -168,7 +165,8 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteReceiver(getConfiguration().getId());
+                            DatabaseHandler.deleteReceiver(getConfiguration().getReceiver()
+                                    .getId());
 
                             // notify rooms fragment
                             RoomsFragment.notifyReceiverChanged();
