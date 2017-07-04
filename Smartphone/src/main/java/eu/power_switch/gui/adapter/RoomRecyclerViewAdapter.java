@@ -101,7 +101,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.roomName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                ConfigureRoomDialog configureRoomDialog = ConfigureRoomDialog.newInstance(room.getId());
+                ConfigureRoomDialog configureRoomDialog = ConfigureRoomDialog.newInstance(room.getId(), recyclerViewFragment);
                 configureRoomDialog.setTargetFragment(recyclerViewFragment, 0);
                 configureRoomDialog.show(fragmentActivity.getSupportFragmentManager(), null);
                 return true;

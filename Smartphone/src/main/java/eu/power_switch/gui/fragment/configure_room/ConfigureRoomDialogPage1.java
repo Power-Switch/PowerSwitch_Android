@@ -18,12 +18,9 @@
 
 package eu.power_switch.gui.fragment.configure_room;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -47,19 +44,15 @@ import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigureRoomDialog;
+import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.constants.LocalBroadcastConstants;
 
 /**
  * Dialog to edit a Room
  */
-public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements OnStartDragListener {
-
-    public static final String KEY_NAME = "name";
-    public static final String KEY_RECEIVERS = "receivers";
+public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfigurationHolder> implements OnStartDragListener {
 
     @BindView(R.id.editText_room_name)
     EditText        name;
@@ -71,26 +64,23 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements
 
     private String originalName;
 
-    private Room currentRoom;
     private LinkedList<String> roomNames;
-    private ItemTouchHelper itemTouchHelper;
+    private ItemTouchHelper    itemTouchHelper;
 
-    private ArrayList<Receiver> receivers;
+    private ArrayList<Receiver>             receivers;
     private ReceiverNameRecyclerViewAdapter receiverNameRecyclerViewAdapter;
 
     /**
      * Used to notify the summary page that some info has changed
      *
-     * @param context   any suitable context
      * @param name      name of room
      * @param receivers list of receivers (with changed order)
      */
-    public static void sendGatewayDetailsChangedBroadcast(Context context, String name, ArrayList<Receiver> receivers) {
-        Intent intent = new Intent(LocalBroadcastConstants.INTENT_ROOM_NAME_CHANGED);
-        intent.putExtra(KEY_NAME, name);
-        intent.putExtra(KEY_RECEIVERS, receivers);
+    public void updateConfiguration(String name, List<Receiver> receivers) {
+        getConfiguration().setName(name);
+        getConfiguration().setReceivers(receivers);
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        notifyConfigurationChanged();
     }
 
     @Nullable
@@ -111,7 +101,7 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements
 
             @Override
             public void afterTextChanged(Editable s) {
-                sendGatewayDetailsChangedBroadcast(getContext(), getCurrentRoomName(), receivers);
+                updateConfiguration(getCurrentRoomName(), receivers);
             }
         });
 
@@ -120,7 +110,7 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements
         receiverNameRecyclerViewAdapter.setOnItemMovedListener(new OnItemMovedListener() {
             @Override
             public void onItemMoved(int fromPosition, int toPosition) {
-                sendGatewayDetailsChangedBroadcast(getContext(), getCurrentRoomName(), receivers);
+                updateConfiguration(getCurrentRoomName(), receivers);
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -131,11 +121,7 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listOfReceivers);
 
-        Bundle args = getArguments();
-        if (args != null && args.containsKey(ConfigureRoomDialog.ROOM_ID_KEY)) {
-            long roomId = args.getLong(ConfigureRoomDialog.ROOM_ID_KEY);
-            initExistingData(roomId);
-        }
+        initExistingData();
 
         return rootView;
     }
@@ -145,26 +131,26 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements
         return R.layout.dialog_fragment_configure_room_page_1;
     }
 
-    private boolean initExistingData(long roomId) {
+    private void initExistingData() {
+        Long roomId = getConfiguration().getId();
+        if (roomId != null) {
+            try {
+                Room currentRoom = DatabaseHandler.getRoom(roomId);
+                originalName = currentRoom.getName();
+                name.setText(originalName);
 
-        try {
-            currentRoom = DatabaseHandler.getRoom(roomId);
-            originalName = currentRoom.getName();
-            name.setText(originalName);
+                receivers.addAll(currentRoom.getReceivers());
+                receiverNameRecyclerViewAdapter.notifyDataSetChanged();
 
-            receivers.addAll(currentRoom.getReceivers());
-            receiverNameRecyclerViewAdapter.notifyDataSetChanged();
-
-            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
-            roomNames = new LinkedList<>();
-            for (Room room : rooms) {
-                roomNames.add(room.getName());
+                List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                roomNames = new LinkedList<>();
+                for (Room room : rooms) {
+                    roomNames.add(room.getName());
+                }
+            } catch (Exception e) {
+                StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
-
-        return true;
     }
 
     private boolean isValid() {
@@ -199,7 +185,9 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage implements
     }
 
     private String getCurrentRoomName() {
-        return name.getText().toString().trim();
+        return name.getText()
+                .toString()
+                .trim();
     }
 
 }

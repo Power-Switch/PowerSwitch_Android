@@ -21,6 +21,7 @@ package eu.power_switch.gui.dialog.configuration;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,14 +29,18 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
+import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Summary;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
+import eu.power_switch.obj.Room;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 import timber.log.Timber;
@@ -43,20 +48,22 @@ import timber.log.Timber;
 /**
  * Dialog to configure a Room
  */
-public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
+public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigurationHolder> {
 
-    /**
-     * ID of existing Room to Edit
-     */
-    public static final String ROOM_ID_KEY = "RoomId";
+    public static ConfigureRoomDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(-1, targetFragment);
+    }
 
-    private long roomId = -1;
-
-    public static ConfigureRoomDialog newInstance(long roomId) {
+    public static ConfigureRoomDialog newInstance(long roomId, @NonNull Fragment targetFragment) {
         Bundle args = new Bundle();
-        args.putLong(ROOM_ID_KEY, roomId);
 
-        ConfigureRoomDialog fragment = new ConfigureRoomDialog();
+        ConfigureRoomDialog     fragment                = new ConfigureRoomDialog();
+        RoomConfigurationHolder roomConfigurationHolder = new RoomConfigurationHolder();
+        if (roomId != -1) {
+            roomConfigurationHolder.setId(roomId);
+        }
+        fragment.setConfiguration(roomConfigurationHolder);
+        fragment.setTargetFragment(targetFragment, 0);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,17 +75,31 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected boolean initializeFromExistingData(Bundle arguments) {
-        if (arguments != null && arguments.containsKey(ROOM_ID_KEY)) {
+        Long roomId = getConfiguration().getId();
+
+        if (roomId != null) {
             // init dialog using existing receiver
-            roomId = arguments.getLong(ROOM_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment(), roomId));
+            try {
+                List<Room> rooms = DatabaseHandler.getAllRooms();
+                Room       room  = DatabaseHandler.getRoom(roomId);
+
+                getConfiguration().setExistingRooms(rooms);
+
+                getConfiguration().setRoom(room);
+                getConfiguration().setName(room.getName());
+                getConfiguration().setReceivers(room.getReceivers());
+                getConfiguration().setAssociatedGateways(room.getAssociatedGateways());
+
+            } catch (Exception e) {
+                Timber.e(e);
+            }
+
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return true;
         } else {
             // Create the adapter that will return a fragment
             // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(),
-                    getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
@@ -90,13 +111,13 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .room_will_be_gone_forever)
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                .setMessage(R.string.room_will_be_gone_forever)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteRoom(roomId);
+                            DatabaseHandler.deleteRoom(getConfiguration().getId());
 
                             // notify rooms fragment
                             RoomsFragment.notifyRoomChanged();
@@ -109,8 +130,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
                             // update wear data
                             UtilityService.forceWearDataUpdate(getActivity());
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                    R.string.room_deleted, Snackbar.LENGTH_LONG);
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(getActivity(), e);
                         }
@@ -118,30 +138,22 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
                         // close dialog
                         getDialog().dismiss();
                     }
-                }).setNeutralButton(android.R.string.cancel, null).show();
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
-        private ConfigurationDialogTabbed parentDialog;
-        private Context context;
-        private long roomId;
-        private ConfigurationDialogTabbedSummaryFragment summaryFragment;
-        private Fragment targetFragment;
+        private Context                                            context;
+        private ConfigurationDialogTabbed<RoomConfigurationHolder> parentDialog;
+        private ConfigurationDialogTabbedSummaryFragment           summaryFragment;
+        private Fragment                                           targetFragment;
 
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment) {
+        public CustomTabAdapter(ConfigurationDialogTabbed<RoomConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.context = parentDialog.getActivity();
-            this.roomId = -1;
-            this.targetFragment = targetFragment;
-        }
-
-        public CustomTabAdapter(ConfigurationDialogTabbed parentDialog, FragmentManager fm, Fragment targetFragment, long id) {
-            super(fm);
-            this.parentDialog = parentDialog;
-            this.context = parentDialog.getActivity();
-            this.roomId = id;
             this.targetFragment = targetFragment;
         }
 
@@ -178,12 +190,6 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed {
                     break;
                 default:
                     break;
-            }
-
-            if (fragment != null && roomId != -1) {
-                Bundle bundle = new Bundle();
-                bundle.putLong(ROOM_ID_KEY, roomId);
-                fragment.setArguments(bundle);
             }
 
             return fragment;
