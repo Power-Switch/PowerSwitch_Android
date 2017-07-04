@@ -154,7 +154,7 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
                     break;
 
                 case Timer.EXECUTION_TYPE_WEEKDAY:
-                    timer = new WeekdayTimer(0,
+                    timer = new WeekdayTimer(getConfiguration().getId(),
                             getConfiguration().isActive(),
                             getConfiguration().getName(),
                             getConfiguration().getExecutionTime(),

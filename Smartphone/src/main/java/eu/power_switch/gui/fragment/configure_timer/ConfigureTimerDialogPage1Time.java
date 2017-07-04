@@ -74,9 +74,8 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        initializeTimerData();
 
-        updateRandomizerValue(0);
+        initializeTimerData();
 
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
