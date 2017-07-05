@@ -84,6 +84,11 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
 
         if (geofence != null) {
             // init dialog using existing geofence
+            getConfiguration().setName(geofence.getName());
+            getConfiguration().setLocation(geofence.getCenterLocation());
+            getConfiguration().setRadius(geofence.getRadius());
+            getConfiguration().setEnterActions(geofence.getActions(Geofence.EventType.ENTER));
+            getConfiguration().setExitActions(geofence.getActions(Geofence.EventType.EXIT));
 
             setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), (RecyclerViewFragment) getTargetFragment()));
             return true;

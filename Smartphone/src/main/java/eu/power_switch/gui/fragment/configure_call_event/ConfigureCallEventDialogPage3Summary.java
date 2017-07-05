@@ -31,6 +31,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,6 +54,7 @@ import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
+import eu.power_switch.shared.event.ConfigurationChangedEvent;
 
 /**
  * Created by Markus on 05.04.2016.
@@ -78,7 +82,7 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
                 if (LocalBroadcastConstants.INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED.equals(intent.getAction())) {
                     currentPhoneNumbers = intent.getStringArrayListExtra(ConfigureCallEventDialogPage1Contacts.KEY_PHONE_NUMBERS);
                 } else if (LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED.equals(intent.getAction())) {
-                    currentActions = (ArrayList<Action>) intent.getSerializableExtra(ConfigureCallEventDialogPage2Actions.KEY_ACTIONS);
+                    currentActions = (ArrayList<Action>) intent.getSerializableExtra("actions");
                 }
 
                 updateUi();
@@ -112,6 +116,12 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    public void onConfigurationChanged(ConfigurationChangedEvent e) {
+        updateUi();
     }
 
     private void updateUi() {

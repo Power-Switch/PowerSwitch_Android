@@ -50,7 +50,7 @@ import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.shared.action.Action;
-import eu.power_switch.shared.event.CustomGeofenceChangedEvent;
+import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import eu.power_switch.shared.permission.PermissionHelper;
 
 /**
@@ -93,7 +93,7 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
-    public void onConfigurationChanged(CustomGeofenceChangedEvent customGeofenceChangedEvent) {
+    public void onConfigurationChanged(ConfigurationChangedEvent e) {
         updateUi();
     }
 
@@ -195,8 +195,7 @@ public class ConfigureGeofenceDialogPage4Summary extends ConfigurationDialogPage
                 if (apartment.getGeofence() == null) {
                     updatedApartment = new Apartment(apartment.getId(),
                             apartment.isActive(),
-                            apartment.getName(),
-                            apartment.getAssociatedGateways(), new Geofence(-1L,
+                            apartment.getName(), apartment.getAssociatedGateways(), new Geofence(-1L,
                                     isLocationPermissionAvailable,
                                     apartment.getName(),
                             getConfiguration().getLocation(),

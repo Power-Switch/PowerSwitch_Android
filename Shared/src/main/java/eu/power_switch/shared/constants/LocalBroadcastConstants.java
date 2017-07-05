@@ -27,10 +27,6 @@ public class LocalBroadcastConstants {
 
     // LocalBroadcastConstants
 
-    public static final String INTENT_GEOFENCE_ENTER_ACTION_ADDED    = "eu.power_switch.geofence_enter_action_added";
-    public static final String INTENT_GEOFENCE_ENTER_ACTIONS_CHANGED = "eu.power_switch.geofence_enter_actions_changed";
-    public static final String INTENT_GEOFENCE_EXIT_ACTION_ADDED     = "eu.power_switch.geofence_exit_action_added";
-    public static final String INTENT_GEOFENCE_EXIT_ACTIONS_CHANGED  = "eu.power_switch.geofence_exit_actions_changed";
 
     public static final String INTENT_CALL_EVENT_PHONE_NUMBERS_CHANGED = "eu.power_switch.call_event_phone_numbers_changed";
     public static final String INTENT_CALL_EVENT_ACTIONS_CHANGED       = "eu.power_switch.call_event_actions_changed";

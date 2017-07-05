@@ -125,6 +125,8 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
             }
         });
 
+        updateUi();
+
         checkValidity();
 
         return rootView;
@@ -134,6 +136,7 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
     protected int getLayoutRes() {
         return R.layout.dialog_fragment_configure_timer_page_1;
     }
+
 
     private void initializeTimerData() {
         Timer timer = getConfiguration().getTimer();
@@ -145,11 +148,14 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
                 timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
                 timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
 
-                updateRandomizerValue(getConfiguration().getRandomizerValue());
             } catch (Exception e) {
                 StatusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
+    }
+
+    private void updateUi() {
+        updateRandomizerValue(getConfiguration().getRandomizerValue());
     }
 
     private String getCurrentName() {

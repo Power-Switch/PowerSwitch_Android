@@ -85,9 +85,6 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
     private MapViewHandler                   mapViewHandler;
     private eu.power_switch.gui.map.Geofence geofenceView;
 
-    private double currentGeofenceRadius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
-    private Bitmap currentSnapshot;
-
     private boolean cameraChangedBySystem = true;
     private boolean isFirstTimeMapInit    = true;
 
@@ -135,21 +132,24 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                     @Override
                     protected void onPostExecute(AsyncTaskResult<LatLng> result) {
                         if (result.isSuccess()) {
+                            LatLng location = result.getResult()
+                                    .get(0);
+
+                            if (location == null) {
+                                Timber.w("Location is null, ignoring");
+                                return;
+                            }
+
                             searchAddressTextInputLayout.setError(null);
 
                             if (geofenceView == null) {
-                                geofenceView = mapViewHandler.addGeofence(result.getResult()
-                                        .get(0), currentGeofenceRadius);
+                                geofenceView = mapViewHandler.addGeofence(location, getConfiguration().getRadius());
                             } else {
-                                geofenceView.setCenter(result.getResult()
-                                        .get(0));
-                                geofenceView.setRadius(currentGeofenceRadius);
+                                geofenceView.setCenter(location);
+                                geofenceView.setRadius(getConfiguration().getRadius());
                             }
 
                             cameraChangedBySystem = true;
-
-                            LatLng location = result.getResult()
-                                    .get(0);
                             mapViewHandler.moveCamera(location, 14, true);
 
                             findAddress(location);
@@ -170,7 +170,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
             }
         });
 
-        geofenceRadiusEditText.setText(String.valueOf((int) currentGeofenceRadius));
+        geofenceRadiusEditText.setText(String.valueOf((int) getConfiguration().getRadius()));
         geofenceRadiusEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -199,7 +199,7 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
         });
 
         geofenceRadiusSeekbar.setMax(2000);
-        geofenceRadiusSeekbar.setProgress((int) currentGeofenceRadius);
+        geofenceRadiusSeekbar.setProgress((int) getConfiguration().getRadius());
         geofenceRadiusSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -282,7 +282,9 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
     }
 
     private void updateGeofenceRadius(double radius) {
-        currentGeofenceRadius = radius;
+        getConfiguration().setRadius(radius);
+
+        notifyConfigurationChanged();
 
         if (geofenceView != null) {
             geofenceView.setRadius(radius);
@@ -320,10 +322,10 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                 Timber.d(latLng.toString());
 
                 if (geofenceView == null) {
-                    geofenceView = mapViewHandler.addGeofence(latLng, currentGeofenceRadius);
+                    geofenceView = mapViewHandler.addGeofence(latLng, getConfiguration().getRadius());
                 } else {
                     geofenceView.setCenter(latLng);
-                    geofenceView.setRadius(currentGeofenceRadius);
+                    geofenceView.setRadius(getConfiguration().getRadius());
                 }
 
                 findAddress(latLng);
@@ -425,6 +427,8 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
                             .get(0);
                     searchAddressEditText.setText(firstMatch);
                     getConfiguration().setName(firstMatch);
+
+                    notifyConfigurationChanged();
                 } else {
                     searchAddressEditText.setText("");
                 }
@@ -441,13 +445,13 @@ public class ConfigureGeofenceDialogPage1Location extends ConfigurationDialogPag
             @Override
             public void onSnapshotReady(Bitmap bitmap) {
                 Timber.d("Snapshot Ready");
-                currentSnapshot = bitmap;
+                getConfiguration().setSnapshot(bitmap);
 
                 try {
                     if (isFirstTimeMapInit) {
                         isFirstTimeMapInit = false;
                     } else {
-                        updateConfiguration(getConfiguration().getName(), getCurrentLocation(), currentGeofenceRadius, currentSnapshot);
+                        updateConfiguration(getConfiguration().getName(), getCurrentLocation(), getConfiguration().getRadius(), bitmap);
                     }
                 } catch (Exception e) {
                     Timber.e(e);

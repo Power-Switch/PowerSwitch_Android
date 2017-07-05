@@ -67,6 +67,8 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
         getConfiguration().setExecutionInterval(executionInterval);
         getConfiguration().setExecutionDays(executionDays);
         getConfiguration().setExecutionType(executionType);
+
+        notifyConfigurationChanged();
     }
 
     @Nullable

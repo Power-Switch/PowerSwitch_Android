@@ -11,6 +11,7 @@ import java.util.List;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
 import eu.power_switch.shared.action.Action;
+import eu.power_switch.shared.constants.GeofenceConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,7 +30,7 @@ public class GeofenceConfigurationHolder extends ConfigurationHolder {
 
     private LatLng location;
 
-    private double radius = -1;
+    private double radius = GeofenceConstants.DEFAULT_GEOFENCE_RADIUS;
 
     private Bitmap snapshot;
 

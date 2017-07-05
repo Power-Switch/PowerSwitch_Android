@@ -162,6 +162,10 @@ public class MapViewHandler implements OnMapReadyCallback {
      * @return Geofence
      */
     public Geofence addGeofence(LatLng latLng, double radius) {
+        if (latLng == null) {
+            return null;
+        }
+
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
                 .draggable(true);

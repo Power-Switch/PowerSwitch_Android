@@ -56,8 +56,6 @@ import eu.power_switch.shared.event.CallEventActionAddedEvent;
  */
 public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPage {
 
-    public static final String KEY_ACTIONS = "actions";
-
     // TODO: exchange static variables for non-static ones and pass added action through intent.extra instead
     private static ArrayList<Action> actions = new ArrayList<>();
     private static ActionRecyclerViewAdapter actionRecyclerViewAdapter;
@@ -74,7 +72,7 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
      */
     public static void sendActionsChangedBroadcast(Context context, ArrayList<Action> actions) {
         Intent intent = new Intent(LocalBroadcastConstants.INTENT_CALL_EVENT_ACTIONS_CHANGED);
-        intent.putExtra(KEY_ACTIONS, actions);
+        intent.putExtra("actions", actions);
 
         LocalBroadcastManager.getInstance(context)
                 .sendBroadcast(intent);
