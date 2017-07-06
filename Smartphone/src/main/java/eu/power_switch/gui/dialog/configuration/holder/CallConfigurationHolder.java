@@ -16,22 +16,31 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.dialog.configuration;
+package eu.power_switch.gui.dialog.configuration.holder;
+
+import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * Created by Markus on 29.01.2016.
+ * Created by Markus on 04.07.2017.
  */
-public interface ConfigurationDialogTabbedSummaryFragment {
+@EqualsAndHashCode(callSuper = true)
+@Data
+public class CallConfigurationHolder extends ConfigurationHolder {
 
-    /**
-     * This method is called when the current configuration of a ConfigurationDialog shall be saved to database
-     */
-    void saveCurrentConfigurationToDatabase() throws Exception;
+    @Override
+    public boolean isValid() {
 
-    /**
-     * Checks the Setup page for validity
-     *
-     * @return true if valid, false otherwise
-     */
-    boolean checkSetupValidity() throws Exception;
+        // TODO:
+
+//        if (currentPhoneNumbers == null || currentPhoneNumbers.isEmpty()) {
+//            return false;
+//        }
+//
+//        return !(currentActions == null || currentActions.isEmpty());
+
+        return true;
+    }
+
 }

@@ -27,12 +27,13 @@ import eu.power_switch.obj.button.OnButton;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class RC3600 extends Receiver implements AutoPairReceiver {
 
-    private static final Brand BRAND = Brand.BRENNENSTUHL;
+    private static final Brand  BRAND = Brand.BRENNENSTUHL;
     private static final String MODEL = Receiver.getModelName(RC3600.class.getCanonicalName());
 
     private long seed = -1;

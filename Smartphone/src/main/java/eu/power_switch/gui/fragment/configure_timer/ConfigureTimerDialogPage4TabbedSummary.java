@@ -20,7 +20,6 @@ package eu.power_switch.gui.fragment.configure_timer;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,22 +32,16 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
-import eu.power_switch.gui.fragment.TimersFragment;
 import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.event.ConfigurationChangedEvent;
-import eu.power_switch.timer.IntervalTimer;
-import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
 
 /**
  * Created by Markus on 12.09.2015.
  */
-public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogPage<TimerConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogPage<TimerConfigurationHolder> {
 
     @BindView(R.id.textView_name)
     TextView textViewName;
@@ -64,7 +57,6 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        checkSetupValidity();
         updateUi();
 
         return rootView;
@@ -136,57 +128,6 @@ public class ConfigureTimerDialogPage4TabbedSummary extends ConfigurationDialogP
             }
         }
         textViewAction.setText(actionText);
-    }
-
-    @Override
-    public void saveCurrentConfigurationToDatabase() {
-        try {
-            Timer timer   = null;
-            long  timerId = -1;
-            if (getConfiguration().getTimer() != null) {
-                timerId = getConfiguration().getTimer()
-                        .getId();
-            }
-            switch (getConfiguration().getExecutionType()) {
-                case Timer.EXECUTION_TYPE_INTERVAL:
-                    timer = new IntervalTimer(timerId,
-                            getConfiguration().isActive(),
-                            getConfiguration().getName(),
-                            getConfiguration().getExecutionTime(),
-                            getConfiguration().getRandomizerValue(),
-                            getConfiguration().getExecutionInterval(),
-                            getConfiguration().getActions());
-                    break;
-
-                case Timer.EXECUTION_TYPE_WEEKDAY:
-                    timer = new WeekdayTimer(timerId,
-                            getConfiguration().isActive(),
-                            getConfiguration().getName(),
-                            getConfiguration().getExecutionTime(),
-                            getConfiguration().getRandomizerValue(),
-                            getConfiguration().getExecutionDays(),
-                            getConfiguration().getActions());
-                    break;
-            }
-
-            if (timer != null) {
-                if (getConfiguration().getTimer() == null) {
-                    DatabaseHandler.addTimer(timer);
-                } else {
-                    DatabaseHandler.updateTimer(timer);
-                }
-            }
-
-            TimersFragment.notifyTimersChanged();
-            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
-    }
-
-    @Override
-    public boolean checkSetupValidity() {
-        return true;
     }
 
 }

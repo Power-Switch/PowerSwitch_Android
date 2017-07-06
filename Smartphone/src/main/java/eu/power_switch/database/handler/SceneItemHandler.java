@@ -21,7 +21,6 @@ package eu.power_switch.database.handler;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -52,7 +51,7 @@ abstract class SceneItemHandler {
      * @param sceneId ID of Scene the SceneItems will be associated with
      * @param items   list of SceneItems
      */
-    protected static void add(Long sceneId, ArrayList<SceneItem> items) throws Exception {
+    protected static void add(Long sceneId, List<SceneItem> items) throws Exception {
         for (SceneItem item : items) {
             add(sceneId, item);
         }

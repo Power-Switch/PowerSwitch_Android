@@ -51,6 +51,8 @@ import eu.power_switch.shared.event.ActionAddedEvent;
  */
 public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialogPage<GeofenceConfigurationHolder> {
 
+    private static final int REQUEST_CODE = 1;
+
     @BindView(R.id.add_action)
     FloatingActionButton addActionFAB;
     @BindView(R.id.recyclerview_list_of_actions)
@@ -90,7 +92,7 @@ public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialo
         addActionFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddActionDialog addActionDialog = AddActionDialog.newInstance(fragment);
+                AddActionDialog addActionDialog = AddActionDialog.newInstance(fragment, REQUEST_CODE);
                 addActionDialog.show(getActivity().getSupportFragmentManager(), null);
             }
         });
@@ -136,6 +138,11 @@ public class ConfigureGeofenceDialogPage2EnterActions extends ConfigurationDialo
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
     public void onActionAdded(ActionAddedEvent e) {
+        if (e.getRequestCode() != REQUEST_CODE) {
+            // ignore event of other view
+            return;
+        }
+
         addAction(e.getAction());
     }
 

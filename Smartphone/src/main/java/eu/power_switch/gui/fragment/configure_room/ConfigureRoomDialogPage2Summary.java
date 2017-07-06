@@ -21,7 +21,6 @@ package eu.power_switch.gui.fragment.configure_room;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,24 +38,18 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
-import eu.power_switch.gui.fragment.main.RoomsFragment;
-import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.wear.service.UtilityService;
-import eu.power_switch.widget.provider.RoomWidgetProvider;
 import timber.log.Timber;
 
 /**
  * Dialog to edit a Room
  */
-public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage<RoomConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage<RoomConfigurationHolder> {
 
     @BindView(R.id.checkbox_use_custom_gateway_selection)
     CheckBox     checkBoxUseCustomGatewaySelection;
@@ -268,41 +261,6 @@ public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage<Roo
         }
 
         return checkedGateways;
-    }
-
-    /**
-     * Checks the Setup page for validity
-     *
-     * @return true if valid, false otherwise
-     */
-    @Override
-    public boolean checkSetupValidity() {
-        return true;
-    }
-
-    @Override
-    public void saveCurrentConfigurationToDatabase() throws Exception {
-        DatabaseHandler.updateRoom(getConfiguration().getRoom()
-                .getId(), getConfiguration().getName(), getCheckedGateways());
-
-        // save receiver order
-        List<Receiver> receivers = getConfiguration().getReceivers();
-        for (int position = 0; position < receivers.size(); position++) {
-            Receiver receiver = receivers.get(position);
-            DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
-        }
-
-        RoomsFragment.notifyRoomChanged();
-        // scenes could change too if room was used in a scene
-        ScenesFragment.notifySceneChanged();
-
-        // update room widgets
-        RoomWidgetProvider.forceWidgetUpdate(getActivity());
-
-        // update wear data
-        UtilityService.forceWearDataUpdate(getActivity());
-
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
     }
 
 }

@@ -126,17 +126,12 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
     protected static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment               summaryFragment;
         private Fragment                                               targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return summaryFragment;
         }
 
         @Override
@@ -158,10 +153,11 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage1Location.class, parentDialog);
                     break;
                 case 1:
@@ -172,13 +168,10 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                     break;
                 case 3:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage4Summary.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
-
-                    summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
-                    break;
-                default:
                     break;
             }
+
+            fragment.setTargetFragment(targetFragment, 0);
 
             return fragment;
         }

@@ -38,7 +38,9 @@ import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage1Tim
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage2Days;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage3Action;
 import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4TabbedSummary;
+import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
+import eu.power_switch.timer.WeekdayTimer;
 import timber.log.Timber;
 
 /**
@@ -111,9 +113,47 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
     }
 
     @Override
-    protected void saveCurrentConfigurationToDatabase() {
-        Timber.d("Saving timer");
-        super.saveCurrentConfigurationToDatabase();
+    protected void saveConfiguration() throws Exception {
+        Timber.d("Saving Timer...");
+
+        Timer timer   = null;
+        long  timerId = -1;
+        if (getConfiguration().getTimer() != null) {
+            timerId = getConfiguration().getTimer()
+                    .getId();
+        }
+        switch (getConfiguration().getExecutionType()) {
+            case Timer.EXECUTION_TYPE_INTERVAL:
+                timer = new IntervalTimer(timerId,
+                        getConfiguration().isActive(),
+                        getConfiguration().getName(),
+                        getConfiguration().getExecutionTime(),
+                        getConfiguration().getRandomizerValue(),
+                        getConfiguration().getExecutionInterval(),
+                        getConfiguration().getActions());
+                break;
+
+            case Timer.EXECUTION_TYPE_WEEKDAY:
+                timer = new WeekdayTimer(timerId,
+                        getConfiguration().isActive(),
+                        getConfiguration().getName(),
+                        getConfiguration().getExecutionTime(),
+                        getConfiguration().getRandomizerValue(),
+                        getConfiguration().getExecutionDays(),
+                        getConfiguration().getActions());
+                break;
+        }
+
+        if (timer != null) {
+            if (getConfiguration().getTimer() == null) {
+                DatabaseHandler.addTimer(timer);
+            } else {
+                DatabaseHandler.updateTimer(timer);
+            }
+        }
+
+        TimersFragment.notifyTimersChanged();
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -146,17 +186,12 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<TimerConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment            summaryFragment;
         private Fragment                                            targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<TimerConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return summaryFragment;
         }
 
         @Override
@@ -178,10 +213,11 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureTimerDialogPage1Time.class, parentDialog);
                     break;
                 case 1:
@@ -192,9 +228,10 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                     break;
                 case 3:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureTimerDialogPage4TabbedSummary.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
-                    summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
+                    break;
             }
+
+            fragment.setTargetFragment(targetFragment, 0);
 
             return fragment;
         }

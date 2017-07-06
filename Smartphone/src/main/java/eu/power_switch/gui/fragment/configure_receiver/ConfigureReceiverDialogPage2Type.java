@@ -48,9 +48,8 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.event.ReceiverBrandOrModelChangedEvent;
-
-import static eu.power_switch.obj.receiver.Receiver.Brand;
 
 /**
  * "Type" Fragment used in Configure Receiver Dialog
@@ -319,7 +318,7 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
         getConfiguration().setModel(getSelectedModel());
 
         EventBus.getDefault()
-                .post(new ReceiverBrandOrModelChangedEvent(getConfiguration().getModel()));
+                .post(new ReceiverBrandOrModelChangedEvent(getConfiguration().getModel(), getSelectedBrand()));
 
         notifyConfigurationChanged();
     }

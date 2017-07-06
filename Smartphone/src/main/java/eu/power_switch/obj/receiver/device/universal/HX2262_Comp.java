@@ -32,13 +32,14 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class HX2262_Comp extends Receiver implements AutoPairReceiver {
 
-    private static final Brand BRAND = Brand.UNIVERSAL;
-    static String MODEL = Receiver.getModelName(HX2262_Comp.class.getCanonicalName());
+    private static final Brand  BRAND = Brand.UNIVERSAL;
+    static               String MODEL = Receiver.getModelName(HX2262_Comp.class.getCanonicalName());
 
     private String tx433version = "1,";
 

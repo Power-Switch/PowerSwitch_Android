@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -56,26 +55,21 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
-import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.event.SceneSelectedReceiversChangedEvent;
-import eu.power_switch.wear.service.UtilityService;
-import eu.power_switch.widget.provider.SceneWidgetProvider;
 
 /**
  * "Setup" Fragment used in Configure Scene Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPage<SceneConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPage<SceneConfigurationHolder> {
 
     @BindView(R.id.recyclerview_list_of_receivers)
     RecyclerView recyclerViewSelectedReceivers;
@@ -96,8 +90,6 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
         recyclerViewSelectedReceivers.setLayoutManager(layoutManager);
 
         initializeSceneData();
-
-        checkSetupValidity();
 
         createTutorial();
 
@@ -200,41 +192,6 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
 
     private void updateSceneItemList() {
         customRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void saveCurrentConfigurationToDatabase() {
-        Scene newScene = new Scene(getConfiguration().getScene()
-                .getId(),
-                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
-                getConfiguration().getName());
-        newScene.addSceneItems(customRecyclerViewAdapter.getSceneItems());
-
-        try {
-            if (getConfiguration().getScene() == null) {
-                DatabaseHandler.addScene(newScene);
-            } else {
-                DatabaseHandler.updateScene(newScene);
-            }
-
-            // notify scenes fragment
-            ScenesFragment.notifySceneChanged();
-
-            // update scene widgets
-            SceneWidgetProvider.forceWidgetUpdate(getActivity());
-
-            // update wear data
-            UtilityService.forceWearDataUpdate(getActivity());
-
-            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
-    }
-
-    @Override
-    public boolean checkSetupValidity() {
-        return true;
     }
 
     private class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder> {

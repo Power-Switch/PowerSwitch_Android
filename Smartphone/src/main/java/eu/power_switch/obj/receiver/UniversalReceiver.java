@@ -25,6 +25,7 @@ import java.util.List;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 import timber.log.Timber;

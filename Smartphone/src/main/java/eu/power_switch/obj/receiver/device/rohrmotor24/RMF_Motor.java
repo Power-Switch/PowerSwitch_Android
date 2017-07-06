@@ -33,6 +33,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
@@ -41,8 +42,8 @@ import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
  */
 public class RMF_Motor extends Receiver implements AutoPairReceiver {
 
-    private static final Brand BRAND = Brand.ROHRMOTOR24;
-    static String MODEL = Receiver.getModelName(RMF_Motor.class.getCanonicalName());
+    private static final Brand  BRAND = Brand.ROHRMOTOR24;
+    static               String MODEL = Receiver.getModelName(RMF_Motor.class.getCanonicalName());
 
     private String headAutoPairConnAir = "TXP:0,0,10,10920,91,41,57,18,";
     private String headAutoPairITGW = "TXP:0,0,10,10920,91,42,0,57,18,";

@@ -28,11 +28,14 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
@@ -49,8 +52,10 @@ import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.DipReceiver;
+import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.ReceiverWidgetProvider;
@@ -158,6 +163,86 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
     }
 
     @Override
+    protected void saveConfiguration() throws Exception {
+        Timber.d("Saving Receiver...");
+        Apartment apartment    = getConfiguration().getParentApartment();
+        Room      room         = apartment.getRoom(getConfiguration().getParentRoomName());
+        String    receiverName = getConfiguration().getName();
+        String    modelName    = getConfiguration().getModel();
+
+        String        className = Receiver.receiverMap.get(modelName);
+        Receiver.Type type      = ReceiverReflectionMagic.getType(className);
+
+        Constructor<?> constructor = ReceiverReflectionMagic.getConstructor(className, type);
+
+
+        long receiverId = -1;
+        if (getConfiguration().getReceiver() != null) {
+            receiverId = getConfiguration().getReceiver()
+                    .getId();
+        }
+
+        Receiver receiver = null;
+        switch (type) {
+            case DIPS:
+                LinkedList<Boolean> dipValues = new LinkedList<>();
+                for (DipSwitch dipSwitch : getConfiguration().getDips()) {
+                    dipValues.add(dipSwitch.isChecked());
+                }
+
+                receiver = (Receiver) constructor.newInstance(getActivity(),
+                        receiverId,
+                        receiverName,
+                        dipValues,
+                        room.getId(),
+                        getConfiguration().getGateways());
+                break;
+            case MASTER_SLAVE:
+                receiver = (Receiver) constructor.newInstance(getActivity(),
+                        receiverId,
+                        receiverName,
+                        getConfiguration().getChannelMaster(),
+                        getConfiguration().getChannelSlave(),
+                        room.getId(),
+                        getConfiguration().getGateways());
+                break;
+            case UNIVERSAL:
+                receiver = new UniversalReceiver(getActivity(),
+                        receiverId,
+                        getConfiguration().getName(),
+                        getConfiguration().getUniversalButtons(),
+                        room.getId(),
+                        getConfiguration().getGateways());
+                break;
+            case AUTOPAIR:
+                receiver = (Receiver) constructor.newInstance(getActivity(),
+                        receiverId,
+                        receiverName,
+                        getConfiguration().getSeed(),
+                        room.getId(),
+                        getConfiguration().getGateways());
+                break;
+        }
+
+        receiver.setRepetitionAmount(getConfiguration().getRepetitionAmount());
+
+        if (receiverId == -1) {
+            DatabaseHandler.addReceiver(receiver);
+        } else {
+            DatabaseHandler.updateReceiver(receiver);
+        }
+
+        RoomsFragment.notifyReceiverChanged();
+        // scenes could change too if room was used in a scene
+        ScenesFragment.notifySceneChanged();
+
+        // update wear data
+        UtilityService.forceWearDataUpdate(getActivity());
+
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
+    }
+
+    @Override
     protected void deleteExistingConfigurationFromDatabase() {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
                 .setMessage(R.string.receiver_will_be_gone_forever)
@@ -195,17 +280,12 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<ReceiverConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment               summaryFragment;
         private Fragment                                               targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<ReceiverConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return summaryFragment;
         }
 
         @Override
@@ -229,10 +309,11 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage1Name.class, parentDialog);
                     break;
                 case 1:
@@ -246,13 +327,10 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                     break;
                 case 4:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage5TabbedSummary.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
-
-                    summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
-                    break;
-                default:
                     break;
             }
+
+            fragment.setTargetFragment(targetFragment, 0);
 
             return fragment;
         }

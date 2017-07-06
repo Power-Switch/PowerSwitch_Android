@@ -29,6 +29,9 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
+import java.util.List;
+
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -41,7 +44,11 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActions;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4Summary;
+import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
+import eu.power_switch.obj.Apartment;
+import eu.power_switch.shared.action.Action;
+import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 
 /**
@@ -106,6 +113,109 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
     }
 
     @Override
+    protected void saveConfiguration() throws Exception {
+        Timber.d("Saving Geofence...");
+
+        HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
+        actionsMap.put(Geofence.EventType.ENTER, getConfiguration().getEnterActions());
+        actionsMap.put(Geofence.EventType.EXIT, getConfiguration().getExitActions());
+
+        boolean isLocationPermissionAvailable = PermissionHelper.isLocationPermissionAvailable(getContext());
+
+        Long apartmentId = getConfiguration().getApartmentId();
+        if (apartmentId == null) {
+            // custom geofence
+            Geofence existingGeofence = getConfiguration().getGeofence();
+            if (existingGeofence == null) {
+                Geofence newGeofence = new Geofence(-1L,
+                        isLocationPermissionAvailable,
+                        getConfiguration().getName(),
+                        getConfiguration().getLocation(),
+                        getConfiguration().getRadius(),
+                        getConfiguration().getSnapshot(),
+                        actionsMap,
+                        Geofence.STATE_NONE);
+                long geofenceId = DatabaseHandler.addGeofence(newGeofence);
+                // update ID of Geofence
+                newGeofence.setId(geofenceId);
+
+                geofenceApiHandler.addGeofence(newGeofence);
+            } else {
+                Geofence updatedGeofence = new Geofence(getConfiguration().getGeofence()
+                        .getId(),
+                        existingGeofence.isActive(),
+                        getConfiguration().getName(),
+                        getConfiguration().getLocation(),
+                        getConfiguration().getRadius(),
+                        getConfiguration().getSnapshot(),
+                        actionsMap,
+                        existingGeofence.getState());
+                DatabaseHandler.updateGeofence(updatedGeofence);
+
+                geofenceApiHandler.removeGeofence(existingGeofence.getId());
+                if (existingGeofence.isActive()) {
+                    geofenceApiHandler.addGeofence(updatedGeofence);
+                }
+            }
+        } else {
+            // apartment geofence
+
+            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+            Apartment updatedApartment;
+
+            if (apartment.getGeofence() == null) {
+                updatedApartment = new Apartment(apartment.getId(),
+                        apartment.isActive(),
+                        apartment.getName(),
+                        apartment.getAssociatedGateways(),
+                        new Geofence(-1L,
+                                isLocationPermissionAvailable,
+                                apartment.getName(),
+                                getConfiguration().getLocation(),
+                                getConfiguration().getRadius(),
+                                getConfiguration().getSnapshot(),
+                                getConfiguration().getEnterActions(),
+                                getConfiguration().getExitActions(),
+                                Geofence.STATE_NONE));
+            } else {
+                Geofence geofence = apartment.getGeofence();
+                Geofence updatedGeofence = new Geofence(geofence.getId(),
+                        geofence.isActive(),
+                        apartment.getName(),
+                        getConfiguration().getLocation(),
+                        getConfiguration().getRadius(),
+                        getConfiguration().getSnapshot(),
+                        getConfiguration().getEnterActions(),
+                        getConfiguration().getExitActions(),
+                        geofence.getState());
+
+                updatedApartment = new Apartment(apartment.getId(),
+                        apartment.isActive(),
+                        apartment.getName(),
+                        apartment.getAssociatedGateways(),
+                        updatedGeofence);
+
+                geofenceApiHandler.removeGeofence(geofence.getId());
+            }
+
+            // update apartment in database
+            DatabaseHandler.updateApartment(updatedApartment);
+
+            // reload from database to get correct geofence ID
+            apartment = DatabaseHandler.getApartment(apartmentId);
+            if (apartment.getGeofence()
+                    .isActive()) {
+                geofenceApiHandler.addGeofence(apartment.getGeofence());
+            }
+        }
+
+        ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
+        CustomGeofencesFragment.notifyCustomGeofencesChanged();
+
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_saved, Snackbar.LENGTH_LONG);
+    }
+
+    @Override
     protected void deleteExistingConfigurationFromDatabase() {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
                 .
@@ -150,7 +260,6 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
     protected static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment               summaryFragment;
         private RecyclerViewFragment                                   recyclerViewFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<GeofenceConfigurationHolder> parentDialog, FragmentManager fm,
@@ -158,10 +267,6 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
             super(fm);
             this.parentDialog = parentDialog;
             this.recyclerViewFragment = recyclerViewFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return summaryFragment;
         }
 
         @Override
@@ -183,10 +288,11 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage1Location.class, parentDialog);
                     break;
                 case 1:
@@ -197,13 +303,10 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                     break;
                 case 3:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGeofenceDialogPage4Summary.class, parentDialog);
-                    fragment.setTargetFragment(recyclerViewFragment, 0);
-
-                    summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
-                    break;
-                default:
                     break;
             }
+
+            fragment.setTargetFragment(recyclerViewFragment, 0);
 
             return fragment;
         }

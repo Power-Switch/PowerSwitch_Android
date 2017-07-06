@@ -7,6 +7,7 @@ import java.util.List;
 import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.obj.SceneItem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,13 +24,19 @@ public class SceneConfigurationHolder extends ConfigurationHolder {
 
     private List<Room> checkedReceivers;
 
+    private List<SceneItem> sceneItems;
+
     @Override
     public boolean isValid() {
         if (TextUtils.isEmpty(name)) {
             return false;
         }
 
-        if (checkedReceivers.isEmpty()) {
+        if (checkedReceivers == null || checkedReceivers.isEmpty()) {
+            return false;
+        }
+
+        if (sceneItems == null || sceneItems.isEmpty()) {
             return false;
         }
 

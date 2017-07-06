@@ -34,12 +34,13 @@ import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class RC_AAA1000_A_IP44_Outdoor extends Receiver implements DipReceiver {
 
-    private static final Brand BRAND = Brand.BAT;
+    private static final Brand  BRAND = Brand.BAT;
     private static final String MODEL = Receiver.getModelName(RC_AAA1000_A_IP44_Outdoor.class.getCanonicalName());
 
     protected LinkedList<DipSwitch> dipList;

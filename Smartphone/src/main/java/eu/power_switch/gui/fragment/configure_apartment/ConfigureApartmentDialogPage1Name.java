@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,20 +43,17 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHolder;
-import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<ApartmentConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<ApartmentConfigurationHolder> {
 
     @BindView(R.id.apartment_name_text_input_layout)
     TextInputLayout floatingName;
@@ -101,8 +97,6 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
         addGatewaysToLayout();
 
         initializeApartmentData();
-
-        checkSetupValidity();
 
         isInitialized = true;
 
@@ -262,46 +256,4 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
         return checkedGateways;
     }
 
-    @Override
-    public void saveCurrentConfigurationToDatabase() throws Exception {
-        Long apartmentId = getConfiguration().getApartment()
-                .getId();
-        if (apartmentId == null) {
-            boolean isActive = DatabaseHandler.getAllApartmentNames()
-                    .size() <= 0;
-            Apartment newApartment = new Apartment((long) -1,
-                    isActive,
-                    getConfiguration().getName(),
-                    getConfiguration().getAssociatedGateways(),
-                    null);
-
-            long newId = DatabaseHandler.addApartment(newApartment);
-            // set new apartment as active if it is the first and only one
-            if (isActive) {
-                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
-            }
-        } else {
-            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-            if (apartment.getGeofence() != null) {
-                apartment.getGeofence()
-                        .setName(getCurrentName());
-            }
-
-            Apartment updatedApartment = new Apartment(apartmentId,
-                    apartment.isActive(),
-                    getConfiguration().getName(),
-                    getConfiguration().getAssociatedGateways(),
-                    apartment.getGeofence());
-
-            DatabaseHandler.updateApartment(updatedApartment);
-        }
-
-        ApartmentFragment.notifyActiveApartmentChanged(getActivity());
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_saved, Snackbar.LENGTH_LONG);
-    }
-
-    @Override
-    public boolean checkSetupValidity() {
-        return getConfiguration().isValid();
-    }
 }

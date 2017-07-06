@@ -113,9 +113,42 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
     }
 
     @Override
-    protected void saveCurrentConfigurationToDatabase() {
+    protected void saveConfiguration() throws Exception {
         Timber.d("Saving apartment");
-        super.saveCurrentConfigurationToDatabase();
+        Long apartmentId = getConfiguration().getApartment()
+                .getId();
+        if (apartmentId == null) {
+            boolean isActive = DatabaseHandler.getAllApartmentNames()
+                    .size() <= 0;
+            Apartment newApartment = new Apartment((long) -1,
+                    isActive,
+                    getConfiguration().getName(),
+                    getConfiguration().getAssociatedGateways(),
+                    null);
+
+            long newId = DatabaseHandler.addApartment(newApartment);
+            // set new apartment as active if it is the first and only one
+            if (isActive) {
+                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
+            }
+        } else {
+            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+            if (apartment.getGeofence() != null) {
+                apartment.getGeofence()
+                        .setName(getConfiguration().getName());
+            }
+
+            Apartment updatedApartment = new Apartment(apartmentId,
+                    apartment.isActive(),
+                    getConfiguration().getName(),
+                    getConfiguration().getAssociatedGateways(),
+                    apartment.getGeofence());
+
+            DatabaseHandler.updateApartment(updatedApartment);
+        }
+
+        ApartmentFragment.notifyActiveApartmentChanged(getActivity());
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -163,17 +196,12 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment                setupFragment;
         private Fragment                                                targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<ApartmentConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return setupFragment;
         }
 
         @Override
@@ -197,8 +225,6 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                 case 0:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureApartmentDialogPage1Name.class, parentDialog);
                     fragment.setTargetFragment(targetFragment, 0);
-
-                    setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;
             }
 

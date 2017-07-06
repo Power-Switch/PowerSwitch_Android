@@ -32,13 +32,14 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 import timber.log.Timber;
 
 public class CMR1000 extends Receiver implements MasterSlaveReceiver {
 
-    private static final Brand BRAND = Brand.INTERTECHNO;
+    private static final Brand  BRAND = Brand.INTERTECHNO;
     private static final String MODEL = Receiver.getModelName(CMR1000.class.getCanonicalName());
 
     private String tx433version = "1,";

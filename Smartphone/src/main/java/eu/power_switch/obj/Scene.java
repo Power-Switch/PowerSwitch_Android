@@ -19,6 +19,7 @@
 package eu.power_switch.obj;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
@@ -36,7 +37,7 @@ public class Scene {
     /**
      * List containing all SceneItems
      */
-    private ArrayList<SceneItem> sceneItems;
+    private List<SceneItem> sceneItems;
 
     /**
      * ID of this Scene
@@ -102,7 +103,7 @@ public class Scene {
      *
      * @param sceneItems
      */
-    public void addSceneItems(ArrayList<SceneItem> sceneItems) {
+    public void addSceneItems(List<SceneItem> sceneItems) {
         this.sceneItems.addAll(sceneItems);
     }
 

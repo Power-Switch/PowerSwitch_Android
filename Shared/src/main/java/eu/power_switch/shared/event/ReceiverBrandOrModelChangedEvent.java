@@ -1,5 +1,6 @@
 package eu.power_switch.shared.event;
 
+import eu.power_switch.shared.Brand;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -13,5 +14,7 @@ import lombok.Value;
 public class ReceiverBrandOrModelChangedEvent extends EventBusEvent {
 
     String model;
+
+    Brand brand;
 
 }

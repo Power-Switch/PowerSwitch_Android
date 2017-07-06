@@ -33,6 +33,7 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
@@ -41,7 +42,7 @@ import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
  */
 public class RC_AAA3680_A_IP20 extends Receiver implements AutoPairReceiver {
 
-    private static final Brand BRAND = Brand.BAT;
+    private static final Brand  BRAND = Brand.BAT;
     private static final String MODEL = Receiver.getModelName(RC_AAA3680_A_IP20.class.getCanonicalName());
 
     private String headAutoPairConnAir = "TXP:0,0,6,0,505,25,6,14,";

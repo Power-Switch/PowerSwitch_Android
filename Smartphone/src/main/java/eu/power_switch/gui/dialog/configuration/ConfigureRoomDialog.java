@@ -41,6 +41,7 @@ import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Summa
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
+import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.RoomWidgetProvider;
 import timber.log.Timber;
@@ -108,6 +109,32 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
     }
 
     @Override
+    protected void saveConfiguration() throws Exception {
+        Timber.d("Saving Room...");
+        DatabaseHandler.updateRoom(getConfiguration().getRoom()
+                .getId(), getConfiguration().getName(), getConfiguration().getAssociatedGateways());
+
+        // save receiver order
+        List<Receiver> receivers = getConfiguration().getReceivers();
+        for (int position = 0; position < receivers.size(); position++) {
+            Receiver receiver = receivers.get(position);
+            DatabaseHandler.setPositionOfReceiver(receiver.getId(), (long) position);
+        }
+
+        RoomsFragment.notifyRoomChanged();
+        // scenes could change too if room was used in a scene
+        ScenesFragment.notifySceneChanged();
+
+        // update room widgets
+        RoomWidgetProvider.forceWidgetUpdate(getActivity());
+
+        // update wear data
+        UtilityService.forceWearDataUpdate(getActivity());
+
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
+    }
+
+    @Override
     protected void deleteExistingConfigurationFromDatabase() {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
                 .setMessage(R.string.room_will_be_gone_forever)
@@ -146,18 +173,13 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
 
         private Context                                            context;
         private ConfigurationDialogTabbed<RoomConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment           summaryFragment;
         private Fragment                                           targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<RoomConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
-            this.parentDialog = parentDialog;
             this.context = parentDialog.getActivity();
+            this.parentDialog = parentDialog;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return summaryFragment;
         }
 
         @Override
@@ -175,21 +197,19 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage1.class, parentDialog);
                     break;
                 case 1:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage2Summary.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
-
-                    summaryFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
-                    break;
-                default:
                     break;
             }
+
+            fragment.setTargetFragment(targetFragment, 0);
 
             return fragment;
         }

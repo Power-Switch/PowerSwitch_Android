@@ -21,6 +21,7 @@ package eu.power_switch.gui.dialog.configuration;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -43,7 +44,6 @@ import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
-import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import lombok.Getter;
@@ -288,9 +288,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
      */
     protected boolean isValid() {
         try {
-            ConfigurationDialogTabAdapter            customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-            ConfigurationDialogTabbedSummaryFragment setupFragment    = customTabAdapter.getSummaryFragment();
-            return getConfiguration().isValid() && setupFragment.checkSetupValidity();
+            return getConfiguration().isValid();
         } catch (Exception e) {
             Timber.e(e);
             return false;
@@ -363,16 +361,17 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
      * This method is called when the user wants to save the current configuration to database and close the dialog
      * Save the current configuration of your object to database in this method
      */
-    protected void saveCurrentConfigurationToDatabase() {
-        ConfigurationDialogTabAdapter            customTabAdapter = (ConfigurationDialogTabAdapter) getTabAdapter();
-        ConfigurationDialogTabbedSummaryFragment setupFragment    = customTabAdapter.getSummaryFragment();
+    @CallSuper
+    private void saveCurrentConfigurationToDatabase() {
         try {
-            setupFragment.saveCurrentConfigurationToDatabase();
+            saveConfiguration();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }
         getDialog().dismiss();
     }
+
+    protected abstract void saveConfiguration() throws Exception;
 
     /**
      * This method is called when the user wants to delete the existing configuration from database (if one exists) and      * close

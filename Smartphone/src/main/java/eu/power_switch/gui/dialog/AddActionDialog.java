@@ -60,6 +60,8 @@ import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.event.ActionAddedEvent;
+import lombok.Getter;
+import lombok.Setter;
 import timber.log.Timber;
 
 /**
@@ -114,6 +116,10 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
     @BindView(R.id.progressScene)
     ProgressBar progressScene;
 
+    @Getter
+    @Setter
+    private int requestCode;
+
     private Dialog dialog;
 
     private int defaultTextColor;
@@ -133,10 +139,16 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
     private ArrayAdapter<String> sceneSpinnerArrayAdapter;
     private ArrayAdapter<String> apartmentSpinnerArrayAdapter;
 
-    public static AddActionDialog newInstance(@NonNull Fragment targetFragment) {
+    public static AddActionDialog newInstance(@NonNull Fragment targetFragment, int requestCode) {
         AddActionDialog addActionDialog = new AddActionDialog();
         addActionDialog.setTargetFragment(targetFragment, 0);
+        addActionDialog.setRequestCode(requestCode);
         return addActionDialog;
+    }
+
+    public static AddActionDialog newInstance(@NonNull Fragment targetFragment) {
+        return newInstance(targetFragment, -1);
+
     }
 
     @NonNull
@@ -658,7 +670,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
      */
     protected void addCurrentSelection() {
         EventBus.getDefault()
-                .post(new ActionAddedEvent(getCurrentSelection()));
+                .post(new ActionAddedEvent(getRequestCode(), getCurrentSelection()));
     }
 
     @Deprecated

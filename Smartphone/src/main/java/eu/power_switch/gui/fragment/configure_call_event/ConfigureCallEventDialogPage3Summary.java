@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,21 +34,14 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.ConfigureCallEventDialog;
-import eu.power_switch.gui.fragment.phone.CallEventsFragment;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.LocalBroadcastConstants;
@@ -59,7 +51,7 @@ import eu.power_switch.shared.event.ConfigurationChangedEvent;
 /**
  * Created by Markus on 05.04.2016.
  */
-public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPage implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPage {
 
     @BindView(R.id.textView_contacts)
     TextView textViewContacts;
@@ -153,43 +145,6 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
         }
 
         textViewActions.setText(actions);
-    }
-
-    @Override
-    public boolean checkSetupValidity() throws Exception {
-
-        if (currentPhoneNumbers == null || currentPhoneNumbers.isEmpty()) {
-            return false;
-        }
-
-        return !(currentActions == null || currentActions.isEmpty());
-
-    }
-
-    @Override
-    public void saveCurrentConfigurationToDatabase() throws Exception {
-        if (callEventId == -1) {
-            // create new call event
-            Map<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
-            phoneNumbersMap.put(PhoneConstants.CallType.INCOMING, new HashSet<>(currentPhoneNumbers));
-
-            Map<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
-            actionsMap.put(PhoneConstants.CallType.INCOMING, currentActions);
-
-            CallEvent newCallEvent = new CallEvent(-1, true, "", phoneNumbersMap, actionsMap);
-            DatabaseHandler.addCallEvent(newCallEvent);
-        } else {
-            // modify existing call event
-            CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
-
-            callEvent.setPhoneNumbers(PhoneConstants.CallType.INCOMING, new HashSet<>(currentPhoneNumbers));
-            callEvent.setActions(PhoneConstants.CallType.INCOMING, currentActions);
-
-            DatabaseHandler.updateCallEvent(callEvent);
-        }
-
-        CallEventsFragment.notifyCallEventsChanged();
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override

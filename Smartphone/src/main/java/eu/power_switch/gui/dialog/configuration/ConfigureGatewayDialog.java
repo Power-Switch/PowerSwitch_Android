@@ -41,7 +41,14 @@ import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage4Summary;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.obj.gateway.BrematicGWY433;
+import eu.power_switch.obj.gateway.ConnAir;
+import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.obj.gateway.ITGW433;
+import eu.power_switch.obj.gateway.RaspyRFM;
+import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
+import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 import timber.log.Timber;
 
 /**
@@ -110,6 +117,135 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
     }
 
     @Override
+    protected void saveConfiguration() throws Exception {
+        Gateway gateway = getConfiguration().getGateway();
+        if (gateway == null) {
+            Gateway newGateway;
+
+            switch (getConfiguration().getModel()) {
+                case BrematicGWY433.MODEL:
+                    newGateway = new BrematicGWY433((long) -1,
+                            true,
+                            getConfiguration().getName(),
+                            "",
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
+                    break;
+                case ConnAir.MODEL:
+                    newGateway = new ConnAir((long) -1,
+                            true,
+                            getConfiguration().getName(),
+                            "",
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
+                    break;
+                case EZControl_XS1.MODEL:
+                    newGateway = new EZControl_XS1((long) -1,
+                            true,
+                            getConfiguration().getName(),
+                            "",
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
+                    break;
+                case ITGW433.MODEL:
+                    newGateway = new ITGW433((long) -1,
+                            true,
+                            getConfiguration().getName(),
+                            "",
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
+                    break;
+                case RaspyRFM.MODEL:
+                    newGateway = new RaspyRFM((long) -1,
+                            true,
+                            getConfiguration().getName(),
+                            "",
+                            getConfiguration().getLocalAddress(),
+                            getConfiguration().getLocalPort(),
+                            getConfiguration().getWanAddress(),
+                            getConfiguration().getWanPort(),
+                            getConfiguration().getSsids());
+                    break;
+                default:
+                    throw new GatewayUnknownException();
+            }
+
+            try {
+                long id = DatabaseHandler.addGateway(newGateway);
+
+                newGateway.setId(id);
+                for (Long apartmentId : getConfiguration().getApartmentIds()) {
+                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+
+                    List<Gateway> associatedGateways = apartment.getAssociatedGateways();
+                    if (!apartment.isAssociatedWith(id)) {
+                        associatedGateways.add(newGateway);
+                    }
+                    Apartment updatedApartment = new Apartment(apartment.getId(),
+                            apartment.isActive(),
+                            apartment.getName(),
+                            associatedGateways,
+                            apartment.getGeofence());
+                    DatabaseHandler.updateApartment(updatedApartment);
+                }
+
+            } catch (GatewayAlreadyExistsException e) {
+                StatusMessageHandler.showInfoMessage(rootView.getContext(), R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
+            }
+        } else {
+            DatabaseHandler.updateGateway(gateway.getId(),
+                    getConfiguration().getName(),
+                    getConfiguration().getModel(),
+                    getConfiguration().getLocalAddress(),
+                    getConfiguration().getLocalPort(),
+                    getConfiguration().getWanAddress(),
+                    getConfiguration().getWanPort(),
+                    getConfiguration().getSsids());
+            Gateway updatedGateway = DatabaseHandler.getGateway(gateway.getId());
+
+            List<Apartment> apartments = DatabaseHandler.getAllApartments();
+            for (Apartment apartment : apartments) {
+                if (apartment.isAssociatedWith(updatedGateway.getId())) {
+                    if (!getConfiguration().getApartmentIds()
+                            .contains(apartment.getId())) {
+                        for (Gateway currentGateway : apartment.getAssociatedGateways()) {
+                            if (currentGateway.getId()
+                                    .equals(updatedGateway.getId())) {
+                                apartment.getAssociatedGateways()
+                                        .remove(currentGateway);
+                                DatabaseHandler.updateApartment(apartment);
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    if (getConfiguration().getApartmentIds()
+                            .contains(apartment.getId())) {
+                        apartment.getAssociatedGateways()
+                                .add(updatedGateway);
+                        DatabaseHandler.updateApartment(apartment);
+                    }
+                }
+            }
+        }
+
+        GatewaySettingsFragment.notifyGatewaysChanged();
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
+    }
+
+    @Override
     protected void deleteExistingConfigurationFromDatabase() {
         new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
                 .setMessage(R.string.gateway_will_be_gone_forever)
@@ -136,17 +272,12 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<GatewayConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment              setupFragment;
         private Fragment                                              targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<GatewayConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return setupFragment;
         }
 
         @Override
@@ -168,28 +299,25 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage1.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 1:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage2.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 2:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage3.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
                     break;
                 case 3:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureGatewayDialogPage4Summary.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
-
-                    setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
                     break;
             }
+
+            fragment.setTargetFragment(targetFragment, 0);
 
             return fragment;
         }

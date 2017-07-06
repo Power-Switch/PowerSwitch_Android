@@ -20,7 +20,6 @@ package eu.power_switch.gui.fragment.configure_gateway;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,34 +29,20 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.List;
-
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
-import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
-import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.gateway.BrematicGWY433;
-import eu.power_switch.obj.gateway.ConnAir;
-import eu.power_switch.obj.gateway.EZControl_XS1;
-import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.obj.gateway.ITGW433;
-import eu.power_switch.obj.gateway.RaspyRFM;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import eu.power_switch.shared.event.ConfigurationChangedEvent;
-import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
-import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog
  * <p/>
  * Created by Markus on 16.08.2015.
  */
-public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<GatewayConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<GatewayConfigurationHolder> {
 
     @BindView(R.id.textView_name)
     TextView name;
@@ -151,140 +136,6 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<
             }
         }
         associatedApartments.setText(apartmentsText);
-    }
-
-    @Override
-    public boolean checkSetupValidity() {
-        return true;
-    }
-
-    @Override
-    public void saveCurrentConfigurationToDatabase() throws Exception {
-        Gateway gateway = getConfiguration().getGateway();
-        if (gateway == null) {
-            Gateway newGateway;
-
-            switch (getConfiguration().getModel()) {
-                case BrematicGWY433.MODEL:
-                    newGateway = new BrematicGWY433((long) -1,
-                            true,
-                            getConfiguration().getName(),
-                            "",
-                            getConfiguration().getLocalAddress(),
-                            getConfiguration().getLocalPort(),
-                            getConfiguration().getWanAddress(),
-                            getConfiguration().getWanPort(),
-                            getConfiguration().getSsids());
-                    break;
-                case ConnAir.MODEL:
-                    newGateway = new ConnAir((long) -1,
-                            true,
-                            getConfiguration().getName(),
-                            "",
-                            getConfiguration().getLocalAddress(),
-                            getConfiguration().getLocalPort(),
-                            getConfiguration().getWanAddress(),
-                            getConfiguration().getWanPort(),
-                            getConfiguration().getSsids());
-                    break;
-                case EZControl_XS1.MODEL:
-                    newGateway = new EZControl_XS1((long) -1,
-                            true,
-                            getConfiguration().getName(),
-                            "",
-                            getConfiguration().getLocalAddress(),
-                            getConfiguration().getLocalPort(),
-                            getConfiguration().getWanAddress(),
-                            getConfiguration().getWanPort(),
-                            getConfiguration().getSsids());
-                    break;
-                case ITGW433.MODEL:
-                    newGateway = new ITGW433((long) -1,
-                            true,
-                            getConfiguration().getName(),
-                            "",
-                            getConfiguration().getLocalAddress(),
-                            getConfiguration().getLocalPort(),
-                            getConfiguration().getWanAddress(),
-                            getConfiguration().getWanPort(),
-                            getConfiguration().getSsids());
-                    break;
-                case RaspyRFM.MODEL:
-                    newGateway = new RaspyRFM((long) -1,
-                            true,
-                            getConfiguration().getName(),
-                            "",
-                            getConfiguration().getLocalAddress(),
-                            getConfiguration().getLocalPort(),
-                            getConfiguration().getWanAddress(),
-                            getConfiguration().getWanPort(),
-                            getConfiguration().getSsids());
-                    break;
-                default:
-                    throw new GatewayUnknownException();
-            }
-
-            try {
-                long id = DatabaseHandler.addGateway(newGateway);
-
-                newGateway.setId(id);
-                for (Long apartmentId : getConfiguration().getApartmentIds()) {
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-
-                    List<Gateway> associatedGateways = apartment.getAssociatedGateways();
-                    if (!apartment.isAssociatedWith(id)) {
-                        associatedGateways.add(newGateway);
-                    }
-                    Apartment updatedApartment = new Apartment(apartment.getId(),
-                            apartment.isActive(),
-                            apartment.getName(),
-                            associatedGateways,
-                            apartment.getGeofence());
-                    DatabaseHandler.updateApartment(updatedApartment);
-                }
-
-            } catch (GatewayAlreadyExistsException e) {
-                StatusMessageHandler.showInfoMessage(rootView.getContext(), R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
-            }
-        } else {
-            DatabaseHandler.updateGateway(gateway.getId(),
-                    getConfiguration().getName(),
-                    getConfiguration().getModel(),
-                    getConfiguration().getLocalAddress(),
-                    getConfiguration().getLocalPort(),
-                    getConfiguration().getWanAddress(),
-                    getConfiguration().getWanPort(),
-                    getConfiguration().getSsids());
-            Gateway updatedGateway = DatabaseHandler.getGateway(gateway.getId());
-
-            List<Apartment> apartments = DatabaseHandler.getAllApartments();
-            for (Apartment apartment : apartments) {
-                if (apartment.isAssociatedWith(updatedGateway.getId())) {
-                    if (!getConfiguration().getApartmentIds()
-                            .contains(apartment.getId())) {
-                        for (Gateway currentGateway : apartment.getAssociatedGateways()) {
-                            if (currentGateway.getId()
-                                    .equals(updatedGateway.getId())) {
-                                apartment.getAssociatedGateways()
-                                        .remove(currentGateway);
-                                DatabaseHandler.updateApartment(apartment);
-                                break;
-                            }
-                        }
-                    }
-                } else {
-                    if (getConfiguration().getApartmentIds()
-                            .contains(apartment.getId())) {
-                        apartment.getAssociatedGateways()
-                                .add(updatedGateway);
-                        DatabaseHandler.updateApartment(apartment);
-                    }
-                }
-            }
-        }
-
-        GatewaySettingsFragment.notifyGatewaysChanged();
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
     }
 
 }

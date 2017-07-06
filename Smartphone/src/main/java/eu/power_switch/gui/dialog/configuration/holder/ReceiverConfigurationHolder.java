@@ -9,6 +9,7 @@ import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,7 +34,7 @@ public class ReceiverConfigurationHolder extends ConfigurationHolder {
 
     // Brand/Model
 
-    private Receiver.Brand brand;
+    private Brand brand;
 
     private String model;
 

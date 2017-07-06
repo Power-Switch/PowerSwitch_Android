@@ -37,6 +37,7 @@ import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Nam
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2Setup;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Scene;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 import eu.power_switch.widget.provider.SceneWidgetProvider;
 import timber.log.Timber;
@@ -98,9 +99,31 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
     }
 
     @Override
-    protected void saveCurrentConfigurationToDatabase() {
-        Timber.d("Saving scene");
-        super.saveCurrentConfigurationToDatabase();
+    protected void saveConfiguration() throws Exception {
+        Timber.d("Saving Scene...");
+        Scene newScene = new Scene(getConfiguration().getScene()
+                .getId(),
+                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
+                getConfiguration().getName());
+        newScene.addSceneItems(getConfiguration().getSceneItems());
+
+        if (getConfiguration().getScene() == null) {
+            DatabaseHandler.addScene(newScene);
+        } else {
+            DatabaseHandler.updateScene(newScene);
+        }
+
+        // notify scenes fragment
+        ScenesFragment.notifySceneChanged();
+
+        // update scene widgets
+        SceneWidgetProvider.forceWidgetUpdate(getActivity());
+
+        // update wear data
+        UtilityService.forceWearDataUpdate(getActivity());
+
+
+        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -139,17 +162,12 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
 
         private ConfigurationDialogTabbed<SceneConfigurationHolder> parentDialog;
-        private ConfigurationDialogTabbedSummaryFragment            setupFragment;
         private Fragment                                            targetFragment;
 
         public CustomTabAdapter(ConfigurationDialogTabbed<SceneConfigurationHolder> parentDialog, FragmentManager fm, Fragment targetFragment) {
             super(fm);
             this.parentDialog = parentDialog;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return setupFragment;
         }
 
         @Override
@@ -169,18 +187,19 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureSceneDialogPage1Name.class, parentDialog);
                     break;
                 case 1:
                     fragment = ConfigurationDialogPage.newInstance(ConfigureSceneDialogTabbedPage2Setup.class, parentDialog);
-                    fragment.setTargetFragment(targetFragment, 0);
-
-                    setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
+                    break;
             }
+
+            fragment.setTargetFragment(targetFragment, 0);
 
             return fragment;
         }

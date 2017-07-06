@@ -34,37 +34,26 @@ import android.widget.TextView;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.Constructor;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHelper;
-import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
-import eu.power_switch.gui.dialog.configuration.ConfigurationDialogTabbedSummaryFragment;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
-import eu.power_switch.gui.fragment.main.RoomsFragment;
-import eu.power_switch.gui.fragment.main.ScenesFragment;
-import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.Room;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.event.ConfigurationChangedEvent;
-import eu.power_switch.wear.service.UtilityService;
 
 /**
  * "Summary" Fragment used in Configure Receiver Dialog
  * <p/>
  * Created by Markus on 28.06.2015.
  */
-public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDialogPage<ReceiverConfigurationHolder> implements ConfigurationDialogTabbedSummaryFragment {
+public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDialogPage<ReceiverConfigurationHolder> {
 
     @BindView(R.id.textView_name)
     TextView              name;
@@ -236,85 +225,6 @@ public class ConfigureReceiverDialogPage5TabbedSummary extends ConfigurationDial
             linearLayoutAutoPairReceiver.setVisibility(View.GONE);
             linearLayoutUniversalReceiver.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public boolean checkSetupValidity() {
-        return true;
-    }
-
-    @Override
-    public void saveCurrentConfigurationToDatabase() throws Exception {
-        Apartment apartment    = getConfiguration().getParentApartment();
-        Room      room         = apartment.getRoom(getConfiguration().getParentRoomName());
-        String    receiverName = getConfiguration().getName();
-        String    modelName    = getConfiguration().getModel();
-
-        String        className = Receiver.receiverMap.get(modelName);
-        Receiver.Type type      = ReceiverReflectionMagic.getType(className);
-
-        Constructor<?> constructor = ReceiverReflectionMagic.getConstructor(className, type);
-
-        long receiverId = -1;
-        if (getConfiguration().getReceiver() != null) {
-            receiverId = getConfiguration().getReceiver()
-                    .getId();
-        }
-
-        Receiver receiver = null;
-        switch (type) {
-            case DIPS:
-                LinkedList<Boolean> dipValues = new LinkedList<>();
-                for (DipSwitch dipSwitch : getConfiguration().getDips()) {
-                    dipValues.add(dipSwitch.isChecked());
-                }
-
-                receiver = (Receiver) constructor.newInstance(getActivity(), receiverId,
-                        receiverName,
-                        dipValues, room.getId(), getConfiguration().getGateways());
-                break;
-            case MASTER_SLAVE:
-                receiver = (Receiver) constructor.newInstance(getActivity(),
-                        receiverId,
-                        receiverName,
-                        getConfiguration().getChannelMaster(),
-                        getConfiguration().getChannelSlave(),
-                        room.getId(),
-                        getConfiguration().getGateways());
-                break;
-            case UNIVERSAL:
-                receiver = new UniversalReceiver(getActivity(), receiverId,
-                        getConfiguration().getName(),
-                        getConfiguration().getUniversalButtons(),
-                        room.getId(),
-                        getConfiguration().getGateways());
-                break;
-            case AUTOPAIR:
-                receiver = (Receiver) constructor.newInstance(getActivity(),
-                        receiverId,
-                        receiverName,
-                        getConfiguration().getSeed(),
-                        room.getId(),
-                        getConfiguration().getGateways());
-                break;
-        }
-
-        receiver.setRepetitionAmount(getConfiguration().getRepetitionAmount());
-
-        if (getConfiguration().getReceiver() == null) {
-            DatabaseHandler.addReceiver(receiver);
-        } else {
-            DatabaseHandler.updateReceiver(receiver);
-        }
-
-        RoomsFragment.notifyReceiverChanged();
-        // scenes could change too if room was used in a scene
-        ScenesFragment.notifySceneChanged();
-
-        // update wear data
-        UtilityService.forceWearDataUpdate(getActivity());
-
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
     }
 
 }

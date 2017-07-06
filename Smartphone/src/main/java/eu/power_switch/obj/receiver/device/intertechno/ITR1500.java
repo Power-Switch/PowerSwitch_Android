@@ -34,13 +34,14 @@ import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.AutoPairReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 import timber.log.Timber;
 
 public class ITR1500 extends Receiver implements AutoPairReceiver, MasterSlaveReceiver {
 
-    private static final Brand BRAND = Brand.INTERTECHNO;
+    private static final Brand  BRAND = Brand.INTERTECHNO;
     private static final String MODEL = Receiver.getModelName(ITR1500.class.getCanonicalName());
 
     private String headConnAir = "TXP:0,0,6,11125,89,25,";

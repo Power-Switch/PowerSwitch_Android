@@ -78,6 +78,7 @@ import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
 import timber.log.Timber;
@@ -88,12 +89,6 @@ import timber.log.Timber;
  * Created by Markus on 28.06.2015.
  */
 public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<ReceiverConfigurationHolder> {
-
-    public static final String KEY_CHANNEL_MASTER    = "channelMaster";
-    public static final String KEY_CHANNEL_SLAVE     = "channelSlave";
-    public static final String KEY_DIPS              = "dips";
-    public static final String KEY_SEED              = "seed";
-    public static final String KEY_UNIVERSAL_BUTTONS = "universalButtons";
 
     @BindView(R.id.listView_channelMaster)
     ListView channelMasterListView;
@@ -248,8 +243,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                 } catch (Exception e) {
                     Timber.e(e);
 
-                    updateConfiguration(getSelectedChannelMaster(),
-                            getSelectedChannelSlave(), dipSwitchArrayList, null,
+                    updateConfiguration(getSelectedChannelMaster(), getSelectedChannelSlave(), dipSwitchArrayList, null,
                             getCurrentUniversalButtons());
 
                     textInputEditTextSeed.setError(e.getMessage());
@@ -392,11 +386,12 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
     @SuppressWarnings("unused")
     public void onBrandOrModelChanged(ReceiverBrandOrModelChangedEvent receiverBrandOrModelChangedEvent) {
         String model = receiverBrandOrModelChangedEvent.getModel();
+        Brand  brand = receiverBrandOrModelChangedEvent.getBrand();
 
         try {
             Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));
 
-            getConfiguration().setReceiver(receiver);
+            getConfiguration().setBrand(receiverBrandOrModelChangedEvent.getBrand());
             getConfiguration().setType(receiver.getType());
 
             initType(receiver);

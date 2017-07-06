@@ -34,12 +34,13 @@ import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.shared.Brand;
 import eu.power_switch.shared.exception.gateway.GatewayNotSupportedException;
 import eu.power_switch.shared.exception.receiver.ActionNotSupportedException;
 
 public class RCS1000NComfort extends Receiver implements DipReceiver {
 
-    private static final Brand BRAND = Brand.BRENNENSTUHL;
+    private static final Brand  BRAND = Brand.BRENNENSTUHL;
     private static final String MODEL = Receiver.getModelName(RCS1000NComfort.class.getCanonicalName());
 
     protected LinkedList<DipSwitch> dipList;

@@ -71,12 +71,10 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
         if (arguments != null && arguments.containsKey(CALL_EVENT_ID_KEY)) {
             // init dialog using existing scene
             callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    getTargetFragment(), callEventId));
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment(), callEventId));
             return true;
         } else {
-            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(),
-                    getTargetFragment()));
+            setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment()));
             return false;
         }
     }
@@ -87,41 +85,64 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected void saveCurrentConfigurationToDatabase() {
-        Timber.d("Saving call event");
-        super.saveCurrentConfigurationToDatabase();
+    protected void saveConfiguration() throws Exception {
+        Timber.d("Saving call event...");
+
+        // TODO:
+
+//        if (callEventId == -1) {
+//             create new call event
+//            Map<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
+//            phoneNumbersMap.put(PhoneConstants.CallType.INCOMING, new HashSet<>(currentPhoneNumbers));
+
+//            Map<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
+//            actionsMap.put(PhoneConstants.CallType.INCOMING, currentActions);
+//
+//            CallEvent newCallEvent = new CallEvent(-1, true, "", phoneNumbersMap, actionsMap);
+//            DatabaseHandler.addCallEvent(newCallEvent);
+//        } else {
+        // modify existing call event
+//            CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
+//
+//            callEvent.setPhoneNumbers(PhoneConstants.CallType.INCOMING, new HashSet<>(currentPhoneNumbers));
+//            callEvent.setActions(PhoneConstants.CallType.INCOMING, currentActions);
+//
+//            DatabaseHandler.updateCallEvent(callEvent);
+//        }
+
+//        CallEventsFragment.notifyCallEventsChanged();
+//        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
     protected void deleteExistingConfigurationFromDatabase() {
-        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure).setMessage(R.string
-                .call_event_will_be_gone_forever)
-                .setPositiveButton
-                        (android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    DatabaseHandler.deleteCallEvent(callEventId);
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.are_you_sure)
+                .setMessage(R.string.call_event_will_be_gone_forever)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            DatabaseHandler.deleteCallEvent(callEventId);
 
-                                    // notify scenes fragment
-                                    CallEventsFragment.notifyCallEventsChanged();
+                            // notify scenes fragment
+                            CallEventsFragment.notifyCallEventsChanged();
 
-                                    StatusMessageHandler.showInfoMessage(getTargetFragment(),
-                                            R.string.call_event_deleted, Snackbar.LENGTH_LONG);
-                                } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getActivity(), e);
-                                }
+                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_deleted, Snackbar.LENGTH_LONG);
+                        } catch (Exception e) {
+                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                        }
 
-                                // close dialog
-                                getDialog().dismiss();
-                            }
-                        }).setNeutralButton(android.R.string.cancel, null).show();
+                        // close dialog
+                        getDialog().dismiss();
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .show();
     }
 
     private static class CustomTabAdapter extends ConfigurationDialogTabAdapter {
-        private Context context;
-        private long callEventId;
-        private ConfigurationDialogTabbedSummaryFragment setupFragment;
+        private Context  context;
+        private long     callEventId;
         private Fragment targetFragment;
 
         public CustomTabAdapter(Context context, FragmentManager fm, Fragment targetFragment) {
@@ -136,10 +157,6 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
             this.context = context;
             this.callEventId = id;
             this.targetFragment = targetFragment;
-        }
-
-        public ConfigurationDialogTabbedSummaryFragment getSummaryFragment() {
-            return setupFragment;
         }
 
         @Override
@@ -159,10 +176,11 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = null;
+            Fragment fragment;
 
             switch (i) {
                 case 0:
+                default:
                     fragment = new ConfigureCallEventDialogPage1Contacts();
                     break;
                 case 1:
@@ -170,12 +188,12 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                     break;
                 case 2:
                     fragment = new ConfigureCallEventDialogPage3Summary();
-                    fragment.setTargetFragment(targetFragment, 0);
-
-                    setupFragment = (ConfigurationDialogTabbedSummaryFragment) fragment;
+                    break;
             }
 
-            if (fragment != null && callEventId != -1) {
+            fragment.setTargetFragment(targetFragment, 0);
+
+            if (callEventId != -1) {
                 Bundle bundle = new Bundle();
                 bundle.putLong(CALL_EVENT_ID_KEY, callEventId);
                 fragment.setArguments(bundle);
