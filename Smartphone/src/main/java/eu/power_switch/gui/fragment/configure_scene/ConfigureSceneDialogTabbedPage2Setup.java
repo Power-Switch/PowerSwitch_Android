@@ -108,6 +108,8 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
         rooms.addAll(getConfiguration().getCheckedReceivers());
 
         updateSceneItemList();
+        getConfiguration().setSceneItems(customRecyclerViewAdapter.getSceneItems());
+        notifyConfigurationChanged();
     }
 
     private void createTutorial() {
@@ -315,6 +317,8 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                                     button.setTextColor(inactiveColor);
                                 }
                             }
+
+                            getConfiguration().setSceneItems(getSceneItems());
                         }
                     });
 

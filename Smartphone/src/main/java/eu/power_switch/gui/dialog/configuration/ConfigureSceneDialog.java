@@ -80,6 +80,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
             // init dialog using existing scene
             try {
                 getConfiguration().setName(scene.getName());
+                getConfiguration().setSceneItems(scene.getSceneItems());
 
             } catch (Exception e) {
                 Timber.e(e);

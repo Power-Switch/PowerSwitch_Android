@@ -212,6 +212,8 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
                             getConfiguration().setCheckedReceivers(getCheckedReceivers());
 
                             notifySelectedReceiversChanged();
+
+                            checkValidity();
                             notifyConfigurationChanged();
                         }
                     });
