@@ -215,7 +215,15 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
             ArrayList<SceneItem> sceneItems = new ArrayList<>();
             for (Room room : rooms) {
                 for (Receiver receiver : room.getReceivers()) {
-                    sceneItems.add(receiverSceneItemHashMap.get(receiver.getId()));
+                    SceneItem sceneItem = receiverSceneItemHashMap.get(receiver.getId());
+                    if (sceneItem == null) {
+                        sceneItem = new SceneItem(receiver,
+                                receiver.getButtons()
+                                        .get(0));
+                        receiverSceneItemHashMap.put(receiver.getId(), sceneItem);
+                    }
+
+                    sceneItems.add(sceneItem);
                 }
             }
             return sceneItems;
@@ -272,12 +280,12 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                 int      i         = 0;
                 TableRow buttonRow = null;
 
-                if (!receiverSceneItemHashMap.containsKey(receiver.getId())) {
-                    receiverSceneItemHashMap.put(receiver.getId(),
-                            new SceneItem(receiver,
-                                    receiver.getButtons()
-                                            .get(0)));
-                }
+//                if (!receiverSceneItemHashMap.containsKey(receiver.getId())) {
+//                    receiverSceneItemHashMap.put(receiver.getId(),
+//                            new SceneItem(receiver,
+//                                    receiver.getButtons()
+//                                            .get(0)));
+//                }
                 final ArrayList<android.widget.Button> buttonList = new ArrayList<>();
                 for (Button button : receiver.getButtons()) {
                     @SuppressLint("InflateParams") android.widget.Button buttonView = (android.widget.Button) inflater.inflate(R.layout.simple_button,

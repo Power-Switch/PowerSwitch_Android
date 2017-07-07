@@ -80,6 +80,8 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
     private ArrayList<CheckBox> receiverCheckboxList = new ArrayList<>();
     private List<Scene> existingScenes;
 
+    private boolean initialized;
+
 
     /**
      * Used to notify the setup page that some info has changed
@@ -93,6 +95,16 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        try {
+            existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+        } catch (Exception e) {
+            StatusMessageHandler.showErrorMessage(getContentView(), e);
+        }
+
+        addReceiversToLayout();
+
+        initializeSceneData();
 
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
@@ -113,19 +125,11 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
             }
         });
 
-        try {
-            existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
-        } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
-        }
-
-        addReceiversToLayout();
-
-        initializeSceneData();
-
         checkValidity();
 
         createTutorial();
+
+        initialized = true;
 
         return rootView;
     }
@@ -211,10 +215,14 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             getConfiguration().setCheckedReceivers(getCheckedReceivers());
 
-                            notifySelectedReceiversChanged();
+                            if (!initialized) {
+                                return;
+                            }
 
                             checkValidity();
+                            notifySelectedReceiversChanged();
                             notifyConfigurationChanged();
+
                         }
                     });
                     receiverCheckboxList.add(checkBox);
@@ -268,7 +276,6 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
     }
 
     private boolean checkValidity() {
-        // TODO: Performance Optimierung
         if (!checkNameValidity()) {
             return false;
         }
@@ -287,14 +294,15 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
             floatingName.setError(getString(R.string.please_enter_name));
             return false;
         } else {
-            // TODO: nullpointer on getId()
-            for (Scene scene : existingScenes) {
-                if (!scene.getId()
-                        .equals(getConfiguration().getScene()
-                                .getId()) && scene.getName()
-                        .equalsIgnoreCase(getCurrentSceneName())) {
-                    floatingName.setError(getString(R.string.scene_name_already_exists));
-                    return false;
+            if (getConfiguration().getScene() != null) {
+                for (Scene scene : existingScenes) {
+                    if (!scene.getId()
+                            .equals(getConfiguration().getScene()
+                                    .getId()) && scene.getName()
+                            .equalsIgnoreCase(getCurrentSceneName())) {
+                        floatingName.setError(getString(R.string.scene_name_already_exists));
+                        return false;
+                    }
                 }
             }
         }

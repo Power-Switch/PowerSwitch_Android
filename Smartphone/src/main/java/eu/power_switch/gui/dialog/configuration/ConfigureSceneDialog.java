@@ -102,8 +102,14 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
     @Override
     protected void saveConfiguration() throws Exception {
         Timber.d("Saving Scene...");
-        Scene newScene = new Scene(getConfiguration().getScene()
-                .getId(),
+
+        long sceneId = -1;
+        if (getConfiguration().getScene() != null) {
+            sceneId = getConfiguration().getScene()
+                    .getId();
+        }
+
+        Scene newScene = new Scene(sceneId,
                 SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
                 getConfiguration().getName());
         newScene.addSceneItems(getConfiguration().getSceneItems());
@@ -122,7 +128,6 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
 
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
-
 
         StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
     }
