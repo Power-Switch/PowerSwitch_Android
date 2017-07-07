@@ -82,7 +82,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle args) {
+    protected void initializeFromExistingData(Bundle args) {
         try {
             getConfiguration().setExistingApartments(DatabaseHandler.getAllApartments());
         } catch (Exception e) {
@@ -99,12 +99,10 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                 dismiss();
                 StatusMessageHandler.showErrorMessage(getContext(), e);
             }
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return false;
-        } else {
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return false;
+
         }
+
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override
@@ -115,9 +113,13 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
     @Override
     protected void saveConfiguration() throws Exception {
         Timber.d("Saving apartment");
-        Long apartmentId = getConfiguration().getApartment()
-                .getId();
-        if (apartmentId == null) {
+
+        long apartmentId = -1;
+        if (getConfiguration().getApartment() != null) {
+            apartmentId = getConfiguration().getApartment()
+                    .getId();
+        }
+        if (apartmentId == -1) {
             boolean isActive = DatabaseHandler.getAllApartmentNames()
                     .size() <= 0;
             Apartment newApartment = new Apartment((long) -1,

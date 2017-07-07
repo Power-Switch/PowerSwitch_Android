@@ -80,7 +80,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
     private ArrayList<CheckBox> receiverCheckboxList = new ArrayList<>();
     private List<Scene> existingScenes;
 
-    private boolean initialized;
+    private boolean isInitialized;
 
 
     /**
@@ -129,7 +129,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
 
         createTutorial();
 
-        initialized = true;
+        isInitialized = true;
 
         return rootView;
     }
@@ -215,7 +215,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             getConfiguration().setCheckedReceivers(getCheckedReceivers());
 
-                            if (!initialized) {
+                            if (!isInitialized) {
                                 return;
                             }
 

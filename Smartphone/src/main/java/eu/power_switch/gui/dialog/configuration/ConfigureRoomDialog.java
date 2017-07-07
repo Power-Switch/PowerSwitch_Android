@@ -37,7 +37,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1;
-import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Summary;
+import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Gateways;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Room;
@@ -75,7 +75,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         Room room = getConfiguration().getRoom();
 
         if (room != null) {
@@ -92,15 +92,9 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
             } catch (Exception e) {
                 Timber.e(e);
             }
-
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return true;
-        } else {
-            // Create the adapter that will return a fragment
-            // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return false;
         }
+
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override
@@ -205,7 +199,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
                     fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage1.class, parentDialog);
                     break;
                 case 1:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage2Summary.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureRoomDialogPage2Gateways.class, parentDialog);
                     break;
             }
 

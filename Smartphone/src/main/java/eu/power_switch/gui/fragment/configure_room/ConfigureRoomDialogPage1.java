@@ -67,7 +67,7 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
     private LinkedList<String> roomNames;
     private ItemTouchHelper    itemTouchHelper;
 
-    private ArrayList<Receiver>             receivers;
+    private List<Receiver> receivers = new ArrayList<>();
     private ReceiverNameRecyclerViewAdapter receiverNameRecyclerViewAdapter;
 
     /**
@@ -88,7 +88,8 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        // restore name
+        initExistingData();
+
         name.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -105,7 +106,6 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
             }
         });
 
-        receivers = new ArrayList<>();
         receiverNameRecyclerViewAdapter = new ReceiverNameRecyclerViewAdapter(getContext(), receivers, this);
         receiverNameRecyclerViewAdapter.setOnItemMovedListener(new OnItemMovedListener() {
             @Override
@@ -120,8 +120,6 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(receiverNameRecyclerViewAdapter);
         itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listOfReceivers);
-
-        initExistingData();
 
         return rootView;
     }
@@ -139,7 +137,6 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
                 name.setText(originalName);
 
                 receivers.addAll(room.getReceivers());
-                receiverNameRecyclerViewAdapter.notifyDataSetChanged();
 
                 List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
                 roomNames = new LinkedList<>();

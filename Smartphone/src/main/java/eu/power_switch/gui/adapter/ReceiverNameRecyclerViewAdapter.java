@@ -30,8 +30,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
@@ -46,12 +46,12 @@ import timber.log.Timber;
  * Created by Markus on 13.10.2015.
  */
 public class ReceiverNameRecyclerViewAdapter extends RecyclerView.Adapter<ReceiverNameRecyclerViewAdapter.ViewHolder> implements ItemTouchHelperAdapter {
-    private ArrayList<Receiver> receivers;
+    private List<Receiver>      receivers;
     private Context             context;
     private OnStartDragListener onStartDragListener;
     private OnItemMovedListener onItemMovedListener;
 
-    public ReceiverNameRecyclerViewAdapter(Context context, ArrayList<Receiver> receivers, OnStartDragListener onStartDragListener) {
+    public ReceiverNameRecyclerViewAdapter(Context context, List<Receiver> receivers, OnStartDragListener onStartDragListener) {
         this.receivers = receivers;
         this.context = context;
         this.onStartDragListener = onStartDragListener;

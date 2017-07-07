@@ -80,7 +80,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         Gateway gateway = getConfiguration().getGateway();
 
         if (gateway != null) {
@@ -102,13 +102,9 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
             } catch (Exception e) {
                 Timber.e(e);
             }
-
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return true;
-        } else {
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return false;
         }
+
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override

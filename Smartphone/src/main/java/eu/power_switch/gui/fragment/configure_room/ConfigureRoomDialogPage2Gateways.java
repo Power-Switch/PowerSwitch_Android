@@ -49,7 +49,7 @@ import timber.log.Timber;
 /**
  * Dialog to edit a Room
  */
-public class ConfigureRoomDialogPage2Summary extends ConfigurationDialogPage<RoomConfigurationHolder> {
+public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<RoomConfigurationHolder> {
 
     @BindView(R.id.checkbox_use_custom_gateway_selection)
     CheckBox     checkBoxUseCustomGatewaySelection;

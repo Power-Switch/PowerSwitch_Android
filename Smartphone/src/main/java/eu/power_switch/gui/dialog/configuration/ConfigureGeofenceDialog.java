@@ -86,7 +86,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         Geofence geofence = getConfiguration().getGeofence();
 
         if (geofence != null) {
@@ -96,15 +96,9 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
             getConfiguration().setRadius(geofence.getRadius());
             getConfiguration().setEnterActions(geofence.getActions(Geofence.EventType.ENTER));
             getConfiguration().setExitActions(geofence.getActions(Geofence.EventType.EXIT));
-
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), (RecyclerViewFragment) getTargetFragment()));
-            return true;
-        } else {
-            // Create the adapter that will return a fragment
-            // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), (RecyclerViewFragment) getTargetFragment()));
-            return false;
         }
+
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), (RecyclerViewFragment) getTargetFragment()));
     }
 
     @Override

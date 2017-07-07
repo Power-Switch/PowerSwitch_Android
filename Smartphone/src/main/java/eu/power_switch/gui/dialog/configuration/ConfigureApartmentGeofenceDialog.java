@@ -26,7 +26,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.view.View;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -39,7 +38,6 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4Summary;
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
-import eu.power_switch.obj.Apartment;
 
 /**
  * Dialog to create or modify a Geofence related to an Apartment
@@ -67,30 +65,19 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         Long apartmentId = getConfiguration().getApartmentId();
 
         if (apartmentId != null) {
-            try {
-                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                if (apartment.getGeofence() == null) {
-                    // Create the adapter that will return a fragment
-                    // for each of the two primary sections of the app.
-                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-                    imageButtonDelete.setVisibility(View.GONE);
-                    return false;
-                } else {
-                    // init dialog using existing geofence
-                    setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-                    imageButtonDelete.setVisibility(View.VISIBLE);
-                    return true;
-                }
-            } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContext(), e);
-            }
+            // TODO
+//            try {
+//                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+//            } catch (Exception e) {
+//                StatusMessageHandler.showErrorMessage(getContext(), e);
+//            }
         }
 
-        return false;
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override

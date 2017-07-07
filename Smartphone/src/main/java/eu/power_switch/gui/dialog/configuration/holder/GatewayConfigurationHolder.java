@@ -55,7 +55,7 @@ public class GatewayConfigurationHolder extends ConfigurationHolder {
 
     @Override
     public boolean isValid() {
-        if (TextUtils.isEmpty(name)) {
+        if (name == null || TextUtils.isEmpty(name.trim())) {
             return false;
         }
 

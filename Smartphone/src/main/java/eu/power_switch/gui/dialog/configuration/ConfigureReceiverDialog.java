@@ -92,7 +92,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         Receiver receiver = getConfiguration().getReceiver();
 
         try {
@@ -146,15 +146,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                 dismiss();
                 StatusMessageHandler.showErrorMessage(getContext(), e);
             }
-
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return true;
-        } else {
-            // Create the adapter that will return a fragment
-            // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return false;
         }
+
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override

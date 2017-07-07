@@ -73,6 +73,10 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
+        addGatewaysToLayout();
+
+        initializeApartmentData();
+
         TextWatcher textWatcher = new TextWatcher() {
 
             @Override
@@ -93,10 +97,6 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
             }
         };
         name.addTextChangedListener(textWatcher);
-
-        addGatewaysToLayout();
-
-        initializeApartmentData();
 
         isInitialized = true;
 
@@ -197,7 +197,10 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
                         getConfiguration().setAssociatedGateways(getCheckedGateways());
-                        notifyConfigurationChanged();
+
+                        if (isInitialized) {
+                            notifyConfigurationChanged();
+                        }
                     }
 
                     @Override

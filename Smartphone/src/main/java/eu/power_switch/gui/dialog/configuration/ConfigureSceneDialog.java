@@ -73,7 +73,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         Scene scene = getConfiguration().getScene();
 
         if (scene != null) {
@@ -85,13 +85,9 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
             } catch (Exception e) {
                 Timber.e(e);
             }
-
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return true;
-        } else {
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return false;
         }
+
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override

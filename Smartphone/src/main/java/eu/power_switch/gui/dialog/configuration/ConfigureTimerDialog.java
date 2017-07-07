@@ -74,7 +74,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         Timer timer = getConfiguration().getTimer();
 
         if (timer != null) {
@@ -95,16 +95,9 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
             } catch (Exception e) {
                 Timber.e(e);
             }
-
-            // init dialog using existing scene
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return true;
-        } else {
-            // Create the adapter that will return a fragment
-            // for each of the two primary sections of the app.
-            setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
-            return false;
         }
+
+        setTabAdapter(new CustomTabAdapter(this, getChildFragmentManager(), getTargetFragment()));
     }
 
     @Override

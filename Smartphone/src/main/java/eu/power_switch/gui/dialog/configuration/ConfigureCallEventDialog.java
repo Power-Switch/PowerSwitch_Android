@@ -67,15 +67,13 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
     }
 
     @Override
-    protected boolean initializeFromExistingData(Bundle arguments) {
+    protected void initializeFromExistingData(Bundle arguments) {
         if (arguments != null && arguments.containsKey(CALL_EVENT_ID_KEY)) {
             // init dialog using existing scene
             callEventId = arguments.getLong(CALL_EVENT_ID_KEY);
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment(), callEventId));
-            return true;
         } else {
             setTabAdapter(new CustomTabAdapter(getActivity(), getChildFragmentManager(), getTargetFragment()));
-            return false;
         }
     }
 
