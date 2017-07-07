@@ -55,14 +55,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
 
     private List<CheckBox> apartmentCheckboxList = new ArrayList<>();
 
-    /**
-     * Used to notify the setup page that some info has changed
-     */
-    public void updateConfiguration(List<Long> apartmentIds) {
-        getConfiguration().setApartmentIds(apartmentIds);
-
-        notifyConfigurationChanged();
-    }
+    private boolean isInitialized = false;
 
     @Nullable
     @Override
@@ -73,7 +66,18 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
 
         initializeGatewayData();
 
+        isInitialized = true;
+
         return rootView;
+    }
+
+    /**
+     * Used to notify the setup page that some info has changed
+     */
+    public void updateConfiguration(List<Long> apartmentIds) {
+        getConfiguration().setApartmentIds(apartmentIds);
+
+        notifyConfigurationChanged();
     }
 
     @Override
@@ -126,7 +130,9 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
                 CheckBoxInteractionListener checkBoxInteractionListener = new CheckBoxInteractionListener() {
                     @Override
                     public void onCheckedChangedByUser(CompoundButton buttonView, boolean isChecked) {
-                        updateConfiguration(getCheckedApartmentIds());
+                        if (isInitialized) {
+                            updateConfiguration(getCheckedApartmentIds());
+                        }
                     }
                 };
                 checkBox.setOnTouchListener(checkBoxInteractionListener);

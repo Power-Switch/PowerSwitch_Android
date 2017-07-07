@@ -79,6 +79,55 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<Gateway
     private String originalWanAddress   = "";
     private String originalWanPort      = "";
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.gateway_array,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        model.setAdapter(adapter);
+
+        initializeGatewayData();
+
+        checkSetupValidity();
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkSetupValidity();
+                updateConfiguration();
+            }
+        };
+        name.addTextChangedListener(textWatcher);
+
+        SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
+            @Override
+            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
+                updateConfiguration();
+            }
+        };
+        model.setOnTouchListener(spinnerInteractionListener);
+        model.setOnItemSelectedListener(spinnerInteractionListener);
+
+        localAddress.addTextChangedListener(textWatcher);
+        localPort.addTextChangedListener(textWatcher);
+        wanAddress.addTextChangedListener(textWatcher);
+        wanPort.addTextChangedListener(textWatcher);
+
+        return rootView;
+    }
+
     private void updateConfiguration() {
         String model = this.model.getSelectedItem()
                 .toString();
@@ -104,53 +153,6 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<Gateway
         notifyConfigurationChanged();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                checkSetupValidity();
-                updateConfiguration();
-            }
-        };
-        name.addTextChangedListener(textWatcher);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.gateway_array,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        model.setAdapter(adapter);
-        SpinnerInteractionListener spinnerInteractionListener = new SpinnerInteractionListener() {
-            @Override
-            public void onItemSelectedByUser(AdapterView<?> parent, View view, int pos, long id) {
-                updateConfiguration();
-            }
-        };
-        model.setOnTouchListener(spinnerInteractionListener);
-        model.setOnItemSelectedListener(spinnerInteractionListener);
-
-        localAddress.addTextChangedListener(textWatcher);
-        localPort.addTextChangedListener(textWatcher);
-        wanAddress.addTextChangedListener(textWatcher);
-        wanPort.addTextChangedListener(textWatcher);
-
-        initializeGatewayData();
-
-        checkSetupValidity();
-
-        return rootView;
-    }
-
     @Override
     protected int getLayoutRes() {
         return R.layout.dialog_fragment_configure_gateway_page_1;
@@ -164,17 +166,13 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<Gateway
         if (gateway != null) {
             originalName = getConfiguration().getName();
             originalLocalAddress = getConfiguration().getLocalAddress();
-            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(getConfiguration().getGateway()
-                    .getLocalPort())) {
-                originalLocalPort = getConfiguration().getGateway()
-                        .getLocalPort()
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(getConfiguration().getLocalPort())) {
+                originalLocalPort = getConfiguration().getLocalPort()
                         .toString();
             }
             originalWanAddress = getConfiguration().getWanAddress();
-            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(getConfiguration().getGateway()
-                    .getWanPort())) {
-                originalWanPort = getConfiguration().getGateway()
-                        .getWanPort()
+            if (!DatabaseConstants.INVALID_GATEWAY_PORT.equals(getConfiguration().getWanPort())) {
+                originalWanPort = getConfiguration().getWanPort()
                         .toString();
             }
 
@@ -187,9 +185,9 @@ public class ConfigureGatewayDialogPage1 extends ConfigurationDialogPage<Gateway
             // restore spinner position
             for (int i = 0; i < model.getCount(); i++) {
                 if (model.getItemAtPosition(i)
-                        .equals(getConfiguration().getGateway()
-                                .getModel())) {
+                        .equals(getConfiguration().getModel())) {
                     model.setSelection(i, false);
+                    break;
                 }
             }
         }

@@ -64,19 +64,12 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
 
     private SsidRecyclerViewAdapter ssidRecyclerViewAdapter;
 
-    /**
-     * Used to notify the setup page that some info has changed
-     */
-    public void updateConfiguration(List<String> ssids) {
-        getConfiguration().setSsids(new HashSet<>(ssids));
-
-        notifyConfigurationChanged();
-    }
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        initializeGatewayData();
 
         ssidRecyclerViewAdapter = new SsidRecyclerViewAdapter(getActivity(), ssids);
         recyclerViewSsids.setAdapter(ssidRecyclerViewAdapter);
@@ -114,9 +107,16 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
             }
         });
 
-        initializeGatewayData();
-
         return rootView;
+    }
+
+    /**
+     * Used to notify the setup page that some info has changed
+     */
+    public void updateConfiguration(List<String> ssids) {
+        getConfiguration().setSsids(new HashSet<>(ssids));
+
+        notifyConfigurationChanged();
     }
 
     @Override
@@ -145,7 +145,6 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
             try {
                 ssids.clear();
                 ssids.addAll(gateway.getSsids());
-                ssidRecyclerViewAdapter.notifyDataSetChanged();
             } catch (Exception e) {
                 StatusMessageHandler.showErrorMessage(getContentView(), e);
             }

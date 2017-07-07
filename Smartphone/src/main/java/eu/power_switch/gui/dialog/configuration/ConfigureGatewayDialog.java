@@ -86,6 +86,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
         if (gateway != null) {
             try {
                 getConfiguration().setName(gateway.getName());
+                getConfiguration().setModel(gateway.getModel());
 
                 getConfiguration().setLocalAddress(gateway.getLocalHost());
                 getConfiguration().setLocalPort(gateway.getLocalPort());
