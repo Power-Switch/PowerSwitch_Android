@@ -90,6 +90,13 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                 getConfiguration().setExecutionInterval(timer.getExecutionInterval());
                 getConfiguration().setExecutionType(timer.getExecutionType());
 
+                if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
+                    WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
+                    getConfiguration().setExecutionDays(weekdayTimer.getExecutionDays());
+                } else {
+
+                }
+
                 getConfiguration().setActions(timer.getActions());
 
             } catch (Exception e) {

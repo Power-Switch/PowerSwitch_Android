@@ -27,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
@@ -88,7 +89,7 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
      * @param executionDays     list of days
      * @param executionType     Timer Type
      */
-    public void updateConfiguration(long executionInterval, ArrayList<WeekdayTimer.Day> executionDays, String executionType) {
+    public void updateConfiguration(long executionInterval, List<WeekdayTimer.Day> executionDays, String executionType) {
         getConfiguration().setExecutionInterval(executionInterval);
         getConfiguration().setExecutionDays(executionDays);
         getConfiguration().setExecutionType(executionType);
@@ -146,8 +147,8 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
         }
     }
 
-    private ArrayList<WeekdayTimer.Day> getSelectedDays() {
-        ArrayList<WeekdayTimer.Day> selectedDays = new ArrayList<>();
+    private List<WeekdayTimer.Day> getSelectedDays() {
+        List<WeekdayTimer.Day> selectedDays = new ArrayList<>();
 
         if (toggleButtonMonday.isChecked()) {
             selectedDays.add(WeekdayTimer.Day.MONDAY);

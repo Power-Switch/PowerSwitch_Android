@@ -20,7 +20,6 @@ package eu.power_switch.gui.dialog.configuration.holder;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class TimerConfigurationHolder extends ConfigurationHolder {
 
     private long executionInterval = -1;
 
-    private ArrayList<WeekdayTimer.Day> executionDays;
+    private List<WeekdayTimer.Day> executionDays;
 
     private String executionType;
 

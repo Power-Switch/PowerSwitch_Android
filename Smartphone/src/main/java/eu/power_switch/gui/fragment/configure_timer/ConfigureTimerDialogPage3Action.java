@@ -77,7 +77,6 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
             }
         });
 
-        currentActions = new ArrayList<>();
         actionRecyclerViewAdapter = new ActionRecyclerViewAdapter(getActivity(), currentActions);
         actionRecyclerViewAdapter.setOnDeleteClickListener(new ActionRecyclerViewAdapter.OnItemClickListener() {
             @Override
