@@ -22,6 +22,7 @@ import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
 import eu.power_switch.shared.action.Action;
@@ -53,7 +54,7 @@ public class TimerConfigurationHolder extends ConfigurationHolder {
 
     private String executionType;
 
-    private ArrayList<Action> actions;
+    private List<Action> actions;
 
     @Override
     public boolean isValid() {

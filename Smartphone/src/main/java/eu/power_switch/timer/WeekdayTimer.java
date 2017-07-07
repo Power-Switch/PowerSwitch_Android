@@ -20,8 +20,8 @@ package eu.power_switch.timer;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import eu.power_switch.R;
 import eu.power_switch.shared.action.Action;
@@ -37,11 +37,11 @@ public class WeekdayTimer extends Timer {
 
     public static final long INTERVAL_DAILY = 1000 * 60 * 60 * 24;
 
-    private ArrayList<Day> executionDays;
+    private List<Day> executionDays;
 
 
-    public WeekdayTimer(long id, boolean isActive, String name, Calendar executionTime, int randomizerValue, ArrayList<Day> executionDays,
-                        ArrayList<Action> actions) {
+    public WeekdayTimer(long id, boolean isActive, String name, Calendar executionTime, int randomizerValue, List<Day> executionDays,
+                        List<Action> actions) {
         super(id, isActive, name, executionTime, randomizerValue, EXECUTION_TYPE_WEEKDAY, actions);
         this.executionDays = executionDays;
     }
@@ -51,7 +51,7 @@ public class WeekdayTimer extends Timer {
         return INTERVAL_DAILY;
     }
 
-    public ArrayList<Day> getExecutionDays() {
+    public List<Day> getExecutionDays() {
         return executionDays;
     }
 

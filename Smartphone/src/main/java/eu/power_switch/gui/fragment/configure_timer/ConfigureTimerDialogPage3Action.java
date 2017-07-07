@@ -33,6 +33,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
@@ -56,32 +57,15 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
     @BindView(R.id.recyclerview_list_of_actions)
     RecyclerView         recyclerViewTimerActions;
 
-    private ArrayList<Action>         currentActions;
+    private List<Action> currentActions = new ArrayList<>();
     private ActionRecyclerViewAdapter actionRecyclerViewAdapter;
-
-    /**
-     * Used to notify the setup page that some info has changed
-     */
-    public void updateConfiguration(ArrayList<Action> actions) {
-        getConfiguration().setActions(actions);
-
-        notifyConfigurationChanged();
-    }
-
-    /**
-     * Used to add TimerActions from "Add TimerAction" Dialog
-     *
-     * @param action TimerAction
-     */
-    private void addTimerAction(Action action) {
-        currentActions.add(action);
-        actionRecyclerViewAdapter.notifyDataSetChanged();
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        initializeTimerData();
 
         final Fragment fragment = this;
         addTimerActionFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
@@ -107,11 +91,26 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recyclerViewTimerActions.setLayoutManager(layoutManager);
 
-        initializeTimerData();
-
-        updateConfiguration(currentActions);
-
         return rootView;
+    }
+
+    /**
+     * Used to notify the setup page that some info has changed
+     */
+    public void updateConfiguration(List<Action> actions) {
+        getConfiguration().setActions(actions);
+
+        notifyConfigurationChanged();
+    }
+
+    /**
+     * Used to add TimerActions from "Add TimerAction" Dialog
+     *
+     * @param action TimerAction
+     */
+    private void addTimerAction(Action action) {
+        currentActions.add(action);
+        actionRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -133,6 +132,8 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
             try {
                 currentActions.clear();
                 currentActions.addAll(timer.getActions());
+
+                getConfiguration().setActions(currentActions);
             } catch (Exception e) {
                 StatusMessageHandler.showErrorMessage(getContentView(), e);
             }

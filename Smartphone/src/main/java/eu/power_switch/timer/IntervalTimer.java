@@ -20,6 +20,7 @@ package eu.power_switch.timer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import eu.power_switch.shared.action.Action;
 import lombok.ToString;
@@ -35,7 +36,7 @@ public class IntervalTimer extends Timer {
     private long executionInterval;
 
     public IntervalTimer(long id, boolean isActive, String name, Calendar executionTime, int randomizerValue, long executionInterval,
-                         ArrayList<Action> actions) {
+                         List<Action> actions) {
         super(id, isActive, name, executionTime, randomizerValue, EXECUTION_TYPE_INTERVAL, new ArrayList<Action>());
         this.executionInterval = executionInterval;
         this.actions = actions;

@@ -56,25 +56,12 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
     @BindView(R.id.toggleButton_sunday)
     ToggleButton toggleButtonSunday;
 
-    /**
-     * Used to notify the summary page that some info has changed
-     *
-     * @param executionInterval time in milliseconds
-     * @param executionDays     list of days
-     * @param executionType     Timer Type
-     */
-    public void updateConfiguration(long executionInterval, ArrayList<WeekdayTimer.Day> executionDays, String executionType) {
-        getConfiguration().setExecutionInterval(executionInterval);
-        getConfiguration().setExecutionDays(executionDays);
-        getConfiguration().setExecutionType(executionType);
-
-        notifyConfigurationChanged();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
+        initializeTimerData();
 
         CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -91,9 +78,22 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
         toggleButtonSaturday.setOnCheckedChangeListener(onCheckedChangeListener);
         toggleButtonSunday.setOnCheckedChangeListener(onCheckedChangeListener);
 
-        initializeTimerData();
-
         return rootView;
+    }
+
+    /**
+     * Used to notify the summary page that some info has changed
+     *
+     * @param executionInterval time in milliseconds
+     * @param executionDays     list of days
+     * @param executionType     Timer Type
+     */
+    public void updateConfiguration(long executionInterval, ArrayList<WeekdayTimer.Day> executionDays, String executionType) {
+        getConfiguration().setExecutionInterval(executionInterval);
+        getConfiguration().setExecutionDays(executionDays);
+        getConfiguration().setExecutionType(executionType);
+
+        notifyConfigurationChanged();
     }
 
     @Override

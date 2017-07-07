@@ -22,8 +22,8 @@ import android.support.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import eu.power_switch.shared.action.Action;
@@ -39,7 +39,7 @@ import lombok.ToString;
 @ToString
 public abstract class Timer {
 
-    public static final String EXECUTION_TYPE_WEEKDAY = "weekday_timer";
+    public static final String EXECUTION_TYPE_WEEKDAY  = "weekday_timer";
     public static final String EXECUTION_TYPE_INTERVAL = "interval_timer";
 
     /**
@@ -55,24 +55,24 @@ public abstract class Timer {
     /**
      * Name of this Timer
      */
-    protected String name;
+    protected String       name;
     /**
      * Randomizer value, determining how much time before/after the actual execution time the actions should be executed
      */
-    protected int randomizerValue;
+    protected int          randomizerValue;
     /**
      * ExecutionType of this Timer
      */
     @ExecutionType
-    protected String executionType;
+    protected String       executionType;
     /**
      * Actions of this Timer
      */
-    protected ArrayList<Action> actions;
+    protected List<Action> actions;
     /**
      * Time when this timer should be executed
      */
-    private Calendar executionTime;
+    private   Calendar     executionTime;
 
 
     /**
@@ -86,7 +86,7 @@ public abstract class Timer {
      * @param executionType   {@see ExecutionType} of this Timer
      * @param actions         list of actions
      */
-    public Timer(long id, boolean active, String name, Calendar executionTime, int randomizerValue, String executionType, ArrayList<Action> actions) {
+    public Timer(long id, boolean active, String name, Calendar executionTime, int randomizerValue, String executionType, List<Action> actions) {
         this.id = id;
         this.active = active;
         this.name = name;
@@ -105,8 +105,8 @@ public abstract class Timer {
         Calendar randomExecutionTime = Calendar.getInstance();
         randomExecutionTime.setTime(getExecutionTime().getTime()); // init with exact time
         randomExecutionTime.add(Calendar.MINUTE, -randomizerValue); // substract highest possible variation (in one direction)
-        Random r = new Random();
-        int randomMinutes = r.nextInt(randomizerValue * 2 + 1); // generate random variation but with double the range (in both directions)
+        Random r             = new Random();
+        int    randomMinutes = r.nextInt(randomizerValue * 2 + 1); // generate random variation but with double the range (in both directions)
         randomExecutionTime.add(Calendar.MINUTE, randomMinutes); // add randomly generated variation to time
         randomExecutionTime.set(Calendar.SECOND, 0); // seconds and milliseconds can be ignored^
         randomExecutionTime.set(Calendar.MILLISECOND, 0);

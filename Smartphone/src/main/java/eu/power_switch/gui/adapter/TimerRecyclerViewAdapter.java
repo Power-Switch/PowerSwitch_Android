@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
@@ -129,7 +130,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         if (timer instanceof WeekdayTimer) {
             WeekdayTimer weekdayTimer = (WeekdayTimer) timer;
 
-            ArrayList<WeekdayTimer.Day> executionDays = weekdayTimer.getExecutionDays();
+            List<WeekdayTimer.Day> executionDays = weekdayTimer.getExecutionDays();
             for (int i = 0; i < executionDays.size(); i++) {
                 if (i < executionDays.size() - 1) {
                     executionDaysText += WeekdayTimer.Day.getWeekdayName(context, executionDays.get(i)) + ", ";

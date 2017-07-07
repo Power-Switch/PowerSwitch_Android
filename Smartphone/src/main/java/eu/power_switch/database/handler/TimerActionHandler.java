@@ -22,6 +22,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.power_switch.database.table.timer.TimerActionTable;
 import eu.power_switch.shared.action.Action;
@@ -47,7 +48,7 @@ abstract class TimerActionHandler {
      * @param actions Actions to be added to the Timer
      * @param timerId ID of Timer
      */
-    protected static void add(ArrayList<Action> actions, Long timerId) throws Exception {
+    protected static void add(List<Action> actions, Long timerId) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 

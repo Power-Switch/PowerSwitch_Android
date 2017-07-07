@@ -58,25 +58,14 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
     @BindView(R.id.seekbarRandomizer)
     SeekBar         seekBarRandomizer;
 
-    /**
-     * Used to notify the setup page that some info has changed
-     *
-     * @param calendar The calendar when this timer activates
-     */
-    public void updateConfiguration(String name, Calendar calendar, int randomizerValue) {
-        getConfiguration().setName(name);
-        getConfiguration().setExecutionTime(calendar);
-        getConfiguration().setRandomizerValue(randomizerValue);
-
-        notifyConfigurationChanged();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
         initializeTimerData();
+
+        updateUi();
 
         name.requestFocus();
         name.addTextChangedListener(new TextWatcher() {
@@ -125,11 +114,22 @@ public class ConfigureTimerDialogPage1Time extends ConfigurationDialogPage<Timer
             }
         });
 
-        updateUi();
-
         checkValidity();
 
         return rootView;
+    }
+
+    /**
+     * Used to notify the setup page that some info has changed
+     *
+     * @param calendar The calendar when this timer activates
+     */
+    public void updateConfiguration(String name, Calendar calendar, int randomizerValue) {
+        getConfiguration().setName(name);
+        getConfiguration().setExecutionTime(calendar);
+        getConfiguration().setRandomizerValue(randomizerValue);
+
+        notifyConfigurationChanged();
     }
 
     @Override
