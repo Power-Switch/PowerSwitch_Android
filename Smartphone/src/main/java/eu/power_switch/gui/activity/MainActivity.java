@@ -66,6 +66,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.application.PowerSaverHelper;
@@ -124,8 +126,10 @@ public class MainActivity extends EventBusActivity {
 
     private static AppBarLayout appBarLayout;
     private static MainActivity activity;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
     private LinkedList<HistoryItem> historyItems = new LinkedList<>();
     private RecyclerView                   recyclerViewHistory;
     private HistoryItemRecyclerViewAdapter historyItemArrayAdapter;
@@ -133,6 +137,9 @@ public class MainActivity extends EventBusActivity {
     private Drawer                         historyDrawer;
     private MiniDrawer                     miniDrawer;
     private LinearLayout                   layoutLoadingHistory;
+
+    @Inject
+    NetworkHandler networkHandler;
 
     /**
      * Add class to Backstack
@@ -282,7 +289,7 @@ public class MainActivity extends EventBusActivity {
 
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (NetworkHandler.isWifiConnected() || NetworkHandler.isEthernetConnected())) {
+        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
             new AsyncTask<Context, Void, AsyncTaskResult<Gateway>>() {
 
                 @Override

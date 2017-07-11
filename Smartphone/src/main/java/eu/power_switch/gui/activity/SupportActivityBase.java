@@ -4,15 +4,15 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 
+import dagger.android.support.DaggerAppCompatActivity;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 
 /**
  * Created by Markus on 30.06.2017.
  */
-public class SupportActivityBase extends AppCompatActivity {
+public abstract class SupportActivityBase extends DaggerAppCompatActivity {
 
     @Override
     @CallSuper

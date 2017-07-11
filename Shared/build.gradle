@@ -55,6 +55,14 @@ dependencies {
     compile "org.projectlombok:lombok:1.16.16"
     annotationProcessor "org.projectlombok:lombok:1.16.16"
 
+    // Dagger 2
+    compile "com.google.dagger:dagger:${rootProject.ext.dagger2Version}"
+    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.dagger2Version}"
+    // if you use the support libraries
+    annotationProcessor "com.google.dagger:dagger-android-processor:${rootProject.ext.dagger2Version}"
+    compile "com.google.dagger:dagger-android:${rootProject.ext.dagger2Version}"
+    compile "com.google.dagger:dagger-android-support:${rootProject.ext.dagger2Version}"
+
     // Timber - Logging framework
     compile 'com.jakewharton.timber:timber:4.5.1'
 

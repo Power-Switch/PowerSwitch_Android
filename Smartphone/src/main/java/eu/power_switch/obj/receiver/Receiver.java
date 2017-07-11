@@ -250,7 +250,8 @@ public abstract class Receiver {
      * @throws GatewayNotSupportedException thrown if this Receiver doesn't support the given Gateway
      * @throws ActionNotSupportedException  thrown if this Receiver doesn't support the given Action
      */
-    public NetworkPackage getNetworkPackage(Gateway gateway, String action) throws GatewayNotSupportedException, ActionNotSupportedException {
+    public NetworkPackage getNetworkPackage(NetworkHandler networkHandler, Gateway gateway,
+                                            String action) throws GatewayNotSupportedException, ActionNotSupportedException {
         String signal = getSignal(gateway, action);
 
         String host;
@@ -258,7 +259,7 @@ public abstract class Receiver {
 
         if (gateway.hasValidLocalAddress()) {
 
-            if (NetworkHandler.isWifiConnected()) {
+            if (networkHandler.isWifiConnected()) {
                 Timber.d("Using local address");
                 host = gateway.getLocalHost();
                 port = gateway.getLocalPort();

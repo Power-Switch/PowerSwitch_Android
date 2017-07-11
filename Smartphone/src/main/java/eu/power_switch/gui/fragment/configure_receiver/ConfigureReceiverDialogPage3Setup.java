@@ -48,6 +48,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import de.markusressel.android.library.tutorialtooltip.builder.IndicatorBuilder;
 import de.markusressel.android.library.tutorialtooltip.builder.MessageBuilder;
@@ -122,6 +124,9 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
 
     @BindView(R.id.add_universalButton_fab)
     FloatingActionButton addUniversalButtonFAB;
+
+    @Inject
+    NetworkHandler networkHandler;
 
     private ArrayAdapter<String> channelMasterNamesAdapter;
     private ArrayAdapter<String> channelSlaveNamesAdapter;
@@ -284,8 +289,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
                     for (Gateway gateway : activeGateways) {
                         try {
-                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
-                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.pair)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(networkHandler, gateway, getString(R.string.pair)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(networkHandler, gateway, getString(R.string.pair)));
                         } catch (Exception e) {
                             Timber.e(e);
                         }
@@ -313,8 +318,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
                     for (Gateway gateway : activeGateways) {
                         try {
-                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
-                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(networkHandler, gateway, getString(R.string.unpair)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(networkHandler, gateway, getString(R.string.unpair)));
                         } catch (Exception e) {
                             Timber.e(e);
                         }
@@ -341,8 +346,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
                     for (Gateway gateway : activeGateways) {
                         try {
-                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
-                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(gateway, getString(R.string.unpair_all)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(networkHandler, gateway, getString(R.string.unpair_all)));
+                            networkPackages.add(currentAutoPairReceiver.getNetworkPackage(networkHandler, gateway, getString(R.string.unpair_all)));
                         } catch (Exception e) {
                             Timber.e(e);
                         }

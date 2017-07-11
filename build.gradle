@@ -50,4 +50,5 @@ ext {
     supportLibVersion = "25.4.0"
     playServicesVersion = "11.0.2"
     supportLibWearableVersion = "2.0.3"
+    dagger2Version = "2.11"
 }

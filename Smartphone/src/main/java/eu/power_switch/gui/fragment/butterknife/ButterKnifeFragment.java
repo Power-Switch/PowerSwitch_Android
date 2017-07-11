@@ -22,20 +22,20 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.android.support.DaggerFragment;
 
 /**
  * ButterKnife base class for implementing a fragment
  * <p>
  * Created by Markus on 29.06.2017.
  */
-public abstract class ButterKnifeFragment extends Fragment {
+public abstract class ButterKnifeFragment extends DaggerFragment {
 
     protected View     rootView;
     private   Unbinder unbinder;

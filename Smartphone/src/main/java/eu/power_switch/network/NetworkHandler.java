@@ -35,6 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.gateway.BrematicGWY433;
 import eu.power_switch.obj.gateway.ConnAir;
@@ -49,7 +51,7 @@ import timber.log.Timber;
 /**
  * Class to handle all network related actions such as sending button actions and searching for gateways
  */
-public abstract class NetworkHandler {
+public class NetworkHandler {
 
     protected static final Object lockObject = new Object();
     protected static Context context;
@@ -59,8 +61,9 @@ public abstract class NetworkHandler {
      *
      * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
-    private NetworkHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
+    @Inject
+    public NetworkHandler(Context context) {
+        this.context = context;
     }
 
     public static void init(Context context) {
@@ -77,15 +80,16 @@ public abstract class NetworkHandler {
      * Works by pinging the Google DNS
      *
      * @return true if connected, false otherwise
+     *
      * @see <a href="http://google.com">http://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-timeouts</a>
      */
-    public static boolean isInternetConnected() {
+    public boolean isInternetConnected() {
         boolean isInternetconnected = false;
 
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int exitValue = ipProcess.waitFor();
+            int     exitValue = ipProcess.waitFor();
             isInternetconnected = (exitValue == 0);
         } catch (IOException e) {
             e.printStackTrace();
@@ -102,12 +106,11 @@ public abstract class NetworkHandler {
      *
      * @return false if WLAN is not connected
      */
-    public static boolean isWifiConnected() {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    public boolean isWifiConnected() {
+        ConnectivityManager connMgr     = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo         networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isWifiConnected = (networkInfo != null &&
-                ConnectivityManager.TYPE_WIFI == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
+        boolean isWifiConnected = (networkInfo != null && ConnectivityManager.TYPE_WIFI == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
         Timber.d("isWifiConnected: " + isWifiConnected);
         return isWifiConnected;
     }
@@ -117,12 +120,11 @@ public abstract class NetworkHandler {
      *
      * @return false if Ethernet is not connected
      */
-    public static boolean isEthernetConnected() {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    public boolean isEthernetConnected() {
+        ConnectivityManager connMgr     = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo         networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isEthernetConnected = (networkInfo != null &&
-                ConnectivityManager.TYPE_ETHERNET == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
+        boolean isEthernetConnected = (networkInfo != null && ConnectivityManager.TYPE_ETHERNET == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
         Timber.d("isEthernetConnected: " + isEthernetConnected);
         return isEthernetConnected;
     }
@@ -132,12 +134,11 @@ public abstract class NetworkHandler {
      *
      * @return false if GPRS is not connected
      */
-    public static boolean isGprsConnected() {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    public boolean isGprsConnected() {
+        ConnectivityManager connMgr     = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo         networkInfo = connMgr.getActiveNetworkInfo();
 
-        boolean isGprsConnected = (networkInfo != null &&
-                ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
+        boolean isGprsConnected = (networkInfo != null && ConnectivityManager.TYPE_MOBILE == networkInfo.getType() && networkInfo.isConnectedOrConnecting());
         Timber.d("isGprsConnected: " + isGprsConnected);
         return isGprsConnected;
     }
@@ -147,9 +148,9 @@ public abstract class NetworkHandler {
      *
      * @return true if a network connection is connected, false otherwise
      */
-    public static boolean isNetworkConnected() {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+    public boolean isNetworkConnected() {
+        ConnectivityManager connMgr     = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo         networkInfo = connMgr.getActiveNetworkInfo();
 
         boolean isNetworkConnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
         Timber.d("isNetworkConnected: " + isNetworkConnected);
@@ -161,11 +162,11 @@ public abstract class NetworkHandler {
      *
      * @return SSID of connected WiFi Network, empty string if no WiFi connection
      */
-    public static String getConnectedWifiSSID() {
+    public String getConnectedWifiSSID() {
         if (isWifiConnected()) {
             WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            WifiInfo info = wifiManager.getConnectionInfo();
-            String ssid = info.getSSID();
+            WifiInfo    info        = wifiManager.getConnectionInfo();
+            String      ssid        = info.getSSID();
 
             // remove unnecessary quotation marks
             if (ssid.startsWith("\"") && ssid.endsWith("\"")) {
@@ -247,6 +248,7 @@ public abstract class NetworkHandler {
      * <p/>
      *
      * @param message some text
+     *
      * @return Gateway null if message could not be parsed
      */
 
@@ -256,10 +258,10 @@ public abstract class NetworkHandler {
         int start;
         int end;
 
-        String brand = "";
-        String model = "";
+        String brand    = "";
+        String model    = "";
         String firmware = "";
-        String host = "";
+        String host     = "";
 
         try {
             if (message.startsWith("HCGW:")) {
@@ -306,26 +308,58 @@ public abstract class NetworkHandler {
                 // "HCGW:VC:Simple Solutions;MC:ConnAir433V1.1;FW:1.00;IP:192.168.2.125;;"
                 // "HCGW:VC:Simple Solutions;MC:ConnAir433;FW:V014;IP:192.168.2.125;;"
                 if (brand.contains("Simple Solutions") || model.contains("ConnAir")) {
-                    return new ConnAir((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptySet());
+                    return new ConnAir((long) -1,
+                            true,
+                            "AutoDiscovered",
+                            firmware,
+                            host,
+                            49880,
+                            "",
+                            DatabaseConstants.INVALID_GATEWAY_PORT,
+                            Collections.<String>emptySet());
                 }
 
                 // Brennenstuhl Gateway
                 // "HCGW:VC:Brennenstuhl;MC:0290217;FW:V016;IP:192.168.178.24;;"
                 if (brand.contains("Brennenstuhl") || model.contains("0290217")) {
-                    return new BrematicGWY433((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptySet());
+                    return new BrematicGWY433((long) -1,
+                            true,
+                            "AutoDiscovered",
+                            firmware,
+                            host,
+                            49880,
+                            "",
+                            DatabaseConstants.INVALID_GATEWAY_PORT,
+                            Collections.<String>emptySet());
                 }
 
                 // Intertechno Gateway
                 // "HCGW:VC:ITECHNO;MC:HCGW22;FW:11;IP:192.168.2.186;;"
                 // "HCGW:VC:ITECHNO;MC:ITGW-433;FW:300;IP:192.168.2.100;;"
                 if (brand.contains("ITECHNO") && (model.contains("HCGW22") || model.contains("ITGW-433"))) {
-                    return new ITGW433((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptySet());
+                    return new ITGW433((long) -1,
+                            true,
+                            "AutoDiscovered",
+                            firmware,
+                            host,
+                            49880,
+                            "",
+                            DatabaseConstants.INVALID_GATEWAY_PORT,
+                            Collections.<String>emptySet());
                 }
 
                 // RaspyRFM Gateway
                 // "HCGW:VC:Seegel Systeme;MC:RaspyRFM;FW:1.00;IP:192.168.2.125;;"
                 if (model.contains("RaspyRFM")) {
-                    return new RaspyRFM((long) -1, true, "AutoDiscovered", firmware, host, 49880, "", DatabaseConstants.INVALID_GATEWAY_PORT, Collections.<String>emptySet());
+                    return new RaspyRFM((long) -1,
+                            true,
+                            "AutoDiscovered",
+                            firmware,
+                            host,
+                            49880,
+                            "",
+                            DatabaseConstants.INVALID_GATEWAY_PORT,
+                            Collections.<String>emptySet());
                 }
             }
             return null;

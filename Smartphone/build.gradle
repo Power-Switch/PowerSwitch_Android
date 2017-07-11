@@ -81,6 +81,9 @@ dependencies {
 
     // External Libraries
 
+    // Dagger (from shared module)
+    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.ext.dagger2Version}"
+
     // Dexter (Permissions)
     compile 'com.karumi:dexter:4.1.0'
 
@@ -150,7 +153,7 @@ dependencies {
     // Set this dependency to use JUnit 4 rules
     androidTestCompile 'com.android.support.test:rules:0.5'
     // Set this dependency to build and run Espresso tests
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    // androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     // Set this dependency to build and run UI Automator tests
     //androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 

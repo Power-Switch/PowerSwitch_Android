@@ -18,7 +18,6 @@
 
 package eu.power_switch.network;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 
@@ -29,7 +28,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
+import eu.power_switch.dagger.InjectableIntentService;
 import eu.power_switch.gui.StatusMessageHandler;
 import timber.log.Timber;
 
@@ -38,10 +40,13 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 29.10.2015.
  */
-public class NetworkPackageQueueHandler extends IntentService {
+public class NetworkPackageQueueHandler extends InjectableIntentService {
 
     public static final String KEY_NETWORK_PACKAGES = "networkPackages";
-    public static final String KEY_CALLBACK = "callback";
+    public static final String KEY_CALLBACK         = "callback";
+
+    @Inject
+    NetworkHandler networkHandler;
 
     /**
      * Socket used to send NetworkPackages over UDP
@@ -50,6 +55,11 @@ public class NetworkPackageQueueHandler extends IntentService {
 
     public NetworkPackageQueueHandler() {
         super(NetworkPackageQueueHandler.class.getName());
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
     }
 
     @Override
@@ -75,7 +85,7 @@ public class NetworkPackageQueueHandler extends IntentService {
     }
 
     private void processQueue(ArrayList<NetworkPackage> networkPackages) {
-        if (NetworkHandler.isNetworkConnected()) {
+        if (networkHandler.isNetworkConnected()) {
             StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
             NetworkPackage currentNetworkPackage;
@@ -89,11 +99,10 @@ public class NetworkPackageQueueHandler extends IntentService {
                     // calculate time to wait before sending next package
                     if (networkPackages.size() > 1) {
                         NetworkPackage nextNetworkPackage = networkPackages.get(1);
-                        if (currentNetworkPackage.getHost().equals(nextNetworkPackage.getHost()) &&
-                                currentNetworkPackage.getPort() == nextNetworkPackage.getPort()) {
+                        if (currentNetworkPackage.getHost()
+                                .equals(nextNetworkPackage.getHost()) && currentNetworkPackage.getPort() == nextNetworkPackage.getPort()) {
                             // if same gateway, wait gateway-specific time
-                            Timber.d("Waiting Gateway specific time (" + currentNetworkPackage.getTimeout() + "ms) " +
-                                    "before sending next signal...");
+                            Timber.d("Waiting Gateway specific time (" + currentNetworkPackage.getTimeout() + "ms) " + "before sending next signal...");
                             delay = currentNetworkPackage.getTimeout();
                         }
                     }
@@ -156,18 +165,18 @@ public class NetworkPackageQueueHandler extends IntentService {
         if (networkPackage instanceof UdpNetworkPackage) {
 
             InetAddress host = InetAddress.getByName(networkPackage.getHost());
-            int port = networkPackage.getPort();
+            int         port = networkPackage.getPort();
 
             socket = new DatagramSocket(null);
             socket.setReuseAddress(true);
             socket.connect(host, port);
 
-            byte[] messageBuffer = networkPackage.getMessage().getBytes();
+            byte[] messageBuffer = networkPackage.getMessage()
+                    .getBytes();
             DatagramPacket messagePacket = new DatagramPacket(messageBuffer, messageBuffer.length, host, port);
             socket.send(messagePacket);
 
-            Timber.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port
-                    + " Message: \"" + new String(messageBuffer) + "\" sent.");
+            Timber.d("UDP Sender", "Host: " + host.getHostAddress() + ":" + port + " Message: \"" + new String(messageBuffer) + "\" sent.");
 
             socket.disconnect();
             socket.close();
