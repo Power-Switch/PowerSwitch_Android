@@ -59,8 +59,8 @@ public class ListenerService extends WearableListenerService {
 
     @Override
     public void onCreate() {
-        super.onCreate();
         AndroidInjection.inject(this);
+        super.onCreate();
     }
 
     /**

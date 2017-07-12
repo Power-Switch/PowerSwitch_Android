@@ -18,7 +18,6 @@
 
 package eu.power_switch.wear.service;
 
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
@@ -35,6 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import dagger.android.DaggerIntentService;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -55,7 +55,7 @@ import timber.log.Timber;
  * <p/>
  * Service to handle background Network communication with the Wearable App
  */
-public class UtilityService extends IntentService {
+public class UtilityService extends DaggerIntentService {
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
