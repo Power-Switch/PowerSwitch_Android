@@ -18,7 +18,6 @@
 
 package eu.power_switch.api;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,10 +26,13 @@ import android.widget.Toast;
 
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
-import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -42,21 +44,25 @@ import timber.log.Timber;
 /**
  * BroadcastReceiver for action API via Intents
  */
-public class IntentReceiver extends BroadcastReceiver {
+public class IntentReceiver extends DaggerBroadcastReceiver {
+
+    @Inject
+    ActionHandler actionHandler;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
         Timber.d("Received intent: ", intent);
 
         try {
-            if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
+            if (intent.getAction()
+                    .equals("android.appwidget.action.APPWIDGET_UPDATE")) {
                 Timber.d("IntentReceiver", "appwidget update");
             } else if (ApiConstants.UNIVERSAL_ACTION_INTENT.equals(intent.getAction())) {
                 parseActionIntent(context, intent);
-            } else if (ApiConstants.intent_switch_on.equals(intent.getAction())
-                    || ApiConstants.intent_switch_off.equals(intent.getAction())
-                    || ApiConstants.intent_room_on.equals(intent.getAction())
-                    || ApiConstants.intent_room_off.equals(intent.getAction())) {
+            } else if (ApiConstants.intent_switch_on.equals(intent.getAction()) || ApiConstants.intent_switch_off.equals(intent.getAction()) || ApiConstants.intent_room_on.equals(
+                    intent.getAction()) || ApiConstants.intent_room_off.equals(intent.getAction())) {
                 parseActionIntentOld(context, intent);
             } else {
                 Timber.d("Received unknown intent: " + intent.getAction());
@@ -76,22 +82,21 @@ public class IntentReceiver extends BroadcastReceiver {
         try {
             Bundle extras = intent.getExtras();
 
-            if (extras.containsKey(ApiConstants.KEY_ROOM) &&
-                    extras.containsKey(ApiConstants.KEY_RECEIVER) &&
-                    extras.containsKey(ApiConstants.KEY_BUTTON)) {
+            if (extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
                 // Expects the following Extras:
                 // Room:<RoomName>
                 // Receiver:<ReceiverName>
                 // Button:<ButtonName>
 
-                Room room = DatabaseHandler.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
-                Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER).trim());
-                Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON).trim());
+                Room room = DatabaseHandler.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
+                        .trim());
+                Receiver receiver = room.getReceiverCaseInsensitive(extras.getString(ApiConstants.KEY_RECEIVER)
+                        .trim());
+                Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON)
+                        .trim());
 
-                ActionHandler.execute(context, receiver, button);
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
-                    extras.containsKey(ApiConstants.KEY_ROOM) &&
-                    extras.containsKey(ApiConstants.KEY_BUTTON)) {
+                actionHandler.execute(receiver, button);
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
                 // Expects the following Extras:
                 // Room:<RoomName>
                 // Button:<ButtonName>
@@ -99,29 +104,36 @@ public class IntentReceiver extends BroadcastReceiver {
                 // Where ButtonName is the name of the Button that is
                 // pressed for each Receiver in the specified Room
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM).trim());
-                String buttonName = extras.getString(ApiConstants.KEY_BUTTON).trim();
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                        .trim());
+                Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
+                        .trim());
+                String buttonName = extras.getString(ApiConstants.KEY_BUTTON)
+                        .trim();
 
-                ActionHandler.execute(context, room, buttonName);
-            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) &&
-                    extras.containsKey(ApiConstants.KEY_SCENE)) {
+                actionHandler.execute(room, buttonName);
+            } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
                 // Expects the following Extras:
                 // Scene:<SceneName>
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT).trim());
-                Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE).trim());
+                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                        .trim());
+                Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE)
+                        .trim());
 
-                ActionHandler.execute(context, scene);
+                actionHandler.execute(scene);
             } else {
-                Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG)
+                        .show();
             }
         } catch (NoSuchElementException e) {
             Timber.e(e);
-            Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.error_executing_action_template, e.getMessage()), Toast.LENGTH_LONG)
+                    .show();
         } catch (Exception e) {
             Timber.e("Error parsing intent!", e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
@@ -137,12 +149,13 @@ public class IntentReceiver extends BroadcastReceiver {
         try {
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                NetworkHandler.init(context);
+                NetworkHandlerImpl.init(context);
 
                 int start;
                 int end;
 
-                if (intent.getAction().equals(ApiConstants.intent_switch_on) || intent.getAction()
+                if (intent.getAction()
+                        .equals(ApiConstants.intent_switch_on) || intent.getAction()
                         .equals(ApiConstants.intent_switch_off)) {
                     if (extras.containsKey("Switch")) {
                         String switchProperties = extras.getString("Switch");
@@ -158,25 +171,26 @@ public class IntentReceiver extends BroadcastReceiver {
                             String switchName = switchProperties.substring(start, end);
 
                             String buttonName;
-                            if (intent.getAction().equals(ApiConstants.intent_switch_on)) {
+                            if (intent.getAction()
+                                    .equals(ApiConstants.intent_switch_on)) {
                                 buttonName = context.getString(R.string.on);
                             } else {
                                 buttonName = context.getString(R.string.off);
                             }
 
-                            Room room = DatabaseHandler.getRoomCaseInsensitive(roomName);
+                            Room     room     = DatabaseHandler.getRoomCaseInsensitive(roomName);
                             Receiver receiver = room.getReceiverCaseInsensitive(switchName);
-                            Button button = receiver.getButtonCaseInsensitive(buttonName);
+                            Button   button   = receiver.getButtonCaseInsensitive(buttonName);
 
-                            ActionHandler.execute(context, receiver, button);
+                            actionHandler.execute(receiver, button);
                         } catch (Exception e) {
                             Timber.e("invalid intent string: " + switchProperties + "\n", e);
-                            Toast.makeText(context,
-                                    "PowerSwitch - Error: invalid intent string: " + switchProperties,
-                                    Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "PowerSwitch - Error: invalid intent string: " + switchProperties, Toast.LENGTH_LONG)
+                                    .show();
                         }
                     }
-                } else if (intent.getAction().equals(ApiConstants.intent_room_on) || intent.getAction()
+                } else if (intent.getAction()
+                        .equals(ApiConstants.intent_room_on) || intent.getAction()
                         .equals(ApiConstants.intent_room_off)) {
                     if (extras.containsKey("Room")) {
                         String roomProperties = extras.getString("Room");
@@ -188,7 +202,8 @@ public class IntentReceiver extends BroadcastReceiver {
                             String roomName = roomProperties.substring(start, end);
 
                             String buttonName;
-                            if (intent.getAction().equals(ApiConstants.intent_room_on)) {
+                            if (intent.getAction()
+                                    .equals(ApiConstants.intent_room_on)) {
                                 buttonName = context.getString(R.string.on);
                             } else {
                                 buttonName = context.getString(R.string.off);
@@ -196,12 +211,11 @@ public class IntentReceiver extends BroadcastReceiver {
 
                             Room room = DatabaseHandler.getRoomCaseInsensitive(roomName);
 
-                            ActionHandler.execute(context, room, buttonName);
+                            actionHandler.execute(room, buttonName);
                         } catch (Exception e) {
                             Timber.e("invalid intent string" + "\n", e);
-                            Toast.makeText(context,
-                                    "PowerSwitch - Error: invalid intent string: " + roomProperties,
-                                    Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "PowerSwitch - Error: invalid intent string: " + roomProperties, Toast.LENGTH_LONG)
+                                    .show();
                         }
                     }
                 } else {
@@ -210,7 +224,8 @@ public class IntentReceiver extends BroadcastReceiver {
             }
         } catch (Exception e) {
             Timber.e(e);
-            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.error_parsing_intent, e.getMessage()), Toast.LENGTH_LONG)
+                    .show();
         }
     }
 }

@@ -39,10 +39,13 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
+import eu.power_switch.event.GatewayChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
@@ -50,11 +53,11 @@ import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.event.GatewayChangedEvent;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import timber.log.Timber;
 
@@ -69,6 +72,10 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     FloatingActionButton searchGatewayFAB;
     @BindView(R.id.add_fab)
     FloatingActionButton addGatewayFAB;
+
+    @Inject
+    NetworkHandler networkHandler;
+
     private GatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
     private ArrayList<Gateway> gateways = new ArrayList<>();
 
@@ -140,7 +147,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     }
 
     private void startAutoDiscovery() {
-        if (!NetworkHandler.isWifiConnected()) {
+        if (!networkHandler.isWifiConnected()) {
             StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
             return;
         }
@@ -151,7 +158,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    final List<Gateway> foundGateways = NetworkHandler.searchGateways();
+                    final List<Gateway> foundGateways = NetworkHandlerImpl.searchGateways();
 
                     // stop animation
                     getActivity().runOnUiThread(new Runnable() {

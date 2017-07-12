@@ -18,11 +18,9 @@
 
 package eu.power_switch.action;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import eu.power_switch.obj.Scene;
-import eu.power_switch.shared.action.Action;
 
 /**
  * SceneAction that holds a specific scene to activate on execution
@@ -33,7 +31,7 @@ public class SceneAction extends Action {
 
     //    private Apartment apartment;
     private String apartmentName;
-    private Scene scene;
+    private Scene  scene;
 
     public SceneAction(long id, @NonNull String apartmentName, @NonNull Scene scene) {
         this.id = id;
@@ -61,9 +59,7 @@ public class SceneAction extends Action {
     }
 
     @Override
-    public void execute(@NonNull Context context) {
-        ActionHandler.execute(context, scene);
+    public void execute(@NonNull ActionHandler actionHandler) {
+        actionHandler.execute(scene);
     }
-
-
 }

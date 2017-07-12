@@ -42,6 +42,8 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
+import eu.power_switch.event.ActiveApartmentChangedEvent;
+import eu.power_switch.event.SceneChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
@@ -52,8 +54,6 @@ import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.event.ActiveApartmentChangedEvent;
-import eu.power_switch.shared.event.SceneChangedEvent;
 import timber.log.Timber;
 
 /**

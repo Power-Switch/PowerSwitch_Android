@@ -19,12 +19,14 @@
 package eu.power_switch.widget;
 
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -44,7 +46,10 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 07.11.2015.
  */
-public class WidgetIntentReceiver extends BroadcastReceiver {
+public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
+
+    @Inject
+    ActionHandler actionHandler;
 
     /**
      * Generates a unique PendingIntent for actions on receiver widgets
@@ -60,7 +65,8 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
     public static PendingIntent buildReceiverWidgetActionPendingIntent(Context context, Apartment apartment, Room room, Receiver receiver,
                                                                        Button button, int uniqueRequestCode) {
         return PendingIntent.getBroadcast(context,
-                uniqueRequestCode, createReceiverButtonIntent(context, apartment.getName(), room.getName(), receiver.getName(), button.getName()),
+                uniqueRequestCode,
+                createReceiverButtonIntent(context, apartment.getName(), room.getName(), receiver.getName(), button.getName()),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -113,8 +119,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
      * @return PendingIntent
      */
     public static PendingIntent buildSceneWidgetPendingIntent(Context context, Apartment apartment, Scene scene, int uniqueRequestCode) {
-        return PendingIntent.getBroadcast(context,
-                uniqueRequestCode, createSceneIntent(context, apartment.getName(), scene.getName()),
+        return PendingIntent.getBroadcast(context, uniqueRequestCode, createSceneIntent(context, apartment.getName(), scene.getName()),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -129,6 +134,8 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
         Timber.d("Received intent: ", intent);
 
         try {
@@ -163,7 +170,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
                 Receiver  receiver  = room.getReceiver(receiverName);
                 Button    button    = receiver.getButton(buttonName);
 
-                ActionHandler.execute(context, receiver, button);
+                actionHandler.execute(receiver, button);
             } else if (extras.containsKey(WidgetConstants.KEY_APARTMENT) && extras.containsKey(WidgetConstants.KEY_ROOM) && extras.containsKey(
                     WidgetConstants.KEY_BUTTON)) {
                 String apartmentName = extras.getString(WidgetConstants.KEY_APARTMENT);
@@ -173,7 +180,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
                 Apartment apartment = DatabaseHandler.getApartment(apartmentName);
                 Room      room      = apartment.getRoom(roomName);
 
-                ActionHandler.execute(context, room, buttonName);
+                actionHandler.execute(room, buttonName);
             } else if (extras.containsKey(WidgetConstants.KEY_APARTMENT) && extras.containsKey(WidgetConstants.KEY_SCENE)) {
                 String apartmentName = extras.getString(WidgetConstants.KEY_APARTMENT);
                 String sceneName     = extras.getString(WidgetConstants.KEY_SCENE);
@@ -181,7 +188,7 @@ public class WidgetIntentReceiver extends BroadcastReceiver {
                 Apartment apartment = DatabaseHandler.getApartment(apartmentName);
                 Scene     scene     = apartment.getScene(sceneName);
 
-                ActionHandler.execute(context, scene);
+                actionHandler.execute(scene);
             } else {
                 Toast.makeText(context, R.string.invalid_arguments, Toast.LENGTH_LONG)
                         .show();

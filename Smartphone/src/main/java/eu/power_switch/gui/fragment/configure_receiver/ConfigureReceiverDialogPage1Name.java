@@ -55,6 +55,8 @@ import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.event.ReceiverParentRoomChangedEvent;
+import eu.power_switch.event.RoomAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
@@ -62,8 +64,6 @@ import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.Room;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.event.ReceiverParentRoomChangedEvent;
-import eu.power_switch.shared.event.RoomAddedEvent;
 import timber.log.Timber;
 
 /**

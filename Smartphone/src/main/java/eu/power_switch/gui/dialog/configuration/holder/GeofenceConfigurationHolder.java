@@ -8,9 +8,9 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.power_switch.action.Action;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.dialog.configuration.ConfigurationHolder;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.GeofenceConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

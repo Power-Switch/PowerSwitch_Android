@@ -29,11 +29,11 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.event.AlarmEventActionAddedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.AlarmClockConstants;
-import eu.power_switch.shared.event.AlarmEventActionAddedEvent;
 
 /**
  * Dialog to select an action configuration for a stock alarm clock event

@@ -38,6 +38,10 @@
         <AndroidXmlCodeStyleSettings>
           <option name="USE_CUSTOM_SETTINGS" value="true" />
         </AndroidXmlCodeStyleSettings>
+        <JavaCodeStyleSettings>
+          <option name="ANNOTATION_PARAMETER_WRAP" value="5" />
+          <option name="ALIGN_MULTILINE_ANNOTATION_PARAMETERS" value="true" />
+        </JavaCodeStyleSettings>
         <MarkdownNavigatorCodeStyleSettings>
           <option name="RIGHT_MARGIN" value="72" />
         </MarkdownNavigatorCodeStyleSettings>
@@ -73,11 +77,14 @@
           <option name="RIGHT_MARGIN" value="150" />
           <option name="KEEP_LINE_BREAKS" value="false" />
           <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
+          <option name="ALIGN_MULTILINE_ARRAY_INITIALIZER_EXPRESSION" value="true" />
           <option name="ALIGN_GROUP_FIELD_DECLARATIONS" value="true" />
           <option name="ALIGN_CONSECUTIVE_VARIABLE_DECLARATIONS" value="true" />
           <option name="CALL_PARAMETERS_WRAP" value="5" />
           <option name="METHOD_PARAMETERS_WRAP" value="1" />
           <option name="METHOD_CALL_CHAIN_WRAP" value="2" />
+          <option name="ARRAY_INITIALIZER_WRAP" value="5" />
+          <option name="ENUM_CONSTANTS_WRAP" value="2" />
         </codeStyleSettings>
         <codeStyleSettings language="XML">
           <option name="FORCE_REARRANGE_MODE" value="1" />

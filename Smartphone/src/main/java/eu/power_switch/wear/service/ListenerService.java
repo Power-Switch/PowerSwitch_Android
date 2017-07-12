@@ -31,6 +31,9 @@ import com.google.android.gms.wearable.WearableListenerService;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -50,6 +53,15 @@ import timber.log.Timber;
  * Created by Markus on 04.06.2015.
  */
 public class ListenerService extends WearableListenerService {
+
+    @Inject
+    ActionHandler actionHandler;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        AndroidInjection.inject(this);
+    }
 
     /**
      * This method is called when a message from a wearable device is received
@@ -102,7 +114,7 @@ public class ListenerService extends WearableListenerService {
                 Receiver receiver = room.getReceiver(receiverId);
                 Button   button   = receiver.getButton(buttonId);
 
-                ActionHandler.execute(getApplicationContext(), receiver, button);
+                actionHandler.execute(receiver, button);
             } else if (messageData.contains(WearableConstants.KEY_ROOM_ID) && messageData.contains(WearableConstants.KEY_BUTTON_ID)) {
                 int start = messageData.indexOf(WearableConstants.KEY_ROOM_ID) + WearableConstants.KEY_ROOM_ID.length();
                 int stop  = messageData.indexOf(WearableConstants.KEY_BUTTON_ID);
@@ -113,7 +125,7 @@ public class ListenerService extends WearableListenerService {
 
                 Room room = DatabaseHandler.getRoom(roomId);
 
-                ActionHandler.execute(getApplicationContext(), room, buttonId);
+                actionHandler.execute(room, buttonId);
             } else if (messageData.contains(WearableConstants.KEY_SCENE_ID)) {
                 int  start   = messageData.indexOf(WearableConstants.KEY_SCENE_ID) + WearableConstants.KEY_SCENE_ID.length();
                 int  stop    = messageData.indexOf(";;");
@@ -121,7 +133,7 @@ public class ListenerService extends WearableListenerService {
 
                 Scene scene = DatabaseHandler.getScene(sceneId);
 
-                ActionHandler.execute(getApplicationContext(), scene);
+                actionHandler.execute(scene);
             }
         } catch (Exception e) {
             Timber.e("parseMessage", e);

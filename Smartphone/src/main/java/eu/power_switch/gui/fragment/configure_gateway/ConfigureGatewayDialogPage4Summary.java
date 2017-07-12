@@ -32,10 +32,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.shared.constants.DatabaseConstants;
-import eu.power_switch.shared.event.ConfigurationChangedEvent;
 
 /**
  * "Name" Fragment used in Configure Apartment Dialog

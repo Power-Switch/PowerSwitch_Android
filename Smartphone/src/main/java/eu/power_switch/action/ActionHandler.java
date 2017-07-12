@@ -36,6 +36,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.history.HistoryHelper;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.network.UdpNetworkPackage;
 import eu.power_switch.notification.NotificationHandler;
@@ -48,7 +49,6 @@ import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
@@ -77,13 +77,12 @@ public class ActionHandler {
     /**
      * Execute Receiver Action
      *
-     * @param context  any suitable context
      * @param receiver receiver to execute on
      * @param button   button to activate
      */
-    public void execute(@NonNull Context context, @NonNull Receiver receiver, @NonNull Button button) {
+    public void execute(@NonNull Receiver receiver, @NonNull Button button) {
         try {
-            executeReceiverAction(context, receiver, button);
+            executeReceiverAction(receiver, button);
 
             HistoryHelper.add(context,
                     new HistoryItem((long) -1,
@@ -105,8 +104,8 @@ public class ActionHandler {
         }
     }
 
-    private void executeReceiverAction(@NonNull Context context, @NonNull Receiver receiver, @NonNull Button button) throws Exception {
-        NetworkHandler.init(context);
+    private void executeReceiverAction(@NonNull Receiver receiver, @NonNull Button button) throws Exception {
+        NetworkHandlerImpl.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
         Room      room      = apartment.getRoom(receiver.getRoomId());
@@ -154,7 +153,7 @@ public class ActionHandler {
             }
         }
 
-        NetworkHandler.send(networkPackages);
+        NetworkHandlerImpl.send(networkPackages);
 
         // set on object, as well as in database
         receiver.setLastActivatedButtonId(button.getId());
@@ -171,13 +170,12 @@ public class ActionHandler {
     /**
      * Execute Room Action
      *
-     * @param context    any suitable context
      * @param room       room to execute on
      * @param buttonName button name to execute on each receiver
      */
-    public void execute(@NonNull Context context, @NonNull Room room, @NonNull String buttonName) {
+    public void execute(@NonNull Room room, @NonNull String buttonName) {
         try {
-            executeRoomAction(context, room, buttonName);
+            executeRoomAction(room, buttonName);
 
             HistoryHelper.add(context,
                     new HistoryItem((long) -1,
@@ -196,13 +194,12 @@ public class ActionHandler {
     /**
      * Execute Room Action
      *
-     * @param context  any suitable context
      * @param room     room to execute on
      * @param buttonId button ID to execute on each receiver
      */
-    public void execute(@NonNull Context context, @NonNull Room room, long buttonId) {
+    public void execute(@NonNull Room room, long buttonId) {
         try {
-            executeRoomAction(context, room, buttonId);
+            executeRoomAction(room, buttonId);
 
             HistoryHelper.add(context,
                     new HistoryItem((long) -1,
@@ -218,8 +215,8 @@ public class ActionHandler {
         }
     }
 
-    private void executeRoomAction(@NonNull Context context, @NonNull Room room, @NonNull String buttonName) throws Exception {
-        NetworkHandler.init(context);
+    private void executeRoomAction(@NonNull Room room, @NonNull String buttonName) throws Exception {
+        NetworkHandlerImpl.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
 
@@ -293,7 +290,7 @@ public class ActionHandler {
             Timber.d(context.getString(R.string.no_receiver_supports_this_action));
             StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
-            NetworkHandler.send(networkPackages);
+            NetworkHandlerImpl.send(networkPackages);
         }
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -304,8 +301,8 @@ public class ActionHandler {
         }
     }
 
-    private void executeRoomAction(@NonNull Context context, @NonNull Room room, long buttonId) throws Exception {
-        NetworkHandler.init(context);
+    private void executeRoomAction(@NonNull Room room, long buttonId) throws Exception {
+        NetworkHandlerImpl.init(context);
 
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
 
@@ -378,7 +375,7 @@ public class ActionHandler {
             Timber.d(context.getString(R.string.no_receiver_supports_this_action));
             StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
-            NetworkHandler.send(networkPackages);
+            NetworkHandlerImpl.send(networkPackages);
         }
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -392,12 +389,11 @@ public class ActionHandler {
     /**
      * Execute Scene Action
      *
-     * @param context any suitable context
-     * @param scene   scene to execute
+     * @param scene scene to execute
      */
-    public void execute(@NonNull Context context, @NonNull Scene scene) {
+    public void execute(@NonNull Scene scene) {
         try {
-            executeScene(context, scene);
+            executeScene(scene);
 
             HistoryHelper.add(context,
                     new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.scene_action_history_text, scene.getName())));
@@ -411,8 +407,8 @@ public class ActionHandler {
         }
     }
 
-    private void executeScene(@NonNull Context context, @NonNull Scene scene) throws Exception {
-        NetworkHandler.init(context);
+    private void executeScene(@NonNull Scene scene) throws Exception {
+        NetworkHandlerImpl.init(context);
 
 
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
@@ -475,7 +471,7 @@ public class ActionHandler {
             }
         }
 
-        NetworkHandler.send(networkPackages);
+        NetworkHandlerImpl.send(networkPackages);
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
@@ -488,12 +484,11 @@ public class ActionHandler {
     /**
      * Execute Timer actions
      *
-     * @param context any suitable context
-     * @param timer   timer to execute
+     * @param timer timer to execute
      */
-    public void execute(@NonNull Context context, @NonNull Timer timer) {
+    public void execute(@NonNull Timer timer) {
         try {
-            executeActions(context, timer.getActions());
+            executeActions(timer.getActions());
 
             if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS)) {
                 NotificationHandler.createNotification(context, "Timer", "Timer \"" + timer.getName() + "\" executed");
@@ -514,13 +509,12 @@ public class ActionHandler {
     /**
      * Execute Sleep As Android actions
      *
-     * @param context any suitable context
-     * @param event   event type
+     * @param event event type
      */
-    public void execute(@NonNull Context context, @NonNull SleepAsAndroidConstants.Event event) {
+    public void execute(@NonNull SleepAsAndroidConstants.Event event) {
         try {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
-            executeActions(context, actions);
+            executeActions(actions);
 
             HistoryHelper.add(context,
                     new HistoryItem((long) -1,
@@ -539,13 +533,12 @@ public class ActionHandler {
     /**
      * Execute Alarm Clock actions
      *
-     * @param context any suitable context
-     * @param event   alarm event type
+     * @param event alarm event type
      */
-    public void execute(@NonNull Context context, @NonNull AlarmClockConstants.Event event) {
+    public void execute(@NonNull AlarmClockConstants.Event event) {
         try {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
-            executeActions(context, actions);
+            executeActions(actions);
 
             HistoryHelper.add(context,
                     new HistoryItem((long) -1,
@@ -564,13 +557,12 @@ public class ActionHandler {
     /**
      * Execute Geofence actions
      *
-     * @param context   any suitable context
      * @param geofence  geofence
      * @param eventType event type
      */
-    public void execute(@NonNull Context context, @NonNull Geofence geofence, @NonNull Geofence.EventType eventType) {
+    public void execute(@NonNull Geofence geofence, @NonNull Geofence.EventType eventType) {
         try {
-            executeActions(context, geofence.getActions(eventType));
+            executeActions(geofence.getActions(eventType));
 
             HistoryItem historyItem;
             String      notificationMessage;
@@ -608,13 +600,12 @@ public class ActionHandler {
     /**
      * Execute CallEvent actions
      *
-     * @param context
      * @param callEvent
      * @param callType
      */
-    public void execute(Context context, CallEvent callEvent, @NonNull PhoneConstants.CallType callType) {
+    public void execute(CallEvent callEvent, @NonNull PhoneConstants.CallType callType) {
         try {
-            executeActions(context, callEvent.getActions(callType));
+            executeActions(callEvent.getActions(callType));
 
             HistoryItem historyItem = new HistoryItem((long) -1,
                     Calendar.getInstance(),
@@ -630,20 +621,20 @@ public class ActionHandler {
         }
     }
 
-    private void executeActions(@NonNull Context context, @NonNull List<Action> actions) throws Exception {
+    private void executeActions(@NonNull List<Action> actions) throws Exception {
         for (Action action : actions) {
             switch (action.getActionType()) {
                 case Action.ACTION_TYPE_RECEIVER:
                     ReceiverAction receiverAction = (ReceiverAction) action;
-                    executeReceiverAction(context, receiverAction.getReceiver(), receiverAction.getButton());
+                    executeReceiverAction(receiverAction.getReceiver(), receiverAction.getButton());
                     break;
                 case Action.ACTION_TYPE_ROOM:
                     RoomAction roomAction = (RoomAction) action;
-                    executeRoomAction(context, roomAction.getRoom(), roomAction.getButtonName());
+                    executeRoomAction(roomAction.getRoom(), roomAction.getButtonName());
                     break;
                 case Action.ACTION_TYPE_SCENE:
                     SceneAction sceneAction = (SceneAction) action;
-                    executeScene(context, sceneAction.getScene());
+                    executeScene(sceneAction.getScene());
                     break;
             }
         }

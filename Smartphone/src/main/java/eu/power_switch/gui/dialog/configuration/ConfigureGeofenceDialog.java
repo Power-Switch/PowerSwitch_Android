@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
@@ -47,7 +48,6 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
 import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 

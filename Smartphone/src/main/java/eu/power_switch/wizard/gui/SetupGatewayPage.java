@@ -39,7 +39,7 @@ import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.adapter.WizardGatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
-import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.wizard.config.ConfigurationHolder;
@@ -113,7 +113,7 @@ public class SetupGatewayPage extends ConfigurationPage {
 
             @Override
             protected ArrayList<Gateway> doInBackground(Void... voids) {
-                ArrayList<Gateway> gateways = new ArrayList<>(NetworkHandler.searchGateways());
+                ArrayList<Gateway> gateways = new ArrayList<>(NetworkHandlerImpl.searchGateways());
 
                 for (Gateway gateway : gateways) {
                     try {

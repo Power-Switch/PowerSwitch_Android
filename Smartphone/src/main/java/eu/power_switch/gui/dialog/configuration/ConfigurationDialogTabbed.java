@@ -41,11 +41,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
-import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import lombok.Getter;
 import lombok.Setter;
 import timber.log.Timber;

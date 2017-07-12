@@ -43,7 +43,7 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage2Type;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage3Setup;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage4Gateway;
-import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage5TabbedSummary;
+import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage5Summary;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.gui.fragment.main.ScenesFragment;
 import eu.power_switch.obj.Apartment;
@@ -320,7 +320,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                     fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage4Gateway.class, parentDialog);
                     break;
                 case 4:
-                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage5TabbedSummary.class, parentDialog);
+                    fragment = ConfigurationDialogPage.newInstance(ConfigureReceiverDialogPage5Summary.class, parentDialog);
                     break;
             }
 

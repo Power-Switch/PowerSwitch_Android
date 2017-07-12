@@ -34,9 +34,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.VariableSelectedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusDialogFragment;
-import eu.power_switch.shared.event.VariableSelectedEvent;
 import timber.log.Timber;
 
 /**

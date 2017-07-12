@@ -18,7 +18,6 @@
 
 package eu.power_switch.phone.call;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.PhoneStateListener;
@@ -27,6 +26,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.shared.constants.PhoneConstants;
@@ -37,10 +39,13 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-public class CallEventReceiver extends BroadcastReceiver {
+public class CallEventReceiver extends DaggerBroadcastReceiver {
+
+    @Inject
+    ActionHandler actionHandler;
 
     private Context mContext;
-    private Intent mIntent;
+    private Intent  mIntent;
     private final PhoneStateListener phoneStateListener = new PhoneStateListener() {
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
@@ -58,10 +63,12 @@ public class CallEventReceiver extends BroadcastReceiver {
                     case TelephonyManager.CALL_STATE_RINGING:
                         // -- check international call or not.
                         if (incomingNumber.startsWith("00")) {
-                            Toast.makeText(mContext, "International Call- " + incomingNumber, Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "International Call- " + incomingNumber, Toast.LENGTH_LONG)
+                                    .show();
                             callState = "International - Ringing (" + incomingNumber + ")";
                         } else {
-                            Toast.makeText(mContext, "Local Call - " + incomingNumber, Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "Local Call - " + incomingNumber, Toast.LENGTH_LONG)
+                                    .show();
                             callState = "Local - Ringing (" + incomingNumber + ")";
                         }
 
@@ -70,10 +77,12 @@ public class CallEventReceiver extends BroadcastReceiver {
                     case TelephonyManager.CALL_STATE_OFFHOOK:
                         String dialingNumber = mIntent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
                         if (dialingNumber.startsWith("00")) {
-                            Toast.makeText(mContext, "International - " + dialingNumber, Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "International - " + dialingNumber, Toast.LENGTH_LONG)
+                                    .show();
                             callState = "International - Dialing (" + dialingNumber + ")";
                         } else {
-                            Toast.makeText(mContext, "Local Call - " + dialingNumber, Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "Local Call - " + dialingNumber, Toast.LENGTH_LONG)
+                                    .show();
                             callState = "Local - Dialing (" + dialingNumber + ")";
                         }
                         break;
@@ -96,16 +105,18 @@ public class CallEventReceiver extends BroadcastReceiver {
 
         Timber.d("Executing CallEvents...");
         for (CallEvent callEvent : callEvents) {
-            ActionHandler.execute(mContext, callEvent, PhoneConstants.CallType.INCOMING);
+            actionHandler.execute(callEvent, PhoneConstants.CallType.INCOMING);
         }
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
         mContext = context;
         mIntent = intent;
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        int events = PhoneStateListener.LISTEN_CALL_STATE;
+        TelephonyManager tm     = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        int              events = PhoneStateListener.LISTEN_CALL_STATE;
         tm.listen(phoneStateListener, events);
     }
 

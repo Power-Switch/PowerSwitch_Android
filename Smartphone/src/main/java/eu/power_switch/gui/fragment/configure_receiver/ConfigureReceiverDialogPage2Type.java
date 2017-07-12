@@ -44,12 +44,12 @@ import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialToolti
 import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
+import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.shared.Brand;
-import eu.power_switch.shared.event.ReceiverBrandOrModelChangedEvent;
 
 /**
  * "Type" Fragment used in Configure Receiver Dialog

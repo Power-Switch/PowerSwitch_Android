@@ -30,8 +30,8 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import dagger.android.DaggerIntentService;
 import eu.power_switch.R;
-import eu.power_switch.dagger.InjectableIntentService;
 import eu.power_switch.gui.StatusMessageHandler;
 import timber.log.Timber;
 
@@ -40,7 +40,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 29.10.2015.
  */
-public class NetworkPackageQueueHandler extends InjectableIntentService {
+public class NetworkPackageQueueHandler extends DaggerIntentService {
 
     public static final String KEY_NETWORK_PACKAGES = "networkPackages";
     public static final String KEY_CALLBACK         = "callback";

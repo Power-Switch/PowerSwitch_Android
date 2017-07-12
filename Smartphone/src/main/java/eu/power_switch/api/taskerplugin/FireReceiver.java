@@ -18,7 +18,6 @@
 
 package eu.power_switch.api.taskerplugin;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +25,9 @@ import android.widget.Toast;
 
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -42,10 +44,15 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 22.02.2016.
  */
-public class FireReceiver extends BroadcastReceiver {
+public class FireReceiver extends DaggerBroadcastReceiver {
+
+    @Inject
+    ActionHandler actionHandler;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
         Timber.d("Received intent: ", intent);
 
         if (com.twofortyfouram.locale.Intent.ACTION_FIRE_SETTING.equals(intent.getAction())) {
@@ -71,7 +78,7 @@ public class FireReceiver extends BroadcastReceiver {
                 Button button = receiver.getButtonCaseInsensitive(extras.getString(ApiConstants.KEY_BUTTON)
                         .trim());
 
-                ActionHandler.execute(context, receiver, button);
+                actionHandler.execute(receiver, button);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
                 Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
@@ -81,7 +88,7 @@ public class FireReceiver extends BroadcastReceiver {
                 String buttonName = extras.getString(ApiConstants.KEY_BUTTON)
                         .trim();
 
-                ActionHandler.execute(context, room, buttonName);
+                actionHandler.execute(room, buttonName);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
 
                 Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
@@ -89,7 +96,7 @@ public class FireReceiver extends BroadcastReceiver {
                 Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE)
                         .trim());
 
-                ActionHandler.execute(context, scene);
+                actionHandler.execute(scene);
             } else {
                 Toast.makeText(context, context.getString(R.string.invalid_arguments), Toast.LENGTH_LONG)
                         .show();

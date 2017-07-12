@@ -22,8 +22,8 @@ import android.content.Context;
 
 import org.greenrobot.eventbus.EventBus;
 
+import eu.power_switch.event.CallEventActionAddedEvent;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
-import eu.power_switch.shared.event.CallEventActionAddedEvent;
 
 /**
  * Dialog to select a action configuration

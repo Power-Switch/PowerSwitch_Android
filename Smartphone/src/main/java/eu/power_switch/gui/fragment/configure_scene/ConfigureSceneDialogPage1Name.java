@@ -51,6 +51,7 @@ import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.event.SceneSelectedReceiversChangedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
@@ -60,7 +61,6 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.event.SceneSelectedReceiversChangedEvent;
 
 /**
  * "Name" Fragment used in Configure Scene Dialog

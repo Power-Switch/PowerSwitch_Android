@@ -18,7 +18,6 @@
 
 package eu.power_switch.google_play_services.geofence;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.text.TextUtils;
 
@@ -28,6 +27,9 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerIntentService;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -39,7 +41,10 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 21.12.2015.
  */
-public class GeofenceIntentService extends IntentService {
+public class GeofenceIntentService extends DaggerIntentService {
+
+    @Inject
+    ActionHandler actionHandler;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -111,7 +116,7 @@ public class GeofenceIntentService extends IntentService {
 
                 eu.power_switch.google_play_services.geofence.Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
                 if (geofence.isActive() && geofenceStateChanged(geofence.getState(), eventType)) {
-                    ActionHandler.execute(getApplicationContext(), geofence, eventType);
+                    actionHandler.execute(geofence, eventType);
 
                     switch (eventType) {
                         case ENTER:

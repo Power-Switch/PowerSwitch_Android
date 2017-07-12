@@ -39,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.GatewaySsidAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SsidRecyclerViewAdapter;
@@ -46,7 +47,6 @@ import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.shared.event.GatewaySsidAddedEvent;
 
 /**
  * "SSID" Fragment used in Configure Apartment Dialog

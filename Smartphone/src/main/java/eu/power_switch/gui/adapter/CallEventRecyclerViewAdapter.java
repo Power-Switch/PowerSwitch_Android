@@ -32,8 +32,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.phone.call.CallEvent;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.PhoneConstants;
 
 /**

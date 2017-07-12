@@ -32,10 +32,10 @@ import java.util.Calendar;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
+import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
-import eu.power_switch.shared.action.Action;
-import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import eu.power_switch.timer.WeekdayTimer;
 
 /**

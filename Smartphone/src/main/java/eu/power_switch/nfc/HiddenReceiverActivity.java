@@ -18,12 +18,14 @@
 
 package eu.power_switch.nfc;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.os.Parcelable;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerActivity;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -39,13 +41,16 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 09.04.2016.
  */
-public class HiddenReceiverActivity extends Activity {
+public class HiddenReceiverActivity extends DaggerActivity {
 
     public static final String KEY_APARTMENT = "Apartment:";
     public static final String KEY_ROOM = "Room:";
     public static final String KEY_RECEIVER = "Receiver:";
     public static final String KEY_BUTTON = "Button:";
     public static final String KEY_SCENE = "Scene:";
+
+    @Inject
+    ActionHandler actionHandler;
 
     @Override
     protected void onResume() {
@@ -116,7 +121,7 @@ public class HiddenReceiverActivity extends Activity {
                     Receiver receiver = room.getReceiver(receiverId);
                     Button button = receiver.getButton(buttonId);
 
-                    ActionHandler.execute(this, receiver, button);
+                    actionHandler.execute(receiver, button);
                 } else if (content.contains(KEY_ROOM) && content.contains(KEY_BUTTON)) {
                     start = KEY_APARTMENT.length();
                     stop = content.indexOf(KEY_ROOM);
@@ -133,7 +138,7 @@ public class HiddenReceiverActivity extends Activity {
                     Apartment apartment = DatabaseHandler.getApartment(apartmentId);
                     Room room = apartment.getRoom(roomId);
 
-                    ActionHandler.execute(this, room, buttonName);
+                    actionHandler.execute(room, buttonName);
                 } else if (content.contains(KEY_SCENE)) {
                     start = KEY_APARTMENT.length();
                     stop = content.indexOf(KEY_SCENE);
@@ -146,7 +151,7 @@ public class HiddenReceiverActivity extends Activity {
                     Apartment apartment = DatabaseHandler.getApartment(apartmentId);
                     Scene scene = apartment.getScene(sceneId);
 
-                    ActionHandler.execute(this, scene);
+                    actionHandler.execute(scene);
                 }
             }
         } catch (Exception e) {

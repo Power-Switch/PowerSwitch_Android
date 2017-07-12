@@ -24,8 +24,8 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.power_switch.action.Action;
 import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import timber.log.Timber;
 

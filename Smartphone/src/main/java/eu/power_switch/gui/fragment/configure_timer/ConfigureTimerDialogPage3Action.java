@@ -37,14 +37,14 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
+import eu.power_switch.event.ActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddActionDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
-import eu.power_switch.shared.action.Action;
-import eu.power_switch.shared.event.ActionAddedEvent;
 import eu.power_switch.timer.Timer;
 
 /**

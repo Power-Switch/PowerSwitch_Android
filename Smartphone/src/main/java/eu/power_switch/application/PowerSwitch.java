@@ -18,7 +18,6 @@
 
 package eu.power_switch.application;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -31,7 +30,6 @@ import android.os.Message;
 import android.os.Process;
 import android.support.annotation.NonNull;
 import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -41,20 +39,17 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.inject.Inject;
-
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
+import dagger.android.DaggerApplication;
 import dagger.android.HasActivityInjector;
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
-import eu.power_switch.dagger.AppModule;
 import eu.power_switch.dagger.DaggerAppComponent;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
-import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -77,14 +72,17 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 11.08.2015.
  */
-public class PowerSwitch extends MultiDexApplication implements HasActivityInjector {
+public class PowerSwitch extends DaggerApplication implements HasActivityInjector {
 
     // Default System Handler for uncaught Exceptions
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
     private Handler                         mHandler;
 
-    @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder()
+                .create(this);
+    }
 
     public PowerSwitch() {
         // save original uncaught exception handler
@@ -157,8 +155,6 @@ public class PowerSwitch extends MultiDexApplication implements HasActivityInjec
     @Override
     public void onCreate() {
         super.onCreate();
-        // Dagger Setup
-        buildDaggerComponentGraph();
 
         // needs to be initialized before logging framework is up to get settings for that
         SmartphonePreferencesHandler.init(this);
@@ -182,7 +178,7 @@ public class PowerSwitch extends MultiDexApplication implements HasActivityInjec
 
         // Onetime initialization of handlers for static access
         DatabaseHandler.init(this);
-        NetworkHandler.init(this);
+        NetworkHandlerImpl.init(this);
 
         // reinitialize after logging framework is up to log current values
         SmartphonePreferencesHandler.init(this);
@@ -281,18 +277,6 @@ public class PowerSwitch extends MultiDexApplication implements HasActivityInjec
                 return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return dispatchingAndroidInjector;
-    }
-
-    private void buildDaggerComponentGraph() {
-        DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .build()
-                .inject(this);
     }
 
     @Override

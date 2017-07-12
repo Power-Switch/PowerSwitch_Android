@@ -29,8 +29,8 @@ import java.lang.reflect.Constructor;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
-import eu.power_switch.shared.event.ConfigurationChangedEvent;
 import timber.log.Timber;
 
 /**

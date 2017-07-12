@@ -18,11 +18,9 @@
 
 package eu.power_switch.action;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
 import eu.power_switch.obj.Room;
-import eu.power_switch.shared.action.Action;
 
 /**
  * RoomAction that holds a specific room/button combination to activate on execution
@@ -33,7 +31,7 @@ public class RoomAction extends Action {
 
     //    private Apartment apartment;
     private String apartmentName;
-    private Room room;
+    private Room   room;
     private String buttonName;
 
     public RoomAction(long id, @NonNull String apartmentName, @NonNull Room room, @NonNull String buttonName) {
@@ -69,7 +67,7 @@ public class RoomAction extends Action {
     }
 
     @Override
-    public void execute(@NonNull Context context) {
-        ActionHandler.execute(context, room, buttonName);
+    public void execute(@NonNull ActionHandler actionHandler) {
+        actionHandler.execute(room, buttonName);
     }
 }

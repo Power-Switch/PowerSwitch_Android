@@ -29,10 +29,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import eu.power_switch.R;
+import eu.power_switch.event.WearableSettingsChangedEvent;
 import eu.power_switch.settings.IntListPreference;
 import eu.power_switch.settings.SliderPreference;
 import eu.power_switch.settings.SliderPreferenceFragmentCompat;
-import eu.power_switch.shared.event.WearableSettingsChangedEvent;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 

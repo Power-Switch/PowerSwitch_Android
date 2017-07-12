@@ -42,6 +42,7 @@ import java.util.Set;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.event.ReceiverParentRoomChangedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
@@ -50,7 +51,6 @@ import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.shared.event.ReceiverParentRoomChangedEvent;
 
 /**
  * "Gateway"/"Network" Fragment used in Configure Receiver Dialog

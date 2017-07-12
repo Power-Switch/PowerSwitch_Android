@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.obj.Apartment;
@@ -46,7 +47,6 @@ import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.device.intertechno.CMR1000;
 import eu.power_switch.phone.call.CallEvent;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 import eu.power_switch.shared.constants.PhoneConstants;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;

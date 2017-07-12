@@ -39,12 +39,14 @@ import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureRoomDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.haptic_feedback.VibrationHandler;
+import timber.log.Timber;
 
 /**
  * * Adapter to visualize Room items (containing Receivers) in RecyclerView
@@ -55,15 +57,17 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
     // Store a member variable for the users
-    private RecyclerViewFragment recyclerViewFragment;
-    private ArrayList<Room>      rooms;
-    private FragmentActivity     fragmentActivity;
+    private       RecyclerViewFragment recyclerViewFragment;
+    private       ArrayList<Room>      rooms;
+    private       FragmentActivity     fragmentActivity;
+    private final ActionHandler        actionHandler;
 
     // Pass in the context and users array into the constructor
     public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Room> rooms) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.rooms = rooms;
         this.fragmentActivity = fragmentActivity;
+        actionHandler = new ActionHandler(fragmentActivity, new NetworkHandlerImpl(fragmentActivity));
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -126,11 +130,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                             String buttonName = buttonNames[0];
 
                             // send signal
-                            ActionHandler.execute(fragmentActivity, room, buttonName);
-
-
+                            actionHandler.execute(room, buttonName);
                         } catch (Exception e) {
-
+                            Timber.e(e);
                         }
 
                         return null;
@@ -237,7 +239,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                             @Override
                             protected Void doInBackground(Void... params) {
                                 // send signal
-                                ActionHandler.execute(fragmentActivity, receiver, button);
+                                actionHandler.execute(receiver, button);
                                 return null;
                             }
 

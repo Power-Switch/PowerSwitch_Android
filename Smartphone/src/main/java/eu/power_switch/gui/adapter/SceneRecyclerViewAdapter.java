@@ -40,6 +40,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
@@ -57,13 +58,15 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     private ArrayList<Scene>     scenes;
     private FragmentActivity     fragmentActivity;
 
-    private OnItemClickListener     onItemClickListener;
-    private OnItemLongClickListener onItemLongClickListener;
+    private       OnItemClickListener     onItemClickListener;
+    private       OnItemLongClickListener onItemLongClickListener;
+    private final ActionHandler           actonHandler;
 
     public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Scene> scenes) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
+        actonHandler = new ActionHandler(fragmentActivity, new NetworkHandlerImpl(fragmentActivity));
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -123,7 +126,7 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
                 new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... params) {
-                        ActionHandler.execute(fragmentActivity, scene);
+                        actonHandler.execute(scene);
                         return null;
                     }
                 }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

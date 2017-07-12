@@ -53,10 +53,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.GatewaySsidAddedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
-import eu.power_switch.shared.event.GatewaySsidAddedEvent;
 import timber.log.Timber;
 
 /**

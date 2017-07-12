@@ -49,9 +49,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
 import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
+import eu.power_switch.event.AlarmEventActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
@@ -61,9 +63,7 @@ import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
-import eu.power_switch.shared.action.Action;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants.Event;
-import eu.power_switch.shared.event.AlarmEventActionAddedEvent;
 
 /**
  * Fragment containing all settings related to Sleep As Android alarm clock event handling

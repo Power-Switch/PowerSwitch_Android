@@ -4,10 +4,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 /**
- * Base class vor EventBus events
+ * Base class for EventBus events
  * <p>
  * Created by Markus on 02.07.2017.
  */
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-abstract class EventBusEvent {
+public abstract class EventBusEvent {
 }

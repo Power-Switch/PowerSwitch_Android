@@ -65,11 +65,13 @@ import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHelper;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
+import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
@@ -81,7 +83,6 @@ import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
 import eu.power_switch.shared.Brand;
-import eu.power_switch.shared.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.shared.exception.clipboard.EmptyClipboardException;
 import timber.log.Timber;
 
@@ -296,8 +297,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                         }
                     }
 
-                    NetworkHandler.init(getContext());
-                    NetworkHandler.send(networkPackages);
+                    NetworkHandlerImpl.init(getContext());
+                    NetworkHandlerImpl.send(networkPackages);
 
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getContentView(), e);
@@ -325,8 +326,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                         }
                     }
 
-                    NetworkHandler.init(getContext());
-                    NetworkHandler.send(networkPackages);
+                    NetworkHandlerImpl.init(getContext());
+                    NetworkHandlerImpl.send(networkPackages);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getContentView(), e);
                 }
@@ -353,8 +354,8 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                         }
                     }
 
-                    NetworkHandler.init(getContext());
-                    NetworkHandler.send(networkPackages);
+                    NetworkHandlerImpl.init(getContext());
+                    NetworkHandlerImpl.send(networkPackages);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getContentView(), e);
                 }

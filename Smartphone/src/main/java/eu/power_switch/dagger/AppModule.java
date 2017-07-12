@@ -5,24 +5,24 @@ import android.content.Context;
 
 import javax.inject.Singleton;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import eu.power_switch.application.PowerSwitch;
 
 /**
  * Created by Markus on 11.07.2017.
  */
-@Module(subcomponents = {MainActivitySubComponent.class, UnknownErrorSubComponent.class})
-public class AppModule {
+@Module
+public abstract class AppModule {
 
-    private Application application;
-
-    public AppModule(Application application) {
-        this.application = application;
-    }
+    @Binds
+    abstract Application application(PowerSwitch application);
 
     @Provides
     @Singleton
-    Context provideContext() {
+    static Context provideContext(Application application) {
         return application;
     }
+
 }

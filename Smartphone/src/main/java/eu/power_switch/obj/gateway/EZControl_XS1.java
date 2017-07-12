@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 
 import java.util.Set;
 
-import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.sensor.Sensor;
 
@@ -53,11 +53,11 @@ public class EZControl_XS1 extends Gateway {
     }
 
     private void requestActors() {
-        communicators = NetworkHandler.getActors(this);
+        communicators = NetworkHandlerImpl.getActors(this);
     }
 
     private void requestSensors() {
-        sensors = NetworkHandler.getSensors(this);
+        sensors = NetworkHandlerImpl.getSensors(this);
     }
 
     public Set<Communicator> getCommunicators() {

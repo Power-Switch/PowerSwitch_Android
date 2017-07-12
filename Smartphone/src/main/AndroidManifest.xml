@@ -337,7 +337,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="eu.power_switch.alarm_clock.stock.IntentReceiver"
+            android:name="eu.power_switch.alarm_clock.stock.StockAlarmClockIntentReceiver"
             android:enabled="true"
             android:exported="true">
             <!-- Other Clock Apps -->
@@ -381,7 +381,7 @@
 
             </intent-filter>
         </receiver>
-        <receiver android:name=".alarm_clock.sleep_as_android.IntentReceiver">
+        <receiver android:name=".alarm_clock.sleep_as_android.SleepAsAndroidIntentReceiver">
             <!-- Sleep As Android -->
             <intent-filter>
                 <action android:name="com.urbandroid.sleep.alarmclock.ALARM_ALERT_START"/>
@@ -439,11 +439,7 @@
         <service
             android:name=".network.NetworkPackageQueueHandler"
             android:exported="false"/>
-        <service android:name=".wear.service.UtilityService">
-            <!-- <intent-filter> -->
-            <!-- <action android:name="eu.power_switch.wear.UPDATE_DATA"/> -->
-            <!-- </intent-filter> -->
-        </service>
+        <service android:name=".wear.service.UtilityService"/>
 
         <!-- Google Play Services Version Number -->
         <meta-data

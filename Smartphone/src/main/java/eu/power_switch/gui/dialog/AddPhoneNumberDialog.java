@@ -47,6 +47,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.event.PhoneNumberAddedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
@@ -54,7 +55,6 @@ import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
 import eu.power_switch.phone.Contact;
 import eu.power_switch.phone.ContactHelper;
-import eu.power_switch.shared.event.PhoneNumberAddedEvent;
 
 /**
  * Created by Markus on 08.04.2016.

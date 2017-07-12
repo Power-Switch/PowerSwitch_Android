@@ -37,10 +37,10 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.action.Action;
+import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
-import eu.power_switch.shared.action.Action;
-import eu.power_switch.shared.event.ConfigurationChangedEvent;
 
 /**
  * Created by Markus on 29.01.2016.

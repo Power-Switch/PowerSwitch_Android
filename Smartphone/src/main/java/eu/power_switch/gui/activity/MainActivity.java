@@ -73,6 +73,7 @@ import eu.power_switch.R;
 import eu.power_switch.application.PowerSaverHelper;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.event.HistoryUpdatedEvent;
 import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHelper;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -91,13 +92,13 @@ import eu.power_switch.gui.fragment.phone.PhoneTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
+import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.phone.PhoneHelper;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
-import eu.power_switch.shared.event.HistoryUpdatedEvent;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.permission.PermissionHelper;
 import eu.power_switch.special.HolidaySpecialHandler;
@@ -296,8 +297,8 @@ public class MainActivity extends EventBusActivity {
                 protected AsyncTaskResult<Gateway> doInBackground(Context... contexts) {
                     try {
                         Context context = contexts[0];
-                        NetworkHandler.init(context);
-                        List<Gateway> foundGateways = NetworkHandler.searchGateways();
+                        NetworkHandlerImpl.init(context);
+                        List<Gateway> foundGateways = NetworkHandlerImpl.searchGateways();
 
                         Gateway[] gatewaysArray = new Gateway[foundGateways.size()];
                         foundGateways.toArray(gatewaysArray);
