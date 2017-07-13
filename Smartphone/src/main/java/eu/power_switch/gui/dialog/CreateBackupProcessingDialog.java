@@ -20,8 +20,11 @@ package eu.power_switch.gui.dialog;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import net.lingala.zip4j.progress.ProgressMonitor;
+
+import javax.inject.Inject;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
@@ -35,10 +38,18 @@ import timber.log.Timber;
  */
 public class CreateBackupProcessingDialog extends ProcessingDialog {
 
-    public static final String KEY_NAME = "name";
+    public static final String KEY_NAME  = "name";
     public static final String KEY_FORCE = "force";
 
+    @Inject
+    BackupHandler backupHandler;
+
     private AsyncTask<Void, Object, AsyncTaskResult<Void>> processingTask;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public static CreateBackupProcessingDialog newInstance(String backupName, boolean force) {
         Bundle args = new Bundle();
@@ -62,13 +73,15 @@ public class CreateBackupProcessingDialog extends ProcessingDialog {
             @Override
             protected AsyncTaskResult<Void> doInBackground(Void... voids) {
                 try {
-                    BackupHandler backupHandler = new BackupHandler(getActivity());
-                    backupHandler.createBackup(false, getArguments().getString(KEY_NAME), getArguments().getBoolean(KEY_FORCE), new OnZipProgressChangedListener() {
-                        @Override
-                        public void onProgressChanged(ProgressMonitor progressMonitor) {
-                            publishProgress(progressMonitor.getPercentDone());
-                        }
-                    });
+                    backupHandler.createBackup(false,
+                            getArguments().getString(KEY_NAME),
+                            getArguments().getBoolean(KEY_FORCE),
+                            new OnZipProgressChangedListener() {
+                                @Override
+                                public void onProgressChanged(ProgressMonitor progressMonitor) {
+                                    publishProgress(progressMonitor.getPercentDone());
+                                }
+                            });
 
                     return new AsyncTaskResult<>();
                 } catch (Exception e) {

@@ -9,8 +9,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 import eu.power_switch.application.PowerSwitch;
 
 @Singleton
-@Component(modules = {AppModule.class,
-                      ActionHandlerModule.class,
+@Component(modules = {AppModule.class, ActionBindingsModule.class,
                       AlarmBindingsModule.class,
                       AndroidBindingsModule.class,
                       ApartmentBindingsModule.class,

@@ -2,6 +2,7 @@ package eu.power_switch.dagger;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.GatewayDetectedDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1;
@@ -29,6 +30,9 @@ public abstract class GatewayBindingsModule {
 
     @ContributesAndroidInjector
     abstract ConfigureGatewayDialogPage3 configureGatewayDialogPage3();
+
+    @ContributesAndroidInjector
+    abstract AddSsidDialog addSsidDialog();
 
     @ContributesAndroidInjector
     abstract ConfigureGatewayDialogPage4Summary configureGatewayDialogPage4Summary();

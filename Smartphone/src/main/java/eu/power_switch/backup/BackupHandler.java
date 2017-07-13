@@ -35,6 +35,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -48,6 +51,7 @@ import timber.log.Timber;
 /**
  * Database Handler to access/modify Backups stored on device or external storage
  */
+@Singleton
 public class BackupHandler {
 
     /**
@@ -69,7 +73,8 @@ public class BackupHandler {
      *
      * @param context any suitable context
      */
-    public BackupHandler(@NonNull Context context) {
+    @Inject
+    public BackupHandler(Context context) {
         this.context = context;
     }
 
@@ -89,8 +94,7 @@ public class BackupHandler {
                 }
 
                 List<String> subFolders = Arrays.asList(pathname.list());
-                return pathname.isDirectory() && subFolders.contains("shared_prefs") &&
-                        subFolders.contains("databases");
+                return pathname.isDirectory() && subFolders.contains("shared_prefs") && subFolders.contains("databases");
             }
         };
 
@@ -101,7 +105,9 @@ public class BackupHandler {
      * Deletes a folder/file recursively
      *
      * @param fileOrDirectory
+     *
      * @return
+     *
      * @throws Exception
      */
     public static boolean deleteRecursive(@NonNull File fileOrDirectory) throws Exception {
@@ -120,20 +126,21 @@ public class BackupHandler {
      */
     @NonNull
     public ArrayList<Backup> getBackups() {
-        ArrayList<Backup> backups = new ArrayList<>();
-        File backupDir = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+        ArrayList<Backup> backups   = new ArrayList<>();
+        File              backupDir = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
 
         FileFilter backupFileFilter = new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return pathname.isFile() && pathname.getName().endsWith(BACKUP_FILE_SUFFIX);
+                return pathname.isFile() && pathname.getName()
+                        .endsWith(BACKUP_FILE_SUFFIX);
             }
         };
 
         if (backupDir.exists()) {
             for (File file : backupDir.listFiles(backupFileFilter)) {
-                backups.add(new Backup(file.getName().replace(BACKUP_FILE_SUFFIX, ""), new Date(file.lastModified()),
-                        backupDir + File.separator + file.getName(), false));
+                backups.add(new Backup(file.getName()
+                        .replace(BACKUP_FILE_SUFFIX, ""), new Date(file.lastModified()), backupDir + File.separator + file.getName(), false));
             }
         }
         return backups;
@@ -145,11 +152,12 @@ public class BackupHandler {
      * @param useExternalStorage use external storage path instead of internal?
      * @param name               name of backup
      * @param force              overwrite existing folders?
+     *
      * @throws CreateBackupException
      * @throws BackupAlreadyExistsException
      */
-    public void createBackup(boolean useExternalStorage, @NonNull String name, boolean force, @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws
-            CreateBackupException, BackupAlreadyExistsException {
+    public void createBackup(boolean useExternalStorage, @NonNull String name, boolean force,
+                             @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws CreateBackupException, BackupAlreadyExistsException {
         if (useExternalStorage) {
             // TODO: kp wie man internen und externen speicher unterscheidet
         } else {
@@ -179,11 +187,11 @@ public class BackupHandler {
             }
 
             try {
-                ZipHelper.createZip(
-                        SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
+                ZipHelper.createZip(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX,
                         BACKUP_PASSWORD,
                         onZipProgressChangedListener,
-                        context.getFilesDir().getParent());
+                        context.getFilesDir()
+                                .getParent());
             } catch (Exception e) {
                 Timber.e(e);
                 throw new CreateBackupException(e);
@@ -195,16 +203,15 @@ public class BackupHandler {
      * Remove a Backup
      *
      * @param name name of backup
+     *
      * @throws BackupNotFoundException
      * @throws RemoveBackupException
      */
     public void removeBackup(@NonNull String name) throws BackupNotFoundException, RemoveBackupException {
         try {
-            File backupFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
-                    + File.separator + name);
+            File backupFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name);
 
-            File backupZipFile = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
-                    + File.separator + name + BACKUP_FILE_SUFFIX);
+            File backupZipFile = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + name + BACKUP_FILE_SUFFIX);
 
             if (backupFolder.exists() || backupZipFile.exists()) {
                 deleteRecursive(backupFolder);
@@ -223,14 +230,13 @@ public class BackupHandler {
      *
      * @param oldName old backup name
      * @param newName new backup name
+     *
      * @throws BackupNotFoundException
      * @throws BackupAlreadyExistsException
      */
     public void renameBackup(@NonNull String oldName, @NonNull String newName) throws BackupNotFoundException, BackupAlreadyExistsException {
-        File oldZipFile = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
-                + File.separator + oldName + BACKUP_FILE_SUFFIX);
-        File newFolder = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH)
-                + File.separator + newName + BACKUP_FILE_SUFFIX);
+        File oldZipFile = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldName + BACKUP_FILE_SUFFIX);
+        File newFolder  = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + newName + BACKUP_FILE_SUFFIX);
 
         if (!oldZipFile.exists()) {
             throw new BackupNotFoundException();
@@ -245,13 +251,16 @@ public class BackupHandler {
      * Restore Backup
      *
      * @param filePath absolute file path of the backup
+     *
      * @throws BackupNotFoundException
      * @throws RestoreBackupException
      */
-    public void restoreBackup(@NonNull String filePath, @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws BackupNotFoundException, RestoreBackupException {
+    public void restoreBackup(@NonNull String filePath,
+                              @NonNull OnZipProgressChangedListener onZipProgressChangedListener) throws BackupNotFoundException, RestoreBackupException {
         try {
             // create destination path object
-            File dst = new File(context.getFilesDir().getParent());
+            File dst = new File(context.getFilesDir()
+                    .getParent());
 
             // delete existing files
             for (File fileOrFolder : dst.listFiles()) {
@@ -259,7 +268,8 @@ public class BackupHandler {
             }
 
             ZipHelper.extractZip(filePath,
-                    context.getFilesDir().getParent(),
+                    context.getFilesDir()
+                            .getParent(),
                     BACKUP_PASSWORD,
                     onZipProgressChangedListener);
         } catch (Exception e) {
@@ -299,7 +309,7 @@ public class BackupHandler {
 
             // Transfer bytes from in to out
             byte[] buf = new byte[1024];
-            int len;
+            int    len;
             while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);
             }

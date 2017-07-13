@@ -31,6 +31,8 @@ import android.text.TextWatcher;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
@@ -50,6 +52,9 @@ public class EditBackupDialog extends EventBusSupportDialogFragment {
 
     @BindView(R.id.editText_backup_name)
     EditText name;
+
+    @Inject
+    BackupHandler backupHandler;
 
     private boolean modified = false;
 
@@ -101,7 +106,6 @@ public class EditBackupDialog extends EventBusSupportDialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 if (modified) {
                     try {
-                        BackupHandler backupHandler = new BackupHandler(getActivity());
                         backupHandler.renameBackup(backupName,
                                 name.getText()
                                         .toString()

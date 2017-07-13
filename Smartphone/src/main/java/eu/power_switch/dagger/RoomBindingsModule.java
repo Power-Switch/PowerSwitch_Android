@@ -2,6 +2,8 @@ package eu.power_switch.dagger;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import eu.power_switch.gui.dialog.CreateRoomDialog;
+import eu.power_switch.gui.dialog.EditRoomOrderDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureRoomDialog;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage2Gateways;
@@ -17,6 +19,9 @@ public abstract class RoomBindingsModule {
     abstract RoomsFragment roomsFragment();
 
     @ContributesAndroidInjector
+    abstract EditRoomOrderDialog editRoomOrderDialog();
+
+    @ContributesAndroidInjector
     abstract ConfigureRoomDialog configureRoomDialog();
 
     @ContributesAndroidInjector
@@ -24,5 +29,8 @@ public abstract class RoomBindingsModule {
 
     @ContributesAndroidInjector
     abstract ConfigureRoomDialogPage2Gateways configureRoomDialogPage2Gateways();
+
+    @ContributesAndroidInjector
+    abstract CreateRoomDialog createRoomDialog();
 
 }

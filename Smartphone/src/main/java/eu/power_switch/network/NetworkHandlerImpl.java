@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.obj.communicator.Communicator;
 import eu.power_switch.obj.gateway.BrematicGWY433;
@@ -51,6 +52,7 @@ import timber.log.Timber;
 /**
  * Class to handle all network related actions such as sending button actions and searching for gateways
  */
+@Singleton
 public class NetworkHandlerImpl implements NetworkHandler {
 
     protected static final Object lockObject = new Object();

@@ -2,6 +2,7 @@ package eu.power_switch.dagger;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import eu.power_switch.gui.dialog.SelectApartmentDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureApartmentDialog;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.gui.fragment.configure_apartment.ConfigureApartmentDialogPage1Name;
@@ -14,6 +15,11 @@ public abstract class ApartmentBindingsModule {
 
     @ContributesAndroidInjector
     abstract ApartmentFragment apartmentFragment();
+
+    @ContributesAndroidInjector
+    abstract SelectApartmentDialog selectApartmentDialog();
+
+
 
     @ContributesAndroidInjector
     abstract ConfigureApartmentDialog configureApartmentDialog();

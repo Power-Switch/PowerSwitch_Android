@@ -45,6 +45,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.backup.Backup;
@@ -82,6 +84,10 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     TextView             textViewBackupPath;
     @BindView(R.id.add_fab)
     FloatingActionButton fab;
+
+    @Inject
+    BackupHandler backupHandler;
+
     private ArrayList<Backup> backups = new ArrayList<>();
     private BackupRecyclerViewAdapter backupArrayAdapter;
 
@@ -119,7 +125,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
             }
         });
 
-        backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups);
+        backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups, backupHandler);
 //        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(View itemView, int position) {
@@ -333,7 +339,6 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     public List<Backup> loadListData() throws Exception {
         ArrayList<Backup> backups = new ArrayList<>();
 
-        BackupHandler backupHandler = new BackupHandler(getActivity());
         for (Backup backup : backupHandler.getBackups()) {
             backups.add(backup);
         }

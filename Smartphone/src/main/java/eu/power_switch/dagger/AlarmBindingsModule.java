@@ -4,6 +4,8 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidIntentReceiver;
 import eu.power_switch.alarm_clock.stock.StockAlarmClockIntentReceiver;
+import eu.power_switch.gui.dialog.AddSleepAsAndroidAlarmEventActionDialog;
+import eu.power_switch.gui.dialog.AddStockAlarmClockEventActionDialog;
 import eu.power_switch.gui.fragment.alarm_clock.AlarmClockTabFragment;
 import eu.power_switch.gui.fragment.alarm_clock.SleepAsAndroidFragment;
 import eu.power_switch.gui.fragment.alarm_clock.StockAlarmClockFragment;
@@ -28,5 +30,11 @@ public abstract class AlarmBindingsModule {
 
     @ContributesAndroidInjector
     abstract SleepAsAndroidIntentReceiver sleepAsAndroidIntentReceiver();
+
+    @ContributesAndroidInjector
+    abstract AddStockAlarmClockEventActionDialog addStockAlarmClockEventActionDialog();
+
+    @ContributesAndroidInjector
+    abstract AddSleepAsAndroidAlarmEventActionDialog addSleepAsAndroidAlarmEventActionDialog();
 
 }

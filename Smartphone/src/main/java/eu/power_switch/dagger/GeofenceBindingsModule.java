@@ -4,6 +4,8 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import eu.power_switch.google_play_services.geofence.GeofenceIntentReceiver;
 import eu.power_switch.google_play_services.geofence.GeofenceIntentService;
+import eu.power_switch.gui.dialog.SelectApartmentForGeofenceDialog;
+import eu.power_switch.gui.dialog.configuration.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1Location;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActions;
@@ -26,7 +28,13 @@ public abstract class GeofenceBindingsModule {
     abstract ApartmentGeofencesFragment apartmentGeofencesFragment();
 
     @ContributesAndroidInjector
+    abstract SelectApartmentForGeofenceDialog selectApartmentForGeofenceDialog();
+
+    @ContributesAndroidInjector
     abstract CustomGeofencesFragment customGeofencesFragment();
+
+    @ContributesAndroidInjector
+    abstract ConfigureApartmentGeofenceDialog configureApartmentGeofenceDialog();
 
     @ContributesAndroidInjector
     abstract ConfigureGeofenceDialog configureGeofenceDialog();

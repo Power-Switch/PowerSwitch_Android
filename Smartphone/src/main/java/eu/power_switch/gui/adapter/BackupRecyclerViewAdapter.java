@@ -54,17 +54,21 @@ import timber.log.Timber;
  * Created by Markus on 27.07.2015.
  */
 public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecyclerViewAdapter.ViewHolder> {
-    private RecyclerViewFragment recyclerViewFragment;
-    private ArrayList<Backup>    backups;
-    private Context              context;
+
+    private final BackupHandler        backupHandler;
+    private final RecyclerViewFragment recyclerViewFragment;
+    private final ArrayList<Backup>    backups;
+    private final Context              context;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public BackupRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, Context context, ArrayList<Backup> backups) {
+    public BackupRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, Context context, ArrayList<Backup> backups,
+                                     BackupHandler backupHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.backups = backups;
         this.context = context;
+        this.backupHandler = backupHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -107,7 +111,6 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
         holder.share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BackupHandler backupHandler = new BackupHandler(context);
                 backupHandler.shareBackup(context, backup);
             }
         });
@@ -119,7 +122,6 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            BackupHandler backupHandler = new BackupHandler(context);
                             backupHandler.removeBackup(backup.getName());
 
                             backups.remove(holder.getAdapterPosition());

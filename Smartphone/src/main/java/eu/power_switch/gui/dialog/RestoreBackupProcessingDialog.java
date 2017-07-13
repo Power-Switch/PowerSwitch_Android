@@ -23,6 +23,8 @@ import android.os.Bundle;
 
 import net.lingala.zip4j.progress.ProgressMonitor;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
 import eu.power_switch.application.PowerSwitch;
 import eu.power_switch.backup.BackupHandler;
@@ -39,6 +41,9 @@ import timber.log.Timber;
 public class RestoreBackupProcessingDialog extends ProcessingDialog {
 
     public static final String KEY_FILE_PATH = "file_path";
+
+    @Inject
+    BackupHandler backupHandler;
 
     private AsyncTask<Void, Object, AsyncTaskResult<Void>> processingTask;
 
@@ -63,14 +68,12 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
             @Override
             protected AsyncTaskResult<Void> doInBackground(Void... voids) {
                 try {
-                    BackupHandler backupHandler = new BackupHandler(getActivity());
-                    backupHandler.restoreBackup(getArguments().getString(KEY_FILE_PATH),
-                            new OnZipProgressChangedListener() {
-                                @Override
-                                public void onProgressChanged(ProgressMonitor progressMonitor) {
-                                    publishProgress(progressMonitor.getPercentDone());
-                                }
-                            });
+                    backupHandler.restoreBackup(getArguments().getString(KEY_FILE_PATH), new OnZipProgressChangedListener() {
+                        @Override
+                        public void onProgressChanged(ProgressMonitor progressMonitor) {
+                            publishProgress(progressMonitor.getPercentDone());
+                        }
+                    });
 
                     return new AsyncTaskResult<>();
                 } catch (Exception e) {

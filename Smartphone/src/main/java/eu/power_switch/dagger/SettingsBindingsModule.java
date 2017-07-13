@@ -2,6 +2,8 @@ package eu.power_switch.dagger;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import eu.power_switch.gui.dialog.DeveloperOptionsDialog;
+import eu.power_switch.gui.dialog.PathChooserDialog;
 import eu.power_switch.gui.fragment.settings.GatewaySettingsFragment;
 import eu.power_switch.gui.fragment.settings.GeneralSettingsPreferenceFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
@@ -24,5 +26,11 @@ public abstract class SettingsBindingsModule {
 
     @ContributesAndroidInjector
     abstract WearableSettingsPreferenceFragment wearableSettingsPreferenceFragment();
+
+    @ContributesAndroidInjector
+    abstract PathChooserDialog pathChooserDialog();
+
+    @ContributesAndroidInjector
+    abstract DeveloperOptionsDialog developerOptionsDialog();
 
 }
