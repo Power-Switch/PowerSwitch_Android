@@ -18,26 +18,19 @@
 
 -dontobfuscate
 
-# Keep device implementation classes
+# Keep device implementation classes in "obj" package
 # This is needed because they are created using reflection
 -keep class eu.power_switch.obj.** {
     *;
 }
+
+### External Libraries
 
 # AboutLibraries
 -keep class .R
 -keep class **.R$* {
     <fields>;
 }
-
-# Lombok
--dontwarn lombok.**
-
-# Logback Android
--keep class ch.qos.** { *; }
--keep class org.slf4j.** { *; }
--keepattributes *Annotation*
--dontwarn ch.qos.logback.core.net.*
 
 # Dagger 2
 -dontwarn com.google.errorprone.annotations.*

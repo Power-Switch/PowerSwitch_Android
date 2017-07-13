@@ -17,3 +17,16 @@
 #}
 
 -dontobfuscate
+
+# Lombok
+-dontwarn lombok.**
+
+# Logback Android
+-keep class ch.qos.** { *; }
+-keep class org.slf4j.** { *; }
+-keepattributes *Annotation*
+-dontwarn ch.qos.logback.core.net.*
+
+# Crashlytics
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
