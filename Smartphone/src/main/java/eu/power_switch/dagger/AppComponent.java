@@ -10,19 +10,17 @@ import eu.power_switch.application.PowerSwitch;
 
 @Singleton
 @Component(modules = {AppModule.class,
-                      ActionHandlerModule.class,
-                      NetworkHandlerModule.class,
+                      ActionHandlerModule.class, AlarmBindingsModule.class,
                       AndroidBindingsModule.class,
-                      ApartmentBindingsModule.class,
+                      ApartmentBindingsModule.class, ApiBindingsModule.class,
                       BackupBindingsModule.class,
                       CallEventBindingsModule.class,
                       GatewayBindingsModule.class,
-                      GeofenceBindingsModule.class,
+                      GeofenceBindingsModule.class, NetworkHandlerModule.class, NfcBindingsModule.class,
                       ReceiverBindingsModule.class,
                       RoomBindingsModule.class,
-                      SceneBindingsModule.class,
-                      TimerBindingsModule.class,
-                      WidgetBindingsModule.class, WearBindingsModule.class,
+                      SceneBindingsModule.class, SettingsBindingsModule.class,
+                      TimerBindingsModule.class, WearBindingsModule.class, WidgetBindingsModule.class,
                       AndroidInjectionModule.class,
                       AndroidSupportInjectionModule.class})
 interface AppComponent extends AndroidInjector<PowerSwitch> {

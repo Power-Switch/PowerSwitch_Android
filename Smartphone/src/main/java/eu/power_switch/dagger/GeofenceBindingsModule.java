@@ -9,12 +9,24 @@ import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPa
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage2EnterActions;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage3ExitActions;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage4Summary;
+import eu.power_switch.gui.fragment.geofences.ApartmentGeofencesFragment;
+import eu.power_switch.gui.fragment.geofences.CustomGeofencesFragment;
+import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
 
 /**
  * Created by Markus on 12.07.2017.
  */
 @Module
 public abstract class GeofenceBindingsModule {
+
+    @ContributesAndroidInjector
+    abstract GeofencesTabFragment geofencesTabFragment();
+
+    @ContributesAndroidInjector
+    abstract ApartmentGeofencesFragment apartmentGeofencesFragment();
+
+    @ContributesAndroidInjector
+    abstract CustomGeofencesFragment customGeofencesFragment();
 
     @ContributesAndroidInjector
     abstract ConfigureGeofenceDialog configureGeofenceDialog();

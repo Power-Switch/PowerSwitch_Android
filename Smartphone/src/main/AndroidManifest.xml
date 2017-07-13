@@ -327,7 +327,7 @@
                 <action android:name="de.ressel.powerswitch.action.Room.OFF"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".timer.alarm.AlarmIntentReceiver">
+        <receiver android:name=".timer.alarm.TimerAlarmIntentReceiver">
             <!-- Timer alarms -->
 
             <!-- Intents are sent explicitly to this class, no need to specify an intent filter -->

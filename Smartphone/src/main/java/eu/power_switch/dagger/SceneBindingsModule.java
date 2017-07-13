@@ -5,12 +5,16 @@ import dagger.android.ContributesAndroidInjector;
 import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Name;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogTabbedPage2Setup;
+import eu.power_switch.gui.fragment.main.ScenesFragment;
 
 /**
  * Created by Markus on 12.07.2017.
  */
 @Module
 public abstract class SceneBindingsModule {
+
+    @ContributesAndroidInjector
+    abstract ScenesFragment scenesFragment();
 
     @ContributesAndroidInjector
     abstract ConfigureSceneDialog configureSceneDialog();

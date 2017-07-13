@@ -2,6 +2,7 @@ package eu.power_switch.dagger;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
+import eu.power_switch.gui.dialog.GatewayDetectedDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage2;
@@ -13,6 +14,9 @@ import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage
  */
 @Module
 public abstract class GatewayBindingsModule {
+
+    @ContributesAndroidInjector
+    abstract GatewayDetectedDialog gatewayDetectedDialog();
 
     @ContributesAndroidInjector
     abstract ConfigureGatewayDialog configureGatewayDialog();

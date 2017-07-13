@@ -57,7 +57,7 @@ public abstract class AlarmHandler {
      * @return Intent
      */
     public static Intent createAlarmIntent(Context context, Timer timer) {
-        Intent intent = new Intent(context, AlarmIntentReceiver.class);
+        Intent intent = new Intent(context, TimerAlarmIntentReceiver.class);
         intent.setAction(TimerConstants.TIMER_ACTIVATION_INTENT);
         intent.setData(Uri.parse(TimerConstants.TIMER_URI_SCHEME + "://" + timer.getId()));
 

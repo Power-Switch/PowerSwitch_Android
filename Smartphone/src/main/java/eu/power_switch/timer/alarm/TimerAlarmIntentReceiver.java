@@ -42,7 +42,7 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 21.09.2015.
  */
-public class AlarmIntentReceiver extends DaggerBroadcastReceiver {
+public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
 
     @Inject
     ActionHandler actionHandler;
