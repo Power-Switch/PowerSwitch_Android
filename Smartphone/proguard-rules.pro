@@ -17,10 +17,39 @@
 #}
 
 -dontobfuscate
+
+# Keep device implementation classes
+# This is needed because they are created using reflection
 -keep class eu.power_switch.obj.** {
     *;
 }
+
+# AboutLibraries
 -keep class .R
 -keep class **.R$* {
     <fields>;
+}
+
+# Lombok
+-dontwarn lombok.**
+
+# Logback Android
+-keep class ch.qos.** { *; }
+-keep class org.slf4j.** { *; }
+-keepattributes *Annotation*
+-dontwarn ch.qos.logback.core.net.*
+
+# Dagger 2
+-dontwarn com.google.errorprone.annotations.*
+
+## New rules for EventBus 3.0.x ##
+# http://greenrobot.org/eventbus/documentation/proguard/
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
 }
