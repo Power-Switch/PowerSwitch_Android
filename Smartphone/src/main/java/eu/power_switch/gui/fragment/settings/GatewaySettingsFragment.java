@@ -53,7 +53,6 @@ import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -158,7 +157,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    final List<Gateway> foundGateways = NetworkHandlerImpl.searchGateways();
+                    final List<Gateway> foundGateways = networkHandler.searchGateways();
 
                     // stop animation
                     getActivity().runOnUiThread(new Runnable() {

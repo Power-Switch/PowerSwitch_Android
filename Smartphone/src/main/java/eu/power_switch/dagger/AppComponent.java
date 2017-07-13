@@ -26,7 +26,7 @@ import eu.power_switch.application.PowerSwitch;
                       SettingsBindingsModule.class,
                       TimerBindingsModule.class,
                       WearBindingsModule.class,
-                      WidgetBindingsModule.class,
+                      WidgetBindingsModule.class, WizardBindingsModule.class,
                       AndroidInjectionModule.class,
                       AndroidSupportInjectionModule.class})
 interface AppComponent extends AndroidInjector<PowerSwitch> {

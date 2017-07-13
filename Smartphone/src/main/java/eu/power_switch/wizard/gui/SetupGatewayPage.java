@@ -34,12 +34,14 @@ import com.mikepenz.iconics.view.IconicsImageView;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.gui.adapter.WizardGatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
-import eu.power_switch.network.NetworkHandlerImpl;
+import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.wizard.config.ConfigurationHolder;
@@ -64,11 +66,11 @@ public class SetupGatewayPage extends ConfigurationPage {
     @BindView(R.id.textViewEmpty)
     TextView     textViewEmpty;
 
+    @Inject
+    NetworkHandler networkHandler;
 
     private ArrayList<Gateway> foundGateways = new ArrayList<>();
-
     private WizardGatewayRecyclerViewAdapter gatewayRecyclerViewAdapter;
-
 
     public static SetupGatewayPage newInstance(ConfigurationHolder configurationHolder) {
         Bundle           args     = new Bundle();
@@ -113,7 +115,7 @@ public class SetupGatewayPage extends ConfigurationPage {
 
             @Override
             protected ArrayList<Gateway> doInBackground(Void... voids) {
-                ArrayList<Gateway> gateways = new ArrayList<>(NetworkHandlerImpl.searchGateways());
+                ArrayList<Gateway> gateways = new ArrayList<>(networkHandler.searchGateways());
 
                 for (Gateway gateway : gateways) {
                     try {

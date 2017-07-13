@@ -39,9 +39,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.action.ActionHandlerImpl;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
@@ -63,11 +61,12 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
     private       OnItemLongClickListener onItemLongClickListener;
     private final ActionHandler           actonHandler;
 
-    public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Scene> scenes) {
+    public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Scene> scenes,
+                                    ActionHandler actionHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
-        actonHandler = new ActionHandlerImpl(fragmentActivity, new NetworkHandlerImpl(fragmentActivity));
+        this.actonHandler = actionHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

@@ -38,8 +38,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
@@ -64,6 +67,9 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     @BindView(R.id.add_fab)
     FloatingActionButton fab;
 
+    @Inject
+    ActionHandler actionHandler;
+
     private ArrayList<Scene> scenes = new ArrayList<>();
     private SceneRecyclerViewAdapter sceneRecyclerViewAdapter;
 
@@ -82,7 +88,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
         setHasOptionsMenu(true);
 
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes);
+        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes, actionHandler);
         getRecyclerView().setAdapter(sceneRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);

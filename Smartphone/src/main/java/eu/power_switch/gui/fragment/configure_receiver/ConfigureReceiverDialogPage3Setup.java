@@ -71,7 +71,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
@@ -297,8 +296,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                         }
                     }
 
-                    NetworkHandlerImpl.init(getContext());
-                    NetworkHandlerImpl.send(networkPackages);
+                    networkHandler.send(networkPackages);
 
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getContentView(), e);
@@ -326,8 +324,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                         }
                     }
 
-                    NetworkHandlerImpl.init(getContext());
-                    NetworkHandlerImpl.send(networkPackages);
+                    networkHandler.send(networkPackages);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getContentView(), e);
                 }
@@ -354,8 +351,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                         }
                     }
 
-                    NetworkHandlerImpl.init(getContext());
-                    NetworkHandlerImpl.send(networkPackages);
+                    networkHandler.send(networkPackages);
                 } catch (Exception e) {
                     StatusMessageHandler.showErrorMessage(getContentView(), e);
                 }

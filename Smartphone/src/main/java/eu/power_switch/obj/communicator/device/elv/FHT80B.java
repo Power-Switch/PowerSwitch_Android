@@ -20,7 +20,6 @@ package eu.power_switch.obj.communicator.device.elv;
 
 import org.json.JSONObject;
 
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.network.UdpNetworkPackage;
 import eu.power_switch.obj.HeatingControl;
@@ -60,7 +59,7 @@ public class FHT80B extends Communicator implements HeatingControl {
                 throw new RuntimeException("Unknown Communication Protocol");
         }
 
-        NetworkHandlerImpl.send(this, networkPackage);
+//        networkHandler.send(this, networkPackage);
     }
 
 

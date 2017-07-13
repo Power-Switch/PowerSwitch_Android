@@ -154,7 +154,7 @@ public class ActionHandlerImpl implements ActionHandler {
             }
         }
 
-        NetworkHandlerImpl.send(networkPackages);
+        networkHandler.send(networkPackages);
 
         // set on object, as well as in database
         receiver.setLastActivatedButtonId(button.getId());
@@ -293,7 +293,7 @@ public class ActionHandlerImpl implements ActionHandler {
             Timber.d(context.getString(R.string.no_receiver_supports_this_action));
             StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
-            NetworkHandlerImpl.send(networkPackages);
+            networkHandler.send(networkPackages);
         }
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -378,7 +378,7 @@ public class ActionHandlerImpl implements ActionHandler {
             Timber.d(context.getString(R.string.no_receiver_supports_this_action));
             StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
-            NetworkHandlerImpl.send(networkPackages);
+            networkHandler.send(networkPackages);
         }
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -475,7 +475,7 @@ public class ActionHandlerImpl implements ActionHandler {
             }
         }
 
-        NetworkHandlerImpl.send(networkPackages);
+        networkHandler.send(networkPackages);
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);

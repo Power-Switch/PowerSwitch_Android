@@ -38,8 +38,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.action.ActionHandler;
 import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
@@ -66,6 +69,9 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
 
     @BindView(R.id.add_fab)
     FloatingActionButton addReceiverFAB;
+
+    @Inject
+    ActionHandler actionHandler;
 
     private ArrayList<Room>            rooms;
     private RoomRecyclerViewAdapter    roomsRecyclerViewAdapter;
@@ -96,7 +102,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         setHasOptionsMenu(true);
 
         rooms = new ArrayList<>();
-        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms);
+        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms, actionHandler);
         getRecyclerView().setAdapter(roomsRecyclerViewAdapter);
         layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);

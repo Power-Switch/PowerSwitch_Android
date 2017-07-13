@@ -188,7 +188,7 @@ public class NetworkHandlerImpl implements NetworkHandler {
      *
      * @param networkPackages list of network packages
      */
-    public static synchronized void send(NetworkResponseCallback responseCallback, ArrayList<NetworkPackage> networkPackages) {
+    public synchronized void send(NetworkResponseCallback responseCallback, ArrayList<NetworkPackage> networkPackages) {
         if (networkPackages == null) {
             return;
         }
@@ -199,7 +199,7 @@ public class NetworkHandlerImpl implements NetworkHandler {
         context.startService(serviceIntent);
     }
 
-    public static synchronized void send(ArrayList<NetworkPackage> networkPackages) {
+    public synchronized void send(ArrayList<NetworkPackage> networkPackages) {
         send(null, networkPackages);
     }
 
@@ -208,11 +208,11 @@ public class NetworkHandlerImpl implements NetworkHandler {
      *
      * @param networkPackages array of network packages
      */
-    public static synchronized void send(NetworkResponseCallback responseCallback, NetworkPackage... networkPackages) {
+    public synchronized void send(NetworkResponseCallback responseCallback, NetworkPackage... networkPackages) {
         send(responseCallback, new ArrayList<>(Arrays.asList(networkPackages)));
     }
 
-    public static synchronized void send(NetworkPackage... networkPackages) {
+    public synchronized void send(NetworkPackage... networkPackages) {
         send(null, new ArrayList<>(Arrays.asList(networkPackages)));
     }
 
@@ -222,7 +222,7 @@ public class NetworkHandlerImpl implements NetworkHandler {
      * @return List of found Gateways
      */
     @WorkerThread
-    public static List<Gateway> searchGateways() {
+    public List<Gateway> searchGateways() {
         List<Gateway> foundGateways = new ArrayList<>();
         Timber.d("NetworkManager", "searchGateways");
 
@@ -255,7 +255,7 @@ public class NetworkHandlerImpl implements NetworkHandler {
      * @return Gateway null if message could not be parsed
      */
 
-    private static Gateway parseMessageToGateway(String message) {
+    private Gateway parseMessageToGateway(String message) {
         Timber.d("parsing Gateway Message: " + message);
 
         int start;
@@ -372,14 +372,14 @@ public class NetworkHandlerImpl implements NetworkHandler {
         }
     }
 
-    public static Set<Communicator> getActors(EZControl_XS1 eZcontrol_xs1) {
+    public Set<Communicator> getActors(EZControl_XS1 eZcontrol_xs1) {
         Set<Communicator> communicators = new HashSet<>();
 
 
         return communicators;
     }
 
-    public static Set<Sensor> getSensors(EZControl_XS1 eZcontrol_xs1) {
+    public Set<Sensor> getSensors(EZControl_XS1 eZcontrol_xs1) {
         Set<Sensor> sensors = new HashSet<>();
 
         return sensors;

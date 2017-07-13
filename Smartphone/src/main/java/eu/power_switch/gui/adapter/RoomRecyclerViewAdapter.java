@@ -36,11 +36,9 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.action.ActionHandlerImpl;
 import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureRoomDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
@@ -64,11 +62,12 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
     private final ActionHandler        actionHandler;
 
     // Pass in the context and users array into the constructor
-    public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Room> rooms) {
+    public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Room> rooms,
+                                   ActionHandler actionHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.rooms = rooms;
         this.fragmentActivity = fragmentActivity;
-        actionHandler = new ActionHandlerImpl(fragmentActivity, new NetworkHandlerImpl(fragmentActivity));
+        this.actionHandler = actionHandler;
     }
 
     // Usually involves inflating a layout from XML and returning the holder

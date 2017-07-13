@@ -298,7 +298,7 @@ public class MainActivity extends EventBusActivity {
                     try {
                         Context context = contexts[0];
                         NetworkHandlerImpl.init(context);
-                        List<Gateway> foundGateways = NetworkHandlerImpl.searchGateways();
+                        List<Gateway> foundGateways = networkHandler.searchGateways();
 
                         Gateway[] gatewaysArray = new Gateway[foundGateways.size()];
                         foundGateways.toArray(gatewaysArray);
