@@ -32,6 +32,8 @@ import android.view.ViewGroup;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -58,7 +60,8 @@ import timber.log.Timber;
  */
 public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceConfigurationHolder> {
 
-    protected GeofenceApiHandler geofenceApiHandler;
+    @Inject
+    GeofenceApiHandler geofenceApiHandler;
 
     public static ConfigureGeofenceDialog newInstance(@NonNull Fragment targetFragment) {
         return newInstance(null, targetFragment);
@@ -81,8 +84,6 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
     @Override
     protected void init(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Timber.d("Opening " + getClass().getSimpleName() + "...");
-
-        geofenceApiHandler = new GeofenceApiHandler(getActivity());
     }
 
     @Override

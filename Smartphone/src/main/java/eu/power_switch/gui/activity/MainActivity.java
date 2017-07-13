@@ -18,7 +18,6 @@
 
 package eu.power_switch.gui.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -92,7 +91,6 @@ import eu.power_switch.gui.fragment.phone.PhoneTabFragment;
 import eu.power_switch.gui.fragment.settings.SettingsTabFragment;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.phone.PhoneHelper;
@@ -141,6 +139,12 @@ public class MainActivity extends EventBusActivity {
 
     @Inject
     NetworkHandler networkHandler;
+
+    @Inject
+    NfcHandler nfcHandler;
+
+    @Inject
+    HolidaySpecialHandler holidaySpecialHandler;
 
     /**
      * Add class to Backstack
@@ -291,13 +295,11 @@ public class MainActivity extends EventBusActivity {
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
-            new AsyncTask<Context, Void, AsyncTaskResult<Gateway>>() {
+            new AsyncTask<Void, Void, AsyncTaskResult<Gateway>>() {
 
                 @Override
-                protected AsyncTaskResult<Gateway> doInBackground(Context... contexts) {
+                protected AsyncTaskResult<Gateway> doInBackground(Void... voids) {
                     try {
-                        Context context = contexts[0];
-                        NetworkHandlerImpl.init(context);
                         List<Gateway> foundGateways = networkHandler.searchGateways();
 
                         Gateway[] gatewaysArray = new Gateway[foundGateways.size()];
@@ -346,7 +348,7 @@ public class MainActivity extends EventBusActivity {
                         StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
                     }
                 }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
@@ -528,7 +530,7 @@ public class MainActivity extends EventBusActivity {
                 .withIcon(IconicsHelper.getNfcIcon(this))
                 .withSelectable(true)
                 .withIdentifier(IDENTIFIER_NFC)
-                .withEnabled(NfcHandler.isNfcSupported(this))
+                .withEnabled(nfcHandler.isNfcSupported())
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -896,7 +898,7 @@ public class MainActivity extends EventBusActivity {
         StatusMessageHandler.dismissCurrentSnackbar();
 
         updateHistory();
-        HolidaySpecialHandler.showHolidaySpecial(this);
+        holidaySpecialHandler.showHolidaySpecial();
     }
 
     @Override

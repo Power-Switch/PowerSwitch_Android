@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -73,10 +75,12 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
     @BindView(R.id.add_fab)
     FloatingActionButton fab;
 
+    @Inject
+    GeofenceApiHandler geofenceApiHandler;
+
     private HashMap<Long, Apartment> geofenceIdApartmentMap = new HashMap<>();
     private ArrayList<Geofence>      geofences              = new ArrayList<>();
     private GeofenceRecyclerViewAdapter geofenceRecyclerViewAdapter;
-    private GeofenceApiHandler          geofenceApiHandler;
 
     /**
      * Used to notify the apartment geofence page (this) that geofences have changed
@@ -91,8 +95,6 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
         super.onCreateView(inflater, container, savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
         geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler);
         getRecyclerView().setAdapter(geofenceRecyclerViewAdapter);

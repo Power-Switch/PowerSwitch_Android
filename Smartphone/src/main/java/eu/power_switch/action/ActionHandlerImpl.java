@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.R;
 import eu.power_switch.database.handler.DatabaseHandler;
@@ -36,7 +37,6 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.history.HistoryHelper;
 import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.network.NetworkPackage;
 import eu.power_switch.network.UdpNetworkPackage;
 import eu.power_switch.notification.NotificationHandler;
@@ -63,15 +63,18 @@ import timber.log.Timber;
 /**
  * Created by Markus on 05.12.2015.
  */
+@Singleton
 public class ActionHandlerImpl implements ActionHandler {
 
-    private Context        context;
-    private NetworkHandler networkHandler;
+    private Context             context;
+    private NetworkHandler      networkHandler;
+    private NotificationHandler notificationHandler;
 
     @Inject
-    public ActionHandlerImpl(Context context, NetworkHandler networkHandler) {
+    public ActionHandlerImpl(Context context, NetworkHandler networkHandler, NotificationHandler notificationHandler) {
         this.context = context;
         this.networkHandler = networkHandler;
+        this.notificationHandler = notificationHandler;
     }
 
     /**
@@ -85,10 +88,9 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeReceiverAction(receiver, button);
 
-            HistoryHelper.add(context,
-                    new HistoryItem((long) -1,
-                            Calendar.getInstance(),
-                            context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
+            HistoryHelper.add(new HistoryItem((long) -1,
+                    Calendar.getInstance(),
+                    context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
         } catch (ActionNotSupportedException e) {
             Timber.e("Action not supported by Receiver!", e);
             StatusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
@@ -106,8 +108,6 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeReceiverAction(@NonNull Receiver receiver, @NonNull Button button) throws Exception {
-        NetworkHandlerImpl.init(context);
-
         Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
         Room      room      = apartment.getRoom(receiver.getRoomId());
 
@@ -179,10 +179,9 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeRoomAction(room, buttonName);
 
-            HistoryHelper.add(context,
-                    new HistoryItem((long) -1,
-                            Calendar.getInstance(),
-                            context.getString(R.string.room_action_history_text, room.getName(), buttonName)));
+            HistoryHelper.add(new HistoryItem((long) -1,
+                    Calendar.getInstance(),
+                    context.getString(R.string.room_action_history_text, room.getName(), buttonName)));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -204,10 +203,9 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeRoomAction(room, buttonId);
 
-            HistoryHelper.add(context,
-                    new HistoryItem((long) -1,
-                            Calendar.getInstance(),
-                            context.getString(R.string.room_action_history_text, room.getName(), Button.getName(context, buttonId))));
+            HistoryHelper.add(new HistoryItem((long) -1,
+                    Calendar.getInstance(),
+                    context.getString(R.string.room_action_history_text, room.getName(), Button.getName(context, buttonId))));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -219,8 +217,6 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeRoomAction(@NonNull Room room, @NonNull String buttonName) throws Exception {
-        NetworkHandlerImpl.init(context);
-
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
 
         List<Gateway> gateways;
@@ -305,8 +301,6 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeRoomAction(@NonNull Room room, long buttonId) throws Exception {
-        NetworkHandlerImpl.init(context);
-
         Apartment apartment = DatabaseHandler.getContainingApartment(room);
 
         List<Gateway> gateways;
@@ -399,8 +393,9 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeScene(scene);
 
-            HistoryHelper.add(context,
-                    new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.scene_action_history_text, scene.getName())));
+            HistoryHelper.add(new HistoryItem((long) -1,
+                    Calendar.getInstance(),
+                    context.getString(R.string.scene_action_history_text, scene.getName())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -412,9 +407,6 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeScene(@NonNull Scene scene) throws Exception {
-        NetworkHandlerImpl.init(context);
-
-
         Apartment apartment = DatabaseHandler.getContainingApartment(scene);
 
         if (apartment.getAssociatedGateways()
@@ -496,11 +488,12 @@ public class ActionHandlerImpl implements ActionHandler {
             executeActions(timer.getActions());
 
             if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS)) {
-                NotificationHandler.createNotification(context, "Timer", "Timer \"" + timer.getName() + "\" executed");
+                notificationHandler.createNotification("Timer", "Timer \"" + timer.getName() + "\" executed");
             }
 
-            HistoryHelper.add(context,
-                    new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.timer_action_history_text, timer.getName())));
+            HistoryHelper.add(new HistoryItem((long) -1,
+                    Calendar.getInstance(),
+                    context.getString(R.string.timer_action_history_text, timer.getName())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -522,10 +515,9 @@ public class ActionHandlerImpl implements ActionHandler {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(actions);
 
-            HistoryHelper.add(context,
-                    new HistoryItem((long) -1,
-                            Calendar.getInstance(),
-                            context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
+            HistoryHelper.add(new HistoryItem((long) -1,
+                    Calendar.getInstance(),
+                    context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -547,10 +539,9 @@ public class ActionHandlerImpl implements ActionHandler {
             List<Action> actions = DatabaseHandler.getAlarmActions(event);
             executeActions(actions);
 
-            HistoryHelper.add(context,
-                    new HistoryItem((long) -1,
-                            Calendar.getInstance(),
-                            context.getString(R.string.alarm_clock_action_history_text, event.toString())));
+            HistoryHelper.add(new HistoryItem((long) -1,
+                    Calendar.getInstance(),
+                    context.getString(R.string.alarm_clock_action_history_text, event.toString())));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -592,9 +583,9 @@ public class ActionHandlerImpl implements ActionHandler {
             }
 
             if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
-                NotificationHandler.createNotification(context, context.getString(R.string.geofence), notificationMessage);
+                notificationHandler.createNotification(context.getString(R.string.geofence), notificationMessage);
             }
-            HistoryHelper.add(context, historyItem);
+            HistoryHelper.add(historyItem);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {
@@ -619,7 +610,7 @@ public class ActionHandlerImpl implements ActionHandler {
             HistoryItem historyItem = new HistoryItem((long) -1,
                     Calendar.getInstance(),
                     context.getString(R.string.geofence_enter_action_history_text, callEvent.getName()));
-            HistoryHelper.add(context, historyItem);
+            HistoryHelper.add(historyItem);
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);
             try {

@@ -32,6 +32,8 @@ import android.widget.Spinner;
 
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
@@ -47,7 +49,6 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
  */
 public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
 
-    private GeofenceApiHandler geofenceApiHandler;
     @BindView(R.id.checkBox_playStoreMode)
     CheckBox checkBox_playStoreMode;
     @BindView(R.id.button_resetShowcases)
@@ -67,12 +68,16 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
     @BindView(R.id.button_testNotification)
     Button   buttonTestNotification;
 
+    @Inject
+    GeofenceApiHandler geofenceApiHandler;
+
+    @Inject
+    NotificationHandler notificationHandler;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-
-        geofenceApiHandler = new GeofenceApiHandler(getActivity());
 
         checkBox_playStoreMode.setChecked(DeveloperPreferencesHandler.getPlayStoreMode());
         checkBox_playStoreMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -149,7 +154,7 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
         buttonTestNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NotificationHandler.createNotification(getActivity(), "Title", "Message");
+                notificationHandler.createNotification("Title", "Message");
             }
         });
 

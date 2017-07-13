@@ -44,7 +44,7 @@ public class HistoryHelper {
                 .post(new HistoryUpdatedEvent());
     }
 
-    public static void add(Context context, HistoryItem historyItem) throws Exception {
+    public static void add(HistoryItem historyItem) throws Exception {
         DatabaseHandler.addHistoryItem(historyItem);
         notifyHistoryChanged();
     }

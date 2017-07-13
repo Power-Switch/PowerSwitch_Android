@@ -49,7 +49,6 @@ import eu.power_switch.database.handler.DatabaseHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
-import eu.power_switch.network.NetworkHandlerImpl;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -178,7 +177,6 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
         // Onetime initialization of handlers for static access
         DatabaseHandler.init(this);
-        NetworkHandlerImpl.init(this);
 
         // reinitialize after logging framework is up to log current values
         SmartphonePreferencesHandler.init(this);

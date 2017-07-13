@@ -41,6 +41,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
@@ -110,6 +112,10 @@ public class NfcFragment extends EventBusFragment {
     ProgressBar   progressScene;
     @BindView(R.id.button_write_nfc_tag)
     IconicsButton buttonWriteTag;
+
+    @Inject
+    NfcHandler nfcHandler;
+
     private View      rootView;
     private Apartment currentApartment;
     private String currentActionType = Action.ACTION_TYPE_RECEIVER;
@@ -223,7 +229,7 @@ public class NfcFragment extends EventBusFragment {
         buttonWriteTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (NfcHandler.isNfcEnabled(getActivity())) {
+                if (nfcHandler.isNfcEnabled()) {
                     startActivity(WriteNfcTagDialog.getNewInstanceIntent(getContext(), getNfcActionContent(getCurrentSelection())));
                 } else {
                     new AlertDialog.Builder(getActivity()).setTitle(R.string.nfc_disabled)
@@ -231,7 +237,7 @@ public class NfcFragment extends EventBusFragment {
                             .setPositiveButton(R.string.open_settings, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    NfcHandler.openNfcSettings(getActivity());
+                                    nfcHandler.openNfcSettings();
                                 }
                             })
                             .setNeutralButton(R.string.close, null)

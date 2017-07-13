@@ -40,6 +40,9 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.GeofenceConstants;
@@ -51,11 +54,13 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 21.12.2015.
  */
+@Singleton
 public class GeofenceApiHandler {
 
     private Context context;
     private GoogleApiClient googleApiClient;
 
+    @Inject
     public GeofenceApiHandler(Context context) {
         this.context = context;
 

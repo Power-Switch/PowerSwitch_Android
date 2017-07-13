@@ -18,13 +18,15 @@
 
 package eu.power_switch.google_play_services.geofence;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.database.handler.DatabaseHandler;
 import timber.log.Timber;
 
@@ -33,18 +35,25 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 31.01.2016.
  */
-public class GeofenceIntentReceiver extends BroadcastReceiver {
+public class GeofenceIntentReceiver extends DaggerBroadcastReceiver {
+
+    @Inject
+    GeofenceApiHandler geofenceApiHandler;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
         try {
             String log = "onReceive: Action: ";
             log += intent.getAction();
             log += "( ";
             if (intent.getData() != null) {
-                log += intent.getData().getScheme();
+                log += intent.getData()
+                        .getScheme();
                 log += "://";
-                log += intent.getData().getHost();
+                log += intent.getData()
+                        .getHost();
             }
             log += " ) ";
             Bundle extras = intent.getExtras();
@@ -61,10 +70,11 @@ public class GeofenceIntentReceiver extends BroadcastReceiver {
         }
 
         try {
-            if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            if (intent.getAction()
+                    .equals("android.intent.action.BOOT_COMPLETED")) {
                 // restart all active geofences because device rebooted
                 Timber.d("restarting all active geofences because device rebooted...");
-                reinitializeGeofences(context);
+                reinitializeGeofences();
             } else {
                 Timber.d("Received unknown intent: " + intent.getAction());
             }
@@ -73,11 +83,10 @@ public class GeofenceIntentReceiver extends BroadcastReceiver {
         }
     }
 
-    private void reinitializeGeofences(final Context context) {
+    private void reinitializeGeofences() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                GeofenceApiHandler geofenceApiHandler = new GeofenceApiHandler(context);
                 geofenceApiHandler.blockingConnect();
 
 //                geofenceApiHandler.removeAllGeofences();

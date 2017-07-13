@@ -27,6 +27,9 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.shared.exception.nfc.NfcTagInsufficientMemoryException;
 import eu.power_switch.shared.exception.nfc.NfcTagNotWritableException;
 
@@ -35,35 +38,39 @@ import eu.power_switch.shared.exception.nfc.NfcTagNotWritableException;
  * <p/>
  * Created by Markus on 24.03.2016.
  */
+@Singleton
 public class NfcHandler {
+
+    private Context context;
+
+    @Inject
+    public NfcHandler(Context context) {
+        this.context = context;
+    }
 
     /**
      * Checks if NFC is supported by the device
      *
-     * @param context any suitable context
      * @return true if NFC is supported, false otherwise
      */
-    public static boolean isNfcSupported(Context context) {
+    public boolean isNfcSupported() {
         return NfcAdapter.getDefaultAdapter(context) != null;
     }
 
     /**
      * Checks if NFC is enabled on the device
      *
-     * @param context any suitable context
      * @return true if NFC is enabled, false otherwise
      */
-    public static boolean isNfcEnabled(Context context) {
+    public boolean isNfcEnabled() {
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         return nfcAdapter.isEnabled();
     }
 
     /**
      * Open NFC settings page in system settings
-     *
-     * @param context any suitable context
      */
-    public static void openNfcSettings(Context context) {
+    public void openNfcSettings() {
         if (android.os.Build.VERSION.SDK_INT >= 16) {
             context.startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
         } else {
@@ -76,23 +83,17 @@ public class NfcHandler {
      * <p/>
      * for writing Places
      */
-    public static NdefMessage getAsNdef(String content) {
-        byte[] textBytes = content.getBytes();
-        NdefRecord textRecord = new NdefRecord(
-                NdefRecord.TNF_MIME_MEDIA,
-                "application/eu.power_switch".getBytes(),
-                new byte[]{},
-                textBytes);
-        return new NdefMessage(new NdefRecord[]{
-                textRecord,
-                NdefRecord.createApplicationRecord("eu.power_switch")});
+    public NdefMessage getAsNdef(String content) {
+        byte[]     textBytes  = content.getBytes();
+        NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "application/eu.power_switch".getBytes(), new byte[]{}, textBytes);
+        return new NdefMessage(new NdefRecord[]{textRecord, NdefRecord.createApplicationRecord("eu.power_switch")});
     }
 
     /**
      * Writes an NdefMessage to a NFC tag
      */
-    public static void writeTag(NdefMessage message, Tag tag) throws Exception {
-        int size = message.toByteArray().length;
+    public void writeTag(NdefMessage message, Tag tag) throws Exception {
+        int  size = message.toByteArray().length;
         Ndef ndef = Ndef.get(tag);
         if (ndef != null) {
             ndef.connect();
@@ -116,10 +117,8 @@ public class NfcHandler {
 
     /**
      * Play NFC Tag found notification sound
-     *
-     * @param context any suitable context
      */
-    public static void soundNotify(Context context) {
+    public void soundNotify() {
 //        MediaPlayer mp = MediaPlayer.create(context, );
 //        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 //            @Override

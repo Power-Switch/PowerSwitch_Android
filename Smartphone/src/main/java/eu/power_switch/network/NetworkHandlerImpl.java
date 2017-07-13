@@ -56,19 +56,11 @@ import timber.log.Timber;
 public class NetworkHandlerImpl implements NetworkHandler {
 
     protected static final Object lockObject = new Object();
-    protected static Context context;
+    protected Context context;
 
     @Inject
     public NetworkHandlerImpl(Context context) {
         this.context = context;
-    }
-
-    public static void init(Context context) {
-        if (NetworkHandlerImpl.context != null) {
-            return;
-        }
-
-        NetworkHandlerImpl.context = context;
     }
 
     /**
@@ -254,7 +246,6 @@ public class NetworkHandlerImpl implements NetworkHandler {
      *
      * @return Gateway null if message could not be parsed
      */
-
     private Gateway parseMessageToGateway(String message) {
         Timber.d("parsing Gateway Message: " + message);
 

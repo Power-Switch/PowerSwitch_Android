@@ -32,6 +32,8 @@ import android.widget.TextView;
 
 import com.mikepenz.iconics.view.IconicsImageView;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
@@ -56,6 +58,9 @@ public class WriteNfcTagDialog extends ButterKnifeDialogActivity {
     IconicsImageView successImage;
     @BindView(R.id.imageView_error)
     IconicsImageView errorImage;
+
+    @Inject
+    NfcHandler nfcHandler;
 
     private String     content;
     private NfcAdapter nfcAdapter;
@@ -113,7 +118,7 @@ public class WriteNfcTagDialog extends ButterKnifeDialogActivity {
                 protected AsyncTaskResult<Void> doInBackground(Void... params) {
                     try {
                         Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                        NfcHandler.writeTag(NfcHandler.getAsNdef(content), detectedTag);
+                        nfcHandler.writeTag(nfcHandler.getAsNdef(content), detectedTag);
 //                        NfcHandler.soundNotify(this);
 
                         return new AsyncTaskResult<>();
