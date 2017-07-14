@@ -44,8 +44,6 @@ import eu.power_switch.database.table.geofence.GeofenceActionTable;
 import eu.power_switch.database.table.timer.TimerActionTable;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.obj.button.Button;
-import eu.power_switch.obj.receiver.Receiver;
 import timber.log.Timber;
 
 /**
@@ -56,16 +54,12 @@ import timber.log.Timber;
 @Singleton
 class ActionHandler {
 
-    private ApartmentHandler apartmentHandler;
-    private RoomHandler      roomHandler;
-    private ReceiverHandler  receiverHandler;
-    private SceneHandler     sceneHandler;
+    private RoomHandler  roomHandler;
+    private SceneHandler sceneHandler;
 
     @Inject
     ActionHandler() {
-        this.apartmentHandler = new ApartmentHandler();
         this.roomHandler = new RoomHandler();
-        this.receiverHandler = new ReceiverHandler();
         this.sceneHandler = new SceneHandler();
     }
 
@@ -100,24 +94,16 @@ class ActionHandler {
                                      @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverActionTable.COLUMN_ACTION_ID, actionId);
-        values.put(ReceiverActionTable.COLUMN_ROOM_ID,
-                receiverAction.getRoom()
-                        .getId());
-        values.put(ReceiverActionTable.COLUMN_RECEIVER_ID,
-                receiverAction.getReceiver()
-                        .getId());
-        values.put(ReceiverActionTable.COLUMN_BUTTON_ID,
-                receiverAction.getButton()
-                        .getId());
+        values.put(ReceiverActionTable.COLUMN_ROOM_ID, receiverAction.getRoomId());
+        values.put(ReceiverActionTable.COLUMN_RECEIVER_ID, receiverAction.getReceiverId());
+        values.put(ReceiverActionTable.COLUMN_BUTTON_ID, receiverAction.getButtonId());
         database.insert(ReceiverActionTable.TABLE_NAME, null, values);
     }
 
     private void insertActionDetails(@NonNull SQLiteDatabase database, @NonNull RoomAction roomAction, @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomActionTable.COLUMN_ACTION_ID, actionId);
-        values.put(RoomActionTable.COLUMN_ROOM_ID,
-                roomAction.getRoom()
-                        .getId());
+        values.put(RoomActionTable.COLUMN_ROOM_ID, roomAction.getRoomId());
         values.put(RoomActionTable.COLUMN_BUTTON_NAME, roomAction.getButtonName());
         database.insert(RoomActionTable.TABLE_NAME, null, values);
     }
@@ -125,9 +111,7 @@ class ActionHandler {
     private void insertActionDetails(@NonNull SQLiteDatabase database, @NonNull SceneAction sceneAction, @NonNull Long actionId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneActionTable.COLUMN_ACTION_ID, actionId);
-        values.put(SceneActionTable.COLUMN_SCENE_ID,
-                sceneAction.getScene()
-                        .getId());
+        values.put(SceneActionTable.COLUMN_SCENE_ID, sceneAction.getSceneId());
         database.insert(SceneActionTable.TABLE_NAME, null, values);
     }
 
@@ -266,15 +250,11 @@ class ActionHandler {
             long receiverId = cursor1.getLong(1);
             long buttonId   = cursor1.getLong(2);
 
-            Room room = roomHandler.get(database, roomId);
-//            Apartment apartment = ApartmentHandler.get(room);
-            String   apartmentName = apartmentHandler.getName(database, room.getApartmentId());
-            Receiver receiver      = receiverHandler.get(database, receiverId);
-            Button   button        = receiver.getButton(buttonId);
-
             cursor1.close();
 
-            return new ReceiverAction(actionId, apartmentName, room, receiver, button);
+            Room room = roomHandler.get(database, roomId);
+
+            return new ReceiverAction(actionId, room.getApartmentId(), roomId, receiverId, buttonId);
         } else if (Action.ACTION_TYPE_ROOM.equals(actionType)) {
             String[] columns1 = {RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME};
             Cursor cursor1 = database.query(RoomActionTable.TABLE_NAME,
@@ -286,14 +266,13 @@ class ActionHandler {
                     null);
             cursor1.moveToFirst();
 
-            long roomId = cursor1.getLong(0);
-            Room room   = roomHandler.get(database, roomId);
-//            Apartment apartment = ApartmentHandler.get(room);
-            String apartmentName = apartmentHandler.getName(database, room.getApartmentId());
-            String buttonName    = cursor1.getString(1);
-
+            long   roomId     = cursor1.getLong(0);
+            String buttonName = cursor1.getString(1);
             cursor1.close();
-            return new RoomAction(actionId, apartmentName, room, buttonName);
+
+            Room room = roomHandler.get(database, roomId);
+
+            return new RoomAction(actionId, room.getApartmentId(), roomId, buttonName);
         } else if (Action.ACTION_TYPE_SCENE.equals(actionType)) {
             String[] columns1 = {SceneActionTable.COLUMN_SCENE_ID};
             Cursor cursor1 = database.query(SceneActionTable.TABLE_NAME,
@@ -305,13 +284,12 @@ class ActionHandler {
                     null);
             cursor1.moveToFirst();
 
-            long   sceneId       = cursor1.getLong(0);
-            Scene  scene         = sceneHandler.get(database, sceneId);
-            String apartmentName = apartmentHandler.getName(database, scene.getApartmentId());
-//            Apartment apartment = ApartmentHandler.get(scene);
-
+            long sceneId = cursor1.getLong(0);
             cursor1.close();
-            return new SceneAction(actionId, apartmentName, scene);
+
+            Scene scene = sceneHandler.get(database, sceneId);
+
+            return new SceneAction(actionId, scene.getApartmentId(), sceneId);
         } else {
             Timber.e("Unknown ActionType!");
             throw new RuntimeException("Unknown ActionType: " + actionType);

@@ -630,19 +630,36 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeActions(@NonNull List<Action> actions) throws Exception {
+        Apartment apartment;
+        Room      room;
+
         for (Action action : actions) {
             switch (action.getActionType()) {
                 case Action.ACTION_TYPE_RECEIVER:
                     ReceiverAction receiverAction = (ReceiverAction) action;
-                    executeReceiverAction(receiverAction.getReceiver(), receiverAction.getButton());
+
+                    apartment = persistanceHandler.getApartment(receiverAction.getApartmentName());
+                    room = apartment.getRoom(receiverAction.getRoomId());
+                    Receiver receiver = room.getReceiver(receiverAction.getReceiverId());
+                    Button button = receiver.getButton(receiverAction.getButtonId());
+
+                    executeReceiverAction(receiver, button);
                     break;
                 case Action.ACTION_TYPE_ROOM:
                     RoomAction roomAction = (RoomAction) action;
-                    executeRoomAction(roomAction.getRoom(), roomAction.getButtonName());
+
+                    apartment = persistanceHandler.getApartment(roomAction.getApartmentName());
+                    room = apartment.getRoom(roomAction.getRoomId());
+
+                    executeRoomAction(room, roomAction.getButtonName());
                     break;
                 case Action.ACTION_TYPE_SCENE:
                     SceneAction sceneAction = (SceneAction) action;
-                    executeScene(sceneAction.getScene());
+
+                    apartment = persistanceHandler.getApartment(sceneAction.getApartmentName());
+                    Scene scene = apartment.getScene(sceneAction.getSceneId());
+
+                    executeScene(scene);
                     break;
             }
         }

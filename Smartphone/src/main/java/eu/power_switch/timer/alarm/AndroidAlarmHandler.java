@@ -27,6 +27,9 @@ import android.os.Build;
 
 import java.util.Calendar;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.shared.constants.TimerConstants;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
@@ -38,15 +41,14 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 12.09.2015.
  */
-public abstract class AlarmHandler {
+@Singleton
+public class AndroidAlarmHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private AlarmHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    private final Context context;
+
+    @Inject
+    public AndroidAlarmHandler(Context context) {
+        this.context = context;
     }
 
     /**
@@ -56,7 +58,7 @@ public abstract class AlarmHandler {
      *
      * @return Intent
      */
-    public static Intent createAlarmIntent(Context context, Timer timer) {
+    private Intent createAlarmIntent(Timer timer) {
         Intent intent = new Intent(context, TimerAlarmIntentReceiver.class);
         intent.setAction(TimerConstants.TIMER_ACTIVATION_INTENT);
         intent.setData(Uri.parse(TimerConstants.TIMER_URI_SCHEME + "://" + timer.getId()));
@@ -67,27 +69,27 @@ public abstract class AlarmHandler {
     /**
      * Creates a one time/repeating alarm
      *
-     * @param context any suitable context
-     * @param timer   Timer that this alarm will activate
+     * @param timer Timer that this alarm will activate
      */
-    public static void createAlarm(Context context, Timer timer) {
+    public void createAlarm(Timer timer) {
         Timber.d("AlarmHandler", "activating alarm of timer: " + timer.getId());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(context, timer), PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent        alarmIntent   = createAlarmIntent(timer);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Timber.d("AlarmHandler", "intent: " + createAlarmIntent(context, timer));
+        Timber.d("AlarmHandler", "intent: " + alarmIntent);
         Timber.d("AlarmHandler",
                 "exactTime: " + timer.getExecutionTime()
                         .getTime()
                         .toLocaleString());
 
         if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
-            createAlarm(context, (WeekdayTimer) timer, pendingIntent);
+            createAlarm((WeekdayTimer) timer, pendingIntent);
         } else {
-            createAlarm(context, (IntervalTimer) timer, pendingIntent);
+            createAlarm((IntervalTimer) timer, pendingIntent);
         }
     }
 
-    private static void createAlarm(Context context, WeekdayTimer timer, PendingIntent pendingIntent) {
+    private void createAlarm(WeekdayTimer timer, PendingIntent pendingIntent) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (timer.getExecutionInterval() == -1) {
@@ -139,7 +141,7 @@ public abstract class AlarmHandler {
         }
     }
 
-    private static void createAlarm(Context context, IntervalTimer timer, PendingIntent pendingIntent) {
+    private void createAlarm(IntervalTimer timer, PendingIntent pendingIntent) {
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         if (timer.getExecutionInterval() == -1) {
@@ -183,15 +185,14 @@ public abstract class AlarmHandler {
     /**
      * Cancels an existing Alarm
      *
-     * @param context any suitable context
-     * @param timer   Timer that this alarm would activate
+     * @param timer Timer that this alarm would activate
      */
-    public static void cancelAlarm(Context context, Timer timer) {
+    public void cancelAlarm(Timer timer) {
         Timber.d("AlarmHandler", "cancelling alarm of timer: " + timer.getId());
         AlarmManager  alarmMgr      = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(context, timer), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, createAlarmIntent(timer), PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Timber.d("AlarmHandler", "cancelling intent: " + createAlarmIntent(context, timer));
+        Timber.d("AlarmHandler", "cancelling intent: " + createAlarmIntent(timer));
         Timber.d("AlarmHandler",
                 "cancelling time: " + timer.getExecutionTime()
                         .getTime()

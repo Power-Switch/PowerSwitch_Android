@@ -35,7 +35,6 @@ import eu.power_switch.database.table.timer.TimerWeekdayTable;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.alarm.AlarmHandler;
 
 /**
  * Provides database methods for managing Timers
@@ -44,7 +43,6 @@ class TimerHandler {
 
     private ActionHandler      actionHandler;
     private TimerActionHandler timerActionHandler;
-    private AlarmHandler       alarmHandler;
 
     TimerHandler() {
         actionHandler = new ActionHandler();
@@ -81,8 +79,6 @@ class TimerHandler {
             throw new RuntimeException();
         }
 
-        // activate alarm
-        alarmHandler.createAlarm(get(database, timerId));
         return timerId;
     }
 
@@ -102,8 +98,6 @@ class TimerHandler {
      * @param timerId ID of Timer
      */
     protected void delete(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
-        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(database, timerId));
-
         timerActionHandler.delete(database, timerId);
 
         deleteWeekdayDetails(database, timerId);
@@ -121,8 +115,6 @@ class TimerHandler {
      * @param timer new Timer Object with same ID as existing one
      */
     protected void update(@NonNull SQLiteDatabase database, Timer timer) throws Exception {
-        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(database, timer.getId()));
-
         timerActionHandler.update(database, timer);
 
         deleteWeekdayDetails(database, timer.getId());
@@ -141,11 +133,6 @@ class TimerHandler {
 
         if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
             insertWeekdayDetails(database, (WeekdayTimer) timer, timer.getId());
-        }
-
-        // activate new alarm if timer is active
-        if (timer.isActive()) {
-            AlarmHandler.createAlarm(DatabaseHandlerStatic.context, timer);
         }
     }
 

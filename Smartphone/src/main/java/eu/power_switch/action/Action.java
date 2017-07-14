@@ -21,9 +21,10 @@ package eu.power_switch.action;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 
-import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import lombok.Getter;
 
 /**
  * Action Base Class
@@ -31,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
  * <p/>
  * Created by Markus on 24.09.2015.
  */
-public abstract class Action implements Serializable {
+public abstract class Action {
 
     public static final String ACTION_TYPE_RECEIVER = "action_type_receiver";
     public static final String ACTION_TYPE_ROOM     = "action_type_room";
@@ -40,16 +41,8 @@ public abstract class Action implements Serializable {
     /**
      * ID of this Action
      */
+    @Getter
     protected long id;
-
-    /**
-     * Get ID of this Action
-     *
-     * @return ID
-     */
-    public long getId() {
-        return id;
-    }
 
     /**
      * Get ActionType of this Action
@@ -59,19 +52,6 @@ public abstract class Action implements Serializable {
     @ActionType
     @NonNull
     public abstract String getActionType();
-
-    /**
-     * Returns a human readable representation of a Action
-     *
-     * @return Text
-     */
-    @NonNull
-    public abstract String toString();
-
-    /**
-     * Executes this Action
-     */
-    public abstract void execute(@NonNull ActionHandler actionHandler);
 
     @StringDef({ACTION_TYPE_RECEIVER, ACTION_TYPE_ROOM, ACTION_TYPE_SCENE, ACTION_TYPE_PAUSE})
     @Retention(RetentionPolicy.SOURCE)

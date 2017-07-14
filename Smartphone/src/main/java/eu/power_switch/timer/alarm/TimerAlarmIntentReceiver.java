@@ -129,8 +129,8 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
     private void reinitializeAlarms(Context context) {
         try {
             for (Timer timer : persistanceHandler.getAllTimers(true)) {
-                AlarmHandler.cancelAlarm(context, timer);
-                AlarmHandler.createAlarm(context, timer);
+                AndroidAlarmHandler.cancelAlarm(context, timer);
+                AndroidAlarmHandler.createAlarm(context, timer);
             }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(context, e);

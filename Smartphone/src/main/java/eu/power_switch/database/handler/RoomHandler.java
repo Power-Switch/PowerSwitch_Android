@@ -129,8 +129,9 @@ class RoomHandler {
      * @param roomId ID of Room
      */
     private void deleteReceiversOfRoom(@NonNull SQLiteDatabase database, Long roomId) throws Exception {
-        ArrayList<Receiver> receivers = receiverHandler.getByRoom(database, roomId);
-        for (Receiver receiver : receivers) {
+        Room room = get(database, roomId);
+
+        for (Receiver receiver : room.getReceivers()) {
             receiverHandler.delete(database, receiver.getId());
         }
     }

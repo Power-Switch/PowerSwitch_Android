@@ -40,7 +40,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
-import eu.power_switch.timer.alarm.AlarmHandler;
+import eu.power_switch.timer.alarm.AndroidAlarmHandler;
 
 /**
  * Adapter to visualize Timer items in RecyclerView
@@ -152,10 +152,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                     try {
                         if (isChecked) {
                             persistanceHandler.enableTimer(timer.getId());
-                            AlarmHandler.createAlarm(context, timer);
+                            AndroidAlarmHandler.createAlarm(context, timer);
                         } else {
                             persistanceHandler.disableTimer(timer.getId());
-                            AlarmHandler.cancelAlarm(context, timer);
+                            AndroidAlarmHandler.cancelAlarm(context, timer);
                         }
                         timer.setActive(isChecked);
                     } catch (Exception e) {

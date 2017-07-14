@@ -20,30 +20,21 @@ package eu.power_switch.action;
 
 import android.support.annotation.NonNull;
 
-import eu.power_switch.obj.Scene;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
  * SceneAction that holds a specific scene to activate on execution
  * <p/>
  * Created by Markus on 24.09.2015.
  */
+@EqualsAndHashCode(callSuper = true)
+@Value
 public class SceneAction extends Action {
 
-    //    private Apartment apartment;
-    private String apartmentName;
-    private Scene  scene;
-
-    public SceneAction(long id, @NonNull String apartmentName, @NonNull Scene scene) {
-        this.id = id;
-//        this.apartment = apartment;
-        this.apartmentName = apartmentName;
-        this.scene = scene;
-    }
-
-    @NonNull
-    public Scene getScene() {
-        return scene;
-    }
+    private long id;
+    private long apartmentId;
+    private long sceneId;
 
     @Override
     @ActionType
@@ -52,14 +43,4 @@ public class SceneAction extends Action {
         return ACTION_TYPE_SCENE;
     }
 
-    @Override
-    @NonNull
-    public String toString() {
-        return apartmentName + ": " + scene.getName();
-    }
-
-    @Override
-    public void execute(@NonNull ActionHandler actionHandler) {
-        actionHandler.execute(scene);
-    }
 }

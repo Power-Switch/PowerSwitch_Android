@@ -20,66 +20,29 @@ package eu.power_switch.action;
 
 import android.support.annotation.NonNull;
 
-import eu.power_switch.obj.Room;
-import eu.power_switch.obj.button.Button;
-import eu.power_switch.obj.receiver.Receiver;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
  * ReceiverAction that holds a specific room/receiver/button combination to activate on execution
  * <p/>
  * Created by Markus on 24.09.2015.
  */
+@EqualsAndHashCode(callSuper = true)
+@Value
 public class ReceiverAction extends Action {
 
-    //    private Apartment apartment;
-    private String apartmentName;
-    private Room room;
-    private Receiver receiver;
-    private Button button;
-
-    public ReceiverAction(long id, @NonNull String apartmentName, @NonNull Room room, @NonNull Receiver receiver, @NonNull Button button) {
-        this.id = id;
-//        this.apartment = apartment;
-        this.apartmentName = apartmentName;
-        this.room = room;
-        this.receiver = receiver;
-        this.button = button;
-    }
-
-    @NonNull
-    public Room getRoom() {
-        return room;
-    }
-
-    @NonNull
-    public Receiver getReceiver() {
-        return receiver;
-    }
-
-    @NonNull
-    public Button getButton() {
-        return button;
-    }
+    private long id;
+    private long apartmentId;
+    private long roomId;
+    private long receiverId;
+    private long buttonId;
 
     @Override
     @ActionType
     @NonNull
     public String getActionType() {
         return ACTION_TYPE_RECEIVER;
-    }
-
-    @Override
-    @NonNull
-    public String toString() {
-        return apartmentName + ": " +
-                room.getName() + ": " +
-                receiver.getName() + ": " +
-                button.getName();
-    }
-
-    @Override
-    public void execute(@NonNull ActionHandler actionHandler) {
-        actionHandler.execute(receiver, button);
     }
 
 }

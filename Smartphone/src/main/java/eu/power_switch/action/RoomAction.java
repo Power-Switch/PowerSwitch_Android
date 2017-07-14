@@ -20,38 +20,22 @@ package eu.power_switch.action;
 
 import android.support.annotation.NonNull;
 
-import eu.power_switch.obj.Room;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
  * RoomAction that holds a specific room/button combination to activate on execution
  * <p/>
  * Created by Markus on 24.09.2015.
  */
+@EqualsAndHashCode(callSuper = true)
+@Value
 public class RoomAction extends Action {
 
-    //    private Apartment apartment;
-    private String apartmentName;
-    private Room   room;
+    private long   id;
+    private long   apartmentId;
+    private long   roomId;
     private String buttonName;
-
-    public RoomAction(long id, @NonNull String apartmentName, @NonNull Room room, @NonNull String buttonName) {
-        this.id = id;
-//        this.apartment = apartment;
-        this.apartmentName = apartmentName;
-        this.room = room;
-        this.buttonName = buttonName;
-    }
-
-    @NonNull
-    public Room getRoom() {
-        return room;
-    }
-
-
-    @NonNull
-    public String getButtonName() {
-        return buttonName;
-    }
 
     @Override
     @ActionType
@@ -60,14 +44,4 @@ public class RoomAction extends Action {
         return ACTION_TYPE_ROOM;
     }
 
-    @Override
-    @NonNull
-    public String toString() {
-        return apartmentName + ": " + room.getName() + ": " + buttonName;
-    }
-
-    @Override
-    public void execute(@NonNull ActionHandler actionHandler) {
-        actionHandler.execute(room, buttonName);
-    }
 }

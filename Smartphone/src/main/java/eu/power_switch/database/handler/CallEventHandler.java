@@ -48,8 +48,10 @@ import eu.power_switch.shared.constants.PhoneConstants;
 @Singleton
 class CallEventHandler {
 
-    private CallEventPhoneNumberHandler callEventPhoneNumberHandler;
-    private CallEventActionHandler      callEventActionHandler;
+    @Inject
+    CallEventPhoneNumberHandler callEventPhoneNumberHandler;
+    @Inject
+    CallEventActionHandler      callEventActionHandler;
 
 
     @Inject

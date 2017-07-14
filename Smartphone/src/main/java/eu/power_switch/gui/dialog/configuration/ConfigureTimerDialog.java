@@ -28,6 +28,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
@@ -40,6 +42,7 @@ import eu.power_switch.gui.fragment.configure_timer.ConfigureTimerDialogPage4Tab
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;
+import eu.power_switch.timer.alarm.AndroidAlarmHandler;
 import timber.log.Timber;
 
 /**
@@ -48,6 +51,9 @@ import timber.log.Timber;
  * Created by Markus on 16.08.2015.
  */
 public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigurationHolder> {
+
+    @Inject
+    AndroidAlarmHandler androidAlarmHandler;
 
     public static ConfigureTimerDialog newInstance(@NonNull Fragment targetFragment) {
         return newInstance(null, targetFragment);
@@ -145,9 +151,20 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
 
         if (timer != null) {
             if (getConfiguration().getTimer() == null) {
-                persistanceHandler.addTimer(timer);
+                long newId = persistanceHandler.addTimer(timer);
+                // update id (because the alarm is based on it's id)
+                timer.setId(newId);
             } else {
+                // cancel any existing alarm
+                androidAlarmHandler.cancelAlarm(timer);
+
+                // update in db
                 persistanceHandler.updateTimer(timer);
+            }
+
+            if (timer.isActive()) {
+                // activate alarm if necessary
+                androidAlarmHandler.createAlarm(timer);
             }
         }
 
@@ -163,6 +180,8 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
+                            androidAlarmHandler.cancelAlarm(getConfiguration().getTimer());
+
                             persistanceHandler.deleteTimer(getConfiguration().getTimer()
                                     .getId());
 

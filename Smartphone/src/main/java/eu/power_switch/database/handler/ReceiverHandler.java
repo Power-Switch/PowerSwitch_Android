@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.database.table.receiver.ReceiverGatewayRelationTable;
 import eu.power_switch.database.table.receiver.ReceiverTable;
 import eu.power_switch.obj.gateway.Gateway;
@@ -40,6 +43,7 @@ import timber.log.Timber;
 /**
  * Provides database methods for managing Receivers of any type
  */
+@Singleton
 class ReceiverHandler {
 
     private RoomHandler                roomHandler;
@@ -52,6 +56,7 @@ class ReceiverHandler {
     private ReceiverReflectionMagic    receiverReflectionMagic;
     private GatewayHandler             gatewayHandler;
 
+    @Inject
     ReceiverHandler(ReceiverReflectionMagic receiverReflectionMagic) {
         this.receiverReflectionMagic = receiverReflectionMagic;
 

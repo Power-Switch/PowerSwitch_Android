@@ -122,7 +122,7 @@ public final class PersistanceHandler {
     /**
      * Open Database for read-only access
      */
-    synchronized SQLiteDatabase openReadable() throws Exception {
+    private synchronized SQLiteDatabase openReadable() throws Exception {
         lock.lock();
         try {
             return dbHelper.getReadableDatabase();
@@ -136,7 +136,7 @@ public final class PersistanceHandler {
     /**
      * Open Database for read-write access
      */
-    synchronized SQLiteDatabase openWritable() throws Exception {
+    private synchronized SQLiteDatabase openWritable() throws Exception {
         lock.lock();
         try {
             SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -152,7 +152,7 @@ public final class PersistanceHandler {
     /**
      * Close Database
      */
-    void close(SQLiteDatabase database) {
+    private void close(SQLiteDatabase database) {
         try {
             if (database.inTransaction()) {
                 database.endTransaction();

@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.gateway.Gateway;
@@ -41,6 +42,7 @@ import eu.power_switch.obj.receiver.UniversalReceiver;
 /**
  *
  */
+@Singleton
 public class ReceiverReflectionMagic {
 
     private Context                    context;
