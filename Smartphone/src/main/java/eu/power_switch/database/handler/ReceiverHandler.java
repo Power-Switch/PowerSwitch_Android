@@ -20,11 +20,15 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.receiver.ReceiverGatewayRelationTable;
 import eu.power_switch.database.table.receiver.ReceiverTable;
@@ -39,15 +43,11 @@ import timber.log.Timber;
 /**
  * Provides database methods for managing Receivers of any type
  */
-abstract class ReceiverHandler {
+@Singleton
+class ReceiverHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private ReceiverHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    ReceiverHandler() {
     }
 
     /**
@@ -55,21 +55,28 @@ abstract class ReceiverHandler {
      *
      * @param receiver Receiver
      */
-    protected static void add(Receiver receiver) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, Receiver receiver) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_NAME, receiver.getName());
         values.put(ReceiverTable.COLUMN_ROOM_ID, receiver.getRoomId());
         values.put(ReceiverTable.COLUMN_MODEL, receiver.getModel());
-        values.put(ReceiverTable.COLUMN_CLASSNAME, receiver.getClass().getName());
-        values.put(ReceiverTable.COLUMN_TYPE, receiver.getType().toString());
-        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, RoomHandler.get(receiver.getRoomId()).getReceivers().size());
+        values.put(ReceiverTable.COLUMN_CLASSNAME,
+                receiver.getClass()
+                        .getName());
+        values.put(ReceiverTable.COLUMN_TYPE,
+                receiver.getType()
+                        .toString());
+        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM,
+                RoomHandler.get(database, receiver.getRoomId())
+                        .getReceivers()
+                        .size());
         values.put(ReceiverTable.COLUMN_REPETITION_AMOUNT, receiver.getRepetitionAmount());
 
-        Long receiverId = DatabaseHandler.database.insert(ReceiverTable.TABLE_NAME, null, values);
+        Long receiverId = database.insert(ReceiverTable.TABLE_NAME, null, values);
 
         if (receiverId > -1) {
-            insertDetails(receiver, receiverId);
-            addAssociatedGateways(receiverId, receiver.getAssociatedGateways());
+            insertDetails(database, receiver, receiverId);
+            addAssociatedGateways(database, receiverId, receiver.getAssociatedGateways());
         } else {
             throw new Exception("invalid database.insert() return value: " + receiverId);
         }
@@ -81,25 +88,24 @@ abstract class ReceiverHandler {
      * @param receiver   the new Receiver
      * @param receiverId ID of the new Receiver in database
      */
-    private static void insertDetails(Receiver receiver, Long receiverId) throws Exception {
+    private void insertDetails(@NonNull SQLiteDatabase database, Receiver receiver, Long receiverId) throws Exception {
         Receiver.Type type = receiver.getType();
         switch (type) {
             case MASTER_SLAVE:
                 MasterSlaveReceiver receiverAsMasterSlave = (MasterSlaveReceiver) receiver;
-                MasterSlaveReceiverHandler.add(receiverId, receiverAsMasterSlave.getMaster(),
-                        receiverAsMasterSlave.getSlave());
+                MasterSlaveReceiverHandler.add(database, receiverId, receiverAsMasterSlave.getMaster(), receiverAsMasterSlave.getSlave());
                 break;
             case DIPS:
                 DipReceiver receiverAsDipReceiver = (DipReceiver) receiver;
-                DipHandler.add(receiverId, receiverAsDipReceiver);
+                DipHandler.add(database, receiverId, receiverAsDipReceiver);
                 break;
             case UNIVERSAL:
                 UniversalReceiver receiverAsUniversalReceiver = (UniversalReceiver) receiver;
-                UniversalButtonHandler.addUniversalButtons(receiverId, receiverAsUniversalReceiver.getButtons());
+                UniversalButtonHandler.addUniversalButtons(database, receiverId, receiverAsUniversalReceiver.getButtons());
                 break;
             case AUTOPAIR:
                 AutoPairReceiver receiverAsAutoPairReceiver = (AutoPairReceiver) receiver;
-                AutoPairHandler.add(receiverId, receiverAsAutoPairReceiver.getSeed());
+                AutoPairHandler.add(database, receiverId, receiverAsAutoPairReceiver.getSeed());
                 break;
         }
     }
@@ -109,25 +115,28 @@ abstract class ReceiverHandler {
      *
      * @param receiver Receiver
      */
-    protected static void update(Receiver receiver) throws Exception {
-        updateDetails(receiver);
+    protected void update(@NonNull SQLiteDatabase database, Receiver receiver) throws Exception {
+        updateDetails(database, receiver);
 
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_NAME, receiver.getName());
         values.put(ReceiverTable.COLUMN_ROOM_ID, receiver.getRoomId());
         values.put(ReceiverTable.COLUMN_MODEL, receiver.getModel());
-        values.put(ReceiverTable.COLUMN_CLASSNAME, receiver.getClass().getName());
-        values.put(ReceiverTable.COLUMN_TYPE, receiver.getType().toString());
+        values.put(ReceiverTable.COLUMN_CLASSNAME,
+                receiver.getClass()
+                        .getName());
+        values.put(ReceiverTable.COLUMN_TYPE,
+                receiver.getType()
+                        .toString());
         values.put(ReceiverTable.COLUMN_REPETITION_AMOUNT, receiver.getRepetitionAmount());
 
-        DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
-                ReceiverTable.COLUMN_ID + "=" + receiver.getId(), null);
+        database.update(ReceiverTable.TABLE_NAME, values, ReceiverTable.COLUMN_ID + "=" + receiver.getId(), null);
 
         // update associated Gateways
-        removeAssociatedGateways(receiver.getId());
-        addAssociatedGateways(receiver.getId(), receiver.getAssociatedGateways());
+        removeAssociatedGateways(database, receiver.getId());
+        addAssociatedGateways(database, receiver.getId(), receiver.getAssociatedGateways());
 
-        SceneItemHandler.update(receiver.getId());
+        SceneItemHandler.update(database, receiver.getId());
     }
 
     /**
@@ -135,27 +144,33 @@ abstract class ReceiverHandler {
      *
      * @param receiver the edited Receiver
      */
-    private static void updateDetails(Receiver receiver) throws Exception {
+    private void updateDetails(@NonNull SQLiteDatabase database, Receiver receiver) throws Exception {
         long receiverId = receiver.getId();
 
-        deleteDetails(receiverId);
-        insertDetails(receiver, receiverId);
+        deleteDetails(database, receiverId);
+        insertDetails(database, receiver, receiverId);
     }
 
     /**
      * Gets Receiver from Database
      *
      * @param id ID of Receiver
+     *
      * @return Receiver
      */
     @NonNull
-    protected static Receiver get(Long id) throws Exception {
+    protected Receiver get(@NonNull SQLiteDatabase database, Long id) throws Exception {
         Receiver receiver = null;
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, ReceiverTable.COLUMN_ID + "="
-                + id, null, null, null, null);
+        Cursor cursor = database.query(ReceiverTable.TABLE_NAME,
+                ReceiverTable.ALL_COLUMNS,
+                ReceiverTable.COLUMN_ID + "=" + id,
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            receiver = dbToReceiver(cursor);
+            receiver = dbToReceiver(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(id));
@@ -170,10 +185,11 @@ abstract class ReceiverHandler {
      *
      * @param roomId       ID of Room
      * @param receiverName Name of Receiver
+     *
      * @return Receiver
      */
-    protected static Receiver getByRoom(Long roomId, String receiverName) throws Exception {
-        for (Receiver receiver : getByRoom(roomId)) {
+    protected Receiver getByRoom(@NonNull SQLiteDatabase database, Long roomId, String receiverName) throws Exception {
+        for (Receiver receiver : getByRoom(database, roomId)) {
             if (receiverName.equals(receiver.getName())) {
                 return receiver;
             }
@@ -186,16 +202,22 @@ abstract class ReceiverHandler {
      * Gets all Receivers in a Room
      *
      * @param roomId ID of Room
+     *
      * @return List of Receivers
      */
-    protected static ArrayList<Receiver> getByRoom(Long roomId) throws Exception {
+    protected ArrayList<Receiver> getByRoom(@NonNull SQLiteDatabase database, Long roomId) throws Exception {
         ArrayList<Receiver> receivers = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, ReceiverTable.COLUMN_ROOM_ID +
-                "=" + roomId, null, null, null, ReceiverTable.COLUMN_POSITION_IN_ROOM + " ASC");
+        Cursor cursor = database.query(ReceiverTable.TABLE_NAME,
+                ReceiverTable.ALL_COLUMNS,
+                ReceiverTable.COLUMN_ROOM_ID + "=" + roomId,
+                null,
+                null,
+                null,
+                ReceiverTable.COLUMN_POSITION_IN_ROOM + " ASC");
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            receivers.add(dbToReceiver(cursor));
+            receivers.add(dbToReceiver(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -208,13 +230,13 @@ abstract class ReceiverHandler {
      *
      * @return List of Receivers
      */
-    protected static List<Receiver> getAll() throws Exception {
+    protected List<Receiver> getAll(@NonNull SQLiteDatabase database) throws Exception {
         List<Receiver> receivers = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor         cursor    = database.query(ReceiverTable.TABLE_NAME, ReceiverTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            receivers.add(dbToReceiver(cursor));
+            receivers.add(dbToReceiver(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -226,19 +248,19 @@ abstract class ReceiverHandler {
      *
      * @param id ID of Receiver
      */
-    protected static void delete(Long id) throws Exception {
+    protected void delete(@NonNull SQLiteDatabase database, Long id) throws Exception {
         Timber.d("Delete Receiver: " + id);
         // CAREFUL ABOUT DELETE ORDER, SOME THINGS DEPEND ON EXISTING DATA
         // delete depending things first!
 
         // delete sceneItems where receiver was used
-        SceneItemHandler.deleteByReceiverId(id);
+        SceneItemHandler.deleteByReceiverId(database, id);
         // delete actions where receiver was used
-        ActionHandler.deleteByReceiverId(id);
+        ActionHandler.deleteByReceiverId(database, id);
 
-        deleteDetails(id);
-        removeAssociatedGateways(id);
-        DatabaseHandler.database.delete(ReceiverTable.TABLE_NAME, ReceiverTable.COLUMN_ID + "=" + id, null);
+        deleteDetails(database, id);
+        removeAssociatedGateways(database, id);
+        database.delete(ReceiverTable.TABLE_NAME, ReceiverTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
@@ -246,19 +268,19 @@ abstract class ReceiverHandler {
      *
      * @param id ID of Receiver
      */
-    private static void deleteDetails(Long id) throws Exception {
-        switch (getType(id)) {
+    private void deleteDetails(@NonNull SQLiteDatabase database, Long id) throws Exception {
+        switch (getType(database, id)) {
             case DIPS:
-                DipHandler.delete(id);
+                DipHandler.delete(database, id);
                 break;
             case MASTER_SLAVE:
-                MasterSlaveReceiverHandler.delete(id);
+                MasterSlaveReceiverHandler.delete(database, id);
                 break;
             case UNIVERSAL:
-                UniversalButtonHandler.deleteUniversalButtons(id);
+                UniversalButtonHandler.deleteUniversalButtons(database, id);
                 break;
             case AUTOPAIR:
-                AutoPairHandler.delete(id);
+                AutoPairHandler.delete(database, id);
                 break;
         }
     }
@@ -267,13 +289,13 @@ abstract class ReceiverHandler {
      * Gets Type of a Receiver
      *
      * @param id ID of Receiver
+     *
      * @return Type of Receiver
      */
-    protected static Receiver.Type getType(Long id) throws Exception {
+    protected Receiver.Type getType(@NonNull SQLiteDatabase database, Long id) throws Exception {
         Receiver.Type type;
-        String[] columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_TYPE};
-        Cursor cursor = DatabaseHandler.database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID +
-                "=" + id, null, null, null, null);
+        String[]      columns = {ReceiverTable.COLUMN_ID, ReceiverTable.COLUMN_TYPE};
+        Cursor        cursor  = database.query(ReceiverTable.TABLE_NAME, columns, ReceiverTable.COLUMN_ID + "=" + id, null, null, null, null);
         if (cursor.moveToFirst()) {
             type = Receiver.Type.getEnum(cursor.getString(1));
         } else {
@@ -290,12 +312,11 @@ abstract class ReceiverHandler {
      * @param receiverId ID of Receiver
      * @param buttonId   ID of Button
      */
-    protected static void setLastActivatedButtonId(Long receiverId, Long buttonId) throws Exception {
+    protected void setLastActivatedButtonId(@NonNull SQLiteDatabase database, Long receiverId, Long buttonId) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_LAST_ACTIVATED_BUTTON_ID, buttonId);
 
-        DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
-                ReceiverTable.COLUMN_ID + "=" + receiverId, null);
+        database.update(ReceiverTable.TABLE_NAME, values, ReceiverTable.COLUMN_ID + "=" + receiverId, null);
     }
 
     /**
@@ -304,12 +325,11 @@ abstract class ReceiverHandler {
      * @param receiverId     ID of Receiver
      * @param positionInRoom Position in Room
      */
-    protected static void setPositionInRoom(Long receiverId, Long positionInRoom) throws Exception {
+    protected void setPositionInRoom(@NonNull SQLiteDatabase database, Long receiverId, Long positionInRoom) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, positionInRoom);
 
-        DatabaseHandler.database.update(ReceiverTable.TABLE_NAME, values,
-                ReceiverTable.COLUMN_ID + "=" + receiverId, null);
+        database.update(ReceiverTable.TABLE_NAME, values, ReceiverTable.COLUMN_ID + "=" + receiverId, null);
     }
 
     /**
@@ -318,13 +338,13 @@ abstract class ReceiverHandler {
      * @param receiverId         ID of Room
      * @param associatedGateways List of Gateways
      */
-    private static void addAssociatedGateways(Long receiverId, List<Gateway> associatedGateways) throws Exception {
+    private void addAssociatedGateways(@NonNull SQLiteDatabase database, Long receiverId, List<Gateway> associatedGateways) throws Exception {
         // add current
         for (Gateway gateway : associatedGateways) {
             ContentValues gatewayRelationValues = new ContentValues();
             gatewayRelationValues.put(ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID, receiverId);
             gatewayRelationValues.put(ReceiverGatewayRelationTable.COLUMN_GATEWAY_ID, gateway.getId());
-            DatabaseHandler.database.insert(ReceiverGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
+            database.insert(ReceiverGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
         }
     }
 
@@ -333,29 +353,34 @@ abstract class ReceiverHandler {
      *
      * @param receiverId ID of Room
      */
-    private static void removeAssociatedGateways(Long receiverId) throws Exception {
+    private void removeAssociatedGateways(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
         // delete old associated gateways
-        DatabaseHandler.database.delete(ReceiverGatewayRelationTable.TABLE_NAME,
-                ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID + "==" + receiverId, null);
+        database.delete(ReceiverGatewayRelationTable.TABLE_NAME, ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID + "==" + receiverId, null);
     }
 
     /**
      * Get Gateways that are associated with a Receiver
      *
      * @param receiverId ID of Receiver
+     *
      * @return List of Gateways
      */
     @NonNull
-    protected static List<Gateway> getAssociatedGateways(long receiverId) throws Exception {
+    protected List<Gateway> getAssociatedGateways(@NonNull SQLiteDatabase database, long receiverId) throws Exception {
         List<Gateway> associatedGateways = new ArrayList<>();
 
-        Cursor cursor = DatabaseHandler.database.query(ReceiverGatewayRelationTable.TABLE_NAME, ReceiverGatewayRelationTable.ALL_COLUMNS,
-                ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID + "==" + receiverId, null, null, null, null);
+        Cursor cursor = database.query(ReceiverGatewayRelationTable.TABLE_NAME,
+                ReceiverGatewayRelationTable.ALL_COLUMNS,
+                ReceiverGatewayRelationTable.COLUMN_RECEIVER_ID + "==" + receiverId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            Long gatewayId = cursor.getLong(1);
-            Gateway gateway = GatewayHandler.get(gatewayId);
+            Long    gatewayId = cursor.getLong(1);
+            Gateway gateway   = GatewayHandler.get(database, gatewayId);
             associatedGateways.add(gateway);
             cursor.moveToNext();
         }
@@ -368,9 +393,10 @@ abstract class ReceiverHandler {
      * Creates a Receiver Object out of Database information
      *
      * @param c cursor pointing to a Receiver database entry
+     *
      * @return Receiver
      */
-    private static Receiver dbToReceiver(Cursor c) throws Exception {
-        return ReceiverReflectionMagic.fromDatabase(DatabaseHandler.context, c);
+    private Receiver dbToReceiver(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+        return ReceiverReflectionMagic.fromDatabase(DatabaseHandlerStatic.context, c);
     }
 }

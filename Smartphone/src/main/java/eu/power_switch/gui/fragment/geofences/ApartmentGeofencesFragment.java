@@ -46,7 +46,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ApartmentGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -130,7 +130,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
                 }
 
                 try {
-                    int apartmentsCount = DatabaseHandler.getAllApartments()
+                    int apartmentsCount = DatabaseHandlerStatic.getAllApartments()
                             .size();
 
                     if (apartmentsCount == 0) {
@@ -138,7 +138,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
                         return;
-                    } else if (DatabaseHandler.getAllApartments()
+                    } else if (DatabaseHandlerStatic.getAllApartments()
                             .size() == geofences.size()) {
                         new AlertDialog.Builder(getContext()).setMessage(R.string.all_apartments_have_geofence)
                                 .setNeutralButton(android.R.string.ok, null)
@@ -219,7 +219,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
                 }
 
                 try {
-                    int apartmentsCount = DatabaseHandler.getAllApartments()
+                    int apartmentsCount = DatabaseHandlerStatic.getAllApartments()
                             .size();
 
                     if (apartmentsCount == 0) {
@@ -302,7 +302,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             apartments = playStoreModeDataModel.getApartments();
         } else {
-            apartments = DatabaseHandler.getAllApartments();
+            apartments = DatabaseHandlerStatic.getAllApartments();
         }
 
         for (Apartment apartment : apartments) {

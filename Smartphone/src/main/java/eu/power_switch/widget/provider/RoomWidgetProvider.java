@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.widget.RoomWidget;
@@ -68,10 +68,10 @@ public class RoomWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_room);
 
             try {
-                RoomWidget roomWidget = DatabaseHandler.getRoomWidget(appWidgetId);
+                RoomWidget roomWidget = DatabaseHandlerStatic.getRoomWidget(appWidgetId);
                 try {
-                    Room      room      = DatabaseHandler.getRoom(roomWidget.getRoomId());
-                    Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
+                    Room      room      = DatabaseHandlerStatic.getRoom(roomWidget.getRoomId());
+                    Apartment apartment = DatabaseHandlerStatic.getApartment(room.getApartmentId());
 
                     // update UI
                     remoteViews.setTextViewText(R.id.textView_room_widget_name, apartment.getName() + ": " + room.getName());
@@ -106,7 +106,7 @@ public class RoomWidgetProvider extends AppWidgetProvider {
         Timber.d("Deleting Room Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
             try {
-                DatabaseHandler.deleteRoomWidget(appWidgetId);
+                DatabaseHandlerStatic.deleteRoomWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

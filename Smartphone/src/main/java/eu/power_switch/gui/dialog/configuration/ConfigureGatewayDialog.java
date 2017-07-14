@@ -31,7 +31,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
@@ -95,7 +95,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
 
                 getConfiguration().setSsids(gateway.getSsids());
 
-                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gateway.getId());
+                List<Apartment> associatedApartments = DatabaseHandlerStatic.getAssociatedApartments(gateway.getId());
                 for (Apartment associatedApartment : associatedApartments) {
                     getConfiguration().getApartmentIds()
                             .add(associatedApartment.getId());
@@ -180,11 +180,11 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
             }
 
             try {
-                long id = DatabaseHandler.addGateway(newGateway);
+                long id = DatabaseHandlerStatic.addGateway(newGateway);
 
                 newGateway.setId(id);
                 for (Long apartmentId : getConfiguration().getApartmentIds()) {
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+                    Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentId);
 
                     List<Gateway> associatedGateways = apartment.getAssociatedGateways();
                     if (!apartment.isAssociatedWith(id)) {
@@ -195,14 +195,14 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                             apartment.getName(),
                             associatedGateways,
                             apartment.getGeofence());
-                    DatabaseHandler.updateApartment(updatedApartment);
+                    DatabaseHandlerStatic.updateApartment(updatedApartment);
                 }
 
             } catch (GatewayAlreadyExistsException e) {
                 StatusMessageHandler.showInfoMessage(rootView.getContext(), R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
             }
         } else {
-            DatabaseHandler.updateGateway(gateway.getId(),
+            DatabaseHandlerStatic.updateGateway(gateway.getId(),
                     getConfiguration().getName(),
                     getConfiguration().getModel(),
                     getConfiguration().getLocalAddress(),
@@ -210,9 +210,9 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                     getConfiguration().getWanAddress(),
                     getConfiguration().getWanPort(),
                     getConfiguration().getSsids());
-            Gateway updatedGateway = DatabaseHandler.getGateway(gateway.getId());
+            Gateway updatedGateway = DatabaseHandlerStatic.getGateway(gateway.getId());
 
-            List<Apartment> apartments = DatabaseHandler.getAllApartments();
+            List<Apartment> apartments = DatabaseHandlerStatic.getAllApartments();
             for (Apartment apartment : apartments) {
                 if (apartment.isAssociatedWith(updatedGateway.getId())) {
                     if (!getConfiguration().getApartmentIds()
@@ -222,7 +222,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                                     .equals(updatedGateway.getId())) {
                                 apartment.getAssociatedGateways()
                                         .remove(currentGateway);
-                                DatabaseHandler.updateApartment(apartment);
+                                DatabaseHandlerStatic.updateApartment(apartment);
                                 break;
                             }
                         }
@@ -232,7 +232,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                             .contains(apartment.getId())) {
                         apartment.getAssociatedGateways()
                                 .add(updatedGateway);
-                        DatabaseHandler.updateApartment(apartment);
+                        DatabaseHandlerStatic.updateApartment(apartment);
                     }
                 }
             }
@@ -250,7 +250,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteGateway(getConfiguration().getGateway()
+                            DatabaseHandlerStatic.deleteGateway(getConfiguration().getGateway()
                                     .getId());
                             GatewaySettingsFragment.notifyGatewaysChanged();
                             StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_removed, Snackbar.LENGTH_LONG);

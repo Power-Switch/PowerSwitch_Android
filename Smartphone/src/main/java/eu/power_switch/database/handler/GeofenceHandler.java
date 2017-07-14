@@ -20,8 +20,10 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -31,6 +33,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
@@ -42,24 +47,22 @@ import eu.power_switch.google_play_services.geofence.Geofence;
  * <p/>
  * Created by Markus on 20.01.2016.
  */
-abstract class GeofenceHandler {
+@Singleton
+class GeofenceHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private GeofenceHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    GeofenceHandler() {
     }
 
     /**
      * Add a Geofence to Database
      *
+     * @param database the database to use
      * @param geofence new geofence to insert
+     *
      * @return ID of inserted Geofence
      */
-    protected static Long add(Geofence geofence) throws Exception {
+    protected Long add(SQLiteDatabase database, Geofence geofence) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, geofence.isActive());
         values.put(GeofenceTable.COLUMN_NAME, geofence.getName());
@@ -69,10 +72,10 @@ abstract class GeofenceHandler {
         values.put(GeofenceTable.COLUMN_SNAPSHOT, getBytes(geofence.getSnapshot()));
         values.put(GeofenceTable.COLUMN_STATE, geofence.getState());
 
-        long newId = DatabaseHandler.database.insert(GeofenceTable.TABLE_NAME, null, values);
+        long newId = database.insert(GeofenceTable.TABLE_NAME, null, values);
 
         for (Geofence.EventType eventType : Geofence.EventType.values()) {
-            GeofenceActionHandler.add(geofence.getActions(eventType), newId, eventType);
+            GeofenceActionHandler.add(database, geofence.getActions(eventType), newId, eventType);
         }
 
         return newId;
@@ -81,21 +84,28 @@ abstract class GeofenceHandler {
     /**
      * Get a Geofence from Database
      *
-     * @param id ID of Geofence
+     * @param database the database to use
+     * @param id       ID of Geofence
+     *
      * @return Geofence
      */
     @Nullable
-    protected static Geofence get(Long id) throws Exception {
+    protected Geofence get(SQLiteDatabase database, Long id) throws Exception {
         if (id == null) {
             return null;
         }
 
         Geofence geofence = null;
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS,
-                GeofenceTable.COLUMN_ID + "=" + id, null, null, null, null);
+        Cursor cursor = database.query(GeofenceTable.TABLE_NAME,
+                GeofenceTable.ALL_COLUMNS,
+                GeofenceTable.COLUMN_ID + "=" + id,
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            geofence = dbToGeofence(cursor);
+            geofence = dbToGeofence(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(id));
@@ -108,64 +118,73 @@ abstract class GeofenceHandler {
     /**
      * Enables an existing Geofence
      *
-     * @param id ID of Geofence
+     * @param database the database to use
+     * @param id       ID of Geofence
      */
-    protected static void enable(Long id) throws Exception {
+    protected void enable(SQLiteDatabase database, Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, true);
-        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
+        database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
      * Disables an existing Geofence
      *
-     * @param id ID of Geofence
+     * @param database the database to use
+     * @param id       ID of Geofence
      */
-    protected static void disable(Long id) throws Exception {
+    protected void disable(SQLiteDatabase database, Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, false);
-        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
+        database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 
-    protected static void updateState(Long id, @Geofence.State String state) {
+    protected void updateState(SQLiteDatabase database, Long id, @Geofence.State String state) {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_STATE, state);
-        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
+        database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
      * Disables all existing Geofences
+     *
+     * @param database the database to use
      */
-    protected static void disableAll() throws Exception {
+    protected void disableAll(SQLiteDatabase database) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, false);
-        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values, null, null);
+        database.update(GeofenceTable.TABLE_NAME, values, null, null);
     }
 
     /**
      * Deletes Geofence information from Database
      *
-     * @param id ID of Geofence
+     * @param database the database to use
+     * @param id       ID of Geofence
      */
-    protected static void delete(Long id) throws Exception {
+    protected void delete(SQLiteDatabase database, Long id) throws Exception {
         // delete from associations with apartments
-        DatabaseHandler.database.delete(ApartmentGeofenceRelationTable.TABLE_NAME, ApartmentGeofenceRelationTable
-                .COLUMN_GEOFENCE_ID + "=" + id, null);
+        database.delete(ApartmentGeofenceRelationTable.TABLE_NAME, ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID + "=" + id, null);
 
-        GeofenceActionHandler.delete(id);
+        GeofenceActionHandler.delete(database, id);
 
-        DatabaseHandler.database.delete(GeofenceTable.TABLE_NAME, GeofenceTable.COLUMN_ID + "=" + id, null);
+        database.delete(GeofenceTable.TABLE_NAME, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
 
-    public static void deleteByApartmentId(Long apartmentId) throws Exception {
-        Cursor cursor = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME, null, ApartmentGeofenceRelationTable
-                .COLUMN_APARTMENT_ID + "=" + apartmentId, null, null, null, null);
+    public void deleteByApartmentId(SQLiteDatabase database, Long apartmentId) throws Exception {
+        Cursor cursor = database.query(ApartmentGeofenceRelationTable.TABLE_NAME,
+                null,
+                ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID + "=" + apartmentId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             long geofenceId = cursor.getLong(1);
 
-            delete(geofenceId);
+            delete(database, geofenceId);
             cursor.moveToNext();
         }
         cursor.close();
@@ -174,15 +193,17 @@ abstract class GeofenceHandler {
     /**
      * Gets all Geofences from Database
      *
+     * @param database the database to use
+     *
      * @return List of Geofences
      */
-    protected static List<Geofence> getAll() throws Exception {
+    protected List<Geofence> getAll(SQLiteDatabase database) throws Exception {
         List<Geofence> geofences = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor         cursor    = database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            geofences.add(dbToGeofence(cursor));
+            geofences.add(dbToGeofence(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -192,21 +213,28 @@ abstract class GeofenceHandler {
     /**
      * Get all custom Geofences
      *
+     * @param database the database to use
+     *
      * @return List of custom Geofences
      */
-    public static List<Geofence> getCustom() throws Exception {
+    public List<Geofence> getCustom(SQLiteDatabase database) throws Exception {
         List<Geofence> geofences = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor         cursor    = database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Long geofenceId = cursor.getLong(0);
-            Cursor cursor1 = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME, null,
-                    ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID + "=" + geofenceId, null, null, null, null);
+            Cursor cursor1 = database.query(ApartmentGeofenceRelationTable.TABLE_NAME,
+                    null,
+                    ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID + "=" + geofenceId,
+                    null,
+                    null,
+                    null,
+                    null);
 
             // only add geofences that are NOT related to an Apartment
             if (!cursor1.moveToFirst()) {
-                geofences.add(dbToGeofence(cursor));
+                geofences.add(dbToGeofence(database, cursor));
             }
             cursor1.close();
 
@@ -220,18 +248,25 @@ abstract class GeofenceHandler {
     /**
      * Gets all Geofences from Database
      *
+     * @param database the database to use
      * @param isActive true if Geofence is enabled
+     *
      * @return List of enabled/disabled Geofences
      */
-    protected static List<Geofence> getAll(boolean isActive) throws Exception {
-        List<Geofence> geofences = new ArrayList<>();
-        int isActiveInt = isActive ? 1 : 0;
-        Cursor cursor = DatabaseHandler.database.query(GeofenceTable.TABLE_NAME, GeofenceTable.ALL_COLUMNS,
-                GeofenceTable.COLUMN_ACTIVE + "=" + isActiveInt, null, null, null, null);
+    protected List<Geofence> getAll(SQLiteDatabase database, boolean isActive) throws Exception {
+        List<Geofence> geofences   = new ArrayList<>();
+        int            isActiveInt = isActive ? 1 : 0;
+        Cursor cursor = database.query(GeofenceTable.TABLE_NAME,
+                GeofenceTable.ALL_COLUMNS,
+                GeofenceTable.COLUMN_ACTIVE + "=" + isActiveInt,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            geofences.add(dbToGeofence(cursor));
+            geofences.add(dbToGeofence(database, cursor));
             cursor.moveToNext();
         }
 
@@ -242,9 +277,10 @@ abstract class GeofenceHandler {
     /**
      * Update Geofence in Database
      *
+     * @param database the database to use
      * @param geofence updated Geofence
      */
-    public static void update(Geofence geofence) throws Exception {
+    public void update(SQLiteDatabase database, Geofence geofence) throws Exception {
         ContentValues values = new ContentValues();
         values.put(GeofenceTable.COLUMN_ACTIVE, geofence.isActive());
         values.put(GeofenceTable.COLUMN_NAME, geofence.getName());
@@ -255,37 +291,36 @@ abstract class GeofenceHandler {
         values.put(GeofenceTable.COLUMN_STATE, geofence.getState());
 
         // delete old actions
-        GeofenceActionHandler.delete(geofence.getId());
+        GeofenceActionHandler.delete(database, geofence.getId());
         // add new actions
         for (Geofence.EventType eventType : Geofence.EventType.values()) {
-            GeofenceActionHandler.add(geofence.getActions(eventType), geofence.getId(), eventType);
+            GeofenceActionHandler.add(database, geofence.getActions(eventType), geofence.getId(), eventType);
         }
 
-        DatabaseHandler.database.update(GeofenceTable.TABLE_NAME, values,
-                GeofenceTable.COLUMN_ID + "=" + geofence.getId(), null);
+        database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + geofence.getId(), null);
     }
 
     /**
      * Creates a Geofence Object out of Database information
      *
      * @param c cursor pointing to a geofence database entry
+     *
      * @return Geofence, can be null
      */
-    private static Geofence dbToGeofence(Cursor c) throws Exception {
+    private Geofence dbToGeofence(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
         Geofence geofence;
-        Long id = c.getLong(0);
-        boolean active = c.getInt(1) > 0;
-        String name = c.getString(2);
-        double latitude = c.getDouble(3);
-        double longitude = c.getDouble(4);
-        double radius = c.getDouble(5);
-        Bitmap snapshot = null;
+        Long     id        = c.getLong(0);
+        boolean  active    = c.getInt(1) > 0;
+        String   name      = c.getString(2);
+        double   latitude  = c.getDouble(3);
+        double   longitude = c.getDouble(4);
+        double   radius    = c.getDouble(5);
+        Bitmap   snapshot  = null;
         if (!c.isNull(6)) {
             snapshot = getImage(c.getBlob(6));
         }
 
-        @Geofence.State
-        String state = c.getString(7);
+        @Geofence.State String state = c.getString(7);
 
         LatLng location;
         if (latitude == Integer.MAX_VALUE || longitude == Integer.MAX_VALUE) {
@@ -296,7 +331,7 @@ abstract class GeofenceHandler {
 
         HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
         for (Geofence.EventType eventType : Geofence.EventType.values()) {
-            actionsMap.put(eventType, GeofenceActionHandler.get(id, eventType));
+            actionsMap.put(eventType, GeofenceActionHandler.get(database, id, eventType));
         }
 
         geofence = new Geofence(id, active, name, location, radius, snapshot, actionsMap, state);
@@ -304,14 +339,14 @@ abstract class GeofenceHandler {
     }
 
     // convert from bitmap to byte array
-    public static byte[] getBytes(Bitmap bitmap) throws Exception {
+    private byte[] getBytes(Bitmap bitmap) throws Exception {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
     }
 
     // convert from byte array to bitmap
-    public static Bitmap getImage(byte[] image) throws Exception {
+    private Bitmap getImage(byte[] image) throws Exception {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }

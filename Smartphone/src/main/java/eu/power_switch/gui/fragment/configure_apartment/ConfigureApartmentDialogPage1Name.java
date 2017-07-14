@@ -40,7 +40,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHolder;
@@ -184,7 +184,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            List<Gateway> gateways = DatabaseHandler.getAllGateways();
+            List<Gateway> gateways = DatabaseHandlerStatic.getAllGateways();
             for (Gateway gateway : gateways) {
                 @SuppressLint("InflateParams") LinearLayout gatewayLayout = (LinearLayout) inflater.inflate(R.layout.gateway_overview, null);
                 // every inflated layout has to be added manually, attaching while inflating will only generate every

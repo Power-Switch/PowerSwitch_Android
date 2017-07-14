@@ -20,23 +20,24 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.receiver.MasterSlaveTable;
 
 /**
  * Provides database methods for managing MasterSlaveReceivers
  */
-abstract class MasterSlaveReceiverHandler {
+@Singleton
+class MasterSlaveReceiverHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private MasterSlaveReceiverHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    MasterSlaveReceiverHandler() {
     }
 
     /**
@@ -46,12 +47,12 @@ abstract class MasterSlaveReceiverHandler {
      * @param master     Master channel of the receiver.
      * @param slave      Slave channel of the receiver.
      */
-    protected static void add(Long receiverID, Character master, int slave) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, Long receiverID, Character master, int slave) throws Exception {
         ContentValues values = new ContentValues();
         values.put(MasterSlaveTable.COLUMN_MASTER, master.toString());
         values.put(MasterSlaveTable.COLUMN_SLAVE, slave);
         values.put(MasterSlaveTable.COLUMN_RECEIVER_ID, receiverID);
-        DatabaseHandler.database.insert(MasterSlaveTable.TABLE_NAME, null, values);
+        database.insert(MasterSlaveTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -59,23 +60,30 @@ abstract class MasterSlaveReceiverHandler {
      *
      * @param receiverID ID of the deleted receiver
      */
-    protected static void delete(Long receiverID) throws Exception {
-        DatabaseHandler.database.delete(MasterSlaveTable.TABLE_NAME, MasterSlaveTable.COLUMN_RECEIVER_ID + "=" + receiverID, null);
+    protected void delete(@NonNull SQLiteDatabase database, Long receiverID) throws Exception {
+        database.delete(MasterSlaveTable.TABLE_NAME, MasterSlaveTable.COLUMN_RECEIVER_ID + "=" + receiverID, null);
     }
 
     /**
      * Returns the master channel of a MasterSlaveReceiver.
      *
      * @param receiverID The ID of the receiver.
+     *
      * @return The master channel of the receiver.
      */
-    protected static Character getMaster(Long receiverID) throws Exception {
+    protected Character getMaster(@NonNull SQLiteDatabase database, Long receiverID) throws Exception {
         Character master;
-        String[] columns = {MasterSlaveTable.COLUMN_MASTER};
-        Cursor cursor = DatabaseHandler.database.query(MasterSlaveTable.TABLE_NAME, columns,
-                MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);
+        String[]  columns = {MasterSlaveTable.COLUMN_MASTER};
+        Cursor cursor = database.query(MasterSlaveTable.TABLE_NAME,
+                columns,
+                MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID,
+                null,
+                null,
+                null,
+                null);
         if (cursor.moveToFirst()) {
-            master = cursor.getString(0).charAt(0);
+            master = cursor.getString(0)
+                    .charAt(0);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(receiverID));
@@ -89,13 +97,19 @@ abstract class MasterSlaveReceiverHandler {
      * Returns the slave channel of a MasterSlaveReceiver.
      *
      * @param receiverID The ID of the receiver.
+     *
      * @return The slave channel of the receiver.
      */
-    protected static int getSlave(Long receiverID) throws Exception {
-        int slave;
+    protected int getSlave(@NonNull SQLiteDatabase database, Long receiverID) throws Exception {
+        int      slave;
         String[] columns = {MasterSlaveTable.COLUMN_SLAVE};
-        Cursor cursor = DatabaseHandler.database.query(MasterSlaveTable.TABLE_NAME, columns,
-                MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);
+        Cursor cursor = database.query(MasterSlaveTable.TABLE_NAME,
+                columns,
+                MasterSlaveTable.COLUMN_RECEIVER_ID + "==" + receiverID,
+                null,
+                null,
+                null,
+                null);
         if (cursor.moveToFirst()) {
             slave = cursor.getInt(0);
         } else {

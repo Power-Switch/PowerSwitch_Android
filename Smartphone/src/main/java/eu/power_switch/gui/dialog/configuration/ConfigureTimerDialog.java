@@ -29,7 +29,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
@@ -146,9 +146,9 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
 
         if (timer != null) {
             if (getConfiguration().getTimer() == null) {
-                DatabaseHandler.addTimer(timer);
+                DatabaseHandlerStatic.addTimer(timer);
             } else {
-                DatabaseHandler.updateTimer(timer);
+                DatabaseHandlerStatic.updateTimer(timer);
             }
         }
 
@@ -164,7 +164,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteTimer(getConfiguration().getTimer()
+                            DatabaseHandlerStatic.deleteTimer(getConfiguration().getTimer()
                                     .getId());
 
                             // notify scenes fragment

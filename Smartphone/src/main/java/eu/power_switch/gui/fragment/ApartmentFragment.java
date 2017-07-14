@@ -40,7 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -214,7 +214,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             return playStoreModeDataModel.getApartments();
         } else {
-            return DatabaseHandler.getAllApartments();
+            return DatabaseHandlerStatic.getAllApartments();
         }
     }
 

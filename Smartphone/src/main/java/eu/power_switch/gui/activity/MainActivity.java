@@ -71,7 +71,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.application.PowerSaverHelper;
 import eu.power_switch.application.PowerSwitch;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.HistoryUpdatedEvent;
 import eu.power_switch.google_play_services.chrome_custom_tabs.ChromeCustomTabHelper;
 import eu.power_switch.gui.IconicsHelper;
@@ -317,7 +317,7 @@ public class MainActivity extends EventBusActivity {
                         List<Gateway> foundGateways = result.getResult();
 
                         try {
-                            if (foundGateways.isEmpty() && DatabaseHandler.getAllGateways()
+                            if (foundGateways.isEmpty() && DatabaseHandlerStatic.getAllGateways()
                                     .isEmpty()) {
                                 StatusMessageHandler.showInfoMessage(getActivity(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                             } else {
@@ -326,11 +326,11 @@ public class MainActivity extends EventBusActivity {
                                         continue;
                                     }
                                     try {
-                                        DatabaseHandler.addGateway(gateway);
+                                        DatabaseHandlerStatic.addGateway(gateway);
                                         StatusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                     } catch (GatewayAlreadyExistsException e) {
                                         try {
-                                            DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
+                                            DatabaseHandlerStatic.enableGateway(e.getIdOfExistingGateway());
                                             StatusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
                                             Timber.e(e1);
@@ -763,7 +763,7 @@ public class MainActivity extends EventBusActivity {
                                     @Override
                                     protected Exception doInBackground(Void... params) {
                                         try {
-                                            DatabaseHandler.clearHistory();
+                                            DatabaseHandlerStatic.clearHistory();
                                         } catch (Exception e) {
                                             return e;
                                         }
@@ -831,7 +831,7 @@ public class MainActivity extends EventBusActivity {
             protected Exception doInBackground(Void... params) {
                 try {
                     historyItems.clear();
-                    historyItems.addAll(DatabaseHandler.getHistory());
+                    historyItems.addAll(DatabaseHandlerStatic.getHistory());
 
                     return null;
                 } catch (Exception e) {

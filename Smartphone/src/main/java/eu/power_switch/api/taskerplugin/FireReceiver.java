@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -69,7 +69,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
             if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_RECEIVER) && extras.containsKey(
                     ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = DatabaseHandlerStatic.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
                         .trim());
@@ -81,7 +81,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
                 actionHandler.execute(receiver, button);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_ROOM) && extras.containsKey(ApiConstants.KEY_BUTTON)) {
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = DatabaseHandlerStatic.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Room room = apartment.getRoomCaseInsensitive(extras.getString(ApiConstants.KEY_ROOM)
                         .trim());
@@ -91,7 +91,7 @@ public class FireReceiver extends DaggerBroadcastReceiver {
                 actionHandler.execute(room, buttonName);
             } else if (extras.containsKey(ApiConstants.KEY_APARTMENT) && extras.containsKey(ApiConstants.KEY_SCENE)) {
 
-                Apartment apartment = DatabaseHandler.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
+                Apartment apartment = DatabaseHandlerStatic.getApartmentCaseInsensitive(extras.getString(ApiConstants.KEY_APARTMENT)
                         .trim());
                 Scene scene = apartment.getSceneCaseInsensitive(extras.getString(ApiConstants.KEY_SCENE)
                         .trim());

@@ -32,7 +32,7 @@ import javax.inject.Inject;
 import dagger.android.DaggerIntentService;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
 import timber.log.Timber;
 
@@ -114,19 +114,19 @@ public class GeofenceIntentService extends DaggerIntentService {
             try {
                 Long geofenceId = Long.valueOf(googleGeofence.getRequestId());
 
-                eu.power_switch.google_play_services.geofence.Geofence geofence = DatabaseHandler.getGeofence(geofenceId);
+                eu.power_switch.google_play_services.geofence.Geofence geofence = DatabaseHandlerStatic.getGeofence(geofenceId);
                 if (geofence.isActive() && geofenceStateChanged(geofence.getState(), eventType)) {
                     actionHandler.execute(geofence, eventType);
 
                     switch (eventType) {
                         case ENTER:
-                            DatabaseHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE);
+                            DatabaseHandlerStatic.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE);
                             break;
                         case EXIT:
-                            DatabaseHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE);
+                            DatabaseHandlerStatic.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE);
                             break;
                         default:
-                            DatabaseHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_NONE);
+                            DatabaseHandlerStatic.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_NONE);
                             break;
                     }
                 }

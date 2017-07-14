@@ -20,12 +20,16 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.room.RoomGatewayRelationTable;
 import eu.power_switch.database.table.room.RoomTable;
@@ -37,15 +41,11 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 /**
  * Provides database methods for managing Rooms
  */
-abstract class RoomHandler {
+@Singleton
+class RoomHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private RoomHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    RoomHandler() {
     }
 
     /**
@@ -53,14 +53,14 @@ abstract class RoomHandler {
      *
      * @param room Room
      */
-    protected static long add(Room room) throws Exception {
+    protected long add(@NonNull SQLiteDatabase database, Room room) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, room.getName());
         values.put(RoomTable.COLUMN_APARTMENT_ID, room.getApartmentId());
         values.put(RoomTable.COLUMN_COLLAPSED, room.isCollapsed());
-        long roomId = DatabaseHandler.database.insert(RoomTable.TABLE_NAME, null, values);
+        long roomId = database.insert(RoomTable.TABLE_NAME, null, values);
 
-        addAssociatedGateways(roomId, room.getAssociatedGateways());
+        addAssociatedGateways(database, roomId, room.getAssociatedGateways());
 
         return roomId;
     }
@@ -71,14 +71,14 @@ abstract class RoomHandler {
      * @param id      ID of Room
      * @param newName new Room name
      */
-    protected static void update(Long id, String newName, List<Gateway> associatedGateways) throws Exception {
+    protected void update(@NonNull SQLiteDatabase database, Long id, String newName, List<Gateway> associatedGateways) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_NAME, newName);
-        DatabaseHandler.database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
+        database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
 
         // update associated Gateways
-        removeAssociatedGateways(id);
-        addAssociatedGateways(id, associatedGateways);
+        removeAssociatedGateways(database, id);
+        addAssociatedGateways(database, id, associatedGateways);
     }
 
     /**
@@ -87,10 +87,10 @@ abstract class RoomHandler {
      * @param id          ID of Room
      * @param isCollapsed new collapsed state of Room
      */
-    protected static void updateCollapsed(Long id, boolean isCollapsed) throws Exception {
+    protected void updateCollapsed(@NonNull SQLiteDatabase database, Long id, boolean isCollapsed) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_COLLAPSED, isCollapsed);
-        DatabaseHandler.database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
+        database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "==" + id, null);
     }
 
 
@@ -100,12 +100,11 @@ abstract class RoomHandler {
      * @param roomId   ID of Room
      * @param position position in apartment
      */
-    protected static void setPosition(Long roomId, Long position) {
+    protected void setPosition(@NonNull SQLiteDatabase database, Long roomId, Long position) {
         ContentValues values = new ContentValues();
         values.put(RoomTable.COLUMN_POSITION, position);
 
-        DatabaseHandler.database.update(RoomTable.TABLE_NAME, values,
-                RoomTable.COLUMN_ID + "=" + roomId, null);
+        database.update(RoomTable.TABLE_NAME, values, RoomTable.COLUMN_ID + "=" + roomId, null);
     }
 
     /**
@@ -113,13 +112,13 @@ abstract class RoomHandler {
      *
      * @param id ID of Room
      */
-    protected static void delete(Long id) throws Exception {
-        ActionHandler.deleteByRoomId(id);
+    protected void delete(@NonNull SQLiteDatabase database, Long id) throws Exception {
+        ActionHandler.deleteByRoomId(database, id);
 
-        deleteReceiversOfRoom(id);
+        deleteReceiversOfRoom(database, id);
 
-        removeAssociatedGateways(id);
-        DatabaseHandler.database.delete(RoomTable.TABLE_NAME, RoomTable.COLUMN_ID + "=" + id, null);
+        removeAssociatedGateways(database, id);
+        database.delete(RoomTable.TABLE_NAME, RoomTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
@@ -127,10 +126,10 @@ abstract class RoomHandler {
      *
      * @param roomId ID of Room
      */
-    private static void deleteReceiversOfRoom(Long roomId) throws Exception {
-        ArrayList<Receiver> receivers = ReceiverHandler.getByRoom(roomId);
+    private void deleteReceiversOfRoom(@NonNull SQLiteDatabase database, Long roomId) throws Exception {
+        ArrayList<Receiver> receivers = ReceiverHandler.getByRoom(database, roomId);
         for (Receiver receiver : receivers) {
-            ReceiverHandler.delete(receiver.getId());
+            ReceiverHandler.delete(database, receiver.getId());
         }
     }
 
@@ -138,16 +137,22 @@ abstract class RoomHandler {
      * Gets Room from Database
      *
      * @param name Name of Room
+     *
      * @return Room
      */
     @NonNull
-    protected static Room get(String name) throws Exception {
+    protected Room get(@NonNull SQLiteDatabase database, String name) throws Exception {
         Room room = null;
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_NAME + "=='" +
-                name + "'", null, null, null, null);
+        Cursor cursor = database.query(RoomTable.TABLE_NAME,
+                RoomTable.ALL_COLUMNS,
+                RoomTable.COLUMN_NAME + "=='" + name + "'",
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            room = dbToRoom(cursor);
+            room = dbToRoom(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(name);
@@ -161,17 +166,23 @@ abstract class RoomHandler {
      * Gets Room from Database, ignoring case
      *
      * @param name Name of Room
+     *
      * @return Room
      */
     @NonNull
-    protected static Room getCaseInsensitive(String name) throws Exception {
+    protected Room getCaseInsensitive(@NonNull SQLiteDatabase database, String name) throws Exception {
         Room room = null;
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_NAME + "=='" +
-                name.toLowerCase() + "' COLLATE NOCASE", null, null, null, null);
+        Cursor cursor = database.query(RoomTable.TABLE_NAME,
+                RoomTable.ALL_COLUMNS,
+                RoomTable.COLUMN_NAME + "=='" + name.toLowerCase() + "' COLLATE NOCASE",
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         if (cursor.moveToFirst()) {
-            room = dbToRoom(cursor);
+            room = dbToRoom(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(name);
@@ -185,16 +196,16 @@ abstract class RoomHandler {
      * Gets Room from Database
      *
      * @param id ID of Room
+     *
      * @return Room
      */
     @NonNull
-    protected static Room get(Long id) throws Exception {
-        Room room = null;
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS,
-                RoomTable.COLUMN_ID + "==" + id, null, null, null, null);
+    protected Room get(@NonNull SQLiteDatabase database, Long id) throws Exception {
+        Room   room   = null;
+        Cursor cursor = database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_ID + "==" + id, null, null, null, null);
 
         if (cursor.moveToFirst()) {
-            room = dbToRoom(cursor);
+            room = dbToRoom(database, cursor);
             room.setCollapsed(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS));
         } else {
             cursor.close();
@@ -209,19 +220,24 @@ abstract class RoomHandler {
      * Get Rooms of a specific Apartment
      *
      * @param apartmentId ID of Apartment
+     *
      * @return list of Rooms
      */
-    public static LinkedList<Room> getByApartment(Long apartmentId) throws Exception {
+    public LinkedList<Room> getByApartment(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
         LinkedList<Room> rooms = new LinkedList<>();
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, RoomTable.COLUMN_APARTMENT_ID +
-                        "==" + apartmentId,
-                null, null, null, RoomTable.COLUMN_POSITION + " ASC");
+        Cursor cursor = database.query(RoomTable.TABLE_NAME,
+                RoomTable.ALL_COLUMNS,
+                RoomTable.COLUMN_APARTMENT_ID + "==" + apartmentId,
+                null,
+                null,
+                null,
+                RoomTable.COLUMN_POSITION + " ASC");
         cursor.moveToFirst();
 
         boolean autoCollapseRooms = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
-            Room room = dbToRoom(cursor);
+            Room room = dbToRoom(database, cursor);
             room.setCollapsed(autoCollapseRooms);
             rooms.add(room);
             cursor.moveToNext();
@@ -235,11 +251,16 @@ abstract class RoomHandler {
      *
      * @return a list of room IDs
      */
-    public static ArrayList<Long> getIdsByApartment(Long apartmentId) throws Exception {
+    public ArrayList<Long> getIdsByApartment(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
         ArrayList<Long> roomIds = new ArrayList<>();
-        String[] columns = new String[]{RoomTable.COLUMN_ID};
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, columns, RoomTable.COLUMN_APARTMENT_ID +
-                "==" + apartmentId, null, null, null, RoomTable.COLUMN_POSITION + " ASC");
+        String[]        columns = new String[]{RoomTable.COLUMN_ID};
+        Cursor cursor = database.query(RoomTable.TABLE_NAME,
+                columns,
+                RoomTable.COLUMN_APARTMENT_ID + "==" + apartmentId,
+                null,
+                null,
+                null,
+                RoomTable.COLUMN_POSITION + " ASC");
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -255,15 +276,15 @@ abstract class RoomHandler {
      *
      * @return List of Rooms
      */
-    protected static List<Room> getAll() throws Exception {
-        List<Room> rooms = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, null, null, null, null, null);
+    protected List<Room> getAll(@NonNull SQLiteDatabase database) throws Exception {
+        List<Room> rooms  = new ArrayList<>();
+        Cursor     cursor = database.query(RoomTable.TABLE_NAME, RoomTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         boolean autoCollapseRooms = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_ROOMS);
 
         while (!cursor.isAfterLast()) {
-            Room room = dbToRoom(cursor);
+            Room room = dbToRoom(database, cursor);
             room.setCollapsed(autoCollapseRooms);
             rooms.add(room);
             cursor.moveToNext();
@@ -278,13 +299,13 @@ abstract class RoomHandler {
      * @param roomId             ID of Room
      * @param associatedGateways List of Gateways
      */
-    private static void addAssociatedGateways(Long roomId, List<Gateway> associatedGateways) throws Exception {
+    private void addAssociatedGateways(@NonNull SQLiteDatabase database, Long roomId, List<Gateway> associatedGateways) throws Exception {
         // add current
         for (Gateway gateway : associatedGateways) {
             ContentValues gatewayRelationValues = new ContentValues();
             gatewayRelationValues.put(RoomGatewayRelationTable.COLUMN_ROOM_ID, roomId);
             gatewayRelationValues.put(RoomGatewayRelationTable.COLUMN_GATEWAY_ID, gateway.getId());
-            DatabaseHandler.database.insert(RoomGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
+            database.insert(RoomGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
         }
     }
 
@@ -293,32 +314,34 @@ abstract class RoomHandler {
      *
      * @param roomId ID of Room
      */
-    private static void removeAssociatedGateways(Long roomId) throws Exception {
-        DatabaseHandler.database.delete(RoomGatewayRelationTable.TABLE_NAME,
-                RoomGatewayRelationTable.COLUMN_ROOM_ID + "==" + roomId, null);
+    private void removeAssociatedGateways(@NonNull SQLiteDatabase database, Long roomId) throws Exception {
+        database.delete(RoomGatewayRelationTable.TABLE_NAME, RoomGatewayRelationTable.COLUMN_ROOM_ID + "==" + roomId, null);
     }
 
     /**
      * Get Gateways that are associated with a Room
      *
      * @param roomId ID of Room
+     *
      * @return List of Gateways
      */
     @NonNull
-    private static List<Gateway> getAssociatedGateways(long roomId) throws Exception {
+    private List<Gateway> getAssociatedGateways(@NonNull SQLiteDatabase database, long roomId) throws Exception {
         List<Gateway> associatedGateways = new ArrayList<>();
 
-        String[] columns = {
-                RoomGatewayRelationTable.COLUMN_ROOM_ID,
-                RoomGatewayRelationTable.COLUMN_GATEWAY_ID
-        };
-        Cursor cursor = DatabaseHandler.database.query(RoomGatewayRelationTable.TABLE_NAME, columns,
-                RoomGatewayRelationTable.COLUMN_ROOM_ID + "==" + roomId, null, null, null, null);
+        String[] columns = {RoomGatewayRelationTable.COLUMN_ROOM_ID, RoomGatewayRelationTable.COLUMN_GATEWAY_ID};
+        Cursor cursor = database.query(RoomGatewayRelationTable.TABLE_NAME,
+                columns,
+                RoomGatewayRelationTable.COLUMN_ROOM_ID + "==" + roomId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            Long gatewayId = cursor.getLong(1);
-            Gateway gateway = GatewayHandler.get(gatewayId);
+            Long    gatewayId = cursor.getLong(1);
+            Gateway gateway   = GatewayHandler.get(database, gatewayId);
             associatedGateways.add(gateway);
             cursor.moveToNext();
         }
@@ -331,18 +354,19 @@ abstract class RoomHandler {
      * Creates a Room Object out of Database information
      *
      * @param c cursor pointing to a Room database entry
+     *
      * @return Room
      */
-    private static Room dbToRoom(Cursor c) throws Exception {
-        long id = c.getLong(0);
-        long apartmentId = c.getLong(1);
-        String name = c.getString(2);
-        int position = c.getInt(3);
-        boolean isCollapsed = c.getInt(4) > 0;
-        List<Gateway> associatedGateways = getAssociatedGateways(id);
+    private Room dbToRoom(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+        long          id                 = c.getLong(0);
+        long          apartmentId        = c.getLong(1);
+        String        name               = c.getString(2);
+        int           position           = c.getInt(3);
+        boolean       isCollapsed        = c.getInt(4) > 0;
+        List<Gateway> associatedGateways = getAssociatedGateways(database, id);
 
         Room room = new Room(id, apartmentId, name, position, isCollapsed, associatedGateways);
-        room.addReceivers(ReceiverHandler.getByRoom(room.getId()));
+        room.addReceivers(ReceiverHandler.getByRoom(database, room.getId()));
         return room;
     }
 }

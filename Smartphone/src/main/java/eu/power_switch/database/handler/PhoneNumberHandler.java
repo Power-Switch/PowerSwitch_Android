@@ -20,35 +20,41 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.phone.PhoneNumberTable;
 
 /**
  * Created by Markus on 11.04.2016.
  */
-abstract class PhoneNumberHandler {
+@Singleton
+class PhoneNumberHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private PhoneNumberHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    PhoneNumberHandler() {
     }
 
-    protected static Long add(String phoneNumber) throws Exception {
+    protected Long add(@NonNull SQLiteDatabase database, String phoneNumber) throws Exception {
         ContentValues values = new ContentValues();
         values.put(PhoneNumberTable.COLUMN_PHONE_NUMBER, phoneNumber);
-        return DatabaseHandler.database.insert(PhoneNumberTable.TABLE_NAME, null, values);
+        return database.insert(PhoneNumberTable.TABLE_NAME, null, values);
     }
 
-    protected static String get(long id) throws Exception {
+    protected String get(@NonNull SQLiteDatabase database, long id) throws Exception {
         String phoneNumber = null;
-        Cursor cursor = DatabaseHandler.database.query(PhoneNumberTable.TABLE_NAME, PhoneNumberTable.ALL_COLUMNS,
-                PhoneNumberTable.COLUMN_ID + "=" + id, null, null, null, null);
+        Cursor cursor = database.query(PhoneNumberTable.TABLE_NAME,
+                PhoneNumberTable.ALL_COLUMNS,
+                PhoneNumberTable.COLUMN_ID + "=" + id,
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
             phoneNumber = cursor.getString(1);

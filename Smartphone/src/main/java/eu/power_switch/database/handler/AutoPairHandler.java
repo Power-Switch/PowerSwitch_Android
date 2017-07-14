@@ -20,8 +20,13 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.receiver.AutoPairTable;
 
@@ -30,15 +35,11 @@ import eu.power_switch.database.table.receiver.AutoPairTable;
  * <p/>
  * Created by Markus on 10.09.2015.
  */
-abstract class AutoPairHandler {
+@Singleton
+class AutoPairHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private AutoPairHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    AutoPairHandler() {
     }
 
     /**
@@ -47,11 +48,11 @@ abstract class AutoPairHandler {
      * @param receiverID The ID of the receiver.
      * @param seed       The seed of the receiver.
      */
-    protected static void add(Long receiverID, long seed) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, Long receiverID, long seed) throws Exception {
         ContentValues values = new ContentValues();
         values.put(AutoPairTable.COLUMN_SEED, seed);
         values.put(AutoPairTable.COLUMN_RECEIVER_ID, receiverID);
-        DatabaseHandler.database.insert(AutoPairTable.TABLE_NAME, null, values);
+        database.insert(AutoPairTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -59,21 +60,27 @@ abstract class AutoPairHandler {
      *
      * @param receiverID ID of the deleted receiver
      */
-    protected static void delete(Long receiverID) throws Exception {
-        DatabaseHandler.database.delete(AutoPairTable.TABLE_NAME, AutoPairTable.COLUMN_RECEIVER_ID + "=" + receiverID, null);
+    protected void delete(@NonNull SQLiteDatabase database, Long receiverID) throws Exception {
+        database.delete(AutoPairTable.TABLE_NAME, AutoPairTable.COLUMN_RECEIVER_ID + "=" + receiverID, null);
     }
 
     /**
      * Returns the seed of a AutoPairReceiver.
      *
      * @param receiverID The ID of the receiver.
+     *
      * @return The seed of the receiver.
      */
-    protected static long getSeed(Long receiverID) throws Exception {
-        long seed;
+    protected long getSeed(@NonNull SQLiteDatabase database, Long receiverID) throws Exception {
+        long     seed;
         String[] columns = {AutoPairTable.COLUMN_SEED};
-        Cursor cursor = DatabaseHandler.database.query(AutoPairTable.TABLE_NAME, columns,
-                AutoPairTable.COLUMN_RECEIVER_ID + "==" + receiverID, null, null, null, null);
+        Cursor cursor = database.query(AutoPairTable.TABLE_NAME,
+                columns,
+                AutoPairTable.COLUMN_RECEIVER_ID + "==" + receiverID,
+                null,
+                null,
+                null,
+                null);
         if (cursor.moveToFirst()) {
             seed = cursor.getLong(0);
         } else {

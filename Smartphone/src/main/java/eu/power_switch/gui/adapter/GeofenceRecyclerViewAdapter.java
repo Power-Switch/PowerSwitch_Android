@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -101,10 +101,10 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            DatabaseHandler.enableGeofence(geofence.getId());
+                            DatabaseHandlerStatic.enableGeofence(geofence.getId());
                             geofenceApiHandler.addGeofence(geofence);
                         } else {
-                            DatabaseHandler.disableGeofence(geofence.getId());
+                            DatabaseHandlerStatic.disableGeofence(geofence.getId());
                             geofenceApiHandler.removeGeofence(geofence.getId());
                         }
                         geofence.setActive(isChecked);

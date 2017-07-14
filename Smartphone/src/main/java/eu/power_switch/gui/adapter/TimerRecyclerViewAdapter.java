@@ -35,7 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
@@ -149,10 +149,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            DatabaseHandler.enableTimer(timer.getId());
+                            DatabaseHandlerStatic.enableTimer(timer.getId());
                             AlarmHandler.createAlarm(context, timer);
                         } else {
-                            DatabaseHandler.disableTimer(timer.getId());
+                            DatabaseHandlerStatic.disableTimer(timer.getId());
                             AlarmHandler.cancelAlarm(context, timer);
                         }
                         timer.setActive(isChecked);

@@ -45,7 +45,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.CustomGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
@@ -249,7 +249,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 //            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getScenes());
 //        } else {
-        return DatabaseHandler.getCustomGeofences();
+        return DatabaseHandlerStatic.getCustomGeofences();
 //        }
     }
 

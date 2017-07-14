@@ -27,7 +27,7 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerActivity;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -116,10 +116,10 @@ public class HiddenReceiverActivity extends DaggerActivity {
                     stop = content.length();
                     Long buttonId = Long.valueOf(content.substring(start, stop));
 
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                    Room room = apartment.getRoom(roomId);
-                    Receiver receiver = room.getReceiver(receiverId);
-                    Button button = receiver.getButton(buttonId);
+                    Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentId);
+                    Room      room      = apartment.getRoom(roomId);
+                    Receiver  receiver  = room.getReceiver(receiverId);
+                    Button    button    = receiver.getButton(buttonId);
 
                     actionHandler.execute(receiver, button);
                 } else if (content.contains(KEY_ROOM) && content.contains(KEY_BUTTON)) {
@@ -135,8 +135,8 @@ public class HiddenReceiverActivity extends DaggerActivity {
                     stop = content.length();
                     String buttonName = content.substring(start, stop);
 
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                    Room room = apartment.getRoom(roomId);
+                    Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentId);
+                    Room      room      = apartment.getRoom(roomId);
 
                     actionHandler.execute(room, buttonName);
                 } else if (content.contains(KEY_SCENE)) {
@@ -148,8 +148,8 @@ public class HiddenReceiverActivity extends DaggerActivity {
                     stop = content.length();
                     Long sceneId = Long.valueOf(content.substring(start, stop));
 
-                    Apartment apartment = DatabaseHandler.getApartment(apartmentId);
-                    Scene scene = apartment.getScene(sceneId);
+                    Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentId);
+                    Scene     scene     = apartment.getScene(sceneId);
 
                     actionHandler.execute(scene);
                 }

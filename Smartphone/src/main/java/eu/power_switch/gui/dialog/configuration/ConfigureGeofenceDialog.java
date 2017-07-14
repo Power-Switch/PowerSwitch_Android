@@ -36,7 +36,7 @@ import javax.inject.Inject;
 
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -130,7 +130,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                         getConfiguration().getSnapshot(),
                         actionsMap,
                         Geofence.STATE_NONE);
-                long geofenceId = DatabaseHandler.addGeofence(newGeofence);
+                long geofenceId = DatabaseHandlerStatic.addGeofence(newGeofence);
                 // update ID of Geofence
                 newGeofence.setId(geofenceId);
 
@@ -145,7 +145,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                         getConfiguration().getSnapshot(),
                         actionsMap,
                         existingGeofence.getState());
-                DatabaseHandler.updateGeofence(updatedGeofence);
+                DatabaseHandlerStatic.updateGeofence(updatedGeofence);
 
                 geofenceApiHandler.removeGeofence(existingGeofence.getId());
                 if (existingGeofence.isActive()) {
@@ -155,7 +155,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
         } else {
             // apartment geofence
 
-            Apartment apartment = DatabaseHandler.getApartment(apartmentId);
+            Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentId);
             Apartment updatedApartment;
 
             if (apartment.getGeofence() == null) {
@@ -194,10 +194,10 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
             }
 
             // update apartment in database
-            DatabaseHandler.updateApartment(updatedApartment);
+            DatabaseHandlerStatic.updateApartment(updatedApartment);
 
             // reload from database to get correct geofence ID
-            apartment = DatabaseHandler.getApartment(apartmentId);
+            apartment = DatabaseHandlerStatic.getApartment(apartmentId);
             if (apartment.getGeofence()
                     .isActive()) {
                 geofenceApiHandler.addGeofence(apartment.getGeofence());
@@ -219,7 +219,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteGeofence(getConfiguration().getGeofence()
+                            DatabaseHandlerStatic.deleteGeofence(getConfiguration().getGeofence()
                                     .getId());
                             geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
                                     .getId());

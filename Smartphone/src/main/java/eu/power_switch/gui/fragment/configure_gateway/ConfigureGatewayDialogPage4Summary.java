@@ -31,7 +31,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
@@ -126,7 +126,7 @@ public class ConfigureGatewayDialogPage4Summary extends ConfigurationDialogPage<
                     .get(i);
 
             try {
-                apartmentsText += DatabaseHandler.getApartmentName(apartmentId);
+                apartmentsText += DatabaseHandlerStatic.getApartmentName(apartmentId);
             } catch (Exception e) {
                 e.printStackTrace();
             }

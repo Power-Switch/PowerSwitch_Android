@@ -20,9 +20,14 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.LinkedList;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.history.HistoryTable;
 import eu.power_switch.history.HistoryItem;
@@ -35,15 +40,11 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 08.12.2015.
  */
-abstract class HistoryHandler {
+@Singleton
+class HistoryHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private HistoryHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    HistoryHandler() {
     }
 
     /**
@@ -51,10 +52,10 @@ abstract class HistoryHandler {
      *
      * @return List of History Items
      */
-    public static LinkedList<HistoryItem> getHistory() throws Exception {
+    public LinkedList<HistoryItem> getHistory(@NonNull SQLiteDatabase database) throws Exception {
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
 
-        Cursor cursor = DatabaseHandler.database.query(HistoryTable.TABLE_NAME, HistoryTable.ALL_COLUMNS, null, null, null, null, HistoryTable.COLUMN_TIME + " ASC");
+        Cursor cursor = database.query(HistoryTable.TABLE_NAME, HistoryTable.ALL_COLUMNS, null, null, null, null, HistoryTable.COLUMN_TIME + " ASC");
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -71,17 +72,19 @@ abstract class HistoryHandler {
      *
      * @return List of History Items
      */
-    public static Long add(HistoryItem historyItem) throws Exception {
+    public Long add(@NonNull SQLiteDatabase database, HistoryItem historyItem) throws Exception {
         ContentValues values = new ContentValues();
         values.put(HistoryTable.COLUMN_DESCRIPTION, historyItem.getShortDescription());
         values.put(HistoryTable.COLUMN_DESCRIPTION_LONG, historyItem.getLongDescription());
-        values.put(HistoryTable.COLUMN_TIME, historyItem.getTime().getTimeInMillis());
-        long id = DatabaseHandler.database.insert(HistoryTable.TABLE_NAME, null, values);
-        deleteOldEntries();
+        values.put(HistoryTable.COLUMN_TIME,
+                historyItem.getTime()
+                        .getTimeInMillis());
+        long id = database.insert(HistoryTable.TABLE_NAME, null, values);
+        deleteOldEntries(database);
         return id;
     }
 
-    private static void deleteOldEntries() throws Exception {
+    private void deleteOldEntries(@NonNull SQLiteDatabase database) throws Exception {
         Calendar calendar = Calendar.getInstance();
 
         switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)) {
@@ -105,21 +108,21 @@ abstract class HistoryHandler {
                 return;
         }
 
-        DatabaseHandler.database.delete(HistoryTable.TABLE_NAME, HistoryTable.COLUMN_TIME + " <= " + calendar.getTimeInMillis(), null);
+        database.delete(HistoryTable.TABLE_NAME, HistoryTable.COLUMN_TIME + " <= " + calendar.getTimeInMillis(), null);
     }
 
     /**
      * Delete the entire History from Database
      */
-    public static void clear() throws Exception {
-        DatabaseHandler.database.delete(HistoryTable.TABLE_NAME, null, null);
+    public void clear(@NonNull SQLiteDatabase database) throws Exception {
+        database.delete(HistoryTable.TABLE_NAME, null, null);
     }
 
-    private static HistoryItem dbToHistoryItem(Cursor cursor) throws Exception {
-        Long id = cursor.getLong(0);
+    private HistoryItem dbToHistoryItem(Cursor cursor) throws Exception {
+        Long   id               = cursor.getLong(0);
         String shortDescription = cursor.getString(1);
-        String longDescription = !cursor.isNull(2) ? cursor.getString(2) : "";
-        Long time = cursor.getLong(3);
+        String longDescription  = !cursor.isNull(2) ? cursor.getString(2) : "";
+        Long   time             = cursor.getLong(3);
 
         return new HistoryItem(id, time, shortDescription, longDescription);
     }

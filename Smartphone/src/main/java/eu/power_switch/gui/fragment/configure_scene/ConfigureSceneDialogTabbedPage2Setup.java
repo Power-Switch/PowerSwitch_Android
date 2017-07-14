@@ -52,7 +52,7 @@ import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialToolti
 import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.SceneSelectedReceiversChangedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -173,7 +173,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
                     }
 
                     if (!roomFound) {
-                        Room room = DatabaseHandler.getRoom(sceneItem.getReceiver()
+                        Room room = DatabaseHandlerStatic.getRoom(sceneItem.getReceiver()
                                 .getRoomId());
                         room.getReceivers()
                                 .clear();

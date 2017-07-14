@@ -54,7 +54,7 @@ import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialToolti
 import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.ReceiverParentRoomChangedEvent;
 import eu.power_switch.event.RoomAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -254,7 +254,7 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
         try {
             // Get Rooms
             roomList.clear();
-            List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            List<Room> rooms = DatabaseHandlerStatic.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             for (Room room : rooms) {
                 roomList.add(room.getName());
             }
@@ -297,7 +297,7 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
 
         if (!currentReceiverName.equalsIgnoreCase(originalName)) {
             try {
-                Room selectedRoom = DatabaseHandler.getRoom(currentRoomName);
+                Room selectedRoom = DatabaseHandlerStatic.getRoom(currentRoomName);
                 if (getConfiguration().receiverNameAlreadyExists(selectedRoom)) {
                     floatingName.setError(getString(R.string.receiver_already_exists));
                     return false;

@@ -20,10 +20,14 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.phone.call.CallEventActionTable;
@@ -33,15 +37,11 @@ import timber.log.Timber;
 /**
  * Created by Markus on 12.04.2016.
  */
-abstract class CallEventActionHandler {
+@Singleton
+class CallEventActionHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private CallEventActionHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    CallEventActionHandler() {
     }
 
     /**
@@ -50,14 +50,14 @@ abstract class CallEventActionHandler {
      * @param actions     list of actions
      * @param callEventId ID of CallEvent
      */
-    protected static void add(List<Action> actions, long callEventId, PhoneConstants.CallType callType) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, List<Action> actions, long callEventId, PhoneConstants.CallType callType) throws Exception {
         if (actions == null) {
             Timber.w("actions was null! nothing added to database");
             return;
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = ActionHandler.add(actions);
+        ArrayList<Long> actionIds = ActionHandler.add(database, actions);
 
         // add to relational table
         for (long actionId : actionIds) {
@@ -65,7 +65,7 @@ abstract class CallEventActionHandler {
             values.put(CallEventActionTable.COLUMN_CALL_EVENT_ID, callEventId);
             values.put(CallEventActionTable.COLUMN_ACTION_ID, actionId);
             values.put(CallEventActionTable.COLUMN_EVENT_TYPE_ID, callType.getId());
-            DatabaseHandler.database.insert(CallEventActionTable.TABLE_NAME, null, values);
+            database.insert(CallEventActionTable.TABLE_NAME, null, values);
         }
     }
 
@@ -74,20 +74,25 @@ abstract class CallEventActionHandler {
      *
      * @param callEventId ID of CallEvent
      * @param callType    Event Type
+     *
      * @return List of Actions
      */
     @NonNull
-    protected static List<Action> get(long callEventId, PhoneConstants.CallType callType) throws Exception {
+    protected List<Action> get(@NonNull SQLiteDatabase database, long callEventId, PhoneConstants.CallType callType) throws Exception {
         List<Action> actions = new ArrayList<>();
 
-        Cursor cursor = DatabaseHandler.database.query(CallEventActionTable.TABLE_NAME, CallEventActionTable.ALL_COLUMNS,
+        Cursor cursor = database.query(CallEventActionTable.TABLE_NAME,
+                CallEventActionTable.ALL_COLUMNS,
                 CallEventActionTable.COLUMN_CALL_EVENT_ID + "==" + callEventId + " AND " + CallEventActionTable.COLUMN_EVENT_TYPE_ID + "==" + callType.getId(),
-                null, null, null, null);
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(2);
-            actions.add(ActionHandler.get(actionId));
+            actions.add(ActionHandler.get(database, actionId));
             cursor.moveToNext();
         }
 
@@ -100,15 +105,14 @@ abstract class CallEventActionHandler {
      *
      * @param callEventId ID of CallEvent
      */
-    protected static void deleteByCallEvent(Long callEventId) throws Exception {
-        Cursor cursor = DatabaseHandler.database.query(CallEventActionTable.TABLE_NAME, CallEventActionTable.ALL_COLUMNS,
-                CallEventActionTable.COLUMN_CALL_EVENT_ID + "==" + callEventId,
-                null, null, null, null);
+    protected void deleteByCallEvent(@NonNull SQLiteDatabase database, Long callEventId) throws Exception {
+        Cursor cursor = database.query(CallEventActionTable.TABLE_NAME, CallEventActionTable.ALL_COLUMNS,
+                CallEventActionTable.COLUMN_CALL_EVENT_ID + "==" + callEventId, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(2);
-            ActionHandler.delete(actionId);
+            ActionHandler.delete(database, actionId);
             cursor.moveToNext();
         }
 

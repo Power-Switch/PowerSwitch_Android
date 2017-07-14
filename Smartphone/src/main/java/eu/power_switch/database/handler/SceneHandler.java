@@ -20,12 +20,16 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.scene.SceneTable;
 import eu.power_switch.obj.Scene;
@@ -35,15 +39,11 @@ import timber.log.Timber;
 /**
  * Provides database methods for managing Scenes
  */
-abstract class SceneHandler {
+@Singleton
+class SceneHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private SceneHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    SceneHandler() {
     }
 
     /**
@@ -51,15 +51,15 @@ abstract class SceneHandler {
      *
      * @param scene Scene
      */
-    protected static void add(Scene scene) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, Scene scene) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneTable.COLUMN_APARTMENT_ID, scene.getApartmentId());
         values.put(SceneTable.COLUMN_NAME, scene.getName());
-        long sceneId = DatabaseHandler.database.insert(SceneTable.TABLE_NAME, null, values);
+        long sceneId = database.insert(SceneTable.TABLE_NAME, null, values);
         if (sceneId == -1) {
             Timber.e("Error inserting Scene to database");
         }
-        SceneItemHandler.add(sceneId, scene.getSceneItems());
+        SceneItemHandler.add(database, sceneId, scene.getSceneItems());
     }
 
     /**
@@ -67,9 +67,9 @@ abstract class SceneHandler {
      *
      * @param scene Scene
      */
-    protected static void update(Scene scene) throws Exception {
-        updateName(scene.getId(), scene.getName());
-        SceneItemHandler.update(scene);
+    protected void update(@NonNull SQLiteDatabase database, Scene scene) throws Exception {
+        updateName(database, scene.getId(), scene.getName());
+        SceneItemHandler.update(database, scene);
     }
 
     /**
@@ -78,10 +78,10 @@ abstract class SceneHandler {
      * @param id      ID of Scene
      * @param newName new Scene name
      */
-    private static void updateName(Long id, String newName) throws Exception {
+    private void updateName(@NonNull SQLiteDatabase database, Long id, String newName) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneTable.COLUMN_NAME, newName);
-        DatabaseHandler.database.update(SceneTable.TABLE_NAME, values, SceneTable.COLUMN_ID + "==" + id, null);
+        database.update(SceneTable.TABLE_NAME, values, SceneTable.COLUMN_ID + "==" + id, null);
     }
 
     /**
@@ -89,27 +89,33 @@ abstract class SceneHandler {
      *
      * @param id ID of Scene
      */
-    protected static void delete(Long id) throws Exception {
-        ActionHandler.deleteBySceneId(id);
+    protected void delete(@NonNull SQLiteDatabase database, Long id) throws Exception {
+        ActionHandler.deleteBySceneId(database, id);
 
-        SceneItemHandler.deleteBySceneId(id);
-        DatabaseHandler.database.delete(SceneTable.TABLE_NAME, SceneTable.COLUMN_ID + "=" + id, null);
+        SceneItemHandler.deleteBySceneId(database, id);
+        database.delete(SceneTable.TABLE_NAME, SceneTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
      * Gets a Scene from Database
      *
      * @param name Name of Scene
+     *
      * @return Scene
      */
     @NonNull
-    protected static Scene get(String name) throws Exception {
+    protected Scene get(@NonNull SQLiteDatabase database, String name) throws Exception {
         Scene scene = null;
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_NAME + "=='" + name + "'", null,
-                null, null, null);
+        Cursor cursor = database.query(SceneTable.TABLE_NAME,
+                SceneTable.ALL_COLUMNS,
+                SceneTable.COLUMN_NAME + "=='" + name + "'",
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            scene = dbToScene(cursor);
+            scene = dbToScene(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(name);
@@ -123,16 +129,16 @@ abstract class SceneHandler {
      * Gets a Scene from Database
      *
      * @param id ID of Scene
+     *
      * @return Scene
      */
     @NonNull
-    protected static Scene get(Long id) throws Exception {
-        Scene scene = null;
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_ID + "==" + id, null, null, null,
-                null);
+    protected Scene get(@NonNull SQLiteDatabase database, Long id) throws Exception {
+        Scene  scene  = null;
+        Cursor cursor = database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_ID + "==" + id, null, null, null, null);
 
         if (cursor.moveToFirst()) {
-            scene = dbToScene(cursor);
+            scene = dbToScene(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(id));
@@ -142,14 +148,19 @@ abstract class SceneHandler {
         return scene;
     }
 
-    public static LinkedList<Scene> getByApartment(Long id) throws Exception {
+    public LinkedList<Scene> getByApartment(@NonNull SQLiteDatabase database, Long id) throws Exception {
         LinkedList<Scene> scenes = new LinkedList<>();
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, SceneTable.COLUMN_APARTMENT_ID +
-                "==" + id, null, null, null, null);
+        Cursor cursor = database.query(SceneTable.TABLE_NAME,
+                SceneTable.ALL_COLUMNS,
+                SceneTable.COLUMN_APARTMENT_ID + "==" + id,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            scenes.add(dbToScene(cursor));
+            scenes.add(dbToScene(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -161,13 +172,13 @@ abstract class SceneHandler {
      *
      * @return List of Scene
      */
-    protected static List<Scene> getAll() throws Exception {
+    protected List<Scene> getAll(@NonNull SQLiteDatabase database) throws Exception {
         List<Scene> scenes = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor      cursor = database.query(SceneTable.TABLE_NAME, SceneTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            scenes.add(dbToScene(cursor));
+            scenes.add(dbToScene(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -178,16 +189,17 @@ abstract class SceneHandler {
      * Creates a Scene Object out of Database information
      *
      * @param c cursor pointing to a Scene database entry
+     *
      * @return Scene
      */
-    private static Scene dbToScene(Cursor c) throws Exception {
-        long id = c.getLong(0);
-        long apartmentId = c.getLong(1);
-        String name = c.getString(2);
-        int position = c.getInt(3);
+    private Scene dbToScene(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+        long   id          = c.getLong(0);
+        long   apartmentId = c.getLong(1);
+        String name        = c.getString(2);
+        int    position    = c.getInt(3);
 
         Scene scene = new Scene(id, apartmentId, name);
-        for (SceneItem item : SceneItemHandler.getSceneItems(scene.getId())) {
+        for (SceneItem item : SceneItemHandler.getSceneItems(database, scene.getId())) {
             scene.addSceneItem(item);
         }
         return scene;

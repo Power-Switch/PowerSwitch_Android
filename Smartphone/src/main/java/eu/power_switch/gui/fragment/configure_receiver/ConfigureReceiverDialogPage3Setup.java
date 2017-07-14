@@ -63,7 +63,7 @@ import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHelper;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -279,7 +279,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                    List<Gateway> activeGateways = DatabaseHandlerStatic.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
@@ -307,7 +307,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                    List<Gateway> activeGateways = DatabaseHandlerStatic.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
@@ -334,7 +334,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = DatabaseHandler.getAllGateways(true);
+                    List<Gateway> activeGateways = DatabaseHandlerStatic.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         StatusMessageHandler.showNoActiveGatewayMessage(getActivity());

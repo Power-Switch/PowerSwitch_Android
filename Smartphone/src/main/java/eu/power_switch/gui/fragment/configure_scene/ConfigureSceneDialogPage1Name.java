@@ -50,7 +50,7 @@ import de.markusressel.android.library.tutorialtooltip.interfaces.TutorialToolti
 import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.SceneSelectedReceiversChangedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -97,7 +97,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         super.onCreateView(inflater, container, savedInstanceState);
 
         try {
-            existingScenes = DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            existingScenes = DatabaseHandlerStatic.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -190,7 +190,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            for (Room room : DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID))) {
+            for (Room room : DatabaseHandlerStatic.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID))) {
                 LinearLayout roomLayout = new LinearLayout(getActivity());
                 roomLayout.setOrientation(LinearLayout.VERTICAL);
                 roomLayout.setPadding(0, 8, 0, 8);
@@ -253,7 +253,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
 
                 ArrayList<Receiver> activeReceivers = new ArrayList<>();
                 for (SceneItem sceneItem : scene.getSceneItems()) {
-                    Receiver receiver = DatabaseHandler.getReceiver(sceneItem.getActiveButton()
+                    Receiver receiver = DatabaseHandlerStatic.getReceiver(sceneItem.getActiveButton()
                             .getReceiverId());
                     activeReceivers.add(receiver);
                 }

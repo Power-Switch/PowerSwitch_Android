@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
@@ -76,13 +76,13 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
 
             try {
-                ReceiverWidget receiverWidget = DatabaseHandler.getReceiverWidget(appWidgetId);
+                ReceiverWidget receiverWidget = DatabaseHandlerStatic.getReceiverWidget(appWidgetId);
                 try {
-                    Room room = DatabaseHandler.getRoom(receiverWidget.getRoomId());
+                    Room room = DatabaseHandlerStatic.getRoom(receiverWidget.getRoomId());
                     try {
-                        Receiver receiver = DatabaseHandler.getReceiver(receiverWidget.getReceiverId());
+                        Receiver receiver = DatabaseHandlerStatic.getReceiver(receiverWidget.getReceiverId());
 
-                        Apartment apartment = DatabaseHandler.getApartment(room.getApartmentId());
+                        Apartment apartment = DatabaseHandlerStatic.getApartment(room.getApartmentId());
                         // update UI
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
                                 apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
@@ -152,7 +152,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
         Timber.d("Deleting Receiver Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
             try {
-                DatabaseHandler.deleteReceiverWidget(appWidgetId);
+                DatabaseHandlerStatic.deleteReceiverWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

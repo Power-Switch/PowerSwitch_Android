@@ -40,7 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -129,7 +129,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Apartment> doInBackground(Void... params) {
                 try {
-                    return DatabaseHandler.getAllApartments();
+                    return DatabaseHandlerStatic.getAllApartments();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -219,7 +219,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
 
                 // save new widget data to database
                 ReceiverWidget receiverWidget = new ReceiverWidget(appWidgetId, selectedRoom.getId(), selectedReceiver.getId());
-                DatabaseHandler.addReceiverWidget(receiverWidget);
+                DatabaseHandlerStatic.addReceiverWidget(receiverWidget);
                 // When the configuration is complete, get an instance of
                 // the AppWidgetManager by calling getInstance(Context):
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ConfigureReceiverWidgetActivity.this);

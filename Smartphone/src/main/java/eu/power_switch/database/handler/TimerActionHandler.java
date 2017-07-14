@@ -20,9 +20,14 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerActionTable;
@@ -31,15 +36,11 @@ import eu.power_switch.timer.Timer;
 /**
  * Provides database methods for managing Timer Actions
  */
-abstract class TimerActionHandler {
+@Singleton
+class TimerActionHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private TimerActionHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    TimerActionHandler() {
     }
 
     /**
@@ -48,7 +49,7 @@ abstract class TimerActionHandler {
      * @param actions Actions to be added to the Timer
      * @param timerId ID of Timer
      */
-    protected static void add(List<Action> actions, Long timerId) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, List<Action> actions, Long timerId) throws Exception {
         // add actions to database
         ArrayList<Long> actionIds = ActionHandler.add(actions);
 
@@ -57,7 +58,7 @@ abstract class TimerActionHandler {
             ContentValues values = new ContentValues();
             values.put(TimerActionTable.COLUMN_TIMER_ID, timerId);
             values.put(TimerActionTable.COLUMN_ACTION_ID, actionId);
-            DatabaseHandler.database.insert(TimerActionTable.TABLE_NAME, null, values);
+            database.insert(TimerActionTable.TABLE_NAME, null, values);
         }
     }
 
@@ -67,7 +68,7 @@ abstract class TimerActionHandler {
      *
      * @param timerId ID of Timer
      */
-    protected static void delete(Long timerId) throws Exception {
+    protected void delete(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
         ArrayList<Action> actions = getByTimerId(timerId);
 
         for (Action action : actions) {
@@ -79,14 +80,20 @@ abstract class TimerActionHandler {
      * Get all Actions associated with a specific Timer
      *
      * @param timerId ID of Timer
+     *
      * @return List of Actions
      */
-    protected static ArrayList<Action> getByTimerId(long timerId) throws Exception {
+    protected ArrayList<Action> getByTimerId(@NonNull SQLiteDatabase database, long timerId) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {TimerActionTable.COLUMN_TIMER_ID, TimerActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(TimerActionTable.TABLE_NAME, columns,
-                TimerActionTable.COLUMN_TIMER_ID + "=" + timerId, null, null, null, null);
+        Cursor cursor = database.query(TimerActionTable.TABLE_NAME,
+                columns,
+                TimerActionTable.COLUMN_TIMER_ID + "=" + timerId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -104,7 +111,7 @@ abstract class TimerActionHandler {
      *
      * @param timer new Timer
      */
-    protected static void update(Timer timer) throws Exception {
+    protected void update(@NonNull SQLiteDatabase database, Timer timer) throws Exception {
         // delete current actions
         delete(timer.getId());
         // add new actions

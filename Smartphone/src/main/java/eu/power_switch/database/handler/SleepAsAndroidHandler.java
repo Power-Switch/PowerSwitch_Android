@@ -20,9 +20,14 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
@@ -34,29 +39,24 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 30.11.2015.
  */
-abstract class SleepAsAndroidHandler {
+@Singleton
+class SleepAsAndroidHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private SleepAsAndroidHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    SleepAsAndroidHandler() {
     }
 
-    protected static List<Action> getAlarmActions(SleepAsAndroidConstants.Event event) throws Exception {
+    protected List<Action> getAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = DatabaseHandler.database.query(SleepAsAndroidActionTable.TABLE_NAME, columns,
-                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(),
-                null, null, null, null);
+        Cursor cursor = database.query(SleepAsAndroidActionTable.TABLE_NAME, columns,
+                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(), null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(1);
-            actions.add(ActionHandler.get(actionId));
+            actions.add(ActionHandler.get(database, actionId));
             cursor.moveToNext();
         }
 
@@ -64,32 +64,33 @@ abstract class SleepAsAndroidHandler {
         return actions;
     }
 
-    protected static void setAlarmActions(SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
-        deleteAlarmActions(event);
-        addAlarmActions(event, actions);
+    protected void setAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event,
+                                   ArrayList<Action> actions) throws Exception {
+        deleteAlarmActions(database, event);
+        addAlarmActions(database, event, actions);
     }
 
-    private static void addAlarmActions(SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
+    private void addAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
         if (actions == null) {
             Timber.w("actions was null! nothing added to database");
             return;
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = ActionHandler.add(actions);
+        ArrayList<Long> actionIds = ActionHandler.add(database, actions);
 
         // add AlarmTriggered <-> action relation
         for (Long actionId : actionIds) {
             ContentValues values = new ContentValues();
             values.put(SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, event.getId());
             values.put(SleepAsAndroidActionTable.COLUMN_ACTION_ID, actionId);
-            DatabaseHandler.database.insert(SleepAsAndroidActionTable.TABLE_NAME, null, values);
+            database.insert(SleepAsAndroidActionTable.TABLE_NAME, null, values);
         }
     }
 
-    private static void deleteAlarmActions(SleepAsAndroidConstants.Event event) throws Exception {
-        for (Action action : getAlarmActions(event)) {
-            ActionHandler.delete(action.getId());
+    private void deleteAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event) throws Exception {
+        for (Action action : getAlarmActions(database, event)) {
+            ActionHandler.delete(database, action.getId());
         }
     }
 }

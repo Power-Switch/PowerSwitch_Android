@@ -38,7 +38,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.adapter.WizardGatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.network.NetworkHandler;
@@ -119,7 +119,7 @@ public class SetupGatewayPage extends ConfigurationPage {
 
                 for (Gateway gateway : gateways) {
                     try {
-                        DatabaseHandler.addGateway(gateway);
+                        DatabaseHandlerStatic.addGateway(gateway);
                     } catch (GatewayAlreadyExistsException e) {
                         Timber.w("Wizard: ignoring found gateway that already exists in database");
                     } catch (Exception e) {

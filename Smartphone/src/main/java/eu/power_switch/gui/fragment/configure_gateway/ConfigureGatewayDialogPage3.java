@@ -35,7 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
@@ -92,7 +92,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
         Gateway gateway = getConfiguration().getGateway();
         if (gateway != null) {
             try {
-                List<Apartment> associatedApartments = DatabaseHandler.getAssociatedApartments(gateway.getId());
+                List<Apartment> associatedApartments = DatabaseHandlerStatic.getAssociatedApartments(gateway.getId());
 
                 for (CheckBox checkBox : apartmentCheckboxList) {
                     Apartment checkBoxApartment = (Apartment) checkBox.getTag(R.string.apartments);
@@ -118,7 +118,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            List<Apartment> apartments = DatabaseHandler.getAllApartments();
+            List<Apartment> apartments = DatabaseHandlerStatic.getAllApartments();
             for (Apartment apartment : apartments) {
                 @SuppressLint("InflateParams") LinearLayout apartmentLayout = (LinearLayout) inflater.inflate(R.layout.apartment_overview, null);
                 // every inflated layout has to be added manually, attaching while inflating will only generate every

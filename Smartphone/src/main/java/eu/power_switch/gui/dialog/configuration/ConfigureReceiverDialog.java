@@ -34,7 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
@@ -96,7 +96,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         Receiver receiver = getConfiguration().getReceiver();
 
         try {
-            Apartment apartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            Apartment apartment = DatabaseHandlerStatic.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             getConfiguration().setParentApartment(apartment);
         } catch (Exception e) {
             dismiss();
@@ -107,7 +107,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
             // init dialog using existing receiver
 
             try {
-                Room room = DatabaseHandler.getRoom(receiver.getRoomId());
+                Room room = DatabaseHandlerStatic.getRoom(receiver.getRoomId());
 
                 getConfiguration().setParentRoom(room);
                 getConfiguration().setParentRoomName(room.getName());
@@ -221,9 +221,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         receiver.setRepetitionAmount(getConfiguration().getRepetitionAmount());
 
         if (receiverId == -1) {
-            DatabaseHandler.addReceiver(receiver);
+            DatabaseHandlerStatic.addReceiver(receiver);
         } else {
-            DatabaseHandler.updateReceiver(receiver);
+            DatabaseHandlerStatic.updateReceiver(receiver);
         }
 
         RoomsFragment.notifyReceiverChanged();
@@ -244,7 +244,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandler.deleteReceiver(getConfiguration().getReceiver()
+                            DatabaseHandlerStatic.deleteReceiver(getConfiguration().getReceiver()
                                     .getId());
 
                             // notify rooms fragment

@@ -20,10 +20,15 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.scene.SceneItemTable;
 import eu.power_switch.obj.Scene;
@@ -34,15 +39,11 @@ import timber.log.Timber;
 /**
  * Provides database methods for managing SceneItems
  */
-abstract class SceneItemHandler {
+@Singleton
+class SceneItemHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private SceneItemHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    SceneItemHandler() {
     }
 
     /**
@@ -51,9 +52,9 @@ abstract class SceneItemHandler {
      * @param sceneId ID of Scene the SceneItems will be associated with
      * @param items   list of SceneItems
      */
-    protected static void add(Long sceneId, List<SceneItem> items) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, Long sceneId, List<SceneItem> items) throws Exception {
         for (SceneItem item : items) {
-            add(sceneId, item);
+            add(database, sceneId, item);
         }
     }
 
@@ -63,12 +64,16 @@ abstract class SceneItemHandler {
      * @param sceneId ID of Scene the SceneItems will be associated with
      * @param item    SceneItem
      */
-    private static void add(Long sceneId, SceneItem item) throws Exception {
+    private void add(@NonNull SQLiteDatabase database, Long sceneId, SceneItem item) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneItemTable.COLUMN_SCENE_ID, sceneId);
-        values.put(SceneItemTable.COLUMN_RECEIVER_ID, item.getReceiver().getId());
-        values.put(SceneItemTable.COLUMN_ACTIVE_BUTTON_ID, item.getActiveButton().getId());
-        DatabaseHandler.database.insert(SceneItemTable.TABLE_NAME, null, values);
+        values.put(SceneItemTable.COLUMN_RECEIVER_ID,
+                item.getReceiver()
+                        .getId());
+        values.put(SceneItemTable.COLUMN_ACTIVE_BUTTON_ID,
+                item.getActiveButton()
+                        .getId());
+        database.insert(SceneItemTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -76,21 +81,26 @@ abstract class SceneItemHandler {
      *
      * @param receiverId ID of Receiver used in Scene(s)
      */
-    protected static void update(Long receiverId) throws Exception {
-        Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, SceneItemTable.ALL_COLUMNS,
-                SceneItemTable.COLUMN_RECEIVER_ID + "==" + receiverId, null, null, null, null);
+    protected void update(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
+        Cursor cursor = database.query(SceneItemTable.TABLE_NAME,
+                SceneItemTable.ALL_COLUMNS,
+                SceneItemTable.COLUMN_RECEIVER_ID + "==" + receiverId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             long sceneItemId = cursor.getLong(0);
-            long buttonId = cursor.getLong(3);
+            long buttonId    = cursor.getLong(3);
             try {
-                Receiver receiver = ReceiverHandler.get(receiverId);
+                Receiver receiver = ReceiverHandler.get(database, receiverId);
                 receiver.getButton(buttonId);
 
                 // all is good, dont change sceneItem
             } catch (NoSuchElementException e) {
                 // sceneItem has reference to missing buttonId, remove sceneItem from scene
-                delete(sceneItemId);
+                delete(database, sceneItemId);
             }
             cursor.moveToNext();
         }
@@ -103,25 +113,31 @@ abstract class SceneItemHandler {
      *
      * @param scene Scene
      */
-    protected static void update(Scene scene) throws Exception {
-        deleteBySceneId(scene.getId());
-        add(scene.getId(), scene.getSceneItems());
+    protected void update(@NonNull SQLiteDatabase database, Scene scene) throws Exception {
+        deleteBySceneId(database, scene.getId());
+        add(database, scene.getId(), scene.getSceneItems());
     }
 
     /**
      * Get a list of all SceneItems associated with a Scene
      *
      * @param sceneId ID of Scene
+     *
      * @return list of SceneItems
      */
-    protected static List<SceneItem> getSceneItems(Long sceneId) throws Exception {
+    protected List<SceneItem> getSceneItems(@NonNull SQLiteDatabase database, Long sceneId) throws Exception {
         LinkedList<SceneItem> sceneItems = new LinkedList<>();
 
-        Cursor cursor = DatabaseHandler.database.query(SceneItemTable.TABLE_NAME, SceneItemTable.ALL_COLUMNS,
-                SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null, null, null, null);
+        Cursor cursor = database.query(SceneItemTable.TABLE_NAME,
+                SceneItemTable.ALL_COLUMNS,
+                SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            sceneItems.add(dbToSceneItem(cursor));
+            sceneItems.add(dbToSceneItem(database, cursor));
             cursor.moveToNext();
         }
 
@@ -134,9 +150,9 @@ abstract class SceneItemHandler {
      *
      * @param sceneItemId ID of SceneItem
      */
-    protected static void delete(Long sceneItemId) throws Exception {
+    protected void delete(@NonNull SQLiteDatabase database, Long sceneItemId) throws Exception {
         Timber.d("Delete SceneItem by Id: " + sceneItemId);
-        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_ID + "=" + sceneItemId, null);
+        database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_ID + "=" + sceneItemId, null);
     }
 
     /**
@@ -144,9 +160,9 @@ abstract class SceneItemHandler {
      *
      * @param receiverId ID of Receiver
      */
-    protected static void deleteByReceiverId(Long receiverId) throws Exception {
+    protected void deleteByReceiverId(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
         Timber.d("Delete SceneItem by ReceiverId: " + receiverId);
-        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
+        database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
 
     /**
@@ -154,21 +170,22 @@ abstract class SceneItemHandler {
      *
      * @param sceneId ID of Scene
      */
-    protected static void deleteBySceneId(Long sceneId) throws Exception {
-        DatabaseHandler.database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null);
+    protected void deleteBySceneId(@NonNull SQLiteDatabase database, Long sceneId) throws Exception {
+        database.delete(SceneItemTable.TABLE_NAME, SceneItemTable.COLUMN_SCENE_ID + "==" + sceneId, null);
     }
 
     /**
      * Creates a SceneItem Object out of Database information
      *
      * @param c cursor pointing to a SceneItem database entry
+     *
      * @return SceneItem
      */
-    private static SceneItem dbToSceneItem(Cursor c) throws Exception {
-        long receiverId = c.getLong(2);
+    private SceneItem dbToSceneItem(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+        long receiverId     = c.getLong(2);
         long activeButtonId = c.getLong(3);
 
-        Receiver receiver = ReceiverHandler.get(receiverId);
+        Receiver receiver = ReceiverHandler.get(database, receiverId);
 
         SceneItem sceneItem = new SceneItem(receiver, receiver.getButton(activeButtonId));
         return sceneItem;

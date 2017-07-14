@@ -36,7 +36,7 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -110,7 +110,7 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
-                Room     room     = DatabaseHandler.getRoom(roomId);
+                Room     room     = DatabaseHandlerStatic.getRoom(roomId);
                 Receiver receiver = room.getReceiver(receiverId);
                 Button   button   = receiver.getButton(buttonId);
 
@@ -123,7 +123,7 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
-                Room room = DatabaseHandler.getRoom(roomId);
+                Room room = DatabaseHandlerStatic.getRoom(roomId);
 
                 actionHandler.execute(room, buttonId);
             } else if (messageData.contains(WearableConstants.KEY_SCENE_ID)) {
@@ -131,7 +131,7 @@ public class ListenerService extends WearableListenerService {
                 int  stop    = messageData.indexOf(";;");
                 Long sceneId = Long.valueOf(messageData.substring(start, stop));
 
-                Scene scene = DatabaseHandler.getScene(sceneId);
+                Scene scene = DatabaseHandlerStatic.getScene(sceneId);
 
                 actionHandler.execute(scene);
             }

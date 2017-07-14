@@ -24,6 +24,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.database.table.action.ActionTable;
 import eu.power_switch.database.table.action.ReceiverActionTable;
 import eu.power_switch.database.table.action.RoomActionTable;
@@ -59,13 +62,15 @@ import eu.power_switch.gui.StatusMessageHandler;
 /**
  * This Class is responsible for initializing and upgrading all Database tables
  */
+@Singleton
 public class Database extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "PSdatabase.db";
-    private static final int DATABASE_VERSION = 19;
+    private static final String DATABASE_NAME    = "PSdatabase.db";
+    private static final int    DATABASE_VERSION = 19;
 
     private Context context;
 
+    @Inject
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -202,17 +207,15 @@ public class Database extends SQLiteOpenHelper {
                 case 6:
                 case 7:
                 case 8:
-                    Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='timer_action';",
-                            null);
+                    Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='timer_action';", null);
                     if (c.moveToFirst()) {
                         // insert data from old timer_action table into ActionTable and TimerActionTable
-                        Cursor cursor = db.query("timer_action", new String[]{"_id", "timer_id", "action_type"},
-                                null, null, null, null, null);
+                        Cursor cursor = db.query("timer_action", new String[]{"_id", "timer_id", "action_type"}, null, null, null, null, null);
                         cursor.moveToFirst();
 
                         while (!cursor.isAfterLast()) {
-                            Long actionId = cursor.getLong(0);
-                            Long timerId = cursor.getLong(1);
+                            Long   actionId   = cursor.getLong(0);
+                            Long   timerId    = cursor.getLong(1);
                             String actionType = cursor.getString(2);
 
                             ContentValues values;
@@ -229,15 +232,22 @@ public class Database extends SQLiteOpenHelper {
                             db.insert(ActionTable.TABLE_NAME, null, values);
 
                             // RECEIVER ACTION
-                            Cursor cursor1 = db.query("timer_receiver_action", new String[]{"_id", "timer_action_id",
-                                    ReceiverActionTable.COLUMN_ROOM_ID, ReceiverActionTable.COLUMN_RECEIVER_ID,
-                                    ReceiverActionTable.COLUMN_BUTTON_ID
-                            }, "timer_action_id" + "=" + actionId, null, null, null, null);
+                            Cursor cursor1 = db.query("timer_receiver_action",
+                                    new String[]{"_id",
+                                                 "timer_action_id",
+                                                 ReceiverActionTable.COLUMN_ROOM_ID,
+                                                 ReceiverActionTable.COLUMN_RECEIVER_ID,
+                                                 ReceiverActionTable.COLUMN_BUTTON_ID},
+                                    "timer_action_id" + "=" + actionId,
+                                    null,
+                                    null,
+                                    null,
+                                    null);
                             cursor1.moveToFirst();
                             while (!cursor1.isAfterLast()) {
-                                Long roomId = cursor1.getLong(2);
+                                Long roomId     = cursor1.getLong(2);
                                 Long receiverId = cursor1.getLong(3);
-                                Long buttonId = cursor1.getLong(4);
+                                Long buttonId   = cursor1.getLong(4);
 
                                 values = new ContentValues();
                                 values.put(ReceiverActionTable.COLUMN_ACTION_ID, actionId);
@@ -251,12 +261,16 @@ public class Database extends SQLiteOpenHelper {
                             cursor1.close();
 
                             // ROOM ACTION
-                            cursor1 = db.query("timer_room_action", new String[]{"_id", "timer_action_id",
-                                            RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME},
-                                    "timer_action_id" + "=" + actionId, null, null, null, null);
+                            cursor1 = db.query("timer_room_action",
+                                    new String[]{"_id", "timer_action_id", RoomActionTable.COLUMN_ROOM_ID, RoomActionTable.COLUMN_BUTTON_NAME},
+                                    "timer_action_id" + "=" + actionId,
+                                    null,
+                                    null,
+                                    null,
+                                    null);
                             cursor1.moveToFirst();
                             while (!cursor1.isAfterLast()) {
-                                Long roomId = cursor1.getLong(2);
+                                Long   roomId     = cursor1.getLong(2);
                                 String buttonName = cursor1.getString(3);
 
                                 values = new ContentValues();
@@ -270,9 +284,13 @@ public class Database extends SQLiteOpenHelper {
                             cursor1.close();
 
                             // SCENE ACTION
-                            cursor1 = db.query("timer_scene_action", new String[]{"_id", "timer_action_id",
-                                            SceneActionTable.COLUMN_SCENE_ID},
-                                    "timer_action_id" + "=" + actionId, null, null, null, null);
+                            cursor1 = db.query("timer_scene_action",
+                                    new String[]{"_id", "timer_action_id", SceneActionTable.COLUMN_SCENE_ID},
+                                    "timer_action_id" + "=" + actionId,
+                                    null,
+                                    null,
+                                    null,
+                                    null);
                             cursor1.moveToFirst();
                             while (!cursor1.isAfterLast()) {
                                 Long sceneId = cursor1.getLong(2);

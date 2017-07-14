@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.history.HistoryHelper;
@@ -108,7 +108,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeReceiverAction(@NonNull Receiver receiver, @NonNull Button button) throws Exception {
-        Apartment apartment = DatabaseHandler.getContainingApartment(receiver);
+        Apartment apartment = DatabaseHandlerStatic.getContainingApartment(receiver);
         Room      room      = apartment.getRoom(receiver.getRoomId());
 
         ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
@@ -158,7 +158,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         // set on object, as well as in database
         receiver.setLastActivatedButtonId(button.getId());
-        DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+        DatabaseHandlerStatic.setLastActivatedButtonId(receiver.getId(), button.getId());
 
         if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
@@ -217,7 +217,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeRoomAction(@NonNull Room room, @NonNull String buttonName) throws Exception {
-        Apartment apartment = DatabaseHandler.getContainingApartment(room);
+        Apartment apartment = DatabaseHandlerStatic.getContainingApartment(room);
 
         List<Gateway> gateways;
         if (!room.getAssociatedGateways()
@@ -270,7 +270,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
                             // set on object, as well as in database
                             receiver.setLastActivatedButtonId(button.getId());
-                            DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+                            DatabaseHandlerStatic.setLastActivatedButtonId(receiver.getId(), button.getId());
                         } catch (ActionNotSupportedException e) {
                             Timber.e("Action not supported by Receiver!", e);
                             StatusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
@@ -301,7 +301,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeRoomAction(@NonNull Room room, long buttonId) throws Exception {
-        Apartment apartment = DatabaseHandler.getContainingApartment(room);
+        Apartment apartment = DatabaseHandlerStatic.getContainingApartment(room);
 
         List<Gateway> gateways;
         if (!room.getAssociatedGateways()
@@ -362,7 +362,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
                 // set on object, as well as in database
                 receiver.setLastActivatedButtonId(button.getId());
-                DatabaseHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
+                DatabaseHandlerStatic.setLastActivatedButtonId(receiver.getId(), button.getId());
             } catch (NoSuchElementException e) {
                 // ignore if Receiver doesnt support this action
             }
@@ -407,7 +407,7 @@ public class ActionHandlerImpl implements ActionHandler {
     }
 
     private void executeScene(@NonNull Scene scene) throws Exception {
-        Apartment apartment = DatabaseHandler.getContainingApartment(scene);
+        Apartment apartment = DatabaseHandlerStatic.getContainingApartment(scene);
 
         if (apartment.getAssociatedGateways()
                 .isEmpty()) {
@@ -430,7 +430,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         ArrayList<NetworkPackage> networkPackages = new ArrayList<>();
         for (SceneItem sceneItem : scene.getSceneItems()) {
-            Room room = DatabaseHandler.getRoom(sceneItem.getReceiver()
+            Room room = DatabaseHandlerStatic.getRoom(sceneItem.getReceiver()
                     .getRoomId());
             Receiver receiver = sceneItem.getReceiver();
 
@@ -459,7 +459,7 @@ public class ActionHandlerImpl implements ActionHandler {
                     sceneItem.getReceiver()
                             .setLastActivatedButtonId(sceneItem.getActiveButton()
                                     .getId());
-                    DatabaseHandler.setLastActivatedButtonId(sceneItem.getReceiver()
+                    DatabaseHandlerStatic.setLastActivatedButtonId(sceneItem.getReceiver()
                                     .getId(),
                             sceneItem.getActiveButton()
                                     .getId());
@@ -512,7 +512,7 @@ public class ActionHandlerImpl implements ActionHandler {
     @Override
     public void execute(@NonNull SleepAsAndroidConstants.Event event) {
         try {
-            List<Action> actions = DatabaseHandler.getAlarmActions(event);
+            List<Action> actions = DatabaseHandlerStatic.getAlarmActions(event);
             executeActions(actions);
 
             HistoryHelper.add(new HistoryItem((long) -1,
@@ -536,7 +536,7 @@ public class ActionHandlerImpl implements ActionHandler {
     @Override
     public void execute(@NonNull AlarmClockConstants.Event event) {
         try {
-            List<Action> actions = DatabaseHandler.getAlarmActions(event);
+            List<Action> actions = DatabaseHandlerStatic.getAlarmActions(event);
             executeActions(actions);
 
             HistoryHelper.add(new HistoryItem((long) -1,

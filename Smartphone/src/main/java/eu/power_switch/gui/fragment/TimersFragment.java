@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.TimerChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -210,7 +210,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             return playStoreModeDataModel.getTimers();
         } else {
-            return DatabaseHandler.getAllTimers();
+            return DatabaseHandlerStatic.getAllTimers();
         }
     }
 

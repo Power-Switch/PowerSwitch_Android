@@ -36,7 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -111,7 +111,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Apartment> doInBackground(Void... params) {
                 try {
-                    return DatabaseHandler.getAllApartments();
+                    return DatabaseHandlerStatic.getAllApartments();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -144,7 +144,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Scene> doInBackground(Void... params) {
                 try {
-                    return DatabaseHandler.getAllScenes();
+                    return DatabaseHandlerStatic.getAllScenes();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -197,7 +197,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
                 // save new widget data to database
                 SceneWidget sceneWidget = new SceneWidget(appWidgetId, scene.getId());
                 try {
-                    DatabaseHandler.addSceneWidget(sceneWidget);
+                    DatabaseHandlerStatic.addSceneWidget(sceneWidget);
                 } catch (Exception e) {
                     Timber.e(e);
                 }

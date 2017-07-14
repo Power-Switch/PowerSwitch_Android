@@ -43,7 +43,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.GatewayChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -183,11 +183,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
                         // save new Gateway if it doesn't exist already
                         try {
-                            DatabaseHandler.addGateway(newGateway);
+                            DatabaseHandlerStatic.addGateway(newGateway);
                             newGatewaysCount++;
                         } catch (GatewayAlreadyExistsException e) {
                             existingGatewaysCount++;
-                            DatabaseHandler.enableGateway(e.getIdOfExistingGateway());
+                            DatabaseHandlerStatic.enableGateway(e.getIdOfExistingGateway());
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
@@ -278,7 +278,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
             return playStoreModeDataModel.getGateways();
         } else {
-            return DatabaseHandler.getAllGateways();
+            return DatabaseHandlerStatic.getAllGateways();
         }
     }
 

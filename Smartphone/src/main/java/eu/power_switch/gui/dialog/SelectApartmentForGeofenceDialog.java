@@ -20,7 +20,7 @@ package eu.power_switch.gui.dialog;
 
 import java.util.ArrayList;
 
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.obj.Apartment;
@@ -35,7 +35,7 @@ public class SelectApartmentForGeofenceDialog extends SelectApartmentDialog {
         ArrayList<String> apartmentNames = new ArrayList<>();
 
         try {
-            for (Apartment apartment : DatabaseHandler.getAllApartments()) {
+            for (Apartment apartment : DatabaseHandlerStatic.getAllApartments()) {
                 if (apartment.getGeofence() == null) {
                     apartmentNames.add(apartment.getName());
                 }

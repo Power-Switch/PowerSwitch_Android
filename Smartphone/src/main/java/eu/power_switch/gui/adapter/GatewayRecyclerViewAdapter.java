@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.gateway.Gateway;
@@ -83,9 +83,9 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            DatabaseHandler.enableGateway(gateway.getId());
+                            DatabaseHandlerStatic.enableGateway(gateway.getId());
                         } else {
-                            DatabaseHandler.disableGateway(gateway.getId());
+                            DatabaseHandlerStatic.disableGateway(gateway.getId());
                         }
                         gateway.setActive(isChecked);
                     } catch (Exception e) {
@@ -98,7 +98,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
 
         boolean isAssociatedWithApartment = true;
         try {
-            isAssociatedWithApartment = DatabaseHandler.isAssociatedWithAnyApartment(gateway);
+            isAssociatedWithApartment = DatabaseHandlerStatic.isAssociatedWithAnyApartment(gateway);
         } catch (Exception e) {
             Timber.e(e);
         }

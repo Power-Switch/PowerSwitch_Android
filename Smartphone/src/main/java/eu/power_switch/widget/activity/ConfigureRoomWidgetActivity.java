@@ -36,7 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -135,7 +135,7 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Apartment> doInBackground(Void... params) {
                 try {
-                    return DatabaseHandler.getAllApartments();
+                    return DatabaseHandlerStatic.getAllApartments();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -178,7 +178,7 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
                 // save new widget data to database
                 RoomWidget roomWidget = new RoomWidget(appWidgetId, room.getId());
                 try {
-                    DatabaseHandler.addRoomWidget(roomWidget);
+                    DatabaseHandlerStatic.addRoomWidget(roomWidget);
                 } catch (Exception e) {
                     Timber.e(e);
                 }

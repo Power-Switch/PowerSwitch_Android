@@ -38,7 +38,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
@@ -164,7 +164,7 @@ public class RoomSceneTabFragment extends EventBusFragment {
                 if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                     textView_currentApartmentInfo.setText(" - ");
                 } else {
-                    String apartmentName = DatabaseHandler.getApartmentName(currentApartmentId);
+                    String apartmentName = DatabaseHandlerStatic.getApartmentName(currentApartmentId);
                     textView_currentApartmentInfo.setText(apartmentName);
                 }
             }

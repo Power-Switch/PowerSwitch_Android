@@ -20,8 +20,13 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.LinkedList;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.receiver.DipTable;
 import eu.power_switch.obj.receiver.DipReceiver;
@@ -30,15 +35,11 @@ import eu.power_switch.obj.receiver.DipSwitch;
 /**
  * Provides database methods for managing DipReceivers
  */
-abstract class DipHandler {
+@Singleton
+class DipHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private DipHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    DipHandler() {
     }
 
     /**
@@ -47,14 +48,14 @@ abstract class DipHandler {
      * @param receiverID The ID of the receiver in database (can differ from the one in the newly created object)
      * @param receiver   The DipReceiver containing the dip information.
      */
-    protected static void add(Long receiverID, DipReceiver receiver) throws Exception {
+    protected void add(@NonNull SQLiteDatabase database, Long receiverID, DipReceiver receiver) throws Exception {
         int position = 0;
         for (DipSwitch dip : receiver.getDips()) {
             ContentValues values = new ContentValues();
             values.put(DipTable.COLUMN_POSITION, position);
             values.put(DipTable.COLUMN_STATE, dip.isChecked());
             values.put(DipTable.COLUMN_RECEIVER_ID, receiverID);
-            DatabaseHandler.database.insert(DipTable.TABLE_NAME, null, values);
+            database.insert(DipTable.TABLE_NAME, null, values);
             position++;
         }
     }
@@ -64,22 +65,28 @@ abstract class DipHandler {
      *
      * @param receiverId The ID of the receiver
      */
-    protected static void delete(Long receiverId) throws Exception {
-        DatabaseHandler.database.delete(DipTable.TABLE_NAME, DipTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
+    protected void delete(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
+        database.delete(DipTable.TABLE_NAME, DipTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
 
     /**
      * Gets associated Dips of a DipReceiver
      *
      * @param receiverId The ID of the receiver
+     *
      * @return List of Dip positions
      */
-    protected static LinkedList<Boolean> getDips(Long receiverId) throws Exception {
+    protected LinkedList<Boolean> getDips(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
         LinkedList<Boolean> dips = new LinkedList<>();
 
         String[] dipColumns = {DipTable.COLUMN_STATE};
-        Cursor dipCursor = DatabaseHandler.database.query(DipTable.TABLE_NAME, dipColumns,
-                DipTable.COLUMN_RECEIVER_ID + "==" + receiverId, null, null, null, DipTable.COLUMN_POSITION);
+        Cursor dipCursor = database.query(DipTable.TABLE_NAME,
+                dipColumns,
+                DipTable.COLUMN_RECEIVER_ID + "==" + receiverId,
+                null,
+                null,
+                null,
+                DipTable.COLUMN_POSITION);
         dipCursor.moveToFirst();
         while (!dipCursor.isAfterLast()) {
             int state = dipCursor.getInt(0);

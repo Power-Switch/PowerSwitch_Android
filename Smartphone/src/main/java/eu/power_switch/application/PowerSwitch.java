@@ -39,13 +39,16 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
 import dagger.android.HasActivityInjector;
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
 import eu.power_switch.dagger.DaggerAppComponent;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.MainActivity;
@@ -76,6 +79,9 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
     // Default System Handler for uncaught Exceptions
     private Thread.UncaughtExceptionHandler originalUncaughtExceptionHandler;
     private Handler                         mHandler;
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
@@ -176,7 +182,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         Timber.d("Device brand/model: " + LogHelper.getDeviceName());
 
         // Onetime initialization of handlers for static access
-        DatabaseHandler.init(this);
+        DatabaseHandlerStatic.init(this);
 
         // reinitialize after logging framework is up to log current values
         SmartphonePreferencesHandler.init(this);
@@ -225,7 +231,7 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
                     if (!PermissionHelper.isLocationPermissionAvailable(getApplicationContext())) {
                         try {
-                            DatabaseHandler.disableGeofences();
+                            persistanceHandler.disableGeofences();
                             Timber.d("Disabled all Geofences because of missing location permission");
                         } catch (Exception e) {
                             Timber.e(e);
@@ -253,19 +259,19 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
                     Thread.sleep(5000);
 //                    mHandler.obtainMessage(0, "Logging database...").sendToTarget();
 
-                    for (Apartment apartment : DatabaseHandler.getAllApartments()) {
+                    for (Apartment apartment : persistanceHandler.getAllApartments()) {
                         Timber.d(apartment.toString());
                     }
 
-                    for (Timer timer : DatabaseHandler.getAllTimers()) {
+                    for (Timer timer : persistanceHandler.getAllTimers()) {
                         Timber.d(timer.toString());
                     }
 
-                    for (Geofence geofence : DatabaseHandler.getAllGeofences()) {
+                    for (Geofence geofence : persistanceHandler.getAllGeofences()) {
                         Timber.d(geofence.toString());
                     }
 
-                    for (Gateway gateway : DatabaseHandler.getAllGateways()) {
+                    for (Gateway gateway : persistanceHandler.getAllGateways()) {
                         Timber.d(gateway.toString() + "\n");
                     }
                 } catch (Exception e) {

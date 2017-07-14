@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.widget.SceneWidget;
@@ -68,11 +68,11 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
 
             try {
-                SceneWidget sceneWidget = DatabaseHandler.getSceneWidget(appWidgetId);
+                SceneWidget sceneWidget = DatabaseHandlerStatic.getSceneWidget(appWidgetId);
                 // update UI
                 try {
-                    Scene     scene     = DatabaseHandler.getScene(sceneWidget.getSceneId());
-                    Apartment apartment = DatabaseHandler.getApartment(scene.getApartmentId());
+                    Scene     scene     = DatabaseHandlerStatic.getScene(sceneWidget.getSceneId());
+                    Apartment apartment = DatabaseHandlerStatic.getApartment(scene.getApartmentId());
 
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, apartment.getName() + ": " + scene.getName());
                     // set button action
@@ -106,7 +106,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
             try {
-                DatabaseHandler.deleteSceneWidget(appWidgetId);
+                DatabaseHandlerStatic.deleteSceneWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

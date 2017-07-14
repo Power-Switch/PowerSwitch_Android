@@ -54,7 +54,7 @@ import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
 import eu.power_switch.api.taskerplugin.gui.AbstractPluginActivity;
 import eu.power_switch.api.taskerplugin.gui.SelectVariableDialog;
 import eu.power_switch.api.taskerplugin.tasker_api.TaskerPlugin;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.VariableSelectedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -169,7 +169,7 @@ public class EditActivity extends AbstractPluginActivity {
         radioButtonSceneAction.setOnClickListener(actionTypeOnClickListener);
 
         try {
-            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandler.getAllApartments();
+            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandlerStatic.getAllApartments();
             for (Apartment apartment : availableApartments) {
                 apartmentNames.add(apartment.getName());
             }
@@ -732,7 +732,7 @@ public class EditActivity extends AbstractPluginActivity {
     }
 
     private Apartment getSelectedApartment() throws Exception {
-        return DatabaseHandler.getApartment(getApartmentName());
+        return DatabaseHandlerStatic.getApartment(getApartmentName());
     }
 
     private Room getSelectedRoom() throws Exception {

@@ -20,6 +20,7 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerTable;
@@ -39,15 +43,11 @@ import eu.power_switch.timer.alarm.AlarmHandler;
 /**
  * Provides database methods for managing Timers
  */
-abstract class TimerHandler {
+@Singleton
+class TimerHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private TimerHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    TimerHandler() {
     }
 
     /**
@@ -55,19 +55,22 @@ abstract class TimerHandler {
      *
      * @param timer Timer
      */
-    protected static Long add(Timer timer) throws Exception {
+    protected Long add(@NonNull SQLiteDatabase database, Timer timer) throws Exception {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, timer.isActive());
         values.put(TimerTable.COLUMN_NAME, timer.getName());
-        values.put(TimerTable.COLUMN_EXECUTION_TIME, timer.getExecutionTime().getTimeInMillis());
+        values.put(TimerTable.COLUMN_EXECUTION_TIME,
+                timer.getExecutionTime()
+                        .getTimeInMillis());
         values.put(TimerTable.COLUMN_EXECUTION_INTERVAL, timer.getExecutionInterval());
         values.put(TimerTable.COLUMN_EXECUTION_TYPE, timer.getExecutionType());
         values.put(TimerTable.COLUMN_RANDOMIZER_VALUE, timer.getRandomizerValue());
 
-        long timerId = DatabaseHandler.database.insert(TimerTable.TABLE_NAME, null, values);
+        long timerId = database.insert(TimerTable.TABLE_NAME, null, values);
 
         if (timerId > -1) {
-            if (timer.getExecutionType().equals(Timer.EXECUTION_TYPE_WEEKDAY)) {
+            if (timer.getExecutionType()
+                    .equals(Timer.EXECUTION_TYPE_WEEKDAY)) {
                 insertWeekdayDetails((WeekdayTimer) timer, timerId);
             }
 
@@ -78,17 +81,17 @@ abstract class TimerHandler {
         }
 
         // activate alarm
-        AlarmHandler.createAlarm(DatabaseHandler.context, get(timerId));
+        AlarmHandler.createAlarm(DatabaseHandlerStatic.context, get(timerId));
         return timerId;
     }
 
-    private static void insertWeekdayDetails(WeekdayTimer weekdayTimer, Long timerId) throws Exception {
+    private void insertWeekdayDetails(@NonNull SQLiteDatabase database, WeekdayTimer weekdayTimer, Long timerId) throws Exception {
         for (WeekdayTimer.Day day : weekdayTimer.getExecutionDays()) {
             ContentValues values = new ContentValues();
             values.put(TimerWeekdayTable.COLUMN_EXECUTION_DAY, day.positionInWeek);
             values.put(TimerWeekdayTable.COLUMN_TIMER_ID, timerId);
 
-            DatabaseHandler.database.insert(TimerWeekdayTable.TABLE_NAME, null, values);
+            database.insert(TimerWeekdayTable.TABLE_NAME, null, values);
         }
     }
 
@@ -97,20 +100,18 @@ abstract class TimerHandler {
      *
      * @param timerId ID of Timer
      */
-    protected static void delete(Long timerId) throws Exception {
-        AlarmHandler.cancelAlarm(DatabaseHandler.context, get(timerId));
+    protected void delete(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
+        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(timerId));
 
         TimerActionHandler.delete(timerId);
 
         deleteWeekdayDetails(timerId);
 
-        DatabaseHandler.database.delete(TimerTable.TABLE_NAME, TimerTable.COLUMN_ID +
-                "=" + timerId, null);
+        database.delete(TimerTable.TABLE_NAME, TimerTable.COLUMN_ID + "=" + timerId, null);
     }
 
-    private static void deleteWeekdayDetails(Long timerId) throws Exception {
-        DatabaseHandler.database.delete(TimerWeekdayTable.TABLE_NAME, TimerWeekdayTable.COLUMN_TIMER_ID +
-                "=" + timerId, null);
+    private void deleteWeekdayDetails(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
+        database.delete(TimerWeekdayTable.TABLE_NAME, TimerWeekdayTable.COLUMN_TIMER_ID + "=" + timerId, null);
     }
 
     /**
@@ -118,8 +119,8 @@ abstract class TimerHandler {
      *
      * @param timer new Timer Object with same ID as existing one
      */
-    protected static void update(Timer timer) throws Exception {
-        AlarmHandler.cancelAlarm(DatabaseHandler.context, get(timer.getId()));
+    protected void update(@NonNull SQLiteDatabase database, Timer timer) throws Exception {
+        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(timer.getId()));
 
         TimerActionHandler.update(timer);
 
@@ -130,11 +131,12 @@ abstract class TimerHandler {
         values.put(TimerTable.COLUMN_NAME, timer.getName());
         values.put(TimerTable.COLUMN_EXECUTION_TYPE, timer.getExecutionType());
         values.put(TimerTable.COLUMN_EXECUTION_INTERVAL, timer.getExecutionInterval());
-        values.put(TimerTable.COLUMN_EXECUTION_TIME, timer.getExecutionTime().getTimeInMillis());
+        values.put(TimerTable.COLUMN_EXECUTION_TIME,
+                timer.getExecutionTime()
+                        .getTimeInMillis());
         values.put(TimerTable.COLUMN_RANDOMIZER_VALUE, timer.getRandomizerValue());
 
-        DatabaseHandler.database.update(TimerTable.TABLE_NAME, values,
-                TimerTable.COLUMN_ID + "=" + timer.getId(), null);
+        database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + timer.getId(), null);
 
         if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
             insertWeekdayDetails((WeekdayTimer) timer, timer.getId());
@@ -142,7 +144,7 @@ abstract class TimerHandler {
 
         // activate new alarm if timer is active
         if (timer.isActive()) {
-            AlarmHandler.createAlarm(DatabaseHandler.context, timer);
+            AlarmHandler.createAlarm(DatabaseHandlerStatic.context, timer);
         }
     }
 
@@ -150,13 +152,13 @@ abstract class TimerHandler {
      * Gets a Timer from Database
      *
      * @param timerId ID of Timer
+     *
      * @return Timer
      */
     @NonNull
-    protected static Timer get(Long timerId) throws Exception {
+    protected Timer get(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
         Timer timer = null;
-        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS,
-                TimerTable.COLUMN_ID + "=" + timerId, null, null, null, null);
+        Cursor cursor = database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS, TimerTable.COLUMN_ID + "=" + timerId, null, null, null, null);
         cursor.moveToFirst();
 
         if (cursor.moveToFirst()) {
@@ -175,9 +177,9 @@ abstract class TimerHandler {
      *
      * @return List of Timer
      */
-    protected static List<Timer> getAll() throws Exception {
+    protected List<Timer> getAll(@NonNull SQLiteDatabase database) throws Exception {
         List<Timer> timers = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor      cursor = database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -193,11 +195,17 @@ abstract class TimerHandler {
      *
      * @return List of Timer
      */
-    protected static List<Timer> getAll(boolean isActive) throws Exception {
-        List<Timer> timers = new ArrayList<>();
-        int isActiveInt = isActive ? 1 : 0;
-        Cursor cursor = DatabaseHandler.database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS, TimerTable.COLUMN_ACTIVE +
-                "=" + isActiveInt, null, null, null, null, null);
+    protected List<Timer> getAll(@NonNull SQLiteDatabase database, boolean isActive) throws Exception {
+        List<Timer> timers      = new ArrayList<>();
+        int         isActiveInt = isActive ? 1 : 0;
+        Cursor cursor = database.query(TimerTable.TABLE_NAME,
+                TimerTable.ALL_COLUMNS,
+                TimerTable.COLUMN_ACTIVE + "=" + isActiveInt,
+                null,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -213,10 +221,10 @@ abstract class TimerHandler {
      *
      * @param id ID of Timer
      */
-    protected static void enable(Long id) throws Exception {
+    protected void enable(@NonNull SQLiteDatabase database, Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, 1);
-        DatabaseHandler.database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
+        database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
@@ -224,31 +232,32 @@ abstract class TimerHandler {
      *
      * @param id ID of Timer
      */
-    protected static void disable(Long id) throws Exception {
+    protected void disable(@NonNull SQLiteDatabase database, Long id) throws Exception {
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, 0);
-        DatabaseHandler.database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
+        database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
      * Creates a Timer Object out of Database information
      *
      * @param c cursor pointing to a Timer database entry
+     *
      * @return Timer
      */
-    private static Timer dbToTimer(Cursor c) throws Exception {
-        Long timerId = c.getLong(0);
-        int rawActive = c.getInt(1);
+    private Timer dbToTimer(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+        Long    timerId   = c.getLong(0);
+        int     rawActive = c.getInt(1);
         boolean active;
         active = rawActive > 0;
-        String name = c.getString(2);
-        long executionTimeRAW = c.getLong(3);
-        Calendar executionTime = Calendar.getInstance();
+        String   name             = c.getString(2);
+        long     executionTimeRAW = c.getLong(3);
+        Calendar executionTime    = Calendar.getInstance();
         executionTime.setTime(new Date(executionTimeRAW));
         int randomizerValue = c.getInt(6);
 
-        long executionInterval = c.getLong(4);
-        String executionType = c.getString(5);
+        long   executionInterval = c.getLong(4);
+        String executionType     = c.getString(5);
 
         ArrayList<Action> actions = TimerActionHandler.getByTimerId(timerId);
 
@@ -263,16 +272,21 @@ abstract class TimerHandler {
         return null;
     }
 
-    private static ArrayList<WeekdayTimer.Day> getWeekdayDetails(Long timerId) throws Exception {
+    private ArrayList<WeekdayTimer.Day> getWeekdayDetails(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
         return getExecutionDays(timerId);
     }
 
-    private static ArrayList<WeekdayTimer.Day> getExecutionDays(Long timerId) throws Exception {
+    private ArrayList<WeekdayTimer.Day> getExecutionDays(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
         ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
 
         String[] columns = {TimerWeekdayTable.COLUMN_EXECUTION_DAY};
-        Cursor cursor = DatabaseHandler.database.query(TimerWeekdayTable.TABLE_NAME, columns,
-                TimerWeekdayTable.COLUMN_TIMER_ID + "=" + timerId, null, null, null, null);
+        Cursor cursor = database.query(TimerWeekdayTable.TABLE_NAME,
+                columns,
+                TimerWeekdayTable.COLUMN_TIMER_ID + "=" + timerId,
+                null,
+                null,
+                null,
+                null);
 
         cursor.moveToFirst();
 

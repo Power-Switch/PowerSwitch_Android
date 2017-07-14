@@ -20,6 +20,7 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.telephony.PhoneNumberUtils;
 
@@ -28,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.phone.PhoneNumberTable;
@@ -41,36 +45,33 @@ import eu.power_switch.shared.constants.PhoneConstants;
  * <p/>
  * Created by Markus on 05.04.2016.
  */
-abstract class CallEventHandler {
+@Singleton
+class CallEventHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private CallEventHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    CallEventHandler() {
     }
 
     /**
      * Add a CallEvent to Database
      *
      * @param callEvent new CallEvent to insert
+     *
      * @return ID of inserted CallEvent
      */
-    protected static Long add(CallEvent callEvent) throws Exception {
+    protected Long add(@NonNull SQLiteDatabase database, CallEvent callEvent) throws Exception {
         ContentValues values = new ContentValues();
         values.put(CallEventTable.COLUMN_ACTIVE, callEvent.isActive());
         values.put(CallEventTable.COLUMN_NAME, callEvent.getName());
 
-        long newId = DatabaseHandler.database.insert(CallEventTable.TABLE_NAME, null, values);
+        long newId = database.insert(CallEventTable.TABLE_NAME, null, values);
 
         for (PhoneConstants.CallType eventCallType : PhoneConstants.CallType.values()) {
-            CallEventPhoneNumberHandler.add(callEvent.getPhoneNumbers(eventCallType), newId, eventCallType);
+            CallEventPhoneNumberHandler.add(database, callEvent.getPhoneNumbers(eventCallType), newId, eventCallType);
         }
 
         for (PhoneConstants.CallType eventCallType : PhoneConstants.CallType.values()) {
-            CallEventActionHandler.add(callEvent.getActions(eventCallType), newId, eventCallType);
+            CallEventActionHandler.add(database, callEvent.getActions(eventCallType), newId, eventCallType);
         }
 
         return newId;
@@ -80,16 +81,22 @@ abstract class CallEventHandler {
      * Get a CallEvent from Database
      *
      * @param id ID of CallEvent
+     *
      * @return CallEvent
      */
-    protected static CallEvent get(Long id) throws Exception {
+    protected CallEvent get(@NonNull SQLiteDatabase database, Long id) throws Exception {
         CallEvent callEvent = null;
 
-        Cursor cursor = DatabaseHandler.database.query(CallEventTable.TABLE_NAME, CallEventTable.ALL_COLUMNS,
-                CallEventTable.COLUMN_ID + "=" + id, null, null, null, null);
+        Cursor cursor = database.query(CallEventTable.TABLE_NAME,
+                CallEventTable.ALL_COLUMNS,
+                CallEventTable.COLUMN_ID + "=" + id,
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            callEvent = dbToCallEvent(cursor);
+            callEvent = dbToCallEvent(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(id));
@@ -103,22 +110,29 @@ abstract class CallEventHandler {
      * Get all CallEvents that are associated with the specified phoneNumber
      *
      * @param phoneNumber phone number used in CallEvents
+     *
      * @return List of CallEvents, may be empty but never null
      */
     @NonNull
-    protected static List<CallEvent> get(String phoneNumber) throws Exception {
+    protected List<CallEvent> get(@NonNull SQLiteDatabase database, String phoneNumber) throws Exception {
         List<CallEvent> callEvents = new ArrayList<>();
 
-        Cursor cursor = DatabaseHandler.database.query(PhoneNumberTable.TABLE_NAME, PhoneNumberTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor cursor = database.query(PhoneNumberTable.TABLE_NAME, PhoneNumberTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             long phoneNumberId = cursor.getLong(0);
 
             if (PhoneNumberUtils.compare(phoneNumber, cursor.getString(1))) {
-                Cursor cursor1 = DatabaseHandler.database.query(CallEventPhoneNumberTable.TABLE_NAME, CallEventPhoneNumberTable.ALL_COLUMNS, CallEventPhoneNumberTable.COLUMN_PHONE_NUMBER_ID + "=" + phoneNumberId, null, null, null, null);
+                Cursor cursor1 = database.query(CallEventPhoneNumberTable.TABLE_NAME,
+                        CallEventPhoneNumberTable.ALL_COLUMNS,
+                        CallEventPhoneNumberTable.COLUMN_PHONE_NUMBER_ID + "=" + phoneNumberId,
+                        null,
+                        null,
+                        null,
+                        null);
                 cursor1.moveToFirst();
                 long callEventId = cursor.getLong(0);
-                callEvents.add(get(callEventId));
+                callEvents.add(get(database, callEventId));
                 cursor1.close();
             }
 
@@ -135,13 +149,13 @@ abstract class CallEventHandler {
      * @return List of CallEvents
      */
     @NonNull
-    protected static List<CallEvent> getAll() throws Exception {
+    protected List<CallEvent> getAll(@NonNull SQLiteDatabase database) throws Exception {
         List<CallEvent> callEvents = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(CallEventTable.TABLE_NAME, CallEventTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor cursor = database.query(CallEventTable.TABLE_NAME, CallEventTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            callEvents.add(dbToCallEvent(cursor));
+            callEvents.add(dbToCallEvent(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -151,7 +165,7 @@ abstract class CallEventHandler {
     /**
      * @param callEvent
      */
-    protected static void update(CallEvent callEvent) {
+    protected void update(@NonNull SQLiteDatabase database, CallEvent callEvent) {
         // TODO:
     }
 
@@ -160,26 +174,26 @@ abstract class CallEventHandler {
      *
      * @param id ID of CallEvent
      */
-    protected static void delete(Long id) throws Exception {
-        CallEventPhoneNumberHandler.deleteByCallEvent(id);
-        CallEventActionHandler.deleteByCallEvent(id);
+    protected void delete(@NonNull SQLiteDatabase database, Long id) throws Exception {
+        CallEventPhoneNumberHandler.deleteByCallEvent(database, id);
+        CallEventActionHandler.deleteByCallEvent(database, id);
 
-        DatabaseHandler.database.delete(CallEventTable.TABLE_NAME, CallEventTable.COLUMN_ID + "=" + id, null);
+        database.delete(CallEventTable.TABLE_NAME, CallEventTable.COLUMN_ID + "=" + id, null);
     }
 
-    private static CallEvent dbToCallEvent(Cursor c) throws Exception {
-        long id = c.getLong(0);
+    private CallEvent dbToCallEvent(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+        long    id     = c.getLong(0);
         boolean active = c.getInt(1) > 0;
-        String name = c.getString(2);
+        String  name   = c.getString(2);
 
         HashMap<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
         for (PhoneConstants.CallType callType : PhoneConstants.CallType.values()) {
-            phoneNumbersMap.put(callType, CallEventPhoneNumberHandler.get(id, callType));
+            phoneNumbersMap.put(callType, CallEventPhoneNumberHandler.get(database, id, callType));
         }
 
         HashMap<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
         for (PhoneConstants.CallType callType : PhoneConstants.CallType.values()) {
-            actionsMap.put(callType, CallEventActionHandler.get(id, callType));
+            actionsMap.put(callType, CallEventActionHandler.get(database, id, callType));
         }
 
         CallEvent callEvent = new CallEvent(id, active, name, phoneNumbersMap, actionsMap);

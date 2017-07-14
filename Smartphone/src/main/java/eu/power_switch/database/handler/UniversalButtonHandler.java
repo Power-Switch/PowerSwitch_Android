@@ -20,10 +20,15 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.receiver.UniversalButtonTable;
 import eu.power_switch.obj.UniversalButton;
@@ -32,15 +37,11 @@ import eu.power_switch.obj.button.Button;
 /**
  * Provides database methods for managing Universal Buttons (used on Universal Receivers)
  */
-abstract class UniversalButtonHandler {
+@Singleton
+class UniversalButtonHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private UniversalButtonHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    UniversalButtonHandler() {
     }
 
     /**
@@ -48,15 +49,16 @@ abstract class UniversalButtonHandler {
      *
      * @param receiverId ID of Receiver
      * @param button     Button
+     *
      * @return ID of Database Button entry
      */
-    protected static long addUniversalButton(Long receiverId, UniversalButton button) throws Exception {
+    protected long addUniversalButton(@NonNull SQLiteDatabase database, Long receiverId, UniversalButton button) throws Exception {
         ContentValues values = new ContentValues();
         values.put(UniversalButtonTable.COLUMN_RECEIVER_ID, receiverId);
         values.put(UniversalButtonTable.COLUMN_NAME, button.getName());
         values.put(UniversalButtonTable.COLUMN_SIGNAL, button.getSignal());
 
-        long newId = DatabaseHandler.database.insert(UniversalButtonTable.TABLE_NAME, null, values);
+        long newId = database.insert(UniversalButtonTable.TABLE_NAME, null, values);
         return newId;
     }
 
@@ -66,7 +68,7 @@ abstract class UniversalButtonHandler {
      * @param receiverId ID of Receiver*
      * @param buttons    List of Buttons
      */
-    protected static void addUniversalButtons(Long receiverId, List<Button> buttons) throws Exception {
+    protected void addUniversalButtons(@NonNull SQLiteDatabase database, Long receiverId, List<Button> buttons) throws Exception {
         for (Button button : buttons) {
             addUniversalButton(receiverId, (UniversalButton) button);
         }
@@ -77,8 +79,8 @@ abstract class UniversalButtonHandler {
      *
      * @param id ID of Button
      */
-    protected static void deleteUniversalButton(Long id) throws Exception {
-        DatabaseHandler.database.delete(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.COLUMN_ID + "=" + id, null);
+    protected void deleteUniversalButton(@NonNull SQLiteDatabase database, Long id) throws Exception {
+        database.delete(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.COLUMN_ID + "=" + id, null);
     }
 
     /**
@@ -86,20 +88,26 @@ abstract class UniversalButtonHandler {
      *
      * @param receiverId ID of Receiver
      */
-    protected static void deleteUniversalButtons(Long receiverId) throws Exception {
-        DatabaseHandler.database.delete(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
+    protected void deleteUniversalButtons(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
+        database.delete(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.COLUMN_RECEIVER_ID + "=" + receiverId, null);
     }
 
     /**
      * Gets Button from Database
      *
      * @param id ID of Button
+     *
      * @return Button
      */
-    protected static UniversalButton getUniversalButton(Long id) throws Exception {
+    protected UniversalButton getUniversalButton(@NonNull SQLiteDatabase database, Long id) throws Exception {
         UniversalButton universalButton;
-        Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.ALL_COLUMNS, UniversalButtonTable.COLUMN_ID + "=" + id, null, null,
-                null, null);
+        Cursor cursor = database.query(UniversalButtonTable.TABLE_NAME,
+                UniversalButtonTable.ALL_COLUMNS,
+                UniversalButtonTable.COLUMN_ID + "=" + id,
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
             universalButton = dbToUniversalButton(cursor);
@@ -116,12 +124,18 @@ abstract class UniversalButtonHandler {
      * Gets all Buttons associated with a Receiver
      *
      * @param receiverId ID of Receiver
+     *
      * @return List of Buttons
      */
-    protected static List<UniversalButton> getUniversalButtons(Long receiverId) throws Exception {
+    protected List<UniversalButton> getUniversalButtons(@NonNull SQLiteDatabase database, Long receiverId) throws Exception {
         List<UniversalButton> buttons = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(UniversalButtonTable.TABLE_NAME, UniversalButtonTable.ALL_COLUMNS, UniversalButtonTable.COLUMN_RECEIVER_ID +
-                "=" + receiverId, null, null, null, null);
+        Cursor cursor = database.query(UniversalButtonTable.TABLE_NAME,
+                UniversalButtonTable.ALL_COLUMNS,
+                UniversalButtonTable.COLUMN_RECEIVER_ID + "=" + receiverId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -136,13 +150,14 @@ abstract class UniversalButtonHandler {
      * Creates a Button Object out of Database information
      *
      * @param c cursor pointing to a gateway database entry
+     *
      * @return Gateway, can be null
      */
-    private static UniversalButton dbToUniversalButton(Cursor c) throws Exception {
-        Long id = c.getLong(0);
-        Long receiverId = c.getLong(1);
-        String name = c.getString(2);
-        String signal = c.getString(3);
+    private UniversalButton dbToUniversalButton(Cursor c) throws Exception {
+        Long   id         = c.getLong(0);
+        Long   receiverId = c.getLong(1);
+        String name       = c.getString(2);
+        String signal     = c.getString(3);
 
         return new UniversalButton(id, name, receiverId, signal);
     }

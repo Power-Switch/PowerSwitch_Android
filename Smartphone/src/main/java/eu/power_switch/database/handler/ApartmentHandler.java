@@ -20,12 +20,16 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import eu.power_switch.database.table.apartment.ApartmentGatewayRelationTable;
 import eu.power_switch.database.table.apartment.ApartmentGeofenceRelationTable;
@@ -41,45 +45,42 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 /**
  * Provides database methods for managing Apartments
  */
-abstract class ApartmentHandler {
+@Singleton
+class ApartmentHandler {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private ApartmentHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    @Inject
+    ApartmentHandler() {
     }
 
     /**
      * Adds a Apartment to Database
      *
      * @param apartment Apartment
+     *
      * @return ID of inserted Apartment
      */
-    protected static long add(Apartment apartment) throws Exception {
+    protected long add(@NonNull SQLiteDatabase database, Apartment apartment) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
-        long apartmentId = DatabaseHandler.database.insert(ApartmentTable.TABLE_NAME, null, values);
+        long apartmentId = database.insert(ApartmentTable.TABLE_NAME, null, values);
         // notice that id here may be different than
         // apartment.getId() because it was just inserted into database
-        addAssociatedGateways(apartmentId, apartment.getAssociatedGateways());
-        addGeofence(apartmentId, apartment);
+        addAssociatedGateways(database, apartmentId, apartment.getAssociatedGateways());
+        addGeofence(database, apartmentId, apartment);
 
         return apartmentId;
     }
 
-    private static void addGeofence(long apartmentId, Apartment apartment) throws Exception {
+    private void addGeofence(@NonNull SQLiteDatabase database, long apartmentId, Apartment apartment) throws Exception {
         if (apartment.getGeofence() == null) {
             return;
         }
-        Long geofenceId = GeofenceHandler.add(apartment.getGeofence());
+        Long geofenceId = geofenceHandler.add(database, apartment.getGeofence());
 
         ContentValues values = new ContentValues();
         values.put(ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, apartmentId);
         values.put(ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID, geofenceId);
-        DatabaseHandler.database.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
+        database.insert(ApartmentGeofenceRelationTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -87,19 +88,18 @@ abstract class ApartmentHandler {
      *
      * @param apartment updated Apartment
      */
-    protected static void update(Apartment apartment) throws Exception {
+    protected void update(@NonNull SQLiteDatabase database, Apartment apartment) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ApartmentTable.COLUMN_NAME, apartment.getName());
-        DatabaseHandler.database.update(ApartmentTable.TABLE_NAME, values,
-                ApartmentTable.COLUMN_ID + "==" + apartment.getId(), null);
+        database.update(ApartmentTable.TABLE_NAME, values, ApartmentTable.COLUMN_ID + "==" + apartment.getId(), null);
 
         // update associated geofence (delete old, add new)
-        GeofenceHandler.deleteByApartmentId(apartment.getId());
-        addGeofence(apartment.getId(), apartment);
+        geofenceHandler.deleteByApartmentId(database, apartment.getId());
+        addGeofence(database, apartment.getId(), apartment);
 
         // update associated gateways
-        removeAssociatedGateways(apartment.getId());
-        addAssociatedGateways(apartment.getId(), apartment.getAssociatedGateways());
+        removeAssociatedGateways(database, apartment.getId());
+        addAssociatedGateways(database, apartment.getId(), apartment.getAssociatedGateways());
     }
 
     /**
@@ -107,39 +107,44 @@ abstract class ApartmentHandler {
      *
      * @param apartmentId ID of Apartment
      */
-    protected static void delete(Long apartmentId) throws Exception {
-        LinkedList<Room> rooms = RoomHandler.getByApartment(apartmentId);
+    protected void delete(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
+        LinkedList<Room> rooms = roomHandler.getByApartment(database, apartmentId);
         for (Room room : rooms) {
-            RoomHandler.delete(room.getId());
+            roomHandler.delete(database, room.getId());
         }
 
-        LinkedList<Scene> scenes = SceneHandler.getByApartment(apartmentId);
+        LinkedList<Scene> scenes = sceneHandler.getByApartment(database, apartmentId);
         for (Scene scene : scenes) {
-            SceneHandler.delete(scene.getId());
+            sceneHandler.delete(database, scene.getId());
         }
 
-        removeAssociatedGateways(apartmentId);
+        removeAssociatedGateways(database, apartmentId);
 
-        GeofenceHandler.deleteByApartmentId(apartmentId);
+        geofenceHandler.deleteByApartmentId(database, apartmentId);
 
-        DatabaseHandler.database.delete(ApartmentTable.TABLE_NAME, ApartmentTable.COLUMN_ID + "=" + apartmentId, null);
+        database.delete(ApartmentTable.TABLE_NAME, ApartmentTable.COLUMN_ID + "=" + apartmentId, null);
     }
 
     /**
      * Gets Apartment from Database
      *
      * @param name Name of Apartment
+     *
      * @return Apartment
      */
     @NonNull
-    protected static Apartment get(String name) throws Exception {
+    protected Apartment get(@NonNull SQLiteDatabase database, String name) throws Exception {
         Apartment apartment = null;
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
-                ApartmentTable.ALL_COLUMNS, ApartmentTable.COLUMN_NAME + "=='" + name + "'",
-                null, null, null, null);
+        Cursor cursor = database.query(ApartmentTable.TABLE_NAME,
+                ApartmentTable.ALL_COLUMNS,
+                ApartmentTable.COLUMN_NAME + "=='" + name + "'",
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            apartment = dbToApartment(cursor);
+            apartment = dbToApartment(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(name);
@@ -153,16 +158,22 @@ abstract class ApartmentHandler {
      * Gets Apartment from Database, ignoring case
      *
      * @param name Name of Apartment
+     *
      * @return Apartment
      */
     @NonNull
-    protected static Apartment getCaseInsensitive(String name) throws Exception {
+    protected Apartment getCaseInsensitive(@NonNull SQLiteDatabase database, String name) throws Exception {
         Apartment apartment = null;
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, ApartmentTable.ALL_COLUMNS, ApartmentTable.COLUMN_NAME + "=='" +
-                name + "' COLLATE NOCASE", null, null, null, null);
+        Cursor cursor = database.query(ApartmentTable.TABLE_NAME,
+                ApartmentTable.ALL_COLUMNS,
+                ApartmentTable.COLUMN_NAME + "=='" + name + "' COLLATE NOCASE",
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            apartment = dbToApartment(cursor);
+            apartment = dbToApartment(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(name);
@@ -176,17 +187,22 @@ abstract class ApartmentHandler {
      * Gets Apartment from Database
      *
      * @param id ID of Apartment
+     *
      * @return Apartment
      */
     @NonNull
-    protected static Apartment get(Long id) throws Exception {
+    protected Apartment get(@NonNull SQLiteDatabase database, Long id) throws Exception {
         Apartment apartment = null;
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
-                ApartmentTable.ALL_COLUMNS, ApartmentTable.COLUMN_ID + "==" + id,
-                null, null, null, null);
+        Cursor cursor = database.query(ApartmentTable.TABLE_NAME,
+                ApartmentTable.ALL_COLUMNS,
+                ApartmentTable.COLUMN_ID + "==" + id,
+                null,
+                null,
+                null,
+                null);
 
         if (cursor.moveToFirst()) {
-            apartment = dbToApartment(cursor);
+            apartment = dbToApartment(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(id));
@@ -200,20 +216,23 @@ abstract class ApartmentHandler {
      * Gets all Apartments that are associated with the given gateway id
      *
      * @param gatewayId ID of gateway
+     *
      * @return list of apartments
      */
-    public static List<Apartment> getAssociated(long gatewayId) throws Exception {
+    public List<Apartment> getAssociated(@NonNull SQLiteDatabase database, long gatewayId) throws Exception {
         ArrayList<Apartment> apartments = new ArrayList<>();
 
-        Cursor cursor = DatabaseHandler.database.query(
-                ApartmentGatewayRelationTable.TABLE_NAME,
+        Cursor cursor = database.query(ApartmentGatewayRelationTable.TABLE_NAME,
                 ApartmentGatewayRelationTable.ALL_COLUMNS,
-                ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "==" + gatewayId
-                , null, null, null, null);
+                ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID + "==" + gatewayId,
+                null,
+                null,
+                null,
+                null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Apartment apartment = get(cursor.getLong(0));
+            Apartment apartment = get(database, cursor.getLong(0));
             apartments.add(apartment);
             cursor.moveToNext();
         }
@@ -226,42 +245,47 @@ abstract class ApartmentHandler {
      * Gets the containing Apartment of a receiver
      *
      * @param receiver Receiver
+     *
      * @return containing Apartment
      */
-    public static Apartment get(Receiver receiver) throws Exception {
-        return get(RoomHandler.get(receiver.getRoomId()).getApartmentId());
+    public Apartment get(@NonNull SQLiteDatabase database, Receiver receiver) throws Exception {
+        return get(roomHandler.get(database, receiver.getRoomId())
+                .getApartmentId());
     }
 
     /**
      * Gets the containing Apartment of a room
      *
      * @param room Room
+     *
      * @return containing Apartment
      */
-    public static Apartment get(Room room) throws Exception {
-        return get(room.getApartmentId());
+    public Apartment get(@NonNull SQLiteDatabase database, Room room) throws Exception {
+        return get(database, room.getApartmentId());
     }
 
     /**
      * Gets the containing Apartment of a scene
      *
      * @param scene Scene
+     *
      * @return containing Apartment
      */
-    public static Apartment get(Scene scene) throws Exception {
-        return get(scene.getApartmentId());
+    public Apartment get(@NonNull SQLiteDatabase database, Scene scene) throws Exception {
+        return get(database, scene.getApartmentId());
     }
 
     /**
      * Get Name of Apartment
      *
      * @param apartmentId ID of Apartment
+     *
      * @return Name of Apartment, null if not found
      */
     @NonNull
-    protected static String getName(Long apartmentId) throws Exception {
+    protected String getName(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
         String[] columns = {ApartmentTable.COLUMN_NAME};
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_ID + "==" + apartmentId, null, null, null, null);
+        Cursor   cursor  = database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_ID + "==" + apartmentId, null, null, null, null);
 
         String name = null;
         if (cursor.moveToFirst()) {
@@ -279,13 +303,19 @@ abstract class ApartmentHandler {
      * Get ID of an Apartment by its name
      *
      * @param name Name of Apartment, ignoring case
+     *
      * @return ID of matching Apartment, might be null
      */
     @NonNull
-    public static Long getId(String name) throws Exception {
+    public Long getId(@NonNull SQLiteDatabase database, String name) throws Exception {
         String[] columns = {ApartmentTable.COLUMN_ID};
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, ApartmentTable.COLUMN_NAME + "=='" +
-                name + "' COLLATE NOCASE", null, null, null, null);
+        Cursor cursor = database.query(ApartmentTable.TABLE_NAME,
+                columns,
+                ApartmentTable.COLUMN_NAME + "=='" + name + "' COLLATE NOCASE",
+                null,
+                null,
+                null,
+                null);
 
         Long id = null;
         if (cursor.moveToFirst()) {
@@ -304,11 +334,11 @@ abstract class ApartmentHandler {
      *
      * @return List of Apartment names
      */
-    public static ArrayList<String> getAllNames() throws Exception {
+    public ArrayList<String> getAllNames(@NonNull SQLiteDatabase database) throws Exception {
         ArrayList<String> apartmentNames = new ArrayList<>();
 
         String[] columns = {ApartmentTable.COLUMN_NAME};
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor   cursor  = database.query(ApartmentTable.TABLE_NAME, columns, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -325,14 +355,13 @@ abstract class ApartmentHandler {
      *
      * @return List of Apartments
      */
-    protected static List<Apartment> getAll() throws Exception {
+    protected List<Apartment> getAll(@NonNull SQLiteDatabase database,) throws Exception {
         List<Apartment> apartments = new ArrayList<>();
-        Cursor cursor = DatabaseHandler.database.query(ApartmentTable.TABLE_NAME,
-                ApartmentTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor          cursor     = database.query(ApartmentTable.TABLE_NAME, ApartmentTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            Apartment apartment = dbToApartment(cursor);
+            Apartment apartment = dbToApartment(database, cursor);
             apartments.add(apartment);
             cursor.moveToNext();
         }
@@ -340,12 +369,15 @@ abstract class ApartmentHandler {
         return apartments;
     }
 
-    private static Long getAssociatedGeofenceId(Long apartmentId) throws Exception {
-        String[] columns = {ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID,
-                ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID};
-        Cursor cursor = DatabaseHandler.database.query(ApartmentGeofenceRelationTable.TABLE_NAME,
-                columns, ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID + "=" + apartmentId,
-                null, null, null, null);
+    private Long getAssociatedGeofenceId(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
+        String[] columns = {ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID, ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID};
+        Cursor cursor = database.query(ApartmentGeofenceRelationTable.TABLE_NAME,
+                columns,
+                ApartmentGeofenceRelationTable.COLUMN_APARTMENT_ID + "=" + apartmentId,
+                null,
+                null,
+                null,
+                null);
         if (!cursor.moveToFirst()) {
             return null;
         }
@@ -359,22 +391,25 @@ abstract class ApartmentHandler {
      * Get Gateways that are associated with an Apartment
      *
      * @param apartmentId ID of Apartment
+     *
      * @return List of Gateways
      */
-    private static LinkedList<Gateway> getAssociatedGateways(Long apartmentId) throws Exception {
+    private LinkedList<Gateway> getAssociatedGateways(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
         LinkedList<Gateway> associatedGateways = new LinkedList<>();
 
-        String[] columns = {
-                ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID,
-                ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID
-        };
-        Cursor cursor = DatabaseHandler.database.query(ApartmentGatewayRelationTable.TABLE_NAME, columns,
-                ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId, null, null, null, null);
+        String[] columns = {ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID, ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID};
+        Cursor cursor = database.query(ApartmentGatewayRelationTable.TABLE_NAME,
+                columns,
+                ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            Long gatewayId = cursor.getLong(1);
-            Gateway gateway = GatewayHandler.get(gatewayId);
+            Long    gatewayId = cursor.getLong(1);
+            Gateway gateway   = gatewayHandler.get(database, gatewayId);
             associatedGateways.add(gateway);
             cursor.moveToNext();
         }
@@ -389,13 +424,13 @@ abstract class ApartmentHandler {
      * @param apartmentId        ID of Apartment
      * @param associatedGateways List of Gateways
      */
-    private static void addAssociatedGateways(Long apartmentId, List<Gateway> associatedGateways) throws Exception {
+    private void addAssociatedGateways(@NonNull SQLiteDatabase database, Long apartmentId, List<Gateway> associatedGateways) throws Exception {
         // add current
         for (Gateway gateway : associatedGateways) {
             ContentValues gatewayRelationValues = new ContentValues();
             gatewayRelationValues.put(ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID, apartmentId);
             gatewayRelationValues.put(ApartmentGatewayRelationTable.COLUMN_GATEWAY_ID, gateway.getId());
-            DatabaseHandler.database.insert(ApartmentGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
+            database.insert(ApartmentGatewayRelationTable.TABLE_NAME, null, gatewayRelationValues);
         }
     }
 
@@ -404,26 +439,26 @@ abstract class ApartmentHandler {
      *
      * @param apartmentId ID of Apartment
      */
-    private static void removeAssociatedGateways(Long apartmentId) throws Exception {
+    private void removeAssociatedGateways(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
         // delete old associated gateways
-        DatabaseHandler.database.delete(ApartmentGatewayRelationTable.TABLE_NAME,
-                ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId, null);
+        database.delete(ApartmentGatewayRelationTable.TABLE_NAME, ApartmentGatewayRelationTable.COLUMN_APARTMENT_ID + "==" + apartmentId, null);
     }
 
     /**
      * Creates a Apartment Object out of Database information
      *
      * @param c cursor pointing to a Apartment database entry
+     *
      * @return Apartment
      */
-    private static Apartment dbToApartment(Cursor c) throws Exception {
-        Long apartmentId = c.getLong(0);
-        String name = c.getString(1);
-        LinkedList<Room> rooms = RoomHandler.getByApartment(apartmentId);
-        LinkedList<Scene> scenes = SceneHandler.getByApartment(apartmentId);
-        LinkedList<Gateway> gateways = getAssociatedGateways(apartmentId);
+    private Apartment dbToApartment(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
+        Long                apartmentId = c.getLong(0);
+        String              name        = c.getString(1);
+        LinkedList<Room>    rooms       = roomHandler.getByApartment(database, apartmentId);
+        LinkedList<Scene>   scenes      = sceneHandler.getByApartment(database, apartmentId);
+        LinkedList<Gateway> gateways    = getAssociatedGateways(database, apartmentId);
 
-        Geofence geofence = GeofenceHandler.get(getAssociatedGeofenceId(apartmentId));
+        Geofence geofence = geofenceHandler.get(getAssociatedGeofenceId(database, apartmentId));
 
         boolean isActive = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId);
 

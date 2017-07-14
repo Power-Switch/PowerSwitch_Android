@@ -41,7 +41,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.ReceiverParentRoomChangedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -223,7 +223,7 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
             linearLayoutOfRoomGateways.removeAllViews();
             linearLayoutOfOtherGateways.removeAllViews();
             gatewayCheckboxList.clear();
-            for (Gateway gateway : DatabaseHandler.getAllGateways()) {
+            for (Gateway gateway : DatabaseHandlerStatic.getAllGateways()) {
                 LinearLayout gatewayLayout;
                 // room association is more important than apartment, so it is checked first!
                 Apartment parentApartment = getConfiguration().getParentApartment();

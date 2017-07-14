@@ -42,7 +42,7 @@ import java.util.Set;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.PhoneNumberAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -144,7 +144,7 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
 
     private void initializeCallData(long callEventId) {
         try {
-            CallEvent callEvent = DatabaseHandler.getCallEvent(callEventId);
+            CallEvent callEvent = DatabaseHandlerStatic.getCallEvent(callEventId);
 
             phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
         } catch (Exception e) {

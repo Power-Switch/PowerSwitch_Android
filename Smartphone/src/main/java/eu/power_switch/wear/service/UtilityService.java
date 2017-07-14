@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import dagger.android.DaggerIntentService;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Apartment;
@@ -212,9 +212,9 @@ public class UtilityService extends DaggerIntentService {
                 }
 
                 if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) != SettingsConstants.INVALID_APARTMENT_ID) {
-                    List<Apartment> apartments = DatabaseHandler.getAllApartments();
+                    List<Apartment> apartments = DatabaseHandlerStatic.getAllApartments();
 
-                    Apartment activeApartment = DatabaseHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                    Apartment activeApartment = DatabaseHandlerStatic.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
 
                     List<Room> rooms = activeApartment.getRooms();
 

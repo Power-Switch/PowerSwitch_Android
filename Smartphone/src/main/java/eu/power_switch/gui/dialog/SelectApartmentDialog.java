@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
@@ -66,7 +66,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
-                    onApartmentClicked(DatabaseHandler.getApartment(apartmentNames.get(position)));
+                    onApartmentClicked(DatabaseHandlerStatic.getApartment(apartmentNames.get(position)));
                 } catch (Exception e) {
                     dismiss();
                     StatusMessageHandler.showErrorMessage(getActivity(), e);
@@ -105,7 +105,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
                     apartmentNames.add(apartment.getName());
                 }
             } else {
-                apartmentNames.addAll(DatabaseHandler.getAllApartmentNames());
+                apartmentNames.addAll(DatabaseHandlerStatic.getAllApartmentNames());
             }
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);

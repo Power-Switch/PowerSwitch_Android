@@ -43,7 +43,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.event.SceneChangedEvent;
@@ -218,7 +218,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             return playStoreModeDataModel.getActiveApartment()
                     .getScenes();
         } else {
-            return DatabaseHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            return DatabaseHandlerStatic.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         }
     }
 

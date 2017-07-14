@@ -51,7 +51,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.alarm_clock.sleep_as_android.SleepAsAndroidHelper;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.AlarmEventActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -140,7 +140,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     actions.remove(position);
-                                    DatabaseHandler.setAlarmActions(currentEventType, actions);
+                                    DatabaseHandlerStatic.setAlarmActions(currentEventType, actions);
                                     StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                             R.string.action_removed,
                                             Snackbar.LENGTH_LONG);
@@ -285,7 +285,7 @@ public class SleepAsAndroidFragment extends RecyclerViewFragment<Action> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
             return playStoreModeDataModel.getAlarmActions(currentEventType);
         } else {
-            return DatabaseHandler.getAlarmActions(currentEventType);
+            return DatabaseHandlerStatic.getAlarmActions(currentEventType);
         }
     }
 

@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.Calendar;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.HistoryUpdatedEvent;
 import eu.power_switch.shared.log.LogHelper;
 import timber.log.Timber;
@@ -45,12 +45,12 @@ public class HistoryHelper {
     }
 
     public static void add(HistoryItem historyItem) throws Exception {
-        DatabaseHandler.addHistoryItem(historyItem);
+        DatabaseHandlerStatic.addHistoryItem(historyItem);
         notifyHistoryChanged();
     }
 
     public static void add(Context context, Exception e) throws Exception {
-        DatabaseHandler.addHistoryItem(new HistoryItem((long) -1,
+        DatabaseHandlerStatic.addHistoryItem(new HistoryItem((long) -1,
                 Calendar.getInstance(),
                 context.getString(R.string.unknown_error),
                 LogHelper.getStackTraceText(e)));

@@ -37,7 +37,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnItemMovedListener;
 import eu.power_switch.gui.adapter.OnStartDragListener;
@@ -138,7 +138,7 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
 
                 receivers.addAll(room.getReceivers());
 
-                List<Room> rooms = DatabaseHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                List<Room> rooms = DatabaseHandlerStatic.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
                 roomNames = new LinkedList<>();
                 for (Room currentRoom : rooms) {
                     roomNames.add(currentRoom.getName());

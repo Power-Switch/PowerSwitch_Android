@@ -21,7 +21,7 @@ package eu.power_switch.obj.button;
 import android.content.Context;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import lombok.Getter;
 import lombok.ToString;
@@ -82,7 +82,8 @@ public class Button {
             } else if (buttonId == DatabaseConstants.BUTTON_DOWN_ID) {
                 return context.getString(R.string.down);
             } else {
-                return DatabaseHandler.getButton(buttonId).getName();
+                return DatabaseHandlerStatic.getButton(buttonId)
+                        .getName();
             }
         } catch (Exception e) {
             Timber.e(e);

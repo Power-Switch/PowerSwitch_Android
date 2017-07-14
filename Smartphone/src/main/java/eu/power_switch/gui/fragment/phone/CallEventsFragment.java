@@ -42,7 +42,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.CallEventChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -244,7 +244,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             return playStoreModeDataModel.getCallEvents();
         } else {
-            return DatabaseHandler.getAllCallEvents();
+            return DatabaseHandlerStatic.getAllCallEvents();
         }
     }
 

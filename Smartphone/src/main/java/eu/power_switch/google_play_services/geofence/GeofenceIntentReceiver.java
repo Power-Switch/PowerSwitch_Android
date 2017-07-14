@@ -27,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import timber.log.Timber;
 
 /**
@@ -91,7 +91,7 @@ public class GeofenceIntentReceiver extends DaggerBroadcastReceiver {
 
 //                geofenceApiHandler.removeAllGeofences();
                 try {
-                    List<Geofence> geofences = DatabaseHandler.getAllGeofences(true);
+                    List<Geofence> geofences = DatabaseHandlerStatic.getAllGeofences(true);
                     for (Geofence geofence : geofences) {
                         geofenceApiHandler.addGeofence(geofence);
                     }

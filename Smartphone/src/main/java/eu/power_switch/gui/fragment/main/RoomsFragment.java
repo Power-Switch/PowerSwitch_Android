@@ -43,7 +43,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandler;
+import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.event.ReceiverChangedEvent;
@@ -252,7 +252,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
             long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
                 // Get Rooms and Receivers
-                return DatabaseHandler.getRooms(currentApartmentId);
+                return DatabaseHandlerStatic.getRooms(currentApartmentId);
             } else {
                 return new ArrayList<>();
             }
