@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.TimerChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -83,7 +82,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), timers);
+        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), persistanceHandler, timers);
         getRecyclerView().setAdapter(timerRecyclerViewAdapter);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
@@ -210,7 +209,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
             return playStoreModeDataModel.getTimers();
         } else {
-            return DatabaseHandlerStatic.getAllTimers();
+            return persistanceHandler.getAllTimers();
         }
     }
 

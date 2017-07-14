@@ -44,13 +44,15 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.event.ActionAddedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
@@ -116,6 +118,9 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
     @BindView(R.id.progressScene)
     ProgressBar progressScene;
 
+    @Inject
+    PersistanceHandler persistanceHandler;
+    
     @Getter
     @Setter
     private int requestCode;
@@ -317,7 +322,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
                 apartmentNames.clear();
 
                 try {
-                    ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandlerStatic.getAllApartments();
+                    ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistanceHandler.getAllApartments();
                     for (Apartment apartment : availableApartments) {
                         apartmentNames.add(apartment.getName());
                     }
@@ -538,7 +543,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
 
     private Apartment getSelectedApartment() {
         try {
-            return DatabaseHandlerStatic.getApartment(spinner_apartment.getSelectedItem()
+            return persistanceHandler.getApartment(spinner_apartment.getSelectedItem()
                     .toString());
         } catch (Exception e) {
             Timber.e(e);
@@ -628,7 +633,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
                 Timber.d(spinner_scene.getSelectedItem()
                         .toString());
 
-                Scene selectedScene = DatabaseHandlerStatic.getScene(spinner_scene.getSelectedItem()
+                Scene selectedScene = persistanceHandler.getScene(spinner_scene.getSelectedItem()
                         .toString());
 
                 action = new SceneAction(-1, currentApartment.getName(), selectedScene);

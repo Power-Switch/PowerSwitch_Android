@@ -35,7 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.timer.Timer;
@@ -48,15 +48,17 @@ import eu.power_switch.timer.alarm.AlarmHandler;
  * Created by Markus on 27.07.2015.
  */
 public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Timer> timers;
-    private Context          context;
+    private final PersistanceHandler persistanceHandler;
+    private       ArrayList<Timer>   timers;
+    private       Context            context;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public TimerRecyclerViewAdapter(Context context, ArrayList<Timer> timers) {
+    public TimerRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, ArrayList<Timer> timers) {
         this.timers = timers;
         this.context = context;
+        this.persistanceHandler = persistanceHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -149,10 +151,10 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            DatabaseHandlerStatic.enableTimer(timer.getId());
+                            persistanceHandler.enableTimer(timer.getId());
                             AlarmHandler.createAlarm(context, timer);
                         } else {
-                            DatabaseHandlerStatic.disableTimer(timer.getId());
+                            persistanceHandler.disableTimer(timer.getId());
                             AlarmHandler.cancelAlarm(context, timer);
                         }
                         timer.setActive(isChecked);

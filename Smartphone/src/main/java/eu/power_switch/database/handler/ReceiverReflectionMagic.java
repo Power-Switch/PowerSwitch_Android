@@ -20,11 +20,15 @@ package eu.power_switch.database.handler;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.gateway.Gateway;
@@ -37,40 +41,50 @@ import eu.power_switch.obj.receiver.UniversalReceiver;
 /**
  *
  */
-public abstract class ReceiverReflectionMagic {
+public class ReceiverReflectionMagic {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private ReceiverReflectionMagic() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    private Context                    context;
+    private ReceiverHandler            receiverHandler;
+    private MasterSlaveReceiverHandler masterSlaveReceiverHandler;
+    private DipHandler                 dipHandler;
+    private UniversalButtonHandler     universalButtonHandler;
+    private AutoPairHandler            autoPairHandler;
+
+    @Inject
+    public ReceiverReflectionMagic(Context context) {
+        this.context = context;
+
+        receiverHandler = new ReceiverHandler(this);
+        masterSlaveReceiverHandler = new MasterSlaveReceiverHandler();
+        dipHandler = new DipHandler();
+        universalButtonHandler = new UniversalButtonHandler();
+        autoPairHandler = new AutoPairHandler();
+
     }
 
     /**
      * Creates a Receiver based on a database cursor.
      *
-     * @param cursor  A database cursor with one element.
-     * @param context The application context for all database operations.
+     * @param cursor A database cursor with one element.
+     *
      * @return The complete Receiver object.
      */
-    public static Receiver fromDatabase(Context context, Cursor cursor) throws Exception {
-        Long id = cursor.getLong(0);
-        String name = cursor.getString(1);
-        String model = cursor.getString(2);
-        Receiver.Type type = Receiver.Type.getEnum(cursor.getString(3));
-        String className = cursor.getString(4);
-        Long roomId = cursor.getLong(5);
+    public Receiver fromDatabase(@NonNull SQLiteDatabase database, Cursor cursor) throws Exception {
+        Long          id        = cursor.getLong(0);
+        String        name      = cursor.getString(1);
+        String        model     = cursor.getString(2);
+        Receiver.Type type      = Receiver.Type.getEnum(cursor.getString(3));
+        String        className = cursor.getString(4);
+        Long          roomId    = cursor.getLong(5);
 
         int positionInRoom = -1;
         if (!cursor.isNull(6)) {
             positionInRoom = cursor.getInt(6);
         }
 
-        Long lastActivatedButtonId = cursor.getLong(7);
-        int repeatAmount = cursor.getInt(8);
-        List<Gateway> associatedGateways = ReceiverHandler.getAssociatedGateways(id);
+        Long          lastActivatedButtonId = cursor.getLong(7);
+        int           repeatAmount          = cursor.getInt(8);
+        List<Gateway> associatedGateways    = receiverHandler.getAssociatedGateways(database, id);
 
         Receiver receiver = null;
 
@@ -78,20 +92,20 @@ public abstract class ReceiverReflectionMagic {
 
         switch (type) {
             case MASTER_SLAVE:
-                Character channelMaster = MasterSlaveReceiverHandler.getMaster(id);
-                int channelSlave = MasterSlaveReceiverHandler.getSlave(id);
+                Character channelMaster = masterSlaveReceiverHandler.getMaster(database, id);
+                int channelSlave = masterSlaveReceiverHandler.getSlave(database, id);
                 receiver = (Receiver) constructor.newInstance(context, id, name, channelMaster, channelSlave, roomId, associatedGateways);
                 break;
             case DIPS:
-                LinkedList<Boolean> dips = DipHandler.getDips(id);
+                LinkedList<Boolean> dips = dipHandler.getDips(database, id);
                 receiver = (Receiver) constructor.newInstance(context, id, name, dips, roomId, associatedGateways);
                 break;
             case UNIVERSAL:
-                List<UniversalButton> buttons = UniversalButtonHandler.getUniversalButtons(id);
+                List<UniversalButton> buttons = universalButtonHandler.getUniversalButtons(database, id);
                 receiver = (Receiver) constructor.newInstance(context, id, name, buttons, roomId, associatedGateways);
                 break;
             case AUTOPAIR:
-                long seed = AutoPairHandler.getSeed(id);
+                long seed = autoPairHandler.getSeed(database, id);
                 receiver = (Receiver) constructor.newInstance(context, id, name, seed, roomId, associatedGateways);
                 break;
         }
@@ -109,21 +123,22 @@ public abstract class ReceiverReflectionMagic {
      *
      * @param className Class name
      * @param type      type of Receiver
+     *
      * @return Constructor
+     *
      * @throws ClassNotFoundException
      * @throws NoSuchMethodException
      * @throws IllegalArgumentException
      */
-    public static Constructor<?> getConstructor(String className, Receiver.Type type) throws ClassNotFoundException,
-            NoSuchMethodException, IllegalArgumentException {
+    public Constructor<?> getConstructor(String className,
+                                         Receiver.Type type) throws ClassNotFoundException, NoSuchMethodException, IllegalArgumentException {
         Class<?> myClass = Class.forName(className);
 
         switch (type) {
             case DIPS:
                 return myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class, List.class);
             case MASTER_SLAVE:
-                return myClass.getConstructor(Context.class, Long.class, String.class, char.class, int.class,
-                        Long.class, List.class);
+                return myClass.getConstructor(Context.class, Long.class, String.class, char.class, int.class, Long.class, List.class);
             case UNIVERSAL:
                 return myClass.getConstructor(Context.class, Long.class, String.class, List.class, Long.class, List.class);
             case AUTOPAIR:
@@ -137,11 +152,12 @@ public abstract class ReceiverReflectionMagic {
      * Gives you the type of a Receiver based on its java path.
      *
      * @param javaPath The java path of the Receiver.
+     *
      * @return The type of the Receiver or null if unknown.
      */
-    public static Receiver.Type getType(String javaPath) throws ClassNotFoundException {
+    public Receiver.Type getType(String javaPath) throws ClassNotFoundException {
 
-        Class<?> myClass = Class.forName(javaPath);
+        Class<?>   myClass               = Class.forName(javaPath);
         Class<?>[] implementedInterfaces = myClass.getInterfaces();
 
         for (Class<?> someClass : implementedInterfaces) {
@@ -163,38 +179,49 @@ public abstract class ReceiverReflectionMagic {
     /**
      * Get an empty dummy Receiver just by providing the class path
      *
-     * @param context  any suitable context
      * @param javaPath path to class
+     *
      * @return Receiver object
      */
-    public static Receiver getDummy(Context context, String javaPath) throws Exception {
-        long dummyReceiverId = 0;
+    public Receiver getDummy(String javaPath) throws Exception {
+        long   dummyReceiverId   = 0;
         String dummyReceiverName = "dummy";
 
-        Class<?> myClass = Class.forName(javaPath);
+        Class<?>   myClass               = Class.forName(javaPath);
         Class<?>[] implementedInterfaces = myClass.getInterfaces();
 
         for (Class<?> someClass : implementedInterfaces) {
             if (someClass.equals(MasterSlaveReceiver.class)) {
-                Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, char
-                        .class, int.class, Long.class, List.class);
-                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, 'A', 0,
-                        null, new ArrayList<Gateway>());
+                Constructor<?> constructor = myClass.getConstructor(Context.class,
+                        Long.class,
+                        String.class,
+                        char.class,
+                        int.class,
+                        Long.class,
+                        List.class);
+                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, 'A', 0, null, new ArrayList<Gateway>());
             } else if (someClass.equals(DipReceiver.class)) {
                 Constructor<?> constructor;
                 constructor = myClass.getConstructor(Context.class, Long.class, String.class, LinkedList.class, Long.class, List.class);
-                return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, new
-                        LinkedList<Boolean>(), null, new ArrayList<Gateway>());
+                return (Receiver) constructor.newInstance(context,
+                        dummyReceiverId,
+                        dummyReceiverName,
+                        new LinkedList<Boolean>(),
+                        null,
+                        new ArrayList<Gateway>());
             } else if (someClass.equals(AutoPairReceiver.class)) {
-                Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, long
-                        .class, Long.class, List.class);
+                Constructor<?> constructor = myClass.getConstructor(Context.class, Long.class, String.class, long.class, Long.class, List.class);
                 return (Receiver) constructor.newInstance(context, dummyReceiverId, dummyReceiverName, -1, null, new ArrayList<Gateway>());
             }
         }
 
         if (myClass.equals(UniversalReceiver.class)) {
-            return new UniversalReceiver(context, dummyReceiverId, dummyReceiverName, new
-                    LinkedList<UniversalButton>(), null, new ArrayList<Gateway>());
+            return new UniversalReceiver(context,
+                    dummyReceiverId,
+                    dummyReceiverName,
+                    new LinkedList<UniversalButton>(),
+                    null,
+                    new ArrayList<Gateway>());
         }
 
         throw new RuntimeException("Unknown Receiver");

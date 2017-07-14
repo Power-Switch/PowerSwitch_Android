@@ -34,9 +34,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -60,6 +62,9 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
 
     @BindView(R.id.button_widgetSave)
     Button buttonSave;
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     private List<Apartment> apartmentList = new ArrayList<>();
     private List<Room>      roomList      = new ArrayList<>();
@@ -135,7 +140,7 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
             @Override
             protected List<Apartment> doInBackground(Void... params) {
                 try {
-                    return DatabaseHandlerStatic.getAllApartments();
+                    return persistanceHandler.getAllApartments();
                 } catch (Exception e) {
                     return new ArrayList<>();
                 }
@@ -178,7 +183,7 @@ public class ConfigureRoomWidgetActivity extends ButterKnifeDialogActivity {
                 // save new widget data to database
                 RoomWidget roomWidget = new RoomWidget(appWidgetId, room.getId());
                 try {
-                    DatabaseHandlerStatic.addRoomWidget(roomWidget);
+                    persistanceHandler.addRoomWidget(roomWidget);
                 } catch (Exception e) {
                     Timber.e(e);
                 }

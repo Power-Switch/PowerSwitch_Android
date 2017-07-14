@@ -40,8 +40,11 @@ import timber.log.Timber;
 @Singleton
 class GeofenceActionHandler {
 
+    private ActionHandler actionHandler;
+
     @Inject
     GeofenceActionHandler() {
+        actionHandler = new ActionHandler();
     }
 
     /**
@@ -58,7 +61,7 @@ class GeofenceActionHandler {
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = ActionHandler.add(database, actions);
+        ArrayList<Long> actionIds = actionHandler.add(database, actions);
 
         // add geofence <-> action relation
         for (Long actionId : actionIds) {
@@ -80,7 +83,7 @@ class GeofenceActionHandler {
         ArrayList<Action> actions = get(database, geofenceId);
 
         for (Action action : actions) {
-            ActionHandler.delete(database, action.getId());
+            actionHandler.delete(database, action.getId());
         }
     }
 
@@ -106,7 +109,7 @@ class GeofenceActionHandler {
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(1);
-            actions.add(ActionHandler.get(database, actionId));
+            actions.add(actionHandler.get(database, actionId));
             cursor.moveToNext();
         }
 
@@ -136,7 +139,7 @@ class GeofenceActionHandler {
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(1);
-            actions.add(ActionHandler.get(database, actionId));
+            actions.add(actionHandler.get(database, actionId));
             cursor.moveToNext();
         }
 

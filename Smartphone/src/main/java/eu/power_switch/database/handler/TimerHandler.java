@@ -29,9 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.timer.TimerTable;
 import eu.power_switch.database.table.timer.TimerWeekdayTable;
@@ -43,11 +40,15 @@ import eu.power_switch.timer.alarm.AlarmHandler;
 /**
  * Provides database methods for managing Timers
  */
-@Singleton
 class TimerHandler {
 
-    @Inject
+    private ActionHandler      actionHandler;
+    private TimerActionHandler timerActionHandler;
+    private AlarmHandler       alarmHandler;
+
     TimerHandler() {
+        actionHandler = new ActionHandler();
+        timerActionHandler = new TimerActionHandler();
     }
 
     /**
@@ -71,17 +72,17 @@ class TimerHandler {
         if (timerId > -1) {
             if (timer.getExecutionType()
                     .equals(Timer.EXECUTION_TYPE_WEEKDAY)) {
-                insertWeekdayDetails((WeekdayTimer) timer, timerId);
+                insertWeekdayDetails(database, (WeekdayTimer) timer, timerId);
             }
 
-            TimerActionHandler.add(timer.getActions(), timerId);
+            timerActionHandler.add(database, timer.getActions(), timerId);
         } else {
             // throw exception
             throw new RuntimeException();
         }
 
         // activate alarm
-        AlarmHandler.createAlarm(DatabaseHandlerStatic.context, get(timerId));
+        alarmHandler.createAlarm(get(database, timerId));
         return timerId;
     }
 
@@ -101,11 +102,11 @@ class TimerHandler {
      * @param timerId ID of Timer
      */
     protected void delete(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
-        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(timerId));
+        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(database, timerId));
 
-        TimerActionHandler.delete(timerId);
+        timerActionHandler.delete(database, timerId);
 
-        deleteWeekdayDetails(timerId);
+        deleteWeekdayDetails(database, timerId);
 
         database.delete(TimerTable.TABLE_NAME, TimerTable.COLUMN_ID + "=" + timerId, null);
     }
@@ -120,11 +121,11 @@ class TimerHandler {
      * @param timer new Timer Object with same ID as existing one
      */
     protected void update(@NonNull SQLiteDatabase database, Timer timer) throws Exception {
-        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(timer.getId()));
+        AlarmHandler.cancelAlarm(DatabaseHandlerStatic.context, get(database, timer.getId()));
 
-        TimerActionHandler.update(timer);
+        timerActionHandler.update(database, timer);
 
-        deleteWeekdayDetails(timer.getId());
+        deleteWeekdayDetails(database, timer.getId());
 
         ContentValues values = new ContentValues();
         values.put(TimerTable.COLUMN_ACTIVE, timer.isActive());
@@ -139,7 +140,7 @@ class TimerHandler {
         database.update(TimerTable.TABLE_NAME, values, TimerTable.COLUMN_ID + "=" + timer.getId(), null);
 
         if (Timer.EXECUTION_TYPE_WEEKDAY.equals(timer.getExecutionType())) {
-            insertWeekdayDetails((WeekdayTimer) timer, timer.getId());
+            insertWeekdayDetails(database, (WeekdayTimer) timer, timer.getId());
         }
 
         // activate new alarm if timer is active
@@ -157,12 +158,12 @@ class TimerHandler {
      */
     @NonNull
     protected Timer get(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
-        Timer timer = null;
+        Timer  timer  = null;
         Cursor cursor = database.query(TimerTable.TABLE_NAME, TimerTable.ALL_COLUMNS, TimerTable.COLUMN_ID + "=" + timerId, null, null, null, null);
         cursor.moveToFirst();
 
         if (cursor.moveToFirst()) {
-            timer = dbToTimer(cursor);
+            timer = dbToTimer(database, cursor);
         } else {
             cursor.close();
             throw new NoSuchElementException(String.valueOf(String.valueOf(timerId)));
@@ -183,7 +184,7 @@ class TimerHandler {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            timers.add(dbToTimer(cursor));
+            timers.add(dbToTimer(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -209,7 +210,7 @@ class TimerHandler {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            timers.add(dbToTimer(cursor));
+            timers.add(dbToTimer(database, cursor));
             cursor.moveToNext();
         }
         cursor.close();
@@ -259,10 +260,10 @@ class TimerHandler {
         long   executionInterval = c.getLong(4);
         String executionType     = c.getString(5);
 
-        ArrayList<Action> actions = TimerActionHandler.getByTimerId(timerId);
+        ArrayList<Action> actions = timerActionHandler.getByTimerId(database, timerId);
 
         if (executionType.equals(Timer.EXECUTION_TYPE_WEEKDAY)) {
-            ArrayList<WeekdayTimer.Day> weekdays = getWeekdayDetails(timerId);
+            ArrayList<WeekdayTimer.Day> weekdays = getWeekdayDetails(database, timerId);
 
             return new WeekdayTimer(timerId, active, name, executionTime, randomizerValue, weekdays, actions);
         } else if (executionType.equals(Timer.EXECUTION_TYPE_INTERVAL)) {
@@ -273,7 +274,7 @@ class TimerHandler {
     }
 
     private ArrayList<WeekdayTimer.Day> getWeekdayDetails(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
-        return getExecutionDays(timerId);
+        return getExecutionDays(database, timerId);
     }
 
     private ArrayList<WeekdayTimer.Day> getExecutionDays(@NonNull SQLiteDatabase database, Long timerId) throws Exception {

@@ -47,6 +47,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.api.taskerplugin.bundle.BundleScrubber;
@@ -54,7 +56,7 @@ import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
 import eu.power_switch.api.taskerplugin.gui.AbstractPluginActivity;
 import eu.power_switch.api.taskerplugin.gui.SelectVariableDialog;
 import eu.power_switch.api.taskerplugin.tasker_api.TaskerPlugin;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.event.VariableSelectedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -76,6 +78,9 @@ import timber.log.Timber;
  * Created by Markus on 22.02.2016.
  */
 public class EditActivity extends AbstractPluginActivity {
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override
@@ -169,7 +174,7 @@ public class EditActivity extends AbstractPluginActivity {
         radioButtonSceneAction.setOnClickListener(actionTypeOnClickListener);
 
         try {
-            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) DatabaseHandlerStatic.getAllApartments();
+            ArrayList<Apartment> availableApartments = (ArrayList<Apartment>) persistanceHandler.getAllApartments();
             for (Apartment apartment : availableApartments) {
                 apartmentNames.add(apartment.getName());
             }
@@ -732,7 +737,7 @@ public class EditActivity extends AbstractPluginActivity {
     }
 
     private Apartment getSelectedApartment() throws Exception {
-        return DatabaseHandlerStatic.getApartment(getApartmentName());
+        return persistanceHandler.getApartment(getApartmentName());
     }
 
     private Room getSelectedRoom() throws Exception {
@@ -980,7 +985,11 @@ public class EditActivity extends AbstractPluginActivity {
 
             if (TaskerPlugin.Setting.hostSupportsOnFireVariableReplacement(this)) {
                 TaskerPlugin.Setting.setVariableReplaceKeys(resultBundle,
-                        new String[]{ApiConstants.KEY_APARTMENT, ApiConstants.KEY_ROOM, ApiConstants.KEY_RECEIVER, ApiConstants.KEY_BUTTON, ApiConstants.KEY_SCENE});
+                        new String[]{ApiConstants.KEY_APARTMENT,
+                                     ApiConstants.KEY_ROOM,
+                                     ApiConstants.KEY_RECEIVER,
+                                     ApiConstants.KEY_BUTTON,
+                                     ApiConstants.KEY_SCENE});
             }
 
             resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
@@ -993,6 +1002,7 @@ public class EditActivity extends AbstractPluginActivity {
     }
 
     private enum InputType {
-        LIST, MANUAL
+        LIST,
+        MANUAL
     }
 }

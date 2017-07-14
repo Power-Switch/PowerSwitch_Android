@@ -53,8 +53,6 @@ import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.SceneWidget;
 import timber.log.Timber;
 
-import static eu.power_switch.database.handler.DatabaseHandlerStatic.database;
-
 /**
  * This class handles all database related operations used anywhere in the app.
  * It has to be initialized before it can be used but this has to be done only once per App launch. Multiple
@@ -67,7 +65,49 @@ import static eu.power_switch.database.handler.DatabaseHandlerStatic.database;
 public final class PersistanceHandler {
 
     @Inject
-    GeofenceHandler geofenceHandler;
+    ActionHandler               actionHandler;
+    @Inject
+    ApartmentHandler            apartmentHandler;
+    @Inject
+    AlarmClockHandler           alarmClockHandler;
+    @Inject
+    CallEventActionHandler      callEventActionHandler;
+    @Inject
+    CallEventHandler            callEventHandler;
+    @Inject
+    CallEventPhoneNumberHandler callEventPhoneNumberHandler;
+    @Inject
+    DipHandler                  dipHandler;
+    @Inject
+    GatewayHandler              gatewayHandler;
+    @Inject
+    GeofenceActionHandler       geofenceActionHandler;
+    @Inject
+    GeofenceHandler             geofenceHandler;
+    @Inject
+    HistoryHandler              historyHandler;
+    @Inject
+    MasterSlaveReceiverHandler  masterSlaveReceiverHandler;
+    @Inject
+    PhoneNumberHandler          phoneNumberHandler;
+    @Inject
+    ReceiverHandler             receiverHandler;
+    @Inject
+    RoomHandler                 roomHandler;
+    @Inject
+    SceneHandler                sceneHandler;
+    @Inject
+    SceneItemHandler            sceneItemHandler;
+    @Inject
+    SleepAsAndroidHandler       sleepAsAndroidHandler;
+    @Inject
+    TimerActionHandler          timerActionHandler;
+    @Inject
+    TimerHandler                timerHandler;
+    @Inject
+    UniversalButtonHandler      universalButtonHandler;
+    @Inject
+    WidgetHandler               widgetHandler;
 
     /**
      * Database helper for opening/closing Database Files
@@ -148,16 +188,16 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public long addApartment(Apartment apartment) throws Exception {
-        openWritable();
-        long id = -1;
+        SQLiteDatabase database = openWritable();
+        long           id       = -1;
         try {
-            id = ApartmentHandler.add(apartment);
+            id = apartmentHandler.add(database, apartment);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
 
         return id;
@@ -170,15 +210,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteApartment(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            ApartmentHandler.delete(id);
+            apartmentHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -189,15 +229,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateApartment(Apartment apartment) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            ApartmentHandler.update(apartment);
+            apartmentHandler.update(database, apartment);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -211,15 +251,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Apartment getApartment(String name) throws Exception {
-        openReadable();
-        Apartment apartment = null;
+        SQLiteDatabase database  = openReadable();
+        Apartment      apartment = null;
         try {
-            apartment = ApartmentHandler.get(name);
+            apartment = apartmentHandler.get(database, name);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartment;
     }
@@ -234,15 +274,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Apartment getApartmentCaseInsensitive(String name) throws Exception {
-        openReadable();
-        Apartment apartment = null;
+        SQLiteDatabase database  = openReadable();
+        Apartment      apartment = null;
         try {
-            apartment = ApartmentHandler.getCaseInsensitive(name);
+            apartment = apartmentHandler.getCaseInsensitive(database, name);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartment;
     }
@@ -257,15 +297,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Apartment getApartment(Long id) throws Exception {
-        openReadable();
-        Apartment apartment = null;
+        SQLiteDatabase database  = openReadable();
+        Apartment      apartment = null;
         try {
-            apartment = ApartmentHandler.get(id);
+            apartment = apartmentHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartment;
     }
@@ -280,15 +320,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Long getApartmentId(String name) throws Exception {
-        openReadable();
-        Long apartmentId = null;
+        SQLiteDatabase database    = openReadable();
+        Long           apartmentId = null;
         try {
-            apartmentId = ApartmentHandler.getId(name);
+            apartmentId = apartmentHandler.getId(database, name);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartmentId;
     }
@@ -303,15 +343,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public String getApartmentName(Long id) throws Exception {
-        openReadable();
-        String apartmentName = null;
+        SQLiteDatabase database      = openReadable();
+        String         apartmentName = null;
         try {
-            apartmentName = ApartmentHandler.getName(id);
+            apartmentName = apartmentHandler.getName(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartmentName;
     }
@@ -326,15 +366,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<String> getAllApartmentNames() throws Exception {
-        openReadable();
-        List<String> apartmentNames = new ArrayList<>();
+        SQLiteDatabase database       = openReadable();
+        List<String>   apartmentNames = new ArrayList<>();
         try {
-            apartmentNames = ApartmentHandler.getAllNames();
+            apartmentNames = apartmentHandler.getAllNames(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartmentNames;
     }
@@ -349,15 +389,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Apartment> getAllApartments() throws Exception {
-        openReadable();
+        SQLiteDatabase  database   = openReadable();
         List<Apartment> apartments = new ArrayList<>();
         try {
-            apartments = ApartmentHandler.getAll();
+            apartments = apartmentHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartments;
     }
@@ -372,15 +412,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Apartment> getAssociatedApartments(long gatewayId) throws Exception {
-        openReadable();
+        SQLiteDatabase  database   = openReadable();
         List<Apartment> apartments = new ArrayList<>();
         try {
-            apartments = ApartmentHandler.getAssociated(gatewayId);
+            apartments = apartmentHandler.getAssociated(database, gatewayId);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartments;
     }
@@ -395,15 +435,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Apartment getContainingApartment(Receiver receiver) throws Exception {
-        openReadable();
-        Apartment apartment = null;
+        SQLiteDatabase database  = openReadable();
+        Apartment      apartment = null;
         try {
-            apartment = ApartmentHandler.get(receiver);
+            apartment = apartmentHandler.get(database, receiver);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartment;
     }
@@ -418,15 +458,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Apartment getContainingApartment(Room room) throws Exception {
-        openReadable();
-        Apartment apartment = null;
+        SQLiteDatabase database  = openReadable();
+        Apartment      apartment = null;
         try {
-            apartment = ApartmentHandler.get(room);
+            apartment = apartmentHandler.get(database, room);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartment;
     }
@@ -441,15 +481,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Apartment getContainingApartment(Scene scene) throws Exception {
-        openReadable();
-        Apartment apartment = null;
+        SQLiteDatabase database  = openReadable();
+        Apartment      apartment = null;
         try {
-            apartment = ApartmentHandler.get(scene);
+            apartment = apartmentHandler.get(database, scene);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return apartment;
     }
@@ -471,16 +511,16 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public long addRoom(Room room) throws Exception {
-        openWritable();
-        long id = -1;
+        SQLiteDatabase database = openWritable();
+        long           id       = -1;
         try {
-            id = RoomHandler.add(room);
+            id = roomHandler.add(database, room);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
 
         return id;
@@ -494,15 +534,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateRoom(Long id, String newName, List<Gateway> associatedGateways) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            RoomHandler.update(id, newName, associatedGateways);
+            roomHandler.update(database, id, newName, associatedGateways);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -514,15 +554,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateRoomCollapsed(Long id, boolean isCollapsed) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            RoomHandler.updateCollapsed(id, isCollapsed);
+            roomHandler.updateCollapsed(database, id, isCollapsed);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -534,15 +574,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void setPositionOfRoom(Long roomId, Long position) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            RoomHandler.setPosition(roomId, position);
+            roomHandler.setPosition(database, roomId, position);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -553,15 +593,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteRoom(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            RoomHandler.delete(id);
+            roomHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -575,15 +615,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Room getRoom(String name) throws Exception {
-        openReadable();
-        Room room = null;
+        SQLiteDatabase database = openReadable();
+        Room           room     = null;
         try {
-            room = RoomHandler.get(name);
+            room = roomHandler.get(database, name);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return room;
     }
@@ -598,15 +638,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Room getRoomCaseInsensitive(String name) throws Exception {
-        openReadable();
-        Room room = null;
+        SQLiteDatabase database = openReadable();
+        Room           room     = null;
         try {
-            room = RoomHandler.getCaseInsensitive(name);
+            room = roomHandler.getCaseInsensitive(database, name);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return room;
     }
@@ -621,15 +661,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Room getRoom(Long id) throws Exception {
-        openReadable();
-        Room room = null;
+        SQLiteDatabase database = openReadable();
+        Room           room     = null;
         try {
-            room = RoomHandler.get(id);
+            room = roomHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return room;
     }
@@ -642,15 +682,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Room> getAllRooms() throws Exception {
-        openReadable();
-        List<Room> rooms = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Room>     rooms    = new ArrayList<>();
         try {
-            rooms = RoomHandler.getAll();
+            rooms = roomHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return rooms;
     }
@@ -663,15 +703,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Room> getRooms(Long apartmentId) throws Exception {
-        openReadable();
-        List<Room> rooms = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Room>     rooms    = new ArrayList<>();
         try {
-            rooms = RoomHandler.getByApartment(apartmentId);
+            rooms = roomHandler.getByApartment(database, apartmentId);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return rooms;
     }
@@ -684,15 +724,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public ArrayList<Long> getRoomIds(Long apartmentId) throws Exception {
-        openReadable();
-        ArrayList<Long> roomIds = new ArrayList<>();
+        SQLiteDatabase  database = openReadable();
+        ArrayList<Long> roomIds  = new ArrayList<>();
         try {
-            roomIds = RoomHandler.getIdsByApartment(apartmentId);
+            roomIds = roomHandler.getIdsByApartment(database, apartmentId);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return roomIds;
     }
@@ -712,15 +752,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void addReceiver(Receiver receiver) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            ReceiverHandler.add(receiver);
+            receiverHandler.add(database, receiver);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -731,15 +771,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateReceiver(Receiver receiver) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            ReceiverHandler.update(receiver);
+            receiverHandler.update(database, receiver);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -753,15 +793,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Receiver getReceiver(Long id) throws Exception {
-        openReadable();
-        Receiver receiver = null;
+        SQLiteDatabase database = openReadable();
+        Receiver       receiver = null;
         try {
-            receiver = ReceiverHandler.get(id);
+            receiver = receiverHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return receiver;
     }
@@ -776,15 +816,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Receiver> getReceiverByRoomId(Long id) throws Exception {
-        openReadable();
+        SQLiteDatabase database  = openReadable();
         List<Receiver> receivers = new ArrayList<>();
         try {
-            receivers = ReceiverHandler.getByRoom(id);
+            receivers = receiverHandler.getByRoom(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return receivers;
     }
@@ -800,15 +840,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Receiver getReceiverByRoomId(Long roomId, String receiverName) throws Exception {
-        openReadable();
-        Receiver receiver = null;
+        SQLiteDatabase database = openReadable();
+        Receiver       receiver = null;
         try {
-            receiver = ReceiverHandler.getByRoom(roomId, receiverName);
+            receiver = receiverHandler.getByRoom(database, roomId, receiverName);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return receiver;
     }
@@ -821,15 +861,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void setPositionOfReceiver(Long receiverId, Long position) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            ReceiverHandler.setPositionInRoom(receiverId, position);
+            receiverHandler.setPositionInRoom(database, receiverId, position);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -841,15 +881,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Receiver> getAllReceivers() throws Exception {
-        openReadable();
+        SQLiteDatabase database  = openReadable();
         List<Receiver> receivers = new ArrayList<>();
         try {
-            receivers = ReceiverHandler.getAll();
+            receivers = receiverHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return receivers;
     }
@@ -861,15 +901,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteReceiver(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            ReceiverHandler.delete(id);
+            receiverHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -883,15 +923,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Button getButton(Long id) throws Exception {
-        openReadable();
-        Button button = null;
+        SQLiteDatabase database = openReadable();
+        Button         button   = null;
         try {
-            button = UniversalButtonHandler.getUniversalButton(id);
+            button = universalButtonHandler.getUniversalButton(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return button;
     }
@@ -906,15 +946,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<UniversalButton> getButtons(Long receiverId) throws Exception {
-        openReadable();
-        List<UniversalButton> buttons = new ArrayList<>();
+        SQLiteDatabase        database = openReadable();
+        List<UniversalButton> buttons  = new ArrayList<>();
         try {
-            buttons = UniversalButtonHandler.getUniversalButtons(receiverId);
+            buttons = universalButtonHandler.getUniversalButtons(database, receiverId);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return buttons;
     }
@@ -927,15 +967,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void setLastActivatedButtonId(Long receiverId, Long buttonId) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            ReceiverHandler.setLastActivatedButtonId(receiverId, buttonId);
+            receiverHandler.setLastActivatedButtonId(database, receiverId, buttonId);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -954,15 +994,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void addScene(Scene scene) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            SceneHandler.add(scene);
+            sceneHandler.add(database, scene);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -973,15 +1013,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateScene(Scene scene) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            SceneHandler.update(scene);
+            sceneHandler.update(database, scene);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -992,15 +1032,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteScene(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            SceneHandler.delete(id);
+            sceneHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1014,15 +1054,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Scene getScene(String name) throws Exception {
-        openReadable();
-        Scene scene = null;
+        SQLiteDatabase database = openReadable();
+        Scene          scene    = null;
         try {
-            scene = SceneHandler.get(name);
+            scene = sceneHandler.get(database, name);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return scene;
     }
@@ -1037,15 +1077,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Scene getScene(Long id) throws Exception {
-        openReadable();
-        Scene scene = null;
+        SQLiteDatabase database = openReadable();
+        Scene          scene    = null;
         try {
-            scene = SceneHandler.get(id);
+            scene = sceneHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return scene;
     }
@@ -1058,15 +1098,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Scene> getScenes(Long apartmentId) throws Exception {
-        openReadable();
-        List<Scene> scenes = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Scene>    scenes   = new ArrayList<>();
         try {
-            scenes = SceneHandler.getByApartment(apartmentId);
+            scenes = sceneHandler.getByApartment(database, apartmentId);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return scenes;
     }
@@ -1079,15 +1119,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Scene> getAllScenes() throws Exception {
-        openReadable();
-        List<Scene> scenes = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Scene>    scenes   = new ArrayList<>();
         try {
-            scenes = SceneHandler.getAll();
+            scenes = sceneHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return scenes;
     }
@@ -1111,10 +1151,10 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public long addGateway(Gateway gateway) throws Exception {
-        openWritable();
-        long id;
+        SQLiteDatabase database = openWritable();
+        long           id;
         try {
-            id = GatewayHandler.add(gateway);
+            id = gatewayHandler.add(database, gateway);
             database.setTransactionSuccessful();
         } catch (GatewayAlreadyExistsException e) {
             throw e;
@@ -1122,7 +1162,7 @@ public final class PersistanceHandler {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return id;
     }
@@ -1134,15 +1174,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void enableGateway(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GatewayHandler.enable(id);
+            gatewayHandler.enable(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1153,15 +1193,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void disableGateway(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GatewayHandler.disable(id);
+            gatewayHandler.disable(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1179,15 +1219,15 @@ public final class PersistanceHandler {
     @WorkerThread
     public void updateGateway(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort,
                               Set<String> ssids) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GatewayHandler.update(id, name, model, localAddress, localPort, wanAddress, wanPort, ssids);
+            gatewayHandler.update(database, id, name, model, localAddress, localPort, wanAddress, wanPort, ssids);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1198,15 +1238,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteGateway(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GatewayHandler.delete(id);
+            gatewayHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1220,15 +1260,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Gateway getGateway(Long id) throws Exception {
-        openReadable();
-        Gateway gateway = null;
+        SQLiteDatabase database = openReadable();
+        Gateway        gateway  = null;
         try {
-            gateway = GatewayHandler.get(id);
+            gateway = gatewayHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return gateway;
     }
@@ -1241,15 +1281,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Gateway> getAllGateways() throws Exception {
-        openReadable();
-        List<Gateway> gateways = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Gateway>  gateways = new ArrayList<>();
         try {
-            gateways = GatewayHandler.getAll();
+            gateways = gatewayHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return gateways;
     }
@@ -1264,15 +1304,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Gateway> getAllGateways(boolean isActive) throws Exception {
-        openReadable();
-        List<Gateway> gateways = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Gateway>  gateways = new ArrayList<>();
         try {
-            gateways = GatewayHandler.getAll(isActive);
+            gateways = gatewayHandler.getAll(database, isActive);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return gateways;
     }
@@ -1286,15 +1326,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public boolean isAssociatedWithAnyApartment(Gateway gateway) throws Exception {
-        openReadable();
-        boolean isAssociatedWithApartment = false;
+        SQLiteDatabase database                  = openReadable();
+        boolean        isAssociatedWithApartment = false;
         try {
-            isAssociatedWithApartment = GatewayHandler.isAssociatedWithAnyApartment(gateway.getId());
+            isAssociatedWithApartment = gatewayHandler.isAssociatedWithAnyApartment(database, gateway.getId());
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return isAssociatedWithApartment;
     }
@@ -1314,15 +1354,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void addReceiverWidget(ReceiverWidget receiverWidget) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            WidgetHandler.addReceiverWidget(receiverWidget);
+            widgetHandler.addReceiverWidget(database, receiverWidget);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1333,15 +1373,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteReceiverWidget(int id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            WidgetHandler.deleteReceiverWidget(id);
+            widgetHandler.deleteReceiverWidget(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1353,15 +1393,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public ReceiverWidget getReceiverWidget(int id) throws Exception {
-        openReadable();
+        SQLiteDatabase database       = openReadable();
         ReceiverWidget receiverWidget = null;
         try {
-            receiverWidget = WidgetHandler.getReceiverWidget(id);
+            receiverWidget = widgetHandler.getReceiverWidget(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return receiverWidget;
     }
@@ -1373,15 +1413,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void addRoomWidget(RoomWidget roomWidget) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            WidgetHandler.addRoomWidget(roomWidget);
+            widgetHandler.addRoomWidget(database, roomWidget);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1392,15 +1432,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteRoomWidget(int id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            WidgetHandler.deleteRoomWidget(id);
+            widgetHandler.deleteRoomWidget(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1412,15 +1452,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public RoomWidget getRoomWidget(int id) throws Exception {
-        openReadable();
-        RoomWidget roomWidget = null;
+        SQLiteDatabase database   = openReadable();
+        RoomWidget     roomWidget = null;
         try {
-            roomWidget = WidgetHandler.getRoomWidget(id);
+            roomWidget = widgetHandler.getRoomWidget(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return roomWidget;
     }
@@ -1432,15 +1472,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void addSceneWidget(SceneWidget sceneWidget) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            WidgetHandler.addSceneWidget(sceneWidget);
+            widgetHandler.addSceneWidget(database, sceneWidget);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1451,15 +1491,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteSceneWidget(int id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            WidgetHandler.deleteSceneWidget(id);
+            widgetHandler.deleteSceneWidget(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1471,16 +1511,16 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public SceneWidget getSceneWidget(int id) throws Exception {
-        openWritable();
-        SceneWidget sceneWidget = null;
+        SQLiteDatabase database    = openWritable();
+        SceneWidget    sceneWidget = null;
         try {
-            sceneWidget = WidgetHandler.getSceneWidget(id);
+            sceneWidget = widgetHandler.getSceneWidget(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return sceneWidget;
     }
@@ -1496,15 +1536,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Timer getTimer(Long id) throws Exception {
-        openReadable();
-        Timer timer = null;
+        SQLiteDatabase database = openReadable();
+        Timer          timer    = null;
         try {
-            timer = TimerHandler.get(id);
+            timer = timerHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return timer;
     }
@@ -1517,15 +1557,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Timer> getAllTimers() throws Exception {
-        openReadable();
-        List<Timer> timers = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Timer>    timers   = new ArrayList<>();
         try {
-            timers = TimerHandler.getAll();
+            timers = timerHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return timers;
     }
@@ -1540,15 +1580,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Timer> getAllTimers(boolean isActive) throws Exception {
-        openReadable();
-        List<Timer> timers = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Timer>    timers   = new ArrayList<>();
         try {
-            timers = TimerHandler.getAll(isActive);
+            timers = timerHandler.getAll(database, isActive);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return timers;
     }
@@ -1560,16 +1600,16 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public long addTimer(Timer timer) throws Exception {
-        openWritable();
-        long id = -1;
+        SQLiteDatabase database = openWritable();
+        long           id       = -1;
         try {
-            id = TimerHandler.add(timer);
+            id = timerHandler.add(database, timer);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
 
         return id;
@@ -1582,15 +1622,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void enableTimer(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            TimerHandler.enable(id);
+            timerHandler.enable(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1601,15 +1641,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void disableTimer(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            TimerHandler.disable(id);
+            timerHandler.disable(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1620,15 +1660,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteTimer(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            TimerHandler.delete(id);
+            timerHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1639,15 +1679,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateTimer(Timer timer) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            TimerHandler.update(timer);
+            timerHandler.update(database, timer);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1669,15 +1709,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Action> getAlarmActions(AlarmClockConstants.Event event) throws Exception {
-        openReadable();
-        List<Action> actions = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Action>   actions  = new ArrayList<>();
         try {
-            actions = AlarmClockHandler.getAlarmActions(event);
+            actions = alarmClockHandler.getAlarmActions(database, event);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return actions;
     }
@@ -1690,15 +1730,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void setAlarmActions(AlarmClockConstants.Event event, ArrayList<Action> actions) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            AlarmClockHandler.setAlarmActions(event, actions);
+            alarmClockHandler.setAlarmActions(database, event, actions);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1720,15 +1760,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Action> getAlarmActions(SleepAsAndroidConstants.Event event) throws Exception {
-        openReadable();
-        List<Action> actions = new ArrayList<>();
+        SQLiteDatabase database = openReadable();
+        List<Action>   actions  = new ArrayList<>();
         try {
-            actions = SleepAsAndroidHandler.getAlarmActions(event);
+            actions = sleepAsAndroidHandler.getAlarmActions(database, event);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return actions;
     }
@@ -1741,15 +1781,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void setAlarmActions(SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            SleepAsAndroidHandler.setAlarmActions(event, actions);
+            sleepAsAndroidHandler.setAlarmActions(database, event, actions);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1767,15 +1807,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public LinkedList<HistoryItem> getHistory() throws Exception {
-        openReadable();
+        SQLiteDatabase          database     = openReadable();
         LinkedList<HistoryItem> historyItems = new LinkedList<>();
         try {
-            historyItems = HistoryHandler.getHistory();
+            historyItems = historyHandler.getHistory(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return historyItems;
     }
@@ -1785,15 +1825,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void clearHistory() throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            HistoryHandler.clear();
+            historyHandler.clear(database);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1804,15 +1844,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void addHistoryItem(HistoryItem historyItem) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            HistoryHandler.add(historyItem);
+            historyHandler.add(database, historyItem);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1832,15 +1872,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public Geofence getGeofence(Long id) throws Exception {
-        openReadable();
-        Geofence geofence = null;
+        SQLiteDatabase database = openReadable();
+        Geofence       geofence = null;
         try {
-            geofence = GeofenceHandlerStatic.get(id);
+            geofence = geofenceHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return geofence;
     }
@@ -1853,15 +1893,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Geofence> getAllGeofences() throws Exception {
-        openReadable();
+        SQLiteDatabase database  = openReadable();
         List<Geofence> geofences = new ArrayList<>();
         try {
-            geofences = GeofenceHandlerStatic.getAll();
+            geofences = geofenceHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return geofences;
     }
@@ -1876,15 +1916,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Geofence> getAllGeofences(boolean isActive) throws Exception {
-        openReadable();
+        SQLiteDatabase database  = openReadable();
         List<Geofence> geofences = new ArrayList<>();
         try {
-            geofences = GeofenceHandlerStatic.getAll(isActive);
+            geofences = geofenceHandler.getAll(database, isActive);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return geofences;
     }
@@ -1897,15 +1937,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public List<Geofence> getCustomGeofences() throws Exception {
-        openReadable();
+        SQLiteDatabase database  = openReadable();
         List<Geofence> geofences = new ArrayList<>();
         try {
-            geofences = GeofenceHandlerStatic.getCustom();
+            geofences = geofenceHandler.getCustom(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return geofences;
     }
@@ -1919,16 +1959,16 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public long addGeofence(Geofence geofence) throws Exception {
-        openWritable();
-        long id;
+        SQLiteDatabase database = openWritable();
+        long           id;
         try {
-            id = GeofenceHandlerStatic.add(geofence);
+            id = geofenceHandler.add(database, geofence);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return id;
     }
@@ -1940,15 +1980,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateGeofence(Geofence geofence) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GeofenceHandlerStatic.update(geofence);
+            geofenceHandler.update(database, geofence);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1959,15 +1999,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void enableGeofence(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GeofenceHandlerStatic.enable(id);
+            geofenceHandler.enable(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -1978,15 +2018,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void disableGeofence(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GeofenceHandlerStatic.disable(id);
+            geofenceHandler.disable(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -2003,7 +2043,7 @@ public final class PersistanceHandler {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -2012,15 +2052,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateState(Long id, @Geofence.State String state) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GeofenceHandlerStatic.updateState(id, state);
+            geofenceHandler.updateState(database, id, state);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -2031,15 +2071,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteGeofence(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            GeofenceHandlerStatic.delete(id);
+            geofenceHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -2059,15 +2099,15 @@ public final class PersistanceHandler {
     @NonNull
     @WorkerThread
     public CallEvent getCallEvent(long id) throws Exception {
-        openReadable();
-        CallEvent callEvent = null;
+        SQLiteDatabase database  = openReadable();
+        CallEvent      callEvent = null;
         try {
-            callEvent = CallEventHandler.get(id);
+            callEvent = callEventHandler.get(database, id);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return callEvent;
     }
@@ -2080,15 +2120,15 @@ public final class PersistanceHandler {
      * @return List of CallEvents
      */
     public List<CallEvent> getCallEvents(String phoneNumber) throws Exception {
-        openReadable();
+        SQLiteDatabase  database   = openReadable();
         List<CallEvent> callEvents = new ArrayList<>();
         try {
-            callEvents = CallEventHandler.get(phoneNumber);
+            callEvents = callEventHandler.get(database, phoneNumber);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return callEvents;
     }
@@ -2100,15 +2140,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public List<CallEvent> getAllCallEvents() throws Exception {
-        openReadable();
+        SQLiteDatabase  database   = openReadable();
         List<CallEvent> callEvents = new ArrayList<>();
         try {
-            callEvents = CallEventHandler.getAll();
+            callEvents = callEventHandler.getAll(database);
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return callEvents;
     }
@@ -2122,16 +2162,16 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public long addCallEvent(CallEvent callEvent) throws Exception {
-        openWritable();
-        long id;
+        SQLiteDatabase database = openWritable();
+        long           id;
         try {
-            id = CallEventHandler.add(callEvent);
+            id = callEventHandler.add(database, callEvent);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
         return id;
     }
@@ -2143,15 +2183,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void deleteCallEvent(Long id) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            CallEventHandler.delete(id);
+            callEventHandler.delete(database, id);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 
@@ -2162,15 +2202,15 @@ public final class PersistanceHandler {
      */
     @WorkerThread
     public void updateCallEvent(CallEvent callEvent) throws Exception {
-        openWritable();
+        SQLiteDatabase database = openWritable();
         try {
-            CallEventHandler.update(callEvent);
+            callEventHandler.update(database, callEvent);
             database.setTransactionSuccessful();
         } catch (Exception e) {
             Timber.e(e);
             throw e;
         } finally {
-            close();
+            close(database);
         }
     }
 }

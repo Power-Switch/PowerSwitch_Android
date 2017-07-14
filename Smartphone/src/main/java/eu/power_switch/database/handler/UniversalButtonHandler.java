@@ -70,7 +70,7 @@ class UniversalButtonHandler {
      */
     protected void addUniversalButtons(@NonNull SQLiteDatabase database, Long receiverId, List<Button> buttons) throws Exception {
         for (Button button : buttons) {
-            addUniversalButton(receiverId, (UniversalButton) button);
+            addUniversalButton(database, receiverId, (UniversalButton) button);
         }
     }
 

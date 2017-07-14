@@ -63,7 +63,6 @@ import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHelper;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.database.handler.ReceiverReflectionMagic;
 import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -127,6 +126,9 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
 
     @Inject
     NetworkHandler networkHandler;
+
+    @Inject
+    ReceiverReflectionMagic receiverReflectionMagic;
 
     private ArrayAdapter<String> channelMasterNamesAdapter;
     private ArrayAdapter<String> channelSlaveNamesAdapter;
@@ -279,7 +281,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = DatabaseHandlerStatic.getAllGateways(true);
+                    List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
@@ -307,7 +309,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = DatabaseHandlerStatic.getAllGateways(true);
+                    List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
@@ -334,7 +336,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             @Override
             public void onClick(View v) {
                 try {
-                    List<Gateway> activeGateways = DatabaseHandlerStatic.getAllGateways(true);
+                    List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
                         StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
@@ -391,7 +393,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
         Brand  brand = receiverBrandOrModelChangedEvent.getBrand();
 
         try {
-            Receiver receiver = ReceiverReflectionMagic.getDummy(getActivity(), Receiver.getJavaPath(model));
+            Receiver receiver = receiverReflectionMagic.getDummy(Receiver.getJavaPath(model));
 
             getConfiguration().setBrand(receiverBrandOrModelChangedEvent.getBrand());
             getConfiguration().setType(receiver.getType());

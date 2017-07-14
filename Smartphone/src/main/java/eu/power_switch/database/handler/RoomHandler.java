@@ -28,9 +28,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import eu.power_switch.database.table.room.RoomGatewayRelationTable;
 import eu.power_switch.database.table.room.RoomTable;
 import eu.power_switch.obj.Room;
@@ -41,11 +38,16 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 /**
  * Provides database methods for managing Rooms
  */
-@Singleton
 class RoomHandler {
 
-    @Inject
+    private ActionHandler   actionHandler;
+    private GatewayHandler  gatewayHandler;
+    private ReceiverHandler receiverHandler;
+
     RoomHandler() {
+        this.actionHandler = new ActionHandler();
+        this.gatewayHandler = new GatewayHandler();
+        this.receiverHandler = new ReceiverHandler();
     }
 
     /**
@@ -113,7 +115,7 @@ class RoomHandler {
      * @param id ID of Room
      */
     protected void delete(@NonNull SQLiteDatabase database, Long id) throws Exception {
-        ActionHandler.deleteByRoomId(database, id);
+        actionHandler.deleteByRoomId(database, id);
 
         deleteReceiversOfRoom(database, id);
 
@@ -127,9 +129,9 @@ class RoomHandler {
      * @param roomId ID of Room
      */
     private void deleteReceiversOfRoom(@NonNull SQLiteDatabase database, Long roomId) throws Exception {
-        ArrayList<Receiver> receivers = ReceiverHandler.getByRoom(database, roomId);
+        ArrayList<Receiver> receivers = receiverHandler.getByRoom(database, roomId);
         for (Receiver receiver : receivers) {
-            ReceiverHandler.delete(database, receiver.getId());
+            receiverHandler.delete(database, receiver.getId());
         }
     }
 
@@ -341,7 +343,7 @@ class RoomHandler {
 
         while (!cursor.isAfterLast()) {
             Long    gatewayId = cursor.getLong(1);
-            Gateway gateway   = GatewayHandler.get(database, gatewayId);
+            Gateway gateway   = gatewayHandler.get(database, gatewayId);
             associatedGateways.add(gateway);
             cursor.moveToNext();
         }
@@ -366,7 +368,7 @@ class RoomHandler {
         List<Gateway> associatedGateways = getAssociatedGateways(database, id);
 
         Room room = new Room(id, apartmentId, name, position, isCollapsed, associatedGateways);
-        room.addReceivers(ReceiverHandler.getByRoom(database, room.getId()));
+        room.addReceivers(receiverHandler.getByRoom(database, room.getId()));
         return room;
     }
 }

@@ -44,10 +44,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.AlarmEventActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -69,12 +71,17 @@ import eu.power_switch.shared.constants.AlarmClockConstants.Event;
 public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
     private static Event currentEventType = Event.ALARM_TRIGGERED;
+
     @BindView(R.id.spinner_sleep_as_android_event)
     Spinner              spinnerEventType;
     @BindView(R.id.add_fab)
     FloatingActionButton addActionFAB;
     @BindView(R.id.switch_on_off)
     Switch               switchOnOff;
+
+    @Inject
+    PersistanceHandler persistanceHandler;
+    
     private ArrayList<Action> actions = new ArrayList<>();
     private ActionRecyclerViewAdapter recyclerViewAdapter;
 
@@ -121,7 +128,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     actions.remove(position);
-                                    DatabaseHandlerStatic.setAlarmActions(currentEventType, actions);
+                                    persistanceHandler.setAlarmActions(currentEventType, actions);
                                     StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                             R.string.action_removed,
                                             Snackbar.LENGTH_LONG);
@@ -243,7 +250,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
             return playStoreModeDataModel.getAlarmActions(currentEventType);
         } else {
-            return DatabaseHandlerStatic.getAlarmActions(currentEventType);
+            return persistanceHandler.getAlarmActions(currentEventType);
         }
     }
 

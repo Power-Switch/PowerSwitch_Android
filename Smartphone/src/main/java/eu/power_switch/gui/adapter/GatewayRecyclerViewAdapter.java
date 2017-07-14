@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.gateway.Gateway;
@@ -45,15 +45,17 @@ import timber.log.Timber;
  * Created by Markus on 27.07.2015.
  */
 public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecyclerViewAdapter.ViewHolder> {
-    private ArrayList<Gateway> gateways;
-    private Context            context;
+    private final PersistanceHandler persistanceHandler;
+    private final ArrayList<Gateway> gateways;
+    private final Context            context;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public GatewayRecyclerViewAdapter(Context context, ArrayList<Gateway> gateways) {
+    public GatewayRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, ArrayList<Gateway> gateways) {
         this.gateways = gateways;
         this.context = context;
+        this.persistanceHandler = persistanceHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -83,9 +85,9 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                 if (buttonView.isPressed()) {
                     try {
                         if (isChecked) {
-                            DatabaseHandlerStatic.enableGateway(gateway.getId());
+                            persistanceHandler.enableGateway(gateway.getId());
                         } else {
-                            DatabaseHandlerStatic.disableGateway(gateway.getId());
+                            persistanceHandler.disableGateway(gateway.getId());
                         }
                         gateway.setActive(isChecked);
                     } catch (Exception e) {
@@ -98,7 +100,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
 
         boolean isAssociatedWithApartment = true;
         try {
-            isAssociatedWithApartment = DatabaseHandlerStatic.isAssociatedWithAnyApartment(gateway);
+            isAssociatedWithApartment = persistanceHandler.isAssociatedWithAnyApartment(gateway);
         } catch (Exception e) {
             Timber.e(e);
         }

@@ -28,9 +28,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import eu.power_switch.database.table.scene.SceneTable;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
@@ -39,11 +36,14 @@ import timber.log.Timber;
 /**
  * Provides database methods for managing Scenes
  */
-@Singleton
 class SceneHandler {
 
-    @Inject
+    private ActionHandler    actionHandler;
+    private SceneItemHandler sceneItemHandler;
+
     SceneHandler() {
+        sceneItemHandler = new SceneItemHandler();
+        actionHandler = new ActionHandler();
     }
 
     /**
@@ -59,7 +59,7 @@ class SceneHandler {
         if (sceneId == -1) {
             Timber.e("Error inserting Scene to database");
         }
-        SceneItemHandler.add(database, sceneId, scene.getSceneItems());
+        sceneItemHandler.add(database, sceneId, scene.getSceneItems());
     }
 
     /**
@@ -69,7 +69,7 @@ class SceneHandler {
      */
     protected void update(@NonNull SQLiteDatabase database, Scene scene) throws Exception {
         updateName(database, scene.getId(), scene.getName());
-        SceneItemHandler.update(database, scene);
+        sceneItemHandler.update(database, scene);
     }
 
     /**
@@ -90,9 +90,9 @@ class SceneHandler {
      * @param id ID of Scene
      */
     protected void delete(@NonNull SQLiteDatabase database, Long id) throws Exception {
-        ActionHandler.deleteBySceneId(database, id);
+        actionHandler.deleteBySceneId(database, id);
 
-        SceneItemHandler.deleteBySceneId(database, id);
+        sceneItemHandler.deleteBySceneId(database, id);
         database.delete(SceneTable.TABLE_NAME, SceneTable.COLUMN_ID + "=" + id, null);
     }
 
@@ -199,7 +199,7 @@ class SceneHandler {
         int    position    = c.getInt(3);
 
         Scene scene = new Scene(id, apartmentId, name);
-        for (SceneItem item : SceneItemHandler.getSceneItems(database, scene.getId())) {
+        for (SceneItem item : sceneItemHandler.getSceneItems(database, scene.getId())) {
             scene.addSceneItem(item);
         }
         return scene;

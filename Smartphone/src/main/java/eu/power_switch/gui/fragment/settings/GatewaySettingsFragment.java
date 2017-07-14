@@ -43,7 +43,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.GatewayChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -115,7 +114,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addGatewayFAB.setOnClickListener(onClickListener);
 
-        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), gateways);
+        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), persistanceHandler, gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
@@ -183,11 +182,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
                         // save new Gateway if it doesn't exist already
                         try {
-                            DatabaseHandlerStatic.addGateway(newGateway);
+                            persistanceHandler.addGateway(newGateway);
                             newGatewaysCount++;
                         } catch (GatewayAlreadyExistsException e) {
                             existingGatewaysCount++;
-                            DatabaseHandlerStatic.enableGateway(e.getIdOfExistingGateway());
+                            persistanceHandler.enableGateway(e.getIdOfExistingGateway());
                         } catch (Exception e) {
                             StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
@@ -278,7 +277,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
             PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
             return playStoreModeDataModel.getGateways();
         } else {
-            return DatabaseHandlerStatic.getAllGateways();
+            return persistanceHandler.getAllGateways();
         }
     }
 

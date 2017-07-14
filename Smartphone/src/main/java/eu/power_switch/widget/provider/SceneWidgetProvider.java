@@ -29,8 +29,10 @@ import android.widget.RemoteViews;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.widget.SceneWidget;
@@ -42,6 +44,9 @@ import timber.log.Timber;
  * This class is responsible for updating existing Scene widgets
  */
 public class SceneWidgetProvider extends AppWidgetProvider {
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     /**
      * Forces an Update of all Scene Widgets
@@ -68,11 +73,11 @@ public class SceneWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_scene);
 
             try {
-                SceneWidget sceneWidget = DatabaseHandlerStatic.getSceneWidget(appWidgetId);
+                SceneWidget sceneWidget = persistanceHandler.getSceneWidget(appWidgetId);
                 // update UI
                 try {
-                    Scene     scene     = DatabaseHandlerStatic.getScene(sceneWidget.getSceneId());
-                    Apartment apartment = DatabaseHandlerStatic.getApartment(scene.getApartmentId());
+                    Scene     scene     = persistanceHandler.getScene(sceneWidget.getSceneId());
+                    Apartment apartment = persistanceHandler.getApartment(scene.getApartmentId());
 
                     remoteViews.setTextViewText(R.id.textView_scene_widget_name, apartment.getName() + ": " + scene.getName());
                     // set button action
@@ -106,7 +111,7 @@ public class SceneWidgetProvider extends AppWidgetProvider {
 
         for (int appWidgetId : appWidgetIds) {
             try {
-                DatabaseHandlerStatic.deleteSceneWidget(appWidgetId);
+                persistanceHandler.deleteSceneWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

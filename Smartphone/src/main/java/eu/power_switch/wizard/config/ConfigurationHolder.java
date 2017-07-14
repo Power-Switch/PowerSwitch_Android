@@ -18,13 +18,8 @@
 
 package eu.power_switch.wizard.config;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
-import eu.power_switch.obj.Apartment;
-import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import lombok.Data;
 import timber.log.Timber;
@@ -47,9 +42,9 @@ public class ConfigurationHolder {
     public void writeToDatabase() {
         try {
             // Add apartment
-            long apartmentId = DatabaseHandlerStatic.addApartment(new Apartment(0L, true, apartmentName, Collections.EMPTY_LIST, null));
+//            long apartmentId = DatabaseHandlerStatic.addApartment(new Apartment(0L, true, apartmentName, Collections.EMPTY_LIST, null));
             // add room to apartment
-            DatabaseHandlerStatic.addRoom(new Room(0L, apartmentId, roomName, 0, false, new ArrayList<Gateway>()));
+//            DatabaseHandlerStatic.addRoom(new Room(0L, apartmentId, roomName, 0, false, new ArrayList<Gateway>()));
             // add found gateways to DB and associate them with the apartment above
 //            DatabaseHandler.addGateway();
 

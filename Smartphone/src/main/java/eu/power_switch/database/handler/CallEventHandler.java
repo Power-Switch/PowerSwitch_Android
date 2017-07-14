@@ -48,6 +48,10 @@ import eu.power_switch.shared.constants.PhoneConstants;
 @Singleton
 class CallEventHandler {
 
+    private CallEventPhoneNumberHandler callEventPhoneNumberHandler;
+    private CallEventActionHandler      callEventActionHandler;
+
+
     @Inject
     CallEventHandler() {
     }
@@ -67,11 +71,11 @@ class CallEventHandler {
         long newId = database.insert(CallEventTable.TABLE_NAME, null, values);
 
         for (PhoneConstants.CallType eventCallType : PhoneConstants.CallType.values()) {
-            CallEventPhoneNumberHandler.add(database, callEvent.getPhoneNumbers(eventCallType), newId, eventCallType);
+            callEventPhoneNumberHandler.add(database, callEvent.getPhoneNumbers(eventCallType), newId, eventCallType);
         }
 
         for (PhoneConstants.CallType eventCallType : PhoneConstants.CallType.values()) {
-            CallEventActionHandler.add(database, callEvent.getActions(eventCallType), newId, eventCallType);
+            callEventActionHandler.add(database, callEvent.getActions(eventCallType), newId, eventCallType);
         }
 
         return newId;
@@ -151,7 +155,7 @@ class CallEventHandler {
     @NonNull
     protected List<CallEvent> getAll(@NonNull SQLiteDatabase database) throws Exception {
         List<CallEvent> callEvents = new ArrayList<>();
-        Cursor cursor = database.query(CallEventTable.TABLE_NAME, CallEventTable.ALL_COLUMNS, null, null, null, null, null);
+        Cursor          cursor     = database.query(CallEventTable.TABLE_NAME, CallEventTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
@@ -175,8 +179,8 @@ class CallEventHandler {
      * @param id ID of CallEvent
      */
     protected void delete(@NonNull SQLiteDatabase database, Long id) throws Exception {
-        CallEventPhoneNumberHandler.deleteByCallEvent(database, id);
-        CallEventActionHandler.deleteByCallEvent(database, id);
+        callEventPhoneNumberHandler.deleteByCallEvent(database, id);
+        callEventActionHandler.deleteByCallEvent(database, id);
 
         database.delete(CallEventTable.TABLE_NAME, CallEventTable.COLUMN_ID + "=" + id, null);
     }
@@ -188,12 +192,12 @@ class CallEventHandler {
 
         HashMap<PhoneConstants.CallType, Set<String>> phoneNumbersMap = new HashMap<>();
         for (PhoneConstants.CallType callType : PhoneConstants.CallType.values()) {
-            phoneNumbersMap.put(callType, CallEventPhoneNumberHandler.get(database, id, callType));
+            phoneNumbersMap.put(callType, callEventPhoneNumberHandler.get(database, id, callType));
         }
 
         HashMap<PhoneConstants.CallType, List<Action>> actionsMap = new HashMap<>();
         for (PhoneConstants.CallType callType : PhoneConstants.CallType.values()) {
-            actionsMap.put(callType, CallEventActionHandler.get(database, id, callType));
+            actionsMap.put(callType, callEventActionHandler.get(database, id, callType));
         }
 
         CallEvent callEvent = new CallEvent(id, active, name, phoneNumbersMap, actionsMap);

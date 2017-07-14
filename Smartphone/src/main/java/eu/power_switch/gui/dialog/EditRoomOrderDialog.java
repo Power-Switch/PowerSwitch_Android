@@ -33,7 +33,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.RoomNameRecyclerViewAdapter;
@@ -92,7 +91,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
         apartmentId = arguments.getLong(APARTMENT_ID_KEY);
 
         try {
-            List<Room> rooms = DatabaseHandlerStatic.getRooms(apartmentId);
+            List<Room> rooms = persistanceHandler.getRooms(apartmentId);
             this.rooms.addAll(rooms);
 
             roomNameRecyclerViewAdapter.notifyDataSetChanged();
@@ -125,7 +124,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
             // save room order
             for (int position = 0; position < rooms.size(); position++) {
                 Room room = rooms.get(position);
-                DatabaseHandlerStatic.setPositionOfRoom(room.getId(), (long) position);
+                persistanceHandler.setPositionOfRoom(room.getId(), (long) position);
             }
 
             // notify rooms fragment

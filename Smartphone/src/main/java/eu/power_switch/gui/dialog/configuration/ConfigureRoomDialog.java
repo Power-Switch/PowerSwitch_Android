@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
@@ -81,7 +80,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
         if (room != null) {
             // init dialog using existing receiver
             try {
-                List<Room> rooms = DatabaseHandlerStatic.getAllRooms();
+                List<Room> rooms = persistanceHandler.getAllRooms();
 
                 getConfiguration().setExistingRooms(rooms);
 
@@ -105,14 +104,14 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
     @Override
     protected void saveConfiguration() throws Exception {
         Timber.d("Saving Room...");
-        DatabaseHandlerStatic.updateRoom(getConfiguration().getRoom()
+        persistanceHandler.updateRoom(getConfiguration().getRoom()
                 .getId(), getConfiguration().getName(), getConfiguration().getAssociatedGateways());
 
         // save receiver order
         List<Receiver> receivers = getConfiguration().getReceivers();
         for (int position = 0; position < receivers.size(); position++) {
             Receiver receiver = receivers.get(position);
-            DatabaseHandlerStatic.setPositionOfReceiver(receiver.getId(), (long) position);
+            persistanceHandler.setPositionOfReceiver(receiver.getId(), (long) position);
         }
 
         RoomsFragment.notifyRoomChanged();
@@ -136,7 +135,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandlerStatic.deleteRoom(getConfiguration().getRoom()
+                            persistanceHandler.deleteRoom(getConfiguration().getRoom()
                                     .getId());
 
                             // notify rooms fragment

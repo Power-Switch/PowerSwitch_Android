@@ -40,8 +40,11 @@ import timber.log.Timber;
 @Singleton
 class CallEventActionHandler {
 
+    private ActionHandler actionHandler;
+
     @Inject
     CallEventActionHandler() {
+        actionHandler = new ActionHandler();
     }
 
     /**
@@ -57,7 +60,7 @@ class CallEventActionHandler {
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = ActionHandler.add(database, actions);
+        ArrayList<Long> actionIds = actionHandler.add(database, actions);
 
         // add to relational table
         for (long actionId : actionIds) {
@@ -92,7 +95,7 @@ class CallEventActionHandler {
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(2);
-            actions.add(ActionHandler.get(database, actionId));
+            actions.add(actionHandler.get(database, actionId));
             cursor.moveToNext();
         }
 
@@ -106,13 +109,18 @@ class CallEventActionHandler {
      * @param callEventId ID of CallEvent
      */
     protected void deleteByCallEvent(@NonNull SQLiteDatabase database, Long callEventId) throws Exception {
-        Cursor cursor = database.query(CallEventActionTable.TABLE_NAME, CallEventActionTable.ALL_COLUMNS,
-                CallEventActionTable.COLUMN_CALL_EVENT_ID + "==" + callEventId, null, null, null, null);
+        Cursor cursor = database.query(CallEventActionTable.TABLE_NAME,
+                CallEventActionTable.ALL_COLUMNS,
+                CallEventActionTable.COLUMN_CALL_EVENT_ID + "==" + callEventId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(2);
-            ActionHandler.delete(database, actionId);
+            actionHandler.delete(database, actionId);
             cursor.moveToNext();
         }
 

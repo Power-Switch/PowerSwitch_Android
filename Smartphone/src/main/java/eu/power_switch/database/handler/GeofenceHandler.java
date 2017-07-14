@@ -50,8 +50,11 @@ import eu.power_switch.google_play_services.geofence.Geofence;
 @Singleton
 class GeofenceHandler {
 
+    private GeofenceActionHandler geofenceActionHandler;
+
     @Inject
     GeofenceHandler() {
+        geofenceActionHandler = new GeofenceActionHandler();
     }
 
     /**
@@ -75,7 +78,7 @@ class GeofenceHandler {
         long newId = database.insert(GeofenceTable.TABLE_NAME, null, values);
 
         for (Geofence.EventType eventType : Geofence.EventType.values()) {
-            GeofenceActionHandler.add(database, geofence.getActions(eventType), newId, eventType);
+            geofenceActionHandler.add(database, geofence.getActions(eventType), newId, eventType);
         }
 
         return newId;
@@ -166,7 +169,7 @@ class GeofenceHandler {
         // delete from associations with apartments
         database.delete(ApartmentGeofenceRelationTable.TABLE_NAME, ApartmentGeofenceRelationTable.COLUMN_GEOFENCE_ID + "=" + id, null);
 
-        GeofenceActionHandler.delete(database, id);
+        geofenceActionHandler.delete(database, id);
 
         database.delete(GeofenceTable.TABLE_NAME, GeofenceTable.COLUMN_ID + "=" + id, null);
     }
@@ -291,10 +294,10 @@ class GeofenceHandler {
         values.put(GeofenceTable.COLUMN_STATE, geofence.getState());
 
         // delete old actions
-        GeofenceActionHandler.delete(database, geofence.getId());
+        geofenceActionHandler.delete(database, geofence.getId());
         // add new actions
         for (Geofence.EventType eventType : Geofence.EventType.values()) {
-            GeofenceActionHandler.add(database, geofence.getActions(eventType), geofence.getId(), eventType);
+            geofenceActionHandler.add(database, geofence.getActions(eventType), geofence.getId(), eventType);
         }
 
         database.update(GeofenceTable.TABLE_NAME, values, GeofenceTable.COLUMN_ID + "=" + geofence.getId(), null);
@@ -331,7 +334,7 @@ class GeofenceHandler {
 
         HashMap<Geofence.EventType, List<Action>> actionsMap = new HashMap<>();
         for (Geofence.EventType eventType : Geofence.EventType.values()) {
-            actionsMap.put(eventType, GeofenceActionHandler.get(database, id, eventType));
+            actionsMap.put(eventType, geofenceActionHandler.get(database, id, eventType));
         }
 
         geofence = new Geofence(id, active, name, location, radius, snapshot, actionsMap, state);

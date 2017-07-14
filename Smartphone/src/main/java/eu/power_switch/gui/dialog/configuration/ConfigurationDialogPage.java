@@ -27,8 +27,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Constructor;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import timber.log.Timber;
@@ -37,6 +40,9 @@ import timber.log.Timber;
  * Created by Markus on 25.03.2016.
  */
 public abstract class ConfigurationDialogPage<Configuration extends ConfigurationHolder> extends EventBusFragment {
+
+    @Inject
+    protected PersistanceHandler persistanceHandler;
 
     @BindView(R.id.contentView)
     @Nullable

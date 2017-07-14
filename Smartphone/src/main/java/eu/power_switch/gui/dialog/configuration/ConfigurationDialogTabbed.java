@@ -39,8 +39,11 @@ import android.widget.ImageButton;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -72,6 +75,9 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
     ViewPager   tabViewPager;
     @BindView(R.id.imageButton_next)
     ImageButton imageButtonNext;
+
+    @Inject
+    protected PersistanceHandler persistanceHandler;
 
     @Getter
     @Setter

@@ -37,9 +37,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1Name;
@@ -59,6 +61,9 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
     @BindView(R.id.room_name_text_input_layout)
     TextInputLayout floatingName;
 
+    @Inject
+    PersistanceHandler persistanceHandler;
+
     private Dialog             dialog;
     private int                defaultTextColor;
     private LinkedList<String> roomNames;
@@ -74,7 +79,7 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         try {
-            List<Room> rooms = DatabaseHandlerStatic.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            List<Room> rooms = persistanceHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             roomNames = new LinkedList<>();
             for (Room room : rooms) {
                 roomNames.add(room.getName());
@@ -106,7 +111,7 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    DatabaseHandlerStatic.addRoom(new Room(null,
+                    persistanceHandler.addRoom(new Room(null,
                             SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
                             getRoomName(),
                             0,

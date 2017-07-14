@@ -20,6 +20,7 @@ package eu.power_switch.database.handler;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.NoSuchElementException;
@@ -49,12 +50,12 @@ class WidgetHandler {
      *
      * @param receiverWidget ReceiverWidget
      */
-    protected void addReceiverWidget(ReceiverWidget receiverWidget) throws Exception {
+    protected void addReceiverWidget(@NonNull SQLiteDatabase database, ReceiverWidget receiverWidget) throws Exception {
         ContentValues values = new ContentValues();
         values.put(ReceiverWidgetTable.COLUMN_WIDGET_APP_ID, receiverWidget.getWidgetId());
         values.put(ReceiverWidgetTable.COLUMN_ROOM_ID, receiverWidget.getRoomId());
         values.put(ReceiverWidgetTable.COLUMN_RECEIVER_ID, receiverWidget.getReceiverId());
-        DatabaseHandlerStatic.database.insert(ReceiverWidgetTable.TABLE_NAME, null, values);
+        database.insert(ReceiverWidgetTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -62,11 +63,11 @@ class WidgetHandler {
      *
      * @param roomWidget RoomWidget
      */
-    protected void addRoomWidget(RoomWidget roomWidget) throws Exception {
+    protected void addRoomWidget(@NonNull SQLiteDatabase database, RoomWidget roomWidget) throws Exception {
         ContentValues values = new ContentValues();
         values.put(RoomWidgetTable.COLUMN_WIDGET_APP_ID, roomWidget.getWidgetId());
         values.put(RoomWidgetTable.COLUMN_ROOM_ID, roomWidget.getRoomId());
-        DatabaseHandlerStatic.database.insert(RoomWidgetTable.TABLE_NAME, null, values);
+        database.insert(RoomWidgetTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -74,11 +75,11 @@ class WidgetHandler {
      *
      * @param sceneWidget SceneWidget
      */
-    protected void addSceneWidget(SceneWidget sceneWidget) throws Exception {
+    protected void addSceneWidget(@NonNull SQLiteDatabase database, SceneWidget sceneWidget) throws Exception {
         ContentValues values = new ContentValues();
         values.put(SceneWidgetTable.COLUMN_WIDGET_APP_ID, sceneWidget.getWidgetId());
         values.put(SceneWidgetTable.COLUMN_SCENE_ID, sceneWidget.getSceneId());
-        DatabaseHandlerStatic.database.insert(SceneWidgetTable.TABLE_NAME, null, values);
+        database.insert(SceneWidgetTable.TABLE_NAME, null, values);
     }
 
     /**
@@ -86,8 +87,8 @@ class WidgetHandler {
      *
      * @param widgetId ID of ReceiverWidget
      */
-    protected void deleteReceiverWidget(int widgetId) throws Exception {
-        DatabaseHandlerStatic.database.delete(ReceiverWidgetTable.TABLE_NAME, ReceiverWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null);
+    protected void deleteReceiverWidget(@NonNull SQLiteDatabase database, int widgetId) throws Exception {
+        database.delete(ReceiverWidgetTable.TABLE_NAME, ReceiverWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null);
     }
 
     /**
@@ -95,8 +96,8 @@ class WidgetHandler {
      *
      * @param widgetId ID of RoomWidget
      */
-    protected void deleteRoomWidget(int widgetId) throws Exception {
-        DatabaseHandlerStatic.database.delete(RoomWidgetTable.TABLE_NAME, RoomWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null);
+    protected void deleteRoomWidget(@NonNull SQLiteDatabase database, int widgetId) throws Exception {
+        database.delete(RoomWidgetTable.TABLE_NAME, RoomWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null);
     }
 
     /**
@@ -104,8 +105,8 @@ class WidgetHandler {
      *
      * @param widgetId ID of SceneWidget
      */
-    protected void deleteSceneWidget(int widgetId) throws Exception {
-        DatabaseHandlerStatic.database.delete(SceneWidgetTable.TABLE_NAME, SceneWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null);
+    protected void deleteSceneWidget(@NonNull SQLiteDatabase database, int widgetId) throws Exception {
+        database.delete(SceneWidgetTable.TABLE_NAME, SceneWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId, null);
     }
 
     /**
@@ -116,12 +117,12 @@ class WidgetHandler {
      * @return
      */
     @NonNull
-    protected ReceiverWidget getReceiverWidget(int widgetId) throws Exception {
+    protected ReceiverWidget getReceiverWidget(@NonNull SQLiteDatabase database, int widgetId) throws Exception {
         ReceiverWidget receiverWidget = null;
         String[] widgetColumns = {ReceiverWidgetTable.COLUMN_WIDGET_APP_ID,
                                   ReceiverWidgetTable.COLUMN_ROOM_ID,
                                   ReceiverWidgetTable.COLUMN_RECEIVER_ID};
-        Cursor cursor = DatabaseHandlerStatic.database.query(ReceiverWidgetTable.TABLE_NAME,
+        Cursor cursor = database.query(ReceiverWidgetTable.TABLE_NAME,
                 widgetColumns,
                 ReceiverWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId,
                 null,
@@ -148,10 +149,10 @@ class WidgetHandler {
      * @return
      */
     @NonNull
-    protected RoomWidget getRoomWidget(int widgetId) throws Exception {
+    protected RoomWidget getRoomWidget(@NonNull SQLiteDatabase database, int widgetId) throws Exception {
         RoomWidget roomWidget    = null;
         String[]   widgetColumns = {RoomWidgetTable.COLUMN_WIDGET_APP_ID, RoomWidgetTable.COLUMN_ROOM_ID};
-        Cursor cursor = DatabaseHandlerStatic.database.query(RoomWidgetTable.TABLE_NAME,
+        Cursor cursor = database.query(RoomWidgetTable.TABLE_NAME,
                 widgetColumns,
                 RoomWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId,
                 null,
@@ -179,10 +180,10 @@ class WidgetHandler {
      * @return
      */
     @NonNull
-    protected SceneWidget getSceneWidget(int widgetId) throws Exception {
+    protected SceneWidget getSceneWidget(@NonNull SQLiteDatabase database, int widgetId) throws Exception {
         SceneWidget sceneWidget   = null;
         String[]    widgetColumns = {SceneWidgetTable.COLUMN_WIDGET_APP_ID, SceneWidgetTable.COLUMN_SCENE_ID};
-        Cursor cursor = DatabaseHandlerStatic.database.query(SceneWidgetTable.TABLE_NAME,
+        Cursor cursor = database.query(SceneWidgetTable.TABLE_NAME,
                 widgetColumns,
                 SceneWidgetTable.COLUMN_WIDGET_APP_ID + "=" + widgetId,
                 null,

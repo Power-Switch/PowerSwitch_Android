@@ -39,8 +39,11 @@ import eu.power_switch.timer.Timer;
 @Singleton
 class TimerActionHandler {
 
+    private ActionHandler actionHandler;
+
     @Inject
     TimerActionHandler() {
+        actionHandler = new ActionHandler();
     }
 
     /**
@@ -51,7 +54,7 @@ class TimerActionHandler {
      */
     protected void add(@NonNull SQLiteDatabase database, List<Action> actions, Long timerId) throws Exception {
         // add actions to database
-        ArrayList<Long> actionIds = ActionHandler.add(actions);
+        ArrayList<Long> actionIds = actionHandler.add(database, actions);
 
         // add timer <-> action relation
         for (Long actionId : actionIds) {
@@ -69,10 +72,10 @@ class TimerActionHandler {
      * @param timerId ID of Timer
      */
     protected void delete(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
-        ArrayList<Action> actions = getByTimerId(timerId);
+        ArrayList<Action> actions = getByTimerId(database, timerId);
 
         for (Action action : actions) {
-            ActionHandler.delete(action.getId());
+            actionHandler.delete(database, action.getId());
         }
     }
 
@@ -98,7 +101,7 @@ class TimerActionHandler {
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(1);
-            actions.add(ActionHandler.get(actionId));
+            actions.add(actionHandler.get(database, actionId));
             cursor.moveToNext();
         }
 
@@ -113,8 +116,8 @@ class TimerActionHandler {
      */
     protected void update(@NonNull SQLiteDatabase database, Timer timer) throws Exception {
         // delete current actions
-        delete(timer.getId());
+        delete(database, timer.getId());
         // add new actions
-        add(timer.getActions(), timer.getId());
+        add(database, timer.getActions(), timer.getId());
     }
 }

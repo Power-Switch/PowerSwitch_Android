@@ -27,9 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import eu.power_switch.database.table.receiver.ReceiverGatewayRelationTable;
 import eu.power_switch.database.table.receiver.ReceiverTable;
 import eu.power_switch.obj.gateway.Gateway;
@@ -43,11 +40,29 @@ import timber.log.Timber;
 /**
  * Provides database methods for managing Receivers of any type
  */
-@Singleton
 class ReceiverHandler {
 
-    @Inject
-    ReceiverHandler() {
+    private RoomHandler                roomHandler;
+    private MasterSlaveReceiverHandler masterSlaveReceiverHandler;
+    private DipHandler                 dipHandler;
+    private UniversalButtonHandler     universalButtonHandler;
+    private AutoPairHandler            autoPairHandler;
+    private SceneItemHandler           sceneItemHandler;
+    private ActionHandler              actionHandler;
+    private ReceiverReflectionMagic    receiverReflectionMagic;
+    private GatewayHandler             gatewayHandler;
+
+    ReceiverHandler(ReceiverReflectionMagic receiverReflectionMagic) {
+        this.receiverReflectionMagic = receiverReflectionMagic;
+
+        roomHandler = new RoomHandler();
+        masterSlaveReceiverHandler = new MasterSlaveReceiverHandler();
+        dipHandler = new DipHandler();
+        universalButtonHandler = new UniversalButtonHandler();
+        autoPairHandler = new AutoPairHandler();
+        sceneItemHandler = new SceneItemHandler();
+        actionHandler = new ActionHandler();
+        gatewayHandler = new GatewayHandler();
     }
 
     /**
@@ -66,8 +81,7 @@ class ReceiverHandler {
         values.put(ReceiverTable.COLUMN_TYPE,
                 receiver.getType()
                         .toString());
-        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM,
-                RoomHandler.get(database, receiver.getRoomId())
+        values.put(ReceiverTable.COLUMN_POSITION_IN_ROOM, roomHandler.get(database, receiver.getRoomId())
                         .getReceivers()
                         .size());
         values.put(ReceiverTable.COLUMN_REPETITION_AMOUNT, receiver.getRepetitionAmount());
@@ -93,19 +107,19 @@ class ReceiverHandler {
         switch (type) {
             case MASTER_SLAVE:
                 MasterSlaveReceiver receiverAsMasterSlave = (MasterSlaveReceiver) receiver;
-                MasterSlaveReceiverHandler.add(database, receiverId, receiverAsMasterSlave.getMaster(), receiverAsMasterSlave.getSlave());
+                masterSlaveReceiverHandler.add(database, receiverId, receiverAsMasterSlave.getMaster(), receiverAsMasterSlave.getSlave());
                 break;
             case DIPS:
                 DipReceiver receiverAsDipReceiver = (DipReceiver) receiver;
-                DipHandler.add(database, receiverId, receiverAsDipReceiver);
+                dipHandler.add(database, receiverId, receiverAsDipReceiver);
                 break;
             case UNIVERSAL:
                 UniversalReceiver receiverAsUniversalReceiver = (UniversalReceiver) receiver;
-                UniversalButtonHandler.addUniversalButtons(database, receiverId, receiverAsUniversalReceiver.getButtons());
+                universalButtonHandler.addUniversalButtons(database, receiverId, receiverAsUniversalReceiver.getButtons());
                 break;
             case AUTOPAIR:
                 AutoPairReceiver receiverAsAutoPairReceiver = (AutoPairReceiver) receiver;
-                AutoPairHandler.add(database, receiverId, receiverAsAutoPairReceiver.getSeed());
+                autoPairHandler.add(database, receiverId, receiverAsAutoPairReceiver.getSeed());
                 break;
         }
     }
@@ -136,7 +150,7 @@ class ReceiverHandler {
         removeAssociatedGateways(database, receiver.getId());
         addAssociatedGateways(database, receiver.getId(), receiver.getAssociatedGateways());
 
-        SceneItemHandler.update(database, receiver.getId());
+        sceneItemHandler.update(database, receiver.getId());
     }
 
     /**
@@ -254,9 +268,9 @@ class ReceiverHandler {
         // delete depending things first!
 
         // delete sceneItems where receiver was used
-        SceneItemHandler.deleteByReceiverId(database, id);
+        sceneItemHandler.deleteByReceiverId(database, id);
         // delete actions where receiver was used
-        ActionHandler.deleteByReceiverId(database, id);
+        actionHandler.deleteByReceiverId(database, id);
 
         deleteDetails(database, id);
         removeAssociatedGateways(database, id);
@@ -271,16 +285,16 @@ class ReceiverHandler {
     private void deleteDetails(@NonNull SQLiteDatabase database, Long id) throws Exception {
         switch (getType(database, id)) {
             case DIPS:
-                DipHandler.delete(database, id);
+                dipHandler.delete(database, id);
                 break;
             case MASTER_SLAVE:
-                MasterSlaveReceiverHandler.delete(database, id);
+                masterSlaveReceiverHandler.delete(database, id);
                 break;
             case UNIVERSAL:
-                UniversalButtonHandler.deleteUniversalButtons(database, id);
+                universalButtonHandler.deleteUniversalButtons(database, id);
                 break;
             case AUTOPAIR:
-                AutoPairHandler.delete(database, id);
+                autoPairHandler.delete(database, id);
                 break;
         }
     }
@@ -380,7 +394,7 @@ class ReceiverHandler {
 
         while (!cursor.isAfterLast()) {
             Long    gatewayId = cursor.getLong(1);
-            Gateway gateway   = GatewayHandler.get(database, gatewayId);
+            Gateway gateway   = gatewayHandler.get(database, gatewayId);
             associatedGateways.add(gateway);
             cursor.moveToNext();
         }
@@ -397,6 +411,6 @@ class ReceiverHandler {
      * @return Receiver
      */
     private Receiver dbToReceiver(@NonNull SQLiteDatabase database, Cursor c) throws Exception {
-        return ReceiverReflectionMagic.fromDatabase(DatabaseHandlerStatic.context, c);
+        return receiverReflectionMagic.fromDatabase(database, c);
     }
 }

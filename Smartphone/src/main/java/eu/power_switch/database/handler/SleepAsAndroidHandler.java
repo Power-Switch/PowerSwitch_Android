@@ -26,9 +26,6 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import eu.power_switch.action.Action;
 import eu.power_switch.database.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
@@ -39,24 +36,30 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 30.11.2015.
  */
-@Singleton
 class SleepAsAndroidHandler {
 
-    @Inject
+    private ActionHandler actionHandler;
+
     SleepAsAndroidHandler() {
+        actionHandler = new ActionHandler();
     }
 
     protected List<Action> getAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event) throws Exception {
         ArrayList<Action> actions = new ArrayList<>();
 
         String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
-        Cursor cursor = database.query(SleepAsAndroidActionTable.TABLE_NAME, columns,
-                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(), null, null, null, null);
+        Cursor cursor = database.query(SleepAsAndroidActionTable.TABLE_NAME,
+                columns,
+                SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID + "==" + event.getId(),
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Long actionId = cursor.getLong(1);
-            actions.add(ActionHandler.get(database, actionId));
+            actions.add(actionHandler.get(database, actionId));
             cursor.moveToNext();
         }
 
@@ -77,7 +80,7 @@ class SleepAsAndroidHandler {
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = ActionHandler.add(database, actions);
+        ArrayList<Long> actionIds = actionHandler.add(database, actions);
 
         // add AlarmTriggered <-> action relation
         for (Long actionId : actionIds) {
@@ -90,7 +93,7 @@ class SleepAsAndroidHandler {
 
     private void deleteAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event) throws Exception {
         for (Action action : getAlarmActions(database, event)) {
-            ActionHandler.delete(database, action.getId());
+            actionHandler.delete(database, action.getId());
         }
     }
 }

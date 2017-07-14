@@ -35,7 +35,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
@@ -86,8 +85,8 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
         try {
-            apartment = DatabaseHandlerStatic.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
-            gateways = DatabaseHandlerStatic.getAllGateways();
+            apartment = persistanceHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            gateways = persistanceHandler.getAllGateways();
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getContentView(), e);
         }
@@ -136,7 +135,7 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
             List<Gateway> previouslyCheckedGateways = new ArrayList<>();
             previouslyCheckedGateways.addAll(getCheckedGateways());
 
-            gateways = DatabaseHandlerStatic.getAllGateways();
+            gateways = persistanceHandler.getAllGateways();
 
             String         inflaterString = Context.LAYOUT_INFLATER_SERVICE;
             LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);

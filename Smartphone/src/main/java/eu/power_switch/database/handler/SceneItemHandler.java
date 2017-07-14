@@ -42,8 +42,11 @@ import timber.log.Timber;
 @Singleton
 class SceneItemHandler {
 
+    private ReceiverHandler receiverHandler;
+
     @Inject
     SceneItemHandler() {
+        receiverHandler = new ReceiverHandler();
     }
 
     /**
@@ -94,7 +97,7 @@ class SceneItemHandler {
             long sceneItemId = cursor.getLong(0);
             long buttonId    = cursor.getLong(3);
             try {
-                Receiver receiver = ReceiverHandler.get(database, receiverId);
+                Receiver receiver = receiverHandler.get(database, receiverId);
                 receiver.getButton(buttonId);
 
                 // all is good, dont change sceneItem
@@ -185,7 +188,7 @@ class SceneItemHandler {
         long receiverId     = c.getLong(2);
         long activeButtonId = c.getLong(3);
 
-        Receiver receiver = ReceiverHandler.get(database, receiverId);
+        Receiver receiver = receiverHandler.get(database, receiverId);
 
         SceneItem sceneItem = new SceneItem(receiver, receiver.getButton(activeButtonId));
         return sceneItem;

@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -50,6 +50,9 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
 
     @Inject
     ActionHandler actionHandler;
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     /**
      * Generates a unique PendingIntent for actions on receiver widgets
@@ -165,7 +168,7 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
                 String receiverName  = extras.getString(WidgetConstants.KEY_RECEIVER);
                 String buttonName    = extras.getString(WidgetConstants.KEY_BUTTON);
 
-                Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentName);
+                Apartment apartment = persistanceHandler.getApartment(apartmentName);
                 Room      room      = apartment.getRoom(roomName);
                 Receiver  receiver  = room.getReceiver(receiverName);
                 Button    button    = receiver.getButton(buttonName);
@@ -177,7 +180,7 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
                 String roomName      = extras.getString(WidgetConstants.KEY_ROOM);
                 String buttonName    = extras.getString(WidgetConstants.KEY_BUTTON);
 
-                Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentName);
+                Apartment apartment = persistanceHandler.getApartment(apartmentName);
                 Room      room      = apartment.getRoom(roomName);
 
                 actionHandler.execute(room, buttonName);
@@ -185,7 +188,7 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
                 String apartmentName = extras.getString(WidgetConstants.KEY_APARTMENT);
                 String sceneName     = extras.getString(WidgetConstants.KEY_SCENE);
 
-                Apartment apartment = DatabaseHandlerStatic.getApartment(apartmentName);
+                Apartment apartment = persistanceHandler.getApartment(apartmentName);
                 Scene     scene     = apartment.getScene(sceneName);
 
                 actionHandler.execute(scene);

@@ -48,8 +48,17 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
 @Singleton
 class ApartmentHandler {
 
+    private RoomHandler     roomHandler;
+    private GatewayHandler  gatewayHandler;
+    private GeofenceHandler geofenceHandler;
+    private SceneHandler    sceneHandler;
+
     @Inject
     ApartmentHandler() {
+        roomHandler = new RoomHandler();
+        gatewayHandler = new GatewayHandler();
+        geofenceHandler = new GeofenceHandler();
+        sceneHandler = new SceneHandler();
     }
 
     /**
@@ -249,8 +258,9 @@ class ApartmentHandler {
      * @return containing Apartment
      */
     public Apartment get(@NonNull SQLiteDatabase database, Receiver receiver) throws Exception {
-        return get(roomHandler.get(database, receiver.getRoomId())
-                .getApartmentId());
+        return get(database,
+                roomHandler.get(database, receiver.getRoomId())
+                        .getApartmentId());
     }
 
     /**
@@ -355,7 +365,7 @@ class ApartmentHandler {
      *
      * @return List of Apartments
      */
-    protected List<Apartment> getAll(@NonNull SQLiteDatabase database,) throws Exception {
+    protected List<Apartment> getAll(@NonNull SQLiteDatabase database) throws Exception {
         List<Apartment> apartments = new ArrayList<>();
         Cursor          cursor     = database.query(ApartmentTable.TABLE_NAME, ApartmentTable.ALL_COLUMNS, null, null, null, null, null);
         cursor.moveToFirst();
@@ -458,7 +468,7 @@ class ApartmentHandler {
         LinkedList<Scene>   scenes      = sceneHandler.getByApartment(database, apartmentId);
         LinkedList<Gateway> gateways    = getAssociatedGateways(database, apartmentId);
 
-        Geofence geofence = geofenceHandler.get(getAssociatedGeofenceId(database, apartmentId));
+        Geofence geofence = geofenceHandler.get(database, getAssociatedGeofenceId(database, apartmentId));
 
         boolean isActive = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId);
 

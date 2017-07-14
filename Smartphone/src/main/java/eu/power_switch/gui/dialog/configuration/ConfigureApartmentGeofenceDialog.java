@@ -28,7 +28,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
@@ -89,7 +88,7 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandlerStatic.deleteGeofence(getConfiguration().getGeofence()
+                            persistanceHandler.deleteGeofence(getConfiguration().getGeofence()
                                     .getId());
                             geofenceApiHandler.removeGeofence(getConfiguration().getGeofence()
                                     .getId());

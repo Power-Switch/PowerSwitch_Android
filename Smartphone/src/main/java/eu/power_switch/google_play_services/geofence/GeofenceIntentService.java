@@ -32,7 +32,7 @@ import javax.inject.Inject;
 import dagger.android.DaggerIntentService;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
 import timber.log.Timber;
 
@@ -45,6 +45,9 @@ public class GeofenceIntentService extends DaggerIntentService {
 
     @Inject
     ActionHandler actionHandler;
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -114,19 +117,19 @@ public class GeofenceIntentService extends DaggerIntentService {
             try {
                 Long geofenceId = Long.valueOf(googleGeofence.getRequestId());
 
-                eu.power_switch.google_play_services.geofence.Geofence geofence = DatabaseHandlerStatic.getGeofence(geofenceId);
+                eu.power_switch.google_play_services.geofence.Geofence geofence = persistanceHandler.getGeofence(geofenceId);
                 if (geofence.isActive() && geofenceStateChanged(geofence.getState(), eventType)) {
                     actionHandler.execute(geofence, eventType);
 
                     switch (eventType) {
                         case ENTER:
-                            DatabaseHandlerStatic.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE);
+                            persistanceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_INSIDE);
                             break;
                         case EXIT:
-                            DatabaseHandlerStatic.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE);
+                            persistanceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_OUTSIDE);
                             break;
                         default:
-                            DatabaseHandlerStatic.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_NONE);
+                            persistanceHandler.updateState(geofenceId, eu.power_switch.google_play_services.geofence.Geofence.STATE_NONE);
                             break;
                     }
                 }

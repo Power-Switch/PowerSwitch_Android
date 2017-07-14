@@ -47,7 +47,6 @@ import dagger.android.HasActivityInjector;
 import eu.power_switch.BuildConfig;
 import eu.power_switch.R;
 import eu.power_switch.dagger.DaggerAppComponent;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -180,9 +179,6 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         Timber.d("Device API Level: " + android.os.Build.VERSION.SDK_INT);
         Timber.d("Device OS Version name: " + Build.VERSION.RELEASE);
         Timber.d("Device brand/model: " + LogHelper.getDeviceName());
-
-        // Onetime initialization of handlers for static access
-        DatabaseHandlerStatic.init(this);
 
         // reinitialize after logging framework is up to log current values
         SmartphonePreferencesHandler.init(this);

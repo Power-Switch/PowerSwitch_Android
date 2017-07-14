@@ -35,8 +35,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.inject.Inject;
+
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
@@ -50,6 +52,9 @@ import timber.log.Timber;
  * This class is responsible for updating existing Receiver widgets
  */
 public class ReceiverWidgetProvider extends AppWidgetProvider {
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     /**
      * Forces an Update of all Receiver Widgets
@@ -76,13 +81,13 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                     .getString(eu.power_switch.shared.R.string.PACKAGE_NAME), R.layout.widget_receiver);
 
             try {
-                ReceiverWidget receiverWidget = DatabaseHandlerStatic.getReceiverWidget(appWidgetId);
+                ReceiverWidget receiverWidget = persistanceHandler.getReceiverWidget(appWidgetId);
                 try {
-                    Room room = DatabaseHandlerStatic.getRoom(receiverWidget.getRoomId());
+                    Room room = persistanceHandler.getRoom(receiverWidget.getRoomId());
                     try {
-                        Receiver receiver = DatabaseHandlerStatic.getReceiver(receiverWidget.getReceiverId());
+                        Receiver receiver = persistanceHandler.getReceiver(receiverWidget.getReceiverId());
 
-                        Apartment apartment = DatabaseHandlerStatic.getApartment(room.getApartmentId());
+                        Apartment apartment = persistanceHandler.getApartment(room.getApartmentId());
                         // update UI
                         remoteViews.setTextViewText(R.id.textView_receiver_widget_name,
                                 apartment.getName() + ": " + room.getName() + ": " + receiver.getName());
@@ -152,7 +157,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
         Timber.d("Deleting Receiver Widgets: " + Arrays.toString(appWidgetIds));
         for (int appWidgetId : appWidgetIds) {
             try {
-                DatabaseHandlerStatic.deleteReceiverWidget(appWidgetId);
+                persistanceHandler.deleteReceiverWidget(appWidgetId);
             } catch (Exception e) {
                 Timber.e(e);
             }

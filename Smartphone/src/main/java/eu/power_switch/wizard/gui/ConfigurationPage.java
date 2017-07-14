@@ -18,6 +18,9 @@
 
 package eu.power_switch.wizard.gui;
 
+import javax.inject.Inject;
+
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.wizard.config.ConfigurationHolder;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,5 +43,8 @@ public abstract class ConfigurationPage extends WizardPage {
     @Getter
     @Setter
     private boolean isValid = false;
+
+    @Inject
+    protected PersistanceHandler persistanceHandler;
 
 }

@@ -29,7 +29,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
@@ -111,9 +110,9 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
         newScene.addSceneItems(getConfiguration().getSceneItems());
 
         if (getConfiguration().getScene() == null) {
-            DatabaseHandlerStatic.addScene(newScene);
+            persistanceHandler.addScene(newScene);
         } else {
-            DatabaseHandlerStatic.updateScene(newScene);
+            persistanceHandler.updateScene(newScene);
         }
 
         // notify scenes fragment
@@ -136,7 +135,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            DatabaseHandlerStatic.deleteScene(getConfiguration().getScene()
+                            persistanceHandler.deleteScene(getConfiguration().getScene()
                                     .getId());
 
                             // notify scenes fragment

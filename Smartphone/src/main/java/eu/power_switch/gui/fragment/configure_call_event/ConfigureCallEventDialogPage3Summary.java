@@ -39,7 +39,6 @@ import java.util.Iterator;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -99,7 +98,7 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
 
     private void initializeCallData(long callEventId) {
         try {
-            CallEvent callEvent = DatabaseHandlerStatic.getCallEvent(callEventId);
+            CallEvent callEvent = persistanceHandler.getCallEvent(callEventId);
 
             currentPhoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
             currentActions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));

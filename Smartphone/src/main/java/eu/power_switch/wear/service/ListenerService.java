@@ -36,7 +36,7 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
@@ -56,6 +56,9 @@ public class ListenerService extends WearableListenerService {
 
     @Inject
     ActionHandler actionHandler;
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     @Override
     public void onCreate() {
@@ -110,7 +113,7 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
-                Room     room     = DatabaseHandlerStatic.getRoom(roomId);
+                Room     room     = persistanceHandler.getRoom(roomId);
                 Receiver receiver = room.getReceiver(receiverId);
                 Button   button   = receiver.getButton(buttonId);
 
@@ -123,7 +126,7 @@ public class ListenerService extends WearableListenerService {
                 stop = messageData.indexOf(";;");
                 buttonId = Long.valueOf(messageData.substring(start, stop));
 
-                Room room = DatabaseHandlerStatic.getRoom(roomId);
+                Room room = persistanceHandler.getRoom(roomId);
 
                 actionHandler.execute(room, buttonId);
             } else if (messageData.contains(WearableConstants.KEY_SCENE_ID)) {
@@ -131,7 +134,7 @@ public class ListenerService extends WearableListenerService {
                 int  stop    = messageData.indexOf(";;");
                 Long sceneId = Long.valueOf(messageData.substring(start, stop));
 
-                Scene scene = DatabaseHandlerStatic.getScene(sceneId);
+                Scene scene = persistanceHandler.getScene(sceneId);
 
                 actionHandler.execute(scene);
             }

@@ -40,8 +40,11 @@ import timber.log.Timber;
 @Singleton
 class CallEventPhoneNumberHandler {
 
+    private PhoneNumberHandler phoneNumberHandler;
+
     @Inject
     CallEventPhoneNumberHandler() {
+        phoneNumberHandler = new PhoneNumberHandler();
     }
 
     protected void add(@NonNull SQLiteDatabase database, Set<String> phoneNumbers, long callEventId,
@@ -52,7 +55,7 @@ class CallEventPhoneNumberHandler {
         }
 
         for (String phoneNumber : phoneNumbers) {
-            long phoneNumberId = PhoneNumberHandler.add(database, phoneNumber);
+            long phoneNumberId = phoneNumberHandler.add(database, phoneNumber);
 
             // add to relational table
             ContentValues values = new ContentValues();
@@ -85,7 +88,7 @@ class CallEventPhoneNumberHandler {
 
         while (!cursor.isAfterLast()) {
             Long phoneNumberId = cursor.getLong(2);
-            phoneNumbers.add(PhoneNumberHandler.get(database, phoneNumberId));
+            phoneNumbers.add(phoneNumberHandler.get(database, phoneNumberId));
             cursor.moveToNext();
         }
 
@@ -99,8 +102,13 @@ class CallEventPhoneNumberHandler {
      * @param callEventId ID of CallEvent
      */
     protected void deleteByCallEvent(@NonNull SQLiteDatabase database, Long callEventId) throws Exception {
-        Cursor cursor = database.query(CallEventPhoneNumberTable.TABLE_NAME, CallEventPhoneNumberTable.ALL_COLUMNS,
-                CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID + "==" + callEventId, null, null, null, null);
+        Cursor cursor = database.query(CallEventPhoneNumberTable.TABLE_NAME,
+                CallEventPhoneNumberTable.ALL_COLUMNS,
+                CallEventPhoneNumberTable.COLUMN_CALL_EVENT_ID + "==" + callEventId,
+                null,
+                null,
+                null,
+                null);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {

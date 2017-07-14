@@ -36,8 +36,11 @@ import android.widget.LinearLayout;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 
@@ -50,10 +53,14 @@ import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
  */
 public abstract class RecyclerViewFragment<T> extends EventBusFragment implements LoaderManager.LoaderCallbacks<RecyclerViewUpdateResult<T>> {
 
+    @Inject
+    protected PersistanceHandler persistanceHandler;
+
     @BindView(R.id.layoutLoading)
     LinearLayout layoutLoading;
     @BindView(R.id.layoutEmpty)
     FrameLayout  layoutEmpty;
+
     @BindView(R.id.layoutError)
     LinearLayout layoutError;
 

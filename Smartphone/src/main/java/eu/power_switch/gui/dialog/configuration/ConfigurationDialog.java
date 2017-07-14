@@ -36,8 +36,11 @@ import android.widget.ImageButton;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
@@ -55,8 +58,8 @@ import timber.log.Timber;
  */
 public abstract class ConfigurationDialog extends EventBusSupportDialogFragment {
 
-    @BindView(R.id.contentView)
-    FrameLayout contentViewContainer;
+    @Inject
+    protected PersistanceHandler persistanceHandler;
 
     @BindView(R.id.imageButton_delete)
     protected ImageButton imageButtonDelete;
@@ -64,6 +67,9 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
     protected ImageButton imageButtonCancel;
     @BindView(R.id.imageButton_save)
     protected ImageButton imageButtonSave;
+
+    @BindView(R.id.contentView)
+    FrameLayout contentViewContainer;
 
     @Getter
     private View contentView;

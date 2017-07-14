@@ -36,9 +36,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
+import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
@@ -69,6 +71,9 @@ public class RoomSceneTabFragment extends EventBusFragment {
 
     @BindView(R.id.linearLayout_currentApartmentInfo)
     LinearLayout linearLayout_currentApartmentInfo;
+
+    @Inject
+    PersistanceHandler persistanceHandler;
 
     private CustomTabAdapter customTabAdapter;
     private int     currentTab   = 0;
@@ -164,7 +169,7 @@ public class RoomSceneTabFragment extends EventBusFragment {
                 if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                     textView_currentApartmentInfo.setText(" - ");
                 } else {
-                    String apartmentName = DatabaseHandlerStatic.getApartmentName(currentApartmentId);
+                    String apartmentName = persistanceHandler.getApartmentName(currentApartmentId);
                     textView_currentApartmentInfo.setText(apartmentName);
                 }
             }
