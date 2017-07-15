@@ -45,8 +45,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.persistence.PersistanceHandler;
 import lombok.Getter;
@@ -96,8 +94,6 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
         if (configuration == null) {
             throw new IllegalStateException("Missing ConfigurationHolder!");
         }
-
-        SmartphoneThemeHelper.applyDialogTheme(this);
     }
 
     @Nullable
@@ -369,7 +365,7 @@ public abstract class ConfigurationDialogTabbed<Configuration extends Configurat
         try {
             saveConfiguration();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            statusMessageHandler.showErrorMessage(getActivity(), e);
         }
         getDialog().dismiss();
     }

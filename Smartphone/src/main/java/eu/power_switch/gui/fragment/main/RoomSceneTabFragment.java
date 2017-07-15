@@ -157,7 +157,7 @@ public class RoomSceneTabFragment extends EventBusFragment {
 
     private void updateCurrentApartmentInfo() {
         try {
-            long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            long currentApartmentId = smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
             if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
                 textView_currentApartmentInfo.setText(" - ");
             } else {

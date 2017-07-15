@@ -41,7 +41,6 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.event.CallEventActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddCallEventActionDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -141,7 +140,7 @@ public class ConfigureCallEventDialogPage2Actions extends ConfigurationDialogPag
             actions.addAll(callEvent.getActions(PhoneConstants.CallType.INCOMING));
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

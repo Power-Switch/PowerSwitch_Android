@@ -44,7 +44,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.CallEventChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.CallEventRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureCallEventDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -123,7 +122,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
 
         if (!PermissionHelper.isPhonePermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+            statusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
                     PermissionConstants.REQUEST_CODE_PHONE_PERMISSION,
                     NEEDED_PERMISSIONS);
@@ -147,11 +146,11 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
             }
 
             if (allGranted) {
-                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                statusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                 notifyCallEventsChanged();
             } else {
-                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                statusMessageHandler.showPermissionMissingMessage(getActivity(),
                         getRecyclerView(),
                         PermissionConstants.REQUEST_CODE_PHONE_PERMISSION,
                         NEEDED_PERMISSIONS);
@@ -208,7 +207,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
         menu.findItem(R.id.create_call_event)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_call_event)
                     .setVisible(false)
                     .setEnabled(false);
@@ -218,7 +217,7 @@ public class CallEventsFragment extends RecyclerViewFragment<CallEvent> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

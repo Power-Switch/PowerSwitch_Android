@@ -55,6 +55,9 @@ public class HiddenReceiverActivity extends DaggerActivity {
     @Inject
     PersistanceHandler persistanceHandler;
 
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -158,7 +161,7 @@ public class HiddenReceiverActivity extends DaggerActivity {
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
+            statusMessageHandler.showErrorMessage(this, e);
         }
     }
 }

@@ -33,7 +33,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
@@ -72,7 +71,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
                     onApartmentClicked(persistanceHandler.getApartment(apartmentNames.get(position)));
                 } catch (Exception e) {
                     dismiss();
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    statusMessageHandler.showErrorMessage(getActivity(), e);
                 }
             }
         });
@@ -104,7 +103,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
         try {
             apartmentNames.addAll(persistanceHandler.getAllApartmentNames());
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            statusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         return apartmentNames;
@@ -116,7 +115,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
      * @param apartment the selected Apartment
      */
     protected void onApartmentClicked(Apartment apartment) {
-        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
+        smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
         ApartmentFragment.notifyActiveApartmentChanged(getContext());
         dismiss();
     }

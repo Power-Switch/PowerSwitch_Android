@@ -20,7 +20,6 @@ package eu.power_switch.gui.dialog;
 
 import java.util.ArrayList;
 
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigureApartmentGeofenceDialog;
 import eu.power_switch.obj.Apartment;
 
@@ -40,7 +39,7 @@ public class SelectApartmentForGeofenceDialog extends SelectApartmentDialog {
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContext(), e);
+            statusMessageHandler.showErrorMessage(getContext(), e);
         }
 
         return apartmentNames;

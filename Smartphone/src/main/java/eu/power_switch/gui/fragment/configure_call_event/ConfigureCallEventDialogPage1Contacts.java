@@ -44,7 +44,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.PhoneNumberAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.PhoneNumberRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddPhoneNumberDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -105,7 +104,7 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
 
                                     sendPhoneNumbersChangedBroadcast(getContext(), phoneNumbers);
                                 } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getContentView(), e);
+                                    statusMessageHandler.showErrorMessage(getContentView(), e);
                                 }
                             }
                         })
@@ -147,7 +146,7 @@ public class ConfigureCallEventDialogPage1Contacts extends ConfigurationDialogPa
 
             phoneNumbers.addAll(callEvent.getPhoneNumbers(PhoneConstants.CallType.INCOMING));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

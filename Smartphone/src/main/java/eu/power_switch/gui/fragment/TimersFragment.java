@@ -42,7 +42,6 @@ import javax.inject.Inject;
 import eu.power_switch.R;
 import eu.power_switch.event.TimerChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
@@ -86,7 +85,12 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(), persistanceHandler, androidAlarmHandler, timers);
+        timerRecyclerViewAdapter = new TimerRecyclerViewAdapter(getActivity(),
+                persistanceHandler,
+                androidAlarmHandler,
+                smartphonePreferencesHandler,
+                statusMessageHandler,
+                timers);
         getRecyclerView().setAdapter(timerRecyclerViewAdapter);
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
@@ -100,7 +104,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
                     ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(timer, recyclerViewFragment);
                     configureTimerDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -114,12 +118,12 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
                     ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(recyclerViewFragment);
                     configureTimerDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
 
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addTimerFAB.setVisibility(View.GONE);
         }
 
@@ -167,7 +171,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
                     ConfigureTimerDialog configureTimerDialog = ConfigureTimerDialog.newInstance(this);
                     configureTimerDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             default:
                 break;
@@ -184,7 +188,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
         menu.findItem(R.id.create_timer)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_timer)
                     .setVisible(false)
                     .setEnabled(false);

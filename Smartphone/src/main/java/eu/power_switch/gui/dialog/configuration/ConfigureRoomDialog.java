@@ -32,7 +32,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_room.ConfigureRoomDialogPage1;
@@ -124,7 +123,7 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
 
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
+        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -149,9 +148,9 @@ public class ConfigureRoomDialog extends ConfigurationDialogTabbed<RoomConfigura
                             // update wear data
                             UtilityService.forceWearDataUpdate(getActivity());
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_deleted, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

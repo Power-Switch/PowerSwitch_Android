@@ -18,12 +18,6 @@
 
 package eu.power_switch.gui.activity.butterknife;
 
-import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.Nullable;
-
-import eu.power_switch.gui.activity.SmartphoneThemeHelper;
-
 /**
  * Base class for a ButterKnife backed activity themed like a dialog
  * <p>
@@ -32,12 +26,7 @@ import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 public abstract class ButterKnifeDialogActivity extends ButterKnifeSupportActivityBase {
 
     @Override
-    @CallSuper
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        // set Theme before anything else in onCreate();
-        SmartphoneThemeHelper.applyDialogTheme(this);
-
-        super.onCreate(savedInstanceState);
+    protected int getStyle() {
+        return DIALOG;
     }
-
 }

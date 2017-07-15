@@ -33,7 +33,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.RoomNameRecyclerViewAdapter;
 import eu.power_switch.gui.adapter.SimpleItemTouchHelperCallback;
@@ -96,7 +95,7 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
 
             roomNameRecyclerViewAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            statusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         return false;
@@ -133,10 +132,10 @@ public class EditRoomOrderDialog extends ConfigurationDialog implements OnStartD
             // update wear data
             UtilityService.forceWearDataUpdate(getActivity());
 
-            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.room_saved, Snackbar.LENGTH_LONG);
             getDialog().dismiss();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            statusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

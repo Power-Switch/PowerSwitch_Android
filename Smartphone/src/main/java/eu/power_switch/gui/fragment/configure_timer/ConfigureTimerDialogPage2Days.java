@@ -31,7 +31,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import eu.power_switch.timer.Timer;
@@ -142,7 +141,7 @@ public class ConfigureTimerDialogPage2Days extends ConfigurationDialogPage<Timer
 
                 }
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }

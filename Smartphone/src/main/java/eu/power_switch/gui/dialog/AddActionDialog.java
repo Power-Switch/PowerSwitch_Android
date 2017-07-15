@@ -53,7 +53,6 @@ import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
 import eu.power_switch.event.ActionAddedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
@@ -639,7 +638,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(rootView, e);
+            statusMessageHandler.showErrorMessage(rootView, e);
         }
 
         return action;

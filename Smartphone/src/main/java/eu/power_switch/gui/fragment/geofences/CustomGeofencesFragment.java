@@ -49,7 +49,6 @@ import eu.power_switch.event.CustomGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -90,7 +89,11 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
         setHasOptionsMenu(true);
 
-        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(), geofences, geofenceApiHandler, persistanceHandler);
+        geofenceRecyclerViewAdapter = new GeofenceRecyclerViewAdapter(getActivity(),
+                geofences,
+                geofenceApiHandler,
+                persistanceHandler,
+                statusMessageHandler);
         getRecyclerView().setAdapter(geofenceRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
@@ -124,7 +127,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
         if (!PermissionHelper.isLocationPermissionAvailable(getContext())) {
             showEmpty();
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+            statusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
                     PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                     Manifest.permission.ACCESS_FINE_LOCATION);
@@ -143,11 +146,11 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
 
         if (permissionRequestCode == PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION) {
             if (result[0] == PackageManager.PERMISSION_GRANTED) {
-                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                statusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                 notifyCustomGeofencesChanged();
             } else {
-                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                statusMessageHandler.showPermissionMissingMessage(getActivity(),
                         getRecyclerView(),
                         PermissionConstants.REQUEST_CODE_LOCATION_PERMISSION,
                         Manifest.permission.ACCESS_FINE_LOCATION);
@@ -203,7 +206,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
         menu.findItem(R.id.create_geofence)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_geofence)
                     .setVisible(false)
                     .setEnabled(false);
@@ -213,7 +216,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

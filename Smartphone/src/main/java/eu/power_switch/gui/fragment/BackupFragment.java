@@ -54,7 +54,6 @@ import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.event.BackupChangedEvent;
 import eu.power_switch.google_play_services.firebase.database.FirebaseDatabaseHandler;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.BackupRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.CreateBackupDialog;
 import eu.power_switch.gui.dialog.EditBackupDialog;
@@ -120,12 +119,12 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                     pathChooserDialog.setTargetFragment(BackupFragment.this, 0);
                     pathChooserDialog.show(getActivity().getSupportFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
 
-        backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups, backupHandler);
+        backupArrayAdapter = new BackupRecyclerViewAdapter(this, getActivity(), backups, backupHandler, statusMessageHandler);
 //        backupArrayAdapter.setOnItemClickListener(new BackupRecyclerViewAdapter.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(View itemView, int position) {
@@ -135,7 +134,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
 //                    Uri fileUri = Uri.fromFile(new File(backup.getPath()));
 //                    RestoreBackupFromFileActivity.newInstance(getActivity(), fileUri);
 //                } catch (Exception e) {
-//                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+//                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
 //                }
 //            }
 //        });
@@ -149,7 +148,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                     editBackupDialog.setTargetFragment(BackupFragment.this, 0);
                     editBackupDialog.show(getActivity().getSupportFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -173,7 +172,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                     createBackupDialog.setTargetFragment(BackupFragment.this, 0);
                     createBackupDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -204,7 +203,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                 updateUI();
             } else {
                 // Permission Denied
-                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                statusMessageHandler.showPermissionMissingMessage(getActivity(),
                         getRecyclerView(),
                         PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
                         NEEDED_PERMISSIONS);
@@ -236,16 +235,16 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     }
 
     private void updateUI() {
-        textViewBackupPath.setText(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+        textViewBackupPath.setText(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
 
         if (!PermissionHelper.isWriteExternalStoragePermissionAvailable(getActivity())) {
             showEmpty();
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
+            statusMessageHandler.showPermissionMissingMessage(getActivity(), getRecyclerView(), PermissionConstants.REQUEST_CODE_STORAGE_PERMISSION,
                     NEEDED_PERMISSIONS);
         } else {
             updateListContent();
 
-            if (BackupHandler.oldBackupFormatsExist()) {
+            if (backupHandler.oldBackupFormatsExist()) {
                 final AlertDialog dialog = new AlertDialog.Builder(getActivity()).setTitle(R.string.old_backups_found_title)
                         .setMessage(R.string.old_backups_found_message)
                         .setView(R.layout.dialog_old_backup_format)
@@ -289,7 +288,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
                     createBackupDialog.setTargetFragment(this, 0);
                     createBackupDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             default:
                 break;
@@ -306,7 +305,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
         menu.findItem(R.id.create_backup)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_backup)
                     .setVisible(false)
                     .setEnabled(false);
@@ -316,7 +315,7 @@ public class BackupFragment extends RecyclerViewFragment<Backup> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

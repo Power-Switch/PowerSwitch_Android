@@ -40,7 +40,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHolder;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -136,7 +135,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -236,7 +235,7 @@ public class ConfigureApartmentDialogPage1Name extends ConfigurationDialogPage<A
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

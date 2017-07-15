@@ -36,8 +36,8 @@ public class SmartphoneThemeHelper {
      *
      * @param activity Activity to apply theme on
      */
-    public static void applyTheme(Activity activity) {
-        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
+    public static void applyTheme(Activity activity, SmartphonePreferencesHandler smartphonePreferencesHandler) {
+        switch (smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
             case SettingsConstants.THEME_DARK_BLUE:
                 activity.getApplicationContext().setTheme(R.style.PowerSwitchTheme_Dark_Blue);
                 activity.setTheme(R.style.PowerSwitchTheme_Dark_Blue);
@@ -71,8 +71,8 @@ public class SmartphoneThemeHelper {
      *
      * @param activity Activity to apply theme on
      */
-    public static void applyDialogTheme(Activity activity) {
-        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
+    public static void applyDialogTheme(Activity activity, SmartphonePreferencesHandler smartphonePreferencesHandler) {
+        switch (smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
             case SettingsConstants.THEME_DARK_BLUE:
                 activity.getApplicationContext().setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
                 activity.setTheme(R.style.PowerSwitchDialogTheme_Dark_Blue);
@@ -106,8 +106,8 @@ public class SmartphoneThemeHelper {
      *
      * @param dialogFragment Fragment to apply theme on
      */
-    public static void applyDialogTheme(DialogFragment dialogFragment) {
-        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
+    public static void applyDialogTheme(DialogFragment dialogFragment, SmartphonePreferencesHandler smartphonePreferencesHandler) {
+        switch (smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)) {
             case SettingsConstants.THEME_DARK_BLUE:
                 dialogFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.PowerSwitchDialogTheme_Dark_Blue);
                 break;

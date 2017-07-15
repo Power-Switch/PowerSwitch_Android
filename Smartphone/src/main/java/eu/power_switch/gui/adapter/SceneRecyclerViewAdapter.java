@@ -55,22 +55,25 @@ import eu.power_switch.shared.haptic_feedback.VibrationHandler;
  * Created by Markus on 27.07.2015.
  */
 public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecyclerViewAdapter.ViewHolder> {
-    private final RecyclerViewFragment recyclerViewFragment;
-    private final ArrayList<Scene>     scenes;
-    private final FragmentActivity     fragmentActivity;
-    private final PersistanceHandler   persistanceHandler;
-    private final ActionHandler        actonHandler;
+    private final RecyclerViewFragment         recyclerViewFragment;
+    private final ArrayList<Scene>             scenes;
+    private final FragmentActivity             fragmentActivity;
+    private final PersistanceHandler           persistanceHandler;
+    private final ActionHandler                actonHandler;
+    private final SmartphonePreferencesHandler smartphonePreferencesHandler;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public SceneRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Scene> scenes,
-                                    ActionHandler actionHandler, PersistanceHandler persistanceHandler) {
+                                    ActionHandler actionHandler, PersistanceHandler persistanceHandler,
+                                    SmartphonePreferencesHandler smartphonePreferencesHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.scenes = scenes;
         this.fragmentActivity = fragmentActivity;
         this.actonHandler = actionHandler;
         this.persistanceHandler = persistanceHandler;
+        this.smartphonePreferencesHandler = smartphonePreferencesHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -122,9 +125,9 @@ public class SceneRecyclerViewAdapter extends RecyclerView.Adapter<SceneRecycler
         holder.buttonActivateScene.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
                     VibrationHandler.vibrate(fragmentActivity,
-                            SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                            smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                 }
 
                 new AsyncTask<Void, Void, Void>() {

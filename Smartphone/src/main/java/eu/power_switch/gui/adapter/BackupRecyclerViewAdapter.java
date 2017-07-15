@@ -59,16 +59,18 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
     private final RecyclerViewFragment recyclerViewFragment;
     private final ArrayList<Backup>    backups;
     private final Context              context;
+    private final StatusMessageHandler statusMessageHandler;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public BackupRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, Context context, ArrayList<Backup> backups,
-                                     BackupHandler backupHandler) {
+                                     BackupHandler backupHandler, StatusMessageHandler statusMessageHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.backups = backups;
         this.context = context;
         this.backupHandler = backupHandler;
+        this.statusMessageHandler = statusMessageHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -104,7 +106,7 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
                     Uri fileUri = Uri.fromFile(new File(backup.getPath()));
                     RestoreBackupFromFileActivity.newInstance(context, fileUri);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                 }
             }
         });
@@ -126,15 +128,15 @@ public class BackupRecyclerViewAdapter extends RecyclerView.Adapter<BackupRecycl
 
                             backups.remove(holder.getAdapterPosition());
                             notifyItemRemoved(holder.getAdapterPosition());
-                            StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.backup_removed,
+                            statusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.backup_removed,
                                     Snackbar.LENGTH_LONG);
                         } catch (BackupNotFoundException e) {
                             Timber.e(e);
-                            StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
+                            statusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                     R.string.backup_not_found,
                                     Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                            statusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
                     }
                 })

@@ -53,6 +53,9 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
     @Inject
     AndroidAlarmHandler androidAlarmHandler;
 
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -123,7 +126,7 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
         }
 
         reinitializeAlarms(context);
@@ -136,7 +139,7 @@ public class TimerAlarmIntentReceiver extends DaggerBroadcastReceiver {
                 androidAlarmHandler.createAlarm(timer);
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
         }
     }
 }

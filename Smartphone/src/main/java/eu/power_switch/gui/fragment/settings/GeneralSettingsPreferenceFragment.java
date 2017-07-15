@@ -34,7 +34,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 import android.view.View;
 
@@ -44,6 +43,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import de.markusressel.android.library.tutorialtooltip.TutorialTooltip;
 import eu.power_switch.BuildConfig;
@@ -69,7 +70,7 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 /**
  * Created by Markus on 31.07.2016.
  */
-public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragment {
 
     private IntListPreference startupDefaultTab;
     private SwitchPreference  autodiscover;
@@ -101,6 +102,12 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     private Map<Integer, String> logDestinationMap;
     private Map<Integer, String> launcherIconMap;
 
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -116,7 +123,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
     @Subscribe(threadMode = ThreadMode.MAIN)
     @SuppressWarnings("unused")
     public void onBackupPathChanged() {
-        backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+        backupPath.setSummary(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
     }
 
     private void initializePreferenceItems() {
@@ -125,7 +132,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         startupDefaultTab.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_STARTUP_TAB);
 
         mainTabsMap = getListPreferenceEntryValueMap(R.array.main_tab_values, R.array.main_tab_names);
-        startupDefaultTab.setSummary(mainTabsMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
+        startupDefaultTab.setSummary(mainTabsMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
 
         autodiscover = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER);
         autodiscover.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_AUTO_DISCOVER);
@@ -169,7 +176,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
 
         vibrationDuration = (SliderPreference) findPreference(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION);
         vibrationDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_VIBRATION_DURATION);
-        vibrationDuration.setSummary(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
+        vibrationDuration.setSummary(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION) + " ms");
 
         showGeofenceNotifications = (SwitchPreference) findPreference(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS);
         showGeofenceNotifications.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS);
@@ -184,12 +191,12 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         keepHistoryDuration = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION);
         keepHistoryDuration.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_KEEP_HISTORY_DURATION);
         keepHistoryMap = getListPreferenceEntryValueMap(R.array.entryValues_history, R.array.entries_history);
-        keepHistoryDuration.setSummary(keepHistoryMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)));
+        keepHistoryDuration.setSummary(keepHistoryMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)));
 
         final Fragment fragment = this;
         backupPath = findPreference(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
         backupPath.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_BACKUP_PATH);
-        backupPath.setSummary(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+        backupPath.setSummary(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
         backupPath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -219,12 +226,12 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         theme = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_THEME);
         theme.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_THEME);
         themeMap = getListPreferenceEntryValueMap(R.array.theme_values, R.array.theme_names);
-        theme.setSummary(themeMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)));
+        theme.setSummary(themeMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_THEME)));
 
         launcherIcon = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON);
         launcherIcon.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LAUNCHER_ICON);
         launcherIconMap = getListPreferenceEntryValueMap(R.array.entryValues_launcher_icon, R.array.entries_launcher_icon);
-        launcherIcon.setSummary(launcherIconMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
+        launcherIcon.setSummary(launcherIconMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LAUNCHER_ICON)));
 
         resetTutorial = findPreference(getString(R.string.key_resetTutorial));
         resetTutorial.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -262,7 +269,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
         logDestination = (IntListPreference) findPreference(SmartphonePreferencesHandler.KEY_LOG_DESTINATION);
         logDestination.setDefaultValue(SmartphonePreferencesHandler.DEFAULT_VALUE_LOG_DESTINATION);
         logDestinationMap = getListPreferenceEntryValueMap(R.array.logDestination_values, R.array.logDestination_names);
-        logDestination.setSummary(logDestinationMap.get(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)));
+        logDestination.setSummary(logDestinationMap.get(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION)));
 
         sendLogsEmail = findPreference(getString(R.string.key_sendLogsEmail));
         sendLogsEmail.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -305,7 +312,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
                                                 });
                                                 snackbar.show();
                                             } else {
-                                                StatusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult.getException());
+                                                statusMessageHandler.showErrorMessage(getActivity(), booleanAsyncTaskResult.getException());
                                             }
                                         }
 
@@ -422,7 +429,7 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
                     .show();
         }
 
-        SmartphonePreferencesHandler.forceRefresh();
+        smartphonePreferencesHandler.forceRefresh();
     }
 
     @Override
@@ -434,22 +441,6 @@ public class GeneralSettingsPreferenceFragment extends PreferenceFragmentCompat 
             fragment.show(getFragmentManager(), "android.support.v7.preference.PreferenceFragment.DIALOG");
         } else
             super.onDisplayPreferenceDialog(preference);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onPause() {
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
-
-        super.onPause();
     }
 
     private Context getPreferenceManagerContext() {

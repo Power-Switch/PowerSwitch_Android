@@ -40,7 +40,6 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.event.ActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddActionDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -134,7 +133,7 @@ public class ConfigureTimerDialogPage3Action extends ConfigurationDialogPage<Tim
 
                 getConfiguration().setActions(currentActions);
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }

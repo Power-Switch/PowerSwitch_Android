@@ -61,7 +61,7 @@ public final class PluginBundleManager {
      * @param bundle bundle to verify. May be null, which will always return false.
      * @return true if the Bundle is valid, false if the bundle is invalid.
      */
-    public static boolean isBundleValid(Context context, final Bundle bundle) {
+    public static boolean isBundleValid(Context context, StatusMessageHandler statusMessageHandler, final Bundle bundle) {
         if (null == bundle) {
             return false;
         }
@@ -70,27 +70,37 @@ public final class PluginBundleManager {
          * Make sure the expected extras exist
          */
         if (!bundle.containsKey(ApiConstants.KEY_APARTMENT)) {
-            StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be missing.", ApiConstants.KEY_APARTMENT), Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context,
+                    String.format("bundle extra %s appears to be missing.", ApiConstants.KEY_APARTMENT),
+                    Snackbar.LENGTH_LONG);
             return false;
         } else if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_APARTMENT))) {
-            StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_APARTMENT), Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context,
+                    String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_APARTMENT),
+                    Snackbar.LENGTH_LONG);
             return false;
         }
 
         // Receiver Action
         if (bundle.keySet().size() == 3 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_ROOM) && bundle.containsKey(ApiConstants.KEY_RECEIVER) && bundle.containsKey(ApiConstants.KEY_BUTTON)) {
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_ROOM))) {
-                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM), Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(context,
+                        String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM),
+                        Snackbar.LENGTH_LONG);
                 return false;
             }
 
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_RECEIVER))) {
-                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_RECEIVER), Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(context,
+                        String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_RECEIVER),
+                        Snackbar.LENGTH_LONG);
                 return false;
             }
 
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_BUTTON))) {
-                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON), Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(context,
+                        String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON),
+                        Snackbar.LENGTH_LONG);
                 return false;
             }
 
@@ -100,12 +110,16 @@ public final class PluginBundleManager {
         // Room Action
         if (bundle.keySet().size() == 2 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_ROOM) && bundle.containsKey(ApiConstants.KEY_BUTTON)) {
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_ROOM))) {
-                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM), Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(context,
+                        String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_ROOM),
+                        Snackbar.LENGTH_LONG);
                 return false;
             }
 
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_BUTTON))) {
-                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON), Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(context,
+                        String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_BUTTON),
+                        Snackbar.LENGTH_LONG);
                 return false;
             }
 
@@ -115,7 +129,9 @@ public final class PluginBundleManager {
         // Scene Action
         if (bundle.keySet().size() == 1 * 2 + 2 + 1 && bundle.containsKey(ApiConstants.KEY_SCENE)) {
             if (TextUtils.isEmpty(bundle.getString(ApiConstants.KEY_SCENE))) {
-                StatusMessageHandler.showInfoMessage(context, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_SCENE), Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(context,
+                        String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", ApiConstants.KEY_SCENE),
+                        Snackbar.LENGTH_LONG);
                 return false;
             }
 

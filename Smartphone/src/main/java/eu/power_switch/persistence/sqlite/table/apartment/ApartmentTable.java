@@ -28,9 +28,9 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  */
 public class ApartmentTable {
 
-    public static final String TABLE_NAME = "apartments";
-    public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_NAME = "name";
+    public static final String TABLE_NAME      = "apartments";
+    public static final String COLUMN_ID       = "_id";
+    public static final String COLUMN_NAME     = "name";
     public static final String COLUMN_POSITION = "position";
 
     public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_NAME, COLUMN_POSITION};
@@ -47,19 +47,19 @@ public class ApartmentTable {
         db.execSQL(TABLE_CREATE);
     }
 
-    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion, SmartphonePreferencesHandler smartphonePreferencesHandler) {
         if (oldVersion <= 10) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
 
-            String apartmentName = "Home";
-            ContentValues values = new ContentValues();
+            String        apartmentName = "Home";
+            ContentValues values        = new ContentValues();
             values.put(COLUMN_ID, 0);
             values.put(COLUMN_NAME, apartmentName);
             values.put(COLUMN_POSITION, 0);
             db.insert(TABLE_NAME, null, values);
 
-            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, (long) 0);
+            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, (long) 0);
         }
     }
 }

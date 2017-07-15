@@ -40,6 +40,9 @@ public class HolidaySpecialHandler {
     private Context context;
 
     @Inject
+    StatusMessageHandler statusMessageHandler;
+
+    @Inject
     public HolidaySpecialHandler(Context context) {
         this.context = context;
     }
@@ -64,19 +67,19 @@ public class HolidaySpecialHandler {
     }
 
     private void showChristmasMessage(Context context) {
-        StatusMessageHandler.showInfoMessage(context, R.string.merry_christmas, 5000);
+        statusMessageHandler.showInfoMessage(context, R.string.merry_christmas, 5000);
     }
 
     private void showHalloweenMessage(Context context) {
-        StatusMessageHandler.showInfoMessage(context, R.string.happy_halloween, 5000);
+        statusMessageHandler.showInfoMessage(context, R.string.happy_halloween, 5000);
     }
 
     private void showEasterMessage(Context context) {
-        StatusMessageHandler.showInfoMessage(context, R.string.happy_easter, 5000);
+        statusMessageHandler.showInfoMessage(context, R.string.happy_easter, 5000);
     }
 
     private void showNewYearMessage(Context context) {
-        StatusMessageHandler.showInfoMessage(context, R.string.happy_new_year, 5000);
+        statusMessageHandler.showInfoMessage(context, R.string.happy_new_year, 5000);
     }
 
     /**

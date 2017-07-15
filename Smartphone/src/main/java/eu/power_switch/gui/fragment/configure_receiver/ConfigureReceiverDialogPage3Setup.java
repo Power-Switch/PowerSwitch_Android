@@ -65,7 +65,6 @@ import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHelper;
 import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.network.NetworkHandler;
@@ -265,14 +264,14 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     String content   = ClipboardHelper.getClipboardContent(getActivity());
                     Long   longValue = Long.parseLong(content);
                     editTextSeed.setText(String.valueOf(longValue));
-                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.pasted_from_clipboard, Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getContentView(), R.string.pasted_from_clipboard, Snackbar.LENGTH_LONG);
                 } catch (EmptyClipboardException e) {
                     Timber.w("Tried to paste but clipboard is empty");
-                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.clipboard_is_empty, Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getContentView(), R.string.clipboard_is_empty, Snackbar.LENGTH_LONG);
                     // do nothing
                 } catch (NumberFormatException e) {
                     Timber.w("Invalid number format: " + e.getMessage());
-                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.invalid_format, Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getContentView(), R.string.invalid_format, Snackbar.LENGTH_LONG);
                 }
             }
         });
@@ -284,7 +283,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
-                        StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
+                        statusMessageHandler.showNoActiveGatewayMessage(getActivity());
                         return;
                     }
 
@@ -301,7 +300,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     networkHandler.send(networkPackages);
 
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getContentView(), e);
+                    statusMessageHandler.showErrorMessage(getContentView(), e);
                 }
             }
         });
@@ -312,7 +311,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
-                        StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
+                        statusMessageHandler.showNoActiveGatewayMessage(getActivity());
                         return;
                     }
 
@@ -328,7 +327,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
 
                     networkHandler.send(networkPackages);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getContentView(), e);
+                    statusMessageHandler.showErrorMessage(getContentView(), e);
                 }
             }
         });
@@ -339,7 +338,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     List<Gateway> activeGateways = persistanceHandler.getAllGateways(true);
 
                     if (activeGateways.isEmpty()) {
-                        StatusMessageHandler.showNoActiveGatewayMessage(getActivity());
+                        statusMessageHandler.showNoActiveGatewayMessage(getActivity());
                         return;
                     }
 
@@ -355,7 +354,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
 
                     networkHandler.send(networkPackages);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getContentView(), e);
+                    statusMessageHandler.showErrorMessage(getContentView(), e);
                 }
             }
         });
@@ -406,7 +405,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
                     getCurrentSeed(),
                     getCurrentUniversalButtons());
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -463,7 +462,7 @@ public class ConfigureReceiverDialogPage3Setup extends ConfigurationDialogPage<R
             try {
                 initType(receiver);
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }

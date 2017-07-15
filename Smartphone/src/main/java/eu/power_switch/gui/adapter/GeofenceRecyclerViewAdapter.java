@@ -47,20 +47,22 @@ import timber.log.Timber;
  * Created by Markus on 27.07.2015.
  */
 public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRecyclerViewAdapter.ViewHolder> {
-    private GeofenceApiHandler  geofenceApiHandler;
-    private ArrayList<Geofence> geofences;
-    private Context             context;
-    private PersistanceHandler  persistanceHandler;
+    private GeofenceApiHandler   geofenceApiHandler;
+    private ArrayList<Geofence>  geofences;
+    private Context              context;
+    private PersistanceHandler   persistanceHandler;
+    private StatusMessageHandler statusMessageHandler;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public GeofenceRecyclerViewAdapter(Context context, ArrayList<Geofence> geofences, GeofenceApiHandler geofenceApiHandler,
-                                       PersistanceHandler persistanceHandler) {
+                                       PersistanceHandler persistanceHandler, StatusMessageHandler statusMessageHandler) {
         this.geofences = geofences;
         this.context = context;
         this.geofenceApiHandler = geofenceApiHandler;
         this.persistanceHandler = persistanceHandler;
+        this.statusMessageHandler = statusMessageHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -113,7 +115,7 @@ public class GeofenceRecyclerViewAdapter extends RecyclerView.Adapter<GeofenceRe
                         geofence.setActive(isChecked);
                     } catch (Exception e) {
                         Timber.e(e);
-                        StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_geofence, 5000);
+                        statusMessageHandler.showInfoMessage(context, R.string.error_enabling_geofence, 5000);
                     }
                 }
             }

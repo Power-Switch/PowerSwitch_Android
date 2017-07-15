@@ -42,7 +42,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
@@ -84,7 +83,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         setHasOptionsMenu(true);
 
         final RecyclerViewFragment recyclerViewFragment = this;
-        apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), apartments);
+        apartmentArrayAdapter = new ApartmentRecyclerViewAdapter(getActivity(), smartphonePreferencesHandler, apartments);
 
         getRecyclerView().setAdapter(apartmentArrayAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
@@ -95,7 +94,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                 try {
                     final Apartment apartment = apartments.get(position);
 
-                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
+                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                     for (Apartment currentApartment : apartments) {
                         if (currentApartment.getId()
@@ -108,7 +107,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
 
                     apartmentArrayAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -121,7 +120,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                     ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(apartment, recyclerViewFragment);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -134,7 +133,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                     ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(recyclerViewFragment);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -167,7 +166,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
         menu.findItem(R.id.create_apartment)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_apartment)
                     .setVisible(false)
                     .setEnabled(false);
@@ -186,7 +185,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
                     ConfigureApartmentDialog configureApartmentDialog = ConfigureApartmentDialog.newInstance(this);
                     configureApartmentDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             default:
                 break;
@@ -219,7 +218,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

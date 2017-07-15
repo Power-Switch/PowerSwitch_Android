@@ -231,11 +231,11 @@ public class MainActivity extends EventBusActivity {
         // Load first Fragment
         try {
             Fragment fragment;
-            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) == SettingsConstants.INVALID_APARTMENT_ID) {
+            if (smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) == SettingsConstants.INVALID_APARTMENT_ID) {
                 fragment = ApartmentFragment.class.newInstance();
                 drawerPositionStack.push(IDENTIFIER_APARTMENTS);
             } else {
-                fragment = RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
+                fragment = RoomSceneTabFragment.newInstance(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB));
                 drawerPositionStack.push(IDENTIFIER_ROOMS_SCENES);
             }
             lastFragmentClasses.push(fragment.getClass());
@@ -244,28 +244,28 @@ public class MainActivity extends EventBusActivity {
                     .replace(R.id.mainContentFrameLayout, fragment)
                     .commit();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            statusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         initNavigationDrawer();
         navigationDrawer.setSelection(drawerPositionStack.peek());
         initHistoryDrawer(navigationDrawer);
 
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA)) {
             new AlertDialog.Builder(this).setTitle(R.string.title_sendAnonymousCrashData)
                     .setMessage(R.string.message_sendAnonymousCrashData)
                     .setPositiveButton(R.string.enable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, true);
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, true);
+                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .setNegativeButton(R.string.disable, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, false);
-                            SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA, false);
+                            smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, false);
                         }
                     })
                     .show();
@@ -283,7 +283,7 @@ public class MainActivity extends EventBusActivity {
                     .show();
         }
 
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD)) {
 //            startActivity(WizardActivity.getLaunchIntent(this));
         } else {
             startGatewayAutoDiscovery();
@@ -297,7 +297,7 @@ public class MainActivity extends EventBusActivity {
 
     private void startGatewayAutoDiscovery() {
         // start automatic gateway discovery (if enabled)
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_DISCOVER) && (networkHandler.isWifiConnected() || networkHandler.isEthernetConnected())) {
             new AsyncTask<Void, Void, AsyncTaskResult<Gateway>>() {
 
                 @Override
@@ -322,7 +322,7 @@ public class MainActivity extends EventBusActivity {
                         try {
                             if (foundGateways.isEmpty() && persistanceHandler.getAllGateways()
                                     .isEmpty()) {
-                                StatusMessageHandler.showInfoMessage(getActivity(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
+                                statusMessageHandler.showInfoMessage(getActivity(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                             } else {
                                 for (Gateway gateway : foundGateways) {
                                     if (gateway == null) {
@@ -330,14 +330,14 @@ public class MainActivity extends EventBusActivity {
                                     }
                                     try {
                                         persistanceHandler.addGateway(gateway);
-                                        StatusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                        statusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                     } catch (GatewayAlreadyExistsException e) {
                                         try {
                                             persistanceHandler.enableGateway(e.getIdOfExistingGateway());
-                                            StatusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
+                                            statusMessageHandler.showInfoMessage(getActivity(), R.string.gateway_found, Snackbar.LENGTH_LONG);
                                         } catch (Exception e1) {
                                             Timber.e(e1);
-                                            StatusMessageHandler.showInfoMessage(getActivity(),
+                                            statusMessageHandler.showInfoMessage(getActivity(),
                                                     R.string.error_enabling_gateway,
                                                     Snackbar.LENGTH_LONG);
                                         }
@@ -345,10 +345,10 @@ public class MainActivity extends EventBusActivity {
                                 }
                             }
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
                     } else {
-                        StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
+                        statusMessageHandler.showErrorMessage(getActivity(), result.getException());
                     }
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -387,7 +387,7 @@ public class MainActivity extends EventBusActivity {
 
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -404,10 +404,10 @@ public class MainActivity extends EventBusActivity {
                         try {
                             startFragmentTransaction(IDENTIFIER_ROOMS_SCENES,
                                     getString(R.string.menu_rooms_scenes),
-                                    RoomSceneTabFragment.newInstance(SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
+                                    RoomSceneTabFragment.newInstance(smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_STARTUP_DEFAULT_TAB)));
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -427,7 +427,7 @@ public class MainActivity extends EventBusActivity {
                                     ApartmentFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -447,7 +447,7 @@ public class MainActivity extends EventBusActivity {
                                     GeofencesTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -467,7 +467,7 @@ public class MainActivity extends EventBusActivity {
                                     AlarmClockTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -486,7 +486,7 @@ public class MainActivity extends EventBusActivity {
                             startFragmentTransaction(IDENTIFIER_PHONE, getString(R.string.phone), PhoneTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -505,7 +505,7 @@ public class MainActivity extends EventBusActivity {
                             startFragmentTransaction(IDENTIFIER_TIMERS, getString(R.string.timers), TimersFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -522,7 +522,7 @@ public class MainActivity extends EventBusActivity {
                             historyDrawer.openDrawer();
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -541,7 +541,7 @@ public class MainActivity extends EventBusActivity {
                             startFragmentTransaction(IDENTIFIER_NFC, getString(R.string.nfc), NfcFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -561,7 +561,7 @@ public class MainActivity extends EventBusActivity {
                                     BackupFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -579,7 +579,7 @@ public class MainActivity extends EventBusActivity {
                             startFragmentTransaction(IDENTIFIER_SETTINGS, getString(R.string.menu_settings), SettingsTabFragment.class.newInstance());
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -597,7 +597,7 @@ public class MainActivity extends EventBusActivity {
                             startActivity(ChromeCustomTabHelper.getBrowserIntent(getActivity(), url));
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -616,7 +616,7 @@ public class MainActivity extends EventBusActivity {
 
                             return true;
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                             return false;
                         } finally {
                             navigationDrawer.closeDrawer();
@@ -779,7 +779,7 @@ public class MainActivity extends EventBusActivity {
                                         updateHistory();
 
                                         if (exception != null) {
-                                            StatusMessageHandler.showErrorMessage(getActivity(), exception);
+                                            statusMessageHandler.showErrorMessage(getActivity(), exception);
                                         }
 
                                     }
@@ -851,7 +851,7 @@ public class MainActivity extends EventBusActivity {
                 recyclerViewHistory.scrollToPosition(historyItems.size() - 1);
 
                 if (exception != null) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), exception);
+                    statusMessageHandler.showErrorMessage(getActivity(), exception);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -898,7 +898,7 @@ public class MainActivity extends EventBusActivity {
         super.onResume();
         appIsInForeground = true;
 
-        StatusMessageHandler.dismissCurrentSnackbar();
+        statusMessageHandler.dismissCurrentSnackbar();
 
         updateHistory();
         holidaySpecialHandler.showHolidaySpecial();

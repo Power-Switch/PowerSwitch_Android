@@ -29,7 +29,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_scene.ConfigureSceneDialogPage1Name;
@@ -104,8 +103,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
                     .getId();
         }
 
-        Scene newScene = new Scene(sceneId,
-                SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
+        Scene newScene = new Scene(sceneId, smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
                 getConfiguration().getName());
         newScene.addSceneItems(getConfiguration().getSceneItems());
 
@@ -124,7 +122,7 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
 
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
+        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -147,9 +145,9 @@ public class ConfigureSceneDialog extends ConfigurationDialogTabbed<SceneConfigu
                             // update wear data
                             UtilityService.forceWearDataUpdate(getActivity());
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_deleted, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.scene_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

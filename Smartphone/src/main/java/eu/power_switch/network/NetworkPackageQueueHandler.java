@@ -48,6 +48,9 @@ public class NetworkPackageQueueHandler extends DaggerIntentService {
     @Inject
     NetworkHandler networkHandler;
 
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
     /**
      * Socket used to send NetworkPackages over UDP
      */
@@ -86,7 +89,7 @@ public class NetworkPackageQueueHandler extends DaggerIntentService {
 
     private void processQueue(ArrayList<NetworkPackage> networkPackages) {
         if (networkHandler.isNetworkConnected()) {
-            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sending, Snackbar.LENGTH_INDEFINITE);
+            statusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sending, Snackbar.LENGTH_INDEFINITE);
 
             NetworkPackage currentNetworkPackage;
             while (networkPackages.size() > 0) {
@@ -115,7 +118,7 @@ public class NetworkPackageQueueHandler extends DaggerIntentService {
                 } catch (UnknownHostException e) {
                     removeQueueHead(networkPackages);
 
-                    StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.unknown_host, Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getApplicationContext(), R.string.unknown_host, Snackbar.LENGTH_LONG);
                     Timber.e("UDP Sender", e);
                     try {
                         Thread.sleep(2000);
@@ -126,7 +129,7 @@ public class NetworkPackageQueueHandler extends DaggerIntentService {
                 } catch (Exception e) {
                     removeQueueHead(networkPackages);
 
-                    StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
+                    statusMessageHandler.showErrorMessage(getApplicationContext(), e);
                     Timber.e("UDP Sender: Unknown error while sending message in background:", e);
                     try {
                         Thread.sleep(2000);
@@ -143,11 +146,11 @@ public class NetworkPackageQueueHandler extends DaggerIntentService {
             }
 
             // queue worked off
-            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sent, Snackbar.LENGTH_SHORT);
+            statusMessageHandler.showInfoMessage(getApplicationContext(), R.string.sent, Snackbar.LENGTH_SHORT);
         } else {
             clearQueue(networkPackages);
 
-            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.missing_network_connection, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(getApplicationContext(), R.string.missing_network_connection, Snackbar.LENGTH_LONG);
         }
     }
 

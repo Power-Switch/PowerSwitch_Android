@@ -38,7 +38,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
@@ -230,7 +229,7 @@ public class ConfigureSceneWidgetActivity extends ButterKnifeDialogActivity {
                 finish();
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
+            statusMessageHandler.showErrorMessage(this, e);
         }
     }
 }

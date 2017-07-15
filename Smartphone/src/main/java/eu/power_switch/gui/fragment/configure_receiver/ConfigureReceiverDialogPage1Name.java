@@ -57,7 +57,6 @@ import eu.power_switch.R;
 import eu.power_switch.event.ReceiverParentRoomChangedEvent;
 import eu.power_switch.event.RoomAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.CreateRoomDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
@@ -253,12 +252,12 @@ public class ConfigureReceiverDialogPage1Name extends ConfigurationDialogPage<Re
         try {
             // Get Rooms
             roomList.clear();
-            List<Room> rooms = persistanceHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            List<Room> rooms = persistanceHandler.getRooms(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             for (Room room : rooms) {
                 roomList.add(room.getName());
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
         roomNamesAdapter.notifyDataSetChanged();
     }

@@ -45,7 +45,6 @@ import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.event.ReceiverBrandOrModelChangedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.receiver.Receiver;
@@ -308,7 +307,7 @@ public class ConfigureReceiverDialogPage2Type extends ConfigurationDialogPage<Re
                 modelListView.smoothScrollToPosition(modelPosition);
 
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }

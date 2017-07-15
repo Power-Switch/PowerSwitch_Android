@@ -27,6 +27,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.persistence.demo_mode.DemoModePersistanceHandler;
@@ -36,6 +39,7 @@ import timber.log.Timber;
 /**
  * Preference handler used to store general app settings
  */
+@Singleton
 public class SmartphonePreferencesHandler {
 
     // default values
@@ -92,33 +96,18 @@ public class SmartphonePreferencesHandler {
 
 
     // setting keys
-    private static SharedPreferences sharedPreferences;
-    private static Map<String, ?>    cachedValues;
+    private SharedPreferences sharedPreferences;
+    private Map<String, ?>    cachedValues;
 
     // default values for each settings key
-    private static Map<String, Object> defaultValueMap;
+    private Map<String, Object> defaultValueMap;
 
-    private static Context context;
+    private Context context;
 
+    @Inject
+    public SmartphonePreferencesHandler(Context context) {
+        this.context = context;
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private SmartphonePreferencesHandler() {
-        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
-    }
-
-    /**
-     * Initialize this Handler
-     * <p/>
-     * Only one call per Application launch is needed
-     *
-     * @param context any suitable context
-     */
-    public static void init(Context context) {
-        SmartphonePreferencesHandler.context = context;
         sharedPreferences = context.getSharedPreferences(SettingsConstants.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         forceRefresh();
 
@@ -130,7 +119,7 @@ public class SmartphonePreferencesHandler {
         }
     }
 
-    private static void initializePublicKeys(Context context) {
+    private void initializePublicKeys(Context context) {
         KEY_AUTO_DISCOVER = context.getString(R.string.key_autodiscover);
         KEY_BACKUP_PATH = context.getString(R.string.key_backupPath);
         KEY_STARTUP_DEFAULT_TAB = context.getString(R.string.key_startupDefaultTab);
@@ -157,7 +146,7 @@ public class SmartphonePreferencesHandler {
         KEY_LAUNCHER_ICON = context.getString(R.string.key_launcher_icon);
     }
 
-    private static void initializeDefaultValueMap() {
+    private void initializeDefaultValueMap() {
         defaultValueMap = new HashMap<>();
         defaultValueMap.put(KEY_SHOW_ROOM_ALL_ON_OFF, DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF);
         defaultValueMap.put(KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON, DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON);
@@ -194,11 +183,11 @@ public class SmartphonePreferencesHandler {
     /**
      * Forces an update of the cached values
      */
-    public static void forceRefresh() {
+    public void forceRefresh() {
         cachedValues = sharedPreferences.getAll();
     }
 
-    public static String getPublicKeyString() {
+    public String getPublicKeyString() {
         return SettingsConstants.KDH_SDSA + SettingsConstants.JKD_COAP + SettingsConstants.DJA_IOVJ + SettingsConstants.VOK_ZWEQ;
     }
 
@@ -210,7 +199,7 @@ public class SmartphonePreferencesHandler {
      *
      * @return settings value
      */
-    public static <T> T get(String settingsKey) throws ClassCastException {
+    public <T> T get(String settingsKey) throws ClassCastException {
         // Timber.d("retrieving current value for key \"" + settingsKey + "\"");
 
         Object value = cachedValues.get(settingsKey);
@@ -230,7 +219,7 @@ public class SmartphonePreferencesHandler {
                 if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
                     return (T) value;
                 } else {
-                    DemoModePersistanceHandler demoModePersistanceHandler = new DemoModePersistanceHandler(SmartphonePreferencesHandler.context);
+                    DemoModePersistanceHandler demoModePersistanceHandler = new DemoModePersistanceHandler(context);
                     try {
                         return (T) demoModePersistanceHandler.getAllApartments()
                                 .get(0)
@@ -246,7 +235,7 @@ public class SmartphonePreferencesHandler {
     }
 
     @Nullable
-    private static Object getDefaultValue(String settingsKey) {
+    private Object getDefaultValue(String settingsKey) {
         return defaultValueMap.get(settingsKey);
     }
 
@@ -256,7 +245,7 @@ public class SmartphonePreferencesHandler {
      * @param settingsKey Key of setting
      * @param newValue    new value
      */
-    public static void set(String settingsKey, Object newValue) {
+    public void set(String settingsKey, Object newValue) {
         Timber.d("setting new value \"" + newValue + "\" for key \"" + settingsKey + "\"");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();

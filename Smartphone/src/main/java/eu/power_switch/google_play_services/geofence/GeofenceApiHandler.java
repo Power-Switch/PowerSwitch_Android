@@ -57,7 +57,10 @@ import timber.log.Timber;
 @Singleton
 public class GeofenceApiHandler {
 
-    private Context context;
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
+    private Context         context;
     private GoogleApiClient googleApiClient;
 
     @Inject
@@ -65,18 +68,17 @@ public class GeofenceApiHandler {
         this.context = context;
 
         // Create an instance of GoogleAPIClient.
-        googleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(@Nullable Bundle bundle) {
-                        Timber.d("GoogleApiClient connected");
-                    }
+        googleApiClient = new GoogleApiClient.Builder(context).addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+                Timber.d("GoogleApiClient connected");
+            }
 
-                    @Override
-                    public void onConnectionSuspended(int i) {
-                        Timber.d("GoogleApiClient connection suspended");
-                    }
-                })
+            @Override
+            public void onConnectionSuspended(int i) {
+                Timber.d("GoogleApiClient connection suspended");
+            }
+        })
                 .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -95,21 +97,17 @@ public class GeofenceApiHandler {
      * @param longitude          Longitude of Geofence location
      * @param radius             Radius in meter of geofence, for best results with WiFi networks this value should be >= 100
      * @param expirationDuration ???
+     *
      * @return Geofence
      */
-    public static Geofence createGeofence(String id, double latitude, double longitude, int radius,
-                                          long expirationDuration) {
+    public static Geofence createGeofence(String id, double latitude, double longitude, int radius, long expirationDuration) {
         Geofence geofence = new Geofence.Builder()
                 // Set the request ID of the geofence. This is a string to identify this
                 // geofence.
                 .setRequestId(id)
 
                 // Set the circular region of this geofence.
-                .setCircularRegion(
-                        latitude,
-                        longitude,
-                        radius
-                )
+                .setCircularRegion(latitude, longitude, radius)
 
                 // Set the expiration duration of the geofence. This geofence gets automatically
                 // removed after this period of time.
@@ -120,10 +118,7 @@ public class GeofenceApiHandler {
 
                 // Set the transition types of interest. Alerts are only generated for these
                 // transition. We track entry and exit transitions in this sample.
-                .setTransitionTypes(
-                        Geofence.GEOFENCE_TRANSITION_ENTER |
-                                Geofence.GEOFENCE_TRANSITION_EXIT |
-                                Geofence.GEOFENCE_TRANSITION_DWELL)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT | Geofence.GEOFENCE_TRANSITION_DWELL)
                 .build();
 
         return geofence;
@@ -146,37 +141,30 @@ public class GeofenceApiHandler {
      * @param geofence Geofence
      */
     public void addGeofence(eu.power_switch.google_play_services.geofence.Geofence geofence) {
-        addGeofence(getGeofencingRequest(
-                createGeofence(
-                        String.valueOf(geofence.getId()),
-                        geofence.getCenterLocation().latitude,
-                        geofence.getCenterLocation().longitude,
-                        (int) geofence.getRadius(),
-                        -1)), getGeofencePendingIntent());
+        addGeofence(getGeofencingRequest(createGeofence(String.valueOf(geofence.getId()),
+                geofence.getCenterLocation().latitude,
+                geofence.getCenterLocation().longitude,
+                (int) geofence.getRadius(),
+                -1)), getGeofencePendingIntent());
     }
 
-    private void addGeofence(GeofencingRequest geofencingRequest,
-                             PendingIntent geofencePendingIntent) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
-                .PERMISSION_GRANTED) {
+    private void addGeofence(GeofencingRequest geofencingRequest, PendingIntent geofencePendingIntent) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
-        LocationServices.GeofencingApi.addGeofences(
-                googleApiClient,
-                geofencingRequest,
-                geofencePendingIntent
-        ).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                switch (status.getStatusCode()) {
-                    case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showInfoMessage(context, R.string.geofence_enabled, Snackbar.LENGTH_SHORT);
-                }
+        LocationServices.GeofencingApi.addGeofences(googleApiClient, geofencingRequest, geofencePendingIntent)
+                .setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        switch (status.getStatusCode()) {
+                            case CommonStatusCodes.SUCCESS:
+                                statusMessageHandler.showInfoMessage(context, R.string.geofence_enabled, Snackbar.LENGTH_SHORT);
+                        }
 
-                Timber.d(status.toString());
-            }
-        });
+                        Timber.d(status.toString());
+                    }
+                });
     }
 
     /**
@@ -192,42 +180,38 @@ public class GeofenceApiHandler {
         ArrayList<String> geofenceIds = new ArrayList<>();
         geofenceIds.add(geofenceId);
 
-        LocationServices.GeofencingApi.removeGeofences(
-                googleApiClient,
-                geofenceIds
-        ).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                switch (status.getStatusCode()) {
-                    case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showInfoMessage(context, R.string.geofence_disabled, Snackbar.LENGTH_SHORT);
-                }
+        LocationServices.GeofencingApi.removeGeofences(googleApiClient, geofenceIds)
+                .setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        switch (status.getStatusCode()) {
+                            case CommonStatusCodes.SUCCESS:
+                                statusMessageHandler.showInfoMessage(context, R.string.geofence_disabled, Snackbar.LENGTH_SHORT);
+                        }
 
-                Timber.d(status.toString());
-            }
-        }); // Result processed in onResult().
+                        Timber.d(status.toString());
+                    }
+                }); // Result processed in onResult().
     }
 
     /**
      * Remove all Geofences from Google Location Api
      */
     public void removeAllGeofences() {
-        LocationServices.GeofencingApi.removeGeofences(
-                googleApiClient,
+        LocationServices.GeofencingApi.removeGeofences(googleApiClient,
                 // This is the same pending intent that was used in addGeofence().
-                getGeofencePendingIntent()
-        ).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                switch (status.getStatusCode()) {
-                    case CommonStatusCodes.SUCCESS:
-                        StatusMessageHandler.showInfoMessage(context, R.string.geofences_disabled, Snackbar
-                                .LENGTH_LONG);
-                }
+                getGeofencePendingIntent())
+                .setResultCallback(new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                        switch (status.getStatusCode()) {
+                            case CommonStatusCodes.SUCCESS:
+                                statusMessageHandler.showInfoMessage(context, R.string.geofences_disabled, Snackbar.LENGTH_LONG);
+                        }
 
-                Timber.d(status.toString());
-            }
-        }); // Result processed in onResult().
+                        Timber.d(status.toString());
+                    }
+                }); // Result processed in onResult().
     }
 
     private PendingIntent getGeofencePendingIntent() {

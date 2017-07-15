@@ -41,7 +41,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.GatewaySsidAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SsidRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddSsidDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
@@ -86,7 +85,7 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
                                     ssidRecyclerViewAdapter.notifyDataSetChanged();
                                     updateConfiguration(ssids);
                                 } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(getContentView(), e);
+                                    statusMessageHandler.showErrorMessage(getContentView(), e);
                                 }
                             }
                         })
@@ -146,7 +145,7 @@ public class ConfigureGatewayDialogPage2 extends ConfigurationDialogPage<Gateway
                 ssids.clear();
                 ssids.addAll(gateway.getSsids());
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
     }
 

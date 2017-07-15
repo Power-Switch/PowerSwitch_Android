@@ -37,7 +37,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.OnItemMovedListener;
 import eu.power_switch.gui.adapter.OnStartDragListener;
 import eu.power_switch.gui.adapter.ReceiverNameRecyclerViewAdapter;
@@ -137,13 +136,13 @@ public class ConfigureRoomDialogPage1 extends ConfigurationDialogPage<RoomConfig
 
                 receivers.addAll(room.getReceivers());
 
-                List<Room> rooms = persistanceHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                List<Room> rooms = persistanceHandler.getRooms(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
                 roomNames = new LinkedList<>();
                 for (Room currentRoom : rooms) {
                     roomNames.add(currentRoom.getName());
                 }
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }

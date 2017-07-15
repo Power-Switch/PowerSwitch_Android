@@ -33,6 +33,9 @@ import android.widget.Toast;
 
 import java.util.Date;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.R;
 import eu.power_switch.gui.activity.MainActivity;
 import eu.power_switch.gui.dialog.UnknownErrorDialog;
@@ -48,10 +51,18 @@ import timber.log.Timber;
  * <p/>
  * Created by Markus on 17.11.2015.
  */
+@Singleton
 public class StatusMessageHandler {
 
-    private static Toast lastToast;
-    private static Snackbar lastSnackbar;
+    private Toast    lastToast;
+    private Snackbar lastSnackbar;
+
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    public StatusMessageHandler() {
+    }
 
     /**
      * Shows a status message on screen, either as Toast if the app is running in the background or as a Snackbar if
@@ -66,22 +77,18 @@ public class StatusMessageHandler {
      * @param runnable                      code that should be executed when activating the action button
      * @param duration                      duration
      */
-    public static void showInfoMessage(View view, @StringRes int messageResourceId,
-                                       @StringRes int actionButtonMessageResourceId, Runnable runnable, int duration) {
+    public void showInfoMessage(View view, @StringRes int messageResourceId, @StringRes int actionButtonMessageResourceId, Runnable runnable,
+                                int duration) {
         Context context = view.getContext();
 
         if (MainActivity.isInForeground()) {
             if (view instanceof RecyclerView) {
                 RecyclerView recyclerView = (RecyclerView) view;
                 showSnackbar(recyclerView,
-                        context.getString(messageResourceId),
-                        context.getString(actionButtonMessageResourceId), runnable,
+                        context.getString(messageResourceId), context.getString(actionButtonMessageResourceId), runnable,
                         duration);
             } else {
-                showSnackbar(view,
-                        context.getString(messageResourceId),
-                        context.getString(actionButtonMessageResourceId), runnable,
-                        duration);
+                showSnackbar(view, context.getString(messageResourceId), context.getString(actionButtonMessageResourceId), runnable, duration);
             }
         } else {
             showInfoToast(context, context.getString(messageResourceId), duration);
@@ -100,13 +107,11 @@ public class StatusMessageHandler {
      * @param runnable                      code that should be executed when activating the action button
      * @param duration                      duration
      */
-    public static void showInfoMessage(Context context, @StringRes int messageResourceId,
-                                       @StringRes int actionButtonMessageResourceId, Runnable runnable, int
-                                               duration) {
+    public void showInfoMessage(Context context, @StringRes int messageResourceId, @StringRes int actionButtonMessageResourceId, Runnable runnable,
+                                int duration) {
         if (MainActivity.isInForeground()) {
             showSnackbar(MainActivity.getMainAppView(),
-                    context.getString(messageResourceId),
-                    context.getString(actionButtonMessageResourceId), runnable,
+                    context.getString(messageResourceId), context.getString(actionButtonMessageResourceId), runnable,
                     duration);
         } else {
             showInfoToast(context, context.getString(messageResourceId), duration);
@@ -123,7 +128,7 @@ public class StatusMessageHandler {
      * @param messageResourceId status message resource id
      * @param duration          duration
      */
-    public static void showInfoMessage(Fragment fragment, @StringRes int messageResourceId, int duration) {
+    public void showInfoMessage(Fragment fragment, @StringRes int messageResourceId, int duration) {
         if (fragment instanceof RecyclerViewFragment) {
             RecyclerViewFragment recyclerViewFragment = (RecyclerViewFragment) fragment;
             showInfoMessage(recyclerViewFragment.getRecyclerView(), messageResourceId, duration);
@@ -142,7 +147,7 @@ public class StatusMessageHandler {
      * @param messageResourceId status message resource id
      * @param duration          duration
      */
-    public static void showInfoMessage(View view, @StringRes int messageResourceId, int duration) {
+    public void showInfoMessage(View view, @StringRes int messageResourceId, int duration) {
         Context context = view.getContext();
         showInfoMessage(view, context.getString(messageResourceId), duration);
     }
@@ -156,7 +161,7 @@ public class StatusMessageHandler {
      * @param messageResourceId status message resource id
      * @param duration          duration
      */
-    public static void showInfoMessage(Context context, @StringRes int messageResourceId, int duration) {
+    public void showInfoMessage(Context context, @StringRes int messageResourceId, int duration) {
         showInfoMessage(context, context.getString(messageResourceId), duration);
     }
 
@@ -170,7 +175,7 @@ public class StatusMessageHandler {
      * @param message  status message
      * @param duration duration
      */
-    public static void showInfoMessage(View view, String message, int duration) {
+    public void showInfoMessage(View view, String message, int duration) {
         Context context = view.getContext();
 
         if (MainActivity.isInForeground()) {
@@ -194,7 +199,7 @@ public class StatusMessageHandler {
      * @param message  status message
      * @param duration duration
      */
-    public static void showInfoMessage(Context context, String message, int duration) {
+    public void showInfoMessage(Context context, String message, int duration) {
         if (MainActivity.isInForeground()) {
             showInfoSnackbar(MainActivity.getMainAppView(), message, duration);
         } else {
@@ -212,7 +217,7 @@ public class StatusMessageHandler {
      *                 the Snackbar and as a context)
      * @param e        throwable
      */
-    public static void showErrorMessage(Fragment fragment, final Throwable e) {
+    public void showErrorMessage(Fragment fragment, final Throwable e) {
         if (fragment instanceof RecyclerViewFragment) {
             RecyclerViewFragment recyclerViewFragment = (RecyclerViewFragment) fragment;
             showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
@@ -231,7 +236,7 @@ public class StatusMessageHandler {
      *             the Snackbar and as a context)
      * @param e    throwable
      */
-    public static void showErrorMessage(final View view, final Throwable e) {
+    public void showErrorMessage(final View view, final Throwable e) {
         Context context = view.getContext();
 
         if (MainActivity.isInForeground()) {
@@ -255,7 +260,7 @@ public class StatusMessageHandler {
      * @param context any suitable context
      * @param e       throwable
      */
-    public static void showErrorMessage(Context context, Throwable e) {
+    public void showErrorMessage(Context context, Throwable e) {
         if (MainActivity.isInForeground()) {
             showErrorSnackbar(MainActivity.getActivity(), MainActivity.getMainAppView(), e);
         } else {
@@ -270,7 +275,7 @@ public class StatusMessageHandler {
      * @param t                  Throwable
      * @param timeInMilliseconds time when the exception was thrown
      */
-    public static void showErrorDialog(Context context, Throwable t, long timeInMilliseconds) {
+    public void showErrorDialog(Context context, Throwable t, long timeInMilliseconds) {
         context.startActivity(UnknownErrorDialog.getNewInstanceIntent(context, t, timeInMilliseconds));
     }
 
@@ -280,7 +285,7 @@ public class StatusMessageHandler {
      * @param context any suitable context
      * @param t       Throwable
      */
-    public static void showErrorDialog(Context context, Throwable t) {
+    public void showErrorDialog(Context context, Throwable t) {
         showErrorDialog(context, t, new Date().getTime());
     }
 
@@ -289,21 +294,26 @@ public class StatusMessageHandler {
      *
      * @param recyclerViewFragment
      */
-    public static void showNoActiveGatewayMessage(final RecyclerViewFragment recyclerViewFragment) {
+    public void showNoActiveGatewayMessage(final RecyclerViewFragment recyclerViewFragment) {
         showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_active_gateway, R.string.open_settings, new Runnable() {
             @Override
             public void run() {
-                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class,
-                        recyclerViewFragment.getActivity().getString(R.string.menu_settings));
+                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS,
+                        SettingsTabFragment.class,
+                        recyclerViewFragment.getActivity()
+                                .getString(R.string.menu_settings));
 
                 SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
-                recyclerViewFragment.getActivity().getSupportFragmentManager()
+                recyclerViewFragment.getActivity()
+                        .getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim
-                                .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                .slide_in_left, android.R.anim.slide_out_right)
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                android.R.anim.slide_in_left,
+                                android.R.anim.slide_out_right)
                         .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                        .addToBackStack(null).commit();
+                        .addToBackStack(null)
+                        .commit();
             }
         }, Snackbar.LENGTH_LONG);
     }
@@ -313,20 +323,23 @@ public class StatusMessageHandler {
      *
      * @param fragmentActivity
      */
-    public static void showNoActiveGatewayMessage(final FragmentActivity fragmentActivity) {
+    public void showNoActiveGatewayMessage(final FragmentActivity fragmentActivity) {
         showInfoMessage(fragmentActivity, R.string.no_active_gateway, R.string.open_settings, new Runnable() {
             @Override
             public void run() {
-                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS, SettingsTabFragment.class, fragmentActivity
-                        .getString(R.string.menu_settings));
+                MainActivity.addToBackstack(MainActivity.IDENTIFIER_SETTINGS,
+                        SettingsTabFragment.class,
+                        fragmentActivity.getString(R.string.menu_settings));
                 SettingsTabFragment settingsTabFragment = SettingsTabFragment.newInstance(SettingsConstants.GATEWAYS_TAB_INDEX);
                 fragmentActivity.getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim
-                                .slide_in_right, R.anim.slide_out_left, android.R.anim
-                                .slide_in_left, android.R.anim.slide_out_right)
+                        .setCustomAnimations(R.anim.slide_in_right,
+                                R.anim.slide_out_left,
+                                android.R.anim.slide_in_left,
+                                android.R.anim.slide_out_right)
                         .replace(R.id.mainContentFrameLayout, settingsTabFragment)
-                        .addToBackStack(null).commit();
+                        .addToBackStack(null)
+                        .commit();
             }
         }, Snackbar.LENGTH_LONG);
     }
@@ -340,7 +353,8 @@ public class StatusMessageHandler {
      * @param recyclerView recyclerview to show snackbar on
      * @param permissions  permission constant(s)
      */
-    public static void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final int requestCode, final String... permissions) {
+    public void showPermissionMissingMessage(final Activity activity, final RecyclerView recyclerView, final int requestCode,
+                                             final String... permissions) {
         if (permissions.length == 0) {
             throw new IllegalArgumentException("Missing permission constant(s)");
         }
@@ -374,7 +388,7 @@ public class StatusMessageHandler {
      * @param message  message
      * @param duration duration
      */
-    private static void showInfoSnackbar(View parent, String message, int duration) {
+    private void showInfoSnackbar(View parent, String message, int duration) {
         Timber.d("Status Snackbar: " + message);
         final Snackbar snackbar = Snackbar.make(parent, message, duration);
 
@@ -397,18 +411,17 @@ public class StatusMessageHandler {
      * @param parent   parent view
      * @param e        throwable
      */
-    private static void showErrorSnackbar(final FragmentActivity activity, View parent, final Throwable e) {
+    private void showErrorSnackbar(final FragmentActivity activity, View parent, final Throwable e) {
         Timber.e("Error Snackbar", e);
 
         // remember the time when the exception was raised
         final Date timeRaised = new Date();
-        showSnackbar(parent, activity.getString(R.string.unknown_error), activity.getString(R.string.details),
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        StatusMessageHandler.showErrorDialog(activity, e, timeRaised.getTime());
-                    }
-                }, 15000);
+        showSnackbar(parent, activity.getString(R.string.unknown_error), activity.getString(R.string.details), new Runnable() {
+            @Override
+            public void run() {
+                showErrorDialog(activity, e, timeRaised.getTime());
+            }
+        }, 15000);
     }
 
     /**
@@ -420,8 +433,7 @@ public class StatusMessageHandler {
      * @param runnable            action code
      * @param duration            duration
      */
-    private static void showSnackbar(View parent, String message, String actionButtonMessage,
-                                     final Runnable runnable, int duration) {
+    private void showSnackbar(View parent, String message, String actionButtonMessage, final Runnable runnable, int duration) {
         Timber.d("Snackbar: [" + message + "] with action: [" + actionButtonMessage + "]");
 
         if (parent == null) {
@@ -447,8 +459,8 @@ public class StatusMessageHandler {
      * @param message  toast message
      * @param duration duration of toast
      */
-    public static void showInfoToast(final Context context, final String message, final int duration) {
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND)) {
+    public void showInfoToast(final Context context, final String message, final int duration) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TOAST_IN_BACKGROUND)) {
             Timber.w("Toast suppressed (disabled): " + message);
             return;
         }
@@ -478,7 +490,7 @@ public class StatusMessageHandler {
      * @param context any suitable context
      * @param e       throwable
      */
-    public static void showErrorToast(final Context context, final Throwable e) {
+    public void showErrorToast(final Context context, final Throwable e) {
         Timber.e("Error Toast: ", e);
 
         Handler handler = new Handler(Looper.getMainLooper());
@@ -489,8 +501,10 @@ public class StatusMessageHandler {
                 dismissCurrentToast();
 
                 // create and show new toast
-                Toast toast = Toast.makeText(context.getApplicationContext(), e.getClass()
-                        .toString(), Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(context.getApplicationContext(),
+                        e.getClass()
+                                .toString(),
+                        Toast.LENGTH_LONG);
                 toast.show();
 
                 // save toast reference
@@ -503,7 +517,7 @@ public class StatusMessageHandler {
      * Dismisses the currently visible toast.
      * If there is no toast this method will do nothing.
      */
-    public static void dismissCurrentToast() {
+    public void dismissCurrentToast() {
         try {
             if (lastToast != null) {
                 lastToast.cancel();
@@ -517,7 +531,7 @@ public class StatusMessageHandler {
      * Dismisses the currently visible snackbar.
      * If there is no snackbar this method will do nothing.
      */
-    public static void dismissCurrentSnackbar() {
+    public void dismissCurrentSnackbar() {
         try {
             if (lastSnackbar != null) {
                 lastSnackbar.dismiss();

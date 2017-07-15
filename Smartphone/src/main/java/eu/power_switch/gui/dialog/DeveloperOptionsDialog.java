@@ -37,7 +37,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.notification.NotificationHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
@@ -91,7 +90,7 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
             @Override
             public void onClick(View v) {
                 MaterialShowcaseView.resetAll(getContext());
-                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, true);
+                smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA, true);
             }
         });
 
@@ -105,7 +104,7 @@ public class DeveloperOptionsDialog extends EventBusSupportDialogFragment {
         forceUnknownExceptionDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StatusMessageHandler.showErrorDialog(getContext(), new Exception("Unknown error during runtime!"));
+                statusMessageHandler.showErrorDialog(getContext(), new Exception("Unknown error during runtime!"));
             }
         });
 

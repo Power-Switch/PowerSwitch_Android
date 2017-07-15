@@ -48,7 +48,6 @@ import java.util.Set;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.PhoneNumberAddedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ContactRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
@@ -154,7 +153,7 @@ public class AddPhoneNumberDialog extends EventBusSupportDialogFragment {
                 try {
                     sendPhoneNumbersAddedBroadcast(getSelectedPhoneNumbers());
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView()
+                    statusMessageHandler.showErrorMessage(getTargetFragment().getView()
                             .findViewById(R.id.listView), e);
                 }
             }
@@ -219,7 +218,7 @@ public class AddPhoneNumberDialog extends EventBusSupportDialogFragment {
                     contacts.addAll(asyncTaskResult.getResult());
                     Collections.sort(contacts, ALPHABETIC);
                 } else {
-                    StatusMessageHandler.showErrorMessage(getActivity(), asyncTaskResult.getException());
+                    statusMessageHandler.showErrorMessage(getActivity(), asyncTaskResult.getException());
                 }
 
                 contactRecyclerViewAdapter.notifyDataSetChanged();

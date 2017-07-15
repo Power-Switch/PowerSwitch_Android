@@ -44,6 +44,9 @@ import timber.log.Timber;
 class HistoryHandler {
 
     @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
     HistoryHandler() {
     }
 
@@ -87,7 +90,7 @@ class HistoryHandler {
     private void deleteOldEntries(@NonNull SQLiteDatabase database) throws Exception {
         Calendar calendar = Calendar.getInstance();
 
-        switch (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)) {
+        switch (smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_KEEP_HISTORY_DURATION)) {
             case SettingsConstants.KEEP_HISTORY_FOREVER:
                 // dont delete anything
                 return;

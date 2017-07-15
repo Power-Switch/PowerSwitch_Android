@@ -45,7 +45,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.GatewayChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.GatewayRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
@@ -112,7 +111,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         addGatewayFAB.setImageDrawable(IconicsHelper.getAddIcon(getActivity(), ContextCompat.getColor(getActivity(), android.R.color.white)));
         addGatewayFAB.setOnClickListener(onClickListener);
 
-        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), persistanceHandler, gateways);
+        gatewayRecyclerViewAdapter = new GatewayRecyclerViewAdapter(getActivity(), persistanceHandler, statusMessageHandler, gateways);
         gatewayRecyclerViewAdapter.setOnItemLongClickListener(new GatewayRecyclerViewAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(View itemView, int position) {
@@ -144,7 +143,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
     private void startAutoDiscovery() {
         if (!networkHandler.isWifiConnected()) {
-            StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(getRecyclerView(), R.string.missing_wifi_connection, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -165,7 +164,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                     });
 
                     if (foundGateways == null || foundGateways.isEmpty()) {
-                        StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
+                        statusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(), R.string.no_gateway_found, Snackbar.LENGTH_LONG);
                         return null;
                     }
 
@@ -186,11 +185,11 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
                             existingGatewaysCount++;
                             persistanceHandler.enableGateway(e.getIdOfExistingGateway());
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                            statusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                         }
                     }
 
-                    StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
+                    statusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                             getString(R.string.autodiscover_response_message, newGatewaysCount, existingGatewaysCount, unknownGatewaysCount),
                             Snackbar.LENGTH_LONG);
 
@@ -213,7 +212,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
     }
 
     private void updateUI() {
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             searchGatewayFAB.setVisibility(View.GONE);
             addGatewayFAB.setVisibility(View.GONE);
         } else {
@@ -252,7 +251,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
         menu.findItem(R.id.search_gateways)
                 .setIcon(IconicsHelper.getRefreshIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_gateway)
                     .setVisible(false)
                     .setEnabled(false);

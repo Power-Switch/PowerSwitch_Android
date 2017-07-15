@@ -58,6 +58,7 @@ import eu.power_switch.persistence.sqlite.table.timer.TimerWeekdayTable;
 import eu.power_switch.persistence.sqlite.table.widget.ReceiverWidgetTable;
 import eu.power_switch.persistence.sqlite.table.widget.RoomWidgetTable;
 import eu.power_switch.persistence.sqlite.table.widget.SceneWidgetTable;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * This Class is responsible for initializing and upgrading all Database tables
@@ -69,6 +70,12 @@ public class Database extends SQLiteOpenHelper {
     private static final int    DATABASE_VERSION = 20;
 
     private Context context;
+
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
 
     @Inject
     public Database(Context context) {
@@ -130,7 +137,7 @@ public class Database extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorDialog(context, e);
+            statusMessageHandler.showErrorDialog(context, e);
         } finally {
             db.endTransaction();
         }
@@ -154,7 +161,7 @@ public class Database extends SQLiteOpenHelper {
             GatewayTable.onUpgrade(db, oldVersion, newVersion);
             GatewaySsidTable.onUpgrade(db, oldVersion, newVersion);
 
-            ApartmentTable.onUpgrade(db, oldVersion, newVersion);
+            ApartmentTable.onUpgrade(db, oldVersion, newVersion, smartphonePreferencesHandler);
             ApartmentGatewayRelationTable.onUpgrade(db, oldVersion, newVersion);
             ApartmentGeofenceRelationTable.onUpgrade(db, oldVersion, newVersion);
 
@@ -326,7 +333,7 @@ public class Database extends SQLiteOpenHelper {
 
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorDialog(context, e);
+            statusMessageHandler.showErrorDialog(context, e);
         } finally {
             db.endTransaction();
         }

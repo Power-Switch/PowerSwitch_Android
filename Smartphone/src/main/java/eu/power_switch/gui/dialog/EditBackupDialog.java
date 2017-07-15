@@ -36,7 +36,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.BackupFragment;
 import eu.power_switch.shared.exception.backup.BackupAlreadyExistsException;
@@ -111,13 +110,13 @@ public class EditBackupDialog extends EventBusSupportDialogFragment {
                                         .toString()
                                         .trim());
                         BackupFragment.notifyBackupsChanged();
-                        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
+                        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_saved, Snackbar.LENGTH_LONG);
                     } catch (BackupAlreadyExistsException e) {
                         Timber.e(e);
-                        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
+                        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_already_exists, Snackbar.LENGTH_LONG);
                     } catch (BackupNotFoundException e) {
                         Timber.e(e);
-                        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
+                        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.backup_not_found, Snackbar.LENGTH_LONG);
                     }
                 }
             }

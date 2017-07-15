@@ -49,7 +49,6 @@ import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.WriteNfcTagDialog;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -643,7 +642,7 @@ public class NfcFragment extends EventBusFragment {
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(rootView, e);
+            statusMessageHandler.showErrorMessage(rootView, e);
         }
 
         return action;

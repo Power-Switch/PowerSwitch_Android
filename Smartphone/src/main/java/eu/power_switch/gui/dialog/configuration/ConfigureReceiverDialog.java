@@ -36,7 +36,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1Name;
@@ -100,11 +99,11 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         Receiver receiver = getConfiguration().getReceiver();
 
         try {
-            Apartment apartment = persistanceHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            Apartment apartment = persistanceHandler.getApartment(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             getConfiguration().setParentApartment(apartment);
         } catch (Exception e) {
             dismiss();
-            StatusMessageHandler.showErrorMessage(getContext(), e);
+            statusMessageHandler.showErrorMessage(getContext(), e);
         }
 
         if (receiver != null) {
@@ -148,7 +147,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
 
             } catch (Exception e) {
                 dismiss();
-                StatusMessageHandler.showErrorMessage(getContext(), e);
+                statusMessageHandler.showErrorMessage(getContext(), e);
             }
         }
 
@@ -237,7 +236,7 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
         // update wear data
         UtilityService.forceWearDataUpdate(getActivity());
 
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
+        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -262,9 +261,9 @@ public class ConfigureReceiverDialog extends ConfigurationDialogTabbed<ReceiverC
                             // update wear data
                             UtilityService.forceWearDataUpdate(getActivity());
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_deleted, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.receiver_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

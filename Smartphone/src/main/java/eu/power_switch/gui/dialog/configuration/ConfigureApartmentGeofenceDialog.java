@@ -29,7 +29,6 @@ import android.support.v7.app.AlertDialog;
 
 import eu.power_switch.R;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_geofence.ConfigureGeofenceDialogPage1Location;
@@ -72,7 +71,7 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
 //            try {
 //                Apartment apartment = DatabaseHandler.getApartment(apartmentId);
 //            } catch (Exception e) {
-//                StatusMessageHandler.showErrorMessage(getContext(), e);
+//                statusMessageHandler.showErrorMessage(getContext(), e);
 //            }
         }
 
@@ -96,9 +95,9 @@ public class ConfigureApartmentGeofenceDialog extends ConfigureGeofenceDialog {
                             // same for timers
                             ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_deleted, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

@@ -29,7 +29,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage1Contacts;
 import eu.power_switch.gui.fragment.configure_call_event.ConfigureCallEventDialogPage2Actions;
@@ -108,7 +107,7 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
 //        }
 
 //        CallEventsFragment.notifyCallEventsChanged();
-//        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
+//        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -124,9 +123,9 @@ public class ConfigureCallEventDialog extends ConfigurationDialogTabbed {
                             // notify scenes fragment
                             CallEventsFragment.notifyCallEventsChanged();
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_deleted, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.call_event_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

@@ -82,6 +82,12 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
     @Inject
     PersistanceHandler persistanceHandler;
 
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
     @Override
     protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
         return DaggerAppComponent.builder()
@@ -100,12 +106,12 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
 
                 try {
                     if (isUIThread()) {
-                        StatusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
+                        statusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
                     } else {  //handle non UI thread throw uncaught exception
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                StatusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
+                                statusMessageHandler.showErrorDialog(getApplicationContext(), throwable);
                             }
                         });
                     }
@@ -160,12 +166,9 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
     public void onCreate() {
         super.onCreate();
 
-        // needs to be initialized before logging framework is up to get settings for that
-        SmartphonePreferencesHandler.init(this);
-
         // Configure Log4J Logger
         boolean internalFileLoggingOnly;
-        if (SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION).equals(Integer.valueOf(getString(R.string.value_internal)))) {
+        if (smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_LOG_DESTINATION).equals(Integer.valueOf(getString(R.string.value_internal)))) {
             internalFileLoggingOnly = true;
         } else {
             internalFileLoggingOnly = false;
@@ -181,12 +184,11 @@ public class PowerSwitch extends DaggerApplication implements HasActivityInjecto
         Timber.d("Device brand/model: " + LogHelper.getDeviceName());
 
         // reinitialize after logging framework is up to log current values
-        SmartphonePreferencesHandler.init(this);
         WearablePreferencesHandler.init(this);
         DeveloperPreferencesHandler.init(this);
 
         // Configure Fabric
-        boolean enableFabric = SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler.getForceFabricEnabled();
+        boolean enableFabric = smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA) || DeveloperPreferencesHandler.getForceFabricEnabled();
 
         if (enableFabric) {
             Fabric.with(this, new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(

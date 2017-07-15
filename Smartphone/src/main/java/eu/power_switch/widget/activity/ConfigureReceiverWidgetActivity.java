@@ -42,7 +42,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
@@ -202,7 +201,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
 
             spinnerReceiver.setSelection(0);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
+            statusMessageHandler.showErrorMessage(this, e);
         }
 
         adapterReceiver.notifyDataSetChanged();
@@ -250,7 +249,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
                             0);
                     buttonView.setTextViewText(R.id.button_widget_universal, s);
 
-                    if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && selectedReceiver.getLastActivatedButtonId()
+                    if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && selectedReceiver.getLastActivatedButtonId()
                             .equals(button.getId())) {
                         buttonView.setTextColor(R.id.button_widget_universal,
                                 ContextCompat.getColor(getApplicationContext(), R.color.color_light_blue_a700));
@@ -279,7 +278,7 @@ public class ConfigureReceiverWidgetActivity extends ButterKnifeDialogActivity {
                 finish();
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
+            statusMessageHandler.showErrorMessage(this, e);
         }
     }
 }

@@ -26,9 +26,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.DaggerFragment;
+import eu.power_switch.gui.StatusMessageHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
  * ButterKnife base class for implementing a fragment
@@ -36,6 +40,12 @@ import dagger.android.support.DaggerFragment;
  * Created by Markus on 29.06.2017.
  */
 public abstract class ButterKnifeFragment extends DaggerFragment {
+
+    @Inject
+    protected StatusMessageHandler statusMessageHandler;
+
+    @Inject
+    protected SmartphonePreferencesHandler smartphonePreferencesHandler;
 
     protected View     rootView;
     private   Unbinder unbinder;

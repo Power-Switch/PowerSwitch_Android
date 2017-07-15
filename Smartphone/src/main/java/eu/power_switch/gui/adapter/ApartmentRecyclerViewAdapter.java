@@ -44,14 +44,17 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  */
 public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<ApartmentRecyclerViewAdapter.ViewHolder> {
     private static final DecimalFormat decimalFormat = new DecimalFormat("##.00000");
-    private ArrayList<Apartment>    apartments;
-    private Context                 context;
+    private final ArrayList<Apartment>         apartments;
+    private final Context                      context;
+    private final SmartphonePreferencesHandler smartphonePreferencesHandler;
+
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public ApartmentRecyclerViewAdapter(Context context, ArrayList<Apartment> apartments) {
+    public ApartmentRecyclerViewAdapter(Context context, SmartphonePreferencesHandler smartphonePreferencesHandler, ArrayList<Apartment> apartments) {
         this.apartments = apartments;
         this.context = context;
+        this.smartphonePreferencesHandler = smartphonePreferencesHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -77,7 +80,7 @@ public class ApartmentRecyclerViewAdapter extends RecyclerView.Adapter<Apartment
         holder.active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
+                smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, apartment.getId());
 
                 for (Apartment currentApartment : apartments) {
                     if (currentApartment.getId()

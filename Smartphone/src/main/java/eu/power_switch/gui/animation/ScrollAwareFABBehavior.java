@@ -30,8 +30,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import eu.power_switch.settings.SmartphonePreferencesHandler;
-
 /**
  * FAB Behaviour
  * Lets FAB Buttons disappear if a scroll down event is caught, and lets them reappear if a scroll up event is
@@ -41,8 +39,8 @@ import eu.power_switch.settings.SmartphonePreferencesHandler;
  */
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
-    private static final android.view.animation.Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
-    private boolean mIsAnimatingOut = false;
+    private static final android.view.animation.Interpolator INTERPOLATOR    = new FastOutSlowInInterpolator();
+    private              boolean                             mIsAnimatingOut = false;
 
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
@@ -56,13 +54,17 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      * @param floatingActionButton FAB
      */
     private void animateOut(final FloatingActionButton floatingActionButton) {
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            return;
-        }
+//        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+//            return;
+//        }
 
         if (Build.VERSION.SDK_INT >= 14) {
-            ViewCompat.animate(floatingActionButton).scaleX(0.0F).scaleY(0.0F).alpha(0.0F)
-                    .setInterpolator(INTERPOLATOR).withLayer()
+            ViewCompat.animate(floatingActionButton)
+                    .scaleX(0.0F)
+                    .scaleY(0.0F)
+                    .alpha(0.0F)
+                    .setInterpolator(INTERPOLATOR)
+                    .withLayer()
                     .setListener(new ViewPropertyAnimatorListener() {
                         public void onAnimationStart(View view) {
                             ScrollAwareFABBehavior.this.mIsAnimatingOut = true;
@@ -76,7 +78,8 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
                             ScrollAwareFABBehavior.this.mIsAnimatingOut = false;
                             view.setVisibility(View.GONE);
                         }
-                    }).start();
+                    })
+                    .start();
         } else {
             Animation anim = AnimationUtils.loadAnimation(floatingActionButton.getContext(), android.R.anim.fade_out);
             anim.setInterpolator(INTERPOLATOR);
@@ -107,14 +110,19 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      */
     //
     private void animateIn(FloatingActionButton floatingActionButton) {
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
-            return;
-        }
+//        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+//            return;
+//        }
 
         floatingActionButton.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 14) {
-            ViewCompat.animate(floatingActionButton).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
-                    .setInterpolator(INTERPOLATOR).withLayer().setListener(null)
+            ViewCompat.animate(floatingActionButton)
+                    .scaleX(1.0F)
+                    .scaleY(1.0F)
+                    .alpha(1.0F)
+                    .setInterpolator(INTERPOLATOR)
+                    .withLayer()
+                    .setListener(null)
                     .start();
         } else {
             Animation anim = AnimationUtils.loadAnimation(floatingActionButton.getContext(), android.R.anim.fade_in);
@@ -125,18 +133,19 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     }
 
     @Override
-    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout,
-                                       FloatingActionButton child, View directTargetChild, View target, int nestedScrollAxes) {
-        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL ||
-                super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target,
-                        nestedScrollAxes);
+    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View directTargetChild, View target,
+                                       int nestedScrollAxes) {
+        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL || super.onStartNestedScroll(coordinatorLayout,
+                child,
+                directTargetChild,
+                target,
+                nestedScrollAxes);
     }
 
     @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child,
-                               View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed,
-                dyUnconsumed);
+    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed,
+                               int dxUnconsumed, int dyUnconsumed) {
+        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
 
         if (dyConsumed > 0 && !this.mIsAnimatingOut && child.getVisibility() == View.VISIBLE) {
             animateOut(child);

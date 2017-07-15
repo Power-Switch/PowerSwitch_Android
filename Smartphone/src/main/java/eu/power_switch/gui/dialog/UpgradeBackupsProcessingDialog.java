@@ -74,7 +74,7 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
             @Override
             protected AsyncTaskResult<Void> doInBackground(Void... voids) {
                 try {
-                    File backupDir = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
+                    File backupDir = new File(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
 
                     FileFilter backupFileFilter = new FileFilter() {
                         @Override
@@ -94,7 +94,7 @@ public class UpgradeBackupsProcessingDialog extends ProcessingDialog {
                             publishProgress(0, i, listFiles.length);
 
                             File oldBackup = listFiles[i];
-                            File target    = new File(SmartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldBackup.getName() + BackupHandler.BACKUP_FILE_SUFFIX);
+                            File target    = new File(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH) + File.separator + oldBackup.getName() + BackupHandler.BACKUP_FILE_SUFFIX);
                             if (target.exists()) {
                                 target.delete();
                             }

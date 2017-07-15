@@ -54,14 +54,6 @@ public class HistoryItem {
      */
     private String longDescription;
 
-    public HistoryItem(long id, @NonNull Long timeInMilliseconds, @NonNull String shortDescription) {
-        this.id = id;
-        this.time = Calendar.getInstance();
-        this.time.setTimeInMillis(timeInMilliseconds);
-        this.shortDescription = shortDescription;
-        this.longDescription = "";
-    }
-
     public HistoryItem(long id, @NonNull Long timeInMilliseconds, @NonNull String shortDescription, @NonNull String longDescription) {
         this.id = id;
         this.time = Calendar.getInstance();
@@ -71,17 +63,11 @@ public class HistoryItem {
     }
 
     public HistoryItem(long id, @NonNull Calendar time, @NonNull String shortDescription) {
-        this.id = id;
-        this.time = time;
-        this.shortDescription = shortDescription;
-        this.longDescription = "";
+        this(id, time, shortDescription, "");
     }
 
     public HistoryItem(long id, @NonNull Calendar time, @NonNull String shortDescription, @NonNull String longDescription) {
-        this.id = id;
-        this.time = time;
-        this.shortDescription = shortDescription;
-        this.longDescription = longDescription;
+        this(id, time.getTimeInMillis(), shortDescription, longDescription);
     }
 
 }

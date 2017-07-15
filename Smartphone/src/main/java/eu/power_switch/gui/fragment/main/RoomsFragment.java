@@ -47,7 +47,6 @@ import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.event.ReceiverChangedEvent;
 import eu.power_switch.event.RoomChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.RoomRecyclerViewAdapter;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.EditRoomOrderDialog;
@@ -99,7 +98,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         setHasOptionsMenu(true);
 
         rooms = new ArrayList<>();
-        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms, actionHandler);
+        roomsRecyclerViewAdapter = new RoomRecyclerViewAdapter(this, getActivity(), rooms, actionHandler, smartphonePreferencesHandler);
         getRecyclerView().setAdapter(roomsRecyclerViewAdapter);
         layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
@@ -123,7 +122,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
 
                     }
 
-                    if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
+                    if (SettingsConstants.INVALID_APARTMENT_ID == smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
                         new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
@@ -133,7 +132,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                     ConfigureReceiverDialog configureReceiverDialog = ConfigureReceiverDialog.newInstance(recyclerViewFragment);
                     configureReceiverDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -178,7 +177,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
 
         switch (menuItem.getItemId()) {
             case R.id.create_receiver:
-                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
+                if (SettingsConstants.INVALID_APARTMENT_ID == smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
                     new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                             .setNeutralButton(android.R.string.ok, null)
                             .show();
@@ -189,7 +188,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
                 configureReceiverDialog.show(getFragmentManager(), null);
                 break;
             case R.id.reorder_rooms:
-                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(SmartphonePreferencesHandler.<Long>get(
+                EditRoomOrderDialog editRoomOrderDialog = EditRoomOrderDialog.newInstance(smartphonePreferencesHandler.<Long>get(
                         SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
                 editRoomOrderDialog.setTargetFragment(this, 0);
                 editRoomOrderDialog.show(getFragmentManager(), null);
@@ -211,7 +210,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
         menu.findItem(R.id.reorder_rooms)
                 .setIcon(IconicsHelper.getReorderIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_receiver)
                     .setVisible(false)
                     .setEnabled(false);
@@ -222,7 +221,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addReceiverFAB.setVisibility(View.GONE);
         } else {
             addReceiverFAB.setVisibility(View.VISIBLE);
@@ -241,7 +240,7 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
 
     @Override
     public List<Room> loadListData() throws Exception {
-        long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+        long currentApartmentId = smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
         if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
             // Get Rooms and Receivers
             return persistanceHandler.getRooms(currentApartmentId);

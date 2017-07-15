@@ -51,7 +51,6 @@ import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.event.SceneSelectedReceiversChangedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
 import eu.power_switch.obj.Room;
@@ -96,9 +95,9 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         super.onCreateView(inflater, container, savedInstanceState);
 
         try {
-            existingScenes = persistanceHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            existingScenes = persistanceHandler.getScenes(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         addReceiversToLayout();
@@ -189,7 +188,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
         LayoutInflater inflater       = (LayoutInflater) getActivity().getSystemService(inflaterString);
 
         try {
-            for (Room room : persistanceHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID))) {
+            for (Room room : persistanceHandler.getRooms(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID))) {
                 LinearLayout roomLayout = new LinearLayout(getActivity());
                 roomLayout.setOrientation(LinearLayout.VERTICAL);
                 roomLayout.setPadding(0, 8, 0, 8);
@@ -239,7 +238,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 
@@ -268,7 +267,7 @@ public class ConfigureSceneDialogPage1Name extends ConfigurationDialogPage<Scene
                     }
                 }
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }

@@ -87,7 +87,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
         View contentView = inflater.inflate(R.layout.dialog_path_chooser, container);
         ButterKnife.bind(viewHolder, contentView);
 
-        currentPath = SmartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
+        currentPath = smartphonePreferencesHandler.get(SmartphonePreferencesHandler.KEY_BACKUP_PATH);
 
         viewHolder.textViewCurrentPath.setText(currentPath);
 
@@ -139,7 +139,7 @@ public class PathChooserDialog extends ConfigurationDialog implements LoaderMana
 
     @Override
     protected void saveCurrentConfigurationToDatabase() {
-        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_BACKUP_PATH, currentPath);
+        smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_BACKUP_PATH, currentPath);
 
         notifyBackupPathChanged();
     }

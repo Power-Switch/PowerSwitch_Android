@@ -35,7 +35,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.RoomConfigurationHolder;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -85,10 +84,10 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
         checkBoxUseCustomGatewaySelection.setOnTouchListener(checkBoxInteractionListener);
 
         try {
-            apartment = persistanceHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            apartment = persistanceHandler.getApartment(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             gateways = persistanceHandler.getAllGateways();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
 
         updateGatewayViews();
@@ -205,7 +204,7 @@ public class ConfigureRoomDialogPage2Gateways extends ConfigurationDialogPage<Ro
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

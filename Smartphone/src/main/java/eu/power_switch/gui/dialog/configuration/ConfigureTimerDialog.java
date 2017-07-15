@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.TimerConfigurationHolder;
 import eu.power_switch.gui.fragment.TimersFragment;
@@ -169,7 +168,7 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
         }
 
         TimersFragment.notifyTimersChanged();
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
+        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -188,9 +187,9 @@ public class ConfigureTimerDialog extends ConfigurationDialogTabbed<TimerConfigu
                             // notify scenes fragment
                             TimersFragment.notifyTimersChanged();
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_deleted, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.timer_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

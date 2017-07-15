@@ -66,18 +66,23 @@ import timber.log.Timber;
 @Singleton
 public class ActionHandlerImpl implements ActionHandler {
 
-    private Context             context;
-    private NetworkHandler      networkHandler;
-    private NotificationHandler notificationHandler;
-    private PersistanceHandler  persistanceHandler;
+    private Context                      context;
+    private NetworkHandler               networkHandler;
+    private NotificationHandler          notificationHandler;
+    private PersistanceHandler           persistanceHandler;
+    private SmartphonePreferencesHandler smartphonePreferencesHandler;
+    private StatusMessageHandler         statusMessageHandler;
 
     @Inject
     public ActionHandlerImpl(Context context, NetworkHandler networkHandler, NotificationHandler notificationHandler,
-                             PersistanceHandler persistanceHandler) {
+                             PersistanceHandler persistanceHandler, SmartphonePreferencesHandler smartphonePreferencesHandler,
+                             StatusMessageHandler statusMessageHandler) {
         this.context = context;
         this.networkHandler = networkHandler;
         this.notificationHandler = notificationHandler;
         this.persistanceHandler = persistanceHandler;
+        this.smartphonePreferencesHandler = smartphonePreferencesHandler;
+        this.statusMessageHandler = statusMessageHandler;
     }
 
     /**
@@ -97,12 +102,12 @@ public class ActionHandlerImpl implements ActionHandler {
                             context.getString(R.string.receiver_action_history_text, receiver.getName(), button.getName())));
         } catch (ActionNotSupportedException e) {
             Timber.e("Action not supported by Receiver!", e);
-            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
+            statusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
         } catch (GatewayNotSupportedException e) {
             Timber.e("Gateway not supported by Receiver!", e);
-            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
+            statusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -131,7 +136,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         if (gateways.isEmpty() && apartment.getAssociatedGateways()
                 .isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -144,7 +149,7 @@ public class ActionHandlerImpl implements ActionHandler {
         }
 
         if (!hasActiveGateway) {
-            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -164,7 +169,7 @@ public class ActionHandlerImpl implements ActionHandler {
         receiver.setLastActivatedButtonId(button.getId());
         persistanceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
 
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -188,7 +193,7 @@ public class ActionHandlerImpl implements ActionHandler {
                             Calendar.getInstance(),
                             context.getString(R.string.room_action_history_text, room.getName(), buttonName)));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -215,7 +220,7 @@ public class ActionHandlerImpl implements ActionHandler {
                                     room.getName(),
                                     Button.getName(context, persistanceHandler, buttonId))));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -237,7 +242,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         if (gateways.isEmpty() && apartment.getAssociatedGateways()
                 .isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -250,7 +255,7 @@ public class ActionHandlerImpl implements ActionHandler {
         }
 
         if (!hasActiveGateway) {
-            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -281,10 +286,10 @@ public class ActionHandlerImpl implements ActionHandler {
                             persistanceHandler.setLastActivatedButtonId(receiver.getId(), button.getId());
                         } catch (ActionNotSupportedException e) {
                             Timber.e("Action not supported by Receiver!", e);
-                            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
+                            statusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
                         } catch (GatewayNotSupportedException e) {
                             Timber.e("Gateway not supported by Receiver!", e);
-                            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
+                            statusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
                         }
                     }
                 }
@@ -295,12 +300,12 @@ public class ActionHandlerImpl implements ActionHandler {
 
         if (networkPackages.size() <= 0) {
             Timber.d(context.getString(R.string.no_receiver_supports_this_action));
-            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
             networkHandler.send(networkPackages);
         }
 
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -321,7 +326,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         if (gateways.isEmpty() && apartment.getAssociatedGateways()
                 .isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -334,7 +339,7 @@ public class ActionHandlerImpl implements ActionHandler {
         }
 
         if (!hasActiveGateway) {
-            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -360,10 +365,10 @@ public class ActionHandlerImpl implements ActionHandler {
                             }
                         } catch (ActionNotSupportedException e) {
                             Timber.e("Action not supported by Receiver!", e);
-                            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
+                            statusMessageHandler.showInfoMessage(context, context.getString(R.string.action_not_supported_by_receiver), 5000);
                         } catch (GatewayNotSupportedException e) {
                             Timber.e("Gateway not supported by Receiver!", e);
-                            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
+                            statusMessageHandler.showInfoMessage(context, context.getString(R.string.gateway_not_supported_by_receiver), 5000);
                         }
                     }
                 }
@@ -378,12 +383,12 @@ public class ActionHandlerImpl implements ActionHandler {
 
         if (networkPackages.size() <= 0) {
             Timber.d(context.getString(R.string.no_receiver_supports_this_action));
-            StatusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, context.getString(R.string.no_receiver_supports_this_action), Snackbar.LENGTH_LONG);
         } else {
             networkHandler.send(networkPackages);
         }
 
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -404,7 +409,7 @@ public class ActionHandlerImpl implements ActionHandler {
             HistoryHelper.add(persistanceHandler,
                     new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.scene_action_history_text, scene.getName())));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -418,7 +423,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         if (apartment.getAssociatedGateways()
                 .isEmpty()) {
-            StatusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.apartment_has_no_associated_gateways, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -431,7 +436,7 @@ public class ActionHandlerImpl implements ActionHandler {
         }
 
         if (!hasActiveGateway) {
-            StatusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(context, R.string.no_active_gateway, Snackbar.LENGTH_LONG);
             return;
         }
 
@@ -474,7 +479,7 @@ public class ActionHandlerImpl implements ActionHandler {
 
         networkHandler.send(networkPackages);
 
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
             ReceiverWidgetProvider.forceWidgetUpdate(context);
         }
         if (WearablePreferencesHandler.<Boolean>get(WearablePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
@@ -492,14 +497,14 @@ public class ActionHandlerImpl implements ActionHandler {
         try {
             executeActions(timer.getActions());
 
-            if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_TIMER_NOTIFICATIONS)) {
                 notificationHandler.createNotification("Timer", "Timer \"" + timer.getName() + "\" executed");
             }
 
             HistoryHelper.add(persistanceHandler,
                     new HistoryItem((long) -1, Calendar.getInstance(), context.getString(R.string.timer_action_history_text, timer.getName())));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -524,7 +529,7 @@ public class ActionHandlerImpl implements ActionHandler {
                             Calendar.getInstance(),
                             context.getString(R.string.sleep_as_android_action_history_text, event.toString())));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -549,7 +554,7 @@ public class ActionHandlerImpl implements ActionHandler {
                             Calendar.getInstance(),
                             context.getString(R.string.alarm_clock_action_history_text, event.toString())));
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -588,12 +593,12 @@ public class ActionHandlerImpl implements ActionHandler {
                         context.getString(R.string.geofence_event_type_action_history_text, geofence.getName(), eventType.toString()));
             }
 
-            if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
+            if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_GEOFENCE_NOTIFICATIONS)) {
                 notificationHandler.createNotification(context.getString(R.string.geofence), notificationMessage);
             }
             HistoryHelper.add(persistanceHandler, historyItem);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {
@@ -618,7 +623,7 @@ public class ActionHandlerImpl implements ActionHandler {
                     context.getString(R.string.geofence_enter_action_history_text, callEvent.getName()));
             HistoryHelper.add(persistanceHandler, historyItem);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(context, e);
+            statusMessageHandler.showErrorMessage(context, e);
             try {
                 HistoryHelper.add(context, persistanceHandler, e);
             } catch (Exception e1) {

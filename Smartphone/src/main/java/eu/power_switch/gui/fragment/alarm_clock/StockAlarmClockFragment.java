@@ -51,7 +51,6 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.event.AlarmEventActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ActionRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.AddStockAlarmClockEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -91,12 +90,12 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
         final RecyclerViewFragment recyclerViewFragment = this;
 
-        switchOnOff.setChecked(SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED));
+        switchOnOff.setChecked(smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED));
         switchOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isPressed()) {
-                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED, isChecked);
+                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_STOCK_ALARM_CLOCK_ENABLED, isChecked);
                 }
             }
         });
@@ -127,11 +126,11 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
                                 try {
                                     actions.remove(position);
                                     persistanceHandler.setAlarmActions(currentEventType, actions);
-                                    StatusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
+                                    statusMessageHandler.showInfoMessage(recyclerViewFragment.getRecyclerView(),
                                             R.string.action_removed,
                                             Snackbar.LENGTH_LONG);
                                 } catch (Exception e) {
-                                    StatusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
+                                    statusMessageHandler.showErrorMessage(recyclerViewFragment.getRecyclerView(), e);
                                 }
 
                                 recyclerViewAdapter.notifyDataSetChanged();
@@ -192,7 +191,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             addActionFAB.setVisibility(View.GONE);
         } else {
             addActionFAB.setVisibility(View.VISIBLE);
@@ -225,7 +224,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
         menu.findItem(R.id.add_action)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.add_action)
                     .setVisible(false)
                     .setEnabled(false);

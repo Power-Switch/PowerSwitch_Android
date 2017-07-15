@@ -47,7 +47,6 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SmsEventRecyclerViewAdapter;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.phone.sms.SmsEvent;
@@ -129,7 +128,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
 
         if (!PermissionHelper.isSmsPermissionAvailable(getContext()) || !PermissionHelper.isContactPermissionAvailable(getContext())) {
             showEmpty();
-            StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+            statusMessageHandler.showPermissionMissingMessage(getActivity(),
                     getRecyclerView(),
                     PermissionConstants.REQUEST_CODE_SMS_PERMISSION, Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_CONTACTS);
         } else {
@@ -152,11 +151,11 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
             }
 
             if (allGranted) {
-                StatusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
+                statusMessageHandler.showInfoMessage(getRecyclerView(), R.string.permission_granted, Snackbar.LENGTH_SHORT);
 
                 sendCallEventsChangedBroadcast(getActivity());
             } else {
-                StatusMessageHandler.showPermissionMissingMessage(getActivity(),
+                statusMessageHandler.showPermissionMissingMessage(getActivity(),
                         getRecyclerView(),
                         PermissionConstants.REQUEST_CODE_SMS_PERMISSION,
                         NEEDED_PERMISSIONS);
@@ -201,7 +200,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
         menu.findItem(R.id.create_sms_event)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_sms_event)
                     .setVisible(false)
                     .setEnabled(false);
@@ -220,7 +219,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);

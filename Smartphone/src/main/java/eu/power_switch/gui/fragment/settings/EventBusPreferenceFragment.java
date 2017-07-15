@@ -16,17 +16,28 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.gui.activity.butterknife;
+package eu.power_switch.gui.fragment.settings;
+
+import eu.power_switch.gui.EventBusHelper;
 
 /**
- * Base class for a ButterKnife backed activity
- * <p>
- * Created by Markus on 30.06.2017.
+ * Created by Markus on 15.07.2017.
  */
-public abstract class ButterKnifeActivity extends ButterKnifeSupportActivityBase {
+
+public abstract class EventBusPreferenceFragment extends DaggerPreferenceFragment {
 
     @Override
-    protected int getStyle() {
-        return DEFAULT;
+    public void onStart() {
+        super.onStart();
+
+        EventBusHelper.tryRegister(this);
     }
+
+    @Override
+    public void onStop() {
+        EventBusHelper.tryUnregister(this);
+
+        super.onStop();
+    }
+
 }

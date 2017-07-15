@@ -42,7 +42,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.persistence.PersistanceHandler;
 import lombok.Getter;
@@ -81,7 +80,6 @@ public abstract class ConfigurationDialog extends EventBusSupportDialogFragment 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SmartphoneThemeHelper.applyDialogTheme(this);
     }
 
     @Nullable

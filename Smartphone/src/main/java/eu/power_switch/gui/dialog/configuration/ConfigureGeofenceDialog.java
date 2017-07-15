@@ -38,7 +38,6 @@ import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.GeofenceConfigurationHolder;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -206,7 +205,7 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
         ApartmentGeofencesFragment.notifyApartmentGeofencesChanged();
         CustomGeofencesFragment.notifyCustomGeofencesChanged();
 
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_saved, Snackbar.LENGTH_LONG);
+        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -226,9 +225,9 @@ public class ConfigureGeofenceDialog extends ConfigurationDialogTabbed<GeofenceC
                             // same for timers
                             CustomGeofencesFragment.notifyCustomGeofencesChanged();
 
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_deleted, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.geofence_deleted, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

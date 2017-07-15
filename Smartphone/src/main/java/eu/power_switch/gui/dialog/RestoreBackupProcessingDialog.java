@@ -31,7 +31,6 @@ import eu.power_switch.backup.BackupHandler;
 import eu.power_switch.backup.OnZipProgressChangedListener;
 import eu.power_switch.gui.fragment.AsyncTaskResult;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.settings.WearablePreferencesHandler;
 import timber.log.Timber;
 
@@ -92,7 +91,7 @@ public class RestoreBackupProcessingDialog extends ProcessingDialog {
                     onFinishedSuccess();
 
                     DeveloperPreferencesHandler.forceRefresh();
-                    SmartphonePreferencesHandler.forceRefresh();
+                    smartphonePreferencesHandler.forceRefresh();
                     WearablePreferencesHandler.forceRefresh();
 
                     // restart app to apply

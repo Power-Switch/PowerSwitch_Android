@@ -54,6 +54,9 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
     @Inject
     PersistanceHandler persistanceHandler;
 
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
     /**
      * Generates a unique PendingIntent for actions on receiver widgets
      *
@@ -145,8 +148,8 @@ public class WidgetIntentReceiver extends DaggerBroadcastReceiver {
             if (intent.getAction()
                     .equals(WidgetConstants.WIDGET_ACTION_INTENT)) {
                 // vibrate
-                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
-                    VibrationHandler.vibrate(context, SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                    VibrationHandler.vibrate(context, smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                 }
 
                 parseWidgetActionIntent(context, intent);

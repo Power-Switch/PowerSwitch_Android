@@ -40,7 +40,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.event.ConfigurationChangedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.ConfigureCallEventDialog;
 import eu.power_switch.phone.call.CallEvent;
@@ -105,7 +104,7 @@ public class ConfigureCallEventDialogPage3Summary extends ConfigurationDialogPag
 
             updateUi();
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

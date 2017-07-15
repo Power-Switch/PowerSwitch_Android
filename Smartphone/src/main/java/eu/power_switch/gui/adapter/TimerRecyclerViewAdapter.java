@@ -48,20 +48,25 @@ import eu.power_switch.timer.alarm.AndroidAlarmHandler;
  * Created by Markus on 27.07.2015.
  */
 public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecyclerViewAdapter.ViewHolder> {
-    private final PersistanceHandler  persistanceHandler;
-    private final AndroidAlarmHandler androidAlarmHandler;
-    private       ArrayList<Timer>    timers;
-    private       Context             context;
+    private final PersistanceHandler           persistanceHandler;
+    private final AndroidAlarmHandler          androidAlarmHandler;
+    private final ArrayList<Timer>             timers;
+    private final Context                      context;
+    private final SmartphonePreferencesHandler smartphonePreferencesHandler;
+    private final StatusMessageHandler         statusMessageHandler;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
     public TimerRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, AndroidAlarmHandler androidAlarmHandler,
+                                    SmartphonePreferencesHandler smartphonePreferencesHandler, StatusMessageHandler statusMessageHandler,
                                     ArrayList<Timer> timers) {
         this.timers = timers;
         this.context = context;
         this.persistanceHandler = persistanceHandler;
         this.androidAlarmHandler = androidAlarmHandler;
+        this.smartphonePreferencesHandler = smartphonePreferencesHandler;
+        this.statusMessageHandler = statusMessageHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -162,7 +167,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
                         }
                         timer.setActive(isChecked);
                     } catch (Exception e) {
-                        StatusMessageHandler.showErrorMessage(context, e);
+                        statusMessageHandler.showErrorMessage(context, e);
                     }
                 }
             }
@@ -188,7 +193,7 @@ public class TimerRecyclerViewAdapter extends RecyclerView.Adapter<TimerRecycler
         }
 
         // collapse timer
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_AUTO_COLLAPSE_TIMERS)) {
             linearLayoutDescription.setVisibility(View.GONE);
         }
 

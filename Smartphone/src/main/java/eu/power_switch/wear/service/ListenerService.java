@@ -60,6 +60,9 @@ public class ListenerService extends WearableListenerService {
     @Inject
     PersistanceHandler persistanceHandler;
 
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
     @Override
     public void onCreate() {
         AndroidInjection.inject(this);
@@ -140,7 +143,7 @@ public class ListenerService extends WearableListenerService {
             }
         } catch (Exception e) {
             Timber.e("parseMessage", e);
-            StatusMessageHandler.showInfoMessage(getApplicationContext(), R.string.error_executing_wear_action, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(getApplicationContext(), R.string.error_executing_wear_action, Snackbar.LENGTH_LONG);
         }
     }
 

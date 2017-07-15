@@ -35,7 +35,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -104,7 +103,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
                 }
 
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }
@@ -150,7 +149,7 @@ public class ConfigureGatewayDialogPage3 extends ConfigurationDialogPage<Gateway
                 apartmentName.setText(apartment.getName());
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

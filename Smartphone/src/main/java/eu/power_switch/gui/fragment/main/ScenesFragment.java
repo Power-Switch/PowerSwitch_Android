@@ -46,7 +46,6 @@ import eu.power_switch.action.ActionHandler;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.event.SceneChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
@@ -85,7 +84,12 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
         setHasOptionsMenu(true);
 
-        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this, getActivity(), scenes, actionHandler, persistanceHandler);
+        sceneRecyclerViewAdapter = new SceneRecyclerViewAdapter(this,
+                getActivity(),
+                scenes,
+                actionHandler,
+                persistanceHandler,
+                smartphonePreferencesHandler);
         getRecyclerView().setAdapter(sceneRecyclerViewAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(getSpanCount(), StaggeredGridLayoutManager.VERTICAL);
         getRecyclerView().setLayoutManager(layoutManager);
@@ -106,7 +110,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
             @Override
             public void onClick(View v) {
                 try {
-                    if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
+                    if (SettingsConstants.INVALID_APARTMENT_ID == smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
                         new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                                 .setNeutralButton(android.R.string.ok, null)
                                 .show();
@@ -117,7 +121,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
                     ConfigureSceneDialog configureSceneDialog = ConfigureSceneDialog.newInstance(recyclerViewFragment);
                     configureSceneDialog.show(getFragmentManager(), null);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getRecyclerView(), e);
+                    statusMessageHandler.showErrorMessage(getRecyclerView(), e);
                 }
             }
         });
@@ -157,7 +161,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
         switch (menuItem.getItemId()) {
             case R.id.create_scene:
-                if (SettingsConstants.INVALID_APARTMENT_ID == SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
+                if (SettingsConstants.INVALID_APARTMENT_ID == smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID)) {
                     new AlertDialog.Builder(getContext()).setMessage(R.string.please_create_or_activate_apartment_first)
                             .setNeutralButton(android.R.string.ok, null)
                             .show();
@@ -181,7 +185,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
         menu.findItem(R.id.create_scene)
                 .setIcon(IconicsHelper.getAddIcon(getActivity(), color));
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             menu.findItem(R.id.create_scene)
                     .setVisible(false)
                     .setEnabled(false);
@@ -191,7 +195,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
     @Override
     public void onResume() {
         super.onResume();
-        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
+        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_USE_OPTIONS_MENU_INSTEAD_OF_FAB)) {
             fab.setVisibility(View.GONE);
         } else {
             fab.setVisibility(View.VISIBLE);
@@ -210,7 +214,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
     @Override
     public List<Scene> loadListData() throws Exception {
-        return persistanceHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+        return persistanceHandler.getScenes(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
     }
 
     @Override

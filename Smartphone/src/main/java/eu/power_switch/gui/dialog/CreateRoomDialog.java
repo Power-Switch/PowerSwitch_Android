@@ -41,7 +41,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPage1Name;
 import eu.power_switch.gui.fragment.main.RoomsFragment;
@@ -79,13 +78,13 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         try {
-            List<Room> rooms = persistanceHandler.getRooms(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+            List<Room> rooms = persistanceHandler.getRooms(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
             roomNames = new LinkedList<>();
             for (Room room : rooms) {
                 roomNames.add(room.getName());
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            statusMessageHandler.showErrorMessage(getActivity(), e);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -112,7 +111,7 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     persistanceHandler.addRoom(new Room(null,
-                            SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
+                            smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID),
                             getRoomName(),
                             0,
                             false,
@@ -125,10 +124,10 @@ public class CreateRoomDialog extends EventBusSupportDialogFragment {
                     // update wear data
                     UtilityService.forceWearDataUpdate(getActivity());
 
-                    StatusMessageHandler.showInfoMessage(getTargetFragment().getView()
+                    statusMessageHandler.showInfoMessage(getTargetFragment().getView()
                             .findViewById(R.id.listView_rooms), R.string.room_saved, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView()
+                    statusMessageHandler.showErrorMessage(getTargetFragment().getView()
                             .findViewById(R.id.listView_rooms), e);
                 }
             }

@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.GatewayConfigurationHolder;
 import eu.power_switch.gui.fragment.configure_gateway.ConfigureGatewayDialogPage1;
@@ -198,7 +197,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                 }
 
             } catch (GatewayAlreadyExistsException e) {
-                StatusMessageHandler.showInfoMessage(rootView.getContext(), R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(rootView.getContext(), R.string.gateway_already_exists, Snackbar.LENGTH_LONG);
             }
         } else {
             persistanceHandler.updateGateway(gateway.getId(),
@@ -238,7 +237,7 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
         }
 
         GatewaySettingsFragment.notifyGatewaysChanged();
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
+        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -252,9 +251,9 @@ public class ConfigureGatewayDialog extends ConfigurationDialogTabbed<GatewayCon
                             persistanceHandler.deleteGateway(getConfiguration().getGateway()
                                     .getId());
                             GatewaySettingsFragment.notifyGatewaysChanged();
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_removed, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.gateway_removed, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

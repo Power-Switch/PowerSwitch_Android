@@ -40,7 +40,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistanceHandler;
 
@@ -125,7 +124,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
             showError(result.getException(),
                     Calendar.getInstance()
                             .getTimeInMillis());
-            StatusMessageHandler.showErrorMessage(getActivity(), result.getException());
+            statusMessageHandler.showErrorMessage(getActivity(), result.getException());
         }
     }
 
@@ -176,7 +175,7 @@ public abstract class RecyclerViewFragment<T> extends EventBusFragment implement
         layoutError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StatusMessageHandler.showErrorDialog(getContext(), e, timeInMilliseconds);
+                statusMessageHandler.showErrorDialog(getContext(), e, timeInMilliseconds);
             }
         });
     }

@@ -56,6 +56,9 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
     @Inject
     PersistanceHandler persistanceHandler;
 
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
     /**
      * Forces an Update of all Receiver Widgets
      *
@@ -110,7 +113,7 @@ public class ReceiverWidgetProvider extends AppWidgetProvider {
                                             .length(),
                                     0);
                             buttonView.setTextViewText(R.id.button_widget_universal, s);
-                            if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && receiver.getLastActivatedButtonId()
+                            if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && receiver.getLastActivatedButtonId()
                                     .equals(button.getId())) {
                                 buttonView.setTextColor(R.id.button_widget_universal, ContextCompat.getColor(context, R.color.color_light_blue_a700));
                             }

@@ -41,9 +41,7 @@ import eu.power_switch.google_play_services.playstore.IabResult;
 import eu.power_switch.google_play_services.playstore.Inventory;
 import eu.power_switch.google_play_services.playstore.Purchase;
 import eu.power_switch.google_play_services.playstore.SkuDetails;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
-import eu.power_switch.settings.SmartphonePreferencesHandler;
 import timber.log.Timber;
 
 /**
@@ -142,7 +140,7 @@ public class DonationDialog extends EventBusSupportDialogFragment {
         super.onCreate(savedInstanceState);
 
         try {
-            String key                    = SmartphonePreferencesHandler.getPublicKeyString();
+            String key                    = smartphonePreferencesHandler.getPublicKeyString();
             String base64EncodedPublicKey = new String(Base64.decode(key));
             iapHelper = new IabHelper(getActivity(), base64EncodedPublicKey);
 
@@ -150,7 +148,7 @@ public class DonationDialog extends EventBusSupportDialogFragment {
                 public void onIabSetupFinished(IabResult result) {
                     if (!result.isSuccess()) {
                         // Oh noes, there was a problem.
-                        StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
+                        statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
                         Timber.e("Problem setting up In-app Billing: " + result);
                         dismiss();
                         return;
@@ -162,7 +160,7 @@ public class DonationDialog extends EventBusSupportDialogFragment {
                         public void onQueryInventoryFinished(final IabResult result, final Inventory inventory) {
                             if (result.isFailure()) {
                                 // handle error
-                                StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
+                                statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
                                 dismiss();
                                 return;
                             }
@@ -208,13 +206,13 @@ public class DonationDialog extends EventBusSupportDialogFragment {
                 // As a further security precaution, you should perform the verification on your own secure server.
 
                 if (result.isFailure()) {
-                    StatusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
                     return;
                 }
 
                 consumePurchase(purchase);
 
-                StatusMessageHandler.showInfoMessage(getContext(), R.string.thank_you, Snackbar.LENGTH_LONG);
+                statusMessageHandler.showInfoMessage(getContext(), R.string.thank_you, Snackbar.LENGTH_LONG);
                 getDialog().cancel();
             }
         };
@@ -229,7 +227,7 @@ public class DonationDialog extends EventBusSupportDialogFragment {
             @Override
             public void onConsumeFinished(Purchase purchase, IabResult result) {
                 if (result.isFailure()) {
-                    StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + result.getMessage(), Snackbar.LENGTH_LONG);
                 }
             }
         });
@@ -240,7 +238,7 @@ public class DonationDialog extends EventBusSupportDialogFragment {
             @Override
             public void onQueryInventoryFinished(IabResult result, Inventory inv) {
                 if (result.isFailure()) {
-                    StatusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getContext(), "Error purchasing: " + result.getMessage(), Snackbar.LENGTH_LONG);
                     return;
                 }
 
@@ -256,7 +254,7 @@ public class DonationDialog extends EventBusSupportDialogFragment {
                     public void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results) {
                         for (IabResult r : results) {
                             if (r.isFailure()) {
-                                StatusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + r.getMessage(), Snackbar.LENGTH_LONG);
+                                statusMessageHandler.showInfoMessage(getContext(), "Error consuming: " + r.getMessage(), Snackbar.LENGTH_LONG);
                                 return;
                             }
                         }

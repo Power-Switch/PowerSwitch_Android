@@ -39,6 +39,9 @@ public class SleepAsAndroidIntentReceiver extends DaggerBroadcastReceiver {
     @Inject
     ActionHandler actionHandler;
 
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -46,7 +49,7 @@ public class SleepAsAndroidIntentReceiver extends DaggerBroadcastReceiver {
         Timber.d("Received intent: ", intent);
 
         try {
-            if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED)) {
+            if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SLEEP_AS_ANDROID_ENABLED)) {
                 return;
             }
 

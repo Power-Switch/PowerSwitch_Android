@@ -42,7 +42,6 @@ import java.util.Set;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.ReceiverParentRoomChangedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.gui.listener.CheckBoxInteractionListener;
@@ -201,7 +200,7 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
                     }
                 }
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         } else {
             getConfiguration().setRepetitionAmount(repetitionAmount);
@@ -285,7 +284,7 @@ public class ConfigureReceiverDialogPage4Gateway extends ConfigurationDialogPage
                 }
             }
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getContentView(), e);
+            statusMessageHandler.showErrorMessage(getContentView(), e);
         }
     }
 

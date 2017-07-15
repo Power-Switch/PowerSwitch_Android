@@ -54,7 +54,6 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.GatewaySsidAddedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.animation.AnimationHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import timber.log.Timber;
@@ -115,7 +114,7 @@ public class AddSsidDialog extends EventBusSupportDialogFragment {
                     updateSSIDs(connections);
 
                 } catch (SecurityException e) {
-                    StatusMessageHandler.showInfoToast(getContext(), getString(R.string.missing_location_permission), Toast.LENGTH_LONG);
+                    statusMessageHandler.showInfoToast(getContext(), getString(R.string.missing_location_permission), Toast.LENGTH_LONG);
                 } catch (Exception e) {
                     Timber.e(e);
                 }
@@ -174,7 +173,7 @@ public class AddSsidDialog extends EventBusSupportDialogFragment {
                 try {
                     sendSsidAddedBroadcast(getContext(), getSelectedSSIDs());
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getTargetFragment().getView()
+                    statusMessageHandler.showErrorMessage(getTargetFragment().getView()
                             .findViewById(R.id.listView), e);
                 }
             }

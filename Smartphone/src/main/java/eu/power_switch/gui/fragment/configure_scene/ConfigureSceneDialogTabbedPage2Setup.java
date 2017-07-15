@@ -53,7 +53,6 @@ import de.markusressel.android.library.tutorialtooltip.view.TooltipId;
 import de.markusressel.android.library.tutorialtooltip.view.TutorialTooltipView;
 import eu.power_switch.R;
 import eu.power_switch.event.SceneSelectedReceiversChangedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.SceneConfigurationHolder;
 import eu.power_switch.obj.Room;
@@ -185,7 +184,7 @@ public class ConfigureSceneDialogTabbedPage2Setup extends ConfigurationDialogPag
 
                 customRecyclerViewAdapter.setReceiverSceneItemHashMap(map);
             } catch (Exception e) {
-                StatusMessageHandler.showErrorMessage(getContentView(), e);
+                statusMessageHandler.showErrorMessage(getContentView(), e);
             }
         }
     }

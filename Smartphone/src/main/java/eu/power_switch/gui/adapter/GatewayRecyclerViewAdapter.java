@@ -45,17 +45,20 @@ import timber.log.Timber;
  * Created by Markus on 27.07.2015.
  */
 public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecyclerViewAdapter.ViewHolder> {
-    private final PersistanceHandler persistanceHandler;
-    private final ArrayList<Gateway> gateways;
-    private final Context            context;
+    private final PersistanceHandler   persistanceHandler;
+    private final ArrayList<Gateway>   gateways;
+    private final Context              context;
+    private final StatusMessageHandler statusMessageHandler;
 
     private OnItemClickListener     onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
 
-    public GatewayRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, ArrayList<Gateway> gateways) {
+    public GatewayRecyclerViewAdapter(Context context, PersistanceHandler persistanceHandler, StatusMessageHandler statusMessageHandler,
+                                      ArrayList<Gateway> gateways) {
         this.gateways = gateways;
         this.context = context;
         this.persistanceHandler = persistanceHandler;
+        this.statusMessageHandler = statusMessageHandler;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -92,7 +95,7 @@ public class GatewayRecyclerViewAdapter extends RecyclerView.Adapter<GatewayRecy
                         gateway.setActive(isChecked);
                     } catch (Exception e) {
                         Timber.e(e);
-                        StatusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, 5000);
+                        statusMessageHandler.showInfoMessage(context, R.string.error_enabling_gateway, 5000);
                     }
                 }
             }

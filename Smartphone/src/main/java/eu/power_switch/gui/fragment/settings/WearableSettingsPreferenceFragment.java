@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -39,7 +38,7 @@ import eu.power_switch.wear.service.UtilityService;
 /**
  * Created by Markus on 31.07.2016.
  */
-public class WearableSettingsPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class WearableSettingsPreferenceFragment extends EventBusPreferenceFragment {
 
     private IntListPreference startupDefaultTab;
     private SwitchPreference  autoCollapseRooms;

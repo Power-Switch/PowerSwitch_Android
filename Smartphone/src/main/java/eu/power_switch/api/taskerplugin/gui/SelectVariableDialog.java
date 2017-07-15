@@ -35,7 +35,6 @@ import java.util.List;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.event.VariableSelectedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusDialogFragment;
 import timber.log.Timber;
 
@@ -91,7 +90,7 @@ public class SelectVariableDialog extends EventBusDialogFragment {
                 try {
                     notifyVariableSelected(relevantVariables.get(position), field);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getActivity(), e);
+                    statusMessageHandler.showErrorMessage(getActivity(), e);
                 }
 
                 dismiss();

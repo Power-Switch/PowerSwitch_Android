@@ -116,7 +116,7 @@ public class WizardActivity extends WizardActivityBase {
         configurationHolder.writeToDatabase();
 
         // disable wizard for future launches
-        SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD, false);
+        smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_SHOULD_SHOW_WIZARD, false);
 
         // close wizard
         finish();

@@ -65,6 +65,7 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistanceHandler;
+import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import timber.log.Timber;
 
@@ -81,6 +82,12 @@ public class EditActivity extends AbstractPluginActivity {
 
     @Inject
     PersistanceHandler persistanceHandler;
+
+    @Inject
+    protected StatusMessageHandler statusMessageHandler;
+
+    @Inject
+    protected SmartphonePreferencesHandler smartphonePreferencesHandler;
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override
@@ -180,7 +187,7 @@ public class EditActivity extends AbstractPluginActivity {
             }
             Collections.sort(apartmentNames, compareToIgnoreCase);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(this, e);
+            statusMessageHandler.showErrorMessage(this, e);
         }
 
         imageButtonApartmentVariablePicker = findViewById(R.id.imageButton_apartmentVariablePicker);
@@ -454,7 +461,7 @@ public class EditActivity extends AbstractPluginActivity {
             relevantVariables.addAll(Arrays.asList(TaskerPlugin.getRelevantVariableList(getIntent().getExtras())));
         }
 
-        if (null == savedInstanceState && PluginBundleManager.isBundleValid(this, localeBundle)) {
+        if (null == savedInstanceState && PluginBundleManager.isBundleValid(this, statusMessageHandler, localeBundle)) {
             initData(localeBundle);
         } else {
             updateActionType(Action.ACTION_TYPE_RECEIVER);

@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ConfigurationDialogTabAdapter;
 import eu.power_switch.gui.dialog.configuration.holder.ApartmentConfigurationHolder;
 import eu.power_switch.gui.fragment.ApartmentFragment;
@@ -86,7 +85,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
             getConfiguration().setExistingApartments(persistanceHandler.getAllApartments());
         } catch (Exception e) {
             dismiss();
-            StatusMessageHandler.showErrorMessage(getContext(), e);
+            statusMessageHandler.showErrorMessage(getContext(), e);
         }
 
         Apartment apartment = getConfiguration().getApartment();
@@ -96,7 +95,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                 getConfiguration().setAssociatedGateways(apartment.getAssociatedGateways());
             } catch (Exception e) {
                 dismiss();
-                StatusMessageHandler.showErrorMessage(getContext(), e);
+                statusMessageHandler.showErrorMessage(getContext(), e);
             }
 
         }
@@ -130,7 +129,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
             long newId = persistanceHandler.addApartment(newApartment);
             // set new apartment as active if it is the first and only one
             if (isActive) {
-                SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
+                smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID, newId);
             }
         } else {
             Apartment apartment = persistanceHandler.getApartment(apartmentId);
@@ -149,7 +148,7 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
         }
 
         ApartmentFragment.notifyActiveApartmentChanged(getActivity());
-        StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_saved, Snackbar.LENGTH_LONG);
+        statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_saved, Snackbar.LENGTH_LONG);
     }
 
     @Override
@@ -162,17 +161,17 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                         try {
                             Long existingApartmentId = getConfiguration().getApartment()
                                     .getId();
-                            if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(
+                            if (smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(
                                     existingApartmentId)) {
                                 persistanceHandler.deleteApartment(existingApartmentId);
 
                                 // update current Apartment selection
                                 List<Apartment> apartments = persistanceHandler.getAllApartments();
                                 if (apartments.isEmpty()) {
-                                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID,
+                                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID,
                                             SettingsConstants.INVALID_APARTMENT_ID);
                                 } else {
-                                    SmartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID,
+                                    smartphonePreferencesHandler.set(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID,
                                             apartments.get(0)
                                                     .getId());
                                 }
@@ -181,9 +180,9 @@ public class ConfigureApartmentDialog extends ConfigurationDialogTabbed<Apartmen
                             }
 
                             ApartmentFragment.notifyActiveApartmentChanged(getActivity());
-                            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_removed, Snackbar.LENGTH_LONG);
+                            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.apartment_removed, Snackbar.LENGTH_LONG);
                         } catch (Exception e) {
-                            StatusMessageHandler.showErrorMessage(getActivity(), e);
+                            statusMessageHandler.showErrorMessage(getActivity(), e);
                         }
 
                         // close dialog

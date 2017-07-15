@@ -58,6 +58,9 @@ class ApartmentHandler {
     SceneHandler    sceneHandler;
 
     @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
     ApartmentHandler() {
     }
 
@@ -470,7 +473,7 @@ class ApartmentHandler {
 
         Geofence geofence = geofenceHandler.get(database, getAssociatedGeofenceId(database, apartmentId));
 
-        boolean isActive = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId);
+        boolean isActive = smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID).equals(apartmentId);
 
         Apartment apartment = new Apartment(apartmentId, isActive, name, rooms, scenes, gateways, geofence);
         return apartment;

@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
 import eu.power_switch.event.AlarmEventActionAddedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 
 /**
@@ -80,9 +79,9 @@ public class AddStockAlarmClockEventActionDialog extends AddActionDialog {
             ArrayList<Action> actions = new ArrayList<>(persistanceHandler.getAlarmActions(currentEventType));
             actions.add(getCurrentSelection());
             persistanceHandler.setAlarmActions(currentEventType, actions);
-            StatusMessageHandler.showInfoMessage(getTargetFragment(), R.string.action_saved, Snackbar.LENGTH_LONG);
+            statusMessageHandler.showInfoMessage(getTargetFragment(), R.string.action_saved, Snackbar.LENGTH_LONG);
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getActivity(), e);
+            statusMessageHandler.showErrorMessage(getActivity(), e);
         }
     }
 

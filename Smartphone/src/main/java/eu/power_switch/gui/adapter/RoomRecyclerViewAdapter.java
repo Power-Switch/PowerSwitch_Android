@@ -56,18 +56,20 @@ import timber.log.Timber;
 // Note that we specify the custom ViewHolder which gives us access to our views
 public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerViewAdapter.ViewHolder> {
     // Store a member variable for the users
-    private       RecyclerViewFragment recyclerViewFragment;
-    private       ArrayList<Room>      rooms;
-    private       FragmentActivity     fragmentActivity;
-    private final ActionHandler        actionHandler;
+    private       RecyclerViewFragment         recyclerViewFragment;
+    private       ArrayList<Room>              rooms;
+    private       FragmentActivity             fragmentActivity;
+    private final ActionHandler                actionHandler;
+    private final SmartphonePreferencesHandler smartphonePreferencesHandler;
 
     // Pass in the context and users array into the constructor
     public RoomRecyclerViewAdapter(RecyclerViewFragment recyclerViewFragment, FragmentActivity fragmentActivity, ArrayList<Room> rooms,
-                                   ActionHandler actionHandler) {
+                                   ActionHandler actionHandler, SmartphonePreferencesHandler smartphonePreferencesHandler) {
         this.recyclerViewFragment = recyclerViewFragment;
         this.rooms = rooms;
         this.fragmentActivity = fragmentActivity;
         this.actionHandler = actionHandler;
+        this.smartphonePreferencesHandler = smartphonePreferencesHandler;
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -115,9 +117,9 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
                     VibrationHandler.vibrate(fragmentActivity,
-                            SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                            smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                 }
 
                 android.widget.Button buttonView = (android.widget.Button) v;
@@ -149,7 +151,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
         holder.buttonAllOn.setOnClickListener(onClickListener);
         holder.buttonAllOff.setOnClickListener(onClickListener);
 
-        if (!SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF)) {
+        if (!smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SHOW_ROOM_ALL_ON_OFF)) {
             holder.buttonAllOn.setVisibility(View.GONE);
             holder.buttonAllOff.setVisibility(View.GONE);
         } else {
@@ -223,16 +225,16 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
                 buttonViews.add(buttonView);
                 buttonView.setText(button.getName());
                 final int accentColor = ThemeHelper.getThemeAttrColor(fragmentActivity, R.attr.colorAccent);
-                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && lastActivatedButtonId != -1 && button.getId() == lastActivatedButtonId) {
+                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON) && lastActivatedButtonId != -1 && button.getId() == lastActivatedButtonId) {
                     buttonView.setTextColor(accentColor);
                 }
                 buttonView.setOnClickListener(new android.widget.Button.OnClickListener() {
 
                     @Override
                     public void onClick(final View v) {
-                        if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
+                        if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_VIBRATE_ON_BUTTON_PRESS)) {
                             VibrationHandler.vibrate(fragmentActivity,
-                                    SmartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
+                                    smartphonePreferencesHandler.<Integer>get(SmartphonePreferencesHandler.KEY_VIBRATION_DURATION));
                         }
 
                         new AsyncTask<Void, Void, Void>() {
@@ -245,7 +247,7 @@ public class RoomRecyclerViewAdapter extends RecyclerView.Adapter<RoomRecyclerVi
 
                             @Override
                             protected void onPostExecute(Void aVoid) {
-                                if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
+                                if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_HIGHLIGHT_LAST_ACTIVATED_BUTTON)) {
                                     for (android.widget.Button button : buttonViews) {
                                         if (button != v) {
                                             button.setTextColor(defaultTextColor);

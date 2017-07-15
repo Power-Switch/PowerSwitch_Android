@@ -60,6 +60,12 @@ public class UtilityService extends DaggerIntentService {
     @Inject
     PersistanceHandler persistanceHandler;
 
+    @Inject
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
+
+    @Inject
+    StatusMessageHandler statusMessageHandler;
+
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
@@ -190,10 +196,10 @@ public class UtilityService extends DaggerIntentService {
             if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
                 Timber.d("Getting Data from Database to send to Wearable...");
 
-                if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) != SettingsConstants.INVALID_APARTMENT_ID) {
+                if (smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) != SettingsConstants.INVALID_APARTMENT_ID) {
                     List<Apartment> apartments = persistanceHandler.getAllApartments();
 
-                    Apartment activeApartment = persistanceHandler.getApartment(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
+                    Apartment activeApartment = persistanceHandler.getApartment(smartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
 
                     List<Room> rooms = activeApartment.getRooms();
 
@@ -215,7 +221,7 @@ public class UtilityService extends DaggerIntentService {
             }
 
         } catch (Exception e) {
-            StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
+            statusMessageHandler.showErrorMessage(getApplicationContext(), e);
         }
     }
 

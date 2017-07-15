@@ -40,7 +40,6 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.clipboard.ClipboardHelper;
 import eu.power_switch.event.ConfigurationChangedEvent;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.configuration.ConfigurationDialogPage;
 import eu.power_switch.gui.dialog.configuration.holder.ReceiverConfigurationHolder;
 import eu.power_switch.obj.UniversalButton;
@@ -97,9 +96,9 @@ public class ConfigureReceiverDialogPage5Summary extends ConfigurationDialogPage
                             getString(R.string.seed),
                             seedTextView.getText()
                                     .toString());
-                    StatusMessageHandler.showInfoMessage(getContentView(), R.string.copied_to_clipboard, Snackbar.LENGTH_LONG);
+                    statusMessageHandler.showInfoMessage(getContentView(), R.string.copied_to_clipboard, Snackbar.LENGTH_LONG);
                 } catch (Exception e) {
-                    StatusMessageHandler.showErrorMessage(getContentView(), e);
+                    statusMessageHandler.showErrorMessage(getContentView(), e);
                 }
             }
         });

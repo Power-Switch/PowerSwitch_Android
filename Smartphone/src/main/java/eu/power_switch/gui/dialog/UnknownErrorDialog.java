@@ -30,7 +30,6 @@ import java.util.Date;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.PermissionConstants;
@@ -107,7 +106,7 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     } catch (Exception e) {
                         finish();
-                        StatusMessageHandler.showErrorMessage(getApplicationContext(), e);
+                        statusMessageHandler.showErrorMessage(getApplicationContext(), e);
                     }
                 }
             });
@@ -125,7 +124,7 @@ public class UnknownErrorDialog extends ButterKnifeDialogActivity {
 
             textViewErrorDescription.setText(LogHelper.getStackTraceText(throwable));
 
-            if (SmartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
+            if (smartphonePreferencesHandler.<Boolean>get(SmartphonePreferencesHandler.KEY_SEND_ANONYMOUS_CRASH_DATA)) {
                 textView_automaticCrashReportingEnabledInfo.setVisibility(View.VISIBLE);
                 textView_automaticCrashReportingDisabledInfo.setVisibility(View.GONE);
             } else {

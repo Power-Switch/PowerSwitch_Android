@@ -21,6 +21,9 @@ package eu.power_switch.tutorial;
 import android.content.Context;
 import android.view.View;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import eu.power_switch.R;
 import eu.power_switch.shared.constants.TutorialConstants;
 import it.sephiroth.android.library.tooltip.Tooltip;
@@ -30,15 +33,14 @@ import it.sephiroth.android.library.tooltip.Tooltip;
  * <p/>
  * Created by Markus on 12.12.2015.
  */
+@Singleton
 public class TutorialHelper {
 
-    /**
-     * Private Constructor
-     *
-     * @throws UnsupportedOperationException because this class cannot be instantiated.
-     */
-    private TutorialHelper() {
-        throw new UnsupportedOperationException("This class is non-instantiable");
+    private Context context;
+
+    @Inject
+    public TutorialHelper(Context context) {
+        this.context = context;
     }
 
     public static String getMainTabKey(String pageTitle) {
@@ -57,12 +59,10 @@ public class TutorialHelper {
         return TutorialConstants.PHONE_TABS_KEY_PREFIX + pageTitle;
     }
 
-    public static void getTutorialToast(Context context, View anchor) {
+    public void getTutorialToast(View anchor) {
         Tooltip.make(context,
-                new Tooltip.Builder(101)
-                        .anchor(anchor, Tooltip.Gravity.BOTTOM)
-                        .closePolicy(new Tooltip.ClosePolicy()
-                                .insidePolicy(true, false)
+                new Tooltip.Builder(101).anchor(anchor, Tooltip.Gravity.BOTTOM)
+                        .closePolicy(new Tooltip.ClosePolicy().insidePolicy(true, false)
                                 .outsidePolicy(true, false), 3000)
                         .activateDelay(800)
                         .showDelay(300)
@@ -72,7 +72,7 @@ public class TutorialHelper {
                         .withOverlay(true)
 //                        .typeface(mYourCustomFont)
                         .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
-                        .build()
-        ).show();
+                        .build())
+                .show();
     }
 }
