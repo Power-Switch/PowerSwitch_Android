@@ -63,8 +63,8 @@ class ActionHandler {
      *
      * @return List of IDs of inserted Actions
      */
-    protected ArrayList<Long> add(@NonNull SQLiteDatabase database, @NonNull List<Action> actions) throws Exception {
-        ArrayList<Long> ids = new ArrayList<>();
+    protected List<Long> add(@NonNull SQLiteDatabase database, @NonNull List<Action> actions) throws Exception {
+        List<Long> ids = new ArrayList<>();
         for (Action action : actions) {
             ContentValues values = new ContentValues();
             values.put(ActionTable.COLUMN_ACTION_TYPE, action.getActionType());

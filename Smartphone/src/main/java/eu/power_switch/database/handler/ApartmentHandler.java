@@ -229,7 +229,7 @@ class ApartmentHandler {
      * @return list of apartments
      */
     public List<Apartment> getAssociated(@NonNull SQLiteDatabase database, long gatewayId) throws Exception {
-        ArrayList<Apartment> apartments = new ArrayList<>();
+        List<Apartment> apartments = new ArrayList<>();
 
         Cursor cursor = database.query(ApartmentGatewayRelationTable.TABLE_NAME,
                 ApartmentGatewayRelationTable.ALL_COLUMNS,
@@ -344,8 +344,8 @@ class ApartmentHandler {
      *
      * @return List of Apartment names
      */
-    public ArrayList<String> getAllNames(@NonNull SQLiteDatabase database) throws Exception {
-        ArrayList<String> apartmentNames = new ArrayList<>();
+    public List<String> getAllNames(@NonNull SQLiteDatabase database) throws Exception {
+        List<String> apartmentNames = new ArrayList<>();
 
         String[] columns = {ApartmentTable.COLUMN_NAME};
         Cursor   cursor  = database.query(ApartmentTable.TABLE_NAME, columns, null, null, null, null, null);

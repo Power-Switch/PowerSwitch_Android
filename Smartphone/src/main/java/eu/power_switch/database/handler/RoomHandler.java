@@ -259,8 +259,8 @@ class RoomHandler {
      *
      * @return a list of room IDs
      */
-    public ArrayList<Long> getIdsByApartment(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
-        ArrayList<Long> roomIds = new ArrayList<>();
+    public List<Long> getIdsByApartment(@NonNull SQLiteDatabase database, Long apartmentId) throws Exception {
+        List<Long>      roomIds = new ArrayList<>();
         String[]        columns = new String[]{RoomTable.COLUMN_ID};
         Cursor cursor = database.query(RoomTable.TABLE_NAME,
                 columns,

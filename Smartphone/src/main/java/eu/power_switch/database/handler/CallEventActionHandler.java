@@ -60,7 +60,7 @@ class CallEventActionHandler {
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = actionHandler.add(database, actions);
+        List<Long> actionIds = actionHandler.add(database, actions);
 
         // add to relational table
         for (long actionId : actionIds) {

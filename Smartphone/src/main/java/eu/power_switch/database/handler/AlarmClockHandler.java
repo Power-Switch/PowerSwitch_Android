@@ -49,7 +49,7 @@ class AlarmClockHandler {
     }
 
     protected List<Action> getAlarmActions(@NonNull SQLiteDatabase database, AlarmClockConstants.Event event) throws Exception {
-        ArrayList<Action> actions = new ArrayList<>();
+        List<Action> actions = new ArrayList<>();
 
         String[] columns = {AlarmClockActionTable.COLUMN_ALARM_TYPE_ID, AlarmClockActionTable.COLUMN_ACTION_ID};
         Cursor cursor = database.query(AlarmClockActionTable.TABLE_NAME,
@@ -71,14 +71,14 @@ class AlarmClockHandler {
         return actions;
     }
 
-    protected void setAlarmActions(@NonNull SQLiteDatabase database, AlarmClockConstants.Event event, ArrayList<Action> actions) throws Exception {
+    protected void setAlarmActions(@NonNull SQLiteDatabase database, AlarmClockConstants.Event event, List<Action> actions) throws Exception {
         deleteAlarmActions(database, event);
         addAlarmActions(database, event, actions);
     }
 
-    private void addAlarmActions(@NonNull SQLiteDatabase database, AlarmClockConstants.Event event, ArrayList<Action> actions) throws Exception {
+    private void addAlarmActions(@NonNull SQLiteDatabase database, AlarmClockConstants.Event event, List<Action> actions) throws Exception {
         // add actions to database
-        ArrayList<Long> actionIds = actionHandler.add(database, actions);
+        List<Long> actionIds = actionHandler.add(database, actions);
 
         // add AlarmTriggered <-> action relation
         for (Long actionId : actionIds) {

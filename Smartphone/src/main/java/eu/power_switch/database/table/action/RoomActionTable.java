@@ -73,14 +73,15 @@ public class RoomActionTable {
                         TABLE_NAME + "." + COLUMN_ID + ", " +
                         RoomTable.TABLE_NAME + "." + RoomTable.COLUMN_APARTMENT_ID +
                         " FROM " +
-                        RoomTable.TABLE_NAME + " INNER JOIN " + TABLE_NAME +
+                        TABLE_NAME + " INNER JOIN " + RoomTable.TABLE_NAME +
                         " ON " +
-                        RoomTable.TABLE_NAME +"." + RoomTable.COLUMN_ID + "=" +
-                        TABLE_NAME + "." + COLUMN_ROOM_ID + ";";
+                        TABLE_NAME + "." + COLUMN_ROOM_ID + "=" +
+                        RoomTable.TABLE_NAME +"." + RoomTable.COLUMN_ID + ";";
                 //@formatter:on
 
                 Cursor cursor = db.rawQuery(select, null);
-                if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
                     long actionId    = cursor.getLong(0);
                     long apartmentId = cursor.getLong(1);
 
@@ -88,6 +89,7 @@ public class RoomActionTable {
                     values.put(COLUMN_APARTMENT_ID, apartmentId);
 
                     db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{String.valueOf(actionId)});
+                    cursor.moveToNext();
                 }
 
                 cursor.close();

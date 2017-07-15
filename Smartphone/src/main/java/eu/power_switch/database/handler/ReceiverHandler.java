@@ -222,8 +222,8 @@ class ReceiverHandler {
      *
      * @return List of Receivers
      */
-    protected ArrayList<Receiver> getByRoom(@NonNull SQLiteDatabase database, Long roomId) throws Exception {
-        ArrayList<Receiver> receivers = new ArrayList<>();
+    protected List<Receiver> getByRoom(@NonNull SQLiteDatabase database, Long roomId) throws Exception {
+        List<Receiver> receivers = new ArrayList<>();
         Cursor cursor = database.query(ReceiverTable.TABLE_NAME,
                 ReceiverTable.ALL_COLUMNS,
                 ReceiverTable.COLUMN_ROOM_ID + "=" + roomId,

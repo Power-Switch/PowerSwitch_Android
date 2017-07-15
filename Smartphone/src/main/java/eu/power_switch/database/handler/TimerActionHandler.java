@@ -54,7 +54,7 @@ class TimerActionHandler {
      */
     protected void add(@NonNull SQLiteDatabase database, List<Action> actions, Long timerId) throws Exception {
         // add actions to database
-        ArrayList<Long> actionIds = actionHandler.add(database, actions);
+        List<Long> actionIds = actionHandler.add(database, actions);
 
         // add timer <-> action relation
         for (Long actionId : actionIds) {
@@ -72,7 +72,7 @@ class TimerActionHandler {
      * @param timerId ID of Timer
      */
     protected void delete(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
-        ArrayList<Action> actions = getByTimerId(database, timerId);
+        List<Action> actions = getByTimerId(database, timerId);
 
         for (Action action : actions) {
             actionHandler.delete(database, action.getId());
@@ -86,8 +86,8 @@ class TimerActionHandler {
      *
      * @return List of Actions
      */
-    protected ArrayList<Action> getByTimerId(@NonNull SQLiteDatabase database, long timerId) throws Exception {
-        ArrayList<Action> actions = new ArrayList<>();
+    protected List<Action> getByTimerId(@NonNull SQLiteDatabase database, long timerId) throws Exception {
+        List<Action> actions = new ArrayList<>();
 
         String[] columns = {TimerActionTable.COLUMN_TIMER_ID, TimerActionTable.COLUMN_ACTION_ID};
         Cursor cursor = database.query(TimerActionTable.TABLE_NAME,

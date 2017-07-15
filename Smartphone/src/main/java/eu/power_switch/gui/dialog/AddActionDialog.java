@@ -612,6 +612,7 @@ public class AddActionDialog extends EventBusSupportDialogFragment {
                             .equals(spinner_button.getSelectedItem()
                                     .toString())) {
                         selectedButton = button;
+                        break;
                     }
                 }
 

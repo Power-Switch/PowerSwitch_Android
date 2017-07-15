@@ -71,14 +71,15 @@ public class SceneActionTable {
                         TABLE_NAME + "." + COLUMN_ID + ", " +
                         SceneTable.TABLE_NAME + "." + SceneTable.COLUMN_APARTMENT_ID +
                         " FROM " +
-                        SceneTable.TABLE_NAME + " INNER JOIN " + TABLE_NAME +
+                        TABLE_NAME + " INNER JOIN " + SceneTable.TABLE_NAME +
                         " ON " +
-                        SceneTable.TABLE_NAME +"." + SceneTable.COLUMN_ID + "=" +
-                        TABLE_NAME + "." + COLUMN_SCENE_ID + ";";
+                        TABLE_NAME + "." + COLUMN_SCENE_ID + "=" +
+                        SceneTable.TABLE_NAME +"." + SceneTable.COLUMN_ID + ";";
                 //@formatter:on
 
                 Cursor cursor = db.rawQuery(select, null);
-                if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
                     long actionId    = cursor.getLong(0);
                     long apartmentId = cursor.getLong(1);
 
@@ -86,6 +87,7 @@ public class SceneActionTable {
                     values.put(COLUMN_APARTMENT_ID, apartmentId);
 
                     db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{String.valueOf(actionId)});
+                    cursor.moveToNext();
                 }
 
                 cursor.close();

@@ -19,7 +19,6 @@
 package eu.power_switch.database;
 
 import eu.power_switch.ApplicationTest;
-import eu.power_switch.database.handler.DatabaseHandlerStatic;
 
 /**
  * Created by Markus on 21.08.2015.
@@ -28,7 +27,7 @@ public class DatabaseTest extends ApplicationTest {
 
     protected void setUp() throws Exception {
         System.out.println(" Global setUp ");
-        DatabaseHandlerStatic.init(getContext());
+//        DatabaseHandlerStatic.init(getContext());
     }
 
 //    @Test

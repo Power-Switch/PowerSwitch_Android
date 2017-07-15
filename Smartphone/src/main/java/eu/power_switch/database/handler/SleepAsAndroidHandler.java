@@ -50,7 +50,7 @@ class SleepAsAndroidHandler {
     }
 
     protected List<Action> getAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event) throws Exception {
-        ArrayList<Action> actions = new ArrayList<>();
+        List<Action> actions = new ArrayList<>();
 
         String[] columns = {SleepAsAndroidActionTable.COLUMN_ALARM_TYPE_ID, SleepAsAndroidActionTable.COLUMN_ACTION_ID};
         Cursor cursor = database.query(SleepAsAndroidActionTable.TABLE_NAME,
@@ -72,20 +72,19 @@ class SleepAsAndroidHandler {
         return actions;
     }
 
-    protected void setAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event,
-                                   ArrayList<Action> actions) throws Exception {
+    protected void setAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event, List<Action> actions) throws Exception {
         deleteAlarmActions(database, event);
         addAlarmActions(database, event, actions);
     }
 
-    private void addAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event, ArrayList<Action> actions) throws Exception {
+    private void addAlarmActions(@NonNull SQLiteDatabase database, SleepAsAndroidConstants.Event event, List<Action> actions) throws Exception {
         if (actions == null) {
             Timber.w("actions was null! nothing added to database");
             return;
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = actionHandler.add(database, actions);
+        List<Long> actionIds = actionHandler.add(database, actions);
 
         // add AlarmTriggered <-> action relation
         for (Long actionId : actionIds) {

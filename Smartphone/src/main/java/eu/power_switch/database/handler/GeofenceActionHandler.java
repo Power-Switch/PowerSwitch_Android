@@ -61,7 +61,7 @@ class GeofenceActionHandler {
         }
 
         // add actions to database
-        ArrayList<Long> actionIds = actionHandler.add(database, actions);
+        List<Long> actionIds = actionHandler.add(database, actions);
 
         // add geofence <-> action relation
         for (Long actionId : actionIds) {
@@ -80,7 +80,7 @@ class GeofenceActionHandler {
      * @param geofenceId ID of Geofence
      */
     protected void delete(@NonNull SQLiteDatabase database, Long geofenceId) throws Exception {
-        ArrayList<Action> actions = get(database, geofenceId);
+        List<Action> actions = get(database, geofenceId);
 
         for (Action action : actions) {
             actionHandler.delete(database, action.getId());
@@ -94,8 +94,8 @@ class GeofenceActionHandler {
      *
      * @return List of Actions
      */
-    protected ArrayList<Action> get(@NonNull SQLiteDatabase database, long geofenceId) throws Exception {
-        ArrayList<Action> actions = new ArrayList<>();
+    protected List<Action> get(@NonNull SQLiteDatabase database, long geofenceId) throws Exception {
+        List<Action> actions = new ArrayList<>();
 
         String[] columns = {GeofenceActionTable.COLUMN_GEOFENCE_ID, GeofenceActionTable.COLUMN_ACTION_ID};
         Cursor cursor = database.query(GeofenceActionTable.TABLE_NAME,
@@ -124,8 +124,8 @@ class GeofenceActionHandler {
      *
      * @return List of Actions
      */
-    protected ArrayList<Action> get(@NonNull SQLiteDatabase database, long geofenceId, Geofence.EventType eventType) throws Exception {
-        ArrayList<Action> actions = new ArrayList<>();
+    protected List<Action> get(@NonNull SQLiteDatabase database, long geofenceId, Geofence.EventType eventType) throws Exception {
+        List<Action> actions = new ArrayList<>();
 
         String[] columns = {GeofenceActionTable.COLUMN_GEOFENCE_ID, GeofenceActionTable.COLUMN_ACTION_ID, GeofenceActionTable.COLUMN_EVENT_TYPE};
         Cursor cursor = database.query(GeofenceActionTable.TABLE_NAME,

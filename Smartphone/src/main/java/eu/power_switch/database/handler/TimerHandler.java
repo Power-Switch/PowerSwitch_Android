@@ -252,10 +252,10 @@ class TimerHandler {
         long   executionInterval = c.getLong(4);
         String executionType     = c.getString(5);
 
-        ArrayList<Action> actions = timerActionHandler.getByTimerId(database, timerId);
+        List<Action> actions = timerActionHandler.getByTimerId(database, timerId);
 
         if (executionType.equals(Timer.EXECUTION_TYPE_WEEKDAY)) {
-            ArrayList<WeekdayTimer.Day> weekdays = getWeekdayDetails(database, timerId);
+            List<WeekdayTimer.Day> weekdays = getWeekdayDetails(database, timerId);
 
             return new WeekdayTimer(timerId, active, name, executionTime, randomizerValue, weekdays, actions);
         } else if (executionType.equals(Timer.EXECUTION_TYPE_INTERVAL)) {
@@ -265,12 +265,12 @@ class TimerHandler {
         return null;
     }
 
-    private ArrayList<WeekdayTimer.Day> getWeekdayDetails(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
+    private List<WeekdayTimer.Day> getWeekdayDetails(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
         return getExecutionDays(database, timerId);
     }
 
-    private ArrayList<WeekdayTimer.Day> getExecutionDays(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
-        ArrayList<WeekdayTimer.Day> days = new ArrayList<>();
+    private List<WeekdayTimer.Day> getExecutionDays(@NonNull SQLiteDatabase database, Long timerId) throws Exception {
+        List<WeekdayTimer.Day> days = new ArrayList<>();
 
         String[] columns = {TimerWeekdayTable.COLUMN_EXECUTION_DAY};
         Cursor cursor = database.query(TimerWeekdayTable.TABLE_NAME,
