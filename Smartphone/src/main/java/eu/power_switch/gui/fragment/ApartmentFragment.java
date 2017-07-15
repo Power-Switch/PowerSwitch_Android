@@ -40,14 +40,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.ApartmentRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureApartmentDialog;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.TutorialConstants;
@@ -209,12 +207,7 @@ public class ApartmentFragment extends RecyclerViewFragment<Apartment> {
 
     @Override
     public List<Apartment> loadListData() throws Exception {
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            return playStoreModeDataModel.getApartments();
-        } else {
-            return persistanceHandler.getAllApartments();
-        }
+        return persistanceHandler.getAllApartments();
     }
 
     @Override

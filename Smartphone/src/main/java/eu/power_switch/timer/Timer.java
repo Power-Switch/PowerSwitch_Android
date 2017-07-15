@@ -45,7 +45,7 @@ public abstract class Timer {
     /**
      * ID of this Timer
      */
-    protected long id;
+    protected Long id;
 
     /**
      * Active state of this Timer

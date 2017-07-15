@@ -43,7 +43,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.event.SceneChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
@@ -52,7 +51,6 @@ import eu.power_switch.gui.adapter.SceneRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureSceneDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -212,13 +210,7 @@ public class ScenesFragment extends RecyclerViewFragment<Scene> {
 
     @Override
     public List<Scene> loadListData() throws Exception {
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            return playStoreModeDataModel.getActiveApartment()
-                    .getScenes();
-        } else {
-            return persistanceHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
-        }
+        return persistanceHandler.getScenes(SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID));
     }
 
     @Override

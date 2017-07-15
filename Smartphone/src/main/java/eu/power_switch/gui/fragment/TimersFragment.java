@@ -40,13 +40,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import eu.power_switch.R;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.TimerChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.adapter.TimerRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.configuration.ConfigureTimerDialog;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.TutorialConstants;
@@ -211,12 +209,7 @@ public class TimersFragment extends RecyclerViewFragment<Timer> {
 
     @Override
     public List<Timer> loadListData() throws Exception {
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            return playStoreModeDataModel.getTimers();
-        } else {
-            return persistanceHandler.getAllTimers();
-        }
+        return persistanceHandler.getAllTimers();
     }
 
     @Override

@@ -46,7 +46,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ApartmentGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
@@ -57,7 +56,6 @@ import eu.power_switch.gui.dialog.SelectApartmentForGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.PermissionConstants;
@@ -301,12 +299,7 @@ public class ApartmentGeofencesFragment extends RecyclerViewFragment<Geofence> {
         ArrayList<Geofence> geofences = new ArrayList<>();
         List<Apartment>     apartments;
 
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            apartments = playStoreModeDataModel.getApartments();
-        } else {
-            apartments = persistanceHandler.getAllApartments();
-        }
+        apartments = persistanceHandler.getAllApartments();
 
         for (Apartment apartment : apartments) {
             // apartment can have no associated Geofence, so we just ignore it

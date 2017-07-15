@@ -43,7 +43,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.GatewayChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -53,7 +52,6 @@ import eu.power_switch.gui.dialog.configuration.ConfigureGatewayDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
@@ -273,12 +271,7 @@ public class GatewaySettingsFragment extends RecyclerViewFragment<Gateway> {
 
     @Override
     public List<Gateway> loadListData() throws Exception {
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-            return playStoreModeDataModel.getGateways();
-        } else {
-            return persistanceHandler.getAllGateways();
-        }
+        return persistanceHandler.getAllGateways();
     }
 
     @Override

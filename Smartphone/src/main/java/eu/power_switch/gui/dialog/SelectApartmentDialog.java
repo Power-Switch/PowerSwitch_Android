@@ -33,13 +33,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**
@@ -104,14 +102,7 @@ public class SelectApartmentDialog extends EventBusSupportDialogFragment {
         ArrayList<String> apartmentNames = new ArrayList<>();
 
         try {
-            if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-                for (Apartment apartment : playStoreModeDataModel.getApartments()) {
-                    apartmentNames.add(apartment.getName());
-                }
-            } else {
-                apartmentNames.addAll(persistanceHandler.getAllApartmentNames());
-            }
+            apartmentNames.addAll(persistanceHandler.getAllApartmentNames());
         } catch (Exception e) {
             StatusMessageHandler.showErrorMessage(getActivity(), e);
         }

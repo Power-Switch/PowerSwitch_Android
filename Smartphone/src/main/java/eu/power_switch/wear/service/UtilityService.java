@@ -37,7 +37,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import dagger.android.DaggerIntentService;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
@@ -45,7 +44,6 @@ import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.shared.constants.WearableConstants;
@@ -191,30 +189,6 @@ public class UtilityService extends DaggerIntentService {
             // Get Room/Receiver/Scene Data from Database and send to wearable
             if (WearableConstants.REQUEST_DATA_UPDATE_PATH.equals(intent.getAction())) {
                 Timber.d("Getting Data from Database to send to Wearable...");
-
-                if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                    PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getApplicationContext());
-
-                    List<Apartment> apartments = playStoreModeDataModel.getApartments();
-
-                    List<Room> rooms = playStoreModeDataModel.getActiveApartment()
-                            .getRooms();
-                    List<Receiver> receivers = new ArrayList<>();
-                    for (Room room : rooms) {
-                        receivers.addAll(room.getReceivers());
-                    }
-
-                    List<Button> buttons = new ArrayList<>();
-                    for (Receiver receiver : receivers) {
-                        buttons.addAll(receiver.getButtons());
-                    }
-
-                    List<Scene> scenes = playStoreModeDataModel.getActiveApartment()
-                            .getScenes();
-
-                    sendDataToWearable(apartments, rooms, receivers, buttons, scenes);
-                    return;
-                }
 
                 if (SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID) != SettingsConstants.INVALID_APARTMENT_ID) {
                     List<Apartment> apartments = persistanceHandler.getAllApartments();

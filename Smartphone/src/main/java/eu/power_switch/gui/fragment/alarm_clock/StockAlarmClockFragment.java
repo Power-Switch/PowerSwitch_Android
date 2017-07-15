@@ -49,7 +49,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.Action;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.AlarmEventActionAddedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
@@ -58,7 +57,6 @@ import eu.power_switch.gui.dialog.AddStockAlarmClockEventActionDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.AlarmClockConstants.Event;
@@ -81,7 +79,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
     @Inject
     PersistanceHandler persistanceHandler;
-    
+
     private ArrayList<Action> actions = new ArrayList<>();
     private ActionRecyclerViewAdapter recyclerViewAdapter;
 
@@ -246,12 +244,7 @@ public class StockAlarmClockFragment extends RecyclerViewFragment<Action> {
 
     @Override
     public List<Action> loadListData() throws Exception {
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-            return playStoreModeDataModel.getAlarmActions(currentEventType);
-        } else {
-            return persistanceHandler.getAlarmActions(currentEventType);
-        }
+        return persistanceHandler.getAlarmActions(currentEventType);
     }
 
     @Override

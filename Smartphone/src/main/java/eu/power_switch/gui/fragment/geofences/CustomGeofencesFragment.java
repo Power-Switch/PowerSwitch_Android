@@ -245,7 +245,7 @@ public class CustomGeofencesFragment extends RecyclerViewFragment<Geofence> {
     @Override
     public List<Geofence> loadListData() throws Exception {
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
-//            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+//            DemoModePersistanceHandler playStoreModeDataModel = new DemoModePersistanceHandler(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getScenes());
 //        } else {
         return persistanceHandler.getCustomGeofences();

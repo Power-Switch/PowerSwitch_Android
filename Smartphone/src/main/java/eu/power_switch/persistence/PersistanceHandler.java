@@ -22,7 +22,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -758,7 +757,7 @@ public interface PersistanceHandler {
      */
     @NonNull
     @WorkerThread
-    LinkedList<HistoryItem> getHistory() throws Exception;
+    List<HistoryItem> getHistory() throws Exception;
 
     /**
      * Delete entire History from Database

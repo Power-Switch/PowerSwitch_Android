@@ -29,7 +29,7 @@ import java.util.Map;
 
 import eu.power_switch.R;
 import eu.power_switch.backup.BackupHandler;
-import eu.power_switch.developer.PlayStoreModeDataModel;
+import eu.power_switch.persistence.demo_mode.DemoModePersistanceHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;
 
@@ -39,31 +39,31 @@ import timber.log.Timber;
 public class SmartphonePreferencesHandler {
 
     // default values
-    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF = true;
-    public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON = false;
-    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS = false;
-    public static final int DEFAULT_VALUE_THEME = SettingsConstants.THEME_DARK_BLUE;
-    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS = true;
-    public static final int DEFAULT_VALUE_VIBRATION_DURATION = SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
-    public static final int DEFAULT_VALUE_STARTUP_TAB = SettingsConstants.ROOMS_TAB_INDEX;
-    public static final boolean DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED = true;
-    public static final boolean DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED = true;
-    public static final int DEFAULT_VALUE_KEEP_HISTORY_DURATION = SettingsConstants.KEEP_HISTORY_FOREVER;
-    public static final long DEFAULT_VALUE_CURRENT_APARTMENT_ID = SettingsConstants.INVALID_APARTMENT_ID;
-    public static final boolean DEFAULT_VALUE_USE_COMPACT_DRAWER = false;
-    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS = false;
-    public static final boolean DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB = false;
-    public static final String DEFAULT_VALUE_BACKUP_PATH = Environment.getExternalStorageDirectory()
+    public static final boolean DEFAULT_VALUE_SHOW_ROOM_ALL_ON_OFF                 = true;
+    public static final boolean DEFAULT_VALUE_HIGHLIGHT_LAST_ACTIVATED_BUTTON      = false;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_ROOMS                  = false;
+    public static final int     DEFAULT_VALUE_THEME                                = SettingsConstants.THEME_DARK_BLUE;
+    public static final boolean DEFAULT_VALUE_VIBRATE_ON_BUTTON_PRESS              = true;
+    public static final int     DEFAULT_VALUE_VIBRATION_DURATION                   = SettingsConstants.DEFAULT_VIBRATION_DURATION_HAPTIC_FEEDBACK;
+    public static final int     DEFAULT_VALUE_STARTUP_TAB                          = SettingsConstants.ROOMS_TAB_INDEX;
+    public static final boolean DEFAULT_VALUE_STOCK_ALARM_CLOCK_ENABLED            = true;
+    public static final boolean DEFAULT_VALUE_SLEEP_AS_ANDROID_ENABLED             = true;
+    public static final int     DEFAULT_VALUE_KEEP_HISTORY_DURATION                = SettingsConstants.KEEP_HISTORY_FOREVER;
+    public static final long    DEFAULT_VALUE_CURRENT_APARTMENT_ID                 = SettingsConstants.INVALID_APARTMENT_ID;
+    public static final boolean DEFAULT_VALUE_USE_COMPACT_DRAWER                   = false;
+    public static final boolean DEFAULT_VALUE_AUTO_COLLAPSE_TIMERS                 = false;
+    public static final boolean DEFAULT_VALUE_USE_OPTIONS_MENU_INSTEAD_OF_FAB      = false;
+    public static final String  DEFAULT_VALUE_BACKUP_PATH                          = Environment.getExternalStorageDirectory()
             .getPath() + File.separator + BackupHandler.MAIN_BACKUP_FOLDERNAME;
-    public static final boolean DEFAULT_VALUE_AUTO_DISCOVER = true;
-    public static final boolean DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND = true;
-    public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA = true;
-    public static final int DEFAULT_VALUE_LOG_DESTINATION = 0;
+    public static final boolean DEFAULT_VALUE_AUTO_DISCOVER                        = true;
+    public static final boolean DEFAULT_VALUE_SHOW_TOAST_IN_BACKGROUND             = true;
+    public static final boolean DEFAULT_VALUE_SEND_ANONYMOUS_CRASH_DATA            = true;
+    public static final int     DEFAULT_VALUE_LOG_DESTINATION                      = 0;
     public static final boolean DEFAULT_VALUE_SHOULD_ASK_SEND_ANONYMOUS_CRASH_DATA = true;
-    public static final boolean DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS = true;
-    public static final boolean DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS = true;
-    public static final boolean DEFAULT_VALUE_SHOULD_SHOW_WIZARD = true;
-    public static final int DEFAULT_VALUE_LAUNCHER_ICON = 0;
+    public static final boolean DEFAULT_VALUE_SHOW_GEOFENCE_NOTIFICATIONS          = true;
+    public static final boolean DEFAULT_VALUE_SHOW_TIMER_NOTIFICATIONS             = true;
+    public static final boolean DEFAULT_VALUE_SHOULD_SHOW_WIZARD                   = true;
+    public static final int     DEFAULT_VALUE_LAUNCHER_ICON                        = 0;
 
     public static String KEY_AUTO_DISCOVER;
     public static String KEY_BACKUP_PATH;
@@ -93,7 +93,7 @@ public class SmartphonePreferencesHandler {
 
     // setting keys
     private static SharedPreferences sharedPreferences;
-    private static Map<String, ?> cachedValues;
+    private static Map<String, ?>    cachedValues;
 
     // default values for each settings key
     private static Map<String, Object> defaultValueMap;
@@ -107,8 +107,7 @@ public class SmartphonePreferencesHandler {
      * @throws UnsupportedOperationException because this class cannot be instantiated.
      */
     private SmartphonePreferencesHandler() {
-        throw new UnsupportedOperationException(
-                "This class is non-instantiable. Use static one time initialization via init() method instead.");
+        throw new UnsupportedOperationException("This class is non-instantiable. Use static one time initialization via init() method instead.");
     }
 
     /**
@@ -208,6 +207,7 @@ public class SmartphonePreferencesHandler {
      *
      * @param settingsKey Key of setting
      * @param <T>         expected type of return value
+     *
      * @return settings value
      */
     public static <T> T get(String settingsKey) throws ClassCastException {
@@ -230,8 +230,14 @@ public class SmartphonePreferencesHandler {
                 if (!DeveloperPreferencesHandler.getPlayStoreMode()) {
                     return (T) value;
                 } else {
-                    PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(SmartphonePreferencesHandler.context);
-                    return (T) playStoreModeDataModel.getApartments().get(0).getId();
+                    DemoModePersistanceHandler demoModePersistanceHandler = new DemoModePersistanceHandler(SmartphonePreferencesHandler.context);
+                    try {
+                        return (T) demoModePersistanceHandler.getAllApartments()
+                                .get(0)
+                                .getId();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Error fetching apartment id for demo mode");
+                    }
                 }
             }
 

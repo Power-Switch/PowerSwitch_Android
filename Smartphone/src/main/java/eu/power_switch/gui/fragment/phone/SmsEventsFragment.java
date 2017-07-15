@@ -247,7 +247,7 @@ public class SmsEventsFragment extends RecyclerViewFragment<SmsEvent> {
     @Override
     public List<SmsEvent> loadListData() throws Exception {
 //        if (SmartphonePreferencesHandler.getPlayStoreMode()) {
-//            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
+//            DemoModePersistanceHandler playStoreModeDataModel = new DemoModePersistanceHandler(getActivity());
 //            geofences.addAll(playStoreModeDataModel.getCustomGeofences());
 //        } else {
 

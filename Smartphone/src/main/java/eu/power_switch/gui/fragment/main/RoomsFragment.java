@@ -43,7 +43,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.event.ReceiverChangedEvent;
 import eu.power_switch.event.RoomChangedEvent;
@@ -55,7 +54,6 @@ import eu.power_switch.gui.dialog.EditRoomOrderDialog;
 import eu.power_switch.gui.dialog.configuration.ConfigureReceiverDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Room;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;
 import eu.power_switch.shared.constants.SettingsConstants;
@@ -243,18 +241,12 @@ public class RoomsFragment extends RecyclerViewFragment<Room> {
 
     @Override
     public List<Room> loadListData() throws Exception {
-        if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-            PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getActivity());
-            return playStoreModeDataModel.getActiveApartment()
-                    .getRooms();
+        long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+        if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
+            // Get Rooms and Receivers
+            return persistanceHandler.getRooms(currentApartmentId);
         } else {
-            long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-            if (currentApartmentId != SettingsConstants.INVALID_APARTMENT_ID) {
-                // Get Rooms and Receivers
-                return persistanceHandler.getRooms(currentApartmentId);
-            } else {
-                return new ArrayList<>();
-            }
+            return new ArrayList<>();
         }
     }
 

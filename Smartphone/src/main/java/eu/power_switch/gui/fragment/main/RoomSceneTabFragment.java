@@ -40,12 +40,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ActiveApartmentChangedEvent;
 import eu.power_switch.gui.dialog.SelectApartmentDialog;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import eu.power_switch.tutorial.TutorialHelper;
@@ -159,19 +157,12 @@ public class RoomSceneTabFragment extends EventBusFragment {
 
     private void updateCurrentApartmentInfo() {
         try {
-            if (DeveloperPreferencesHandler.getPlayStoreMode()) {
-                PlayStoreModeDataModel playStoreModeDataModel = new PlayStoreModeDataModel(getContext());
-                textView_currentApartmentInfo.setText(playStoreModeDataModel.getApartments()
-                        .get(0)
-                        .getName());
+            long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
+            if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
+                textView_currentApartmentInfo.setText(" - ");
             } else {
-                long currentApartmentId = SmartphonePreferencesHandler.<Long>get(SmartphonePreferencesHandler.KEY_CURRENT_APARTMENT_ID);
-                if (currentApartmentId == SettingsConstants.INVALID_APARTMENT_ID) {
-                    textView_currentApartmentInfo.setText(" - ");
-                } else {
-                    String apartmentName = persistanceHandler.getApartmentName(currentApartmentId);
-                    textView_currentApartmentInfo.setText(apartmentName);
-                }
+                String apartmentName = persistanceHandler.getApartmentName(currentApartmentId);
+                textView_currentApartmentInfo.setText(apartmentName);
             }
         } catch (Exception e) {
             Timber.e(e);

@@ -27,7 +27,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
 import eu.power_switch.application.PowerSwitch;
 
 @Singleton
-@Component(modules = {AppModule.class, ActionBindingsModule.class,
+@Component(modules = {AppModule.class,
+                      ActionBindingsModule.class,
                       AlarmBindingsModule.class,
                       AndroidBindingsModule.class,
                       ApartmentBindingsModule.class,
@@ -37,12 +38,16 @@ import eu.power_switch.application.PowerSwitch;
                       GatewayBindingsModule.class,
                       GeofenceBindingsModule.class,
                       NetworkHandlerModule.class,
-                      NfcBindingsModule.class, PersistenceBindingsModule.class,
+                      NfcBindingsModule.class,
+                      PersistenceBindingsModule.class,
                       ReceiverBindingsModule.class,
                       RoomBindingsModule.class,
                       SceneBindingsModule.class,
                       SettingsBindingsModule.class,
-                      TimerBindingsModule.class, WearBindingsModule.class, WidgetBindingsModule.class, WizardBindingsModule.class,
+                      TimerBindingsModule.class,
+                      WearBindingsModule.class,
+                      WidgetBindingsModule.class,
+                      WizardBindingsModule.class,
                       AndroidInjectionModule.class,
                       AndroidSupportInjectionModule.class})
 interface AppComponent extends AndroidInjector<PowerSwitch> {
