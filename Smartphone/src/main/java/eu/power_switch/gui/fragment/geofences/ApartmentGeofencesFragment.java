@@ -46,7 +46,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.developer.PlayStoreModeDataModel;
 import eu.power_switch.event.ApartmentGeofenceChangedEvent;
 import eu.power_switch.google_play_services.geofence.Geofence;
@@ -57,6 +56,7 @@ import eu.power_switch.gui.adapter.GeofenceRecyclerViewAdapter;
 import eu.power_switch.gui.dialog.SelectApartmentForGeofenceDialog;
 import eu.power_switch.gui.fragment.RecyclerViewFragment;
 import eu.power_switch.obj.Apartment;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;

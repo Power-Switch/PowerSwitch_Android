@@ -20,7 +20,7 @@ package eu.power_switch.wizard.gui;
 
 import javax.inject.Inject;
 
-import eu.power_switch.database.handler.PersistanceHandler;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import eu.power_switch.wizard.config.ConfigurationHolder;
 import lombok.Getter;
 import lombok.Setter;

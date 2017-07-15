@@ -38,11 +38,11 @@ import java.util.NoSuchElementException;
 import javax.inject.Inject;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;

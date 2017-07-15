@@ -31,7 +31,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.R;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.history.HistoryHelper;
@@ -47,6 +46,7 @@ import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.AlarmClockConstants;

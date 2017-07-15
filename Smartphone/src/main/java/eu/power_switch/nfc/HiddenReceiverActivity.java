@@ -27,13 +27,13 @@ import javax.inject.Inject;
 
 import dagger.android.DaggerActivity;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import timber.log.Timber;
 
 /**

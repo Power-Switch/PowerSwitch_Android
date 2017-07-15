@@ -40,11 +40,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.event.ConfigurationChangedEvent;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.activity.SmartphoneThemeHelper;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import lombok.Getter;
 import lombok.Setter;
 import timber.log.Timber;

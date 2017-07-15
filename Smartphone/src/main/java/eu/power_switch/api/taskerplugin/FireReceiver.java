@@ -30,12 +30,12 @@ import javax.inject.Inject;
 import dagger.android.DaggerBroadcastReceiver;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import timber.log.Timber;
 

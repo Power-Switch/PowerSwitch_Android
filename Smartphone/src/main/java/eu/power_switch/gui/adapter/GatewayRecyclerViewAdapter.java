@@ -33,10 +33,10 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import eu.power_switch.R;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.gui.IconicsHelper;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.obj.gateway.Gateway;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import timber.log.Timber;
 
 /**

@@ -56,7 +56,6 @@ import eu.power_switch.api.taskerplugin.bundle.PluginBundleManager;
 import eu.power_switch.api.taskerplugin.gui.AbstractPluginActivity;
 import eu.power_switch.api.taskerplugin.gui.SelectVariableDialog;
 import eu.power_switch.api.taskerplugin.tasker_api.TaskerPlugin;
-import eu.power_switch.database.handler.PersistanceHandler;
 import eu.power_switch.event.VariableSelectedEvent;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
@@ -65,6 +64,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
 import eu.power_switch.shared.constants.ApiConstants;
 import timber.log.Timber;
 
