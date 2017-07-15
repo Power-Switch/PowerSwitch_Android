@@ -118,6 +118,12 @@ public final class SqlitePersistanceHandler implements PersistanceHandler {
      */
     private Lock lock;
 
+    @Inject
+    public SqlitePersistanceHandler(Database database) {
+        this.dbHelper = database;
+        lock = new ReentrantLock();
+    }
+
     /**
      * Open Database for read-only access
      */
@@ -164,12 +170,6 @@ public final class SqlitePersistanceHandler implements PersistanceHandler {
         } finally {
             lock.unlock();
         }
-    }
-
-    @Inject
-    public SqlitePersistanceHandler(Database database) {
-        this.dbHelper = database;
-        lock = new ReentrantLock();
     }
 
     /**
