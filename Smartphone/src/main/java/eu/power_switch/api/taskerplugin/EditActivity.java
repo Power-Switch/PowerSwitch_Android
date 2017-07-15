@@ -84,10 +84,10 @@ public class EditActivity extends AbstractPluginActivity {
     PersistanceHandler persistanceHandler;
 
     @Inject
-    protected StatusMessageHandler statusMessageHandler;
+    StatusMessageHandler statusMessageHandler;
 
     @Inject
-    protected SmartphonePreferencesHandler smartphonePreferencesHandler;
+    SmartphonePreferencesHandler smartphonePreferencesHandler;
 
     private static final Comparator<String> compareToIgnoreCase = new Comparator<String>() {
         @Override

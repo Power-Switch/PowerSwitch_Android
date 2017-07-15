@@ -29,6 +29,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasFragmentInjector;
 import dagger.android.support.AndroidSupportInjection;
+import timber.log.Timber;
 
 /**
  * Created by Markus on 15.07.2017.
@@ -41,7 +42,10 @@ public abstract class DaggerPreferenceFragment extends PreferenceFragmentCompat 
 
     @Override
     public void onAttach(Context context) {
+        Timber.v("before injection");
         AndroidSupportInjection.inject(this);
+        Timber.v("after injection");
+
         super.onAttach(context);
     }
 

@@ -37,9 +37,6 @@ import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceScreen;
 import android.view.View;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,7 +105,6 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
     @Inject
     StatusMessageHandler statusMessageHandler;
 
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // set preferences file name
@@ -118,12 +114,6 @@ public class GeneralSettingsPreferenceFragment extends EventBusPreferenceFragmen
         addPreferencesFromResource(R.xml.settings_general);
 
         initializePreferenceItems();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    @SuppressWarnings("unused")
-    public void onBackupPathChanged() {
-        backupPath.setSummary(smartphonePreferencesHandler.<String>get(SmartphonePreferencesHandler.KEY_BACKUP_PATH));
     }
 
     private void initializePreferenceItems() {
