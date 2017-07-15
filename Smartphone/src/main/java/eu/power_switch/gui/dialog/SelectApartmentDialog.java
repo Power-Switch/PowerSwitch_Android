@@ -38,7 +38,7 @@ import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.dialog.eventbus.EventBusSupportDialogFragment;
 import eu.power_switch.gui.fragment.ApartmentFragment;
 import eu.power_switch.obj.Apartment;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.settings.DeveloperPreferencesHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 

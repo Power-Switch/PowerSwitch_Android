@@ -43,7 +43,7 @@ import eu.power_switch.gui.activity.butterknife.ButterKnifeDialogActivity;
 import eu.power_switch.gui.listener.SpinnerInteractionListener;
 import eu.power_switch.obj.Apartment;
 import eu.power_switch.obj.Scene;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.widget.SceneWidget;
 import eu.power_switch.widget.WidgetIntentReceiver;
 import timber.log.Timber;

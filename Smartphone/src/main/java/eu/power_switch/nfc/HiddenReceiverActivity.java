@@ -33,7 +33,7 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import timber.log.Timber;
 
 /**

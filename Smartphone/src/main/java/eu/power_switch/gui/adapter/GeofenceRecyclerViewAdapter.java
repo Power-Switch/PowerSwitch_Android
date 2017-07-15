@@ -37,7 +37,7 @@ import eu.power_switch.action.Action;
 import eu.power_switch.google_play_services.geofence.Geofence;
 import eu.power_switch.google_play_services.geofence.GeofenceApiHandler;
 import eu.power_switch.gui.StatusMessageHandler;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.shared.permission.PermissionHelper;
 import timber.log.Timber;
 

@@ -42,7 +42,7 @@ import butterknife.BindView;
 import eu.power_switch.R;
 import eu.power_switch.gui.StatusMessageHandler;
 import eu.power_switch.gui.fragment.eventbus.EventBusFragment;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 
 /**
  * This is a Fragment that contains a RecyclerView somewhere in its view hierarchy

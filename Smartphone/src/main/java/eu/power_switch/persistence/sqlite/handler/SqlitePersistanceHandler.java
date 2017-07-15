@@ -42,6 +42,7 @@ import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.persistence.sqlite.Database;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.AlarmClockConstants;
@@ -62,7 +63,7 @@ import timber.log.Timber;
  * accessed via this class.
  */
 @Singleton
-public final class PersistanceHandler {
+public final class SqlitePersistanceHandler implements PersistanceHandler {
 
     @Inject
     ApartmentHandler            apartmentHandler;
@@ -166,7 +167,7 @@ public final class PersistanceHandler {
     }
 
     @Inject
-    public PersistanceHandler(Database database) {
+    public SqlitePersistanceHandler(Database database) {
         this.dbHelper = database;
         lock = new ReentrantLock();
     }
@@ -177,13 +178,7 @@ public final class PersistanceHandler {
      * /////////////////////////
      */
 
-    /**
-     * Add Apartment to Database
-     *
-     * @param apartment Apartment
-     *
-     * @return ID of added Apartment
-     */
+    @Override
     @WorkerThread
     public long addApartment(Apartment apartment) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -199,11 +194,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Deletes an Apartment from Database
-     *
-     * @param id ID of Apartment
-     */
+    @Override
     @WorkerThread
     public void deleteApartment(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -218,11 +209,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Updates an Apartment in Database
-     *
-     * @param apartment updated Apartment
-     */
+    @Override
     @WorkerThread
     public void updateApartment(Apartment apartment) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -237,13 +224,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get an Apartment by Name
-     *
-     * @param name Name of Apartment
-     *
-     * @return Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Apartment getApartment(String name) throws Exception {
@@ -258,13 +239,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get an Apartment by Name, ignoring case
-     *
-     * @param name Name of Apartment
-     *
-     * @return Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Apartment getApartmentCaseInsensitive(String name) throws Exception {
@@ -279,13 +254,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get an Apartment by ID
-     *
-     * @param id ID of Apartment
-     *
-     * @return Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Apartment getApartment(Long id) throws Exception {
@@ -300,13 +269,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get the ID of an Apartment by its name, ignoring case
-     *
-     * @param name Name of Apartment
-     *
-     * @return ID of Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Long getApartmentId(String name) throws Exception {
@@ -321,13 +284,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get the Name of an Apartment by ID
-     *
-     * @param id ID of Apartment
-     *
-     * @return Name of Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public String getApartmentName(Long id) throws Exception {
@@ -342,13 +299,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Apartments from Database
-     *
-     * @return List of Apartment Names
-     *
-     * @throws Exception
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<String> getAllApartmentNames() throws Exception {
@@ -363,13 +314,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Apartments from Database
-     *
-     * @return List of Apartments
-     *
-     * @throws Exception
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Apartment> getAllApartments() throws Exception {
@@ -384,13 +329,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Apartments associated with the given gateway id from Database
-     *
-     * @return List of Apartments
-     *
-     * @throws Exception
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Apartment> getAssociatedApartments(long gatewayId) throws Exception {
@@ -405,13 +344,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Apartment that contains a specific Receiver
-     *
-     * @param receiver Receiver
-     *
-     * @return Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Apartment getContainingApartment(Receiver receiver) throws Exception {
@@ -426,13 +359,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Apartment that contains a specific Room
-     *
-     * @param room Room
-     *
-     * @return Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Apartment getContainingApartment(Room room) throws Exception {
@@ -447,13 +374,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Apartment that contains a specific Scene
-     *
-     * @param scene Scene
-     *
-     * @return Apartment
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Apartment getContainingApartment(Scene scene) throws Exception {
@@ -476,13 +397,7 @@ public final class PersistanceHandler {
      *
      */
 
-    /**
-     * Save a room to the database.
-     *
-     * @param room the new room
-     *
-     * @return ID of added Room
-     */
+    @Override
     @WorkerThread
     public long addRoom(Room room) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -498,12 +413,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Update an existing room.
-     *
-     * @param id      the ID of the Room
-     * @param newName the new Name
-     */
+    @Override
     @WorkerThread
     public void updateRoom(Long id, String newName, List<Gateway> associatedGateways) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -518,12 +428,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Update collapsed state of an existing room.
-     *
-     * @param id          the ID of the Room
-     * @param isCollapsed the new Name
-     */
+    @Override
     @WorkerThread
     public void updateRoomCollapsed(Long id, boolean isCollapsed) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -538,12 +443,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Sets the position of a Room
-     *
-     * @param roomId   ID of Room
-     * @param position position in apartment
-     */
+    @Override
     @WorkerThread
     public void setPositionOfRoom(Long roomId, Long position) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -558,11 +458,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delte a room.
-     *
-     * @param id the ID of the room
-     */
+    @Override
     @WorkerThread
     public void deleteRoom(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -577,13 +473,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get a room object by its name.
-     *
-     * @param name the name of the room
-     *
-     * @return a room object
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Room getRoom(String name) throws Exception {
@@ -598,13 +488,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get a room object by its name, ignoring case
-     *
-     * @param name the name of the room
-     *
-     * @return a room object
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Room getRoomCaseInsensitive(String name) throws Exception {
@@ -619,13 +503,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get a room object by its ID.
-     *
-     * @param id the ID of the room
-     *
-     * @return a room object
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Room getRoom(Long id) throws Exception {
@@ -640,11 +518,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all rooms.
-     *
-     * @return a list of all rooms
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Room> getAllRooms() throws Exception {
@@ -659,11 +533,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all rooms of a specific Apartment.
-     *
-     * @return a list of rooms
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Room> getRooms(Long apartmentId) throws Exception {
@@ -678,11 +548,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all room IDs of a specific Apartment.
-     *
-     * @return a list of room IDs
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Long> getRoomIds(Long apartmentId) throws Exception {
@@ -705,11 +571,7 @@ public final class PersistanceHandler {
      *
      */
 
-    /**
-     * Add Receiver to database
-     *
-     * @param receiver the new Receiver
-     */
+    @Override
     @WorkerThread
     public void addReceiver(Receiver receiver) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -724,11 +586,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Updates a Receiver in database
-     *
-     * @param receiver the edited Receiver
-     */
+    @Override
     @WorkerThread
     public void updateReceiver(Receiver receiver) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -743,13 +601,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Receiver by id
-     *
-     * @param id ID of the Receiver
-     *
-     * @return Receiver, can be null
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Receiver getReceiver(Long id) throws Exception {
@@ -764,13 +616,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Receivers associated with a Room
-     *
-     * @param id ID of room
-     *
-     * @return List of Receivers
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Receiver> getReceiverByRoomId(Long id) throws Exception {
@@ -785,14 +631,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Receiver associated with a Room
-     *
-     * @param roomId       ID of room
-     * @param receiverName Name of Receiver
-     *
-     * @return List of Receivers
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Receiver getReceiverByRoomId(Long roomId, String receiverName) throws Exception {
@@ -807,12 +646,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Sets the position of a Receiver
-     *
-     * @param receiverId ID of Receiver
-     * @param position   position in room
-     */
+    @Override
     @WorkerThread
     public void setPositionOfReceiver(Long receiverId, Long position) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -827,11 +661,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Receivers in database
-     *
-     * @return List of Receivers
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Receiver> getAllReceivers() throws Exception {
@@ -846,11 +676,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete Receiver from Database
-     *
-     * @param id ID of Receiver
-     */
+    @Override
     @WorkerThread
     public void deleteReceiver(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -865,13 +691,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Button from Database
-     *
-     * @param id ID of Button
-     *
-     * @return Button
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Button getButton(Long id) throws Exception {
@@ -886,13 +706,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Buttons associated with a Receiver
-     *
-     * @param receiverId ID of Receiver
-     *
-     * @return List of Buttons
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<UniversalButton> getButtons(Long receiverId) throws Exception {
@@ -907,12 +721,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Sets ID of last activated Button of a Receiver
-     *
-     * @param receiverId ID of Receiver
-     * @param buttonId   ID of Button
-     */
+    @Override
     @WorkerThread
     public void setLastActivatedButtonId(Long receiverId, Long buttonId) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -935,11 +744,7 @@ public final class PersistanceHandler {
      *
      */
 
-    /**
-     * Add a scene to Database
-     *
-     * @param scene the new Scene
-     */
+    @Override
     @WorkerThread
     public void addScene(Scene scene) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -954,11 +759,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Update existing Scene
-     *
-     * @param scene the edited Scene
-     */
+    @Override
     @WorkerThread
     public void updateScene(Scene scene) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -973,11 +774,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete Scene from Database
-     *
-     * @param id ID of Scene
-     */
+    @Override
     @WorkerThread
     public void deleteScene(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -992,13 +789,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Scene from Database
-     *
-     * @param name Name of Scene
-     *
-     * @return Scene
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Scene getScene(String name) throws Exception {
@@ -1013,13 +804,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Scene from Database
-     *
-     * @param id ID of Scene
-     *
-     * @return Scene
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Scene getScene(Long id) throws Exception {
@@ -1034,11 +819,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all scenes of a specific Apartment.
-     *
-     * @return a list of scenes
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Scene> getScenes(Long apartmentId) throws Exception {
@@ -1053,11 +834,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all scenes from Database
-     *
-     * @return List of Scenes
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Scene> getAllScenes() throws Exception {
@@ -1080,15 +857,7 @@ public final class PersistanceHandler {
      *
      */
 
-    /**
-     * Add Gateway to Database
-     *
-     * @param gateway new Gateway
-     *
-     * @return ID of saved Database entry
-     *
-     * @throws GatewayAlreadyExistsException
-     */
+    @Override
     @WorkerThread
     public long addGateway(Gateway gateway) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1106,11 +875,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Enable existing Gateway
-     *
-     * @param id ID of Gateway
-     */
+    @Override
     @WorkerThread
     public void enableGateway(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1125,11 +890,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Disable existing Gateway
-     *
-     * @param id ID of Gateway
-     */
+    @Override
     @WorkerThread
     public void disableGateway(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1144,17 +905,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Update existing Gateway
-     *
-     * @param id           ID of Gateway
-     * @param name         new Name of Gateway
-     * @param model        new Model of Gateway
-     * @param localAddress new local Address (Host) of Gateway
-     * @param localPort    new local Port of Gateway
-     * @param wanAddress   new WAN Address (Host) of Gateway
-     * @param wanPort      new WAN Port of Gateway
-     */
+    @Override
     @WorkerThread
     public void updateGateway(Long id, String name, String model, String localAddress, Integer localPort, String wanAddress, Integer wanPort,
                               Set<String> ssids) throws Exception {
@@ -1170,11 +921,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete Gateway from Database
-     *
-     * @param id ID of Gateway
-     */
+    @Override
     @WorkerThread
     public void deleteGateway(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1189,13 +936,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get Gateway from Database
-     *
-     * @param id ID of Gateway
-     *
-     * @return Gateway
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Gateway getGateway(Long id) throws Exception {
@@ -1210,11 +951,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Gateways
-     *
-     * @return List of Gateways
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Gateway> getAllGateways() throws Exception {
@@ -1229,13 +966,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all enabled/disabled Gateways
-     *
-     * @param isActive true if Gateway is enabled
-     *
-     * @return List of Gateways
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Gateway> getAllGateways(boolean isActive) throws Exception {
@@ -1250,13 +981,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Checks if the gateway is associated with any apartment
-     *
-     * @param gateway gateway to check for associations
-     *
-     * @return true if associated with at least one apartment, false otherwise
-     */
+    @Override
     @WorkerThread
     public boolean isAssociatedWithAnyApartment(Gateway gateway) throws Exception {
         SQLiteDatabase database = openReadable();
@@ -1278,11 +1003,7 @@ public final class PersistanceHandler {
      *
      */
 
-    /**
-     * Add ReceiverWidget to Database
-     *
-     * @param receiverWidget WidgetInfo Object
-     */
+    @Override
     @WorkerThread
     public void addReceiverWidget(ReceiverWidget receiverWidget) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1297,11 +1018,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete ReceiverWidget from Database
-     *
-     * @param id WidgetId
-     */
+    @Override
     @WorkerThread
     public void deleteReceiverWidget(int id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1316,11 +1033,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get ReceiverWidget from Database
-     *
-     * @param id WidgetId
-     */
+    @Override
     @NonNull
     @WorkerThread
     public ReceiverWidget getReceiverWidget(int id) throws Exception {
@@ -1335,11 +1048,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Add RoomWidget to Database
-     *
-     * @param roomWidget WidgetInfo Object
-     */
+    @Override
     @WorkerThread
     public void addRoomWidget(RoomWidget roomWidget) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1354,11 +1063,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete RoomWidget from Database
-     *
-     * @param id WidgetId
-     */
+    @Override
     @WorkerThread
     public void deleteRoomWidget(int id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1373,11 +1078,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get RoomWidget from Database
-     *
-     * @param id WidgetId
-     */
+    @Override
     @NonNull
     @WorkerThread
     public RoomWidget getRoomWidget(int id) throws Exception {
@@ -1392,11 +1093,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Add SceneWidget to Database
-     *
-     * @param sceneWidget WidgetInfo Object
-     */
+    @Override
     @WorkerThread
     public void addSceneWidget(SceneWidget sceneWidget) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1411,11 +1108,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete SceneWidget from Database
-     *
-     * @param id WidgetId
-     */
+    @Override
     @WorkerThread
     public void deleteSceneWidget(int id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1430,11 +1123,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get SceneWidget from Database
-     *
-     * @param id WidgetId
-     */
+    @Override
     @NonNull
     @WorkerThread
     public SceneWidget getSceneWidget(int id) throws Exception {
@@ -1452,13 +1141,7 @@ public final class PersistanceHandler {
     }
 
 
-    /**
-     * Get Timer from Database
-     *
-     * @param id ID of Timer
-     *
-     * @return Timer
-     */
+    @Override
     @NonNull
     @WorkerThread
     public Timer getTimer(Long id) throws Exception {
@@ -1473,11 +1156,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Timers.
-     *
-     * @return a list of all Timers
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Timer> getAllTimers() throws Exception {
@@ -1492,13 +1171,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all active/inactive Timers.
-     *
-     * @param isActive true if Timer is active
-     *
-     * @return a list of all active/inactive Timers
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Timer> getAllTimers(boolean isActive) throws Exception {
@@ -1513,11 +1186,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Add Timer to Database
-     *
-     * @param timer Timer Object
-     */
+    @Override
     @WorkerThread
     public long addTimer(Timer timer) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1533,11 +1202,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Enable Timer
-     *
-     * @param id ID of Timer
-     */
+    @Override
     @WorkerThread
     public void enableTimer(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1552,11 +1217,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Disable Timer
-     *
-     * @param id ID of Timer
-     */
+    @Override
     @WorkerThread
     public void disableTimer(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1571,11 +1232,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Deletes Timer from Database
-     *
-     * @param id ID of Timer
-     */
+    @Override
     @WorkerThread
     public void deleteTimer(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1590,11 +1247,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Updates an existing Timer
-     *
-     * @param timer new Timer with same ID as old one
-     */
+    @Override
     @WorkerThread
     public void updateTimer(Timer timer) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1617,13 +1270,7 @@ public final class PersistanceHandler {
      *
      */
 
-    /**
-     * Get Actions for a specific alarm event
-     *
-     * @param event alarm event
-     *
-     * @return List of Actions
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Action> getAlarmActions(AlarmClockConstants.Event event) throws Exception {
@@ -1638,12 +1285,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Set Actions for a specific alarm event
-     *
-     * @param event   alarm event
-     * @param actions List of Actions
-     */
+    @Override
     @WorkerThread
     public void setAlarmActions(AlarmClockConstants.Event event, List<Action> actions) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1666,13 +1308,7 @@ public final class PersistanceHandler {
      *
      */
 
-    /**
-     * Get Actions for a specific alarm event
-     *
-     * @param event alarm event
-     *
-     * @return List of Actions
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Action> getAlarmActions(SleepAsAndroidConstants.Event event) throws Exception {
@@ -1687,12 +1323,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Set Actions for a specific alarm event
-     *
-     * @param event   alarm event
-     * @param actions List of Actions
-     */
+    @Override
     @WorkerThread
     public void setAlarmActions(SleepAsAndroidConstants.Event event, List<Action> actions) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1713,11 +1344,7 @@ public final class PersistanceHandler {
      * ///////////////////////
      */
 
-    /**
-     * Gets all HistoryItems in Database, sorted by date/time
-     *
-     * @return List of HistoryItems
-     */
+    @Override
     @NonNull
     @WorkerThread
     public LinkedList<HistoryItem> getHistory() throws Exception {
@@ -1732,9 +1359,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete entire History from Database
-     */
+    @Override
     @WorkerThread
     public void clearHistory() throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1749,11 +1374,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Adds a HistoryItem to database
-     *
-     * @param historyItem HistoryItem
-     */
+    @Override
     @WorkerThread
     public void addHistoryItem(HistoryItem historyItem) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1774,13 +1395,7 @@ public final class PersistanceHandler {
      * ////////////////////////
      */
 
-    /**
-     * Get Gateway from Database
-     *
-     * @param id ID of Gateway
-     *
-     * @return Gateway
-     */
+    @Override
     @Nullable
     @WorkerThread
     public Geofence getGeofence(Long id) throws Exception {
@@ -1795,11 +1410,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get a list of all Geofences
-     *
-     * @return list of Geofences
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Geofence> getAllGeofences() throws Exception {
@@ -1814,13 +1425,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get a list of all active/inactive Geofences
-     *
-     * @param isActive true if active, false otherwise
-     *
-     * @return list of Geofences
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Geofence> getAllGeofences(boolean isActive) throws Exception {
@@ -1835,11 +1440,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get a list of all custom Geofences
-     *
-     * @return list of custom Geofences
-     */
+    @Override
     @NonNull
     @WorkerThread
     public List<Geofence> getCustomGeofences() throws Exception {
@@ -1854,13 +1455,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Add Geofence to Database
-     *
-     * @param geofence new Geofence
-     *
-     * @return ID of saved Database entry
-     */
+    @Override
     @WorkerThread
     public long addGeofence(Geofence geofence) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1876,11 +1471,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Update existing Geofence in Database
-     *
-     * @param geofence updated Geofence
-     */
+    @Override
     @WorkerThread
     public void updateGeofence(Geofence geofence) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1895,11 +1486,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Enable existing Geofence
-     *
-     * @param id ID of Geofence
-     */
+    @Override
     @WorkerThread
     public void enableGeofence(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1914,11 +1501,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Disable existing Geofence
-     *
-     * @param id ID of Geofence
-     */
+    @Override
     @WorkerThread
     public void disableGeofence(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1933,9 +1516,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Disable all existing Geofences
-     */
+    @Override
     @WorkerThread
     public void disableGeofences() throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1950,9 +1531,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Update Geofence State
-     */
+    @Override
     @WorkerThread
     public void updateState(Long id, @Geofence.State String state) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1967,11 +1546,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete Geofence from Database
-     *
-     * @param id ID of Geofence
-     */
+    @Override
     @WorkerThread
     public void deleteGeofence(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -1992,13 +1567,7 @@ public final class PersistanceHandler {
      * /////////////////////////
      */
 
-    /**
-     * Get a CallEvent from Database
-     *
-     * @param id ID of Call Event
-     *
-     * @return CallEvent
-     */
+    @Override
     @NonNull
     @WorkerThread
     public CallEvent getCallEvent(long id) throws Exception {
@@ -2013,13 +1582,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all CallEvents that react to the specified phone number
-     *
-     * @param phoneNumber phone number used in the Call Event
-     *
-     * @return List of CallEvents
-     */
+    @Override
     public List<CallEvent> getCallEvents(String phoneNumber) throws Exception {
         SQLiteDatabase database = openReadable();
         try {
@@ -2032,11 +1595,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Get all Call Events from Database
-     *
-     * @return List of CallEvents
-     */
+    @Override
     @WorkerThread
     public List<CallEvent> getAllCallEvents() throws Exception {
         SQLiteDatabase database = openReadable();
@@ -2050,13 +1609,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Add CallEvent to Database
-     *
-     * @param callEvent new Call Event
-     *
-     * @return ID of saved Database entry
-     */
+    @Override
     @WorkerThread
     public long addCallEvent(CallEvent callEvent) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -2072,11 +1625,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Delete Call Event from Database
-     *
-     * @param id ID of Call Event
-     */
+    @Override
     @WorkerThread
     public void deleteCallEvent(Long id) throws Exception {
         SQLiteDatabase database = openWritable();
@@ -2091,11 +1640,7 @@ public final class PersistanceHandler {
         }
     }
 
-    /**
-     * Update existing CallEvent in Database
-     *
-     * @param callEvent updated CallEvent
-     */
+    @Override
     @WorkerThread
     public void updateCallEvent(CallEvent callEvent) throws Exception {
         SQLiteDatabase database = openWritable();

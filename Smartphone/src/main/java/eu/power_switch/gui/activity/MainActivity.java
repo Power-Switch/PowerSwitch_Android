@@ -92,7 +92,7 @@ import eu.power_switch.history.HistoryItem;
 import eu.power_switch.network.NetworkHandler;
 import eu.power_switch.nfc.NfcHandler;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.phone.PhoneHelper;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.ThemeHelper;

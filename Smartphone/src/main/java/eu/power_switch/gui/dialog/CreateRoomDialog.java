@@ -47,7 +47,7 @@ import eu.power_switch.gui.fragment.configure_receiver.ConfigureReceiverDialogPa
 import eu.power_switch.gui.fragment.main.RoomsFragment;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.wear.service.UtilityService;
 

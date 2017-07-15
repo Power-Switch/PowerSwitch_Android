@@ -33,7 +33,7 @@ import dagger.android.DaggerIntentService;
 import eu.power_switch.R;
 import eu.power_switch.action.ActionHandler;
 import eu.power_switch.gui.fragment.geofences.GeofencesTabFragment;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import timber.log.Timber;
 
 /**

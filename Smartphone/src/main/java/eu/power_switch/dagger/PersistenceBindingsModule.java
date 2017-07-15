@@ -16,35 +16,23 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.wizard.gui;
+package eu.power_switch.dagger;
 
-import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import dagger.Binds;
+import dagger.Module;
 import eu.power_switch.persistence.PersistanceHandler;
-import eu.power_switch.wizard.config.ConfigurationHolder;
-import lombok.Getter;
-import lombok.Setter;
+import eu.power_switch.persistence.sqlite.handler.SqlitePersistanceHandler;
 
 /**
- * Created by Markus on 27.06.2017.
+ * Created by Markus on 12.07.2017.
  */
-public abstract class ConfigurationPage extends WizardPage {
+@Module
+public abstract class PersistenceBindingsModule {
 
-    /**
-     * Configuration holder where to store the configuration of this page
-     */
-    @Getter
-    @Setter
-    protected ConfigurationHolder configurationHolder;
-
-    /**
-     * The current validity of this page
-     */
-    @Getter
-    @Setter
-    private boolean isValid = false;
-
-    @Inject
-    protected PersistanceHandler persistanceHandler;
+    @Binds
+    @Singleton
+    public abstract PersistanceHandler providePersistenceHandler(SqlitePersistanceHandler sqlitePersistanceHandler);
 
 }

@@ -21,7 +21,7 @@ package eu.power_switch.obj.button;
 import android.content.Context;
 
 import eu.power_switch.R;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.shared.constants.DatabaseConstants;
 import lombok.Getter;
 import lombok.ToString;

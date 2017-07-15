@@ -26,7 +26,7 @@ import java.util.Calendar;
 
 import eu.power_switch.R;
 import eu.power_switch.event.HistoryUpdatedEvent;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import eu.power_switch.shared.log.LogHelper;
 import timber.log.Timber;
 

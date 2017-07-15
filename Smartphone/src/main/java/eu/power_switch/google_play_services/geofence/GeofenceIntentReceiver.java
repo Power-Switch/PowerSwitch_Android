@@ -27,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.android.DaggerBroadcastReceiver;
-import eu.power_switch.persistence.sqlite.handler.PersistanceHandler;
+import eu.power_switch.persistence.PersistanceHandler;
 import timber.log.Timber;
 
 /**
