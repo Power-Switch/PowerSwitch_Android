@@ -41,8 +41,8 @@ public class TimerActionTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_TIMER_ID + " integer not null," +
-            COLUMN_ACTION_ID + " integer not null," +
+            COLUMN_TIMER_ID     + " integer not null," +
+            COLUMN_ACTION_ID    + " integer not null," +
             "FOREIGN KEY(" + COLUMN_TIMER_ID + ") REFERENCES " +
                 TimerTable.TABLE_NAME + "(" + TimerTable.COLUMN_ID + "), " +
             "FOREIGN KEY(" + COLUMN_ACTION_ID+ ") REFERENCES " +

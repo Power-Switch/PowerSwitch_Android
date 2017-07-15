@@ -34,7 +34,7 @@ public class ApartmentGeofenceRelationTable {
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
             COLUMN_APARTMENT_ID + " integer not null," +
-            COLUMN_GEOFENCE_ID + " integer not null," +
+            COLUMN_GEOFENCE_ID  + " integer not null," +
             "FOREIGN KEY(" + COLUMN_APARTMENT_ID + ") REFERENCES " +
                 ApartmentTable.TABLE_NAME + "(" + ApartmentTable.COLUMN_ID + "), " +
             "FOREIGN KEY(" + COLUMN_GEOFENCE_ID + ") REFERENCES " +

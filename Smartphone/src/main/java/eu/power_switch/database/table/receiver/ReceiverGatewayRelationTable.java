@@ -37,8 +37,8 @@ public class ReceiverGatewayRelationTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_RECEIVER_ID + " integer not null," +
-            COLUMN_GATEWAY_ID + " integer not null," +
+            COLUMN_RECEIVER_ID  + " integer not null," +
+            COLUMN_GATEWAY_ID   + " integer not null," +
             "FOREIGN KEY(" + COLUMN_RECEIVER_ID + ") REFERENCES " +
                 ReceiverTable.TABLE_NAME + "(" + ReceiverTable.COLUMN_ID + "), " +
             "FOREIGN KEY(" + COLUMN_GATEWAY_ID + ") REFERENCES " +

@@ -36,9 +36,9 @@ public class GeofenceActionTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_GEOFENCE_ID + " integer not null," +
-            COLUMN_ACTION_ID + " integer not null," +
-            COLUMN_EVENT_TYPE + " text not null," +
+            COLUMN_GEOFENCE_ID  + " integer not null," +
+            COLUMN_ACTION_ID    + " integer not null," +
+            COLUMN_EVENT_TYPE   + " text not null," +
             "FOREIGN KEY(" + COLUMN_GEOFENCE_ID + ") REFERENCES " +
                 GeofenceTable.TABLE_NAME + "(" + GeofenceTable.COLUMN_ID + "), " +
             "FOREIGN KEY(" + COLUMN_ACTION_ID+ ") REFERENCES " +

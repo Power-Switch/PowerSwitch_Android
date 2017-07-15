@@ -40,13 +40,13 @@ public class TimerTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTIVE + " integer not null, " +
-            COLUMN_NAME + " text not null, " +
-            COLUMN_EXECUTION_TIME + " integer not null, " +
-            COLUMN_EXECUTION_INTERVAL + " integer not null, " +
-            COLUMN_EXECUTION_TYPE + " text not null, " +
-            COLUMN_RANDOMIZER_VALUE + " int not null " +
+            COLUMN_ID                   + " integer primary key autoincrement," +
+            COLUMN_ACTIVE               + " integer not null, " +
+            COLUMN_NAME                 + " text not null, " +
+            COLUMN_EXECUTION_TIME       + " integer not null, " +
+            COLUMN_EXECUTION_INTERVAL   + " integer not null, " +
+            COLUMN_EXECUTION_TYPE       + " text not null, " +
+            COLUMN_RANDOMIZER_VALUE     + " int not null " +
         ");";
     //@formatter:on
 

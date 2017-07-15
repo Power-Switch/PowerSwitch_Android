@@ -36,9 +36,9 @@ public class CallEventTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTIVE + " integer not null, " +
-            COLUMN_NAME + " text not null " +
+            COLUMN_ID       + " integer primary key autoincrement," +
+            COLUMN_ACTIVE   + " integer not null, " +
+            COLUMN_NAME     + " text not null " +
             ");";
     //@formatter:on
 

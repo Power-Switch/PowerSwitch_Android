@@ -32,9 +32,9 @@ public class TimerWeekdayTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_EXECUTION_DAY + " integer not null, " +
-            COLUMN_TIMER_ID + " integer not null," +
+            COLUMN_ID               + " integer primary key autoincrement," +
+            COLUMN_EXECUTION_DAY    + " integer not null, " +
+            COLUMN_TIMER_ID         + " integer not null," +
                 "FOREIGN KEY(" + COLUMN_TIMER_ID + ") REFERENCES " +
                 TimerTable.TABLE_NAME + "(" + TimerTable.COLUMN_ID +
             ")" +

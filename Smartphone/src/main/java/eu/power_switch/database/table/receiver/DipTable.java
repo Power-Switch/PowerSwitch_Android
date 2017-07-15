@@ -33,10 +33,10 @@ public class DipTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_POSITION + " integer not null," +
-            COLUMN_STATE + " integer not null," +
-            COLUMN_RECEIVER_ID + " integer not null," +
+            COLUMN_ID           + " integer primary key autoincrement," +
+            COLUMN_POSITION     + " integer not null," +
+            COLUMN_STATE        + " integer not null," +
+            COLUMN_RECEIVER_ID  + " integer not null," +
                 "FOREIGN KEY(" + COLUMN_RECEIVER_ID  + ") REFERENCES " +
                 ReceiverTable.TABLE_NAME + "(" + ReceiverTable.COLUMN_ID +
             ")" +

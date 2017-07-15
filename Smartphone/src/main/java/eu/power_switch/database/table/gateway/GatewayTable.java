@@ -42,15 +42,15 @@ public class GatewayTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTIVE + " integer not null, " +
-            COLUMN_NAME + " text not null, " +
-            COLUMN_MODEL + " text not null, " +
-            COLUMN_FIRMWARE + " text not null, " +
-            COLUMN_LAN_ADDRESS + " text not null, " +
-            COLUMN_LAN_PORT + " integer not null," +
-            COLUMN_WAN_ADDRESS + " text not null, " +
-            COLUMN_WAN_PORT + " integer not null" +
+            COLUMN_ID           + " integer primary key autoincrement," +
+            COLUMN_ACTIVE       + " integer not null, " +
+            COLUMN_NAME         + " text not null, " +
+            COLUMN_MODEL        + " text not null, " +
+            COLUMN_FIRMWARE     + " text not null, " +
+            COLUMN_LAN_ADDRESS  + " text not null, " +
+            COLUMN_LAN_PORT     + " integer not null," +
+            COLUMN_WAN_ADDRESS  + " text not null, " +
+            COLUMN_WAN_PORT     + " integer not null" +
             ");";
     //@formatter:on
 

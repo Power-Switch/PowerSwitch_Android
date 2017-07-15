@@ -41,14 +41,14 @@ public class GeofenceTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ACTIVE + " integer not null, " +
-            COLUMN_NAME + " text not null, " +
-            COLUMN_LATITUDE + " real not null, " +
-            COLUMN_LONGITUDE + " real not null, " +
-            COLUMN_RADIUS + " real not null, " +
-            COLUMN_SNAPSHOT + " blob," +
-            COLUMN_STATE + " text not null" +
+            COLUMN_ID           + " integer primary key autoincrement," +
+            COLUMN_ACTIVE       + " integer not null, " +
+            COLUMN_NAME         + " text not null, " +
+            COLUMN_LATITUDE     + " real not null, " +
+            COLUMN_LONGITUDE    + " real not null, " +
+            COLUMN_RADIUS       + " real not null, " +
+            COLUMN_SNAPSHOT     + " blob," +
+            COLUMN_STATE        + " text not null" +
             ");";
     //@formatter:on
 

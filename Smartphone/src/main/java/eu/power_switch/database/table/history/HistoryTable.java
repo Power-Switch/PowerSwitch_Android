@@ -35,9 +35,9 @@ public class HistoryTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_TIME + " integer not null," +
-            COLUMN_DESCRIPTION + " text not null," +
+            COLUMN_ID               + " integer primary key autoincrement," +
+            COLUMN_TIME             + " integer not null," +
+            COLUMN_DESCRIPTION      + " text not null," +
             COLUMN_DESCRIPTION_LONG + " text not null" +
         ");";
     //@formatter:on

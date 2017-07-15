@@ -33,10 +33,10 @@ public class ReceiverWidgetTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_ROOM_ID + " integer not null," +
-            COLUMN_RECEIVER_ID + " integer not null," +
-            COLUMN_WIDGET_APP_ID + " integer not null" +
+            COLUMN_ID               + " integer primary key autoincrement," +
+            COLUMN_ROOM_ID          + " integer not null," +
+            COLUMN_RECEIVER_ID      + " integer not null," +
+            COLUMN_WIDGET_APP_ID    + " integer not null" +
         ");";
     //@formatter:on
 

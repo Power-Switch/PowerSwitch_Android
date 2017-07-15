@@ -38,9 +38,9 @@ public class CallEventPhoneNumberTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_CALL_EVENT_ID + " integer not null," +
-            COLUMN_PHONE_NUMBER_ID + " integer not null," +
-            COLUMN_EVENT_TYPE_ID + " text not null," +
+            COLUMN_CALL_EVENT_ID    + " integer not null," +
+            COLUMN_PHONE_NUMBER_ID  + " integer not null," +
+            COLUMN_EVENT_TYPE_ID    + " text not null," +
             "FOREIGN KEY(" + COLUMN_CALL_EVENT_ID + ") REFERENCES " +
                 CallEventTable.TABLE_NAME + "(" + CallEventTable.COLUMN_ID + "), " +
             "FOREIGN KEY(" + COLUMN_PHONE_NUMBER_ID+ ") REFERENCES " +

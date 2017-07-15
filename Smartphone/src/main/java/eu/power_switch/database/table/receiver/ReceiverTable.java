@@ -48,15 +48,15 @@ public class ReceiverTable {
 
     //@formatter:off
     private static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + "(" +
-            COLUMN_ID + " integer primary key autoincrement," +
-            COLUMN_NAME + " text not null," +
-            COLUMN_MODEL + " text not null," +
-            COLUMN_TYPE + " text not null," +
-            COLUMN_CLASSNAME + " text not null," +
-            COLUMN_ROOM_ID + " integer not null," +
-            COLUMN_POSITION_IN_ROOM + " integer," +
+            COLUMN_ID                       + " integer primary key autoincrement," +
+            COLUMN_NAME                     + " text not null," +
+            COLUMN_MODEL                    + " text not null," +
+            COLUMN_TYPE                     + " text not null," +
+            COLUMN_CLASSNAME                + " text not null," +
+            COLUMN_ROOM_ID                  + " integer not null," +
+            COLUMN_POSITION_IN_ROOM         + " integer," +
             COLUMN_LAST_ACTIVATED_BUTTON_ID + " integer," +
-            COLUMN_REPETITION_AMOUNT + " integer not null," +
+            COLUMN_REPETITION_AMOUNT        + " integer not null," +
                 "FOREIGN KEY(" + COLUMN_ROOM_ID + ") REFERENCES " +
                 RoomTable.TABLE_NAME + "(" + RoomTable.COLUMN_ID +
             ")" +
