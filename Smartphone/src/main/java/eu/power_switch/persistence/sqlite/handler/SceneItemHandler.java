@@ -33,7 +33,7 @@ import javax.inject.Singleton;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.SceneItem;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.table.scene.SceneItemTable;
+import eu.power_switch.persistence.sqlite.table.scene.SceneItemTable;
 import timber.log.Timber;
 
 /**

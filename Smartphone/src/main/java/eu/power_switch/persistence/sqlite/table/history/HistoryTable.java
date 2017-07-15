@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.persistence.table.history;
+package eu.power_switch.persistence.sqlite.table.history;
 
 import android.database.sqlite.SQLiteDatabase;
 

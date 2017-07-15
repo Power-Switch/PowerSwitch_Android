@@ -16,11 +16,11 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.persistence.table.geofence;
+package eu.power_switch.persistence.sqlite.table.geofence;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import eu.power_switch.persistence.table.action.ActionTable;
+import eu.power_switch.persistence.sqlite.table.action.ActionTable;
 
 /**
  * GeofenceAction table description

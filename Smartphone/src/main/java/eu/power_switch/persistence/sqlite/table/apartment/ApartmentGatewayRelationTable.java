@@ -16,13 +16,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.persistence.table.apartment;
+package eu.power_switch.persistence.sqlite.table.apartment;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import eu.power_switch.persistence.table.gateway.GatewayTable;
+import eu.power_switch.persistence.sqlite.table.gateway.GatewayTable;
 
 /**
  * Apartment Gateway relation table description

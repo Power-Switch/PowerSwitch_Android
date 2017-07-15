@@ -16,14 +16,14 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.persistence.table.receiver;
+package eu.power_switch.persistence.sqlite.table.receiver;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.table.room.RoomTable;
+import eu.power_switch.persistence.sqlite.table.room.RoomTable;
 import timber.log.Timber;
 
 /**

@@ -16,13 +16,13 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.persistence.table.action;
+package eu.power_switch.persistence.sqlite.table.action;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import eu.power_switch.persistence.table.room.RoomTable;
+import eu.power_switch.persistence.sqlite.table.room.RoomTable;
 
 /**
  * TimerRoomAction table description

@@ -28,9 +28,9 @@ import java.util.NoSuchElementException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import eu.power_switch.persistence.table.widget.ReceiverWidgetTable;
-import eu.power_switch.persistence.table.widget.RoomWidgetTable;
-import eu.power_switch.persistence.table.widget.SceneWidgetTable;
+import eu.power_switch.persistence.sqlite.table.widget.ReceiverWidgetTable;
+import eu.power_switch.persistence.sqlite.table.widget.RoomWidgetTable;
+import eu.power_switch.persistence.sqlite.table.widget.SceneWidgetTable;
 import eu.power_switch.widget.ReceiverWidget;
 import eu.power_switch.widget.RoomWidget;
 import eu.power_switch.widget.SceneWidget;

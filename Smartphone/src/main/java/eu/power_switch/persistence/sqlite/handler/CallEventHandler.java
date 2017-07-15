@@ -34,9 +34,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.persistence.table.phone.PhoneNumberTable;
-import eu.power_switch.persistence.table.phone.call.CallEventPhoneNumberTable;
-import eu.power_switch.persistence.table.phone.call.CallEventTable;
+import eu.power_switch.persistence.sqlite.table.phone.PhoneNumberTable;
+import eu.power_switch.persistence.sqlite.table.phone.call.CallEventPhoneNumberTable;
+import eu.power_switch.persistence.sqlite.table.phone.call.CallEventTable;
 import eu.power_switch.phone.call.CallEvent;
 import eu.power_switch.shared.constants.PhoneConstants;
 

@@ -34,8 +34,8 @@ import javax.inject.Singleton;
 import eu.power_switch.obj.Room;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.table.room.RoomGatewayRelationTable;
-import eu.power_switch.persistence.table.room.RoomTable;
+import eu.power_switch.persistence.sqlite.table.room.RoomGatewayRelationTable;
+import eu.power_switch.persistence.sqlite.table.room.RoomTable;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**

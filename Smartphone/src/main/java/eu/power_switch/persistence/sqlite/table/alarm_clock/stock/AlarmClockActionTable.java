@@ -16,7 +16,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.power_switch.persistence.table.alarm_clock.stock;
+package eu.power_switch.persistence.sqlite.table.alarm_clock.stock;
 
 import android.database.sqlite.SQLiteDatabase;
 

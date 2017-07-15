@@ -29,8 +29,8 @@ import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import eu.power_switch.persistence.table.phone.PhoneNumberTable;
-import eu.power_switch.persistence.table.phone.call.CallEventPhoneNumberTable;
+import eu.power_switch.persistence.sqlite.table.phone.PhoneNumberTable;
+import eu.power_switch.persistence.sqlite.table.phone.call.CallEventPhoneNumberTable;
 import eu.power_switch.shared.constants.PhoneConstants;
 import timber.log.Timber;
 

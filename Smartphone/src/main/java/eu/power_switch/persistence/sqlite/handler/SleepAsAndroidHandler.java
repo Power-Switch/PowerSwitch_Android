@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.persistence.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
+import eu.power_switch.persistence.sqlite.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
 import eu.power_switch.shared.constants.SleepAsAndroidConstants;
 import timber.log.Timber;
 

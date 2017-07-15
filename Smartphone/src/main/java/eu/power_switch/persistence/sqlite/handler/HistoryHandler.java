@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.history.HistoryItem;
-import eu.power_switch.persistence.table.history.HistoryTable;
+import eu.power_switch.persistence.sqlite.table.history.HistoryTable;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 import eu.power_switch.shared.constants.SettingsConstants;
 import timber.log.Timber;

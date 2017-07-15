@@ -37,9 +37,9 @@ import eu.power_switch.obj.Room;
 import eu.power_switch.obj.Scene;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.receiver.Receiver;
-import eu.power_switch.persistence.table.apartment.ApartmentGatewayRelationTable;
-import eu.power_switch.persistence.table.apartment.ApartmentGeofenceRelationTable;
-import eu.power_switch.persistence.table.apartment.ApartmentTable;
+import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGatewayRelationTable;
+import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGeofenceRelationTable;
+import eu.power_switch.persistence.sqlite.table.apartment.ApartmentTable;
 import eu.power_switch.settings.SmartphonePreferencesHandler;
 
 /**

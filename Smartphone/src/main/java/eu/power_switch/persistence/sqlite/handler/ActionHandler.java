@@ -34,14 +34,14 @@ import eu.power_switch.action.Action;
 import eu.power_switch.action.ReceiverAction;
 import eu.power_switch.action.RoomAction;
 import eu.power_switch.action.SceneAction;
-import eu.power_switch.persistence.table.action.ActionTable;
-import eu.power_switch.persistence.table.action.ReceiverActionTable;
-import eu.power_switch.persistence.table.action.RoomActionTable;
-import eu.power_switch.persistence.table.action.SceneActionTable;
-import eu.power_switch.persistence.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
-import eu.power_switch.persistence.table.alarm_clock.stock.AlarmClockActionTable;
-import eu.power_switch.persistence.table.geofence.GeofenceActionTable;
-import eu.power_switch.persistence.table.timer.TimerActionTable;
+import eu.power_switch.persistence.sqlite.table.action.ActionTable;
+import eu.power_switch.persistence.sqlite.table.action.ReceiverActionTable;
+import eu.power_switch.persistence.sqlite.table.action.RoomActionTable;
+import eu.power_switch.persistence.sqlite.table.action.SceneActionTable;
+import eu.power_switch.persistence.sqlite.table.alarm_clock.sleep_as_android.SleepAsAndroidActionTable;
+import eu.power_switch.persistence.sqlite.table.alarm_clock.stock.AlarmClockActionTable;
+import eu.power_switch.persistence.sqlite.table.geofence.GeofenceActionTable;
+import eu.power_switch.persistence.sqlite.table.timer.TimerActionTable;
 import timber.log.Timber;
 
 /**

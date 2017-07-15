@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.persistence.table.alarm_clock.stock.AlarmClockActionTable;
+import eu.power_switch.persistence.sqlite.table.alarm_clock.stock.AlarmClockActionTable;
 import eu.power_switch.shared.constants.AlarmClockConstants;
 
 /**

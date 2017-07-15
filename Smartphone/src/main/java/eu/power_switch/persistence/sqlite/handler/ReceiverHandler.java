@@ -36,8 +36,8 @@ import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.MasterSlaveReceiver;
 import eu.power_switch.obj.receiver.Receiver;
 import eu.power_switch.obj.receiver.UniversalReceiver;
-import eu.power_switch.persistence.table.receiver.ReceiverGatewayRelationTable;
-import eu.power_switch.persistence.table.receiver.ReceiverTable;
+import eu.power_switch.persistence.sqlite.table.receiver.ReceiverGatewayRelationTable;
+import eu.power_switch.persistence.sqlite.table.receiver.ReceiverTable;
 import timber.log.Timber;
 
 import static android.R.attr.id;

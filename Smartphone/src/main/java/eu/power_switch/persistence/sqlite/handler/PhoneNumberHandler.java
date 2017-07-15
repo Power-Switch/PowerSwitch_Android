@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import eu.power_switch.persistence.table.phone.PhoneNumberTable;
+import eu.power_switch.persistence.sqlite.table.phone.PhoneNumberTable;
 
 /**
  * Created by Markus on 11.04.2016.

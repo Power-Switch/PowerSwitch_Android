@@ -33,8 +33,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
-import eu.power_switch.persistence.table.timer.TimerTable;
-import eu.power_switch.persistence.table.timer.TimerWeekdayTable;
+import eu.power_switch.persistence.sqlite.table.timer.TimerTable;
+import eu.power_switch.persistence.sqlite.table.timer.TimerWeekdayTable;
 import eu.power_switch.timer.IntervalTimer;
 import eu.power_switch.timer.Timer;
 import eu.power_switch.timer.WeekdayTimer;

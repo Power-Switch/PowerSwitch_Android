@@ -38,11 +38,11 @@ import eu.power_switch.obj.gateway.EZControl_XS1;
 import eu.power_switch.obj.gateway.Gateway;
 import eu.power_switch.obj.gateway.ITGW433;
 import eu.power_switch.obj.gateway.RaspyRFM;
-import eu.power_switch.persistence.table.apartment.ApartmentGatewayRelationTable;
-import eu.power_switch.persistence.table.gateway.GatewaySsidTable;
-import eu.power_switch.persistence.table.gateway.GatewayTable;
-import eu.power_switch.persistence.table.receiver.ReceiverGatewayRelationTable;
-import eu.power_switch.persistence.table.room.RoomGatewayRelationTable;
+import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGatewayRelationTable;
+import eu.power_switch.persistence.sqlite.table.gateway.GatewaySsidTable;
+import eu.power_switch.persistence.sqlite.table.gateway.GatewayTable;
+import eu.power_switch.persistence.sqlite.table.receiver.ReceiverGatewayRelationTable;
+import eu.power_switch.persistence.sqlite.table.room.RoomGatewayRelationTable;
 import eu.power_switch.shared.exception.gateway.GatewayAlreadyExistsException;
 import eu.power_switch.shared.exception.gateway.GatewayUnknownException;
 

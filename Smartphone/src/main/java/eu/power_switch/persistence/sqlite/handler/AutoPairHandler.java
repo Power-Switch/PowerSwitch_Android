@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import eu.power_switch.persistence.table.receiver.AutoPairTable;
+import eu.power_switch.persistence.sqlite.table.receiver.AutoPairTable;
 
 /**
  * Provides database methods for managing AutoPairReceivers

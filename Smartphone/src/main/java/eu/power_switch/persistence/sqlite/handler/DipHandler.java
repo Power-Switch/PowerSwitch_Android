@@ -30,7 +30,7 @@ import javax.inject.Singleton;
 
 import eu.power_switch.obj.receiver.DipReceiver;
 import eu.power_switch.obj.receiver.DipSwitch;
-import eu.power_switch.persistence.table.receiver.DipTable;
+import eu.power_switch.persistence.sqlite.table.receiver.DipTable;
 
 /**
  * Provides database methods for managing DipReceivers

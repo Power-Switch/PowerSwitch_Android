@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import eu.power_switch.persistence.table.receiver.MasterSlaveTable;
+import eu.power_switch.persistence.sqlite.table.receiver.MasterSlaveTable;
 
 /**
  * Provides database methods for managing MasterSlaveReceivers

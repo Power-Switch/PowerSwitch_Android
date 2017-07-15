@@ -39,8 +39,8 @@ import javax.inject.Singleton;
 
 import eu.power_switch.action.Action;
 import eu.power_switch.google_play_services.geofence.Geofence;
-import eu.power_switch.persistence.table.apartment.ApartmentGeofenceRelationTable;
-import eu.power_switch.persistence.table.geofence.GeofenceTable;
+import eu.power_switch.persistence.sqlite.table.apartment.ApartmentGeofenceRelationTable;
+import eu.power_switch.persistence.sqlite.table.geofence.GeofenceTable;
 
 /**
  * Provides database methods for managing Geofences

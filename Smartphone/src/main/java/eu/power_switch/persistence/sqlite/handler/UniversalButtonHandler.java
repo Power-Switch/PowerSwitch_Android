@@ -32,7 +32,7 @@ import javax.inject.Singleton;
 
 import eu.power_switch.obj.UniversalButton;
 import eu.power_switch.obj.button.Button;
-import eu.power_switch.persistence.table.receiver.UniversalButtonTable;
+import eu.power_switch.persistence.sqlite.table.receiver.UniversalButtonTable;
 
 /**
  * Provides database methods for managing Universal Buttons (used on Universal Receivers)
